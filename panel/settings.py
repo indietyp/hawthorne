@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'core',
+    'interface'
 ]
 
 MIDDLEWARE = [
@@ -49,7 +51,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'BoomPanel.urls'
+ROOT_URLCONF = 'panel.urls'
 
 TEMPLATES = [
     {
@@ -67,7 +69,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'BoomPanel.wsgi.application'
+WSGI_APPLICATION = 'panel.wsgi.application'
 
 
 # Database
@@ -75,8 +77,13 @@ WSGI_APPLICATION = 'BoomPanel.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'boompanel',
+        'USER': 'root',
+        'PASSWORD': '',
+        'TEST': {
+            'NAME': 'boompaneltest',
+        },
     }
 }
 
