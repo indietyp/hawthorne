@@ -1,0 +1,88 @@
+.item.pure-u-1-1.pure-g
+  .heading.flex
+    span EU Retake 3
+    .spacer
+    .icons
+      .action
+        i(data-feather='plus-square')
+      .action
+        i(data-feather='edit-2')
+      .action
+        i(data-feather='trash-2')
+
+  .pure-u-1-1
+    .row.overview.item.pure-g
+      .section.icon.pure-u-1-2.pure-u-lg-1-3
+        i(data-feather='compass')
+        span.content CS:GO
+      .section.icon.pure-u-1-2.pure-u-lg-1-3
+        i(data-feather='map')
+        span.content de_mirage
+      .section.icon.pure-u-1-2.pure-u-lg-1-3
+        i(data-feather='briefcase')
+        span.content Retake
+      .section.icon.pure-u-1-2.pure-u-lg-1-3
+        i(data-feather='wifi')
+        span.content 127.0.0.1:9012
+      .section.icon.pure-u-1-2.pure-u-lg-1-3
+        i(data-feather='lock')
+        span.content ********
+      .section.icon.pure-u-1-2.pure-u-lg-1-3
+        i(data-feather='shield')
+        span.content VAC
+      .section.icon.pure-u-1-2.pure-u-lg-1-3
+        i(data-feather='layers')
+        span.content 01 - 01
+      .section.icon.pure-u-1-2.pure-u-lg-1-3
+        i(data-feather='users')
+        span.content 12
+      .section.icon.pure-u-1-2.pure-u-lg-1-3
+        i(data-feather='clock')
+        span.content 12 minutes
+
+  .row.add.pure-g
+    .pure-u-1-1.flex.center.relative
+      pre.code.code-command(data-placeholder='Enter command here...' contenteditable="true", onkeypress="input_verification('command')")
+      .icon.action.send-command
+        i.explicit(data-feather='send')
+
+    .pure-u-1-2
+      .ct-chart.ct-minor-seventh
+      .ct-info
+        .info
+          .spacer
+          span.number 12
+          .description
+            .content last
+            .content month
+          .spacer
+        .info
+          .spacer
+          span.number 24
+          .description
+            .content all
+            .content time
+          .spacer
+      script.
+        var data = {
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+          series: [
+            [5, 2, 4, 1, 3]
+          ]
+        };
+        var options = {
+          showPoint: false,
+          axisX: {
+              showGrid: false,
+          },
+          axisY: {
+              position: 'end',
+              onlyInteger: true,
+          },
+          fullWidth: true,
+          low: 0
+        }
+        new Chartist.Line('.ct-chart', data, options);
+    .pure-u-1-2
+      .pure-g
+        //- partials/server/online.pug

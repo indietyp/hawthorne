@@ -1,0 +1,22 @@
+- load staticfiles
+- load compile_static
+
+link(rel="stylesheet", href='{% static "css/flag-icon.min.css" %}')
+link(rel="stylesheet", href='{% static "css/bp-font.css" %}')
+link(href="https://fonts.googleapis.com/css?family=Lato:300,400,700|Source+Code+Pro" rel="stylesheet")
+link(rel="stylesheet", href="https://unpkg.com/purecss@1.0.0/build/base-min.css")
+link(rel="stylesheet", href="https://unpkg.com/purecss@1.0.0/build/grids-min.css")
+link(rel="stylesheet", href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css")
+link(rel="stylesheet", href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css")
+link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/choices.js/3.0.2/styles/css/choices.min.css")
+link(rel="stylesheet", href='{% static "css/template.sass"|compile %}')
+
+link(rel="shortcut icon", type="image/ico", href='{% static "img/favicon.ico" %}')
+meta(name="theme-color", content="#2E363F")
+
+script(src="//cdn.jsdelivr.net/npm/chibijs@3.0.9/chibi-min.min.js")
+script(src="//cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js")
+script(src="//cdn.jsdelivr.net/npm/choices.js@3.0.2/assets/scripts/dist/choices.min.js")
+script(src="//cdn.jsdelivr.net/npm/chartist@0.11.0/dist/chartist.min.js")
+script(src="{% static 'js/style.coffee'|compile %}")
+script(src="{% static 'js/vc.coffee'|compile %}")

@@ -1,2 +1,3 @@
 Django
 mysqlclient
+social-auth-app-django

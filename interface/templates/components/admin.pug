@@ -1,0 +1,117 @@
+- extends 'skeleton/main.pug'
+- load i18n
+- load staticfiles
+
+- block content
+  .item.pure-u-1-1.users
+    .heading
+     - trans "Administration"
+    .list
+      //- partials/admin/user.pug
+    .row.add.pure-g
+      .column.icon.username.pure-u-7-24
+        select#username-input
+          option(placeholder) Username
+      .column.icon.group.pure-u-7-24
+        select#group-input
+          option(placeholder) Group
+      .column.icon.server.pure-u-7-24
+        select#server-input
+          option(placeholder) Server
+      .column.icon.pure-u-3-24
+        .spacer
+        .action
+          i(data-feather="user-plus")
+      script.
+        var usernameinput = new Choices('#username-input', {
+          searchPlaceholderValue: "Steam Username",
+          choices: [],
+          noResultsText: 'Could not find user',
+          noChoicesText: 'Type something to query',
+          itemSelectText: 'Enter will do it',
+        })
+        usernameinput.passedElement.addEventListener('search', function(event) {
+          console.log(event.detail.value);
+        }, false);
+
+        var groupinput = new Choices('#group-input', {
+          searchEnabled: false,
+          choices: [],
+        })
+        var serverinput = new Choices('#server-input', {
+          searchEnabled: false,
+          choices: [],
+        })
+
+  .item.pure-u-1-1.pure-u-lg-11-24.second
+    .heading Groups
+    .list
+      .row.pure-g
+        .column.icon.username.pure-u-7-24
+          i(data-feather="users")
+          span root
+        .column.icon.server.pure-u-7-24
+          i(data-feather="trending-up")
+          span 100%
+        .column.icon.server.pure-u-7-24
+          i(data-feather="clock")
+          i.bpi-unlimited
+        .column.icon.pure-u-3-24
+          .spacer
+          //- .action
+            i(data-feather="edit-2")
+          //- .action
+            i(data-feather="trash-2")
+        .column.icon.username.pure-u-7-24
+        .column.icon.group.pure-u-14-24
+          i(data-feather="zap")
+          span (root)
+
+      //- partials/admin/group.pug
+
+      .row.add.pure-g
+        .column.icon.group.pure-u-7-24.input-wrapper
+          input#inputgroupname(type='text')
+          label(for='inputgroupname')
+            i.skip(data-feather='users')
+        .column.icon.immunity.pure-u-7-24.input-wrapper
+          input#inputimmunityvalue(type='number', min='0', max='100', onkeypress="return isNumeric(event)", oninput="maxLengthCheck(this)", value="0")
+          label(for='inputimmunityvalue')
+            i.skip(data-feather='trending-up')
+          .appendix %
+
+          script.
+            function maxLengthCheck(object) {
+              if (object.value > object.max && object.value.length === object.max.length)
+                object.value = object.max
+              if (object.value.length > object.max.length)
+                object.value = object.value.slice(0, object.max.length)
+            }
+
+            function isNumeric (evt) {
+              var theEvent = evt || window.event;
+              var key = theEvent.keyCode || theEvent.which;
+              key = String.fromCharCode (key);
+              var regex = /[0-9]|\./;
+              if ( !regex.test(key) ) {
+                theEvent.returnValue = false;
+                if(theEvent.preventDefault) theEvent.preventDefault();
+              }
+            }
+        .column.icon.time.pure-u-7-24.input-wrapper
+          input#inputtimevalue(type='text', placeholder='11h 6m')
+          label(for='inputtimevalue')
+            i.skip(data-feather='clock')
+
+        .column.icon.pure-u-3-24
+          .spacer
+          .action
+            i(data-feather="plus")
+
+  .spacer
+  .item.pure-u-1-1.pure-u-lg-11-24.second
+    .heading
+      - trans "Logs"
+    .list
+      .row.pure-g
+        //- partials/admin/group.pug

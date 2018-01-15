@@ -1,0 +1,33 @@
+- load i18n
+- load staticfiles
+- load compile_static
+
+<!DOCTYPE html>
+html(lang='en')
+  head
+    include skeleton/header.pug
+  body
+    include skeleton/csrf.pug
+
+    #login-wrapper
+      .spacer
+      .action-container
+        .logo
+          .spacer
+          include assets/logo.svg
+          .heading
+            span.green Boom
+            span.white Panel
+          .spacer
+        .login-container
+          .spacer
+          a(href="{% url 'social:begin' 'steam' %}")
+            i(data-feather='database')
+          .spacer
+          a(href="{% url 'social:begin' 'steam' %}")
+            - include 'assets/steam.svg'
+          .spacer
+      .spacer
+
+    script.
+      feather.replace()
