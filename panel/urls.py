@@ -18,6 +18,7 @@ from django.contrib import admin
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/', include('api.urls')),
     path('', include('interface.urls')),
     path('external/', include('social_django.urls', namespace='social')),
 ]

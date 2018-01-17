@@ -2,7 +2,6 @@ from core.models import Country
 
 
 def populate(strategy, details, backend, user=None, *args, **kwargs):
-  print(dir(strategy))
   information = details['player']
 
   if information['realname'] != '':
@@ -19,7 +18,7 @@ def populate(strategy, details, backend, user=None, *args, **kwargs):
   user.profile = information['profileurl']
   user.save()
 
-  if strategy == 'steam' and user is not None:
-    print(user)
-    print(details)
-    print(type(details))
+  # if strategy == 'steam' and user is not None:
+  #   print(user)
+  #   print(details)
+  #   print(type(details))

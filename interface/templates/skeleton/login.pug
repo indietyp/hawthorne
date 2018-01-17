@@ -21,10 +21,10 @@ html(lang='en')
           .spacer
         .login-container
           .spacer
-          a(href="{% url 'social:begin' 'steam' %}")
+          a(href="{% url 'social:begin' 'steam' %}?{{ request.GET.urlencode }}")
             i(data-feather='database')
           .spacer
-          a(href="{% url 'social:begin' 'steam' %}")
+          a(href="{% url 'social:begin' 'steam' %}?{{ request.GET.urlencode }}")
             - include 'assets/steam.svg'
           .spacer
       .spacer

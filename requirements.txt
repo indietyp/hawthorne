@@ -1,3 +1,6 @@
 Django
 mysqlclient
 social-auth-app-django
+cerberus
+lxml
+cssselect

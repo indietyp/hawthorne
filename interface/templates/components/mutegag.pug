@@ -1,4 +1,4 @@
-- extends 'skeleton/main.pug'
+- extends ajax|yesno:'skeleton/ajax.pug,skeleton/main.pug'
 - load i18n
 - load staticfiles
 
@@ -33,7 +33,7 @@
         .action
           i(data-feather="plus")
 
-      script.
+      script.execution.
         var now = new Date()
           , year
           , month

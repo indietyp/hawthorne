@@ -1,27 +1,55 @@
 # view controller
 
-vc_change = (destination='home') ->
-  switch
+change = (destination='home') ->
+  method = 'POST'
+
+  switch destination
     when 'home'
-      console.log "do stuff"
+      url = '/'
     when 'player'
-      console.log "do stuff"
+      url = '/players'
     when 'admin'
-      console.log "do stuff"
-    when 'player'
-      console.log "do stuff"
+      url = '/admins'
     when 'server'
-      console.log "do stuff"
+      url = '/servers'
     when 'ban'
-      console.log "do stuff"
+      url = '/bans'
     when 'mutegag'
-      console.log "do stuff"
+      url = '/mutegags'
     when 'announcements'
-      console.log "do stuff"
+      url = '/announcements'
     when 'chat'
-      console.log "do stuff"
+      url = '/chat'
     when 'settings'
-      console.log "do stuff"
+      url = '/settings'
     else
       return false
+
+  data =
+    csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val()
+
+  $(data).ajax(url, method, (data, status) ->
+    if status == 200
+      $("#content").css('opacity', '0')
+
+      setTimeout(->
+        $("#content").html(data)
+        eval($("#content script.execution").html())
+        feather.replace()
+        $("#content").css('opacity', '')
+      , 200)
+    else
+      return false
+
+    window.history.pushState "", "", url
+    return true
+  )
+
   return true
+
+
+ajax = (destination, module) ->
+  return true
+
+window.vc = {}
+window.vc.change = change
