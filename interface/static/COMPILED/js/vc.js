@@ -62,8 +62,8 @@
     return true;
   };
 
-  window.vc = {};
-
-  window.vc.change = change;
+  window.vc = {
+    change: change
+  };
 
 }).call(this);

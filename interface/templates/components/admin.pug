@@ -22,7 +22,7 @@
         .spacer
         .action
           i(data-feather="user-plus")
-      script.
+      script.execution.
         var usernameinput = new Choices('#username-input', {
           searchPlaceholderValue: "Steam Username",
           choices: [],
@@ -30,8 +30,16 @@
           noChoicesText: 'Type something to query',
           itemSelectText: 'Enter will do it',
         })
+
+        debounce_search = function(value, input) {
+          window.steam.search(value, input);
+        }
+
+        var call = _.debounce(debounce_search, 500);
         usernameinput.passedElement.addEventListener('search', function(event) {
-          console.log(event.detail.value);
+          if (event.detail.value.length > 3) {
+            call(event.detail.value, usernameinput);
+          }
         }, false);
 
         var groupinput = new Choices('#group-input', {
@@ -67,15 +75,15 @@
       .row.add.pure-g
         .column.icon.group.pure-u-7-24.input-wrapper
           input#inputgroupname(type='text')
-          label(for='inputgroupname')
+          label.adjusted(for='inputgroupname')
             i.skip(data-feather='users')
         .column.icon.immunity.pure-u-7-24.input-wrapper
           input#inputimmunityvalue(type='number', min='0', max='100', onkeypress="return isNumeric(event)", oninput="maxLengthCheck(this)", value="0")
-          label(for='inputimmunityvalue')
-            i.skip(data-feather='trending-up')
+          label.adjusted(for='inputimmunityvalue')
+            i.skip.adjusted(data-feather='trending-up')
           .appendix %
 
-          script.
+          script.execution.
             function maxLengthCheck(object) {
               if (object.value > object.max && object.value.length === object.max.length)
                 object.value = object.max
@@ -95,7 +103,7 @@
             }
         .column.icon.time.pure-u-7-24.input-wrapper
           input#inputtimevalue(type='text', placeholder='11h 6m')
-          label(for='inputtimevalue')
+          label.adjusted(for='inputtimevalue')
             i.skip(data-feather='clock')
 
         .column.icon.pure-u-3-24

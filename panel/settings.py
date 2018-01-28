@@ -86,7 +86,7 @@ SOCIAL_AUTH_PIPELINE = [
     'social_core.pipeline.social_auth.social_uid',
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.get_username',
-    # 'social_core.pipeline.user.create_user',
+    'core.pipeline.system.get_user',
     'social_core.pipeline.social_auth.associate_user',
     'core.pipeline.database.populate',
     'social_core.pipeline.social_auth.load_extra_data',

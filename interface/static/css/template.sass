@@ -137,7 +137,12 @@ input[type="number"]
 
         & + label
             position: absolute
-            top: 10px
+
+            &:not(.adjusted)
+                top: 10px
+            &.adjusted
+                top: 4px
+
             left: 0
 
             &.fix
@@ -550,6 +555,12 @@ pre.code-command
                 &:not(:first-child)::before, &::after
                     content: "a"
                     visibility: hidden
+
+.username
+    .choices
+        .choices__item
+            display: flex
+            align-items: center
 
 // media queiers
 @media (max-width: 1000px)

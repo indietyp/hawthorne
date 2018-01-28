@@ -51,5 +51,5 @@ change = (destination='home') ->
 ajax = (destination, module) ->
   return true
 
-window.vc = {}
-window.vc.change = change
+window.vc =
+  change: change
