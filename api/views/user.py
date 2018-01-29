@@ -1,5 +1,7 @@
-from core.models import User, Country, UserLogIP, UserLogTime, UserLogUsername
+from core.models import User, Country, UserLogIP, UserLogTime, UserLogUsername, ServerRole, Server, ServerGroup
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import Group
+from django.db.models import F
 from core.decorators.api import json_response, validation
 from core.decorators.auth import authentication_required, permission_required
 from django.views.decorators.http import require_http_methods
@@ -13,13 +15,16 @@ from django.views.decorators.http import require_http_methods
 @require_http_methods(['GET', 'PUT'])
 def list(request, validated=[], *args, **kwargs):
   if request.method == 'GET':
+    # role query
     limit = validated['limit']
     offset = validated['offset']
 
-    # TODO: add server role objects
-    selected = User.objects.extra({'has_panel_access': 'is_staff'})\
-                           .values('id', 'username', 'steamid', 'profile', 'has_panel_access')\
+    selected = User.objects.annotate(steamid=F('username'), name=F('ingame'), has_panel_access=F('is_staff'))\
+                           .values('id', 'name', 'steamid', 'profile', 'has_panel_access')\
                            .filter(username__contains=validated['match'])
+
+    if validated['has_panel_access'] is not None:
+      selected = selected.filter(has_panel_access=validated['has_panel_access'])
 
     output = []
     selected = selected[offset:] if limit < 0 else selected[offset:limit]
@@ -38,7 +43,7 @@ def list(request, validated=[], *args, **kwargs):
       update = True
     except Exception as e:
       print(e)
-      user = User.objects.create_user(username=validated['steamid'])
+      user = User.objects.create_user(username=str(validated['steamid']))
       user.ingame = str(validated['username'])
       user.is_active = False
 
@@ -52,14 +57,15 @@ def list(request, validated=[], *args, **kwargs):
         log, created = UserLogIP.objects.get_or_create(user=user, ip=user.ip)
 
         for l in UserLogIP.objects.filter(user=user, ip=user.ip, active=True):
-          l.active = False
+          l.is_active = False
           l.save()
 
         log.active = True
         if 'connected' in validated:
-          # server = validated['server']
-          # UserLogTime(user=user, server=server).save()
-          log.connections += 1
+          if validated['connected']:
+            # server = validated['server']
+            # UserLogTime(user=user, server=server).save()
+            log.connections += 1
 
         log.save()
 
@@ -69,8 +75,8 @@ def list(request, validated=[], *args, **kwargs):
     uname, created = UserLogUsername.objects.get_or_create(user=user, username=validated['username'])
     uname.connections += 1
     uname.save()
-    user.username = validated['username']
 
+    user.ingame = validated['username']
     user.save()
 
     if update:
@@ -86,7 +92,107 @@ def list(request, validated=[], *args, **kwargs):
 @validation('user.detailed')
 @require_http_methods(['GET', 'POST', 'DELETE'])
 def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
-  pass
+  if request.method == 'GET':
+    # server role
+    query = User.objects.annotate(has_panel_access=F('is_staff'),
+                                  country_code=F('country__code'))
+
+    if u is not None:
+      try:
+        user = query.annotate(steamid=None, name=F('username')).get(id=u)
+      except Exception as e:
+        return 'not existent user queried - {}'.format(e), 403
+
+    if s is not None:
+      user = query.annotate(steamid=F('username'), name=F('ingame')).get(username=s)
+      user.steamid = int(user.steamid)
+      try:
+        pass
+      except Exception as e:
+        return 'not existent steamid provided - {}'.format(e), 403
+
+    selected = ['id', 'ip', 'avatar', 'profile', 'permissions', 'steamid', 'name', 'circles']
+    if validated['server'] is not None:
+      try:
+        role = ServerRole.objects.get(user=user, server=Server.objects.get(id=validated['server']))
+        user.flags = role.groups.flags.convert()
+        selected.append('flags')
+      except Exception as e:
+        return 'serverrole does not exist for this user - {}'.format(e), 403
+
+    user.permissions = [a.content_type.app_label + '.' + a.codename for a in user.user_permissions.all()]
+    user.circles = [str(a) for a in user.groups.all()]
+    user = user.__dict__
+
+    tmp = {}
+    for k, i in user.items():
+      if k in selected:
+        tmp[k] = i
+
+    user = tmp
+    return user
+  elif request.method == 'POST':
+    # TODO: TESTING
+    if u is not None:
+      try:
+        user = User.objects.get(id=u)
+      except Exception as e:
+        return 'not existent user queried - {}'.format(e), 403
+
+    if s is not None:
+      try:
+        user = User.objects.get(username=s)
+      except Exception as e:
+        return 'not existent steamid provided - {}'.format(e), 403
+
+    if validated['role'] is not None:
+      group = ServerGroup.objects.get(id=validated['role'])
+      server = Server.objects.get(id=validated['server'])
+
+      if not validated['promotion']:
+        ServerRole.objects.get(group=group, server=server, user=user).delete()
+      else:
+        ServerRole(group=group, server=server, user=user).save()
+
+    if validated['group'] is not None:
+      group = Group.objects.get(id=validated['group'])
+      if validated['promotion']:
+        user.groups.add(group)
+      else:
+        user.groups.remove(group)
+
+    return '+1'
+  elif request.method == 'DELETE':
+    # TODO: TESTING
+    if u is not None:
+      try:
+        user = User.objects.get(id=u)
+      except Exception as e:
+        return 'not existent user queried - {}'.format(e), 403
+
+    if s is not None:
+      try:
+        user = User.objects.get(username=s)
+      except Exception as e:
+        return 'not existent steamid provided - {}'.format(e), 403
+
+    if not user.is_active:
+      return 'user not using panel'
+
+    if validated['purge']:
+      user.delete()
+
+      return 'CASCADE DELETE', 200
+    else:
+      user.is_active = False
+      user.is_staff = False
+      user.is_superuser = False
+
+      if validated['reset']:
+        user.user_permissions.clear()
+        user.groups.clear()
+
+      user.save()
 
 
 @csrf_exempt
@@ -94,7 +200,7 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
 @authentication_required
 @permission_required('user.ban')
 @validation('user.ban')
-@require_http_methods(['POST'])
+@require_http_methods(['GET', 'POST'])
 def ban():
   pass
 
@@ -104,7 +210,7 @@ def ban():
 @authentication_required
 @permission_required('user.mutegag')
 @validation('user.mutegag')
-@require_http_methods(['POST'])
+@require_http_methods(['GET', 'POST'])
 def mutegag():
   pass
 
@@ -116,14 +222,4 @@ def mutegag():
 @validation('user.kick')
 @require_http_methods(['POST'])
 def kick():
-  pass
-
-
-@csrf_exempt
-@json_response
-@authentication_required
-@permission_required('user.s_perm')
-@validation('user.s_perm')
-@require_http_methods(['GET'])
-def serverpermission():
   pass

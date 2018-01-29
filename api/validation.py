@@ -5,7 +5,7 @@ from cerberus import Validator
 
 class Validator(Validator):
     def _validate_type_uuid(self, value):
-        re_uuid = re.compile(r'[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}', re.I)
+        re_uuid = re.compile(r'[0-9a-f]{8}(?:(?:-)?[0-9a-f]{4}){3}(?:-)?[0-9a-f]{12}', re.I)
         if re_uuid.match(value):
             return True
             # self._error("Value for field '%s' must be valid UUID" % field)
@@ -27,7 +27,9 @@ validation = {
         'list': {
             'GET': {'validation': {'offset': {'type': 'integer', 'min': 0, 'default': 0, 'coerce': codes.l_to_i},
                                    'limit': {'type': 'integer', 'min': -1, 'default': -1, 'coerce': codes.l_to_i},
-                                   'match': {'type': 'string', 'default': '', 'coerce': codes.l_to_s}},
+                                   'match': {'type': 'string', 'default': '', 'coerce': codes.l_to_s},
+                                   'has_panel_access': {'type': 'boolean', 'default': None, 'nullable': True, 'coerce': codes.l_to_b},
+                                   'role': {'type': 'uuid', 'default': None, 'nullable': True, 'coerce': codes.l_to_s}},
                     'permission': ['core.view_user']},
             'PUT': {'validation': {'steamid': {'type': 'integer', 'required': True, 'min': 76561197960265729, 'max': 76561202255233023},
                                    'username': {'type': 'string', 'required': True},
@@ -37,11 +39,16 @@ validation = {
                     'permission': ['core.add_user']}
         },
         'detailed': {
-            'POST': {'validation': {'steamid': {'type': 'steamid', 'required': True, 'coerce': codes.l_to_s},
-                                    'promotion': {'type': 'boolean', 'default': False, 'coerce': codes.l_to_b},
-                                    'role': {'type': 'uuid', 'required': False},
-                                    'group': {'type': 'uuid', 'required': False}},
+            'GET': {'validation': {'server': {'type': 'uuid', 'default': None, 'nullable': True, 'required': False, 'coerce': codes.l_to_s}},
+                    'permission': ['core.view_user']},
+            'POST': {'validation': {'promotion': {'type': 'boolean', 'default': False},
+                                    'role': {'type': 'uuid', 'default': None, 'nullable': True, 'required': False, 'dependencies': ['server']},
+                                    'server': {'type': 'uuid', 'required': False},
+                                    'group': {'type': 'uuid', 'default': None, 'nullable': True, 'required': False}},
                      'permission': ['core.modify_user']},
+            'DELETE': {'validation': {'purge': {'type': 'boolean', 'default': False, 'required': False},
+                                      'reset': {'type': 'boolean', 'default': True, 'required': False}},
+                       'permission': ['core.delete_user']}
         }
     },
     'steam': {

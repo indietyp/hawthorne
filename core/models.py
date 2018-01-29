@@ -92,28 +92,62 @@ class UserLogUsername(BaseModel):
   last_used = models.DateTimeField(auto_now=True)
 
 
-class PanelPermission(BaseModel):
+class ServerPermission(BaseModel):
   can_reservation = models.BooleanField(default=False)
   can_generic = models.BooleanField(default=False)
+  can_kick = models.BooleanField(default=False)
   can_ban = models.BooleanField(default=False)
   can_slay = models.BooleanField(default=False)
   can_map = models.BooleanField(default=False)
+  can_config = models.BooleanField(default=False)
   can_cvar = models.BooleanField(default=False)
+  can_chat = models.BooleanField(default=False)
   can_vote = models.BooleanField(default=False)
   can_password = models.BooleanField(default=False)
   can_rcon = models.BooleanField(default=False)
   can_cheat = models.BooleanField(default=False)
 
+  def convert(self):
+    flags = []
+    if self.can_reservation:
+      flags.append('A')
+    if self.can_generic:
+      flags.append('B')
+    if self.can_kick:
+      flags.append('C')
+    if self.can_ban:
+      flags.append('D')
+      flags.append('E')
+    if self.can_slay:
+      flags.append('F')
+    if self.can_map:
+      flags.append('G')
+    if self.can_cvar:
+      flags.append('H')
+    if self.can_config:
+      flags.append('I')
+    if self.can_chat:
+      flags.append('J')
+    if self.can_vote:
+      flags.append('K')
+    if self.can_password:
+      flags.append('L')
+    if self.can_rcon:
+      flags.append('M')
+    if self.can_cheat:
+      flags.append('N')
 
-class PanelGroup(BaseModel):
+    return ''.join(flags).upper()
+
+
+class ServerGroup(BaseModel):
   name = models.CharField(max_length=255)
-  flags = models.CharField(max_length=25)
+  flags = models.OneToOneField(ServerPermission, on_delete=models.CASCADE)
+  # flags = models.CharField(max_length=25)
 
   immunity = models.DurationField()
   usetime = models.DurationField()
   isadmingroup = models.BooleanField(default=False)
-
-  permissions = models.OneToOneField(PanelPermission, on_delete=models.CASCADE)
 
   class Meta:
     permissions = [
@@ -144,9 +178,10 @@ class Server(BaseModel):
 class ServerRole(BaseModel):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   server = models.ForeignKey(Server, on_delete=models.CASCADE)
-  group = models.ForeignKey(PanelGroup, on_delete=models.CASCADE)
+  group = models.ForeignKey(ServerGroup, on_delete=models.CASCADE)
 
   class Meta:
+    unique_together = ('user', 'server', )
     permissions = [
         ('view_admin_role', 'View server roles'),
         ('add_admin_role', 'Add server roles'),
