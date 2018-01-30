@@ -13,9 +13,9 @@ urlpatterns = [
     path('users', user.list, name='user.list'),                             # PUT, GET - DONE
     path('users/<uuid:u>', user.detailed, name='user.detailed'),            # POST, GET, DELETE - DONE
     path('users/<steamid:s>', user.detailed, name='user.detailed'),         # POST, GET, DELETE - DONE
-    path('users/<uuid:u>/ban', user.ban, name='user.ban'),                  # POST, GET
-    path('users/<uuid:u>/kick', user.kick, name='user.kick'),               # POST
-    path('users/<uuid:u>/mutegag', user.mutegag, name='user.mutegag'),      # POST, GET
+    path('users/<uuid:u>/ban', user.ban, name='user.ban'),                  # POST, GET, PUT, DELETE
+    path('users/<uuid:u>/kick', user.kick, name='user.kick'),               # PUT
+    path('users/<uuid:u>/mutegag', user.mutegag, name='user.mutegag'),      # POST, GET, PUT, DELETE
 
     # groups
     path('groups', group.list, name='group.list'),                          # PUT, GET

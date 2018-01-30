@@ -1,5 +1,6 @@
-from core.models import User, Country, UserLogIP, UserLogTime, UserLogUsername, ServerRole, Server, ServerGroup
+from core.models import User, Country, UserLogIP, UserLogTime, UserLogUsername, ServerRole, Server, ServerGroup, Ban
 from django.views.decorators.csrf import csrf_exempt
+import datetime
 from django.contrib.auth.models import Group
 from django.db.models import F
 from core.decorators.api import json_response, validation
@@ -195,14 +196,64 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
       user.save()
 
 
+# TESTING
+# RCON integration
 @csrf_exempt
 @json_response
 @authentication_required
 @permission_required('user.ban')
 @validation('user.ban')
-@require_http_methods(['GET', 'POST'])
-def ban():
-  pass
+@require_http_methods(['GET', 'POST', 'PUT', 'DELETE'])
+def ban(request, u=None, validated={}, *args, **kwargs):
+  try:
+    user = User.objects.get(id=u)
+  except Exception as e:
+    return 'non existent user queried - {}'.format(e), 403
+
+  if request.method == 'GET':
+    bans = Ban.objects.filter(user=user)
+    if validated['server'] is not None:
+      bans.filter(server=Server.objects.get(id=validated['server']))
+
+    if validated['resolved'] is not None:
+      bans.filter(resolved=validated['resolved'])
+
+    return bans.values()
+
+  elif request.method == 'POST':
+    try:
+      server = Server.objects.get(id=validated['server'])
+    except Exception:
+      return 'server not found', 500
+
+    try:
+      ban = Ban.objects.get(user=user, server=server)
+    except Exception:
+      return 'ban not found', 500
+
+    if validated['resolved'] is not None:
+      ban.resolved = validated['resolved']
+
+    if validated['reason'] is not None:
+      ban.reason = validated['reason']
+
+    if validated['length'] is not None:
+      ban.length = datetime.timedelta(seconds=validated['length'])
+
+    ban.save()
+
+  elif request.method == 'PUT':
+    server = Server.objects.get(id=validated['server'])
+    length = datetime.timedelta(seconds=validated['length'])
+
+    ban = Ban(user=user, server=server, reason=validated['reason'], length=length)
+
+  elif request.method == 'DELETE':
+    server = Server.objects.get(id=validated['server'])
+    ban = Ban.objects.get(user=user, server=server)
+    ban.resolved = True
+
+  return 'successful, nothing to report'
 
 
 @csrf_exempt
@@ -210,7 +261,7 @@ def ban():
 @authentication_required
 @permission_required('user.mutegag')
 @validation('user.mutegag')
-@require_http_methods(['GET', 'POST'])
+@require_http_methods(['GET', 'PUT', 'DELETE', 'POST'])
 def mutegag():
   pass
 
@@ -220,6 +271,6 @@ def mutegag():
 @authentication_required
 @permission_required('user.kick')
 @validation('user.kick')
-@require_http_methods(['POST'])
+@require_http_methods(['PUT'])
 def kick():
   pass

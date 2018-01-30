@@ -49,7 +49,25 @@ validation = {
             'DELETE': {'validation': {'purge': {'type': 'boolean', 'default': False, 'required': False},
                                       'reset': {'type': 'boolean', 'default': True, 'required': False}},
                        'permission': ['core.delete_user']}
-        }
+        },
+        'ban': {
+            'GET': {'validation': {'server': {'type': 'uuid', 'nullable': True, 'default': None, 'coerce': codes.l_to_s},
+                                   'resolved': {'type': 'boolean', 'nullable': True, 'default': None, 'coerce': codes.l_to_b}},
+                    'permission': ['core.view_ban']},
+            'POST': {'validation': {'server': {'type': 'uuid', 'required': True},
+                                    'resolved': {'type': 'boolean', 'nullable': True, 'default': None},
+                                    'reason': {'type': 'string', 'nullable': True, 'default': None},
+                                    'length': {'type': 'integer', 'nullable': True, 'default': None}},
+                     'permission': ['core.modify_ban']},
+            'PUT': {'validation': {'server': {'type': 'uuid', 'required': True},
+                                   'reason': {'type': 'string', 'required': True},
+                                   'length': {'type': 'integer', 'required': True}},
+                    'permission': ['core.add_ban']},
+            'DELETE': {'validation': {'server': {'type': 'uuid', 'required': True}},
+                       'permission': ['core.delete_ban']},
+        },
+        'kick': {},
+        'mutegag': {}
     },
     'steam': {
         'search': {
