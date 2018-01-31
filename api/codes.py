@@ -41,5 +41,9 @@ def s_to_l(v):
   return None
 
 
+def lower(v):
+  return v.lower()
+
+
 method = ['request method not allowed'], 405
 valid = ['data required was not satisfied'], 417

@@ -66,8 +66,28 @@ validation = {
             'DELETE': {'validation': {'server': {'type': 'uuid', 'required': True}},
                        'permission': ['core.delete_ban']},
         },
-        'kick': {},
-        'mutegag': {}
+        'kick': {
+            'PUT': {'validation': {'server': {'type': 'uuid', 'required': True}},
+                    'permission': ['kick_user']},
+        },
+        'mutegag': {
+            'GET': {'validation': {'server': {'type': 'uuid', 'nullable': True, 'default': None, 'coerce': codes.l_to_s},
+                                   'resolved': {'type': 'boolean', 'nullable': True, 'default': None, 'coerce': codes.l_to_b}},
+                    'permission': ['core.view_mutegag']},
+            'POST': {'validation': {'server': {'type': 'uuid', 'required': True},
+                                    'resolved': {'type': 'boolean', 'nullable': True, 'default': None},
+                                    'type': {'type': 'string', 'anyof': ['mute', 'gag', 'both'], 'default': 'both', 'coerce': codes.lower},
+                                    'reason': {'type': 'string', 'nullable': True, 'default': None},
+                                    'length': {'type': 'integer', 'nullable': True, 'default': None}},
+                     'permission': ['core.modify_mutegag']},
+            'PUT': {'validation': {'server': {'type': 'uuid', 'required': True},
+                                   'reason': {'type': 'string', 'required': True},
+                                   'type': {'type': 'string', 'anyof': ['mute', 'gag', 'both'], 'default': 'both', 'coerce': codes.lower},
+                                   'length': {'type': 'integer', 'required': True}},
+                    'permission': ['core.add_mutegag']},
+            'DELETE': {'validation': {'server': {'type': 'uuid', 'required': True}},
+                       'permission': ['core.delete_mutegag']},
+        }
     },
     'steam': {
         'search': {

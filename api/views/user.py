@@ -1,5 +1,6 @@
-from core.models import User, Country, UserLogIP, UserLogTime, UserLogUsername, ServerRole, Server, ServerGroup, Ban
+from core.models import User, Country, UserLogIP, UserLogTime, UserLogUsername, ServerRole, Server, ServerGroup, Ban, Mutegag
 from django.views.decorators.csrf import csrf_exempt
+from rcon.sourcemod import RConSourcemod
 import datetime
 from django.contrib.auth.models import Group
 from django.db.models import F
@@ -197,7 +198,6 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
 
 
 # TESTING
-# RCON integration
 @csrf_exempt
 @json_response
 @authentication_required
@@ -248,6 +248,8 @@ def ban(request, u=None, validated={}, *args, **kwargs):
 
     ban = Ban(user=user, server=server, reason=validated['reason'], length=length)
 
+    RConSourcemod().ban(ban)
+
   elif request.method == 'DELETE':
     server = Server.objects.get(id=validated['server'])
     ban = Ban.objects.get(user=user, server=server)
@@ -256,21 +258,98 @@ def ban(request, u=None, validated={}, *args, **kwargs):
   return 'successful, nothing to report'
 
 
+# TESTING
 @csrf_exempt
 @json_response
 @authentication_required
 @permission_required('user.mutegag')
 @validation('user.mutegag')
 @require_http_methods(['GET', 'PUT', 'DELETE', 'POST'])
-def mutegag():
-  pass
+def mutegag(request, u=None, validated={}, *args, **kwargs):
+  try:
+    user = User.objects.get(id=u)
+  except Exception as e:
+    return 'non existent user queried - {}'.format(e), 403
+
+  if request.method == 'GET':
+    mutegags = Ban.objects.filter(user=user)
+    if validated['server'] is not None:
+      mutegags.filter(server=Server.objects.get(id=validated['server']))
+
+    if validated['resolved'] is not None:
+      mutegags.filter(resolved=validated['resolved'])
+
+    return mutegags.values()
+
+  elif request.method == 'POST':
+    try:
+      server = Server.objects.get(id=validated['server'])
+    except Exception:
+      return 'server not found', 500
+
+    try:
+      mutegag = Mutegag.objects.get(user=user, server=server)
+    except Exception:
+      return 'mute/gag not found', 500
+
+    if validated['type'] is not None:
+      if validated['type'] == 'mute':
+        mutegag.type = 'MU'
+      if validated['type'] == 'gag':
+        mutegag.type = 'GA'
+      if validated['type'] == 'both':
+        mutegag.type = 'BO'
+
+    if validated['resolved'] is not None:
+      mutegag.resolved = validated['resolved']
+
+    if validated['reason'] is not None:
+      mutegag.reason = validated['reason']
+
+    if validated['length'] is not None:
+      mutegag.length = datetime.timedelta(seconds=validated['length'])
+
+    mutegag.save()
+
+  elif request.method == 'PUT':
+    server = Server.objects.get(id=validated['server'])
+    length = datetime.timedelta(seconds=validated['length'])
+
+    if validated['type'] == 'mute':
+      mutegag_type = 'MU'
+    if validated['type'] == 'gag':
+      mutegag_type = 'GA'
+    if validated['type'] == 'both':
+      mutegag_type = 'BO'
+
+    mutegag = Mutegag(user=user, server=server, reason=validated['reason'], length=length, type=mutegag_type)
+
+    RConSourcemod().mutegag(mutegag)
+
+  elif request.method == 'DELETE':
+    server = Server.objects.get(id=validated['server'])
+    ban = Mutegag.objects.get(user=user, server=server)
+    ban.resolved = True
+
+  return 'successful, nothing to report'
 
 
+# TESTING
 @csrf_exempt
 @json_response
 @authentication_required
 @permission_required('user.kick')
 @validation('user.kick')
 @require_http_methods(['PUT'])
-def kick():
-  pass
+def kick(request, u=None, validated={}, *args, **kwargs):
+  try:
+    user = User.objects.get(id=u)
+  except Exception:
+    return 'user not found', 500
+
+  try:
+    server = Server.objects.get(id=validated['server'])
+  except Exception:
+    return 'server not found', 500
+
+  return RConSourcemod().kick(user=user, server=server)

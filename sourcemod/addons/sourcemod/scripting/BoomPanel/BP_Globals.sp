@@ -13,42 +13,48 @@ char cMuteGagName[][] =  {"mute", "gag", "silence", "unmute", "ungag", "unsilenc
 
 HTTPClient httpClient;
 
-int iServerID = -1,
-iClientID[MAXPLAYERS + 1],
-iLastMuteGagTime[MAXPLAYERS + 1],
-iLastTargetID[MAXPLAYERS + 1],
-iLastCommandType[MAXPLAYERS + 1],
-iClientOnlineID[MAXPLAYERS + 1],
-iMuteGagTimeleft[MAXPLAYERS + 1][3],
-iAdminUpdateTimeleft[MAXPLAYERS + 1];
-Handle hMuteGagTimer[MAXPLAYERS + 1],
-g_OnDatabaseReady,
-g_OnClientIDReceived,
-hAdminTimer[MAXPLAYERS + 1];
-ConVar g_cvServerIP,
-g_cvServerPORT,
-g_cvServerHTTPS,
-g_cvServerTOKEN,
-g_cvBansEnabled,
-g_cvAdminsEnabled,
-g_cvMuteGagEnabled,
-g_cvChatLogEnabled,
-g_cvMuteGagAllSrvs,
-g_cvBansAllSrvs;
+char iServerID[37] = "",
+     iClientID[MAXPLAYERS + 1][37];
 
+int iLastMuteGagTime[MAXPLAYERS + 1],
+    iLastTargetID[MAXPLAYERS + 1],
+    iLastCommandType[MAXPLAYERS + 1],
+    iClientOnlineID[MAXPLAYERS + 1],
+    iMuteGagTimeleft[MAXPLAYERS + 1][3],
+    iAdminUpdateTimeleft[MAXPLAYERS + 1];
+
+Handle hMuteGagTimer[MAXPLAYERS + 1],
+       g_OnDatabaseReady,
+       g_OnClientIDReceived,
+       hAdminTimer[MAXPLAYERS + 1];
+
+ConVar g_cvServerIP,
+       g_cvServerPORT,
+       g_cvServerHTTPS,
+       g_cvServerTOKEN,
+       g_cvBansEnabled,
+       g_cvAdminsEnabled,
+       g_cvMuteGagEnabled,
+       g_cvChatLogEnabled,
+       g_cvMuteGagAllSrvs,
+       g_cvBansAllSrvs;
 char g_endpoint[100];
+
 char cServerHostName[100],
-cMuteReasonsFile[PLATFORM_MAX_PATH],
-cGagReasonsFile[PLATFORM_MAX_PATH],
-cSilenceReasonsFile[PLATFORM_MAX_PATH],
-cPunishmentTimeFile[PLATFORM_MAX_PATH],
-cMuteGagReason[MAXPLAYERS + 1][3][150],
-cLastCmd[MAXPLAYERS + 1][50];
+     cMuteReasonsFile[PLATFORM_MAX_PATH],
+     cGagReasonsFile[PLATFORM_MAX_PATH],
+     cSilenceReasonsFile[PLATFORM_MAX_PATH],
+     cPunishmentTimeFile[PLATFORM_MAX_PATH],
+     cMuteGagReason[MAXPLAYERS + 1][3][150],
+     cLastCmd[MAXPLAYERS + 1][50];
+
 char g_MuteReasons[500],
-g_GagReasons[500],
-g_SilenceReasons[500],
-g_PunishmentTimes[500];
+     g_GagReasons[500],
+     g_SilenceReasons[500],
+     g_PunishmentTimes[500];
+
 bool b_WaitingChatMessage[MAXPLAYERS + 1],
-bShowMuteGagOnce[MAXPLAYERS + 1],
-bMuteGagPermanent[MAXPLAYERS + 1][3];
+     bShowMuteGagOnce[MAXPLAYERS + 1],
+     bMuteGagPermanent[MAXPLAYERS + 1][3];
+
 ArrayList g_ConnectionTime;

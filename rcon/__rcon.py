@@ -1,0 +1,2 @@
+class RCon:
+  pass

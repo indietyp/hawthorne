@@ -1,6 +1,6 @@
 // TODO: TESTING
 void Players_OnClientAuthorized(int client) {
-	iClientID[client] = -1;
+	iClientID[client] = "";
 
 	char steamid[20];
 	GetClientAuthId(client, AuthId_SteamID64, steamid, sizeof(steamid));
@@ -26,7 +26,7 @@ void Players_OnClientAuthorized(int client) {
 }
 
 void Players_OnClientDisconnect(int client) {
-	iClientID[client] = -1;
+	iClientID[client] = "";
 }
 
 public void OnClientIsInAPI(HTTPResponse response, any value) {
@@ -40,7 +40,7 @@ public void OnClientIsInAPI(HTTPResponse response, any value) {
       return;
     }
 
-    if(iServerID == -1)
+    if(iServerID == "")
     	return;
 
     int client = GetClientOfUserId(userID);
@@ -51,14 +51,16 @@ public void OnClientIsInAPI(HTTPResponse response, any value) {
     int success = output.GetInt("success");
 
     if (success == 0) {
-    	LogError("[BOOMPANEL] API ERROR (api call failed)");
-    	return;
+      LogError("[BOOMPANEL] API ERROR (api call failed)");
+      return;
     } else {
-    	iClientID[client] = results.InsertId;
+      JSONObject result = view_as<JSONObject>(output.Get("result"));
+    	iClientID[client] = result.getString("id");
 			OnClientIDReceived(client);
     }
 
     delete output;
+    delete result;
 }
 
 void PlayersOnline_OnClientDisconnect(int client) {
