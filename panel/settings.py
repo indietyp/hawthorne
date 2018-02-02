@@ -34,6 +34,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'social_django',
     'static_precompiler',
+    'django_admin_generator',
+    'api',
+    'ajax',
     'core',
     'interface'
 ]

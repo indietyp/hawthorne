@@ -17,6 +17,9 @@ class Country(BaseModel):
   code = models.CharField(unique=True, max_length=2)
   name = models.CharField(max_length=100, null=True)
 
+  def __str__(self):
+    return self.code.upper()
+
 
 class User(AbstractUser):
   id = models.UUIDField(primary_key=True, auto_created=True, default=uuid.uuid4, editable=False, unique=True)
@@ -33,11 +36,14 @@ class User(AbstractUser):
 
   class Meta:
     permissions = [
-        ('view_user', 'View users'),
-        ('kick_user', 'Kick a user'),
-        ('modify_user', 'Kick a user'),
-        # ('search_user', 'Search for users'),
+        ('view_user', 'Can view users'),
+        ('kick_user', 'Can kick a user'),
+        ('view_group', 'Can view a user group'),
+        # ('change_user', 'Can edit a user'),  # built-in
     ]
+
+  def __str__(self):
+    return "{} - {}".format(self.ingame, self.username)
 
 
 class Token(BaseModel):
@@ -56,15 +62,17 @@ class Token(BaseModel):
 
     try:
       permission = self.permissions.get(codename=perm[-1])
-      application = ContentType.objects.get(id=permission.content_type.id)
     except Exception as e:
       print(e)
       return False
 
-    if application.app_label == perm[0]:
+    if permission.content_type.app_label == perm[0]:
       return True
 
     return False
+
+  def __str__(self):
+    return "({}) - {}".format(self.owner, self.id)
 
 
 class UserLogIP(BaseModel):
@@ -75,6 +83,9 @@ class UserLogIP(BaseModel):
   active = models.BooleanField(default=False)
   last_used = models.DateTimeField(auto_now=True)
 
+  def __str__(self):
+    return "{} - {}".format(self.user, self.ip)
+
 
 class UserLogTime(BaseModel):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -83,6 +94,9 @@ class UserLogTime(BaseModel):
   connected = models.DateTimeField(auto_now_add=True)
   disconnected = models.DateTimeField()
 
+  def __str__(self):
+    return "{} - {}".format(self.user, self.server)
+
 
 class UserLogUsername(BaseModel):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -90,6 +104,9 @@ class UserLogUsername(BaseModel):
 
   connections = models.IntegerField(default=0)
   last_used = models.DateTimeField(auto_now=True)
+
+  def __str__(self):
+    return "{}".format(self.username)
 
 
 class ServerPermission(BaseModel):
@@ -139,23 +156,28 @@ class ServerPermission(BaseModel):
 
     return ''.join(flags).upper()
 
+  def __str__(self):
+    return self.convert()
+
 
 class ServerGroup(BaseModel):
   name = models.CharField(max_length=255)
   flags = models.OneToOneField(ServerPermission, on_delete=models.CASCADE)
-  # flags = models.CharField(max_length=25)
 
-  immunity = models.DurationField()
-  usetime = models.DurationField()
-  isadmingroup = models.BooleanField(default=False)
+  immunity = models.PositiveSmallIntegerField()
+  usetime = models.DurationField(null=True)
+  is_admin = models.BooleanField(default=False)
 
   class Meta:
     permissions = [
-        ('view_admin_group', 'View server groups'),
-        ('add_admin_group', 'Add server groups'),
-        ('modify_admin_group', 'Edit server groups'),
-        ('delete_admin_group', 'Delete server groups'),
+        ('view_servergroup', 'Can view server groups'),
+        # ('add_servergroup', 'Can add server groups'),
+        # ('change_servergroup', 'Can edit server groups'),  # built-in
+        # ('delete_servergroup', 'Can delete server groups'),
     ]
+
+  def __str__(self):
+    return self.name
 
 
 class Server(BaseModel):
@@ -168,11 +190,14 @@ class Server(BaseModel):
     unique_together = (('ip', 'port'),)
 
     permissions = [
-        ('view_server', 'View the servers'),
+        ('view_server', 'Can view a server'),
         # ('add_server', 'Add a server'),  # built-in
-        ('modify_server', 'Edit a server'),
+        # ('change_server', 'Can edit a server'),  # built-in
         # ('delete_server', 'Delete a server')  # built-in
     ]
+
+  def __str__(self):
+    return self.name
 
 
 class ServerRole(BaseModel):
@@ -183,11 +208,14 @@ class ServerRole(BaseModel):
   class Meta:
     unique_together = ('user', 'server', )
     permissions = [
-        ('view_admin_role', 'View server roles'),
-        ('add_admin_role', 'Add server roles'),
-        ('modify_admin_role', 'Edit server roles'),
-        ('delete_admin_role', 'Delete server roles'),
+        ('view_serverrole', 'Can view a server role'),
+        # ('add_serverrole', 'Can add a server role'),
+        # ('change_serverrole', 'Can edit server role'),  # built-in
+        # ('delete_serverrole', 'Can delete a server role'),
     ]
+
+  def __str__(self):
+    return "{} - {} = {}".format(self.user, self.server, self.group)
 
 
 class Ban(BaseModel):
@@ -201,11 +229,14 @@ class Ban(BaseModel):
 
   class Meta:
     permissions = [
-        ('view_ban', 'View bans'),
+        ('view_ban', 'Can view a bans'),
         # ('add_ban', 'Add a ban'),  # built-in
-        ('modify_ban', 'Edit a ban'),
+        # ('change_ban', 'Can edit a ban'),  # built-in
         # ('delete_ban', 'Delete bans'),  # built-in
     ]
+
+  def __str__(self):
+    return "{} - {}".format(self.user, self.server)
 
 
 class Chat(BaseModel):
@@ -219,11 +250,14 @@ class Chat(BaseModel):
 
   class Meta:
     permissions = [
-        ('view_chat', 'View chat logs'),
-        ('view_chat_ip', 'View ip of someone in chat logs'),
-        ('view_chat_server', 'View current server of someone in chat logs'),
-        ('view_chat_time', 'View current time of message in chat logs'),
+        ('view_chat', 'Can view chat logs'),
+        ('view_chat_ip', 'Can view ip of someone in chat logs'),
+        ('view_chat_server', 'Can view current server of someone in chat logs'),
+        ('view_chat_time', 'Can view current time of message in chat logs'),
     ]
+
+  def __str__(self):
+    return "{} - {}".format(self.user, self.server)
 
 
 class Mutegag(BaseModel):
@@ -244,13 +278,16 @@ class Mutegag(BaseModel):
 
   class Meta:
     permissions = [
-        ('view_mutegag', 'View mutegags'),
+        ('view_mutegag', 'Can view a mutegag'),
         # ('add_mutegag', 'Add mutegags'),  # built-in
-        ('add_mutegag_mute', 'Add mutegag mutes'),
-        ('add_mutegag_gag', 'Add mutegag gags'),
-        ('modify_mutegag', 'Edit mutegags'),
+        ('add_mutegag_mute', 'Can add a mutegag mute'),
+        ('add_mutegag_gag', 'Can add a mutegag gag'),
+        # ('change_mutegag', 'Can edit a mutegag'),  # built-in
         # ('delete_mutegag', 'Delete mutegags'),  # built-in
     ]
+
+  def __str__(self):
+    return "{} - {}".format(self.user, self.server)
 
 
 class Log(BaseModel):
@@ -259,5 +296,8 @@ class Log(BaseModel):
 
   class Meta:
     permissions = [
-        ('view_admin_log', 'View server logs')
+        ('view_log', 'Can view a server logs')
     ]
+
+  def __str__(self):
+    return "{} - {}".format(self.user, self.action)

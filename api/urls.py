@@ -19,7 +19,7 @@ urlpatterns = [
 
     # groups
     path('groups', group.list, name='group.list'),                          # PUT, GET
-    path('groups/<uuid:g>', group.detailed, name='group.detailed'),         # POST, GET, DELETE
+    path('groups/<int:g>', group.detailed, name='group.detailed'),         # POST, GET, DELETE
 
     # game server roles
     path('roles', role.list, name='role.list'),                             # PUT, GET

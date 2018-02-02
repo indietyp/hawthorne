@@ -33,7 +33,11 @@ def jsonparse(content, code=200, success=None):
 
 def json_response(f):
   def wrapper(request, *args, **kwargs):
-    response = f(request, *args, **kwargs)
+    try:
+      response = f(request, *args, **kwargs)
+    except Exception as e:
+      response = (e.args[-1], 500)
+
     if not isinstance(response, tuple) or len(response) > 4:
       response = (response,)
 
@@ -58,7 +62,7 @@ def validation(a):
         document = dict(request.GET)
         schema = validation['GET']
       else:
-        document = json.loads(request.body)
+        document = json.loads(request.body) if request.body != b'' else {}
         schema = validation[request.method]
 
       schema = schema['validation']

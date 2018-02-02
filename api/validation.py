@@ -45,7 +45,7 @@ validation = {
                                     'role': {'type': 'uuid', 'default': None, 'nullable': True, 'required': False, 'dependencies': ['server']},
                                     'server': {'type': 'uuid', 'required': False},
                                     'group': {'type': 'uuid', 'default': None, 'nullable': True, 'required': False}},
-                     'permission': ['core.modify_user']},
+                     'permission': ['core.change_user']},
             'DELETE': {'validation': {'purge': {'type': 'boolean', 'default': False, 'required': False},
                                       'reset': {'type': 'boolean', 'default': True, 'required': False}},
                        'permission': ['core.delete_user']}
@@ -58,7 +58,7 @@ validation = {
                                     'resolved': {'type': 'boolean', 'nullable': True, 'default': None},
                                     'reason': {'type': 'string', 'nullable': True, 'default': None},
                                     'length': {'type': 'integer', 'nullable': True, 'default': None}},
-                     'permission': ['core.modify_ban']},
+                     'permission': ['core.change_ban']},
             'PUT': {'validation': {'server': {'type': 'uuid', 'required': True},
                                    'reason': {'type': 'string', 'required': True},
                                    'length': {'type': 'integer', 'required': True}},
@@ -79,7 +79,7 @@ validation = {
                                     'type': {'type': 'string', 'anyof': ['mute', 'gag', 'both'], 'default': 'both', 'coerce': codes.lower},
                                     'reason': {'type': 'string', 'nullable': True, 'default': None},
                                     'length': {'type': 'integer', 'nullable': True, 'default': None}},
-                     'permission': ['core.modify_mutegag']},
+                     'permission': ['core.change_mutegag']},
             'PUT': {'validation': {'server': {'type': 'uuid', 'required': True},
                                    'reason': {'type': 'string', 'required': True},
                                    'type': {'type': 'string', 'anyof': ['mute', 'gag', 'both'], 'default': 'both', 'coerce': codes.lower},
@@ -87,6 +87,28 @@ validation = {
                     'permission': ['core.add_mutegag']},
             'DELETE': {'validation': {'server': {'type': 'uuid', 'required': True}},
                        'permission': ['core.delete_mutegag']},
+        }
+    },
+    'group': {
+        'list': {
+            'GET': {'validation': {'offset': {'type': 'integer', 'min': 0, 'default': 0, 'coerce': codes.l_to_i},
+                                   'limit': {'type': 'integer', 'min': -1, 'default': -1, 'coerce': codes.l_to_i},
+                                   'match': {'type': 'string', 'default': '', 'coerce': codes.l_to_s}},
+                    'permission': ['core.view_group']},
+            'PUT': {'validation': {'name': {'type': 'string', 'required': True},
+                                   'permissions': {'type': 'list', 'default': [], 'schema': {'regex': '\w+\.\w+\_\w+'}},
+                                   'members': {'type': 'list', 'default': [], 'schema': {'type': 'uuid'}}},
+                    'permission': ['auth.add_group']}
+        },
+        'detailed': {
+            'GET': {'validation': {},
+                    'permission': ['core.view_group']},
+            'POST': {'validation': {'name': {'type': 'string', 'default': None, 'nullable': True},
+                                    'permissions': {'type': 'list', 'default': [], 'schema': {'regex': '\w+\.\w+\_\w+'}},
+                                    'members': {'type': 'list', 'default': [], 'schema': {'type': 'uuid'}}},
+                     'permission': ['auth.edit_group']},
+            'DELETE': {'validation': {},
+                       'permission': ['auth.delete_group']}
         }
     },
     'steam': {
