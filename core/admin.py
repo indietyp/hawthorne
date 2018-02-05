@@ -174,20 +174,6 @@ class ServerAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
 
 
-class ServerRoleAdmin(admin.ModelAdmin):
-
-    list_display = (
-        'id',
-        'created_at',
-        'updated_at',
-        'user',
-        'server',
-        'group',
-    )
-    list_filter = ('created_at', 'updated_at', 'user', 'server', 'group')
-    date_hierarchy = 'created_at'
-
-
 class BanAdmin(admin.ModelAdmin):
 
     list_display = (
@@ -273,7 +259,6 @@ _register(models.UserLogUsername, UserLogUsernameAdmin)
 _register(models.ServerPermission, ServerPermissionAdmin)
 _register(models.ServerGroup, ServerGroupAdmin)
 _register(models.Server, ServerAdmin)
-_register(models.ServerRole, ServerRoleAdmin)
 _register(models.Ban, BanAdmin)
 _register(models.Chat, ChatAdmin)
 _register(models.Mutegag, MutegagAdmin)

@@ -1,7 +1,6 @@
 import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Permission
-from django.contrib.contenttypes.models import ContentType
 
 
 class BaseModel(models.Model):
@@ -28,6 +27,7 @@ class User(AbstractUser):
 
   ip = models.GenericIPAddressField(null=True)
 
+  roles = models.ManyToManyField('ServerGroup')
   country = models.ForeignKey(Country, on_delete=models.CASCADE, null=True)
   avatar = models.URLField(null=True)
   profile = models.URLField(null=True)
@@ -124,37 +124,80 @@ class ServerPermission(BaseModel):
   can_rcon = models.BooleanField(default=False)
   can_cheat = models.BooleanField(default=False)
 
-  def convert(self):
-    flags = []
-    if self.can_reservation:
-      flags.append('A')
-    if self.can_generic:
-      flags.append('B')
-    if self.can_kick:
-      flags.append('C')
-    if self.can_ban:
-      flags.append('D')
-      flags.append('E')
-    if self.can_slay:
-      flags.append('F')
-    if self.can_map:
-      flags.append('G')
-    if self.can_cvar:
-      flags.append('H')
-    if self.can_config:
-      flags.append('I')
-    if self.can_chat:
-      flags.append('J')
-    if self.can_vote:
-      flags.append('K')
-    if self.can_password:
-      flags.append('L')
-    if self.can_rcon:
-      flags.append('M')
-    if self.can_cheat:
-      flags.append('N')
+  def convert(self, conv=None):
+    if conv is not None:
+      flags = []
+      if self.can_reservation:
+        flags.append('A')
+      if self.can_generic:
+        flags.append('B')
+      if self.can_kick:
+        flags.append('C')
+      if self.can_ban:
+        flags.append('D')
+        flags.append('E')
+      if self.can_slay:
+        flags.append('F')
+      if self.can_map:
+        flags.append('G')
+      if self.can_cvar:
+        flags.append('H')
+      if self.can_config:
+        flags.append('I')
+      if self.can_chat:
+        flags.append('J')
+      if self.can_vote:
+        flags.append('K')
+      if self.can_password:
+        flags.append('L')
+      if self.can_rcon:
+        flags.append('M')
+      if self.can_cheat:
+        flags.append('N')
+    else:
+      self.can_reservation = False
+      self.can_generic = False
+      self.can_kick = False
+      self.can_ban = False
+      self.can_slay = False
+      self.can_map = False
+      self.can_cvar = False
+      self.can_config = False
+      self.can_chat = False
+      self.can_vote = False
+      self.can_password = False
+      self.can_rcon = False
+      self.can_cheat = False
 
-    return ''.join(flags).upper()
+      for char in conv:
+        if char in ['A']:
+          self.can_reservation = True
+        if char in ['B']:
+          self.can_generic = True
+        if char in ['C']:
+          self.can_kick = True
+        if char in ['D', 'E']:
+          self.can_ban = True
+        if char in ['F']:
+          self.can_slay = True
+        if char in ['G']:
+          self.can_map = True
+        if char in ['H']:
+          self.can_cvar = True
+        if char in ['I']:
+          self.can_config = True
+        if char in ['J']:
+          self.can_chat = True
+        if char in ['K']:
+          self.can_vote = True
+        if char in ['L']:
+          self.can_password = True
+        if char in ['M']:
+          self.can_rcon = True
+        if char in ['N']:
+          self.can_cheat = True
+
+      return True
 
   def __str__(self):
     return self.convert()
@@ -163,6 +206,7 @@ class ServerPermission(BaseModel):
 class ServerGroup(BaseModel):
   name = models.CharField(max_length=255)
   flags = models.OneToOneField(ServerPermission, on_delete=models.CASCADE)
+  server = models.ForeignKey('Server', on_delete=models.CASCADE, null=True)
 
   immunity = models.PositiveSmallIntegerField()
   usetime = models.DurationField(null=True)
@@ -198,24 +242,6 @@ class Server(BaseModel):
 
   def __str__(self):
     return self.name
-
-
-class ServerRole(BaseModel):
-  user = models.ForeignKey(User, on_delete=models.CASCADE)
-  server = models.ForeignKey(Server, on_delete=models.CASCADE)
-  group = models.ForeignKey(ServerGroup, on_delete=models.CASCADE)
-
-  class Meta:
-    unique_together = ('user', 'server', )
-    permissions = [
-        ('view_serverrole', 'Can view a server role'),
-        # ('add_serverrole', 'Can add a server role'),
-        # ('change_serverrole', 'Can edit server role'),  # built-in
-        # ('delete_serverrole', 'Can delete a server role'),
-    ]
-
-  def __str__(self):
-    return "{} - {} = {}".format(self.user, self.server, self.group)
 
 
 class Ban(BaseModel):

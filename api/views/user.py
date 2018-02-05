@@ -1,4 +1,4 @@
-from core.models import User, Country, UserLogIP, UserLogTime, UserLogUsername, ServerRole, Server, ServerGroup, Ban, Mutegag
+from core.models import User, Country, UserLogIP, UserLogTime, UserLogUsername, Server, ServerGroup, Ban, Mutegag
 from django.views.decorators.csrf import csrf_exempt
 from rcon.sourcemod import RConSourcemod
 import datetime
@@ -116,8 +116,8 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
     selected = ['id', 'ip', 'avatar', 'profile', 'permissions', 'steamid', 'name', 'circles']
     if validated['server'] is not None:
       try:
-        role = ServerRole.objects.get(user=user, server=Server.objects.get(id=validated['server']))
-        user.flags = role.groups.flags.convert()
+        role = user.roles.get(server=Server.objects.get(id=validated['server']))
+        user.flags = role.flags.convert()
         selected.append('flags')
       except Exception as e:
         return 'serverrole does not exist for this user - {}'.format(e), 403

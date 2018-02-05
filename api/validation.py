@@ -111,6 +111,28 @@ validation = {
                        'permission': ['auth.delete_group']}
         }
     },
+    'role': {
+        'list': {
+            'GET': {'validation': {'offset': {'type': 'integer', 'min': 0, 'default': 0, 'coerce': codes.l_to_i},
+                                   'limit': {'type': 'integer', 'min': -1, 'default': -1, 'coerce': codes.l_to_i},
+                                   'match': {'type': 'string', 'default': '', 'coerce': codes.l_to_s}},
+                    'permission': ['core.view_group']},
+            'PUT': {'validation': {'name': {'type': 'string', 'required': True},
+                                   'permissions': {'type': 'list', 'default': [], 'schema': {'regex': '\w+\.\w+\_\w+'}},
+                                   'members': {'type': 'list', 'default': [], 'schema': {'type': 'uuid'}}},
+                    'permission': ['auth.add_group']}
+        },
+        'detailed': {
+            'GET': {'validation': {},
+                    'permission': ['core.view_group']},
+            'POST': {'validation': {'name': {'type': 'string', 'default': None, 'nullable': True},
+                                    'permissions': {'type': 'list', 'default': [], 'schema': {'regex': '\w+\.\w+\_\w+'}},
+                                    'members': {'type': 'list', 'default': [], 'schema': {'type': 'uuid'}}},
+                     'permission': ['auth.edit_group']},
+            'DELETE': {'validation': {},
+                       'permission': ['auth.delete_group']}
+        }
+    },
     'steam': {
         'search': {
             'GET': {'validation': {'scope': {'type': 'string', 'allowed': ['user'], 'default': 'user', 'coerce': codes.l_to_s},
