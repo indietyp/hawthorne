@@ -6,7 +6,7 @@ from api.validation import validation as valid_dict
 from api.validation import Validator
 
 
-def jsonparse(content, code=200, success=None):
+def jsonparse(content=None, code=200, success=None):
   if success is None:
     # applying best guess
     success = True if code >= 200 and code < 300 else False
@@ -17,6 +17,9 @@ def jsonparse(content, code=200, success=None):
                        'dependencies': {'success': False}, 'coerce': s_to_l},
             'result': {'dependencies': {'success': True}}}
   v = Validator(schema, update=True, purge_unknown=True)
+
+  if content is None:
+    content = 'no return value was supplied'
 
   document = {'success': success}
   if success:

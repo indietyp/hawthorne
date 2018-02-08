@@ -1,8 +1,8 @@
 // TODO: NEEDS TO BE REPLACED WITH API
 // TODO: TESTING
 void RconCommands_OnPluginStart() {
-	RegAdminCmd("sm_BPstatus", 		CMD_Status, 	ADMFLAG_RCON);
-	RegAdminCmd("sm_BPbankick", 	CMD_BanKick, 	ADMFLAG_RCON);
+	RegAdminCmd("sm_BPstatus", 			CMD_Status, 	ADMFLAG_RCON);
+	RegAdminCmd("sm_BPbankick", 		CMD_BanKick, 	ADMFLAG_RCON);
 	RegAdminCmd("sm_BPmutegagadd", 	CMD_MuteGagAdd, ADMFLAG_RCON);
 	RegAdminCmd("sm_BPmutegagrem", 	CMD_MuteGagRem, ADMFLAG_RCON);
 	RegAdminCmd("sm_BPmutegagres", 	CMD_MuteGagRes, ADMFLAG_RCON);

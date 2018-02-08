@@ -1,7 +1,7 @@
-from core.models import User, ServerGroup
+import datetime
+from core.models import User, Server, ServerGroup, ServerPermission
 from django.forms.models import model_to_dict
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.models import Permission
 from core.decorators.api import json_response, validation
 from core.decorators.auth import authentication_required, permission_required
 from django.views.decorators.http import require_http_methods
@@ -23,21 +23,30 @@ def list(request, validated={}, *args, **kwargs):
 
     return [g for g in roles]
   else:
-    # perms = []
-    # for perm in validated['permissions']:
-    #   perm = perm.split('.')
-    #   for p in Permission.objects.filter(name=perm[1]):
-    #     if p.content_type.app_label == perm[0]:
-    #       perms.append(p)
-
     users = []
     for user in validated['members']:
       for u in User.objects.filter(id=user):
         users.append(u)
 
     role = ServerGroup(name=validated['name'])
+
+    if validated['flags'] is not None:
+      flags = validated['flags']
+      permission = ServerPermission().convert(conv=flags)
+    else:
+      permission = ServerPermission()
+    permission.save()
+
+    role.flags = permission
+    role.immunity = validated['immunity']
+
+    if validated['server'] is not None:
+      role.server = Server.objects.get(id=validated['server'])
+
+    if validated['usetime'] is not None:
+      role.usetime = datetime.timedelta(seconds=validated['usetime'])
+
     role.save()
-    # role.permissions.set(perms)
     role.user_set.set(users)
     role.save()
 
@@ -50,19 +59,19 @@ def list(request, validated={}, *args, **kwargs):
 @permission_required('role.detailed')
 @validation('role.detailed')
 @require_http_methods(['GET', 'POST', 'DELETE'])
-def detailed(request, g=None, validated={}, *args, **kwargs):
-  role = ServerGroup.objects.get(id=g)
+def detailed(request, r=None, validated={}, *args, **kwargs):
+  role = ServerGroup.objects.get(id=r)
 
   if request.method == 'GET':
-    g = model_to_dict(role)
-    g['members'] = [str(a.id) for a in role.user_set.all()]
-    g['permissions'] = ["{}.{}".format(p.content_type.app_label, p.codename) for p in role.permissions.all()]
+    r = model_to_dict(role)
+    r['members'] = [str(a.id) for a in role.user_set.all()]
+    r['flags'] = role.flags.convert()
 
-    return g
+    return r
 
   elif request.method == 'POST':
     if validated['name'] is not None:
-      g.name = validated['name']
+      role.name = validated['name']
 
     if len(validated['members']) > 0:
       users = []
@@ -73,17 +82,20 @@ def detailed(request, g=None, validated={}, *args, **kwargs):
           continue
       role.user_set.set(users)
 
-    if len(validated['permissions']) > 0:
-      perms = []
-      for p in validated['permissions']:
-        p = p.split('.')
-        try:
-          perms.append(Permission.objects.get(content_type__app_label=p[0], codename=p[1]))
-        except Exception:
-          continue
-      role.permissions.set(perms)
+    if validated['immunity'] is not None:
+      role.immunity = validated['immunity']
 
-    g.save()
+    if validated['server'] is not None:
+      role.server = Server.objects.get(id=validated['server'])
+
+    if validated['usetime'] is not None:
+      role.usetime = datetime.timedelta(seconds=validated['usetime'])
+
+    if validated['flags'] is not None:
+      role.flags = role.flags.convert(validated['flags'])
+      role.flags.save()
+
+    role.save()
 
   elif request.method == 'DELETE':
     role.delete()

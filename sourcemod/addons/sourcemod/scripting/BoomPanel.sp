@@ -9,17 +9,17 @@
 #include <ripext>
 
 
-#include "BoomPanel/BP_Globals.sp"
-#include "BoomPanel/BP_Functions.sp"
-#include "BoomPanel/BP_Convars.sp"
-#include "BoomPanel/BP_ServerID.sp"
-#include "BoomPanel/BP_Players.sp"
-#include "BoomPanel/BP_Chat.sp"
-#include "BoomPanel/BP_Bans.sp"
-#include "BoomPanel/BP_Admins.sp"
-#include "BoomPanel/BP_MuteGag.sp"
-#include "BoomPanel/BP_RconCommands.sp"
-#include "BoomPanel/BP_Natives.sp"
+#include "modules/globals.sp"
+#include "modules/functions.sp"
+#include "modules/convars.sp"
+#include "modules/serverid.sp"
+#include "modules/players.sp"
+#include "modules/chat.sp"
+#include "modules/bans.sp"
+#include "modules/admins.sp"
+#include "modules/mutegag.sp"
+#include "modules/rcon.sp"
+#include "modules/natives.sp"
 
 #pragma newdecls required
 

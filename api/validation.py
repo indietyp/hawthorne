@@ -106,7 +106,7 @@ validation = {
             'POST': {'validation': {'name': {'type': 'string', 'default': None, 'nullable': True},
                                     'permissions': {'type': 'list', 'default': [], 'schema': {'regex': '\w+\.\w+\_\w+'}},
                                     'members': {'type': 'list', 'default': [], 'schema': {'type': 'uuid'}}},
-                     'permission': ['auth.edit_group']},
+                     'permission': ['auth.change_group']},
             'DELETE': {'validation': {},
                        'permission': ['auth.delete_group']}
         }
@@ -116,22 +116,81 @@ validation = {
             'GET': {'validation': {'offset': {'type': 'integer', 'min': 0, 'default': 0, 'coerce': codes.l_to_i},
                                    'limit': {'type': 'integer', 'min': -1, 'default': -1, 'coerce': codes.l_to_i},
                                    'match': {'type': 'string', 'default': '', 'coerce': codes.l_to_s}},
-                    'permission': ['core.view_group']},
+                    'permission': ['core.view_servergroup']},
             'PUT': {'validation': {'name': {'type': 'string', 'required': True},
-                                   'permissions': {'type': 'list', 'default': [], 'schema': {'regex': '\w+\.\w+\_\w+'}},
+                                   'immunity': {'type': 'integer', 'required': True, 'min': 0, 'max': 100},
+                                   'server': {'type': 'uuid', 'default': None, 'nullable': True},
+                                   'usetime': {'type': 'integer', 'default': None, 'nullable': True, 'min': 0},
+                                   'flags': {'type': 'string', 'default': None, 'nullable': True, 'regex': r'[A-N]+'},
                                    'members': {'type': 'list', 'default': [], 'schema': {'type': 'uuid'}}},
-                    'permission': ['auth.add_group']}
+                    'permission': ['core.add_servergroup']}
         },
         'detailed': {
             'GET': {'validation': {},
-                    'permission': ['core.view_group']},
+                    'permission': ['core.view_servergroup']},
             'POST': {'validation': {'name': {'type': 'string', 'default': None, 'nullable': True},
-                                    'permissions': {'type': 'list', 'default': [], 'schema': {'regex': '\w+\.\w+\_\w+'}},
+                                    'immunity': {'type': 'integer', 'default': None, 'nullable': True, 'min': 0, 'max': 100},
+                                    'usetime': {'type': 'integer', 'default': None, 'nullable': True, 'min': 0},
+                                    'server': {'type': 'uuid', 'default': None, 'nullable': True},
+                                    'flags': {'type': 'string', 'default': None, 'nullable': True, 'regex': r'[A-N]+'},
                                     'members': {'type': 'list', 'default': [], 'schema': {'type': 'uuid'}}},
-                     'permission': ['auth.edit_group']},
+                     'permission': ['core.change_servergroup']},
             'DELETE': {'validation': {},
-                       'permission': ['auth.delete_group']}
+                       'permission': ['core.delete_servergroup']}
         }
+    },
+    'server': {
+        'list': {
+            'GET': {'validation': {'offset': {'type': 'integer', 'min': 0, 'default': 0, 'coerce': codes.l_to_i},
+                                   'limit': {'type': 'integer', 'min': -1, 'default': -1, 'coerce': codes.l_to_i},
+                                   'match': {'type': 'string', 'default': '', 'coerce': codes.l_to_s}},
+                    'permission': ['core.view_server']},
+            'PUT': {'validation': {'name': {'type': 'string', 'required': True},
+                                   'ip': {'type': 'ip', 'required': True},
+                                   'port': {'type': 'integer', 'required': True, 'min': 0, 'max': 65535},
+                                   'password': {'type': 'string', 'required': True}},
+                    'permission': ['core.add_server']}
+        },
+        'detailed': {
+            'GET': {'validation': {},
+                    'permission': ['core.view_server']},
+            'POST': {'validation': {'name': {'type': 'string', 'nullable': True, 'default': None},
+                                    'ip': {'type': 'ip', 'nullable': True, 'default': None},
+                                    'port': {'type': 'integer', 'nullable': True, 'default': None, 'min': 0, 'max': 65535},
+                                    'password': {'type': 'string', 'nullable': True, 'default': None}},
+                     'permission': ['core.change_server']},
+            'DELETE': {'validation': {},
+                       'permission': ['core.delete_server']}
+        },
+        'action': {
+            'PUT': {'validation': {'command': {'type': 'string', 'required': True}},
+                    'permission': ['core.execute_server']}
+        }
+    },
+    'system': {
+        'log': {
+            'GET': {'validation': {'offset': {'type': 'integer', 'min': 0, 'default': 0, 'coerce': codes.l_to_i},
+                                   'limit': {'type': 'integer', 'min': -1, 'default': -1, 'coerce': codes.l_to_i},
+                                   'match': {'type': 'string', 'default': '', 'coerce': codes.l_to_s},
+                                   'descend': {'type': 'boolean', 'default': True, 'coerce': codes.l_to_b}},
+                    'permission': ['core.view_log']},
+            'PUT': {'validation': {'action': {'type': 'string', 'required': True},
+                                   'user': {'type': 'uuid', 'required': True}},
+                    'permission': ['core.add_log']}
+        },
+        'chat': {
+            'GET': {'validation': {'offset': {'type': 'integer', 'min': 0, 'default': 0, 'coerce': codes.l_to_i},
+                                   'limit': {'type': 'integer', 'min': -1, 'default': -1, 'coerce': codes.l_to_i},
+                                   'match': {'type': 'string', 'default': '', 'coerce': codes.l_to_s}},
+                    'permission': ['core.view_chat']},
+            'PUT': {'validation': {'user': {'type': 'uuid', 'required': True},
+                                   'server': {'type': 'uuid', 'required': True},
+                                   'ip': {'type': 'ip', 'required': True},
+                                   'message': {'type': 'string', 'required': True},
+                                   'command': {'type': 'boolean', 'default': None, 'nullable': True},
+                                   'descend': {'type': 'boolean', 'default': True, 'coerce': codes.l_to_b}},
+                    'permission': ['core.add_chat']}
+        },
     },
     'steam': {
         'search': {

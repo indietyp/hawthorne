@@ -1,10 +1,11 @@
 from core.models import User
+from django.http import HttpResponseRedirect
 
 
-def get_user(strategy, details, backend, user=None, *args, **kwargs):
+def get_user(backend, details, response, uid, user, *args, **kwargs):
   information = details['player']
-  if not user:
-    try:
-      return {'user': User.objects.get(username=information['steamid'], is_active=True)}
-    except Exception:
-      return
+
+  try:
+    return {'user': User.objects.get(username=information['steamid'], is_active=True, is_staff=True)}
+  except Exception:
+    return HttpResponseRedirect('/login?insufficient=1')

@@ -125,7 +125,7 @@ class ServerPermission(BaseModel):
   can_cheat = models.BooleanField(default=False)
 
   def convert(self, conv=None):
-    if conv is not None:
+    if conv is None:
       flags = []
       if self.can_reservation:
         flags.append('A')
@@ -154,6 +154,8 @@ class ServerPermission(BaseModel):
         flags.append('M')
       if self.can_cheat:
         flags.append('N')
+
+      return ''.join(flags)
     else:
       self.can_reservation = False
       self.can_generic = False
@@ -197,7 +199,7 @@ class ServerPermission(BaseModel):
         if char in ['N']:
           self.can_cheat = True
 
-      return True
+      return self
 
   def __str__(self):
     return self.convert()
@@ -235,6 +237,7 @@ class Server(BaseModel):
 
     permissions = [
         ('view_server', 'Can view a server'),
+        ('execute_server', 'Can view a server'),
         # ('add_server', 'Add a server'),  # built-in
         # ('change_server', 'Can edit a server'),  # built-in
         # ('delete_server', 'Delete a server')  # built-in

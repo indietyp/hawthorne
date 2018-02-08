@@ -248,7 +248,7 @@ def ban(request, u=None, validated={}, *args, **kwargs):
 
     ban = Ban(user=user, server=server, reason=validated['reason'], length=length)
 
-    RConSourcemod().ban(ban)
+    RConSourcemod(server).ban(ban)
 
   elif request.method == 'DELETE':
     server = Server.objects.get(id=validated['server'])
@@ -324,7 +324,7 @@ def mutegag(request, u=None, validated={}, *args, **kwargs):
 
     mutegag = Mutegag(user=user, server=server, reason=validated['reason'], length=length, type=mutegag_type)
 
-    RConSourcemod().mutegag(mutegag)
+    RConSourcemod(server).mutegag(mutegag)
 
   elif request.method == 'DELETE':
     server = Server.objects.get(id=validated['server'])
@@ -352,4 +352,4 @@ def kick(request, u=None, validated={}, *args, **kwargs):
   except Exception:
     return 'server not found', 500
 
-  return RConSourcemod().kick(user=user, server=server)
+  return RConSourcemod(server).kick(user=user, server=server)

@@ -62,7 +62,7 @@ def detailed(request, g=None, validated={}, *args, **kwargs):
 
   elif request.method == 'POST':
     if validated['name'] is not None:
-      g.name = validated['name']
+      group.name = validated['name']
 
     if len(validated['members']) > 0:
       users = []
@@ -83,7 +83,7 @@ def detailed(request, g=None, validated={}, *args, **kwargs):
           continue
       group.permissions.set(perms)
 
-    g.save()
+    group.save()
 
   elif request.method == 'DELETE':
     group.delete()
