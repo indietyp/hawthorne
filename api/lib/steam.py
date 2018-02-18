@@ -1,8 +1,10 @@
 import requests
+import steamapi
 import uuid
 import json
 from lxml import etree
 from lxml.cssselect import CSSSelector
+from django.conf import settings
 
 
 def search(query=''):
@@ -38,10 +40,16 @@ def search(query=''):
     image = CSSSelector('div.avatarMedium img')
 
     output = []
+    steamapi.core.APIConnection(api_key=settings.SOCIAL_AUTH_STEAM_API_KEY, validate_key=True)
     for result in results(html):
         tmp = {}
         tmp['name'] = credentials(result)[0].text
-        tmp['url'] = credentials(result)[0].attrib['href']
+
+        uri = credentials(result)[0].attrib['href']
+        if '/id/' in uri:
+            tmp['url'] = steamapi.user.SteamUser(userurl=uri.split('/id/')[-1]).steamid
+        else:
+            tmp['url'] = uri.split('/profiles/')[-1]
         tmp['image'] = image(result)[0].attrib['src']
 
         output.append(tmp)

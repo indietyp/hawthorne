@@ -1,15 +1,24 @@
-.row.pure-g
+- load interface_utils
+
+.row.pure-g(style="width:100%")
   .column.icon.username.pure-u-7-24
-    span.flag-icon.flag-icon-de
-    img(src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/0f/0f7d37f4f53260811d53bfd7fcbfb77a48997093.jpg")
-    span indietyp
+    span.flag-icon(class="flag-icon-{{data.country.code|lower}}")
+    img(src=data.avatar)
+    span= data.ingame
   .column.icon.server.pure-u-7-24
     i(data-feather="hard-drive")
-    span EU-Retake 3
+    span= data.sname
   .column.icon.online.pure-u-7-24
     i(data-feather="clock")
-    span 3 minutes
+    span= data.otime|timesince
   .column.icon.username.pure-u-3-24
     .spacer
+    div
+      - if data.online
+        svg.feather(width='24', height='24').green.fill
+          circle(cx="12", cy="12", r="12", stroke="none")
+      - else
+        svg.feather(width='24', height='24').red.fill
+          circle(cx="12", cy="12", r="12", stroke="none")
     .action
       i.red(data-feather="slash")

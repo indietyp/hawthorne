@@ -26,7 +26,7 @@ change = (destination='home') ->
       return false
 
   data =
-    csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val()
+    csrfmiddlewaretoken: window.csrftoken
 
   $(data).ajax(url, method, (data, status) ->
     if status == 200
@@ -34,7 +34,8 @@ change = (destination='home') ->
 
       setTimeout(->
         $("#content").html(data)
-        eval($("#content script.execution").html())
+        for scr in $("#content script.execution")
+          eval($(scr).html())
         feather.replace()
         $("#content").css('opacity', '')
       , 200)

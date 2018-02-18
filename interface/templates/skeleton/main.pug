@@ -12,7 +12,10 @@ html(lang='en')
       .spacer
       .information.action.default-cursor
         i(data-feather="user")
-        span Indietyp
+        - if request.user.steam is False
+          span= request.user.username
+        - else
+          span= request.user.ingame
       .offline.action(onclick="window.location='{% url 'logout' %}';")
         i(data-feather="power")
 

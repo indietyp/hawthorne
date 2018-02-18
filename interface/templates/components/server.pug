@@ -3,4 +3,24 @@
 - load staticfiles
 
 - block content
+  .item.pure-u-1-1.pure-g#server__server
+    script.execution.
+      window.ajax.server.server(1)
+    .row.pure-g
+      .column.icon.group.pure-u-7-24.input-wrapper
+        input#inputservername(type='text')
+        label.adjusted(for='inputgroupname')
+          i.skip(data-feather='hard-drive')
+      .column.icon.immunity.pure-u-7-24.input-wrapper
+        input#inputip(placeholder='0.0.0.0:27012', type='text', pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$")
+        label.adjusted(for='inputip')
+          i.skip.adjusted(data-feather='wifi')
+      .column.icon.time.pure-u-7-24.input-wrapper
+        input#inputpassword(type='password')
+        label.adjusted(for='inputpassword')
+          i.skip(data-feather='lock')
+      .column.icon.pure-u-3-24
+        .spacer
+        .action
+          i(data-feather="plus")
   //- partials/server/server.pug

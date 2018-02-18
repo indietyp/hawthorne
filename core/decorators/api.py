@@ -8,13 +8,10 @@ from api.validation import Validator
 
 def jsonparse(content=None, code=200, success=None):
   if success is None:
-    # applying best guess
     success = True if code >= 200 and code < 300 else False
 
-  schema = {'success': {'type': 'boolean',
-                        'required': True},
-            'reason': {'type': ['dict', 'list'],
-                       'dependencies': {'success': False}, 'coerce': s_to_l},
+  schema = {'success': {'type': 'boolean', 'required': True},
+            'reason': {'type': ['dict', 'list'], 'dependencies': {'success': False}, 'coerce': s_to_l},
             'result': {'dependencies': {'success': True}}}
   v = Validator(schema, update=True, purge_unknown=True)
 

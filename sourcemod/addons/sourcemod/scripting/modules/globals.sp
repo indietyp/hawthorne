@@ -30,7 +30,7 @@ Handle hMuteGagTimer[MAXPLAYERS + 1],
 
 ConVar g_cvServerIP,
        g_cvServerPORT,
-       g_cvServerHTTPS,
+       g_cvServerPROTOCOL,
        g_cvServerTOKEN,
        g_cvBansEnabled,
        g_cvAdminsEnabled,

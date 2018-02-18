@@ -30,7 +30,7 @@ void Players_OnClientDisconnect(int client) {
 }
 
 public void OnClientIsInAPI(HTTPResponse response, any value) {
-    if (response.Status != HTTPStatus_Created) {
+    if (response.Status != 200) {
     	LogError("[BOOMPANEL] API ERROR (request failed)");
       return;
     }

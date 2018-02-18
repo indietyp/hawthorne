@@ -1,13 +1,13 @@
-.row.pure-g
+.row.pure-g(style="width:100%")
   .column.icon.username.pure-u-8-24
     i(data-feather='user')
-    span indietyp
+    span= data.user.ingame|truncatechars:18
   .column.icon.server.pure-u-8-24
     i(data-feather='hard-drive')
-    span EU-Retake 1
+    span= data.server.name|truncatechars:18
   .column.icon.time.pure-u-8-24
     i(data-feather='clock')
-    span 02.09 17 13:12
+    span= data.created_at|date:"d.m y H:i"
   .column.icon.placeholder.pure-u-8-24
   .column.icon.command.pure-u-16-24
-    pre.code.code-command sm_admin
+    pre.code.code-command= data.message

@@ -4,3 +4,7 @@ social-auth-app-django
 cerberus
 lxml
 cssselect
+natural
+dateparser
+steamapi
+automated_logging

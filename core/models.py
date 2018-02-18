@@ -22,9 +22,9 @@ class Country(BaseModel):
 
 class User(AbstractUser):
   id = models.UUIDField(primary_key=True, auto_created=True, default=uuid.uuid4, editable=False, unique=True)
-  # steamid = models.CharField(max_length=17, null=True)
   ingame = models.CharField(max_length=255, null=True)
 
+  online = models.BooleanField(default=False)
   ip = models.GenericIPAddressField(null=True)
 
   roles = models.ManyToManyField('ServerGroup')
@@ -33,6 +33,9 @@ class User(AbstractUser):
   profile = models.URLField(null=True)
 
   steam = models.BooleanField(default=True)
+
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
 
   class Meta:
     permissions = [
@@ -92,7 +95,7 @@ class UserLogTime(BaseModel):
   server = models.ForeignKey('Server', on_delete=models.CASCADE)
 
   connected = models.DateTimeField(auto_now_add=True)
-  disconnected = models.DateTimeField()
+  disconnected = models.DateTimeField(null=True)
 
   def __str__(self):
     return "{} - {}".format(self.user, self.server)
@@ -231,6 +234,13 @@ class Server(BaseModel):
   ip = models.GenericIPAddressField()
   port = models.IntegerField()
   password = models.CharField(max_length=255)
+
+  SUPPORTED = (
+      ('csgo', 'Counter-Strike: Global Offensive'),
+  )
+  game = models.CharField(max_length=255, choices=SUPPORTED)
+  mode = models.CharField(max_length=255, null=True)
+  vac = models.BooleanField(default=True)
 
   class Meta:
     unique_together = (('ip', 'port'),)

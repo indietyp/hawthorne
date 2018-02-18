@@ -9,7 +9,7 @@ $blue: #19648D
 $lblue: #76B1DF
 $purple: #8B6DFF
 $lipstick: #954070
-$colors: "white" $white, "dgray" $dgray, "gray" $gray, "black" $black, "red" $red, "green" $green, "blue" $blue, "lblue" $lblue, "purple" $purple, "lipstick" $lipstick
+$colors: "white" $white, "dgray" $dgray, "gray" $gray, "black" $black, "red" $red, "green" $green, "blue" $blue, "lblue" $lblue, "purple" $purple, "lipstick" $lipstick, "black" #000
 
 body
     margin: 0
@@ -46,7 +46,7 @@ html, button, input, select, textarea, .pure-g [class*="pure-u"]
 #content-wrapper
     display: flex
     z-index: 1
-    width: 100vw
+    // width: 100vw
 
 #login-wrapper
     display: flex
@@ -241,33 +241,41 @@ input[type="number"]
             & .actions
                 display: block
                 width: calc(100% - 36px)
+                &.disabled
+                    & input[type="checkbox"]:checked + label
+                        color: $black
+                        pointer-events: none
 
-            & input[type="checkbox"]
-                display: none
+                    & input[type="checkbox"]:not(:checked) + label
+                        display: none
 
-            & input[type="checkbox"] + label
-                transition: color 0.25s ease-out
-                cursor: pointer
-                margin-left: 3px
-                margin-right: 3px
-                position: relative
+                &:not(.disabled)
+                    & input[type="checkbox"]:checked + label
+                        color: $green
 
-                &::after
-                    content: attr(data-description)
-                    overflow: hidden
-                    max-width: 0
-                    display: inline-flex
-                    transition: max-width 0.5s ease-out
-                    color: black
+                    & input[type="checkbox"]:not(:checked) + label
+                        color: $red
 
-                &:hover::after
-                    max-width: 100px
+                & input[type="checkbox"]
+                    display: none
 
-            & input[type="checkbox"]:checked + label
-                color: $green
+                & input[type="checkbox"] + label
+                    transition: color 0.25s ease-out
+                    cursor: pointer
+                    margin-left: 3px
+                    margin-right: 3px
+                    position: relative
 
-            & input[type="checkbox"]:not(:checked) + label
-                color: $red
+                    &::after
+                        content: attr(data-description)
+                        overflow: hidden
+                        max-width: 0
+                        display: inline-flex
+                        transition: max-width 0.5s ease-out
+                        color: black
+
+                    &:hover::after
+                        max-width: 100px
 
             & .icon
                 display: flex
@@ -505,8 +513,19 @@ pre.code-command
 // colors
 @each $clr in $colors
     .#{nth($clr, 1)}
-        color: nth($clr, 2)
-        stroke: nth($clr, 2) !important
+        &:not(.hover)
+            color: nth($clr, 2)
+            stroke: nth($clr, 2) !important
+
+        &.hover
+            color: rgba(nth($clr, 2), .8)
+            stroke: rgba(nth($clr, 2), .8) !important
+
+            transition: color,stroke .3s ease-out
+
+            &:hover, &:active, &:focus
+                color: nth($clr, 2)
+                stroke: nth($clr, 2) !important
 
         &.fill
             fill: nth($clr, 2) !important

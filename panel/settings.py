@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'social_django',
     'static_precompiler',
     'django_admin_generator',
+    'automated_logging',
     'api',
     'ajax',
     'core',
@@ -49,6 +50,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'automated_logging.middleware.AutomatedLoggingMiddleware'
 ]
 
 ROOT_URLCONF = 'panel.urls'
@@ -175,3 +178,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR + '/interface/static'
+
+PAGE_SIZE = 16

@@ -1,16 +1,16 @@
 void BP_OnPluginStart() {
-	char protocol[6]
+	char protocol[6];
 	if (g_cvServerPROTOCOL == 1) {
-		protocol = "HTTPS"
+		protocol = "HTTPS";
 	} else {
-		protocol = "HTTP"
+		protocol = "HTTP";
 	}
 
-	g_endpoint = protocol + "://" + g_cvServerIP + ":" + g_cvServerPORT + "/api/v1/"
-	delete protocol
+	g_endpoint = protocol + "://" + g_cvServerIP + ":" + g_cvServerPORT + "/api/v1/";
+	delete protocol;
 
 	httpClient = new HTTPClient(g_endpoint);
-	httpClient.SetHeader("X-TOKEN", g_cvServerTOKEN)
+	httpClient.SetHeader("X-TOKEN", g_cvServerTOKEN);
 
 	BP_InitConVars();
 	MuteGag_OnPluginStart();

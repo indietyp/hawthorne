@@ -1,30 +1,44 @@
 .row.pure-g
   .column.icon.username.pure-u-7-24
-    span.flag-icon.flag-icon-de
-    img(src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/0f/0f7d37f4f53260811d53bfd7fcbfb77a48997093.jpg")
-    span indietyp
+    span.flag-icon(class="flag-icon-{{data.user.country.code|lower}}")
+    img(src=data.user.avatar)
+    span= data.user.ingame
   .column.icon.invoker.pure-u-7-24
     i(data-feather="zap")
-    span indietyp
+    span= data.issuer.ingame
   .column.icon.reason.pure-u-7-24
     i(data-feather="paperclip")
-    span I do not like him
+    span= data.reason
   .column.icon.pure-u-3-24
     .spacer
     div
-      i.explicit.green(data-feather="volume-x")
+      - if data.type == 'MU' or data.type == 'BO'
+        i.explicit.red(data-feather="volume-x")
+      - else
+        i.explicit.gray(data-feather="volume-x")
     div
-      i.explicit.red(data-feather="message-circle")
+      - if data.type == 'GA' or data.type == 'BO'
+        i.explicit.red(data-feather="message-circle")
+      - else
+        i.explicit.gray(data-feather="message-circle")
+
   .column.icon.placeholder.pure-u-7-24
   .column.icon.server.pure-u-7-24
     i(data-feather="hard-drive")
-    span Retake 76
+    span= data.server.name
   .column.icon.time.pure-u-7-24
     i(data-feather="clock")
-    span 12.17.18 11:13 - 13.17.18 11:13
+    span
+      = data.created_at|date:"d.m.y H:i:s"
+      |  -
+      = data.created_at|add:data.length|date:"d.m.y H:i:s"
+      // 12.17.18 11:13 - 13.17.18 11:13
   .column.icon.pure-u-3-24
     .spacer
-    .action
-      i(data-feather="edit-2")
-    .action
-      i.red(data-feather="trash-2")
+    - if perms.core.change_mutegag
+      .action
+        i(data-feather="edit-2")
+    - if perms.core.delete_mutegag
+      .action
+        i(data-feather="trash-2")
+        // i.red(data-feather="trash-2")

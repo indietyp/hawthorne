@@ -1,64 +1,59 @@
-// TODO: NEEDS TO BE REPLACED WITH API
 // TODO: TESTING
 void Admins_OnClientIDReceived(int client) {
-	if(g_cvAdminsEnabled.IntValue == 1 && DB != null && iServerID != -1) {
+	if(g_cvAdminsEnabled.IntValue == 1 && iServerID != '') {
+		//JSONObject payload = new JSONObject();
+		//payload.SetInt("server", iServerID);
 
-		// Check if admin has any group
-		char query[500];
-		Format(query, sizeof(query),
-		"SELECT GROUP_CONCAT(flags SEPARATOR ''), MAX(ag.immunity), MIN(IF(ag.usetime > 0, usetime - TIMESTAMPDIFF(MINUTE, add_time, now()), 1000000)) "...
-		"FROM bp_admins a LEFT JOIN bp_admin_groups ag ON a.gid = ag.id "...
-		"WHERE pid = %i AND (sid = %i OR sid = 0)"...
-		"AND (TIMESTAMPDIFF(MINUTE, add_time, now()) < ag.usetime OR ag.usetime = 0)", iClientID[client], iServerID);
-		DB.Query(GetClientAdmin, query, GetClientUserId(client));
-
+		httpClient.GET("/users/" + iClientID[client] + "?server=" + iServerID, payload, GetClientAdmin);
+		//delete payload;
 	}
 }
 
-public void GetClientAdmin(Database db, DBResultSet results, const char[] error, any userID) {
-	if(results == null) {
-		LogError("[BOOMPANEL GetClientAdmin] SQL ERROR: %s", error);
+public void GetClientAdmin(HTTPResponse response, any value) {
+	if(response.status != 200 && response.status != 403) {
+		LogError("[BOOMPANEL] API ERROR (no response data)");
 		return;
 	}
 
-	int client = GetClientOfUserId(userID);
-	if(client < 1)
+	if(response.status == 403)
 		return;
 
-	if(results.FetchRow()) {
-		//Fetch SQL data
-		char flags[25];
-		int immunity 	= results.FetchInt(1);
-		int timeleft 	= results.FetchInt(2); //After how many mins to update group again
-		results.FetchString(0, flags, sizeof(flags));
+	JSONObject output = view_as<JSONObject>(response.Data);
+	int success = output.GetInt("success");
 
+	if (success == 0) {
+		LogError("[BOOMPANEL] API ERROR (api call failed)");
+		return;
+		} else {
+			JSONObject result = view_as<JSONObject>(output.Get("result"));
+    	int immunity = result.getInt("immunity");
+    	int usetime = result.getInt("usetime") / 60;   // API outputs seconds, but we need minutes!
 
-		AdminId admin = CreateAdmin();
-		SetAdminImmunityLevel(admin, immunity);
-		for(int i = 0; i < strlen(flags); i++)
-		{
-			AdminFlag flag;
-			if(FindFlagByChar(flags[i], flag))
-				if(!admin.HasFlag(flag, Access_Effective))
-					admin.SetFlag(flag, true);
+			char flags[25];
+    	flags = result.getString("flags");
+
+			AdminId admin = CreateAdmin();
+			SetAdminImmunityLevel(admin, immunity);
+			for(int i = 0; i < strlen(flags); i++) {
+				AdminFlag flag;
+				if(FindFlagByChar(flags[i], flag))
+					if(!admin.HasFlag(flag, Access_Effective))
+						admin.SetFlag(flag, true);
+			}
+			SetUserAdmin(client, admin, true);
+
+			// Next admin update time
+			iAdminUpdateTimeleft[client] = timeleft;
+
+			if(hAdminTimer[client] == null)
+				hAdminTimer[client] = CreateTimer(60.0, TakeAwayMinute2, GetClientUserId(client), TIMER_REPEAT);
 		}
-		SetUserAdmin(client, admin, true);
-
-		//Next admin update time
-		iAdminUpdateTimeleft[client] = timeleft;
-
-		if(hAdminTimer[client] == null)
-			hAdminTimer[client] = CreateTimer(60.0, TakeAwayMinute2, GetClientUserId(client), TIMER_REPEAT);
-
-
-	}
 
 }
 
 public Action TakeAwayMinute2(Handle tmr, any userID) {
 	int client = GetClientOfUserId(userID);
-	if(client > 0)
-	{
+	if(client > 0) {
 		iAdminUpdateTimeleft[client] -= 1;
 		if(iAdminUpdateTimeleft[client] == 0)
 		{

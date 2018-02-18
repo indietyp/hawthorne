@@ -38,14 +38,19 @@
         return false;
     }
     data = {
-      csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val()
+      csrfmiddlewaretoken: window.csrftoken
     };
     $(data).ajax(url, method, function(data, status) {
       if (status === 200) {
         $("#content").css('opacity', '0');
         setTimeout(function() {
+          var i, len, ref, scr;
           $("#content").html(data);
-          eval($("#content script.execution").html());
+          ref = $("#content script.execution");
+          for (i = 0, len = ref.length; i < len; i++) {
+            scr = ref[i];
+            eval($(scr).html());
+          }
           feather.replace();
           return $("#content").css('opacity', '');
         }, 200);

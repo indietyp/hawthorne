@@ -10,27 +10,42 @@
 .item.action(onclick="window.vc.change('home')")
   i(data-feather="home")
   span Home
-.item.action(onclick="window.vc.change('player')")
-  i(data-feather="users")
-  span Players
-.item.action(onclick="window.vc.change('admin')")
-  i(data-feather="zap")
-  span Admins
-.item.action(onclick="window.vc.change('server')")
-  i(data-feather="server")
-  span Servers
-.item.action(onclick="window.vc.change('ban')")
-  i(data-feather="slash")
-  span Bans
-.item.action(onclick="window.vc.change('mutegag')")
-  i(data-feather="volume-x")
-  span Mute/Gag
+
+- if perms.core.view_user
+  .item.action(onclick="window.vc.change('player')")
+    i(data-feather="users")
+    span Players
+
+- if perms.core.view_user or perms.core.view_servergroup or perms.core.view_chat
+  .item.action(onclick="window.vc.change('admin')")
+    i(data-feather="zap")
+    span Admins
+
+- if perms.core.view_server
+  .item.action(onclick="window.vc.change('server')")
+    i(data-feather="server")
+    span Servers
+
+- if perms.core.view_ban
+  .item.action(onclick="window.vc.change('ban')")
+    i(data-feather="slash")
+    span Bans
+
+- if perms.core.view_mutegag
+  .item.action(onclick="window.vc.change('mutegag')")
+    i(data-feather="volume-x")
+    span Mute/Gag
+
 .item.action(onclick="window.vc.change('announcements')")
   i(data-feather="phone-outgoing")
   span Announcements
-.item.action(onclick="window.vc.change('chat')")
-  i(data-feather="message-circle")
-  span Chat
-.item.action(onclick="window.vc.change('settings')")
-  i(data-feather="sliders")
-  span Settings
+
+- if perms.core.view_chat
+  .item.action(onclick="window.vc.change('chat')")
+    i(data-feather="message-circle")
+    span Chat
+
+- if request.user.is_superuser
+  .item.action(onclick="window.vc.change('settings')")
+    i(data-feather="sliders")
+    span Settings

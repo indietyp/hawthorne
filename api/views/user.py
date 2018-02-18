@@ -1,5 +1,6 @@
 from core.models import User, Country, UserLogIP, UserLogTime, UserLogUsername, Server, ServerGroup, Ban, Mutegag
 from django.views.decorators.csrf import csrf_exempt
+from core.lib.steam import populate as steam_populate
 from rcon.sourcemod import RConSourcemod
 import datetime
 from django.contrib.auth.models import Group
@@ -45,9 +46,9 @@ def list(request, validated=[], *args, **kwargs):
       update = True
     except Exception as e:
       print(e)
-      user = User.objects.create_user(username=str(validated['steamid']))
+      user = User.objects.create_user(username=str(validated['steamid']), is_active=False)
       user.ingame = str(validated['username'])
-      user.is_active = False
+      # user.is_active = False
 
     if 'country' in validated:
       country = validated['country'].upper()
@@ -58,21 +59,31 @@ def list(request, validated=[], *args, **kwargs):
       if user.ip is not None:
         log, created = UserLogIP.objects.get_or_create(user=user, ip=user.ip)
 
-        for l in UserLogIP.objects.filter(user=user, ip=user.ip, active=True):
+        for l in UserLogIP.objects.filter(user=user, ip=user.ip, is_active=True):
           l.is_active = False
           l.save()
 
         log.active = True
         if 'connected' in validated:
+          server = Server.objects.get(id=validated['server'])
           if validated['connected']:
-            # server = validated['server']
-            # UserLogTime(user=user, server=server).save()
+            UserLogTime(user=user, server=server).save()
             log.connections += 1
+          else:
+            for ultime in UserLogTime.objects.filter(user=user, server=server, disconnected=None):
+              ultime.disconnected = datetime.datetime.now()
+              ultime.save()
 
         log.save()
 
       if user.ip != validated['ip']:
         user.ip = validated['ip']
+
+    if 'connected' in validated:
+      if validated['connected']:
+        user.online = True
+      else:
+        user.online = False
 
     uname, created = UserLogUsername.objects.get_or_create(user=user, username=validated['username'])
     uname.connections += 1
@@ -95,7 +106,6 @@ def list(request, validated=[], *args, **kwargs):
 @require_http_methods(['GET', 'POST', 'DELETE'])
 def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
   if request.method == 'GET':
-    # server role
     query = User.objects.annotate(has_panel_access=F('is_staff'),
                                   country_code=F('country__code'))
 
@@ -113,17 +123,26 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
       except Exception as e:
         return 'not existent steamid provided - {}'.format(e), 403
 
-    selected = ['id', 'ip', 'avatar', 'profile', 'permissions', 'steamid', 'name', 'circles']
+    selected = ['id', 'ip', 'avatar', 'profile', 'permissions', 'steamid', 'name', 'circles', 'positions']
     if validated['server'] is not None:
       try:
         role = user.roles.get(server=Server.objects.get(id=validated['server']))
         user.flags = role.flags.convert()
+        user.immunity = role.immunity
+        user.usetime = role.usetime.total_seconds()
         selected.append('flags')
+        selected.append('immunity')
+        selected.append('usetime')
       except Exception as e:
         return 'serverrole does not exist for this user - {}'.format(e), 403
 
     user.permissions = [a.content_type.app_label + '.' + a.codename for a in user.user_permissions.all()]
     user.circles = [str(a) for a in user.groups.all()]
+    user.positions = [{'server': None if a.server is None else a.server.id,
+                       'flags': a.flags.convert(),
+                       'immunity': a.immunity,
+                       'usetime': None if a.usetime is None else a.usetime.total_seconds()
+                       } for a in user.roles.all()]
     user = user.__dict__
 
     tmp = {}
@@ -133,8 +152,8 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
 
     user = tmp
     return user
+
   elif request.method == 'POST':
-    # TODO: TESTING
     if u is not None:
       try:
         user = User.objects.get(id=u)
@@ -145,16 +164,22 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
       try:
         user = User.objects.get(username=s)
       except Exception as e:
-        return 'not existent steamid provided - {}'.format(e), 403
+        if validated['force']:
+          user = User.objects.create_user(username=str(s))
+          user.save()
+
+          steam_populate(user)
+
+        else:
+          return 'not existent steamid provided - {}'.format(e), 403
 
     if validated['role'] is not None:
       group = ServerGroup.objects.get(id=validated['role'])
-      server = Server.objects.get(id=validated['server'])
 
-      if not validated['promotion']:
-        ServerRole.objects.get(group=group, server=server, user=user).delete()
+      if validated['promotion']:
+        user.roles.add(group)
       else:
-        ServerRole(group=group, server=server, user=user).save()
+        user.roles.remove(group)
 
     if validated['group'] is not None:
       group = Group.objects.get(id=validated['group'])
@@ -163,9 +188,9 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
       else:
         user.groups.remove(group)
 
-    return '+1'
+    return ':+1:'
+
   elif request.method == 'DELETE':
-    # TODO: TESTING
     if u is not None:
       try:
         user = User.objects.get(id=u)
@@ -195,6 +220,8 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
         user.groups.clear()
 
       user.save()
+
+    return '+1'
 
 
 # TESTING

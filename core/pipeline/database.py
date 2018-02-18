@@ -2,9 +2,7 @@ from core.models import Country
 
 
 def populate(strategy, details, backend, user=None, *args, **kwargs):
-  print(dir(strategy))
-  if strategy == 'steam' and user is not None:
-    print("triggered2")
+  if backend.name == 'steam' and user is not None:
     information = details['player']
 
     if information['realname'] != '':

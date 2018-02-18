@@ -1,17 +1,25 @@
+- load interface_utils
+
 .row.pure-g
   .column.icon.username.pure-u-7-24
-    span.flag-icon.flag-icon-de
-    img(src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/0f/0f7d37f4f53260811d53bfd7fcbfb77a48997093.jpg")
-    span Indietyp
+    span.flag-icon(class="flag-icon-{{data.country.code|lower}}")
+    img(src="{{ data.avatar }}")
+    span= data.ingame|truncatechars:18
   .column.icon.group.pure-u-7-24
     i(data-feather="users")
-    span root
+    span= data.role|truncatechars:18
   .column.icon.server.pure-u-7-24
     i(data-feather="hard-drive")
-    span all
+    - if data.server is None
+      span all
+    - else
+      span= data.server|truncatechars:18
   .column.icon.username.pure-u-3-24
     .spacer
-    .action
-      i(data-feather="edit-2")
-    .action
-      i(data-feather="trash-2")
+    - if data.role != 'root'
+      - if perms.core.modify_user
+        .action
+          i(data-feather="edit-2")
+      - if perms.core.delete_user
+        .action
+          i(data-feather="trash-2")

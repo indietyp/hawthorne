@@ -76,6 +76,7 @@
   };
 
   $().ready(function() {
+    window.endpoint = fermata.json("/api/v1");
     return $("input#inputtimevalue").on('change', function(event, ui) {
       var field, icon, sd, seconds;
       event.preventDefault();

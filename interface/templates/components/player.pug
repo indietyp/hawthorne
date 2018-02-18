@@ -8,24 +8,26 @@
     //- SEARCH WITH FILTER
     //- SETS MERGED
     .heading
-      - trans "Currently Online"
-      span.sub (please be patient, the list is loading)
+      - trans "Players"
+      // span.sub (please be patient, the list is loading)
     .search-input-wrapper
       label(for="inputsearchwrapper").action
         i(data-feather='search', width='48', height='48')
       input#inputsearchwrapper(type='checkbox')
       input(type='text', placeholder='Search for a player...')
-    .row.pure-g
+    .row.pure-g#player__user
       //- partials/player/online.pug
+    script.execution.
+      window.ajax.player.user(1)
 
-  .item.pure-u-1-1.users.search.second-set
-    .heading
-      - trans "All Players"
-      span.sub (showing the most active players)
-    .search-input-wrapper
-      label(for="inputsearchwrapperall").action
-        i(data-feather='search', width='48', height='48')
-      input#inputsearchwrapperall(type='checkbox')
-      input(type='text', placeholder='Search for a player...')
-    .row.most-active.pure-g
-      //- partials/player/active.pug
+  // .item.pure-u-1-1.users.search.second-set
+  //   .heading
+  //     - trans "All Players"
+  //     span.sub (showing the most active players)
+  //   .search-input-wrapper
+  //     label(for="inputsearchwrapperall").action
+  //       i(data-feather='search', width='48', height='48')
+  //     input#inputsearchwrapperall(type='checkbox')
+  //     input(type='text', placeholder='Search for a player...')
+  //   .row.most-active.pure-g
+  //     //- partials/player/active.pug

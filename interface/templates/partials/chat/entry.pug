@@ -1,13 +1,19 @@
 .command
   .segment.first
     span.symbol.blue #
-    span.lblue indietyp
-    span.symbol.white @
-    span.green 112.246.244.168
-    span.symbol.white in
-    span.lipstick Retake76
+    span.lblue= data.user.ingame
+    - if perms.core.view_chat_ip
+        span.symbol.white @
+        span.green= data.ip
+    - if perms.core.view_chat_server
+        span.symbol.white in
+        span.lipstick= data.server.name
     .spacer
-    span [12.19.2018 12:12:13]
+    - if perms.core.view_chat_time
+        span
+            |[
+            = data.created_at|date:"d.m.Y H:i:s"
+            |  ]
   .segment.second
     span.symbol.red $
-    span Hello!
+    span= data.message

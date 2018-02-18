@@ -1,10 +1,8 @@
-.item.pure-u-1-1.pure-g
+.item.pure-u-1-1.pure-g.second
   .heading.flex
-    span EU Retake 3
+    span= data.name
     .spacer
     .icons
-      .action
-        i(data-feather='plus-square')
       .action
         i(data-feather='edit-2')
       .action
@@ -14,31 +12,41 @@
     .row.overview.item.pure-g
       .section.icon.pure-u-1-2.pure-u-lg-1-3
         i(data-feather='compass')
-        span.content CS:GO
+        span.content= data.get_game_display
       .section.icon.pure-u-1-2.pure-u-lg-1-3
         i(data-feather='map')
-        span.content de_mirage
+        span.content de_mirage [DUMMY]
       .section.icon.pure-u-1-2.pure-u-lg-1-3
         i(data-feather='briefcase')
-        span.content Retake
+        span.content
+          if data.mode is not None
+            | data.mode
+          else
+            | ----
       .section.icon.pure-u-1-2.pure-u-lg-1-3
         i(data-feather='wifi')
-        span.content 127.0.0.1:9012
+        span.content
+          =data.ip|add:":"
+          =data.port
       .section.icon.pure-u-1-2.pure-u-lg-1-3
         i(data-feather='lock')
         span.content ********
       .section.icon.pure-u-1-2.pure-u-lg-1-3
         i(data-feather='shield')
-        span.content VAC
+        span.content
+          if data.vac
+            | VAC
+          else
+            | ----
       .section.icon.pure-u-1-2.pure-u-lg-1-3
         i(data-feather='layers')
-        span.content 01 - 01
+        span.content 01 - 01 [DUMMY]
       .section.icon.pure-u-1-2.pure-u-lg-1-3
         i(data-feather='users')
-        span.content 12
+        span.content 12 [DUMMY]
       .section.icon.pure-u-1-2.pure-u-lg-1-3
         i(data-feather='clock')
-        span.content 12 minutes
+        span.content= data.created_at|timesince
 
   .row.add.pure-g
     .pure-u-1-1.flex.center.relative
@@ -46,8 +54,8 @@
       .icon.action.send-command
         i.explicit(data-feather='send')
 
-    .pure-u-1-2
-      .ct-chart.ct-minor-seventh
+    .pure-u-1-2.chart-section
+      .ct-chart.ct-minor-seventh(id="chart-{{data.id}}")
       .ct-info
         .info
           .spacer
@@ -63,7 +71,7 @@
             .content all
             .content time
           .spacer
-      script.
+      script.execution.
         var data = {
           labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
           series: [
@@ -82,7 +90,8 @@
           fullWidth: true,
           low: 0
         }
-        new Chartist.Line('.ct-chart', data, options);
+        new Chartist.Line("#chart-{{data.id}}", data, options);
+        console.log('test')
     .pure-u-1-2
       .pure-g
         //- partials/server/online.pug

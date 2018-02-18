@@ -59,6 +59,8 @@ toDurationString = (iDuration) ->
 
 
 $().ready ->
+  window.endpoint = fermata.json("/api/v1")
+
   $("input#inputtimevalue").on('change', (event, ui) ->
     event.preventDefault()
     field = $('input#inputtimevalue')
