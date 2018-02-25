@@ -1,9 +1,10 @@
- [ ] ban: RESOLVED
- [ ] homepage: no access implementation
- [ ] add, remove, change implementation
+ ✔ ban: RESOLVED @done (18-02-25 19:25)
+ ✔ homepage: no access implementation @done (18-02-25 19:25)
+ ✔ add, remove, change implementation @done (18-02-25 19:25)
  [ ] settings
  [ ] homepage
  [ ] sourcemod
  [ ] announcements
  [ ] loading spinner boompanel logo
+ [ ] new icon as favicon
  [ ] change icon
