@@ -1,6 +1,6 @@
 Django
 mysqlclient
-social-auth-app-django
+social-auth-app-django==2.1.0
 cerberus
 lxml
 cssselect

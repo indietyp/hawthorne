@@ -1,8 +1,8 @@
 from core.decorators.api import json_response
 from django.views.decorators.http import require_http_methods
-from api import urls
-from api.validation import validation
-from copy import deepcopy
+# from api import urls
+# from api.validation import validation
+# from copy import deepcopy
 import os
 
 
@@ -40,23 +40,24 @@ for file in os.listdir(os.path.dirname(os.path.realpath(__file__))):
 @json_response
 @require_http_methods(['GET'])
 def documentation(request, *args, **kwargs):
-  v = deepcopy(validation)
-  delete_key(v, 'coerce')
-  patterns = {}
-  for pattern in urls.urlpatterns[1:]:
-    patterns[pattern.name] = str(pattern.pattern)
+  return "due to incompatibility problems this is not yet implemented"
+  # v = deepcopy(validation)
+  # delete_key(v, 'coerce')
+  # patterns = {}
+  # for pattern in urls.urlpatterns[1:]:
+  #   patterns[pattern.name] = str(pattern.pattern)
 
-  output = {}
-  for k, i in patterns.items():
-    try:
-      tmp = v
-      kl = k.split('.')
+  # output = {}
+  # for k, i in patterns.items():
+  #   try:
+  #     tmp = v
+  #     kl = k.split('.')
 
-      for ki in kl:
-        tmp = tmp[ki]
+  #     for ki in kl:
+  #       tmp = tmp[ki]
 
-      output[patterns[k]] = tmp
-    except Exception as e:
-      print(e)
+  #     output[patterns[k]] = tmp
+  #   except Exception as e:
+  #     print(e)
 
-  return output
+  # return output
