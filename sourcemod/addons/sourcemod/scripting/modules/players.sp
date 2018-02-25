@@ -2,6 +2,10 @@
 void Players_OnClientAuthorized(int client) {
 	iClientID[client] = "";
 
+  if (StrEqual(iServerID, "")) {
+    GetServerID();
+  }
+
 	char steamid[20];
 	GetClientAuthId(client, AuthId_SteamID64, steamid, sizeof(steamid));
 
@@ -13,67 +17,81 @@ void Players_OnClientAuthorized(int client) {
 	GeoipCode2(ip, country);
 
 	JSONObject payload = new JSONObject();
-	payload.SetInt("steamid", StringToInt(steamid));
+	payload.SetString("steamid", steamid);
 	payload.SetString("username", username);
 	payload.SetString("ip", ip);
-	payload.SetString("counrty", counrty);
-	payload.SetBool("connect", true);
+	payload.SetString("country", country);
+  payload.SetString("server", iServerID);
+  payload.SetBool("connected", true);
 
-	delete username, steamid, ip, counrty;
-
-	httpClient.PUT("/users", payload, OnClientIsInAPI);
+	httpClient.Put("users", payload, OnClientIsInAPI, client);
 	delete payload;
 }
 
 void Players_OnClientDisconnect(int client) {
+  char steamid[20];
+  GetClientAuthId(client, AuthId_SteamID64, steamid, sizeof(steamid));
+
 	iClientID[client] = "";
+
+  JSONObject payload = new JSONObject();
+  payload.SetString("steamid", steamid);
+  payload.SetString("server", iServerID);
+  payload.SetBool("connected", false);
+
+  httpClient.Put("users", payload, APINoResponseCall);
+  delete payload;
 }
 
 public void OnClientIsInAPI(HTTPResponse response, any value) {
-    if (response.Status != 200) {
-    	LogError("[BOOMPANEL] API ERROR (request failed)");
-      return;
-    }
+  int client = value;
 
-    if (response.Data == null) {
-    	LogError("[BOOMPANEL] API ERROR (no response data)");
-      return;
-    }
+  if (response.Status != HTTPStatus_OK) {
+  	LogError("[BOOMPANEL] API ERROR (request failed)");
+    return;
+  }
 
-    if(iServerID == "")
-    	return;
+  if (response.Data == null) {
+  	LogError("[BOOMPANEL] API ERROR (no response data)");
+    return;
+  }
 
-    int client = GetClientOfUserId(userID);
-    if(client < 1)
-    	return;
+  if (StrEqual(iServerID, ""))
+  	return;
 
-    JSONObject output = view_as<JSONObject>(response.Data);
-    int success = output.GetInt("success");
+  JSONObject output = view_as<JSONObject>(response.Data);
+  int success = output.GetBool("success");
 
-    if (success == 0) {
-      LogError("[BOOMPANEL] API ERROR (api call failed)");
-      return;
-    } else {
-      JSONObject result = view_as<JSONObject>(output.Get("result"));
-    	iClientID[client] = result.getString("id");
-			OnClientIDReceived(client);
-    }
-
-    delete output;
+  if (success == false) {
+    LogError("[BOOMPANEL] API ERROR (api call failed)");
+    return;
+  } else {
+    JSONObject result = view_as<JSONObject>(output.Get("result"));
+  	result.GetString("id", iClientID[client], 37);
     delete result;
+    OnClientIDReceived(client);
+  }
+
+  delete output;
 }
 
 void PlayersOnline_OnClientDisconnect(int client) {
 	char steamid[20];
-	GetClientAuthId(client, AuthId_SteamID64, steamid, sizeof(steamid));
+  char username[64];
 
-	JSONObject payload = new JSONObject();
-	payload.SetInt("steamid", StringToInt(steamid));
-	payload.SetBool("connect", false);
-	delete steamid;
+  GetClientAuthId(client, AuthId_SteamID64, steamid, sizeof(steamid));
+  GetClientName(client, username, sizeof(username));
 
-	httpClient.PUT("/users", payload, OnClientDisconnectAPI);
+  JSONObject payload = new JSONObject();
+  payload.SetString("steamid", steamid);
+  payload.SetString("username", username);
+	payload.SetBool("connected", false);
+  payload.SetString("server", iServerID);
+
+	httpClient.Put("users", payload, OnClientDisconnectAPI);
 	delete payload;
+
+  iClientID[client] = "";
 }
 
 public void OnClientDisconnectAPI(HTTPResponse response, any value) {

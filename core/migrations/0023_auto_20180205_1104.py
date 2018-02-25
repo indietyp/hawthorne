@@ -10,8 +10,4 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterUniqueTogether(
-            name='servergroup',
-            unique_together=set(),
-        ),
     ]

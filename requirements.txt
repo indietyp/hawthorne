@@ -7,4 +7,6 @@ cssselect
 natural
 dateparser
 steamapi
-automated_logging
+django-automated-logging
+django-static-precompiler
+django-admin-generator

@@ -1,5 +1,7 @@
 from core.models import User, Country, UserLogIP, UserLogTime, UserLogUsername, Server, ServerGroup, Ban, Mutegag
 from django.views.decorators.csrf import csrf_exempt
+from core.utils import UniPanelJSONEncoder
+from django.utils import timezone
 from core.lib.steam import populate as steam_populate
 from rcon.sourcemod import RConSourcemod
 import datetime
@@ -38,7 +40,6 @@ def list(request, validated=[], *args, **kwargs):
     return output
 
   elif request.method == 'PUT':
-    print(validated)
     update = False
 
     try:
@@ -48,7 +49,6 @@ def list(request, validated=[], *args, **kwargs):
       print(e)
       user = User.objects.create_user(username=str(validated['steamid']), is_active=False)
       user.ingame = str(validated['username'])
-      # user.is_active = False
 
     if 'country' in validated:
       country = validated['country'].upper()
@@ -56,6 +56,9 @@ def list(request, validated=[], *args, **kwargs):
         user.country = Country.objects.get_or_create(code=country)[0]
 
     if 'ip' in validated:
+      if user.ip != validated['ip']:
+        user.ip = validated['ip']
+
       if user.ip is not None:
         log, created = UserLogIP.objects.get_or_create(user=user, ip=user.ip)
 
@@ -63,21 +66,19 @@ def list(request, validated=[], *args, **kwargs):
           l.is_active = False
           l.save()
 
-        log.active = True
+        log.is_active = True
+
         if 'connected' in validated:
           server = Server.objects.get(id=validated['server'])
+          for ultime in UserLogTime.objects.filter(user=user, server=server, disconnected=None):
+            ultime.disconnected = timezone.now()
+            ultime.save()
+
           if validated['connected']:
             UserLogTime(user=user, server=server).save()
             log.connections += 1
-          else:
-            for ultime in UserLogTime.objects.filter(user=user, server=server, disconnected=None):
-              ultime.disconnected = datetime.datetime.now()
-              ultime.save()
 
         log.save()
-
-      if user.ip != validated['ip']:
-        user.ip = validated['ip']
 
     if 'connected' in validated:
       if validated['connected']:
@@ -93,9 +94,11 @@ def list(request, validated=[], *args, **kwargs):
     user.save()
 
     if update:
-      return 'updated user'
+      return {'info': 'updated user', 'id': user.id}
     else:
-      return 'created non panel accessible user'
+      return {'info': 'created non panel accessible user', 'id': user.id}
+
+    return {'id': user.id}
 
 
 @csrf_exempt
@@ -245,7 +248,7 @@ def ban(request, u=None, validated={}, *args, **kwargs):
     if validated['resolved'] is not None:
       bans.filter(resolved=validated['resolved'])
 
-    return bans.values()
+    return [b for b in bans.values('user', 'server', 'created_at', 'reason', 'resolved', 'issuer', 'length')], 200, UniPanelJSONEncoder
 
   elif request.method == 'POST':
     try:
@@ -270,8 +273,15 @@ def ban(request, u=None, validated={}, *args, **kwargs):
     ban.save()
 
   elif request.method == 'PUT':
-    server = Server.objects.get(id=validated['server'])
-    length = datetime.timedelta(seconds=validated['length'])
+    if 'server' in validated:
+      server = Server.objects.get(id=validated['server'])
+    else:
+      server = None
+
+    if validated['length'] > 0:
+      length = datetime.timedelta(seconds=validated['length'])
+    else:
+      length = None
 
     ban = Ban(user=user, server=server, reason=validated['reason'], length=length)
 
@@ -299,14 +309,14 @@ def mutegag(request, u=None, validated={}, *args, **kwargs):
     return 'non existent user queried - {}'.format(e), 403
 
   if request.method == 'GET':
-    mutegags = Ban.objects.filter(user=user)
+    mutegags = Mutegag.objects.filter(user=user)
     if validated['server'] is not None:
       mutegags.filter(server=Server.objects.get(id=validated['server']))
 
     if validated['resolved'] is not None:
       mutegags.filter(resolved=validated['resolved'])
 
-    return mutegags.values()
+    return [m for m in mutegags.values('user', 'issuer', 'created_at', 'reason', 'length', 'resolved', 'type')]
 
   elif request.method == 'POST':
     try:

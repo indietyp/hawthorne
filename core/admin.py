@@ -63,10 +63,10 @@ class UserLogIPAdmin(admin.ModelAdmin):
         'user',
         'ip',
         'connections',
-        'active',
+        'is_active',
         'last_used',
     )
-    list_filter = ('created_at', 'updated_at', 'user', 'active', 'last_used')
+    list_filter = ('created_at', 'updated_at', 'user', 'is_active', 'last_used')
     date_hierarchy = 'created_at'
 
 

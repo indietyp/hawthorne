@@ -1,4 +1,3 @@
-// TODO: NEEDS TO BE REPLACED WITH API
 // TODO: TESTING
 public Action OnPlayerChatMessage(int client, const char[] command, int argc) {
 	//If text comes from console
@@ -6,7 +5,7 @@ public Action OnPlayerChatMessage(int client, const char[] command, int argc) {
 		return Plugin_Continue;
 
 	//Get chat message
-	char cMessage[256], cEscMessage[256];
+	char cMessage[256];
 	GetCmdArgString(cMessage, sizeof(cMessage));
 
 	//Get rid of the qoutes
@@ -19,34 +18,38 @@ public Action OnPlayerChatMessage(int client, const char[] command, int argc) {
 		return Plugin_Handled;
 
 	//If chat log is disabled or DB/ServerID is not found
-	if(g_cvChatLogEnabled.IntValue == 0 || DB == null || iServerID == -1)
+	if(g_cvChatLogEnabled.IntValue == 0 || StrEqual(iServerID, ""))
 		return Plugin_Continue;
 
 	//If client ID is not found
-	if(iClientID[client] == -1)
-	{
-		LogError("[BoomPanel] Failed to send message to MYSQL, because plugin couldnt get clientID");
+	if(StrEqual(iClientID[client], "")) {
+		LogError("[BoomPanel] Failed to send message to API, clientID was not fetched.");
 		return Plugin_Continue;
 	}
-
-	DB.Escape(cMessage, cEscMessage, sizeof(cEscMessage));
 
 	//Check if that is not command (later will be added support for commands also?)
 	if(IsChatTrigger() || StringIsEmpty(cMessage))
 		return Plugin_Continue;
 
 	//Insert into database
-	LogChatMessage(client, cEscMessage);
+	LogChatMessage(client, cMessage);
 
 	return Plugin_Continue;
 }
 
-stock void LogChatMessage(int client, char[] cMessage, int type = 0)
-{
-	int adminID = (client == 0) ? 0 : iClientID[client];
-	char query[700];
-	Format(query, sizeof(query), "INSERT INTO bp_chat (pid, sid, message, type) VALUES (%i, %i, '%s', %i)", adminID, iServerID, cMessage, type);
-	DB.Query(OnRowInserted, query, _, DBPrio_Low);
+stock void LogChatMessage(int client, char[] cMessage, int type = 0) {
+	char ip[10];
+
+	GetClientIP(client, ip, sizeof(ip));
+	JSONObject payload = new JSONObject();
+	payload.SetString("user", iClientID[client]);
+	payload.SetString("server", iServerID);
+	payload.SetString("ip", ip);
+	payload.SetString("message", cMessage);
+
+	httpClient.Put("system/chat", payload, APINoResponseCall);
+
+	delete payload;
 }
 
 
@@ -59,7 +62,7 @@ public Action OnClientCommand(int client, int args)
 			return Plugin_Continue;
 
 		//If chat log is disabled or DB/ServerID is not found
-		if(g_cvChatLogEnabled.IntValue == 0 || DB == null || iServerID == -1)
+		if(g_cvChatLogEnabled.IntValue == 0 || StrEqual(iServerID, ""))
 			return Plugin_Continue;
 
 		//Get written command
@@ -70,12 +73,10 @@ public Action OnClientCommand(int client, int args)
 		{
 			if(IsAdminCMD(sCommand))
 			{
-				char sFullCommand[100], sEscFullCommand[100], cEscCommand[50];
+				char sFullCommand[100];
 				GetCmdArgString(sFullCommand, sizeof(sFullCommand));
-				DB.Escape(sCommand, cEscCommand, sizeof(cEscCommand));
-				DB.Escape(sFullCommand, sEscFullCommand, sizeof(sEscFullCommand));
-				Format(cEscCommand, sizeof(cEscCommand), "%s %s", cEscCommand, sEscFullCommand);
-				LogChatMessage(client, cEscCommand, 1);
+				Format(sCommand, sizeof(sCommand), "%s %s", sCommand, sFullCommand);
+				LogChatMessage(client, sCommand, 1);
 			}
 		}
 

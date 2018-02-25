@@ -1,12 +1,11 @@
-// TODO: NEEDS TO BE REPLACED WITH API
 // TODO: TESTING
 void RconCommands_OnPluginStart() {
-	RegAdminCmd("sm_BPstatus", 			CMD_Status, 	ADMFLAG_RCON);
-	RegAdminCmd("sm_BPbankick", 		CMD_BanKick, 	ADMFLAG_RCON);
-	RegAdminCmd("sm_BPmutegagadd", 	CMD_MuteGagAdd, ADMFLAG_RCON);
-	RegAdminCmd("sm_BPmutegagrem", 	CMD_MuteGagRem, ADMFLAG_RCON);
-	RegAdminCmd("sm_BPmutegagres", 	CMD_MuteGagRes, ADMFLAG_RCON);
-	RegAdminCmd("sm_BPreloadadmin", CMD_ReloadAdm, 	ADMFLAG_RCON);
+	RegAdminCmd("json_status", 				CMD_Status, 		ADMFLAG_RCON);
+	RegAdminCmd("rcon_bankick", 			CMD_BanKick, 		ADMFLAG_RCON);
+	RegAdminCmd("rcon_mutegag__add", 	CMD_MuteGagAdd, ADMFLAG_RCON);
+	RegAdminCmd("rcon_mutegag__rem", 	CMD_MuteGagRem, ADMFLAG_RCON);
+	RegAdminCmd("rcon_mutegag__res", 	CMD_MuteGagRes, ADMFLAG_RCON);
+	RegAdminCmd("rcon_reload__admin", CMD_ReloadAdm, 	ADMFLAG_RCON);
 }
 
 public Action CMD_ReloadAdm(int client, int args) {
@@ -104,8 +103,7 @@ public Action CMD_BanKick(int client, int args) {
 	GetCmdArg(1, steamid, sizeof(steamid));
 	int target = GetClientFromSteamID(steamid);
 
-	if(target != -1)
-	{
+	if(target != -1) {
 		char cAdminUsername[128], cReason[150], cLength[50], cTime[200];
 		GetCmdArg(2, cAdminUsername, sizeof(cAdminUsername));
 		GetCmdArg(3, cReason, sizeof(cReason));
@@ -142,8 +140,6 @@ public Action CMD_Status(int client, int args) {
 		if(IsClientInGame(i) && !IsFakeClient(i))
 			online++;
 
-	int count = 0;
-
 	char currentMap[50];
 	GetCurrentMap(currentMap, sizeof(currentMap));
 
@@ -153,19 +149,30 @@ public Action CMD_Status(int client, int args) {
 	int timeleft;
 	GetMapTimeLeft(timeleft);
 
-	ReplyToCommand(client, "{\"stats\":{\"sid\": \"%i\", \"map\": \"%s\", \"online\": %i, \"tl\": %i, \"s1\": \"%i\", \"s2\": \"%i\"}, \"players\": [", iServerID, currentMap, online, timeleft, Tscore, CTscore);
-	//This is done, so everything is sorted
-	for (int i = 5; i >= 0; i--)
-		AddToList(count, i);
+	JSONObject output = new JSONObject();
+	JSONObject stats = new JSONObject();
 
-	ReplyToCommand(client, "]}");
+	stats.SetString("uuid", iServerID);
+	stats.SetString("map", currentMap);
+	stats.SetInt("online", online);
+	stats.SetInt("timeleft", timeleft);
+	stats.SetInt("score__T", Tscore);
+	stats.SetInt("score__CT", CTscore);
+	output.Set("stats", stats);
+	output.Set("players", AddToList());
+
+	char reply[1024];
+	output.ToString(reply, sizeof(reply));
+	ReplyToCommand(client, reply);
+
 	return Plugin_Handled;
 }
 
-void AddToList(int &count, int team) {
-	for (int i = 1; i <= MaxClients; i++)
-		if(IsClientInGame(i) && !IsFakeClient(i) && GetClientTeam(i) == team)
-		{
+JSONArray AddToList() {
+	JSONArray output = new JSONArray();
+
+	for (int i = 1; i <= MaxClients; i++) {
+		if(IsClientInGame(i) && !IsFakeClient(i)) {
 			char username[MAX_NAME_LENGTH], steamid[20], cIP[20], cCountry[50];
 			GetClientName(i, username, sizeof(username));
 			ReplaceString(username, sizeof(username), "\\", "");
@@ -175,9 +182,21 @@ void AddToList(int &count, int team) {
 			GeoipCountry(cIP, cCountry, sizeof(cCountry));
 			int kills 	= (!IsSpectator(i)) ? GetClientFrags(i) : 0;
 			int deaths 	= (!IsSpectator(i)) ? GetClientDeaths(i) : 0;
-			int online = (GetFullConnectionTime(i) / 60);
-			PrintToServer("%s{\"p\":%i,\"t\":%i,\"k\":%i,\"d\":%i,\"o\":%i}", (count == 0) ? "" : ",", iClientID[i], GetClientTeam(i), kills, deaths, online);
+			int online = GetClientTime(i);
 
-			count++;
+			JSONObject player = new JSONObject();
+
+			player.SetString("uuid", iClientID[i]);
+			player.SetString("username", username);
+
+			player.SetInt("team", GetClientTeam(i));
+			player.SetInt("kills", kills);
+			player.SetInt("deaths", deaths);
+			player.SetInt("online", online);
+
+			output.Push(player);
 		}
+	}
+
+	return output;
 }

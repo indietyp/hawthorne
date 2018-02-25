@@ -4,42 +4,28 @@
 #define _boompanel_included
 
 /**
-* Gets boompanel database connection
+* Returns current server ID from API
 *
-* @param Database			Where to store connection
-* @return					true/false (connection successful)
+* @return char				server ID
 */
-native bool BoomPanel_GetDB(Database &DB);
+native void BoomPanel_GetServerID(char[] buffer, int maxlength);
 
 /**
-* Returns current server ID from database
+* Returns clients ID from API
 *
-* @return int				server ID
+* @return char				clients ID
 */
-native int BoomPanel_GetServerID();
+native void BoomPanel_GetClientID(char[] buffer, int maxlength, int client);
+
 
 /**
-* Returns clients ID from database
-*
-* @return int				clients ID
-*/
-native int BoomPanel_GetClientID(int client);
-
-/**
-* Called when database is loaded up
-*
-*/
-forward void BoomPanel_DatabaseReady();
-
-/**
-* Called when clientID is recived
+* Called when clientID is received
 *
 */
 forward void BoomPanel_OnClientIDReceived(int client, int clientID);
 
 
 public void __pl_boompanel__SetNTVOptional() {
-	MarkNativeAsOptional("BoomPanel_GetDB");
 	MarkNativeAsOptional("BoomPanel_GetServerID");
 	MarkNativeAsOptional("BoomPanel_GetClientID");
 }

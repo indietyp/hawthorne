@@ -1,9 +1,8 @@
-// TODO: NEEDS TO BE REPLACED WITH API
 // TODO: TESTING
 void MuteGag_OnPluginStart() {
 	//Get file locations
-	BuildPath(Path_SM, cMuteReasonsFile, sizeof(cMuteReasonsFile), 			"configs/BoomPanel/mute-reasons.txt");
-	BuildPath(Path_SM, cGagReasonsFile, sizeof(cGagReasonsFile), 			"configs/BoomPanel/gag-reasons.txt");
+	BuildPath(Path_SM, cMuteReasonsFile, 		sizeof(cMuteReasonsFile), 		"configs/BoomPanel/mute-reasons.txt");
+	BuildPath(Path_SM, cGagReasonsFile, 		sizeof(cGagReasonsFile), 			"configs/BoomPanel/gag-reasons.txt");
 	BuildPath(Path_SM, cSilenceReasonsFile, sizeof(cSilenceReasonsFile), 	"configs/BoomPanel/silence-reasons.txt");
 	BuildPath(Path_SM, cPunishmentTimeFile, sizeof(cPunishmentTimeFile), 	"configs/BoomPanel/punishment-times.txt");
 
@@ -14,7 +13,7 @@ void MuteGag_OnPluginStart() {
 
 public Action CMD_PermaMuteGag(int client, int args) {
 
-	if(g_cvMuteGagEnabled.IntValue == 1 && DB != null && iServerID != -1) {
+	if(g_cvMuteGagEnabled.IntValue == 1 && !StrEqual(iServerID, "")) {
 
 		//Get what command player is trying to execute
 		char command[50], command3[50];
@@ -70,7 +69,7 @@ public Action CMD_PermaMuteGag(int client, int args) {
 
 
 		//Save admins last target ID
-		iLastTargetID[client] = (client > 0) ? iClientID[tlist[0]] : 0;
+		iLastTargetID[client] = (client > 0) ? iClientID[tlist[0]] : "";
 
 
 		//If mute/gag/silence
@@ -83,7 +82,7 @@ public Action CMD_PermaMuteGag(int client, int args) {
 				//Get all arguments
 				char cReason[150];
 				GetCmdArg(2, cReason, sizeof(cReason));
-				DBMuteGag(client, iLastTargetID[client], type, cReason, 0);
+				APIMuteGag(client, iLastTargetID[client], type, cReason, 0);
 
 			}
 
@@ -98,7 +97,7 @@ public Action CMD_PermaMuteGag(int client, int args) {
 }
 
 void MuteGag_OnClientPutInServer(int client) {
-	if(iClientID[client] > 0) {
+	if(!StrEqual(iClientID[client], "")) {
 		for (int i = 0; i < 3; i++)
 		{
 			if((iMuteGagTimeleft[client][i] >= 0 || bMuteGagPermanent[client][i])) {
@@ -110,12 +109,10 @@ void MuteGag_OnClientPutInServer(int client) {
 	}
 }
 
-public Action TryMuteAgainPlayer(Handle tmr, any userID)
-{
+public Action TryMuteAgainPlayer(Handle tmr, any userID) {
 	int target = GetClientOfUserId(userID);
-	if(target > 0)
-	{
-		if(iClientID[target] > 0) {
+	if(target > 0) {
+		if (!StrEqual(iClientID[target], "")) {
 			for (int i = 0; i < 3; i++) {
 				if(iMuteGagTimeleft[target][i] >= 0 || bMuteGagPermanent[target][i]) {
 					PerformMuteGag(target, i, true);
@@ -155,7 +152,7 @@ int MuteGag_OnPlayerChatMessage(int client, char message[256]) {
 		}
 
 		else {
-			DBMuteGag(client, iLastTargetID[client], iLastCommandType[client], message, iLastMuteGagTime[client]);
+			APIMuteGag(client, iLastTargetID[client], iLastCommandType[client], message, iLastMuteGagTime[client]);
 			return 1;
 		}
 	}
@@ -204,7 +201,7 @@ int AddMenuItems(Menu menu, char[] cFileString, bool punishments = false) {
 
 
 void MuteGag_OnClientIDReceived(int client) {
-	if(g_cvMuteGagEnabled.IntValue == 1 && DB != null && iServerID != -1) {
+	if(g_cvMuteGagEnabled.IntValue == 1 && !StrEqual(iServerID, "")) {
 
 		//Set default values
 		for (int i = 0; i < 3; i++) {
@@ -216,38 +213,65 @@ void MuteGag_OnClientIDReceived(int client) {
 		hMuteGagTimer[client] 		= null;
 
 		//Check if client is muted or gagged or silenced
-		char query[500];
-		Format(query, sizeof(query), "SELECT `mgtype`, MAX(`length` - TIMESTAMPDIFF(MINUTE, time, now())) as timeleft, MAX(`length`), MAX(`reason`) "...
-		"FROM bp_mutegag mg WHERE (sid = %i OR sid = 0) AND pid = %i AND unbanned = 0 AND IF(`length` > 0, TIMESTAMPDIFF(MINUTE, time, now()), 0) <= `length` "...
-		"GROUP BY mgtype", iServerID, iClientID[client]);
-		DB.Query(OnMuteGagCheck, query, GetClientUserId(client), DBPrio_Low);
+		char url[512] = "users/";
+		StrCat(url, sizeof(url), iClientID[client]);
+		StrCat(url, sizeof(url), "/mutegag?resolved=false&server=");
+		StrCat(url, sizeof(url), iServerID);
+
+		httpClient.Get(url, OnMuteGagCheck, client);
 	}
 }
 
-public void OnMuteGagCheck(Database db, DBResultSet results, const char[] error, any userID) {
-	if(results == null)
-	{
-		LogError("[BOOMPANEL] SQL ERROR: %s", error);
-		return;
-	}
+public void OnMuteGagCheck(HTTPResponse response, any value) {
+	int client = value;
+	if (response.Status != 200) {
+	  	LogError("[BOOMPANEL] API ERROR (request failed)");
+	    return;
+	  }
 
-	int client = GetClientOfUserId(userID);
-	if(client < 1)
-		return;
+	  if (response.Data == null) {
+	  	LogError("[BOOMPANEL] API ERROR (no response data)");
+	    return;
+	  }
 
-	//If results were found
-	while (results.FetchRow())
-	{
-		int type 		= results.FetchInt(0);
-		int timeleft 	= results.FetchInt(1);
-		int length 		= results.FetchInt(2);
-		char reason[150];
-		results.FetchString(3, reason, sizeof(reason));
-		cMuteGagReason[client][type] = reason;
+		JSONObject output = view_as<JSONObject>(response.Data);
+		int success = output.GetBool("success");
 
-		AddMuteGag(client, type, timeleft, length);
-	}
+		if (success == false) {
+		  LogError("[BOOMPANEL] API ERROR (api call failed)");
+		  return;
 
+		} else {
+			JSONArray results = view_as<JSONArray>(output.Get("result"));
+			if (results.Length == 0) {
+				return;
+			}
+
+			JSONObject result = view_as<JSONObject>(results.Get(0));
+
+	    int now = GetTime();
+	    int itype;
+
+	    char stype[3], reason[100];
+	    result.GetString("type", stype, sizeof(stype));
+	    result.GetString("reason", reason, sizeof(reason));
+	    int timeleft = now - (result.GetInt("created_at") + result.GetInt("length"));
+	    int length = result.GetInt("length");
+
+	    delete result;
+	    delete results;
+
+	    if (StrEqual(stype, "MU")) {
+	    	itype = 0;
+	    } else if (StrEqual(stype, "GA")) {
+	    	itype = 1;
+	    } else {
+	    	itype = 2;
+	    }
+
+	    cMuteGagReason[client][itype] = reason;
+	    AddMuteGag(client, itype, timeleft, length);
+		}
 }
 
 void AddMuteGag(int client, int type, int timeleft, int length, char[] cReason = "") {
@@ -325,7 +349,7 @@ public Action TakeAwayMinute(Handle tmr, any userID) {
 
 //-- ALL COMMANDS (mute, gag, ungag, unmUte, silence, unsilence)--//
 public Action OnPlayerMuteGag(int client, const char[] command, int args) {
-	if(g_cvMuteGagEnabled.IntValue == 1 && DB != null && iServerID != -1) {
+	if(g_cvMuteGagEnabled.IntValue == 1 && !StrEqual(iServerID, "")) {
 
 		/* Few things might be taken from sourcecomms */
 
@@ -337,11 +361,9 @@ public Action OnPlayerMuteGag(int client, const char[] command, int args) {
 		Format(cLastCmd[client], sizeof(cLastCmd), "%s", command);
 
 		//Manually send this command to bp_chat, so it gets logged (because such command already exists in sourcemod by default)
-		char cMessage[256], cEscMessage[256];
-		GetCmdArgString(cMessage, sizeof(cMessage));
-		DB.Escape(cMessage, cEscMessage, sizeof(cEscMessage));
-		Format(cEscMessage, sizeof(cEscMessage), "%s %s", command, cEscMessage);
-		LogChatMessage(client, cEscMessage, 1);
+		char cMessage[256];
+		Format(cMessage, sizeof(cMessage), "%s %s", command, cMessage);
+		LogChatMessage(client, cMessage, 1);
 
 
 		//Get command type
@@ -400,7 +422,7 @@ public Action OnPlayerMuteGag(int client, const char[] command, int args) {
 
 
 		//Save admins last target ID
-		iLastTargetID[client] = (client > 0) ? iClientID[tlist[0]] : 0;
+		iLastTargetID[client] = (client > 0) ? iClientID[tlist[0]] : "";
 
 
 		//If mute/gag/silence
@@ -417,13 +439,13 @@ public Action OnPlayerMuteGag(int client, const char[] command, int args) {
 				GetCmdArg(2, cTime, sizeof(cTime));
 				GetCmdArg(3, cReason, sizeof(cReason));
 				int iBanTime = ConverTimeToMinutes(cTime, sizeof(cTime));
-				DBMuteGag(client, iLastTargetID[client], type, cReason, iBanTime);
+				APIMuteGag(client, iLastTargetID[client], type, cReason, iBanTime);
 
 			}
 
 		//If unmute/ungag/unsilence
 		} else {
-			DBMuteGag(client, iLastTargetID[client], type);
+			APIMuteGag(client, iLastTargetID[client], type);
 		}
 
 
@@ -459,31 +481,46 @@ void AddPeopleToMenu(Menu menu)
 	}
 }
 
-void DBMuteGag(int admin, int clientID, int type, char[] reason = "", int time = -1) {
-	//Update last target for admin
-	int adminID = (admin == 0) ? 0 : iClientID[admin];
-	int serverToBan = (g_cvMuteGagAllSrvs.IntValue == 0) ? iServerID : 0;
+void APIMuteGag(int admin, char[] clientID, int type, char[] reason = "", int time = -1) {
+	// Update last target for admin
+	char adminID[37], serverToBan[37];
+	StrCat(adminID, sizeof(adminID), (admin == 0) ? "" : iClientID[admin]);
+	StrCat(serverToBan, sizeof(serverToBan), (g_cvMuteGagAllSrvs.IntValue == 0) ? iServerID : "");
 
-	//SQL stuff
-	char query[500];
-	if(type < 3) {
-		Format(query, sizeof(query),
-		"INSERT INTO bp_mutegag (pid, sid, aid, mgtype, length, reason) "...
-		"VALUES(%i, %i, %i, %i, %i, '%s')",
-		clientID, serverToBan, adminID, type, time, reason);
-	} else {
-		Format(query, sizeof(query),
-		"UPDATE bp_mutegag SET unbanned = 1 WHERE pid = %i AND sid = %i AND mgtype = %i",
-		clientID, serverToBan, GetOpositeType(type));
+	JSONObject payload = new JSONObject();
+
+	if (!StrEqual(serverToBan, "")) {
+		payload.SetString("server", iServerID);
 	}
-	DB.Query(OnRowInserted, query, _, DBPrio_Low);
 
+	char stype[5] = "both";
+	if (type == 0) {
+		stype = "mute";
+	} else if (type == 1) {
+		stype = "gag";
+	}
 
+	char url[512] = "users/";
+	StrCat(url, sizeof(url), clientID);
+	StrCat(url, sizeof(url), "/mutegag");
 
-	//Perform mute/gag on player if hes still ingame
+	payload.SetString("type", stype);
+	if(type < 3) {
+		payload.SetString("reason", reason);
+		payload.SetString("issuer", adminID);
+		payload.SetInt("length", time * 60);
+
+		httpClient.Put(url, payload, APINoResponseCall);
+	} else {
+		payload.SetBool("resolved", true);
+		httpClient.Post(url, payload, APINoResponseCall);
+	}
+	delete payload;
+
+	//Perform mute/gag on player if he is still ingame
 	int target = -1;
 	for (int i = 1; i < MaxClients; i++) {
-		if(IsClientInGame(i) && !IsFakeClient(i) && iClientID[i] == clientID) {
+		if(IsClientInGame(i) && !IsFakeClient(i) && StrEqual(iClientID[i], clientID)) {
 			target = i;
 
 			if(type < 3) {
@@ -583,8 +620,8 @@ public int MenuHandler_OnAdminSelectsReason(Menu menu, MenuAction action, int cl
 		if(!StrEqual(cReason, "customreason")) {
 
 			//Update just the info about mute/gag
-			if(iLastTargetID[client] > 0)
-				DBMuteGag(client, iLastTargetID[client], iLastCommandType[client], cReason, iLastMuteGagTime[client]);
+			if(!StrEqual(iLastTargetID[client], ""))
+				APIMuteGag(client, iLastTargetID[client], iLastCommandType[client], cReason, iLastMuteGagTime[client]);
 			else
 				PrintToChat(client, "%sSorry, we got some kind of a problem!", PREFIX);
 

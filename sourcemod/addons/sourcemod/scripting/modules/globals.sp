@@ -14,10 +14,10 @@ char cMuteGagName[][] =  {"mute", "gag", "silence", "unmute", "ungag", "unsilenc
 HTTPClient httpClient;
 
 char iServerID[37] = "",
-     iClientID[MAXPLAYERS + 1][37];
+     iClientID[MAXPLAYERS + 1][37],
+     iLastTargetID[MAXPLAYERS + 1][37];
 
 int iLastMuteGagTime[MAXPLAYERS + 1],
-    iLastTargetID[MAXPLAYERS + 1],
     iLastCommandType[MAXPLAYERS + 1],
     iClientOnlineID[MAXPLAYERS + 1],
     iMuteGagTimeleft[MAXPLAYERS + 1][3],
@@ -38,7 +38,8 @@ ConVar g_cvServerIP,
        g_cvChatLogEnabled,
        g_cvMuteGagAllSrvs,
        g_cvBansAllSrvs;
-char g_endpoint[100];
+
+char g_endpoint[512];
 
 char cServerHostName[100],
      cMuteReasonsFile[PLATFORM_MAX_PATH],

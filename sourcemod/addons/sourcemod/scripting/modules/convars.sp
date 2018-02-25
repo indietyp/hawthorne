@@ -1,5 +1,5 @@
 void BP_InitConVars() {
-	// Create ton of cvars
+	// Create tons of cvars
 	g_cvServerIP				= CreateConVar("bp_server_ip", 						"127.0.0.1", 	"Panel server domain or IP");
 	g_cvServerPORT			= CreateConVar("bp_server_port", 					"80", 				"Panel server accessed port");
 	g_cvServerTOKEN			= CreateConVar("bp_server_token", 				"", 					"Panel server issued authentication token - REQUIRED");

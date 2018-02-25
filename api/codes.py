@@ -41,6 +41,13 @@ def s_to_l(v):
   return None
 
 
+def s_to_i(v):
+  try:
+    return int(v)
+  except:
+    return None
+
+
 def lower(v):
   return v.lower()
 

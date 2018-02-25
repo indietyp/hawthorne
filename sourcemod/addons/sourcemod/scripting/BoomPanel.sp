@@ -10,7 +10,6 @@
 
 
 #include "modules/globals.sp"
-#include "modules/functions.sp"
 #include "modules/convars.sp"
 #include "modules/serverid.sp"
 #include "modules/players.sp"
@@ -20,15 +19,9 @@
 #include "modules/mutegag.sp"
 #include "modules/rcon.sp"
 #include "modules/natives.sp"
+#include "modules/functions.sp"
 
 #pragma newdecls required
-
-//DB DEFINITIONS
-/*
-	pid = player ID
-	sid = server ID
-	aid = admin ID
-*/
 
 //Credits
 //asherkin - help admin commands logging
@@ -40,13 +33,11 @@ public Plugin myinfo = {
 	author = "indietyp & boomix",
 	description = "BoomPanel Admin Panel",
 	version = "2.00",
-	url = "http://steamcommunity.com/id/boomix69/"
+	url = "boompanel.com"
 };
 
 
 public void OnPluginStart() {
-	//Database.Connect(SQLConnect, "BoomPanel");
-
 	// Events
 	HookEvent("player_disconnect", 	Event_Disconnect, EventHookMode_Pre);
 	HookEvent("player_team",		Event_PlayerTeam);
@@ -73,6 +64,34 @@ public void OnPluginStart() {
 	BP_OnPluginStart();
 }
 
+public void OnConfigsExecuted() {
+	char protocol[6], ip[12], port[6], token[37];
+	if (GetConVarInt(g_cvServerPROTOCOL) == 1) {
+		protocol = "https";
+	} else {
+		protocol = "http";
+	}
+
+	GetConVarString(g_cvServerIP, ip, sizeof(ip));
+	GetConVarString(g_cvServerPORT, port, sizeof(port));
+	GetConVarString(g_cvServerTOKEN, token, sizeof(token));
+
+	g_endpoint = protocol;
+	StrCat(g_endpoint, sizeof(g_endpoint), "://");
+	StrCat(g_endpoint, sizeof(g_endpoint), ip);
+	StrCat(g_endpoint, sizeof(g_endpoint), ":");
+	StrCat(g_endpoint, sizeof(g_endpoint), port);
+	StrCat(g_endpoint, sizeof(g_endpoint), "/api/v1");
+
+	LogMessage("Configured Endpoint:");
+	LogMessage(g_endpoint);
+
+	httpClient = new HTTPClient(g_endpoint);
+	httpClient.SetHeader("X-TOKEN", token);
+
+	GetServerID();
+}
+
 bool IsSpectator(int client) {
 	if(GetClientTeam(client) == 2 || GetClientTeam(client) == 3)
 		return false;
@@ -80,45 +99,6 @@ bool IsSpectator(int client) {
 		return true;
 }
 
-// SQL GOT REPLACED WITH AN REST API APPROACH
-//void Main_OnMapStart() {
-//	if(DB == null) {
-
-//		if (SQL_CheckConfig("BoomPanel"))
-//			Database.Connect(SQLConnect, "BoomPanel");
-//		else
-//			Database.Connect(SQLConnect, "default");
-
-//	}
-//}
-
-//***************
-//--------------
-//DATABASE CONNECT
-//--------------
-//***************
-
-//public void SQLConnect(Database db, const char[] error, any data) {
-//	if (db == null)
-//	{
-//		delete db;
-//		LogError("Database failure: %s", error);
-//		return;
-//	}
-
-//	else
-//	{
-//		DB = db;
-//		DB.Query(OnRowInserted, "SET NAMES \"UTF8\"");
-//		DB.SetCharset("utf8");
-//		OnDBConnected();
-//	}
-//}
-
-//public void OnRowInserted(Database db, DBResultSet results, const char[] error, any data) {
-//	if(results == null)
-//	{
-//		LogError("[BOOMPANEL] MYSQL ERROR: %s", error);
-//		return;
-//	}
-//}
+public void APINoResponseCall(HTTPResponse response, any value) {
+	return;
+}

@@ -15,7 +15,14 @@ from django.views.decorators.http import require_http_methods
 @require_http_methods(['GET', 'PUT'])
 def list(request, validated={}, *args, **kwargs):
   if request.method == 'GET':
+    print('getting server')
     server = Server.objects.filter(name__contains=validated['match']).values('id', 'name')
+
+    if validated['ip'] is not None:
+      server = server.filter(ip=validated['ip'])
+
+    if validated['port'] is not None:
+      server = server.filter(port=validated['port'])
 
     limit = validated['limit']
     offset = validated['offset']

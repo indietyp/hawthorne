@@ -1,14 +1,16 @@
 from django.http import JsonResponse
+from django.conf import settings
 import json
+import re
 from api.codes import s_to_l
 from functools import wraps
 from api.validation import validation as valid_dict
 from api.validation import Validator
+from core.utils import UniPanelJSONEncoder
 
 
-def jsonparse(content=None, code=200, success=None):
-  if success is None:
-    success = True if code >= 200 and code < 300 else False
+def jsonparse(content=None, code=200, encoder=None):
+  success = True if code >= 200 and code < 300 else False
 
   schema = {'success': {'type': 'boolean', 'required': True},
             'reason': {'type': ['dict', 'list'], 'dependencies': {'success': False}, 'coerce': s_to_l},
@@ -28,7 +30,13 @@ def jsonparse(content=None, code=200, success=None):
   if not v.validate(document):
     return JsonResponse({'error': 'FATAL ERROR, VALIDATION NOT WORKING. CONTACT SYSTEM ADMINISTRATOR', 'calm': v.errors}, status=500)
 
-  return JsonResponse(document, status=code)
+  if code != 200 and settings.DEBUG:
+    print(document)
+
+  if encoder is None:
+    return JsonResponse(document, status=code, encoder=UniPanelJSONEncoder)
+  else:
+    return JsonResponse(document, status=code, encoder=encoder)
 
 
 def json_response(f):
@@ -62,7 +70,13 @@ def validation(a):
         document = dict(request.GET)
         schema = validation['GET']
       else:
-        document = json.loads(request.body) if request.body != b'' else {}
+        raw = request._stream.stream.peek()
+        data = request.body
+
+        if re.match(r'^[0-9a-fA-F]{2}', data.decode()) is not None:
+          data = raw.split(b'\r\n')[1]
+
+        document = json.loads(data) if data != b'' else {}
         schema = validation[request.method]
 
       schema = schema['validation']
@@ -77,6 +91,8 @@ def validation(a):
         return v.errors, 428
 
       data = document
+
+      print(data)
       return f(request, validated=data, *args, **kwargs)
 
     return wrapper

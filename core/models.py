@@ -83,7 +83,7 @@ class UserLogIP(BaseModel):
   ip = models.GenericIPAddressField()
   connections = models.IntegerField(default=0)
 
-  active = models.BooleanField(default=False)
+  is_active = models.BooleanField(default=False)
   last_used = models.DateTimeField(auto_now=True)
 
   def __str__(self):

@@ -1,54 +1,56 @@
 // TODO: TESTING
 void Admins_OnClientIDReceived(int client) {
-	if(g_cvAdminsEnabled.IntValue == 1 && iServerID != '') {
-		//JSONObject payload = new JSONObject();
-		//payload.SetInt("server", iServerID);
+	if(g_cvAdminsEnabled.IntValue == 1 && !StrEqual(iServerID, "")) {
+		char url[512] = "users/";
+		StrCat(url, sizeof(url), iClientID[client]);
+		StrCat(url, sizeof(url), "?server=");
+		StrCat(url, sizeof(url), iServerID);
 
-		httpClient.GET("/users/" + iClientID[client] + "?server=" + iServerID, payload, GetClientAdmin);
-		//delete payload;
+		httpClient.Get(url, GetClientAdmin, client);
 	}
 }
 
 public void GetClientAdmin(HTTPResponse response, any value) {
-	if(response.status != 200 && response.status != 403) {
+	int client = value;
+
+	if(response.Status != 200 && response.Status != 403) {
 		LogError("[BOOMPANEL] API ERROR (no response data)");
 		return;
 	}
 
-	if(response.status == 403)
+	if(response.Status == 403)
 		return;
 
 	JSONObject output = view_as<JSONObject>(response.Data);
-	int success = output.GetInt("success");
+	int success = output.GetBool("success");
 
-	if (success == 0) {
+	if (success == false) {
 		LogError("[BOOMPANEL] API ERROR (api call failed)");
 		return;
-		} else {
-			JSONObject result = view_as<JSONObject>(output.Get("result"));
-    	int immunity = result.getInt("immunity");
-    	int usetime = result.getInt("usetime") / 60;   // API outputs seconds, but we need minutes!
+	} else {
+		JSONObject result = view_as<JSONObject>(output.Get("result"));
+  	int immunity = result.GetInt("immunity");
+  	int usetime = result.GetInt("usetime") / 60;   // API outputs seconds, but we need minutes!
 
-			char flags[25];
-    	flags = result.getString("flags");
+		char flags[25];
+  	result.GetString("flags", flags, sizeof(flags));
 
-			AdminId admin = CreateAdmin();
-			SetAdminImmunityLevel(admin, immunity);
-			for(int i = 0; i < strlen(flags); i++) {
-				AdminFlag flag;
-				if(FindFlagByChar(flags[i], flag))
-					if(!admin.HasFlag(flag, Access_Effective))
-						admin.SetFlag(flag, true);
-			}
-			SetUserAdmin(client, admin, true);
-
-			// Next admin update time
-			iAdminUpdateTimeleft[client] = timeleft;
-
-			if(hAdminTimer[client] == null)
-				hAdminTimer[client] = CreateTimer(60.0, TakeAwayMinute2, GetClientUserId(client), TIMER_REPEAT);
+		AdminId admin = CreateAdmin();
+		SetAdminImmunityLevel(admin, immunity);
+		for(int i = 0; i < strlen(flags); i++) {
+			AdminFlag flag;
+			if(FindFlagByChar(flags[i], flag))
+				if(!admin.HasFlag(flag, Access_Effective))
+					admin.SetFlag(flag, true);
 		}
+		SetUserAdmin(client, admin, true);
 
+		// Next admin update time
+		iAdminUpdateTimeleft[client] = usetime;
+
+		if(hAdminTimer[client] == null)
+			hAdminTimer[client] = CreateTimer(60.0, TakeAwayMinute2, GetClientUserId(client), TIMER_REPEAT);
+	}
 }
 
 public Action TakeAwayMinute2(Handle tmr, any userID) {
