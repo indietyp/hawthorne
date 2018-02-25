@@ -122,24 +122,6 @@ CACHES = {
 WSGI_APPLICATION = 'panel.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'boompanel',
-        'USER': 'root',
-        'PASSWORD': '',
-        'TEST': {
-            'NAME': 'boompaneltest',
-        },
-        'OPTIONS': {
-            'sql_mode': 'STRICT_ALL_TABLES'
-        }
-    }
-}
-
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
@@ -175,8 +157,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR + '/interface/static'
-
 PAGE_SIZE = 16
+
+
+AUTOMATED_LOGGING = {
+    'exclude': ['automated_logging', 'Session', 'basehttp', 'django.server']
+}

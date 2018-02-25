@@ -10,3 +10,4 @@ steamapi
 django-automated-logging
 django-static-precompiler
 django-admin-generator
+argon2-cffi

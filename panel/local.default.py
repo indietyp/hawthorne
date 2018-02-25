@@ -53,9 +53,22 @@ STATIC_PRECOMPILER_COMPILERS = (
     }),
 )
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'boompanel',
+        'USER': 'root',
+        'PASSWORD': '',
+        'OPTIONS': {
+            'sql_mode': 'STRICT_ALL_TABLES'
+        }
+    }
+}
+
 DEBUG = False
 REDISCACHE = 'localhost:6379'
 SOCIAL_AUTH_STEAM_API_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+STATIC_ROOT = '/local/static'
 
 # generate me baby
 SECRET_KEY = '##t_85)kd%hca+xfp6fhk06mx&r+yw%%u@8c5bfkuc@yg-7^vt'
