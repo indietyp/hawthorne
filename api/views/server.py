@@ -15,7 +15,6 @@ from django.views.decorators.http import require_http_methods
 @require_http_methods(['GET', 'PUT'])
 def list(request, validated={}, *args, **kwargs):
   if request.method == 'GET':
-    print('getting server')
     server = Server.objects.filter(name__contains=validated['match']).values('id', 'name')
 
     if validated['ip'] is not None:

@@ -23,10 +23,10 @@
             i.skip(data-feather='clock')
         .column.icon.pure-u-3-24
           .spacer
-          .action
-            i.explicit.gray(data-feather="volume-x")
-          .action
-            i.explicit.gray(data-feather="message-circle")
+          .action(onclick="window.style.mutegag.toggle(this)")
+            i.explicit.gray#mute(data-feather="volume-x")
+          .action(onclick="window.style.mutegag.toggle(this)")
+            i.explicit.gray#gag(data-feather="message-circle")
         .column.icon.placeholder.pure-u-7-24
         .column.icon.group.pure-u-14-24.input-wrapper
           input#inputdescription(type='text')
@@ -35,7 +35,7 @@
         .column.icon.pure-u-3-24
           .spacer
           .action
-            i(data-feather="plus")
+            i.animated(onclick="window.api.submit('mutegag', this)", data-feather="plus")
 
         script.execution.
           var now = new Date()
@@ -57,6 +57,7 @@
           formattedDateTime = year + '-' + month + '-' + date + 'T' + hours + ':' + minutes;
           document.getElementById('inputduration').min = formattedDateTime;
           var usernameinput = new Choices('#username-input', {
+            searchChoices: false,
             searchPlaceholderValue: "Steam Username",
             choices: [],
             noResultsText: 'Could not find user',
@@ -64,7 +65,7 @@
             itemSelectText: 'Enter will do it',
           })
           debounce_search = function(value, input) {
-            window.steam.search(value, input);
+            window.steam.search(value, input, true);
           }
 
           var call = _.debounce(debounce_search, 200);
@@ -78,5 +79,8 @@
             searchEnabled: false,
             choices: [],
           })
+
+          window.usernameinput = usernameinput
+          window.serverinput = serverinput
 
           window.api.servers('', serverinput)

@@ -2,7 +2,7 @@
 (function() {
   // original code from davesag
   // http://jsfiddle.net/davesag/qgCrk/6/
-  var parseDuration, toDurationString, to_seconds;
+  var mutegag__toggle, parseDuration, submit, toDurationString, to_seconds;
 
   to_seconds = function(dd, hh, mm) {
     var d, h, m, t;
@@ -75,25 +75,64 @@
     return result.substring(0, result.length - 1);
   };
 
-  $().ready(function() {
-    window.endpoint = fermata.json("/api/v1");
-    return $("input#inputtimevalue").on('change', function(event, ui) {
-      var field, icon, sd, seconds;
-      event.preventDefault();
-      field = $('input#inputtimevalue');
-      icon = $('input#inputtimevalue + label svg');
-      sd = field.val();
-      seconds = parseDuration(sd);
-      if (sd !== '' && seconds === 0) {
-        field.css('border-bottom-color', '#FF404B');
-        icon.css('stroke', '#FF404B');
-        return this.focus();
+  mutegag__toggle = function(that) {
+    var i, j, len, ref, results, state;
+    ref = that.children;
+    results = [];
+    for (j = 0, len = ref.length; j < len; j++) {
+      i = ref[j];
+      state = i.getAttribute('class');
+      if (state.match(/gray/)) {
+        state = state.replace('gray', '');
+        state += 'red selected';
       } else {
-        field.css('border-bottom-color', '');
-        icon.css('stroke', '');
-        return field.val(toDurationString(seconds));
+        state = state.replace('red', '');
+        state = state.replace('selected', '');
+        state += 'gray';
       }
-    });
+      state = state.replace('  ', ' ');
+      results.push(i.setAttribute('class', state));
+    }
+    return results;
+  };
+
+  submit = function(that, success = true, cleanup = false) {
+    var state;
+    state = that.getAttribute('class');
+    if (!state.match(/animated/)) {
+      return false;
+    }
+    if (success && !state.match(/success/)) {
+      state += ' success explicit green';
+    }
+    if (!success && !state.match(/fail/)) {
+      state += ' fail explicit red';
+    }
+    if (cleanup) {
+      state = state.replace(/explicit/g, '');
+      state = state.replace(/green/g, '');
+      state = state.replace(/red/g, '');
+      state = state.replace(/fail/g, '');
+      state = state.replace(/success/g, '');
+      state = state.replace(/(\s+)/g, ' ');
+    }
+    return that.setAttribute('class', state);
+  };
+
+  window.style = {
+    duration: {
+      parse: parseDuration,
+      string: toDurationString
+    },
+    mutegag: {
+      toggle: mutegag__toggle
+    },
+    submit: submit
+  };
+
+  $().ready(function() {
+    window.cache = {};
+    return window.endpoint = fermata.json("/api/v1");
   });
 
 }).call(this);

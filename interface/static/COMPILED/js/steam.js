@@ -2,13 +2,23 @@
 (function() {
   var search;
 
-  search = function(query, that = null) {
+  search = function(query, that = null, internal = false) {
+    var ts;
+    ts = new Date().getTime();
+    window.cache.steam = {
+      _ts: ts
+    };
     $({
-      'query': query
-    }).ajax('/api/v1/steam/search', 'GET', function(data, status) {
+      'query': query,
+      '_ts': ts
+    }).ajax('/api/v1/steam/search/' + Number(internal), 'GET', function(data, status) {
       var ele, formatted, i, len;
       data = JSON.parse(data);
-      data = data['result'];
+      data = data.result;
+      if (data._ts < window.cache.steam._ts) {
+        return false;
+      }
+      data = data.data;
       if (that !== null) {
         formatted = [];
         for (i = 0, len = data.length; i < len; i++) {

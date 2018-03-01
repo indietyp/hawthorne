@@ -1,6 +1,7 @@
 from functools import wraps
 from core.models import Token
 from api.validation import validation as valid_dict
+from django.utils import timezone
 
 
 def token_retrieve(request):
@@ -13,6 +14,13 @@ def token_retrieve(request):
   if token is not None:
     try:
       token = Token.objects.get(id=token, is_active=True, is_anonymous=False)
+      request.user = token.owner
+
+      if token.due is not None and token.due > timezone.now():
+        token.is_active = False
+        token.save()
+
+        token = None
     except Exception:
       token = None
 

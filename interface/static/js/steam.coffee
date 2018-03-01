@@ -1,8 +1,16 @@
-search = (query, that=null) ->
-  $({'query': query}).ajax('/api/v1/steam/search', 'GET', (data, status) ->
-    data = JSON.parse data
-    data = data['result']
+search = (query, that=null, internal=false) ->
+  ts = new Date().getTime()
+  window.cache.steam =
+    _ts: ts
 
+  $({'query': query, '_ts': ts}).ajax('/api/v1/steam/search/' + Number(internal), 'GET', (data, status) ->
+    data = JSON.parse data
+    data = data.result
+
+    if data._ts < window.cache.steam._ts
+      return false
+
+    data = data.data
     if that != null
       formatted = []
       for ele in data

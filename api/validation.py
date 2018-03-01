@@ -31,11 +31,12 @@ validation = {
                                    'has_panel_access': {'type': 'boolean', 'default': None, 'nullable': True, 'coerce': codes.l_to_b},
                                    'role': {'type': 'uuid', 'default': None, 'nullable': True, 'coerce': codes.l_to_s}},
                     'permission': ['core.view_user']},
-            'PUT': {'validation': {'steamid': {'type': 'integer', 'required': True, 'min': 76561197960265729, 'max': 76561202255233023, 'coerce': codes.s_to_i},
+            'PUT': {'validation': {'steamid': {'type': 'integer', 'min': 76561197960265729, 'max': 76561202255233023, 'coerce': codes.s_to_i, 'dependencies': {'id': None}, 'nullable': True, 'default': None},
+                                   'id': {'type': 'uuid', 'dependencies': {'steamid': None}, 'nullable': True, 'default': None},
                                    'username': {'type': 'string', 'required': True},
-                                   'country': {'type': 'string', 'required': False},
-                                   'ip': {'type': 'ip', 'required': False},
-                                   'connected': {'type': 'boolean', 'required': False, 'dependencies': ['server']},
+                                   'country': {'type': 'string', 'nullable': True, 'default': None},
+                                   'ip': {'type': 'ip', 'nullable': True, 'default': None},
+                                   'connected': {'type': 'boolean', 'dependencies': ['server'], 'nullable': True, 'default': None},
                                    'server': {'type': 'uuid'}},
                     'permission': ['core.add_user']}
         },
@@ -78,13 +79,13 @@ validation = {
                     'permission': ['core.view_mutegag']},
             'POST': {'validation': {'server': {'type': 'uuid', 'required': True},
                                     'resolved': {'type': 'boolean', 'nullable': True, 'default': None},
-                                    'type': {'type': 'string', 'anyof': ['mute', 'gag', 'both'], 'default': 'both', 'coerce': codes.lower},
+                                    'type': {'type': 'string', 'allowed': ['mute', 'gag', 'both'], 'default': 'both', 'coerce': codes.lower},
                                     'reason': {'type': 'string', 'nullable': True, 'default': None},
                                     'length': {'type': 'integer', 'nullable': True, 'default': None}},
                      'permission': ['core.change_mutegag']},
             'PUT': {'validation': {'server': {'type': 'uuid', 'required': True},
                                    'reason': {'type': 'string', 'required': True},
-                                   'type': {'type': 'string', 'anyof': ['mute', 'gag', 'both'], 'default': 'both', 'coerce': codes.lower},
+                                   'type': {'type': 'string', 'allowed': ['mute', 'gag', 'both'], 'default': 'both', 'coerce': codes.lower},
                                    'length': {'type': 'integer', 'required': True}},
                     'permission': ['core.add_mutegag']},
             'DELETE': {'validation': {'server': {'type': 'uuid', 'required': True}},
@@ -199,7 +200,8 @@ validation = {
         'search': {
             'GET': {'validation': {'scope': {'type': 'string', 'allowed': ['user'], 'default': 'user', 'coerce': codes.l_to_s},
                                    'query': {'type': 'string', 'required': True, 'coerce': codes.l_to_s},
-                                   'mode': {'type': 'string', 'allowed': ['best-guess'], 'default': 'best-guess', 'coerce': codes.l_to_s}},
+                                   'mode': {'type': 'string', 'allowed': ['best-guess'], 'default': 'best-guess', 'coerce': codes.l_to_s},
+                                   '_ts': {'type': 'integer', 'required': False, 'coerce': codes.l_to_i}},
                     'permission': []}
         }
     }

@@ -3,20 +3,19 @@ from .__rcon import RCon
 
 class RConSourcemod:
   def __init__(self, server):
-    self.rcon = RCon()
-    print(self.rcon)
+    self.rcon = RCon(server)
 
-  def ban(self):
+  def ban(self, *args, **kwargs):
     pass
 
-  def kick(self):
+  def kick(self, *args, **kwargs):
     pass
 
-  def mutegag(self):
+  def mutegag(self, mutegag, *args, **kwargs):
     pass
 
-  def status(self):
-    pass
+  def status(self, *args, **kwargs):
+    return self.rcon.run('json_status')[0]
 
-  def execute(self):
+  def execute(self, *args, **kwargs):
     pass

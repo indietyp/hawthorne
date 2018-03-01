@@ -4,7 +4,7 @@
   .column.icon.username.pure-u-7-24
     span.flag-icon(class="flag-icon-{{data.country.code|lower}}")
     img(src="{{ data.avatar }}")
-    span= data.ingame|truncatechars:18
+    span= data.namespace|truncatechars:18
   .column.icon.group.pure-u-7-24
     i(data-feather="users")
     span= data.role|truncatechars:18

@@ -6,7 +6,7 @@
     $({
       'query': query
     }).ajax('/api/v1/servers', 'GET', function(data, status) {
-      var ele, formatted, i, len;
+      var ele, formatted, j, len;
       data = JSON.parse(data);
       data = data['result'];
       if (that !== null) {
@@ -16,8 +16,8 @@
             'label': '<b>all</b>'
           }
         ];
-        for (i = 0, len = data.length; i < len; i++) {
-          ele = data[i];
+        for (j = 0, len = data.length; j < len; j++) {
+          ele = data[j];
           formatted.push({
             'value': ele.id,
             'label': ele.name
@@ -33,13 +33,13 @@
     $({
       'query': query
     }).ajax('/api/v1/roles', 'GET', function(data, status) {
-      var ele, formatted, i, len;
+      var ele, formatted, j, len;
       data = JSON.parse(data);
       data = data['result'];
       if (that !== null) {
         formatted = [];
-        for (i = 0, len = data.length; i < len; i++) {
-          ele = data[i];
+        for (j = 0, len = data.length; j < len; j++) {
+          ele = data[j];
           formatted.push({
             'value': ele.id,
             'label': ele.name
@@ -51,8 +51,8 @@
     });
   };
 
-  submit = function(mode = '', refresh = []) {
-    var data, user;
+  submit = function(mode = '', that) {
+    var data, i, j, len, now, ref, time, type, user;
     switch (mode) {
       case 'admin__administrator':
         data = {
@@ -63,13 +63,124 @@
         user = window.usernameinput.getValue(true);
         window.endpoint.users[user].post(data, function(err, data) {
           if (data.success) {
-            window.ajax.admin.admins(1);
+            window.style.submit(that);
+          } else {
+            window.style.submit(that, false);
           }
           return data;
         });
-        return console.log(data);
+        return setTimeout(function() {
+          window.style.submit(that, false, true);
+          return window.ajax.admin.admins(1);
+        }, 3000);
       case 'admin__groups':
-        return console.log('stoff');
+        data = {
+          name: $("#inputgroupname").val(),
+          server: window.serverinput.getValue(true),
+          immunity: parseInt($("#inputimmunityvalue").val()),
+          usetime: null,
+          flags: ''
+        };
+        if (data.server === 'all') {
+          data.server = null;
+        }
+        ref = $(".row.add .actions input:checked");
+        for (j = 0, len = ref.length; j < len; j++) {
+          i = ref[j];
+          data.flags += $(i).val();
+        }
+        time = $("#inputtimevalue").val();
+        if (time === !null || time !== '') {
+          data.usetime = window.style.duration.parse(time);
+        }
+        window.endpoint.roles.put(data, function(err, data) {
+          if (data.success) {
+            window.style.submit(that);
+          } else {
+            window.style.submit(that, false);
+          }
+          return data;
+        });
+        return setTimeout(function() {
+          window.style.submit(that, false, true);
+          return window.ajax.ban.user(1);
+        }, 3000);
+      case 'ban':
+        now = new Date();
+        now = now.getTime() / 1000;
+        time = $("#inputduration").val();
+        if (time !== '') {
+          time = new Date($("#inputduration").val());
+          time = time.getTime() / 1000;
+        } else {
+          time = 0;
+        }
+        user = window.usernameinput.getValue(true);
+        data = {
+          reason: $("#inputdescription").val(),
+          length: parseInt(time - now)
+        };
+        server = window.serverinput.getValue(true);
+        if (server !== 'all') {
+          data.server = server;
+        }
+        window.endpoint.users[user].ban.put(data, function(err, data) {
+          if (data.success) {
+            return window.style.submit(that);
+          } else {
+            return window.style.submit(that, false);
+          }
+        });
+        return setTimeout(function() {
+          window.style.submit(that, false, true);
+          return window.ajax.ban.user(1);
+        }, 3000);
+      case 'mutegag':
+        now = new Date();
+        now = now.getTime() / 1000;
+        time = $("#inputduration").val();
+        if (time !== '') {
+          time = new Date(time);
+          time = time.getTime() / 1000;
+        } else {
+          time = 0;
+        }
+        user = window.usernameinput.getValue(true);
+        type = '';
+        $('.row.add .action .selected').each((function(e) {
+          return type += e.id;
+        }));
+        if (type.match(/mute/) && type.match(/gag/)) {
+          type = 'both';
+        }
+        if (type === '') {
+          type = 'both';
+        }
+        data = {
+          reason: $("#inputdescription").val(),
+          length: parseInt(time - now),
+          type: type
+        };
+        server = window.serverinput.getValue(true);
+        if (server !== 'all') {
+          data.server = server;
+        }
+        window.endpoint.users[user].mutegag.put(data, function(err, data) {
+          if (data.success) {
+            window.style.submit(that);
+          } else {
+            window.style.submit(that, false);
+          }
+          return data;
+        });
+        return setTimeout(function() {
+          window.style.submit(that, false, true);
+          return window.ajax.mutegag.user(1);
+        }, 3000);
+      case 'kick':
+        return console.log('placeholder');
+      case 'server':
+        return console.log('placeholder');
       default:
         return console.log('stuff');
     }

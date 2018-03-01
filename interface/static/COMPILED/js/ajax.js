@@ -36,6 +36,18 @@
   };
 
   admin__group = function(page = 1) {
+    var i, item, j, len, ref;
+    if (page === 1) {
+      i = 0;
+      ref = $("#admin__group .row");
+      for (j = 0, len = ref.length; j < len; j++) {
+        item = ref[j];
+        if (i !== 0) {
+          $(item).remove();
+        }
+        i++;
+      }
+    }
     return $({
       'csrfmiddlewaretoken': window.csrftoken
     }).ajax('/ajax/v1/admin/group/' + page, 'POST', function(data, status) {
@@ -81,6 +93,9 @@
   };
 
   mutegag__user = function(page = 1) {
+    if (page === 1) {
+      $("#mutegag__user").html('');
+    }
     return $({
       'csrfmiddlewaretoken': window.csrftoken
     }).ajax('/ajax/v1/mutegag/user/' + page, 'POST', function(data, status) {
@@ -114,12 +129,12 @@
     return $({
       'csrfmiddlewaretoken': window.csrftoken
     }).ajax('/ajax/v1/server/server/' + page, 'POST', function(data, status) {
-      var i, len, ref, scr;
+      var j, len, ref, scr;
       if (status === 200) {
         $("#server__server").htmlAfter(data);
         ref = $(".chart-section script.execution");
-        for (i = 0, len = ref.length; i < len; i++) {
-          scr = ref[i];
+        for (j = 0, len = ref.length; j < len; j++) {
+          scr = ref[j];
           eval($(scr).html());
         }
         feather.replace();

@@ -373,6 +373,23 @@ input[type="number"]
 
 .feather
     stroke: white
+    transition: stroke .3s ease-out
+
+    &.animated
+        transition: transform 0.3s ease-out
+        transform-origin: 12px 12px 0px
+
+        &.success
+            transform: rotate(45deg)
+
+            & line:nth-child(2)
+                transition: transform 0.3s ease-out
+                transform-origin: 12px 12px 0px
+
+                transform: matrix(.5, 0, 0, 1, -4, 7)
+
+        &.fail
+            transform: rotate(45deg)
 
 .flex
     display: flex

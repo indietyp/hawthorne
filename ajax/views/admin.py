@@ -17,7 +17,7 @@ def user(request, page, *args, **kwargs):
                     .annotate(location=F('country__code'))
 
   ext = User.objects.filter(is_superuser=True)\
-                    .annotate(server=Value(None, CharField()))\
+                    .annotate(server=Value(None, CharField(null=True)))\
                     .annotate(role=Value('root', CharField()))\
                     .annotate(location=F('country__code'))
   return renderer(request, 'partials/admin/user.pug', obj, page, extra=ext)

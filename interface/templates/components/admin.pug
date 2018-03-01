@@ -20,11 +20,12 @@
               option(placeholder) Group
           .column.icon.pure-u-3-24
             .spacer
-            .action(onclick="window.api.submit('admin__administrator')")
-              i.explicit.hover.black(data-feather="user-plus")
+            .action
+              i.animated(onclick="window.api.submit('admin__administrator', this)", data-feather="plus")
 
           script.execution.
             var usernameinput = new Choices('#username-input', {
+              searchChoices: false,
               searchPlaceholderValue: "Steam Username",
               choices: [],
               noResultsText: 'Could not find user',
@@ -122,44 +123,63 @@
           .column.icon.server.pure-u-14-24
             i(data-feather="zap")
             .actions.enabled
-              input(type='checkbox', id="reservation-input").tiny
+              input(type='checkbox', id="reservation-input", value='A').tiny
               label.tiny(for="reservation-input", data-description='eservation') R
-              input(type='checkbox', id="genericinput").tiny
+              input(type='checkbox', id="genericinput", value='B').tiny
               label.tiny(for="genericinput", data-description='eneric') G
-              input(type='checkbox', id="kick-input").tiny
+              input(type='checkbox', id="kick-input", value='C').tiny
               label.tiny(for="kick-input", data-description='ick') K
-              input(type='checkbox', id="ban-input").tiny
+              input(type='checkbox', id="ban-input", value='DE').tiny
               label.tiny(for="ban-input", data-description='an') B
-              input(type='checkbox', id="slay-input").tiny
+              input(type='checkbox', id="slay-input", value='F').tiny
               label.tiny(for="slay-input", data-description='lay') S
-              input(type='checkbox', id="map-input").tiny
+              input(type='checkbox', id="map-input", value='G').tiny
               label.tiny(for="map-input", data-description='ap') M
-              input(type='checkbox', id="cvar-input").tiny
+              input(type='checkbox', id="cvar-input", value='H').tiny
               label.tiny(for="cvar-input", data-description='Var') C
-              input(type='checkbox', id="config-input").tiny
+              input(type='checkbox', id="config-input", value='I').tiny
               label.tiny(for="config-input", data-description='onfig') C
-              input(type='checkbox', id="chat-input").tiny
+              input(type='checkbox', id="chat-input", value='J').tiny
               label.tiny(for="chat-input", data-description='hat') C
-              input(type='checkbox', id="vote-input").tiny
+              input(type='checkbox', id="vote-input", value='K').tiny
               label.tiny(for="vote-input", data-description='ote') V
-              input(type='checkbox', id="password-input").tiny
+              input(type='checkbox', id="password-input", value='L').tiny
               label.tiny(for="password-input",data-description='assword') P
-              input(type='checkbox', id="rcon-input").tiny
+              input(type='checkbox', id="rcon-input", value='M').tiny
               label.tiny(for="rcon-input", data-description='Con') R
-              input(type='checkbox', id="cheat-input").tiny
+              input(type='checkbox', id="cheat-input", value='N').tiny
               label.tiny(for="cheat-input", data-description='heats') C
           script.execution.
+            $("input#inputtimevalue").on('change', function(event, ui) {
+              var field, icon, sd, seconds;
+              event.preventDefault();
+              field = $('input#inputtimevalue');
+              icon = $('input#inputtimevalue + label svg');
+              sd = field.val();
+              seconds = window.style.duration.parse(sd);
+              if (sd !== '' && seconds === 0) {
+                field.css('border-bottom-color', '#FF404B');
+                icon.css('stroke', '#FF404B');
+                this.focus();
+              } else {
+                field.css('border-bottom-color', '');
+                icon.css('stroke', '');
+                field.val(window.style.duration.string(seconds));
+              }
+            });
+
             var serverinput = new Choices('#server-input', {
               searchEnabled: false,
               choices: [],
             })
+            window.serverinput = serverinput
             window.api.servers('', serverinput)
             window.ajax.admin.admins(1)
 
           .column.icon.pure-u-3-24
             .spacer
             .action
-              i(data-feather="plus")
+              i.animated(onclick="window.api.submit('admin__groups', this)", data-feather="plus")
 
   .spacer
 

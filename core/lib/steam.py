@@ -8,7 +8,7 @@ def populate(user):
     steamapi.core.APIConnection(api_key=settings.SOCIAL_AUTH_STEAM_API_KEY, validate_key=True)
     fetched = steamapi.user.SteamUser(userid=user.username)
 
-    user.ingame = fetched.name
+    user.namespace = fetched.name
     user.profile = fetched.profile_url
     user.avatar = fetched.avatar
 

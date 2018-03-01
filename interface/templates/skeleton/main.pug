@@ -15,7 +15,7 @@ html(lang='en')
         - if request.user.steam is False
           span= request.user.username
         - else
-          span= request.user.ingame
+          span= request.user.namespace
       .offline.action(onclick="window.location='{% url 'logout' %}';")
         i(data-feather="power")
 

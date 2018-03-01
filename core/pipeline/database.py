@@ -13,7 +13,7 @@ def populate(strategy, details, backend, user=None, *args, **kwargs):
       if len(information['realname']) > 1:
         user.last_name = information['realname'][-1]
 
-    user.ingame = information['personaname']
+    user.namespace = information['personaname']
     user.country = Country.objects.get_or_create(code=information['loccountrycode'])[0]
     user.avatar = information['avatar']
     user.profile = information['profileurl']

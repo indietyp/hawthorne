@@ -29,17 +29,14 @@ void Players_OnClientAuthorized(int client) {
 }
 
 void Players_OnClientDisconnect(int client) {
-  char steamid[20];
-  GetClientAuthId(client, AuthId_SteamID64, steamid, sizeof(steamid));
-
-	iClientID[client] = "";
-
   JSONObject payload = new JSONObject();
-  payload.SetString("steamid", steamid);
+  payload.SetString("id", iClientID[client]);
   payload.SetString("server", iServerID);
   payload.SetBool("connected", false);
 
   httpClient.Put("users", payload, APINoResponseCall);
+
+	iClientID[client] = "";
   delete payload;
 }
 

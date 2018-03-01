@@ -22,7 +22,7 @@ class Country(BaseModel):
 
 class User(AbstractUser):
   id = models.UUIDField(primary_key=True, auto_created=True, default=uuid.uuid4, editable=False, unique=True)
-  ingame = models.CharField(max_length=255, null=True)
+  namespace = models.CharField(max_length=255, null=True)
 
   online = models.BooleanField(default=False)
   ip = models.GenericIPAddressField(null=True)
@@ -46,7 +46,7 @@ class User(AbstractUser):
     ]
 
   def __str__(self):
-    return "{} - {}".format(self.ingame, self.username)
+    return "{} - {}".format(self.namespace, self.username)
 
 
 class Token(BaseModel):
@@ -56,6 +56,8 @@ class Token(BaseModel):
   is_active = models.BooleanField(default=True)
   is_anonymous = models.BooleanField(default=False)
   is_superuser = models.BooleanField(default=False)
+
+  due = models.DateTimeField(null=True)
 
   def has_perm(self, perm, obj=None):
     if self.is_active and self.is_superuser:
@@ -129,6 +131,9 @@ class ServerPermission(BaseModel):
 
   def convert(self, conv=None):
     if conv is None:
+      if 'servergroup' in self.__dict__.keys() and self.servergroup.is_supergroup:
+        return 'ABCDEFGHIJKLMN'
+
       flags = []
       if self.can_reservation:
         flags.append('A')
@@ -160,6 +165,9 @@ class ServerPermission(BaseModel):
 
       return ''.join(flags)
     else:
+      if 'servergroup' in self.__dict__.keys() and self.servergroup.is_supergroup:
+        conv = 'ABCDEFGHIJKLMN'
+
       self.can_reservation = False
       self.can_generic = False
       self.can_kick = False
@@ -215,7 +223,7 @@ class ServerGroup(BaseModel):
 
   immunity = models.PositiveSmallIntegerField()
   usetime = models.DurationField(null=True)
-  is_admin = models.BooleanField(default=False)
+  is_supergroup = models.BooleanField(default=False)
 
   class Meta:
     permissions = [
@@ -259,11 +267,11 @@ class Server(BaseModel):
 
 class Ban(BaseModel):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
-  server = models.ForeignKey(Server, on_delete=models.CASCADE)
+  server = models.ForeignKey(Server, on_delete=models.CASCADE, null=True)
   issuer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ban_issuer')
 
   reason = models.CharField(max_length=255)
-  length = models.DurationField()
+  length = models.DurationField(null=True)
   resolved = models.BooleanField(default=False)
 
   class Meta:
@@ -273,6 +281,8 @@ class Ban(BaseModel):
         # ('change_ban', 'Can edit a ban'),  # built-in
         # ('delete_ban', 'Delete bans'),  # built-in
     ]
+
+    unique_together = ('user', 'server')
 
   def __str__(self):
     return "{} - {}".format(self.user, self.server)
@@ -312,7 +322,7 @@ class Mutegag(BaseModel):
   type = models.CharField(max_length=2, choices=MUTEGAG_CHOICES, default='MU')
 
   reason = models.CharField(max_length=255)
-  length = models.DurationField()
+  length = models.DurationField(null=True)
   resolved = models.BooleanField(default=False)
 
   class Meta:
@@ -324,6 +334,9 @@ class Mutegag(BaseModel):
         # ('change_mutegag', 'Can edit a mutegag'),  # built-in
         # ('delete_mutegag', 'Delete mutegags'),  # built-in
     ]
+
+
+    unique_together = ('user', 'server')
 
   def __str__(self):
     return "{} - {}".format(self.user, self.server)

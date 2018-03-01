@@ -1,7 +1,7 @@
 .row.pure-g(style="width:100%")
   .column.icon.username.pure-u-8-24
     i(data-feather='user')
-    span= data.user.ingame|truncatechars:18
+    span= data.user.namespace|truncatechars:18
   .column.icon.server.pure-u-8-24
     i(data-feather='hard-drive')
     span= data.server.name|truncatechars:18

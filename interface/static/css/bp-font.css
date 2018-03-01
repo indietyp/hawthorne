@@ -9,6 +9,15 @@
     font-weight: normal;
     font-style: normal;
 }
+
+.px24[class*='bpi-'] {
+  height: 24px;
+}
+
+.px24[class*='bpi-']:before {
+  margin-top: 6px;
+}
+
 [class*='bpi-'] {
   height: 32px;
 }

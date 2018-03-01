@@ -36,4 +36,5 @@ urlpatterns = [
 
     # steam
     path('steam/search', steam.search, name='steam.search'),                # GET
+    path('steam/search/<int:i>', steam.search, name='steam.search'),        # GET
 ]

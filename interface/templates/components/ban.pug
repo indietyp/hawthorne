@@ -31,7 +31,7 @@
         .column.icon.pure-u-3-24
           .spacer
           .action
-            i(data-feather="plus")
+            i.animated(onclick="window.api.submit('ban', this)", data-feather="plus")
         script.execution.
           var now = new Date()
             , year
@@ -52,6 +52,7 @@
           formattedDateTime = year + '-' + month + '-' + date + 'T' + hours + ':' + minutes;
           document.getElementById('inputduration').min = formattedDateTime;
           var usernameinput = new Choices('#username-input', {
+            searchChoices: false,
             searchPlaceholderValue: "Steam Username",
             choices: [],
             noResultsText: 'Could not find user',
@@ -60,7 +61,7 @@
           })
 
           debounce_search = function(value, input) {
-            window.steam.search(value, input);
+            window.steam.search(value, input, true);
           }
 
           var call = _.debounce(debounce_search, 200);
@@ -74,5 +75,8 @@
             searchEnabled: false,
             choices: [],
           })
+
+          window.usernameinput = usernameinput
+          window.serverinput = serverinput
 
           window.api.servers('', serverinput)

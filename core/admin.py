@@ -14,7 +14,7 @@ class UserAdmin(admin.ModelAdmin):
 
     list_display = (
         'username',
-        'ingame',
+        'namespace',
         'steam',
         'first_name',
         'last_name',
@@ -151,9 +151,9 @@ class ServerGroupAdmin(admin.ModelAdmin):
         'flags',
         'immunity',
         'usetime',
-        'is_admin',
+        'is_supergroup',
     )
-    list_filter = ('created_at', 'updated_at', 'flags', 'is_admin')
+    list_filter = ('created_at', 'updated_at', 'flags', 'is_supergroup')
     search_fields = ('name',)
     date_hierarchy = 'created_at'
 

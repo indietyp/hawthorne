@@ -57,22 +57,52 @@ toDurationString = (iDuration) ->
     result = result + m + 'm '
   return result.substring(0, result.length - 1)
 
+mutegag__toggle = (that) ->
+  for i in that.children
+    state = i.getAttribute 'class'
+    if state.match /gray/
+      state = state.replace 'gray', ''
+      state += 'red selected'
+    else
+      state = state.replace 'red', ''
+      state = state.replace 'selected', ''
+      state += 'gray'
+
+    state = state.replace '  ', ' '
+    i.setAttribute 'class', state
+
+submit = (that, success=true, cleanup=false) ->
+  state = that.getAttribute 'class'
+
+  if not state.match /animated/
+    return false
+
+  if success and not state.match /success/
+    state += ' success explicit green'
+
+  if not success and not state.match /fail/
+    state += ' fail explicit red'
+
+  if cleanup
+    state = state.replace /explicit/g, ''
+    state = state.replace /green/g, ''
+    state = state.replace /red/g, ''
+    state = state.replace /fail/g, ''
+    state = state.replace /success/g, ''
+    state = state.replace /(\s+)/g, ' '
+
+  that.setAttribute 'class', state
+
+window.style =
+  duration:
+    parse: parseDuration
+    string: toDurationString
+
+  mutegag:
+    toggle: mutegag__toggle
+
+  submit: submit
 
 $().ready ->
+  window.cache = {}
   window.endpoint = fermata.json("/api/v1")
-
-  $("input#inputtimevalue").on('change', (event, ui) ->
-    event.preventDefault()
-    field = $('input#inputtimevalue')
-    icon = $('input#inputtimevalue + label svg')
-    sd = field.val()
-    seconds = parseDuration(sd)
-    if sd != '' and seconds == 0
-      field.css('border-bottom-color', '#FF404B')
-      icon.css('stroke', '#FF404B')
-      this.focus()
-    else
-      field.css('border-bottom-color', '')
-      icon.css('stroke', '')
-      field.val toDurationString(seconds)
-    )

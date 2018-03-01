@@ -2,10 +2,10 @@
   .column.icon.username.pure-u-7-24
     span.flag-icon(class="flag-icon-{{data.user.country.code|lower}}")
     img(src=data.user.avatar)
-    span= data.user.ingame
+    span= data.user.namespace
   .column.icon.invoker.pure-u-7-24
     i(data-feather="zap")
-    span= data.issuer.ingame
+    span= data.issuer.namespace
   .column.icon.reason.pure-u-7-24
     i(data-feather="paperclip")
     span= data.reason
@@ -29,10 +29,13 @@
   .column.icon.time.pure-u-7-24
     i(data-feather="clock")
     span
-      = data.created_at|date:"d.m.y H:i:s"
-      |  -
-      = data.created_at|add:data.length|date:"d.m.y H:i:s"
-      // 12.17.18 11:13 - 13.17.18 11:13
+      if data.length is not None
+        // = data.created_at|date:"d.m.y H:i:s"
+        // |  -
+        | until
+        = data.created_at|add:data.length|date:"d.m.y H:i:s"
+      else
+        i.bpi-unlimited.px24
   .column.icon.pure-u-3-24
     .spacer
     - if perms.core.change_mutegag

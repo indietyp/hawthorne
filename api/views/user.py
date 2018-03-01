@@ -6,7 +6,7 @@ from core.lib.steam import populate as steam_populate
 from rcon.sourcemod import RConSourcemod
 import datetime
 from django.contrib.auth.models import Group
-from django.db.models import F
+from django.db.models import F, Q, Value, CharField
 from core.decorators.api import json_response, validation
 from core.decorators.auth import authentication_required, permission_required
 from django.views.decorators.http import require_http_methods
@@ -24,7 +24,7 @@ def list(request, validated=[], *args, **kwargs):
     limit = validated['limit']
     offset = validated['offset']
 
-    selected = User.objects.annotate(steamid=F('username'), name=F('ingame'), has_panel_access=F('is_staff'))\
+    selected = User.objects.annotate(steamid=F('username'), name=F('namespace'), has_panel_access=F('is_staff'))\
                            .values('id', 'name', 'steamid', 'profile', 'has_panel_access')\
                            .filter(username__contains=validated['match'])
 
@@ -42,55 +42,53 @@ def list(request, validated=[], *args, **kwargs):
   elif request.method == 'PUT':
     update = False
 
-    try:
-      user = User.objects.get(username=str(validated['steamid']))
+    if validated['steamid'] is not None:
+      try:
+        user = User.objects.get(username=str(validated['steamid']))
+        update = True
+      except Exception:
+        user = User.objects.create_user(username=str(validated['steamid']), is_active=False)
+        user.namespace = validated['username']
+    elif validated['id'] is not None:
+      user = User.objects.get(id=validated['id'])
       update = True
-    except Exception as e:
-      print(e)
-      user = User.objects.create_user(username=str(validated['steamid']), is_active=False)
-      user.ingame = str(validated['username'])
 
-    if 'country' in validated:
+    if validated['country'] is not None and len(validated['country']) == 2:
       country = validated['country'].upper()
-      if len(country) == 2:
-        user.country = Country.objects.get_or_create(code=country)[0]
+      user.country = Country.objects.get_or_create(code=country)[0]
 
-    if 'ip' in validated:
+    if validated['ip'] is not None:
       if user.ip != validated['ip']:
         user.ip = validated['ip']
 
-      if user.ip is not None:
-        log, created = UserLogIP.objects.get_or_create(user=user, ip=user.ip)
+      log, created = UserLogIP.objects.get_or_create(user=user, ip=user.ip)
 
-        for l in UserLogIP.objects.filter(user=user, ip=user.ip, is_active=True):
-          l.is_active = False
-          l.save()
+      for l in UserLogIP.objects.filter(user=user, ip=user.ip, is_active=True):
+        l.is_active = False
+        l.save()
 
-        log.is_active = True
+      log.is_active = True
 
-        if 'connected' in validated:
-          server = Server.objects.get(id=validated['server'])
-          for ultime in UserLogTime.objects.filter(user=user, server=server, disconnected=None):
-            ultime.disconnected = timezone.now()
-            ultime.save()
+      if validated['connected'] is not None:
+        server = Server.objects.get(id=validated['server'])
+        for disconnect in UserLogTime.objects.filter(user=user, server=server, disconnected=None):
+          disconnect.disconnected = timezone.now()
+          disconnect.save()
 
-          if validated['connected']:
-            UserLogTime(user=user, server=server).save()
-            log.connections += 1
+        if validated['connected']:
+          UserLogTime(user=user, server=server).save()
+          log.connections += 1
+          user.online = True
+        else:
+          user.online = False
 
         log.save()
 
-    if 'connected' in validated:
-      if validated['connected']:
-        user.online = True
-      else:
-        user.online = False
+    logname, created = UserLogUsername.objects.get_or_create(user=user, username=validated['username'])
+    logname.connections += 1
+    logname.save()
 
-    uname, created = UserLogUsername.objects.get_or_create(user=user, username=validated['username'])
-    uname.connections += 1
-    uname.save()
-
-    user.ingame = validated['username']
+    user.namespace = validated['username']
     user.save()
 
     if update:
@@ -114,12 +112,12 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
 
     if u is not None:
       try:
-        user = query.annotate(steamid=None, name=F('username')).get(id=u)
+        user = query.annotate(steamid=Value(None, CharField(null=True)), name=F('username')).get(id=u)
       except Exception as e:
         return 'not existent user queried - {}'.format(e), 403
 
     if s is not None:
-      user = query.annotate(steamid=F('username'), name=F('ingame')).get(username=s)
+      user = query.annotate(steamid=F('username'), name=F('namespace')).get(username=s)
       user.steamid = int(user.steamid)
       try:
         pass
@@ -129,10 +127,18 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
     selected = ['id', 'ip', 'avatar', 'profile', 'permissions', 'steamid', 'name', 'circles', 'positions']
     if validated['server'] is not None:
       try:
-        role = user.roles.get(server=Server.objects.get(id=validated['server']))
-        user.flags = role.flags.convert()
-        user.immunity = role.immunity
-        user.usetime = role.usetime.total_seconds()
+        if user.is_superuser:
+          # simulate root role
+          user.flags = 'ABCDEFGHIJKLN'
+          user.immunity = 100
+          user.usetime = None
+        else:
+          server = Server.objects.get(id=validated['server'])
+          role = user.roles.filter(Q(server=server) | Q(server=None)).order_by('-immunity')[0]
+          user.flags = role.flags.convert()
+          user.immunity = role.immunity
+          user.usetime = int(role.usetime.total_seconds())
+
         selected.append('flags')
         selected.append('immunity')
         selected.append('usetime')
@@ -145,7 +151,7 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
                        'flags': a.flags.convert(),
                        'immunity': a.immunity,
                        'usetime': None if a.usetime is None else a.usetime.total_seconds()
-                       } for a in user.roles.all()]
+                       } for a in user.roles.all().order_by('-immunity')]
     user = user.__dict__
 
     tmp = {}
@@ -350,7 +356,11 @@ def mutegag(request, u=None, validated={}, *args, **kwargs):
 
   elif request.method == 'PUT':
     server = Server.objects.get(id=validated['server'])
-    length = datetime.timedelta(seconds=validated['length'])
+
+    if validated['length'] > 0:
+      length = datetime.timedelta(seconds=validated['length'])
+    else:
+      length = None
 
     if validated['type'] == 'mute':
       mutegag_type = 'MU'
@@ -359,7 +369,8 @@ def mutegag(request, u=None, validated={}, *args, **kwargs):
     if validated['type'] == 'both':
       mutegag_type = 'BO'
 
-    mutegag = Mutegag(user=user, server=server, reason=validated['reason'], length=length, type=mutegag_type)
+    mutegag = Mutegag(user=user, server=server, reason=validated['reason'], length=length, type=mutegag_type, issuer=request.user)
+    mutegag.save()
 
     RConSourcemod(server).mutegag(mutegag)
 
@@ -389,4 +400,4 @@ def kick(request, u=None, validated={}, *args, **kwargs):
   except Exception:
     return 'server not found', 500
 
-  return RConSourcemod(server).kick(user=user, server=server)
+  return RConSourcemod(server).kick(user=user)
