@@ -3,13 +3,13 @@
   var admin__admin, admin__group, admin__log, ban__user, chat__log, mutegag__user, player__user, server__server;
 
   admin__admin = function(page = 1) {
-    if (page === 1) {
-      $("#admin__admin").html('');
-    }
     return $({
       'csrfmiddlewaretoken': window.csrftoken
     }).ajax('/ajax/v1/admin/user/' + page, 'POST', function(data, status) {
       if (status === 200) {
+        if (page === 1) {
+          $("#admin__admin").html('');
+        }
         $("#admin__admin").htmlAppend(data);
         feather.replace();
         return window.ajax.admin.admins(page + 1);
@@ -36,22 +36,22 @@
   };
 
   admin__group = function(page = 1) {
-    var i, item, j, len, ref;
-    if (page === 1) {
-      i = 0;
-      ref = $("#admin__group .row");
-      for (j = 0, len = ref.length; j < len; j++) {
-        item = ref[j];
-        if (i !== 0) {
-          $(item).remove();
-        }
-        i++;
-      }
-    }
     return $({
       'csrfmiddlewaretoken': window.csrftoken
     }).ajax('/ajax/v1/admin/group/' + page, 'POST', function(data, status) {
+      var i, item, j, len, ref;
       if (status === 200) {
+        if (page === 1) {
+          i = 0;
+          ref = $("#admin__group .row");
+          for (j = 0, len = ref.length; j < len; j++) {
+            item = ref[j];
+            if (i !== 0) {
+              $(item).remove();
+            }
+            i++;
+          }
+        }
         $("#admin__group").htmlAppend(data);
         feather.replace();
         return window.ajax.admin.groups(page + 1);
@@ -93,13 +93,13 @@
   };
 
   mutegag__user = function(page = 1) {
-    if (page === 1) {
-      $("#mutegag__user").html('');
-    }
     return $({
       'csrfmiddlewaretoken': window.csrftoken
     }).ajax('/ajax/v1/mutegag/user/' + page, 'POST', function(data, status) {
       if (status === 200) {
+        if (page === 1) {
+          $("#mutegag__user").html('');
+        }
         $("#mutegag__user").htmlAppend(data);
         feather.replace();
         return window.ajax.mutegag.user(page + 1);

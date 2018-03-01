@@ -39,12 +39,12 @@ void GetServerID() {
 public void OnGetServerID(HTTPResponse response, any value) {
 	LogMessage("ServerID");
   if (response.Status != HTTPStatus_OK) {
-  	LogError("[BOOMPANEL] API ERROR (request failed)");
+  	LogError("[bellwether] API ERROR (request failed)");
     return;
   }
 
   if (response.Data == null) {
-  	LogError("[BOOMPANEL] API ERROR (no response data)");
+  	LogError("[bellwether] API ERROR (no response data)");
     return;
   }
 
@@ -52,14 +52,14 @@ public void OnGetServerID(HTTPResponse response, any value) {
 	int success = output.GetBool("success");
 
 	if (success == false) {
-	  LogError("[BOOMPANEL] API ERROR (api call failed)");
+	  LogError("[bellwether] API ERROR (api call failed)");
 	  return;
 
 	} else {
 		JSONArray results = view_as<JSONArray>(output.Get("result"));
 
 		if (results.Length == 0) {
-			LogError("[BOOMPANEL] Failed to find server IP and PORT in database!");
+			LogError("[bellwether] Failed to find server IP and PORT in database!");
 			return;
 		}
 

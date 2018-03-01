@@ -29,11 +29,11 @@
 
 
 public Plugin myinfo = {
-	name = "BoomPanel",
+	name = "Bellwether",
 	author = "indietyp & boomix",
-	description = "BoomPanel Admin Panel",
+	description = "Bellwether Admin Panel",
 	version = "2.00",
-	url = "boompanel.com"
+	url = "bellwether.com"
 };
 
 

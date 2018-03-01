@@ -1,9 +1,9 @@
 admin__admin = (page=1) ->
-  if page == 1
-    $("#admin__admin").html('')
-
   $({'csrfmiddlewaretoken': window.csrftoken}).ajax('/ajax/v1/admin/user/' + page, 'POST', (data, status) ->
     if status == 200
+      if page == 1
+        $("#admin__admin").html('')
+
       $("#admin__admin").htmlAppend(data)
       feather.replace()
 
@@ -28,15 +28,15 @@ admin__log = (page=1) ->
   )
 
 admin__group = (page=1) ->
-  if page == 1
-    i = 0
-    for item in $("#admin__group .row")
-      if i != 0
-        $(item).remove()
-      i++
-
   $({'csrfmiddlewaretoken': window.csrftoken}).ajax('/ajax/v1/admin/group/' + page, 'POST', (data, status) ->
     if status == 200
+      if page == 1
+        i = 0
+        for item in $("#admin__group .row")
+          if i != 0
+            $(item).remove()
+          i++
+
       $("#admin__group").htmlAppend(data)
       feather.replace()
 
@@ -74,11 +74,11 @@ chat__log = (page=1) ->
   )
 
 mutegag__user = (page=1) ->
-  if page == 1
-    $("#mutegag__user").html('')
-
   $({'csrfmiddlewaretoken': window.csrftoken}).ajax('/ajax/v1/mutegag/user/' + page, 'POST', (data, status) ->
     if status == 200
+      if page == 1
+        $("#mutegag__user").html('')
+
       $("#mutegag__user").htmlAppend(data)
       feather.replace()
 

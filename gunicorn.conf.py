@@ -1,4 +1,4 @@
 import multiprocessing
 
-bind = "unix:/tmp/boompanel.sock"
+bind = "unix:/tmp/bellwether.sock"
 workers = multiprocessing.cpu_count() * 2 + 1

@@ -12,5 +12,5 @@ void BP_InitConVars() {
 	g_cvBansAllSrvs			= CreateConVar("bp_bans_all_servers", 		"0", 					"Toggle of serverwide bans", 0, true, 0.0, true, 1.0);
 
 
-	AutoExecConfig(true, "BoomPanel");
+	AutoExecConfig(true, "Bellwether");
 }

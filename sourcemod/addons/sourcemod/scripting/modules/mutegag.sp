@@ -1,10 +1,10 @@
 // TODO: TESTING
 void MuteGag_OnPluginStart() {
 	//Get file locations
-	BuildPath(Path_SM, cMuteReasonsFile, 		sizeof(cMuteReasonsFile), 		"configs/BoomPanel/mute-reasons.txt");
-	BuildPath(Path_SM, cGagReasonsFile, 		sizeof(cGagReasonsFile), 			"configs/BoomPanel/gag-reasons.txt");
-	BuildPath(Path_SM, cSilenceReasonsFile, sizeof(cSilenceReasonsFile), 	"configs/BoomPanel/silence-reasons.txt");
-	BuildPath(Path_SM, cPunishmentTimeFile, sizeof(cPunishmentTimeFile), 	"configs/BoomPanel/punishment-times.txt");
+	BuildPath(Path_SM, cMuteReasonsFile, 		sizeof(cMuteReasonsFile), 		"configs/bellwether/mute-reasons.txt");
+	BuildPath(Path_SM, cGagReasonsFile, 		sizeof(cGagReasonsFile), 			"configs/bellwether/gag-reasons.txt");
+	BuildPath(Path_SM, cSilenceReasonsFile, sizeof(cSilenceReasonsFile), 	"configs/bellwether/silence-reasons.txt");
+	BuildPath(Path_SM, cPunishmentTimeFile, sizeof(cPunishmentTimeFile), 	"configs/bellwether/punishment-times.txt");
 
 	//Create array lists
 	UpdateConfigs();
@@ -225,12 +225,12 @@ void MuteGag_OnClientIDReceived(int client) {
 public void OnMuteGagCheck(HTTPResponse response, any value) {
 	int client = value;
 	if (response.Status != 200) {
-	  	LogError("[BOOMPANEL] API ERROR (request failed)");
+	  	LogError("[bellwether] API ERROR (request failed)");
 	    return;
 	  }
 
 	  if (response.Data == null) {
-	  	LogError("[BOOMPANEL] API ERROR (no response data)");
+	  	LogError("[bellwether] API ERROR (no response data)");
 	    return;
 	  }
 
@@ -238,7 +238,7 @@ public void OnMuteGagCheck(HTTPResponse response, any value) {
 		int success = output.GetBool("success");
 
 		if (success == false) {
-		  LogError("[BOOMPANEL] API ERROR (api call failed)");
+		  LogError("[bellwether] API ERROR (api call failed)");
 		  return;
 
 		} else {

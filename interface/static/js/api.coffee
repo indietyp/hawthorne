@@ -28,6 +28,12 @@ group = (query, that=null) ->
   )
   return
 
+remove = (mode='', that) ->
+  return
+
+edit = (mode='', that) ->
+  return
+
 submit = (mode='', that) ->
   switch mode
     when 'admin__administrator'
@@ -177,3 +183,5 @@ window.api =
   servers: server
   groups: group
   submit: submit
+  remove: remove
+  edit: edit

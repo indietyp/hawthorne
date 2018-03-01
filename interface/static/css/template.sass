@@ -4,14 +4,14 @@ $gray: #E7E7E7
 $black: #474554
 
 $red: #FF404B
-// $green: #79BD9A
+$green: #79BD9A
 $raspberry: #EC0452
-$green: $raspberry
+$primary: $raspberry
 $blue: #19648D
 $lblue: #76B1DF
 $purple: #8B6DFF
 $lipstick: #954070
-$colors: "white" $white, "dgray" $dgray, "gray" $gray, "black" $black, "red" $red, "green" $green, "blue" $blue, "lblue" $lblue, "purple" $purple, "lipstick" $lipstick, "black" #000, "raspberry" $raspberry
+$colors: "white" $white, "dgray" $dgray, "gray" $gray, "black" $black, "red" $red, "green" $green, "blue" $blue, "lblue" $lblue, "purple" $purple, "lipstick" $lipstick, "black" #000, "raspberry" $raspberry, 'primary' $primary
 
 body
     margin: 0
@@ -99,7 +99,7 @@ html, button, input, select, textarea, .pure-g [class*="pure-u"]
                 width: auto
                 margin-right: 0.5em
                 background: transparent !important
-                stroke: $green !important
+                stroke: $primary !important
 
             @keyframes logo-heading
                 from
@@ -156,10 +156,10 @@ input[type="number"]
                 padding-right: 0 !important
 
         &:hover, &:active, &:focus
-            border-bottom-color: $green
+            border-bottom-color: $primary
 
             & + label > svg
-                stroke: $green
+                stroke: $primary
                 padding-right: 0 !important
 
 #content
@@ -253,7 +253,7 @@ input[type="number"]
 
                 &:not(.disabled)
                     & input[type="checkbox"]:checked + label
-                        color: $green
+                        color: $primary
 
                     & input[type="checkbox"]:not(:checked) + label
                         color: $red
@@ -336,7 +336,7 @@ input[type="number"]
             margin-right: 0.5em
             height: 80%
             background: transparent !important
-            stroke: $green !important
+            stroke: $primary !important
 
         @keyframes animate-heading
             from
@@ -550,7 +550,7 @@ pre.code-command
             fill: nth($clr, 2) !important
 
 .ct-series-a .ct-line
-    stroke: $green
+    stroke: $primary
     stroke-width: 2px
 
 .ct-info

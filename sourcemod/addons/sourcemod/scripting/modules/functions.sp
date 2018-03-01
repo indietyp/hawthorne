@@ -6,7 +6,7 @@ void BP_OnPluginStart() {
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max) {
 	BP_InitConVars();
-	RegPluginLibrary("boompanel");
+	RegPluginLibrary("bellwether");
 	CreateNatives();
 	return APLRes_Success;
 }

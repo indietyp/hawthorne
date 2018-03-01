@@ -23,7 +23,7 @@ public Action OnPlayerChatMessage(int client, const char[] command, int argc) {
 
 	//If client ID is not found
 	if(StrEqual(iClientID[client], "")) {
-		LogError("[BoomPanel] Failed to send message to API, clientID was not fetched.");
+		LogError("[Bellwether] Failed to send message to API, clientID was not fetched.");
 		return Plugin_Continue;
 	}
 

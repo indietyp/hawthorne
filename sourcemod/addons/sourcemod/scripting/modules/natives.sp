@@ -1,9 +1,9 @@
 void CreateNatives() {
-	CreateNative("BoomPanel_GetServerID", 	Native_GetServerID);
-	CreateNative("BoomPanel_GetClientID", 	Native_GetClientID);
+	CreateNative("Bellwether_GetServerID", 	Native_GetServerID);
+	CreateNative("Bellwether_GetClientID", 	Native_GetClientID);
 
-	g_OnClientIDReceived = CreateGlobalForward("BoomPanel_OnClientIDReceived", ET_Ignore, Param_Cell, Param_Cell);
-	//g_OnDatabaseReady 	= CreateGlobalForward("BoomPanel_DatabaseReady", ET_Ignore);
+	g_OnClientIDReceived = CreateGlobalForward("Bellwether_OnClientIDReceived", ET_Ignore, Param_Cell, Param_Cell);
+	//g_OnDatabaseReady 	= CreateGlobalForward("Bellwether_DatabaseReady", ET_Ignore);
 }
 
 public int Native_GetServerID(Handle plugin, int numParams) {

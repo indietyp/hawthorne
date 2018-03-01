@@ -111,7 +111,7 @@ public Action CMD_BanKick(int client, int args) {
 		int iLength = StringToInt(cLength);
 		if(iLength > 0) SecondsToTime(iLength * 60, cTime); else cTime = "permanent";
 		ClientBanKick(target, cAdminUsername, cReason, cTime, cTime);
-		ReplyToCommand(client, "[BoomPanel] Player ban kicked!");
+		ReplyToCommand(client, "[Bellwether] Player ban kicked!");
 	}
 
 	return Plugin_Handled;

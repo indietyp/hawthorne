@@ -14,7 +14,7 @@ public void GetClientAdmin(HTTPResponse response, any value) {
 	int client = value;
 
 	if(response.Status != 200 && response.Status != 403) {
-		LogError("[BOOMPANEL] API ERROR (no response data)");
+		LogError("[bellwether] API ERROR (no response data)");
 		return;
 	}
 
@@ -25,7 +25,7 @@ public void GetClientAdmin(HTTPResponse response, any value) {
 	int success = output.GetBool("success");
 
 	if (success == false) {
-		LogError("[BOOMPANEL] API ERROR (api call failed)");
+		LogError("[bellwether] API ERROR (api call failed)");
 		return;
 	} else {
 		JSONObject result = view_as<JSONObject>(output.Get("result"));

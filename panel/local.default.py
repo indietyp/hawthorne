@@ -19,13 +19,13 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': '/var/log/boompanel/debug.log',
+            'filename': '/var/log/bellwether/debug.log',
             'formatter': 'verbose'
         },
         'interface': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': '/var/log/boompanel/interface.log',
+            'filename': '/var/log/bellwether/interface.log',
             'formatter': 'request'
         },
     },
@@ -56,7 +56,7 @@ STATIC_PRECOMPILER_COMPILERS = (
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'boompanel',
+        'NAME': 'bellwether',
         'USER': 'root',
         'PASSWORD': '',
         'OPTIONS': {

@@ -1,5 +1,5 @@
-#define PREFIX 			    "\x3 \x4[BoomPanel] \x1"
-#define PREFIX_BAD 		  "\x3 \x7[BoomPanel] \x1"
+#define PREFIX 			    "\x3 \x4[Bellwether] \x1"
+#define PREFIX_BAD 		  "\x3 \x7[Bellwether] \x1"
 #define TYPE_MUTE 		  0
 #define TYPE_GAG 		    1
 #define TYPE_SILENCE 	  2
