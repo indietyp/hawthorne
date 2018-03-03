@@ -49,7 +49,8 @@ validation = {
                                     'group': {'type': 'uuid', 'default': None, 'nullable': True, 'required': False}},
                      'permission': ['core.change_user']},
             'DELETE': {'validation': {'purge': {'type': 'boolean', 'default': False, 'required': False},
-                                      'reset': {'type': 'boolean', 'default': True, 'required': False}},
+                                      'reset': {'type': 'boolean', 'default': True, 'required': False},
+                                      'role': {'type': 'uuid', 'default': None, 'nullable': True, 'required': False}},
                        'permission': ['core.delete_user']}
         },
         'ban': {

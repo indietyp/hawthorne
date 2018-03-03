@@ -1,4 +1,6 @@
 .row.pure-g
+  input.hidden.user(type='hidden', value=data.user.id)
+  input.hidden.server(type='hidden', value=data.server.id)
   .column.icon.username.pure-u-7-24
     span.flag-icon(class="flag-icon-{{data.user.country.code|lower}}")
     img(src=data.user.avatar)
@@ -32,4 +34,4 @@
         i(data-feather="edit-2")
     - if perms.core.delete_ban
       .action
-        i(data-feather="trash-2")
+        i(data-feather="trash-2", onclick="window.api.remove('ban', this)")

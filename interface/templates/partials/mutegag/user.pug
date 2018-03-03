@@ -1,4 +1,7 @@
 .row.pure-g
+  input.hidden.user(type='hidden', value=data.user.id)
+  input.hidden.server(type='hidden', value=data.server.id)
+
   .column.icon.username.pure-u-7-24
     span.flag-icon(class="flag-icon-{{data.user.country.code|lower}}")
     img(src=data.user.avatar)
@@ -30,8 +33,6 @@
     i(data-feather="clock")
     span
       if data.length is not None
-        // = data.created_at|date:"d.m.y H:i:s"
-        // |  -
         | until
         = data.created_at|add:data.length|date:"d.m.y H:i:s"
       else
@@ -43,5 +44,4 @@
         i(data-feather="edit-2")
     - if perms.core.delete_mutegag
       .action
-        i(data-feather="trash-2")
-        // i.red(data-feather="trash-2")
+        i(data-feather="trash-2", onclick="window.api.remove('mutegag', this)")

@@ -51,7 +51,60 @@
     });
   };
 
-  remove = function(mode = '', that) {};
+  remove = function(mode = '', that) {
+    var endpoint, node, payload, role, state, user;
+    state = that.getAttribute('class');
+    if (!state.match(/confirmation/)) {
+      state += ' explicit red confirmation';
+      that.setAttribute('class', state);
+      return;
+    }
+    payload = {};
+    node = that.parentElement.parentElement.parentElement;
+    switch (mode) {
+      case 'admin__administrator':
+        user = $(node.querySelector('input.uuid')).val();
+        role = $(node.querySelector('input.role')).val();
+        payload = {
+          reset: true,
+          role: role
+        };
+        endpoint = window.endpoint.users[user];
+        break;
+      case 'admin__groups':
+        role = $(node.querySelector('input.uuid')).val();
+        endpoint = window.endpoint.roles[role];
+        break;
+      case 'ban':
+        user = $(node.querySelector('input.user')).val();
+        server = $(node.querySelector('input.server')).val();
+        payload = {
+          server: server
+        };
+        endpoint = window.endpoint.users[user].ban;
+        break;
+      case 'mutegag':
+        user = $(node.querySelector('input.user')).val();
+        server = $(node.querySelector('input.server')).val();
+        payload = {
+          server: server
+        };
+        endpoint = window.endpoint.users[user].mutegag;
+        break;
+      case 'server':
+        node = that.parentElement.parentElement.parentElement.parentElement;
+        server = $(node.querySelector('input.uuid')).val();
+        endpoint = window.endpoint.servers[server];
+        break;
+      default:
+        return;
+    }
+    endpoint.delete(payload, function(err, data) {
+      if (data.success) {
+        return $(node).remove();
+      }
+    });
+  };
 
   edit = function(mode = '', that) {};
 

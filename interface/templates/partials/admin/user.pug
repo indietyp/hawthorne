@@ -1,11 +1,13 @@
 - load interface_utils
 
 .row.pure-g
+  input.hidden.uuid(type='hidden', value=data.id)
   .column.icon.username.pure-u-7-24
     span.flag-icon(class="flag-icon-{{data.country.code|lower}}")
     img(src="{{ data.avatar }}")
     span= data.namespace|truncatechars:18
   .column.icon.group.pure-u-7-24
+    input.hidden.role(type='hidden', value=data.role_id)
     i(data-feather="users")
     span= data.role|truncatechars:18
   .column.icon.server.pure-u-7-24
@@ -22,4 +24,4 @@
           i(data-feather="edit-2")
       - if perms.core.delete_user
         .action
-          i(data-feather="trash-2")
+          i(data-feather="trash-2", onclick="window.api.remove('admin__administrator', this)")

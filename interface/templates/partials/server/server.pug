@@ -1,4 +1,5 @@
 .item.pure-u-1-1.pure-g.second
+  input.hidden.uuid(type='hidden', value=data.id)
   .heading.flex
     span= data.name
     .spacer
@@ -6,7 +7,7 @@
       .action
         i(data-feather='edit-2')
       .action
-        i(data-feather='trash-2')
+        i(data-feather='trash-2', onclick="window.api.remove('server', this)")
 
   .pure-u-1-1
     .row.overview.item.pure-g

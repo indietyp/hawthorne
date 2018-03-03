@@ -219,6 +219,9 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
       user.delete()
 
       return 'CASCADE DELETE', 200
+
+    elif validated['role'] is not None:
+      user.roles.remove(ServerGroup.objects.get(id=validated['role']))
     else:
       user.is_active = False
       user.is_staff = False
@@ -228,7 +231,7 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
         user.user_permissions.clear()
         user.groups.clear()
 
-      user.save()
+    user.save()
 
     return '+1'
 
@@ -297,6 +300,8 @@ def ban(request, u=None, validated={}, *args, **kwargs):
     server = Server.objects.get(id=validated['server'])
     ban = Ban.objects.get(user=user, server=server)
     ban.resolved = True
+
+    ban.save()
 
   return 'successful, nothing to report'
 

@@ -29,6 +29,58 @@ group = (query, that=null) ->
   return
 
 remove = (mode='', that) ->
+  state = that.getAttribute 'class'
+
+  if not state.match /confirmation/
+    state += ' explicit red confirmation'
+    that.setAttribute 'class', state
+    return
+
+  payload = {}
+  node = that.parentElement.parentElement.parentElement
+
+  switch mode
+    when 'admin__administrator'
+      user = $(node.querySelector('input.uuid')).val()
+      role = $(node.querySelector('input.role')).val()
+
+      payload =
+        reset: true
+        role: role
+
+      endpoint = window.endpoint.users[user]
+    when 'admin__groups'
+      role = $(node.querySelector('input.uuid')).val()
+
+      endpoint = window.endpoint.roles[role]
+    when 'ban'
+      user = $(node.querySelector('input.user')).val()
+      server = $(node.querySelector('input.server')).val()
+
+      payload =
+        server: server
+
+      endpoint = window.endpoint.users[user].ban
+    when 'mutegag'
+      user = $(node.querySelector('input.user')).val()
+      server = $(node.querySelector('input.server')).val()
+
+      payload =
+        server: server
+
+      endpoint = window.endpoint.users[user].mutegag
+    when 'server'
+      node = that.parentElement.parentElement.parentElement.parentElement
+      server = $(node.querySelector('input.uuid')).val()
+
+      endpoint = window.endpoint.servers[server]
+    else
+      return
+
+  endpoint.delete(payload, (err, data) ->
+    if data.success
+      $(node).remove()
+  )
   return
 
 edit = (mode='', that) ->
