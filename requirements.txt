@@ -6,8 +6,8 @@ lxml
 cssselect
 natural
 dateparser
-steamapi
 django-automated-logging
+git+https://github.com/smiley/steamapi
 django-static-precompiler
 django-admin-generator
 argon2-cffi

@@ -381,6 +381,14 @@ input[type="number"]
         transition: transform 0.3s ease-out
         transform-origin: 12px 12px 0px
 
+        &.opacity
+            transition: opacity .3s ease-out
+            opacity: 0
+
+            &.animate
+                opacity: 1
+
+
         &.success
             transform: rotate(45deg)
 
@@ -465,6 +473,15 @@ input[type="number"]
     cursor: text !important
     width: 100%
 
+    &.edit
+        width: calc(100% - 48px)
+
+        & .choices__list, & .choices__item:not(.choices__item--choice)
+            padding: 0px !important
+
+        & .choices__item.choices__item--choice
+            padding-left: 0px !important
+
     & .choices__list
         border: none
 
@@ -476,10 +493,6 @@ input[type="number"]
         border-radius: 0
         border: none
         background-color: #F7FDFA !important
-
-    // & .choices__input
-    //   background-color: #F7FDFA !important
-    //   border: none !important
 
     & .choices__item, & .choices__input
         padding: 6px !important

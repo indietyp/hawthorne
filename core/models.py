@@ -311,7 +311,7 @@ class Chat(BaseModel):
 
 class Mutegag(BaseModel):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
-  server = models.ForeignKey(Server, on_delete=models.CASCADE)
+  server = models.ForeignKey(Server, on_delete=models.CASCADE, null=True)
   issuer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='mutegag_issuer')
 
   MUTEGAG_CHOICES = (

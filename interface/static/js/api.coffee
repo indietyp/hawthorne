@@ -13,7 +13,7 @@ server = (query, that=null) ->
   )
   return
 
-group = (query, that=null) ->
+group = (query, that=null, selected='') ->
   $({'query': query}).ajax('/api/v1/roles', 'GET', (data, status) ->
     data = JSON.parse data
     data = data['result']
@@ -21,7 +21,16 @@ group = (query, that=null) ->
     if that != null
       formatted = []
       for ele in data
-        formatted.push {'value': ele.id, 'label': ele.name}
+        fmt =
+          value: ele.id
+          label: ele.name
+          customProperties:
+            server: ele.server
+
+        if selected != '' and fmt.value == selected
+          fmt.selected = true
+
+        formatted.push fmt
       that.setChoices(formatted, 'value', 'label', true)
 
     return data
@@ -65,8 +74,9 @@ remove = (mode='', that) ->
       user = $(node.querySelector('input.user')).val()
       server = $(node.querySelector('input.server')).val()
 
-      payload =
-        server: server
+      if server != ''
+        payload =
+          server: server
 
       endpoint = window.endpoint.users[user].mutegag
     when 'server'
@@ -83,7 +93,55 @@ remove = (mode='', that) ->
   )
   return
 
+save = (mode='', that) ->
+  return
+
 edit = (mode='', that) ->
+  if that.getAttribute('class').match /save/
+    # this is for the actual process of saving
+    save mode, that
+    console.log 'saving'
+
+    return
+
+  node = that.parentElement.parentElement.parentElement
+  trigger = that.getAttribute 'onclick'
+
+  # this is for converting the style to be editable.
+  switch mode
+    when 'admin__administrator'
+      group = node.querySelector('.icon.group')
+
+      selected = $(node.querySelector('input.role')).val()
+      target = group.querySelector('span')
+      $(target).remove()
+
+      $(group).htmlAppend("<select id='group-#{selected}'></select>")
+      selector = new Choices("#group-#{selected}", {
+        searchEnabled: false,
+        choices: [],
+        classNames: {
+          containerOuter: 'choices edit'
+        }
+      })
+
+      window.api.groups('', selector, selected)
+
+  $(that).css('opacity', '0')
+  setTimeout(->
+    $(that).htmlAfter("<i class='save opacity animated' data-feather='save'></i>")
+    feather.replace()
+
+    transition = that.parentElement.querySelector('.save.opacity.animated')
+    $(that).remove()
+
+    # we need this timeout so that the transition can be applied properly
+    # i know this is not the perfect way, but it is still better than twilight
+    setTimeout( ->
+      transition.setAttribute 'onclick', trigger
+      $(transition).css('opacity', '1')
+    , 300)
+  , 300)
   return
 
 submit = (mode='', that) ->

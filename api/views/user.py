@@ -330,10 +330,13 @@ def mutegag(request, u=None, validated={}, *args, **kwargs):
     return [m for m in mutegags.values('user', 'issuer', 'created_at', 'reason', 'length', 'resolved', 'type')]
 
   elif request.method == 'POST':
-    try:
-      server = Server.objects.get(id=validated['server'])
-    except Exception:
-      return 'server not found', 500
+    if 'server' in validated:
+      try:
+        server = Server.objects.get(id=validated['server'])
+      except Exception:
+        return 'server not found', 500
+    else:
+      server = None
 
     try:
       mutegag = Mutegag.objects.get(user=user, server=server)
@@ -360,7 +363,10 @@ def mutegag(request, u=None, validated={}, *args, **kwargs):
     mutegag.save()
 
   elif request.method == 'PUT':
-    server = Server.objects.get(id=validated['server'])
+    if 'server' in validated:
+      server = Server.objects.get(id=validated['server'])
+    else:
+      server = None
 
     if validated['length'] > 0:
       length = datetime.timedelta(seconds=validated['length'])
@@ -381,8 +387,9 @@ def mutegag(request, u=None, validated={}, *args, **kwargs):
 
   elif request.method == 'DELETE':
     server = Server.objects.get(id=validated['server'])
-    ban = Mutegag.objects.get(user=user, server=server)
-    ban.resolved = True
+    mutegag = Mutegag.objects.get(user=user, server=server)
+    mutegag.resolved = True
+    mutegag.save()
 
   return 'successful, nothing to report'
 

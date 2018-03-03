@@ -21,7 +21,7 @@
     - if data.role != 'root'
       - if perms.core.modify_user
         .action
-          i(data-feather="edit-2")
+          i.animate.opacity.animated(data-feather="edit-2", onclick="window.api.edit('admin__administrator', this)")
       - if perms.core.delete_user
         .action
           i(data-feather="trash-2", onclick="window.api.remove('admin__administrator', this)")

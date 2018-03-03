@@ -15,11 +15,11 @@ class RCon:
 
     output = []
     with valve.rcon.RCON(addr, pwd) as rcon:
-      if isinstance(command, str):
-        command = [command]
+     if isinstance(command, str):
+       command = [command]
 
-      for cmd in command:
-        response = rcon(cmd)
-        output.append(response)
+     for cmd in command:
+       response = rcon(cmd)
+       output.append(response)
 
     return output
