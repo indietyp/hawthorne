@@ -15,7 +15,7 @@ class Command(BaseCommand):
     )
 
   def handle(self, *args, **options):
-    steamid = input('The SteamID of the superuser: ') if options['steam'] is None else options['steam']
+    steamid = input('The SteamID64 of the superuser: ') if options['steam'] is None else options['steam']
 
     user = User.objects.create_user(username=steamid, is_active=True, is_staff=True, is_superuser=True, steam=True)
     user.save()

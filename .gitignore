@@ -98,3 +98,4 @@ ENV/
 # macOS related stuff
 .DS_Store
 .sass-cache/
+supervisor.conf

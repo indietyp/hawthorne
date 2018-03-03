@@ -56,9 +56,13 @@ STATIC_PRECOMPILER_COMPILERS = (
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
+
         'NAME': 'bellwether',
         'USER': 'root',
         'PASSWORD': '',
+
+        'HOST': 'localhost',
+        'PORT': '3306',
         'OPTIONS': {
             'sql_mode': 'STRICT_ALL_TABLES'
         }
