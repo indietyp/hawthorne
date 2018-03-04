@@ -27,7 +27,7 @@ main() {
   # which may fail on systems lacking tput or terminfo
   set -e
 
-  if [ "$EUID" -ne 0 ]
+  if ! [ $(id -u) = 0 ];
     then echo "Please run as ${RED}root${NORMAL}"
     exit 1
   fi
@@ -52,49 +52,49 @@ main() {
     esac
   done
 
-  # # Prevent the cloned repository from having insecure permissions. Failing to do
-  # # so causes compinit() calls to fail with "command not found: compdef" errors
-  # # for users with insecure umasks (e.g., "002", allowing group writability). Note
-  # # that this will be ignored under Cygwin by default, as Windows ACLs take
-  # # precedence over umasks except for filesystems mounted with option "noacl".
-  # umask g-w,o-w
+  # Prevent the cloned repository from having insecure permissions. Failing to do
+  # so causes compinit() calls to fail with "command not found: compdef" errors
+  # for users with insecure umasks (e.g., "002", allowing group writability). Note
+  # that this will be ignored under Cygwin by default, as Windows ACLs take
+  # precedence over umasks except for filesystems mounted with option "noacl".
+  umask g-w,o-w
 
-  # printf "${BLUE}Installing the package requirements...${NORMAL}\n"
-  # if hash apt >/dev/null 2>&1; then
-  #   apt update
-  #   apt install -y python3 python3-dev python3-pip ruby ruby-dev redis-server libmysqlclient-dev libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor
-  # elif hash yum >/dev/null 2>&1; then
-  #   echo "I should install everything with yum...."
-  # else
-  #   printf "Your package manager is currently not supported. Please contact the maintainer\n"
-  #   printf "${BLUE}opensource@indietyp.com${NORMAL} or open an issure\n"
-  # fi
+  printf "${BLUE}Installing the package requirements...${NORMAL}\n"
+  if hash apt >/dev/null 2>&1; then
+    apt update
+    apt install -y python3 python3-dev python3-pip ruby ruby-dev redis-server libmysqlclient-dev libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client
+  elif hash yum >/dev/null 2>&1; then
+    echo "I should install everything with yum...."
+  else
+    printf "Your package manager is currently not supported. Please contact the maintainer\n"
+    printf "${BLUE}opensource@indietyp.com${NORMAL} or open an issure\n"
+  fi
 
 
-  # hash git >/dev/null 2>&1 || {
-  #   echo "Error: git is not installed"
-  #   exit 1
-  # }
+  hash git >/dev/null 2>&1 || {
+    echo "Error: git is not installed"
+    exit 1
+  }
 
-  # printf "${BLUE}Cloning the project...${NORMAL}\n"
-  # env git clone https://github.com/indietyp/bellwether $BW || {
-  #   printf "${RED}Error:${NORMAL} git clone of bellwether repo failed\n"
-  #   exit 1
-  # }
+  printf "${BLUE}Cloning the project...${NORMAL}\n"
+  env git clone https://github.com/indietyp/bellwether $BW || {
+    printf "${RED}Error:${NORMAL} git clone of bellwether repo failed\n"
+    exit 1
+  }
 
-  # printf "${BLUE}Installing python3 dependencies...${NORMAL}\n"
-  # pip3 install gunicorn
-  # pip3 install -r $BW/requirements.txt
+  printf "${BLUE}Installing python3 dependencies...${NORMAL}\n"
+  pip3 install gunicorn
+  pip3 install -r $BW/requirements.txt
 
-  # printf "${BLUE}Installing ruby and npm dependencies...${NORMAL}\n"
-  # curl -sL deb.nodesource.com/setup_8.x | sudo -E bash -
-  # apt install -y nodejs
-  # npm install -g pug coffeescript
-  # gem install sass --no-user-install
+  printf "${BLUE}Installing ruby and npm dependencies...${NORMAL}\n"
+  curl -sL deb.nodesource.com/setup_8.x | sudo -E bash -
+  apt install -y nodejs
+  npm install -g pug coffeescript
+  gem install sass --no-user-install
 
-  # printf "${BLUE}Configuring the project...${NORMAL}\n"
-  # cp $BW/panel/local.default.py $BW/panel/local.py
-  # cp $BW/supervisor.default.conf $BW/supervisor.conf
+  printf "${BLUE}Configuring the project...${NORMAL}\n"
+  cp $BW/panel/local.default.py $BW/panel/local.py
+  cp $BW/supervisor.default.conf $BW/supervisor.conf
   mkdir -p /var/log/bellwether
 
   printf "\n\n${YELLOW}Database configuration:${NORMAL}\n"
