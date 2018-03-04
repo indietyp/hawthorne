@@ -96,13 +96,13 @@ main() {
   # cp $BW/panel/local.default.py $BW/panel/local.py
   # cp $BW/supervisor.default.conf $BW/supervisor.conf
 
-  printf "\n\n${YELLOW}Database configuration:${NORMAL}\n\n"
+  printf "\n\n${YELLOW}Database configuration:${NORMAL}\n"
   while true; do
-    read -p 'Host     (default: localhost): ' dbhost
-    read -p 'Port     (default: 3006):      ' dbport
-    read -p 'User     (default: root):      ' dbuser
-    read -p 'Database (default: bellwether):' dbname
-    read -p 'Password:                      ' dbpwd
+    read -p 'Host     (default: localhost):  ' dbhost
+    read -p 'Port     (default: 3006):       ' dbport
+    read -p 'User     (default: root):       ' dbuser
+    read -p 'Database (default: bellwether): ' dbname
+    read -p 'Password:                       ' dbpwd
 
     dbhost=${dbhost:-localhost}
     dbport=${dbport:-3306}
@@ -114,17 +114,17 @@ main() {
   done
 
   printf "\n\n${YELLOW}SteamAPI configuration:${NORMAL}\n"
-  read -p 'Steam API key:                ' stapi
+  read -p 'Steam API key:                   ' stapi
 
   printf "\n\n${GREEN}Just doing some file transmutation magic:${NORMAL}\n"
   # replace the stuff in the local.py and supervisor.conf file
-  sed -i "s/'HOST': 'root'/'HOST': '${dbhost}'/g" $BW/panel/local.py
-  sed -i "s/'PORT': 'root'/'PORT': '${dbport}'/g" $BW/panel/local.py
-  sed -i "s/'NAME': 'bellwether'/'NAME': '${dbname}'/g" $BW/panel/local.py
-  sed -i "s/'USER': 'root'/'USER': '${dbuser}'/g" $BW/panel/local.py
-  sed -i "s/'PASSWORD': 'root'/'PASSWORD': '${dbpwd}'/g" $BW/panel/local.py
+  sed -i "s/\'HOST\'\: \'root\'/\'HOST\'\: \'${dbhost}\'/g" $BW/panel/local.py
+  sed -i "s/\'PORT\'\: \'root\'/\'PORT\'\: \'${dbport}\'/g" $BW/panel/local.py
+  sed -i "s/\'NAME\'\: \'bellwether\'/\'NAME\'\: \'${dbname}\'/g" $BW/panel/local.py
+  sed -i "s/\'USER\'\: \'root\'/\'USER\'\: \'${dbuser}\'/g" $BW/panel/local.py
+  sed -i "s/\'PASSWORD\'\: \'root\'/\'PASSWORD\'\: \'${dbpwd}\'/g" $BW/panel/local.py
 
-  sed -i "s/SOCIAL_AUTH_STEAM_API_KEY = '(?:X*)'/SOCIAL_AUTH_STEAM_API_KEY = '${stapi}'/g" $BW/panel/local.py
+  sed -i "s/SOCIAL_AUTH_STEAM_API_KEY = \'(?:X*)\'/SOCIAL_AUTH_STEAM_API_KEY = \'${stapi}\'/g" $BW/panel/local.py
 
   sed -i "s/directory=<replace>/directory=${BW}'/g" $BW/supervisor.conf
 
