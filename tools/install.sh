@@ -115,14 +115,12 @@ main() {
     export MYSQL_TCP_PORT=$dbport
 
     if mysql -u $dbuser -e "CREATE DATABASE IF NOT EXISTS $dbname"; then
-      printf "connected"
+      printf "\n${GREEN}successfully connected to mysql and created the database.${NORMAL}\n"
+      break;
     else
-      printf "not connected"
+      printf "\n${YELLOW}I could not connected to mysql with the credentials you provided, try again.${NORMAL}\n"
     fi
-    # try to connect - if not mention bind_user and loop, else continue
-    break;
   done
-  return
 
   printf "\n\n${YELLOW}SteamAPI configuration:${NORMAL}\n"
   read -p 'Steam API key:                   ' stapi
