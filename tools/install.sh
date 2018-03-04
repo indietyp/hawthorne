@@ -98,11 +98,16 @@ main() {
 
   printf "\n\n${YELLOW}Database configuration:${NORMAL}"
   while true; do
-    read -p 'Host     (default: localhost): ' -i "localhost" dbhost
-    read -p 'Port     (default: 3006):      ' -i "3006" dbport
-    read -p 'User     (default: root):      ' -i "root" dbuser
-    read -p 'Database (default: bellwether):' -i "bellwether" dbname
+    read -p 'Host     (default: localhost): ' dbhost
+    read -p 'Port     (default: 3006):      ' dbport
+    read -p 'User     (default: root):      ' dbuser
+    read -p 'Database (default: bellwether):' dbname
     read -p 'Password:                      ' dbpwd
+
+    dbhost=${dbhost:-localhost}
+    dbport=${dbport:-3306}
+    dbuser=${dbuser:-root}
+    dbname=${dbname:-bellwether}
 
     # try to connect - if not mention bind_user and loop, else continue
     break;
