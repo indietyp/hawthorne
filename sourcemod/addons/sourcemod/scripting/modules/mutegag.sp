@@ -360,7 +360,7 @@ public Action OnPlayerMuteGag(int client, const char[] command, int args) {
 		//Save command
 		Format(cLastCmd[client], sizeof(cLastCmd), "%s", command);
 
-		//Manually send this command to bp_chat, so it gets logged (because such command already exists in sourcemod by default)
+		//Manually send this command to the chat module, so it gets logged (because such command already exists in sourcemod by default)
 		char cMessage[256];
 		Format(cMessage, sizeof(cMessage), "%s %s", command, cMessage);
 		LogChatMessage(client, cMessage, 1);

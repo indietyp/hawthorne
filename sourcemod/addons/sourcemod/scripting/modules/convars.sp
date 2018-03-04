@@ -1,4 +1,4 @@
-void BP_InitConVars() {
+void BW_InitConVars() {
 	// Create tons of cvars
 	g_cvServerIP				= CreateConVar("bw_server_ip", 						"127.0.0.1", 	"Panel server domain or IP");
 	g_cvServerPORT			= CreateConVar("bw_server_port", 					"80", 				"Panel server accessed port");

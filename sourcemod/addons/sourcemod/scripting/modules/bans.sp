@@ -111,7 +111,7 @@ void Bans_OnMapStart() {
 public Action OnAddBanCommand(int client, const char[] command, int args) {
 	if(g_cvBansEnabled.IntValue == 1 && !StrEqual(iServerID, "")) {
 
-		// Manually send this command to bp_chat, so it gets logged (because such command already exists in sourcemod)
+		// Manually send this command to the chat module, so it gets logged (because such command already exists in sourcemod)
 		char cMessage[256];
 		GetCmdArgString(cMessage, sizeof(cMessage));
 		Format(cMessage, sizeof(cMessage), "%s %s", command, cMessage);

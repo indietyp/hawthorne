@@ -62,7 +62,7 @@ public void OnPluginStart() {
 
 	//RegConsoleCmd("sm_online", CMD_Online);
 
-	BP_OnPluginStart();
+	BW_OnPluginStart();
 }
 
 public void OnConfigsExecuted() {

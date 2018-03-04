@@ -1,11 +1,11 @@
-void BP_OnPluginStart() {
-	BP_InitConVars();
+void BW_OnPluginStart() {
+	BW_InitConVars();
 	MuteGag_OnPluginStart();
 	RconCommands_OnPluginStart();
 }
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max) {
-	BP_InitConVars();
+	BW_InitConVars();
 	RegPluginLibrary("bellwether");
 	CreateNatives();
 	return APLRes_Success;
