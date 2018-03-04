@@ -76,4 +76,4 @@ STATIC_ROOT = '/local/static'
 ALLOWED_HOSTS = []
 
 # generate me baby
-SECRET_KEY = '##t_85)kd%hca+xfp6fhk06mx&r+yw%%u@8c5bfkuc@yg-7^vt'
+SECRET_KEY = ''

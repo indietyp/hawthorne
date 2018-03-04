@@ -137,7 +137,7 @@ main() {
   sed -i "s#directory=<replace>#directory=$BW#g" $BW/supervisor.conf
 
   printf "${BLUE}Executing project setupcommands...${NORMAL}\n"
-  sed -iE "s/SECRET_KEY = (?:.*)/SECRET_KEY = '$(python3 $BW/manage.py generatesecret | tail -1)'/g" $BW/panel/local.py
+  sed -i "s/SECRET_KEY = ''/SECRET_KEY = '$(python3 $BW/manage.py generatesecret | tail -1)'/g" $BW/panel/local.py
 
   python3 $BW/manage.py migrate
   python3 $BW/manage.py compilestatic
