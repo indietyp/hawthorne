@@ -27,30 +27,30 @@ main() {
   # which may fail on systems lacking tput or terminfo
   set -e
 
-  # if [ "$EUID" -ne 0 ]
-  #   then echo "Please run as ${RED}root${NORMAL}"
-  #   exit 1
-  # fi
+  if [ "$EUID" -ne 0 ]
+    then echo "Please run as ${RED}root${NORMAL}"
+    exit 1
+  fi
 
-  # locale-gen --purge en_US.UTF-8
-  # echo -e 'LANG="en_US.UTF-8"\nLANGUAGE="en_US:en"\n' > /etc/default/locale
+  locale-gen --purge en_US.UTF-8
+  echo -e 'LANG="en_US.UTF-8"\nLANGUAGE="en_US:en"\n' > /etc/default/locale
 
-  # export LC_ALL=C
+  export LC_ALL=C
 
-  # BW=/bellwether
-  # printf "${YELLOW}This is the automatic and guided installation. ${NORMAL}\n"
-  # printf "${RED}You still need to install a webserver of your choosing and provide a mysql server. ${NORMAL}\n\n"
-  # printf "Everything will be configured by itelf.\n"
-  # printf "The configured installation path used will be ${GREEN}${BW}${NORMAL}\n"
+  BW=/bellwether
+  printf "${YELLOW}This is the automatic and guided installation. ${NORMAL}\n"
+  printf "${RED}You still need to install a webserver of your choosing and provide a mysql server. ${NORMAL}\n\n"
+  printf "Everything will be configured by itelf.\n"
+  printf "The configured installation path used will be ${GREEN}${BW}${NORMAL}\n"
 
-  # while true; do
-  #   read -p "Do you want to define a custom path? ${GREEN}(y)${NORMAL}es or ${RED}(n)${NORMAL}o: " yn
-  #   case $yn in
-  #       [Yy]* ) read -p "Where should bellwether be installed? " BW; break;;
-  #       [Nn]* ) break;;
-  #       * ) echo "Please answer with the answers provided.";;
-  #   esac
-  # done
+  while true; do
+    read -p "Do you want to define a custom path? ${GREEN}(y)${NORMAL}es or ${RED}(n)${NORMAL}o: " yn
+    case $yn in
+        [Yy]* ) read -p "Where should bellwether be installed? " BW; break;;
+        [Nn]* ) break;;
+        * ) echo "Please answer with the answers provided.";;
+    esac
+  done
 
   # # Prevent the cloned repository from having insecure permissions. Failing to do
   # # so causes compinit() calls to fail with "command not found: compdef" errors
@@ -96,7 +96,7 @@ main() {
   # cp $BW/panel/local.default.py $BW/panel/local.py
   # cp $BW/supervisor.default.conf $BW/supervisor.conf
 
-  printf "\n\n${YELLOW}Database configuration:${NORMAL}\n"
+  printf "\n\n${YELLOW}Database configuration:${NORMAL}\n\n"
   while true; do
     read -p 'Host     (default: localhost): ' dbhost
     read -p 'Port     (default: 3006):      ' dbport
@@ -113,10 +113,10 @@ main() {
     break;
   done
 
-  printf "\n\n${YELLOW}SteamAPI configuration:${NORMAL}"
+  printf "\n\n${YELLOW}SteamAPI configuration:${NORMAL}\n"
   read -p 'Steam API key:                ' stapi
 
-  printf "\n\n${GREEN}Just doing some file transmutation magic:${NORMAL}"
+  printf "\n\n${GREEN}Just doing some file transmutation magic:${NORMAL}\n"
   # replace the stuff in the local.py and supervisor.conf file
   sed -i "s/'HOST': 'root'/'HOST': '${dbhost}'/g" $BW/panel/local.py
   sed -i "s/'PORT': 'root'/'PORT': '${dbport}'/g" $BW/panel/local.py
