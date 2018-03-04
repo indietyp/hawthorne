@@ -33,7 +33,7 @@ main() {
   fi
 
   locale-gen en_US en_US.UTF-8
-  dpkg-reconfigure locales
+  dpkg-reconfigure --frontend=noninteractive locales
 
   BW=/bellwether
   printf "${YELLOW}This is the automatic and guided installation. ${NORMAL}\n"
