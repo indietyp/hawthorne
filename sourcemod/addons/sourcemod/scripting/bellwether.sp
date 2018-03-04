@@ -24,8 +24,9 @@
 #pragma newdecls required
 
 //Credits
-//asherkin - help admin commands logging
-//Credits to `11530` https://forums.alliedmods.net/showthread.php?t=183443
+// asherkin - help admin commands logging
+// Credits to `11530` https://forums.alliedmods.net/showthread.php?t=183443
+// Credits to boomix and the boompanel - this is an adaptation
 
 
 public Plugin myinfo = {
