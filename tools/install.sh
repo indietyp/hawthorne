@@ -96,7 +96,7 @@ main() {
   # cp $BW/panel/local.default.py $BW/panel/local.py
   # cp $BW/supervisor.default.conf $BW/supervisor.conf
 
-  printf "\n\n${YELLOW}Database configuration:${NORMAL}"
+  printf "\n\n${YELLOW}Database configuration:${NORMAL}\n"
   while true; do
     read -p 'Host     (default: localhost): ' dbhost
     read -p 'Port     (default: 3006):      ' dbport
