@@ -32,6 +32,10 @@ main() {
     exit 1
   fi
 
+  export LC_ALL="en_US.UTF-8"
+  export LC_CTYPE="en_US.UTF-8"
+  dpkg-reconfigure locale
+
   BW=/bellwether
   printf "${YELLOW}This is the automatic and guided installation. ${NORMAL}\n"
   printf "${RED}You still need to install a webserver of your choosing and provide a mysql server. ${NORMAL}\n\n"
