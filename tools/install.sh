@@ -118,15 +118,15 @@ main() {
 
   printf "\n\n${GREEN}Just doing some file transmutation magic:${NORMAL}\n"
   # replace the stuff in the local.py and supervisor.conf file
-  sed -i "s/\'HOST\'\: \'root\'/\'HOST\'\: \'${dbhost}\'/g" $BW/panel/local.py
-  sed -i "s/\'PORT\'\: \'root\'/\'PORT\'\: \'${dbport}\'/g" $BW/panel/local.py
-  sed -i "s/\'NAME\'\: \'bellwether\'/\'NAME\'\: \'${dbname}\'/g" $BW/panel/local.py
-  sed -i "s/\'USER\'\: \'root\'/\'USER\'\: \'${dbuser}\'/g" $BW/panel/local.py
-  sed -i "s/\'PASSWORD\'\: \'root\'/\'PASSWORD\'\: \'${dbpwd}\'/g" $BW/panel/local.py
+  sed -i "s/'HOST': 'root'/'HOST': '$(dbhost)'/g" $BW/panel/local.py
+  sed -i "s/'PORT': 'root'/'PORT': '$(dbport)'/g" $BW/panel/local.py
+  sed -i "s/'NAME': 'bellwether'/'NAME': '$(dbname)'/g" $BW/panel/local.py
+  sed -i "s/'USER': 'root'/'USER': '$(dbuser)'/g" $BW/panel/local.py
+  sed -i "s/'PASSWORD': 'root'/'PASSWORD': '$(dbpwd)'/g" $BW/panel/local.py
 
-  sed -i "s/SOCIAL_AUTH_STEAM_API_KEY = \'(?:X*)\'/SOCIAL_AUTH_STEAM_API_KEY = \'${stapi}\'/g" $BW/panel/local.py
+  sed -i "s/SOCIAL_AUTH_STEAM_API_KEY = '(?:X*)'/SOCIAL_AUTH_STEAM_API_KEY = '$(stapi)'/g" $BW/panel/local.py
 
-  sed -i "s/directory=<replace>/directory=${BW}'/g" $BW/supervisor.conf
+  sed -i "s/directory=<replace>/directory=$(BW)'/g" $BW/supervisor.conf
 
   printf "${BLUE}Executing project setupcommands...${NORMAL}\n"
   sed -i "s/SECRET_KEY = (?:.*)/SECRET_KEY = '$(python3 manage.py generatesecret | tail -1)'/g" $BW/panel/local.py
