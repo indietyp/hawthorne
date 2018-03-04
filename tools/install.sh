@@ -32,9 +32,8 @@ main() {
     exit 1
   fi
 
-  export LC_ALL="en_US.UTF-8"
-  export LC_CTYPE="en_US.UTF-8"
-  dpkg-reconfigure locale
+  locale-gen --purge en_US.UTF-8
+  echo -e 'LANG="en_US.UTF-8"\nLANGUAGE="en_US:en"\n' > /etc/default/locale
 
   BW=/bellwether
   printf "${YELLOW}This is the automatic and guided installation. ${NORMAL}\n"
