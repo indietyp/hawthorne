@@ -110,11 +110,11 @@ main() {
     dbuser=${dbuser:-root}
     dbname=${dbname:-bellwether}
 
-    MYSQL_PWD=$dbpwd
-    MYSQL_HOST=$dbhost
-    MYSQL_TCP_PORT=$dbport
+    export MYSQL_PWD=$dbpwd
+    export MYSQL_HOST=$dbhost
+    export MYSQL_TCP_PORT=$dbport
 
-    if mysql -u $dbuser -e "CREATE DATABASE IF NOT EXISTS $dbname"; then
+    if mysql -u $dbuser -p -e "CREATE DATABASE IF NOT EXISTS $dbname"; then
       printf "connected"
     else
       printf "not connected"
