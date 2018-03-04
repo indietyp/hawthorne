@@ -30,76 +30,76 @@
 
 
 public Plugin myinfo = {
-	name = "Bellwether",
-	author = "indietyp & boomix",
-	description = "Bellwether Admin Panel",
-	version = "2.00",
-	url = "bellwether.com"
+  name = "Bellwether",
+  author = "indietyp & boomix",
+  description = "Bellwether Admin Panel",
+  version = "2.00",
+  url = "bellwether.com"
 };
 
 
 public void OnPluginStart() {
-	// Events
-	HookEvent("player_disconnect", 	Event_Disconnect, EventHookMode_Pre);
-	HookEvent("player_team",		Event_PlayerTeam);
+  // Events
+  HookEvent("player_disconnect",  Event_Disconnect, EventHookMode_Pre);
+  HookEvent("player_team",    Event_PlayerTeam);
 
-	// Listeners
-	AddCommandListener(OnPlayerChatMessage, 		"say");
-	AddCommandListener(OnPlayerChatMessage, 		"say_team");
-	AddCommandListener(OnAddBanCommand, 				"sm_addban");
+  // Listeners
+  AddCommandListener(OnPlayerChatMessage,     "say");
+  AddCommandListener(OnPlayerChatMessage,     "say_team");
+  AddCommandListener(OnAddBanCommand,         "sm_addban");
 
-	AddCommandListener(OnPlayerMuteGag, 				"sm_mute");
-	AddCommandListener(OnPlayerMuteGag, 				"sm_unmute");
-	AddCommandListener(OnPlayerMuteGag, 				"sm_gag");
-	AddCommandListener(OnPlayerMuteGag, 				"sm_ungag");
-	AddCommandListener(OnPlayerMuteGag, 				"sm_silence");
-	AddCommandListener(OnPlayerMuteGag,					"sm_unsilence");
+  AddCommandListener(OnPlayerMuteGag,         "sm_mute");
+  AddCommandListener(OnPlayerMuteGag,         "sm_unmute");
+  AddCommandListener(OnPlayerMuteGag,         "sm_gag");
+  AddCommandListener(OnPlayerMuteGag,         "sm_ungag");
+  AddCommandListener(OnPlayerMuteGag,         "sm_silence");
+  AddCommandListener(OnPlayerMuteGag,         "sm_unsilence");
 
-	// Shortcuts
-	RegAdminCmd("sm_pmute", 		CMD_PermaMuteGag, 	ADMFLAG_CHAT);
-	RegAdminCmd("sm_pgag", 			CMD_PermaMuteGag, 	ADMFLAG_CHAT);
-	RegAdminCmd("sm_psilence", 	CMD_PermaMuteGag, 	ADMFLAG_CHAT);
+  // Shortcuts
+  RegAdminCmd("sm_pmute",     CMD_PermaMuteGag,   ADMFLAG_CHAT);
+  RegAdminCmd("sm_pgag",      CMD_PermaMuteGag,   ADMFLAG_CHAT);
+  RegAdminCmd("sm_psilence",  CMD_PermaMuteGag,   ADMFLAG_CHAT);
 
-	//RegConsoleCmd("sm_online", CMD_Online);
+  //RegConsoleCmd("sm_online", CMD_Online);
 
-	BW_OnPluginStart();
+  BW_OnPluginStart();
 }
 
 public void OnConfigsExecuted() {
-	char protocol[6], ip[12], port[6], token[37];
-	if (GetConVarInt(g_cvServerPROTOCOL) == 1) {
-		protocol = "https";
-	} else {
-		protocol = "http";
-	}
+  char protocol[6], ip[12], port[6], token[37];
+  if (GetConVarInt(g_cvServerPROTOCOL) == 1) {
+    protocol = "https";
+  } else {
+    protocol = "http";
+  }
 
-	GetConVarString(g_cvServerIP, ip, sizeof(ip));
-	GetConVarString(g_cvServerPORT, port, sizeof(port));
-	GetConVarString(g_cvServerTOKEN, token, sizeof(token));
+  GetConVarString(g_cvServerIP, ip, sizeof(ip));
+  GetConVarString(g_cvServerPORT, port, sizeof(port));
+  GetConVarString(g_cvServerTOKEN, token, sizeof(token));
 
-	g_endpoint = protocol;
-	StrCat(g_endpoint, sizeof(g_endpoint), "://");
-	StrCat(g_endpoint, sizeof(g_endpoint), ip);
-	StrCat(g_endpoint, sizeof(g_endpoint), ":");
-	StrCat(g_endpoint, sizeof(g_endpoint), port);
-	StrCat(g_endpoint, sizeof(g_endpoint), "/api/v1");
+  g_endpoint = protocol;
+  StrCat(g_endpoint, sizeof(g_endpoint), "://");
+  StrCat(g_endpoint, sizeof(g_endpoint), ip);
+  StrCat(g_endpoint, sizeof(g_endpoint), ":");
+  StrCat(g_endpoint, sizeof(g_endpoint), port);
+  StrCat(g_endpoint, sizeof(g_endpoint), "/api/v1");
 
-	LogMessage("Configured Endpoint:");
-	LogMessage(g_endpoint);
+  LogMessage("Configured Endpoint:");
+  LogMessage(g_endpoint);
 
-	httpClient = new HTTPClient(g_endpoint);
-	httpClient.SetHeader("X-TOKEN", token);
+  httpClient = new HTTPClient(g_endpoint);
+  httpClient.SetHeader("X-TOKEN", token);
 
-	GetServerID();
+  GetServerID();
 }
 
 bool IsSpectator(int client) {
-	if(GetClientTeam(client) == 2 || GetClientTeam(client) == 3)
-		return false;
-	else
-		return true;
+  if(GetClientTeam(client) == 2 || GetClientTeam(client) == 3)
+    return false;
+  else
+    return true;
 }
 
 public void APINoResponseCall(HTTPResponse response, any value) {
-	return;
+  return;
 }
