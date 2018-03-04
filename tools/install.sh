@@ -118,7 +118,7 @@ main() {
 
   printf "\n\n${GREEN}Just doing some file transmutation magic:${NORMAL}\n"
   # replace the stuff in the local.py and supervisor.conf file
-  sed -i "s/'HOST': 'root'/'HOST': '$(dbhost)'/g" $BW/panel/local.py
+  sed -i "s/'HOST': 'root'/'HOST': '$dbhost'/g" $BW/panel/local.py
   sed -i "s/'PORT': 'root'/'PORT': '$(dbport)'/g" $BW/panel/local.py
   sed -i "s/'NAME': 'bellwether'/'NAME': '$(dbname)'/g" $BW/panel/local.py
   sed -i "s/'USER': 'root'/'USER': '$(dbuser)'/g" $BW/panel/local.py
