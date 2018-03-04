@@ -64,7 +64,28 @@ main() {
     apt update
     apt install -y python3 python3-dev python3-pip ruby ruby-dev redis-server libmysqlclient-dev libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client
   elif hash yum >/dev/null 2>&1; then
-    echo "I should install everything with yum...."
+    yum -y update
+    yum -y install yum-utils wget
+    yum-builddep python
+    curl -O https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz
+    tar xf Python-3.6.4.tgz
+    rm Python-3.6.4.tgz
+    cd Python-3.6.4
+    ./configure
+    make
+    make install
+    cd ..
+    rm -rf Python-3.6.4
+
+    yum -y install epel-release
+    yum -y update
+    yum -y install redis
+    systemctl start redis
+    systemctl enable redis
+
+    yum -y install mysql mysql-devel mysql-lib
+    yum -y install libxml2-devel libffi-devel libxslt-devel openssl-devel
+    yum -y install git supervisor
   else
     printf "Your package manager is currently not supported. Please contact the maintainer\n"
     printf "${BLUE}opensource@indietyp.com${NORMAL} or open an issure\n"
