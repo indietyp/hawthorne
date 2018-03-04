@@ -44,7 +44,7 @@ LOGGING = {
 }
 
 STATIC_PRECOMPILER_COMPILERS = (
-    ('static_precompiler.compilers.CoffeeScript', {"executable": "/usr/local/bin/coffee"}),
+    ('static_precompiler.compilers.CoffeeScript', {"executable": "/usr/bin/coffee"}),
     ('static_precompiler.compilers.SASS', {
         "sourcemap_enabled": True,
         "compass_enabled": True,
