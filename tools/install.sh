@@ -32,8 +32,8 @@ main() {
     exit 1
   fi
 
-  LC_ALL=en_US.UTF-8
-  LANG=en_US.UTF-8
+  locale-gen en_US en_US.UTF-8
+  dpkg-reconfigure locales
 
   BW=/bellwether
   printf "${YELLOW}This is the automatic and guided installation. ${NORMAL}\n"
