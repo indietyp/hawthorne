@@ -122,10 +122,10 @@ main() {
   sed -i "s/'PORT': 'root'/'PORT': '$dbport'/g" $BW/panel/local.py
   sed -i "s/'NAME': 'bellwether'/'NAME': '$dbname'/g" $BW/panel/local.py
   sed -i "s/'USER': 'root'/'USER': '$dbuser'/g" $BW/panel/local.py
-  sed -i "s/'PASSWORD': 'root'/'PASSWORD': '$dbpwd'/g" $BW/panel/local.py
+  sed -i "s/'PASSWORD': ''/'PASSWORD': '$dbpwd'/g" $BW/panel/local.py
 
   printf "${BLUE}...${NORMAL}\n"
-  sed -i "s/SOCIAL_AUTH_STEAM_API_KEY = '(?:[X]*)'/SOCIAL_AUTH_STEAM_API_KEY = '$stapi'/g" $BW/panel/local.py
+  sed -i "s/SOCIAL_AUTH_STEAM_API_KEY = '([X]*)'/SOCIAL_AUTH_STEAM_API_KEY = '$stapi'/g" $BW/panel/local.py
 
   sed -i "s/directory=<replace>/directory=$BW'/g" $BW/supervisor.conf
 
