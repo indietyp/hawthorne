@@ -56,6 +56,7 @@ main() {
 
   printf "${BLUE}Installing the package requirements...${NORMAL}\n"
   if hash apt >/dev/null 2>&1; then
+    apt update
     apt install -y python3 python3-dev python3-pip ruby ruby-dev redis-server libmysqlclient-dev libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor
   elif hash yum >/dev/null 2>&1; then
     echo "I should install everything with yum...."
