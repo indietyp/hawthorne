@@ -13,7 +13,7 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 
 void OnServerIDUpdated() {
   for (int i = 1; i <= MaxClients; i++)
-    if(IsClientInGame(i) && !IsFakeClient(i) && iClientID[i] < 1) {
+    if(IsClientInGame(i) && !IsFakeClient(i) && clients[i] < 1) {
 
       MuteGag_OnClientDisconnect(i);
 
@@ -23,15 +23,14 @@ void OnServerIDUpdated() {
       OnClientAuthorized(i, steamid);
 
     }
-  Call_StartForward(g_OnDatabaseReady);
   Call_Finish();
 }
 
 void OnClientIDReceived(int client) {
   //Push event
-  Call_StartForward(g_OnClientIDReceived);
+  Call_StartForward(forward_client);
   Call_PushCell(client);
-  //Call_PushCell(iClientID[client]);
+  //Call_PushCell(clients[client]);
   Call_Finish();
 
   Bans_OnClientIDReceived(client);

@@ -1,97 +1,69 @@
-// TODO: TESTING
 public Action OnPlayerChatMessage(int client, const char[] command, int argc) {
-  //If text comes from console
-  if(client < 1)
-    return Plugin_Continue;
+  // check if the client is an actual person
+  if(client < 1) return Plugin_Continue;
 
-  //Get chat message
-  char cMessage[256];
-  GetCmdArgString(cMessage, sizeof(cMessage));
+  char message[512];
+  GetCmdArgString(message, sizeof(message));
 
-  //Get rid of the qoutes
-  strcopy(cMessage, sizeof(cMessage), cMessage[1]);
-  cMessage[strlen(cMessage) - 1] = 0;
+  // cleanup quotes
+  strcopy(message, sizeof(message), message[1]);
+  message[strlen(message) - 1] = 0;
 
-  //Send event to other files
-  int shouldReturn = MuteGag_OnPlayerChatMessage(client, cMessage);
-  if(shouldReturn > 0)
-    return Plugin_Handled;
+  // send event to other internal modules
+  int handled = MuteGag_OnPlayerChatMessage(client, message);
+  if (handled > 0) return Plugin_Handled;
 
-  //If chat log is disabled or DB/ServerID is not found
-  if(g_cvChatLogEnabled.IntValue == 0 || StrEqual(iServerID, ""))
-    return Plugin_Continue;
-
-  //If client ID is not found
-  if(StrEqual(iClientID[client], "")) {
-    LogError("[Bellwether] Failed to send message to API, clientID was not fetched.");
+  if (logs_enabled.IntValue == 0 || StrEqual(server, "")) return Plugin_Continue;
+  if (StrEqual(clients[client], "")) {
+    LogError("[Bellwether] Failed to send message to the API of the manager, the client UUID was not fetched.");
     return Plugin_Continue;
   }
 
-  //Check if that is not command (later will be added support for commands also?)
-  if(IsChatTrigger() || StringIsEmpty(cMessage))
-    return Plugin_Continue;
-
-  //Insert into database
-  LogChatMessage(client, cMessage);
-
+  SendChatMessage(client, message);
   return Plugin_Continue;
 }
 
-stock void LogChatMessage(int client, char[] cMessage, int type = 0) {
+stock void SendChatMessage(int client, char[] message, int type = 0) {
   char ip[10];
 
   GetClientIP(client, ip, sizeof(ip));
-  JSONObject payload = new JSONObject();
-  payload.SetString("user", iClientID[client]);
-  payload.SetString("server", iServerID);
-  payload.SetString("ip", ip);
-  payload.SetString("message", cMessage);
 
+  JSONObject payload = new JSONObject();
+  payload.SetString("user", clients[client]);
+  payload.SetString("server", server);
+  payload.SetString("ip", ip);
+  payload.SetString("message", message);
   httpClient.Put("system/chat", payload, APINoResponseCall);
 
   delete payload;
 }
 
 
-public Action OnClientCommand(int client, int args)
-{
-  if(IsClientInGame(client) && !IsFakeClient(client))
-  {
+public Action OnClientCommand(int client, int args) {
+  // get the command used
+  char command[512];
+  GetCmdArg(0, command, sizeof(command));
 
-    if(client < 1)
-      return Plugin_Continue;
+  // check if the client is an actual person and online
+  if (!IsClientInGame(client) || IsFakeClient(client)) return Plugin_Continue;
+  if (client < 1) return Plugin_Continue;
+  if (logs_enabled.IntValue == 0 || StrEqual(server, "")) return Plugin_Continue;
+  if(StrContains(command, "sm_") == -1 || !IsAdminCMD(command)) return Plugin_Continue;
 
-    //If chat log is disabled or DB/ServerID is not found
-    if(g_cvChatLogEnabled.IntValue == 0 || StrEqual(iServerID, ""))
-      return Plugin_Continue;
+  // formatting the command to include the argument used
+  char arguments[512];
+  GetCmdArgString(arguments, sizeof(arguments));
 
-    //Get written command
-    char sCommand[50];
-    GetCmdArg(0, sCommand, sizeof(sCommand));
-
-    if(StrContains(sCommand, "sm_") != -1)
-    {
-      if(IsAdminCMD(sCommand))
-      {
-        char sFullCommand[100];
-        GetCmdArgString(sFullCommand, sizeof(sFullCommand));
-        Format(sCommand, sizeof(sCommand), "%s %s", sCommand, sFullCommand);
-        LogChatMessage(client, sCommand, 1);
-      }
-    }
-
-
-  }
+  Format(command, sizeof(command), "%s %s", command, arguments);
+  SendChatMessage(client, command, 1);
 
   return Plugin_Continue;
-
-
 }
 
-bool IsAdminCMD(char[] sCommand)
-{
+bool IsAdminCMD(char[] command) {
+
+  // we are excluding VIP privileges
   AdminId admin = CreateAdmin();
-  //Do not include VIP commands
   admin.SetFlag(Admin_Custom1, true);
   admin.SetFlag(Admin_Custom2, true);
   admin.SetFlag(Admin_Custom3, true);
@@ -99,26 +71,8 @@ bool IsAdminCMD(char[] sCommand)
   admin.SetFlag(Admin_Custom5, true);
   admin.SetFlag(Admin_Custom6, true);
   admin.SetFlag(Admin_Reservation, true);
-  if (CheckAccess(admin, sCommand, 0, false))
-  {
-    RemoveAdmin(admin);
-    return false;
-  } else {
-    RemoveAdmin(admin);
-    return true;
-  }
-}
+  RemoveAdmin(admin);
 
-bool StringIsEmpty(char text[256])
-{
-  ReplaceString(text, sizeof(text), " ", "");
-  int length = strlen(text);
-  if(length > 0)
-    return false;
-  else
-    return true;
-}
-
-stock void RemoveFrontString(char[] strInput, int iSize, int iVar) {
-    strcopy(strInput, iSize, strInput[iVar]);
+  if (CheckAccess(admin, command, 0, false)) return false;
+  return true;
 }

@@ -13,7 +13,7 @@ void MuteGag_OnPluginStart() {
 
 public Action CMD_PermaMuteGag(int client, int args) {
 
-  if(g_cvMuteGagEnabled.IntValue == 1 && !StrEqual(iServerID, "")) {
+  if(mutegags_enabled.IntValue == 1 && !StrEqual(server, "")) {
 
     //Get what command player is trying to execute
     char command[50], command3[50];
@@ -69,7 +69,7 @@ public Action CMD_PermaMuteGag(int client, int args) {
 
 
     //Save admins last target ID
-    iLastTargetID[client] = (client > 0) ? iClientID[tlist[0]] : "";
+    last_target[client] = (client > 0) ? clients[tlist[0]] : "";
 
 
     //If mute/gag/silence
@@ -82,7 +82,7 @@ public Action CMD_PermaMuteGag(int client, int args) {
         //Get all arguments
         char cReason[150];
         GetCmdArg(2, cReason, sizeof(cReason));
-        APIMuteGag(client, iLastTargetID[client], type, cReason, 0);
+        APIMuteGag(client, last_target[client], type, cReason, 0);
 
       }
 
@@ -97,7 +97,7 @@ public Action CMD_PermaMuteGag(int client, int args) {
 }
 
 void MuteGag_OnClientPutInServer(int client) {
-  if(!StrEqual(iClientID[client], "")) {
+  if(!StrEqual(clients[client], "")) {
     for (int i = 0; i < 3; i++)
     {
       if((iMuteGagTimeleft[client][i] >= 0 || bMuteGagPermanent[client][i])) {
@@ -112,7 +112,7 @@ void MuteGag_OnClientPutInServer(int client) {
 public Action TryMuteAgainPlayer(Handle tmr, any userID) {
   int target = GetClientOfUserId(userID);
   if(target > 0) {
-    if (!StrEqual(iClientID[target], "")) {
+    if (!StrEqual(clients[target], "")) {
       for (int i = 0; i < 3; i++) {
         if(iMuteGagTimeleft[target][i] >= 0 || bMuteGagPermanent[target][i]) {
           PerformMuteGag(target, i, true);
@@ -152,7 +152,7 @@ int MuteGag_OnPlayerChatMessage(int client, char message[256]) {
     }
 
     else {
-      APIMuteGag(client, iLastTargetID[client], iLastCommandType[client], message, iLastMuteGagTime[client]);
+      APIMuteGag(client, last_target[client], iLastCommandType[client], message, iLastMuteGagTime[client]);
       return 1;
     }
   }
@@ -201,7 +201,7 @@ int AddMenuItems(Menu menu, char[] cFileString, bool punishments = false) {
 
 
 void MuteGag_OnClientIDReceived(int client) {
-  if(g_cvMuteGagEnabled.IntValue == 1 && !StrEqual(iServerID, "")) {
+  if(mutegags_enabled.IntValue == 1 && !StrEqual(server, "")) {
 
     //Set default values
     for (int i = 0; i < 3; i++) {
@@ -214,9 +214,9 @@ void MuteGag_OnClientIDReceived(int client) {
 
     //Check if client is muted or gagged or silenced
     char url[512] = "users/";
-    StrCat(url, sizeof(url), iClientID[client]);
+    StrCat(url, sizeof(url), clients[client]);
     StrCat(url, sizeof(url), "/mutegag?resolved=false&server=");
-    StrCat(url, sizeof(url), iServerID);
+    StrCat(url, sizeof(url), server);
 
     httpClient.Get(url, OnMuteGagCheck, client);
   }
@@ -349,7 +349,7 @@ public Action TakeAwayMinute(Handle tmr, any userID) {
 
 //-- ALL COMMANDS (mute, gag, ungag, unmUte, silence, unsilence)--//
 public Action OnPlayerMuteGag(int client, const char[] command, int args) {
-  if(g_cvMuteGagEnabled.IntValue == 1 && !StrEqual(iServerID, "")) {
+  if(mutegags_enabled.IntValue == 1 && !StrEqual(server, "")) {
 
     /* Few things might be taken from sourcecomms */
 
@@ -363,7 +363,7 @@ public Action OnPlayerMuteGag(int client, const char[] command, int args) {
     //Manually send this command to the chat module, so it gets logged (because such command already exists in sourcemod by default)
     char cMessage[256];
     Format(cMessage, sizeof(cMessage), "%s %s", command, cMessage);
-    LogChatMessage(client, cMessage, 1);
+    SendChatMessage(client, cMessage, 1);
 
 
     //Get command type
@@ -422,7 +422,7 @@ public Action OnPlayerMuteGag(int client, const char[] command, int args) {
 
 
     //Save admins last target ID
-    iLastTargetID[client] = (client > 0) ? iClientID[tlist[0]] : "";
+    last_target[client] = (client > 0) ? clients[tlist[0]] : "";
 
 
     //If mute/gag/silence
@@ -439,13 +439,13 @@ public Action OnPlayerMuteGag(int client, const char[] command, int args) {
         GetCmdArg(2, cTime, sizeof(cTime));
         GetCmdArg(3, cReason, sizeof(cReason));
         int iBanTime = ConverTimeToMinutes(cTime, sizeof(cTime));
-        APIMuteGag(client, iLastTargetID[client], type, cReason, iBanTime);
+        APIMuteGag(client, last_target[client], type, cReason, iBanTime);
 
       }
 
     //If unmute/ungag/unsilence
     } else {
-      APIMuteGag(client, iLastTargetID[client], type);
+      APIMuteGag(client, last_target[client], type);
     }
 
 
@@ -484,13 +484,13 @@ void AddPeopleToMenu(Menu menu)
 void APIMuteGag(int admin, char[] clientID, int type, char[] reason = "", int time = -1) {
   // Update last target for admin
   char adminID[37], serverToBan[37];
-  StrCat(adminID, sizeof(adminID), (admin == 0) ? "" : iClientID[admin]);
-  StrCat(serverToBan, sizeof(serverToBan), (g_cvMuteGagAllSrvs.IntValue == 0) ? iServerID : "");
+  StrCat(adminID, sizeof(adminID), (admin == 0) ? "" : clients[admin]);
+  StrCat(serverToBan, sizeof(serverToBan), (mutegags_global.IntValue == 0) ? server : "");
 
   JSONObject payload = new JSONObject();
 
   if (!StrEqual(serverToBan, "")) {
-    payload.SetString("server", iServerID);
+    payload.SetString("server", server);
   }
 
   char stype[5] = "both";
@@ -520,7 +520,7 @@ void APIMuteGag(int admin, char[] clientID, int type, char[] reason = "", int ti
   //Perform mute/gag on player if he is still ingame
   int target = -1;
   for (int i = 1; i < MaxClients; i++) {
-    if(IsClientInGame(i) && !IsFakeClient(i) && StrEqual(iClientID[i], clientID)) {
+    if(IsClientInGame(i) && !IsFakeClient(i) && StrEqual(clients[i], clientID)) {
       target = i;
 
       if(type < 3) {
@@ -620,8 +620,8 @@ public int MenuHandler_OnAdminSelectsReason(Menu menu, MenuAction action, int cl
     if(!StrEqual(cReason, "customreason")) {
 
       //Update just the info about mute/gag
-      if(!StrEqual(iLastTargetID[client], ""))
-        APIMuteGag(client, iLastTargetID[client], iLastCommandType[client], cReason, iLastMuteGagTime[client]);
+      if(!StrEqual(last_target[client], ""))
+        APIMuteGag(client, last_target[client], iLastCommandType[client], cReason, iLastMuteGagTime[client]);
       else
         PrintToChat(client, "%sSorry, we got some kind of a problem!", PREFIX);
 

@@ -11,7 +11,7 @@
 
 #include "modules/globals.sp"
 #include "modules/convars.sp"
-#include "modules/serverid.sp"
+#include "modules/server.sp"
 #include "modules/players.sp"
 #include "modules/chat.sp"
 #include "modules/bans.sp"
@@ -67,30 +67,30 @@ public void OnPluginStart() {
 
 public void OnConfigsExecuted() {
   char protocol[6], ip[12], port[6], token[37];
-  if (GetConVarInt(g_cvServerPROTOCOL) == 1) {
+  if (GetConVarInt(manager_protocol) == 1) {
     protocol = "https";
   } else {
     protocol = "http";
   }
 
-  GetConVarString(g_cvServerIP, ip, sizeof(ip));
-  GetConVarString(g_cvServerPORT, port, sizeof(port));
-  GetConVarString(g_cvServerTOKEN, token, sizeof(token));
+  GetConVarString(manager_ip, ip, sizeof(ip));
+  GetConVarString(manager_port, port, sizeof(port));
+  GetConVarString(api_token, token, sizeof(token));
 
-  g_endpoint = protocol;
-  StrCat(g_endpoint, sizeof(g_endpoint), "://");
-  StrCat(g_endpoint, sizeof(g_endpoint), ip);
-  StrCat(g_endpoint, sizeof(g_endpoint), ":");
-  StrCat(g_endpoint, sizeof(g_endpoint), port);
-  StrCat(g_endpoint, sizeof(g_endpoint), "/api/v1");
+  endpoint = protocol;
+  StrCat(endpoint, sizeof(endpoint), "://");
+  StrCat(endpoint, sizeof(endpoint), ip);
+  StrCat(endpoint, sizeof(endpoint), ":");
+  StrCat(endpoint, sizeof(endpoint), port);
+  StrCat(endpoint, sizeof(endpoint), "/api/v1");
 
   LogMessage("Configured Endpoint:");
-  LogMessage(g_endpoint);
+  LogMessage(endpoint);
 
-  httpClient = new HTTPClient(g_endpoint);
+  httpClient = new HTTPClient(endpoint);
   httpClient.SetHeader("X-TOKEN", token);
 
-  GetServerID();
+  GetServerUUID();
 }
 
 bool IsSpectator(int client) {
@@ -102,4 +102,25 @@ bool IsSpectator(int client) {
 
 public void APINoResponseCall(HTTPResponse response, any value) {
   return;
+}
+
+bool APIValidator(HTTPResponse response) {
+  if (response.Status != HTTPStatus_OK) {
+    LogError("[Bellwether] API ERROR (request did not return 200 OK)");
+    return false;
+  }
+
+  if (response.Data == null) {
+    LogError("[Bellwether] API ERROR (no response data received)");
+    return false;
+  }
+
+  JSONObject data = view_as<JSONObject>(response.Data);
+  if (data.GetBool("success") == false) {
+    LogError("[Bellwether] API ERROR (api call failed)");
+    return false;
+  }
+
+  delete data;
+  return true;
 }

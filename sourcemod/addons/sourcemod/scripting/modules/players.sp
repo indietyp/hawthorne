@@ -1,9 +1,8 @@
-// TODO: TESTING
 void Players_OnClientAuthorized(int client) {
-  iClientID[client] = "";
+  clients[client] = "";
 
-  if (StrEqual(iServerID, "")) {
-    GetServerID();
+  if (StrEqual(server, "")) {
+    GetServerUUID();
   }
 
   char steamid[20];
@@ -21,7 +20,7 @@ void Players_OnClientAuthorized(int client) {
   payload.SetString("username", username);
   payload.SetString("ip", ip);
   payload.SetString("country", country);
-  payload.SetString("server", iServerID);
+  payload.SetString("server", server);
   payload.SetBool("connected", true);
 
   httpClient.Put("users", payload, OnClientIsInAPI, client);
@@ -30,13 +29,13 @@ void Players_OnClientAuthorized(int client) {
 
 void Players_OnClientDisconnect(int client) {
   JSONObject payload = new JSONObject();
-  payload.SetString("id", iClientID[client]);
-  payload.SetString("server", iServerID);
+  payload.SetString("id", clients[client]);
+  payload.SetString("server", server);
   payload.SetBool("connected", false);
 
   httpClient.Put("users", payload, APINoResponseCall);
 
-  iClientID[client] = "";
+  clients[client] = "";
   delete payload;
 }
 
@@ -53,7 +52,7 @@ public void OnClientIsInAPI(HTTPResponse response, any value) {
     return;
   }
 
-  if (StrEqual(iServerID, ""))
+  if (StrEqual(server, ""))
     return;
 
   JSONObject output = view_as<JSONObject>(response.Data);
@@ -64,7 +63,7 @@ public void OnClientIsInAPI(HTTPResponse response, any value) {
     return;
   } else {
     JSONObject result = view_as<JSONObject>(output.Get("result"));
-    result.GetString("id", iClientID[client], 37);
+    result.GetString("id", clients[client], 37);
     delete result;
     OnClientIDReceived(client);
   }
@@ -83,12 +82,12 @@ void PlayersOnline_OnClientDisconnect(int client) {
   payload.SetString("steamid", steamid);
   payload.SetString("username", username);
   payload.SetBool("connected", false);
-  payload.SetString("server", iServerID);
+  payload.SetString("server", server);
 
   httpClient.Put("users", payload, OnClientDisconnectAPI);
   delete payload;
 
-  iClientID[client] = "";
+  clients[client] = "";
 }
 
 public void OnClientDisconnectAPI(HTTPResponse response, any value) {

@@ -13,9 +13,9 @@ char cMuteGagName[][] =  {"mute", "gag", "silence", "unmute", "ungag", "unsilenc
 
 HTTPClient httpClient;
 
-char iServerID[37] = "",
-     iClientID[MAXPLAYERS + 1][37],
-     iLastTargetID[MAXPLAYERS + 1][37];
+char server[37] = "",
+     clients[MAXPLAYERS + 1][37],
+     last_target[MAXPLAYERS + 1][37];
 
 int iLastMuteGagTime[MAXPLAYERS + 1],
     iLastCommandType[MAXPLAYERS + 1],
@@ -24,22 +24,21 @@ int iLastMuteGagTime[MAXPLAYERS + 1],
     iAdminUpdateTimeleft[MAXPLAYERS + 1];
 
 Handle hMuteGagTimer[MAXPLAYERS + 1],
-       g_OnDatabaseReady,
-       g_OnClientIDReceived,
+       forward_client,
        hAdminTimer[MAXPLAYERS + 1];
 
-ConVar g_cvServerIP,
-       g_cvServerPORT,
-       g_cvServerPROTOCOL,
-       g_cvServerTOKEN,
-       g_cvBansEnabled,
-       g_cvAdminsEnabled,
-       g_cvMuteGagEnabled,
-       g_cvChatLogEnabled,
-       g_cvMuteGagAllSrvs,
-       g_cvBansAllSrvs;
+ConVar manager_ip,
+       manager_port,
+       manager_protocol,
+       api_token,
+       bans_enabled,
+       admins_enabled,
+       mutegags_enabled,
+       logs_enabled,
+       mutegags_global,
+       bans_global;
 
-char g_endpoint[512];
+char endpoint[512];
 
 char cServerHostName[100],
      cMuteReasonsFile[PLATFORM_MAX_PATH],

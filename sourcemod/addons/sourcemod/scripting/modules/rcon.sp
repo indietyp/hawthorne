@@ -152,7 +152,7 @@ public Action CMD_Status(int client, int args) {
   JSONObject output = new JSONObject();
   JSONObject stats = new JSONObject();
 
-  stats.SetString("uuid", iServerID);
+  stats.SetString("uuid", server);
   stats.SetString("map", currentMap);
   stats.SetInt("online", online);
   stats.SetInt("timeleft", timeleft);
@@ -186,7 +186,7 @@ JSONArray AddToList() {
 
       JSONObject player = new JSONObject();
 
-      player.SetString("uuid", iClientID[i]);
+      player.SetString("uuid", clients[i]);
       player.SetString("username", username);
 
       player.SetInt("team", GetClientTeam(i));

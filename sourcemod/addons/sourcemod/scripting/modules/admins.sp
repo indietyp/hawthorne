@@ -1,10 +1,10 @@
 // TODO: TESTING
 void Admins_OnClientIDReceived(int client) {
-  if(g_cvAdminsEnabled.IntValue == 1 && !StrEqual(iServerID, "")) {
+  if(admins_enabled.IntValue == 1 && !StrEqual(server, "")) {
     char url[512] = "users/";
-    StrCat(url, sizeof(url), iClientID[client]);
+    StrCat(url, sizeof(url), clients[client]);
     StrCat(url, sizeof(url), "?server=");
-    StrCat(url, sizeof(url), iServerID);
+    StrCat(url, sizeof(url), server);
 
     httpClient.Get(url, GetClientAdmin, client);
   }
