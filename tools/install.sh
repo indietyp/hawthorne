@@ -134,7 +134,7 @@ main() {
   sed -i "s/'PASSWORD': ''/'PASSWORD': '$dbpwd'/g" $BW/panel/local.py
 
   sed -i "s/SOCIAL_AUTH_STEAM_API_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'/SOCIAL_AUTH_STEAM_API_KEY = '$stapi'/g" $BW/panel/local.py
-  sed -i "s#directory=\<replace\>#directory=$BW#g" $BW/supervisor.conf
+  sed -i "s#directory=<replace>#directory=$BW#g" $BW/supervisor.conf
 
   printf "${BLUE}Executing project setupcommands...${NORMAL}\n"
   sed -iE "s/SECRET_KEY = (?:.*)/SECRET_KEY = '$(python3 $BW/manage.py generatesecret | tail -1)'/g" $BW/panel/local.py
@@ -150,10 +150,9 @@ main() {
   supervisorctl restart bellwether
   printf "Started the unix socket at: ${YELLOW}/tmp/bellwether.sock${NORMAL}\n"
 
-  printf "\n\n${GREEN}You did it (Well rather I did). Everything seems to be installed.${NORMAL}"
-  printf "Please look over the ${RED}panel/local.py${NORMAL} to see if you want to configure anything. And restart the supervisor with ${YELLOW}supervisorctl restart bellwether${NORMAL}"
-  printf "To configure your webserver please refer to the project wiki: ${YELLOW}https://github.com/indietyp/bellwether/wiki/Webserver-Configuration"
-  env zsh
+  printf "\n\n${GREEN}You did it (Well rather I did). Everything seems to be installed.${NORMAL}\n"
+  printf "Please look over the $BW/${RED}panel/local.py${NORMAL} to see if you want to configure anything. And restart the supervisor with ${YELLOW}supervisorctl restart bellwether${NORMAL}\n"
+  printf "To configure your webserver please refer to the project wiki: ${YELLOW}https://github.com/indietyp/bellwether/wiki/Webserver-Configuration${NORMAL}\n"
 }
 
 main
