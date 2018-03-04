@@ -110,9 +110,19 @@ main() {
     dbuser=${dbuser:-root}
     dbname=${dbname:-bellwether}
 
+    MYSQL_PWD=$dbpwd
+    MYSQL_HOST=$dbhost
+    MYSQL_TCP_PORT=$dbport
+
+    if mysql -u $dbuser -e "CREATE DATABASE IF NOT EXISTS $dbname"; then
+      printf "connected"
+    else
+      printf "not connected"
+    fi
     # try to connect - if not mention bind_user and loop, else continue
     break;
   done
+  return
 
   printf "\n\n${YELLOW}SteamAPI configuration:${NORMAL}\n"
   read -p 'Steam API key:                   ' stapi
