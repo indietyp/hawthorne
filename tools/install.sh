@@ -32,8 +32,8 @@ main() {
     exit 1
   fi
 
-  locale-gen --purge en_US.UTF-8
-  echo -e 'LANG="en_US.UTF-8"\nLANGUAGE="en_US:en"\n' > /etc/default/locale
+  LC_ALL=en_US.UTF-8
+  LANG=en_US.UTF-8
 
   BW=/bellwether
   printf "${YELLOW}This is the automatic and guided installation. ${NORMAL}\n"
