@@ -93,7 +93,7 @@ stock void SecondsToTime(int seconds, char time[200], bool ShortDate = true) {
 void Bans_OnClientIDReceived(int client) {
   if(bans_enabled.IntValue == 1 && !StrEqual(server, "")) {
     char url[512] = "users/";
-    StrCat(url, sizeof(url), clients[client]);
+    StrCat(url, sizeof(url), bw_clients[client]);
     StrCat(url, sizeof(url), "/ban?resolved=false&server=");
     StrCat(url, sizeof(url), server);
 
@@ -157,7 +157,7 @@ public Action OnAddBanCommand(int client, const char[] command, int args) {
 
     char adminID[37], serverToBan[37];
 
-    StrCat(adminID, sizeof(adminID),  (client == 0) ? "" : clients[client]);
+    StrCat(adminID, sizeof(adminID),  (client == 0) ? "" : bw_clients[client]);
     StrCat(serverToBan, sizeof(serverToBan), (bans_global.IntValue == 0) ? server : "");
 
     JSONObject payload = new JSONObject();
@@ -254,7 +254,7 @@ public Action OnBanClient(int client, int time, int flags, const char[] reason, 
 
   // insert data into the API
   char adminID[37], serverToBan[37];
-  StrCat(adminID, sizeof(adminID), (admin == 0) ? "" : clients[admin]);
+  StrCat(adminID, sizeof(adminID), (admin == 0) ? "" : bw_clients[admin]);
   StrCat(serverToBan, sizeof(serverToBan), (bans_global.IntValue == 0) ? server : "");
 
   JSONObject payload = new JSONObject();
@@ -269,7 +269,7 @@ public Action OnBanClient(int client, int time, int flags, const char[] reason, 
 
 
   char url[512] = "users/";
-  StrCat(url, sizeof(url), clients[client]);
+  StrCat(url, sizeof(url), bw_clients[client]);
   StrCat(url, sizeof(url), "/ban");
 
   httpClient.Put(url, payload, APINoResponseCall);

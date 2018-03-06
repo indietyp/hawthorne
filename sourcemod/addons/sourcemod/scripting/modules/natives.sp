@@ -15,5 +15,5 @@ public int Native_GetClientID(Handle plugin, int numParams) {
   int client = GetNativeCell(3);
   int maxlength = GetNativeCell(2);
 
-  SetNativeString(1, (!IsFakeClient(client)) ? clients[client] : "", maxlength);
+  SetNativeString(1, (!IsFakeClient(client)) ? bw_clients[client] : "", maxlength);
 }

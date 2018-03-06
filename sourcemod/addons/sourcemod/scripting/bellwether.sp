@@ -41,7 +41,7 @@ public Plugin myinfo = {
 public void OnPluginStart() {
   // Events
   HookEvent("player_disconnect",  Event_Disconnect, EventHookMode_Pre);
-  HookEvent("player_team",    Event_PlayerTeam);
+  HookEvent("player_team",        Event_PlayerTeam);
 
   // Listeners
   AddCommandListener(OnPlayerChatMessage,     "say");

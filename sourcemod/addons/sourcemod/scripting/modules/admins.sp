@@ -2,7 +2,7 @@
 void Admins_OnClientIDReceived(int client) {
   if(admins_enabled.IntValue == 1 && !StrEqual(server, "")) {
     char url[512] = "users/";
-    StrCat(url, sizeof(url), clients[client]);
+    StrCat(url, sizeof(url), bw_clients[client]);
     StrCat(url, sizeof(url), "?server=");
     StrCat(url, sizeof(url), server);
 

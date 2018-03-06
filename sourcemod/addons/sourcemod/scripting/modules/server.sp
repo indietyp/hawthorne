@@ -18,16 +18,16 @@ void GetServerUUID() {
   IntToString(raw_port, port, sizeof(port));
 
   char url[512] = "servers?ip=";
-  StrCat(url, sizeof(url), serverIP);
+  StrCat(url, sizeof(url), ip);
   StrCat(url, sizeof(url), "&port=");
   StrCat(url, sizeof(url), port);
   httpClient.Get(url, APIGetServerUUID);
 }
 
 public void APIGetServerUUID(HTTPResponse response, any value) {
-  proceed = APIValidator(response)
+  JSONObject proceed = APIValidator(response);
 
-  if (!proceed) return;
+  if (!proceed.GetBool("success")) return;
   JSONObject output = view_as<JSONObject>(response.Data);
   JSONArray data = view_as<JSONArray>(output.Get("result"));
 

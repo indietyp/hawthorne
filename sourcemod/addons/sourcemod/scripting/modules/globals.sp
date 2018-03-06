@@ -14,7 +14,7 @@ char cMuteGagName[][] =  {"mute", "gag", "silence", "unmute", "ungag", "unsilenc
 HTTPClient httpClient;
 
 char server[37] = "",
-     clients[MAXPLAYERS + 1][37],
+     bw_clients[MAXPLAYERS + 1][37],
      last_target[MAXPLAYERS + 1][37];
 
 int iLastMuteGagTime[MAXPLAYERS + 1],

@@ -69,7 +69,7 @@ public Action CMD_PermaMuteGag(int client, int args) {
 
 
     //Save admins last target ID
-    last_target[client] = (client > 0) ? clients[tlist[0]] : "";
+    last_target[client] = (client > 0) ? bw_clients[tlist[0]] : "";
 
 
     //If mute/gag/silence
@@ -97,7 +97,7 @@ public Action CMD_PermaMuteGag(int client, int args) {
 }
 
 void MuteGag_OnClientPutInServer(int client) {
-  if(!StrEqual(clients[client], "")) {
+  if(!StrEqual(bw_clients[client], "")) {
     for (int i = 0; i < 3; i++)
     {
       if((iMuteGagTimeleft[client][i] >= 0 || bMuteGagPermanent[client][i])) {
@@ -112,7 +112,7 @@ void MuteGag_OnClientPutInServer(int client) {
 public Action TryMuteAgainPlayer(Handle tmr, any userID) {
   int target = GetClientOfUserId(userID);
   if(target > 0) {
-    if (!StrEqual(clients[target], "")) {
+    if (!StrEqual(bw_clients[target], "")) {
       for (int i = 0; i < 3; i++) {
         if(iMuteGagTimeleft[target][i] >= 0 || bMuteGagPermanent[target][i]) {
           PerformMuteGag(target, i, true);
@@ -214,7 +214,7 @@ void MuteGag_OnClientIDReceived(int client) {
 
     //Check if client is muted or gagged or silenced
     char url[512] = "users/";
-    StrCat(url, sizeof(url), clients[client]);
+    StrCat(url, sizeof(url), bw_clients[client]);
     StrCat(url, sizeof(url), "/mutegag?resolved=false&server=");
     StrCat(url, sizeof(url), server);
 
@@ -422,7 +422,7 @@ public Action OnPlayerMuteGag(int client, const char[] command, int args) {
 
 
     //Save admins last target ID
-    last_target[client] = (client > 0) ? clients[tlist[0]] : "";
+    last_target[client] = (client > 0) ? bw_clients[tlist[0]] : "";
 
 
     //If mute/gag/silence
@@ -484,7 +484,7 @@ void AddPeopleToMenu(Menu menu)
 void APIMuteGag(int admin, char[] clientID, int type, char[] reason = "", int time = -1) {
   // Update last target for admin
   char adminID[37], serverToBan[37];
-  StrCat(adminID, sizeof(adminID), (admin == 0) ? "" : clients[admin]);
+  StrCat(adminID, sizeof(adminID), (admin == 0) ? "" : bw_clients[admin]);
   StrCat(serverToBan, sizeof(serverToBan), (mutegags_global.IntValue == 0) ? server : "");
 
   JSONObject payload = new JSONObject();
@@ -520,7 +520,7 @@ void APIMuteGag(int admin, char[] clientID, int type, char[] reason = "", int ti
   //Perform mute/gag on player if he is still ingame
   int target = -1;
   for (int i = 1; i < MaxClients; i++) {
-    if(IsClientInGame(i) && !IsFakeClient(i) && StrEqual(clients[i], clientID)) {
+    if(IsClientInGame(i) && !IsFakeClient(i) && StrEqual(bw_clients[i], clientID)) {
       target = i;
 
       if(type < 3) {

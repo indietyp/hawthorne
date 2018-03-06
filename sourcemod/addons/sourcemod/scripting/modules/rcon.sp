@@ -186,7 +186,7 @@ JSONArray AddToList() {
 
       JSONObject player = new JSONObject();
 
-      player.SetString("uuid", clients[i]);
+      player.SetString("uuid", bw_clients[i]);
       player.SetString("username", username);
 
       player.SetInt("team", GetClientTeam(i));

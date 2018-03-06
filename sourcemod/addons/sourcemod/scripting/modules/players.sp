@@ -1,5 +1,5 @@
 void Players_OnClientAuthorized(int client) {
-  clients[client] = "";
+  bw_clients[client] = "";
 
   if (StrEqual(server, "")) {
     GetServerUUID();
@@ -29,13 +29,13 @@ void Players_OnClientAuthorized(int client) {
 
 void Players_OnClientDisconnect(int client) {
   JSONObject payload = new JSONObject();
-  payload.SetString("id", clients[client]);
+  payload.SetString("id", bw_clients[client]);
   payload.SetString("server", server);
   payload.SetBool("connected", false);
 
   httpClient.Put("users", payload, APINoResponseCall);
 
-  clients[client] = "";
+  bw_clients[client] = "";
   delete payload;
 }
 
@@ -63,7 +63,7 @@ public void OnClientIsInAPI(HTTPResponse response, any value) {
     return;
   } else {
     JSONObject result = view_as<JSONObject>(output.Get("result"));
-    result.GetString("id", clients[client], 37);
+    result.GetString("id", bw_clients[client], 37);
     delete result;
     OnClientIDReceived(client);
   }
@@ -87,7 +87,7 @@ void PlayersOnline_OnClientDisconnect(int client) {
   httpClient.Put("users", payload, OnClientDisconnectAPI);
   delete payload;
 
-  clients[client] = "";
+  bw_clients[client] = "";
 }
 
 public void OnClientDisconnectAPI(HTTPResponse response, any value) {

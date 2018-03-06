@@ -13,7 +13,7 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 
 void OnServerIDUpdated() {
   for (int i = 1; i <= MaxClients; i++)
-    if(IsClientInGame(i) && !IsFakeClient(i) && clients[i] < 1) {
+    if(IsClientInGame(i) && !IsFakeClient(i) && bw_clients[i] < 1) {
 
       MuteGag_OnClientDisconnect(i);
 
@@ -30,7 +30,7 @@ void OnClientIDReceived(int client) {
   //Push event
   Call_StartForward(forward_client);
   Call_PushCell(client);
-  //Call_PushCell(clients[client]);
+  //Call_PushCell(bw_clients[client]);
   Call_Finish();
 
   Bans_OnClientIDReceived(client);
@@ -47,8 +47,7 @@ public void OnMapStart() {
 }
 
 public void OnClientPutInServer(int client) {
-  if(!IsFakeClient(client))
-  {
+  if(!IsFakeClient(client)) {
     MuteGag_OnClientPutInServer(client);
     //PlayersOnline2_OnClientPutInServer(client);
     //Players_OnClientPutInServer(client);
@@ -83,8 +82,7 @@ public Action Event_PlayerTeam(Handle event, const char[] name, bool dontBroadca
 
 //public void OnClientPostAdminCheck(int client)
 public void OnClientAuthorized(int client, const char[] auth) {
-  if(!IsFakeClient(client))
-  {
+  if(!IsFakeClient(client)) {
     Players_OnClientAuthorized(client);
   }
 }
