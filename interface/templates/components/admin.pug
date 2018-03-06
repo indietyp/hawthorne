@@ -77,20 +77,20 @@
           .column.icon.group.pure-u-14-24
             i(data-feather="zap")
             span (root)
+          script.execution.
+            window.ajax.admin.groups(1)
         //- partials/admin/group.pug
-        script.execution.
-          window.ajax.admin.groups(1)
 
       - if perms.core.add_servergroup
         .row.add.pure-g
           .column.icon.group.pure-u-7-24.input-wrapper
             input#inputgroupname(type='text')
             label.adjusted(for='inputgroupname')
-              i.skip(data-feather='users')
+              i.explicit(data-feather='users')
           .column.icon.immunity.pure-u-7-24.input-wrapper
             input#inputimmunityvalue(type='number', min='0', max='100', onkeypress="return isNumeric(event)", oninput="maxLengthCheck(this)", value="0")
             label.adjusted(for='inputimmunityvalue')
-              i.skip.adjusted(data-feather='trending-up')
+              i.explicit.adjusted(data-feather='trending-up')
             .appendix %
 
             script.execution.
@@ -115,7 +115,7 @@
           .column.icon.time.pure-u-7-24.input-wrapper
             input#inputtimevalue(type='text', placeholder='11h 6m')
             label.adjusted(for='inputtimevalue')
-              i.skip(data-feather='clock')
+              i.explicit(data-feather='clock')
           .column.icon.pure-u-3-24
           .column.icon.server.pure-u-7-24
             select#server-input

@@ -1,12 +1,47 @@
-server = (query, that=null) ->
+`
+var cssPath = function(el) {
+    if (!(el instanceof Element)) return;
+    var path = [];
+    while (el.nodeType === Node.ELEMENT_NODE) {
+        if (el.nodeName.toLowerCase() === 'body') {
+          return path.join(" > ");
+        }
+
+        var selector = el.nodeName.toLowerCase();
+        if (el.id) {
+            selector += '#' + el.id;
+        } else {
+            var sib = el, nth = 1;
+            while (sib.nodeType === Node.ELEMENT_NODE && (sib = sib.previousSibling) && nth++);
+            selector += ":nth-child("+nth+")";
+        }
+        path.unshift(selector);
+        el = el.parentNode;
+    }
+    return path.join(" > ");
+}
+`
+
+server = (query, that=null, selected='') ->
   $({'query': query}).ajax('/api/v1/servers', 'GET', (data, status) ->
     data = JSON.parse data
     data = data['result']
 
     if that != null
       formatted = [{'value': 'all', 'label': '<b>all</b>'}]
+
+      if selected == 'all'
+        formatted[0].selected = true
+
       for ele in data
-        formatted.push {'value': ele.id, 'label': ele.name}
+        fmt =
+          value: ele.id
+          label: ele.name
+
+        if selected != '' and fmt.value == selected
+          fmt.selected = true
+
+        formatted.push fmt
       that.setChoices(formatted, 'value', 'label', true)
 
     return data
@@ -94,14 +129,93 @@ remove = (mode='', that) ->
   return
 
 save = (mode='', that) ->
+  node = that.parentElement.parentElement.parentElement
+
+  switch mode
+    when 'admin__administrator'
+      role = $(node.querySelector('input.role')).val()
+      uuid = $(node.querySelector('input.uuid')).val()
+
+      selector = window.api.storage[uuid + '#' + role]
+      replacement = selector.getValue(true)
+
+      payloads = [
+        payload =
+          promotion: false
+          role: role
+        payload =
+          promotion: true
+          role: replacement
+      ]
+
+      success = 0
+      for payload in payloads
+        window.endpoint.users[uuid].post(payload, (err, data) ->
+          if (!data.success)
+            return
+
+          success += 1
+        )
+
+      state = that.getAttribute 'class'
+      old = state
+
+      if success == 2
+        state += ' explicit red'
+      else
+        state += ' explicit green'
+      that.setAttribute 'class', state
+
+      setTimeout(->
+        that.setAttribute 'class', old
+      , 1200)
+
+    when 'admin__groups'
+      scope = cssPath node
+
+      uuid = $("#{scope} input.uuid").val()
+      console.log uuid
+
+      data =
+        name: $("#{scope} .name span").html()
+        server: window.api.storage[uuid].getValue(true)
+        immunity: parseInt $("#{scope} .immunity span").html().match(/([0-9]|[1-8][0-9]|9[0-9]|100)(?:%)?$/)[1]
+        usetime: -1
+        flags: ''
+
+      $("#{scope} .immunity span").html("#{data.immunity}%")
+      if data.server == 'all'
+        data.server = null
+
+      for i in $("#{scope} .actions input:checked")
+        data.flags += $(i).val()
+
+      time = $("#{scope} .usetime span").html()
+      if time is not null or time != ''
+        data.usetime = window.style.duration.parse(time)
+
+      window.endpoint.roles[uuid].post(data, (err, data) ->
+        state = that.getAttribute 'class'
+        old = state
+
+        if data.success
+          state += ' explicit green'
+        else
+          state += ' explicit red'
+        that.setAttribute 'class', state
+
+        setTimeout(->
+          that.setAttribute 'class', old
+        , 1200)
+
+        return data
+      )
   return
 
 edit = (mode='', that) ->
   if that.getAttribute('class').match /save/
     # this is for the actual process of saving
     save mode, that
-    console.log 'saving'
-
     return
 
   node = that.parentElement.parentElement.parentElement
@@ -112,12 +226,13 @@ edit = (mode='', that) ->
     when 'admin__administrator'
       group = node.querySelector('.icon.group')
 
+      uuid = $(node.querySelector('input.uuid')).val()
       selected = $(node.querySelector('input.role')).val()
       target = group.querySelector('span')
       $(target).remove()
 
-      $(group).htmlAppend("<select id='group-#{selected}'></select>")
-      selector = new Choices("#group-#{selected}", {
+      $(group).htmlAppend("<select id='group-#{uuid + '---' + selected}'></select>")
+      selector = new Choices("#group-#{uuid + '---' + selected}", {
         searchEnabled: false,
         choices: [],
         classNames: {
@@ -125,7 +240,71 @@ edit = (mode='', that) ->
         }
       })
 
+      selector.passedElement.addEventListener('change', (e) ->
+        target = $(node.querySelector('.server span'))
+        server = selector.getValue().customProperties.server
+        if server == null
+          target.html 'all'
+        else
+          window.endpoint.servers[server].get((err, data) ->
+            if not data.success
+              return
+            target.html data.result.name
+          )
+
+      , false)
+
+      window.api.storage[uuid + '#' + selected] = selector
       window.api.groups('', selector, selected)
+
+    when 'admin__groups'
+      server = node.querySelector('.icon.server')
+
+      uuid = $(node.querySelector('input.uuid')).val()
+      selected = $(node.querySelector('input.server')).val()
+
+      if selected == ''
+        selected = 'all'
+
+      target = server.querySelector('span')
+      $(target).remove()
+
+      $(server).htmlAppend("<select id='server-#{uuid}'></select>")
+      selector = new Choices("#server-#{uuid}", {
+        searchEnabled: false,
+        choices: [],
+        classNames: {
+          containerOuter: 'choices edit small'
+        }
+      })
+
+      actions = node.querySelector('.icon.group .actions')
+      $(actions).removeClass('disabled').addClass('enabled')
+
+      scope = cssPath node
+
+      $(scope + " .icon.usetime").addClass('input-wrapper')
+      $(scope + " .icon.usetime span i").remove()
+      $(scope + " .icon.usetime span").on('focusout', (event, ui) ->
+        field = $(this)
+        sd = field.html()
+        seconds = window.style.duration.parse(sd)
+
+        if sd != '' and seconds == 0
+          field.css 'border-bottom-color', '#FF404B'
+        else
+          field.css 'border-bottom-color', ''
+          field.html window.style.duration.string(seconds)
+      )
+
+      $(scope + " .icon.immunity").addClass('input-wrapper')
+      $(scope + " .icon.name").addClass('input-wrapper')
+
+      $(scope + " .icon span").addClass('input')
+      $(scope + " .icon span").attr('contenteditable', 'true')
+
+      window.api.storage[uuid] = selector
+      window.api.servers('', selector, selected)
 
   $(that).css('opacity', '0')
   setTimeout(->
@@ -295,3 +474,4 @@ window.api =
   submit: submit
   remove: remove
   edit: edit
+  storage: {}

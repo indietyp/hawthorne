@@ -120,6 +120,14 @@ input[type="number"]
 .input-wrapper
     position: relative
 
+    & > svg
+        position: absolute
+        transition: stroke 0.5s ease-out
+        stroke: black
+        padding-right: 0 !important
+        top: 2px
+        left: 0
+
     .appendix
         position: absolute
         top: 4px
@@ -130,7 +138,13 @@ input[type="number"]
         outline: none
         border: none
         font-size: 1em
-        width: 100%
+
+        &:not(.input)
+            width: 100%
+
+        &.input
+            width: calc(100% - 36px)
+
         padding-left: 32px
         margin-right: 6px
         background: none
@@ -143,7 +157,7 @@ input[type="number"]
             &:not(.adjusted)
                 top: 10px
             &.adjusted
-                top: 4px
+                top: 2px
 
             left: 0
 
@@ -253,7 +267,7 @@ input[type="number"]
 
                 &:not(.disabled)
                     & input[type="checkbox"]:checked + label
-                        color: $primary
+                        color: $green
 
                     & input[type="checkbox"]:not(:checked) + label
                         color: $red
@@ -374,7 +388,9 @@ input[type="number"]
             height: 2rem
 
 .feather
-    stroke: white
+    &:not(.explicit)
+        stroke: white
+
     transition: stroke .3s ease-out
 
     &.animated
@@ -382,7 +398,7 @@ input[type="number"]
         transform-origin: 12px 12px 0px
 
         &.opacity
-            transition: opacity .3s ease-out
+            transition: opacity .3s ease-out, stroke .6s ease-out
             opacity: 0
 
             &.animate
@@ -474,7 +490,14 @@ input[type="number"]
     width: 100%
 
     &.edit
-        width: calc(100% - 48px)
+        &:not(.small)
+            width: calc(100% - 36px)
+        &.small
+            width: calc(100% - 36px*2)
+
+            & .choices__list, & .choices__item
+                overflow: hidden
+                white-space: nowrap
 
         & .choices__list, & .choices__item:not(.choices__item--choice)
             padding: 0px !important

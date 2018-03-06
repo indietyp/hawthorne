@@ -1,4 +1,5 @@
 from core.models import User, Country, UserLogIP, UserLogTime, UserLogUsername, Server, ServerGroup, Ban, Mutegag
+import re
 from django.views.decorators.csrf import csrf_exempt
 from core.utils import UniPanelJSONEncoder
 from django.utils import timezone
@@ -48,7 +49,7 @@ def list(request, validated=[], *args, **kwargs):
         update = True
       except Exception:
         user = User.objects.create_user(username=str(validated['steamid']), is_active=False)
-        user.namespace = validated['username']
+
     elif validated['id'] is not None:
       user = User.objects.get(id=validated['id'])
       update = True
@@ -88,7 +89,15 @@ def list(request, validated=[], *args, **kwargs):
     logname.connections += 1
     logname.save()
 
-    user.namespace = validated['username']
+    # https://stackoverflow.com/questions/13729638/how-can-i-filter-emoji-characters-from-my-input-so-i-can-save-in-mysql-5-5
+    try:
+      # UCS-4
+      highpoints = re.compile(u'[\U00010000-\U0010ffff]')
+    except re.error:
+      # UCS-2
+      highpoints = re.compile(u'[\uD800-\uDBFF][\uDC00-\uDFFF]')
+
+    user.namespace = highpoints.sub(u'\u25FD', validated['username'])
     user.save()
 
     if update:

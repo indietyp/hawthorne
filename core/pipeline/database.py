@@ -1,3 +1,4 @@
+import re
 from core.models import Country
 
 
@@ -13,7 +14,14 @@ def populate(strategy, details, backend, user=None, *args, **kwargs):
       if len(information['realname']) > 1:
         user.last_name = information['realname'][-1]
 
-    user.namespace = information['personaname']
+    try:
+      # UCS-4
+      highpoints = re.compile(u'[\U00010000-\U0010ffff]')
+    except re.error:
+      # UCS-2
+      highpoints = re.compile(u'[\uD800-\uDBFF][\uDC00-\uDFFF]')
+
+    user.namespace = highpoints.sub(u'\u25FD', information['personaname'])
     user.country = Country.objects.get_or_create(code=information['loccountrycode'])[0]
     user.avatar = information['avatar']
     user.profile = information['profileurl']

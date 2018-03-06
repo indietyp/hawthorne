@@ -2,36 +2,39 @@
 
 .row.pure-g
   input.hidden.uuid(type='hidden', value=data.id)
-  .column.icon.username.pure-u-7-24
-    i(data-feather="users")
+  .column.icon.name.pure-u-7-24
+    i.explicit(data-feather="users")
     span= data.name
-  .column.icon.server.pure-u-7-24
-    i(data-feather="trending-up")
+  .column.icon.immunity.pure-u-7-24
+    i.explicit(data-feather="trending-up")
     span= data.immunity
       |%
-  .column.icon.server.pure-u-7-24
-    i(data-feather="clock")
+  .column.icon.usetime.pure-u-7-24
+    i.explicit(data-feather="clock")
     - if data.usetime is None
-      i.bpi-unlimited
+      span
+        i.bpi-unlimited
     - else
       span= data.usetime|duration
   .column.icon.pure-u-3-24
     .spacer
     - if perms.core.modify_servergroup
       .action
-        i(data-feather="edit-2")
+        i.explicit(data-feather="edit-2", onclick="window.api.edit('admin__groups', this)")
     - if perms.core.delete_servergroup
       .action
-        i(data-feather="trash-2", onclick="window.api.remove('admin__groups', this)")
+        i.explicit(data-feather="trash-2", onclick="window.api.remove('admin__groups', this)")
   .column.icon.server.pure-u-7-24
+    input.server.hidden(type='hidden', value="{{data.server.id}}")
     i.explicit.white(data-feather="hard-drive")
-    i(data-feather="hard-drive")
-    if data.server is not None
-      = data.server.name
-    else
-      | all
+    i.explicit(data-feather="hard-drive")
+    span(style="width:calc(100% - 36px*2)")
+      if data.server is not None
+        = data.server.name
+      else
+        | all
   .column.icon.group.pure-u-14-24
-    i(data-feather="zap")
+    i.explicit(data-feather="zap")
     .actions.disabled
       - if data.flags.can_reservation
         input(type='checkbox', checked, id="reservation-{{data.id|stringformat:'s'}}", value='A').tiny

@@ -134,7 +134,7 @@ validation = {
                     'permission': ['core.view_servergroup']},
             'POST': {'validation': {'name': {'type': 'string', 'default': None, 'nullable': True},
                                     'immunity': {'type': 'integer', 'default': None, 'nullable': True, 'min': 0, 'max': 100},
-                                    'usetime': {'type': 'integer', 'default': None, 'nullable': True, 'min': 0},
+                                    'usetime': {'type': 'integer', 'default': None, 'nullable': True, 'min': -1},
                                     'server': {'type': 'uuid', 'default': None, 'nullable': True},
                                     'flags': {'type': 'string', 'default': None, 'nullable': True, 'regex': r'[A-N]+'},
                                     'members': {'type': 'list', 'default': [], 'schema': {'type': 'uuid'}}},

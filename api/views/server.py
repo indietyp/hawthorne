@@ -48,15 +48,16 @@ def list(request, validated={}, *args, **kwargs):
 @require_http_methods(['POST', 'GET', 'DELETE'])
 def detailed(request, validated={}, s=None, *args, **kwargs):
   server = Server.objects.get(id=s)
+
   if request.method == 'GET':
-    status = RConSourcemod(server).status()
-    # print(status)
+    # status = RConSourcemod(server).status()
+
     status = {}
     return {'adress': "{}:{}".format(server.ip, server.port),
             'name': server.name,
             'status': status}
   elif request.method == 'POST':
-    # resolve domain into ip - maybe domain field?
+    # resolve domain into ip
     if validated['name'] is not None:
       server.name = validated['name']
 

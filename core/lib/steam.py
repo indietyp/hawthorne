@@ -1,3 +1,4 @@
+import re
 import steamapi
 from django.conf import settings
 from core.models import Country
@@ -8,7 +9,15 @@ def populate(user):
     steamapi.core.APIConnection(api_key=settings.SOCIAL_AUTH_STEAM_API_KEY, validate_key=True)
     fetched = steamapi.user.SteamUser(userid=user.username)
 
-    user.namespace = fetched.name
+    # https://stackoverflow.com/questions/13729638/how-can-i-filter-emoji-characters-from-my-input-so-i-can-save-in-mysql-5-5
+    try:
+      # UCS-4
+      highpoints = re.compile(u'[\U00010000-\U0010ffff]')
+    except re.error:
+      # UCS-2
+      highpoints = re.compile(u'[\uD800-\uDBFF][\uDC00-\uDFFF]')
+    user.namespace = highpoints.sub(u'\u25FD', fetched.name)
+
     user.profile = fetched.profile_url
     user.avatar = fetched.avatar
 
@@ -21,11 +30,9 @@ def populate(user):
       realname = None
 
     if realname is not None:
-      print(realname)
       realname = realname.split(' ')
       user.first_name = realname[0]
       if len(realname) > 1:
         user.last_name = realname[-1]
 
-    print('populated')
     user.save()

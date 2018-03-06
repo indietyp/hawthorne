@@ -15,7 +15,7 @@ from django.views.decorators.http import require_http_methods
 @require_http_methods(['GET', 'PUT'])
 def list(request, validated={}, *args, **kwargs):
   if request.method == 'GET':
-    roles = ServerGroup.objects.filter(name__contains=validated['match']).values('id', 'name')
+    roles = ServerGroup.objects.filter(name__icontains=validated['match']).values('id', 'name', 'server')
 
     limit = validated['limit']
     offset = validated['offset']
@@ -89,7 +89,10 @@ def detailed(request, r=None, validated={}, *args, **kwargs):
       role.server = Server.objects.get(id=validated['server'])
 
     if validated['usetime'] is not None:
-      role.usetime = datetime.timedelta(seconds=validated['usetime'])
+      if validated['usetime'] > 0:
+        role.usetime = datetime.timedelta(seconds=validated['usetime'])
+      else:
+        role.usetime = None
 
     if validated['flags'] is not None:
       role.flags = role.flags.convert(validated['flags'])

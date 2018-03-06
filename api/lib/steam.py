@@ -1,5 +1,5 @@
 import requests
-import steamapi
+from steam import WebAPI
 import uuid
 import json
 from lxml import etree
@@ -40,18 +40,20 @@ def search(query=''):
     image = CSSSelector('div.avatarMedium img')
 
     output = []
-    steamapi.core.APIConnection(api_key=settings.SOCIAL_AUTH_STEAM_API_KEY, validate_key=True)
+
+    api = WebAPI(settings.SOCIAL_AUTH_STEAM_API_KEY)
     for result in results(html):
         tmp = {}
         tmp['name'] = credentials(result)[0].text
 
         uri = credentials(result)[0].attrib['href']
         if '/id/' in uri:
-            tmp['url'] = steamapi.user.SteamUser(userurl=uri.split('/id/')[-1]).steamid
+            response = api.ISteamUser.ResolveVanityURL(vanityurl=uri.split('/id/')[-1], url_type=1)
+            tmp['url'] = response['response']['steamid']
         else:
             tmp['url'] = uri.split('/profiles/')[-1]
-        tmp['image'] = image(result)[0].attrib['src']
 
+        tmp['image'] = image(result)[0].attrib['src']
         output.append(tmp)
 
     return output

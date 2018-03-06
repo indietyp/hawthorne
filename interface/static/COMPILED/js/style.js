@@ -29,16 +29,22 @@
   // or 11h 11m, or 11h, or 11m, or 1d
   // returns a number of seconds.
   parseDuration = function(sDuration) {
-    var days, drx, hours, hrx, minutes, mrx;
+    var days, drx, hours, hrx, minutes, morx, mrx, wrx, yrx;
     if (sDuration === null || sDuration === '') {
       return 0;
     }
-    mrx = new RegExp(/([0-9][0-9]?)[ ]?m/);
+    mrx = new RegExp(/([0-9][0-9]?)[ ]?m(?:[^o]|$)/);
     hrx = new RegExp(/([0-9][0-9]?)[ ]?h/);
     drx = new RegExp(/([0-9]{1,2})[ ]?d/);
+    wrx = new RegExp(/([0-9][0-9]?)[ ]?w/);
+    morx = new RegExp(/([0-9][0-9]?)[ ]?mo/);
+    yrx = new RegExp(/([0-9][0-9]?)[ ]?y/);
     days = 0;
     hours = 0;
     minutes = 0;
+    if (morx.test(sDuration)) {
+      days += morx.exec(sDuration)[1] * 31;
+    }
     if (mrx.test(sDuration)) {
       minutes = mrx.exec(sDuration)[1];
     }
@@ -46,7 +52,13 @@
       hours = hrx.exec(sDuration)[1];
     }
     if (drx.test(sDuration)) {
-      days = drx.exec(sDuration)[1];
+      days += drx.exec(sDuration)[1];
+    }
+    if (wrx.test(sDuration)) {
+      days += wrx.exec(sDuration)[1] * 7;
+    }
+    if (yrx.test(sDuration)) {
+      days += yrx.exec(sDuration)[1] * 365;
     }
     return to_seconds(days, hours, minutes);
   };
