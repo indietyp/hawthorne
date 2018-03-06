@@ -66,7 +66,7 @@ public void OnPluginStart() {
 }
 
 public void OnConfigsExecuted() {
-  char protocol[6], ip[12], port[6], token[37];
+  char protocol[6], ip[16], port[6], token[37];
   if (GetConVarInt(manager_protocol) == 1) {
     protocol = "https";
   } else {
