@@ -1,4 +1,4 @@
 import multiprocessing
 
-bind = "unix:/tmp/bellwether.sock"
+bind = "unix:/tmp/hawthorne.sock"
 workers = multiprocessing.cpu_count() * 2 + 1

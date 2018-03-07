@@ -111,7 +111,7 @@ public Action CMD_BanKick(int client, int args) {
     int iLength = StringToInt(cLength);
     if(iLength > 0) SecondsToTime(iLength * 60, cTime); else cTime = "permanent";
     ClientBanKick(target, cAdminUsername, cReason, cTime, cTime);
-    ReplyToCommand(client, "[Bellwether] Player ban kicked!");
+    ReplyToCommand(client, "[hawthorne] Player ban kicked!");
   }
 
   return Plugin_Handled;
@@ -186,7 +186,7 @@ JSONArray AddToList() {
 
       JSONObject player = new JSONObject();
 
-      player.SetString("uuid", bw_clients[i]);
+      player.SetString("uuid", ht_clients[i]);
       player.SetString("username", username);
 
       player.SetInt("team", GetClientTeam(i));

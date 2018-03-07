@@ -210,6 +210,16 @@ save = (mode='', that) ->
 
         return data
       )
+
+    when 'ban'
+      console.log 'placeholder'
+
+    when 'mutegag'
+      console.log 'placeholder'
+
+    when 'server'
+      console.log 'placeholder'
+
   return
 
 edit = (mode='', that) ->

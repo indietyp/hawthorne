@@ -5,7 +5,7 @@ void GetServerUUID() {
   Handle host_port = FindConVar("hostport");
 
   if (host_ip == INVALID_HANDLE || host_port == INVALID_HANDLE) {
-    LogError("[Bellwether] Failed to get the ip or port of the server, please fix the convars hostip and hostport");
+    LogError("[hawthorne] Failed to get the ip or port of the server, please fix the convars hostip and hostport");
     return;
   }
 
@@ -32,7 +32,7 @@ public void APIGetServerUUID(HTTPResponse response, any value) {
   JSONArray data = view_as<JSONArray>(output.Get("result"));
 
   if (data.Length == 0) {
-    LogError("[Bellwether] Failed to find the server. It seems not to exist. Please check the webpage.");
+    LogError("[hawthorne] Failed to find the server. It seems not to exist. Please check the webpage.");
     return;
   }
 

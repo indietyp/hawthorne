@@ -19,13 +19,13 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': '/var/log/bellwether/debug.log',
+            'filename': '/var/log/hawthorne/debug.log',
             'formatter': 'verbose'
         },
         'interface': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': '/var/log/bellwether/interface.log',
+            'filename': '/var/log/hawthorne/interface.log',
             'formatter': 'request'
         },
     },
@@ -57,7 +57,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
 
-        'NAME': 'bellwether',
+        'NAME': 'hawthorne',
         'USER': 'root',
         'PASSWORD': '',
 

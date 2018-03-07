@@ -1,5 +1,5 @@
 """
-WSGI config for Bellwether project.
+WSGI config for hawthorne project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

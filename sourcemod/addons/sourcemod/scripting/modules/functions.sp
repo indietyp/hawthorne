@@ -1,19 +1,19 @@
-void BW_OnPluginStart() {
-  BW_InitConVars();
+void Hawthorne_OnPluginStart() {
+  Hawthorne_InitConVars();
   MuteGag_OnPluginStart();
   RconCommands_OnPluginStart();
 }
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max) {
-  BW_InitConVars();
-  RegPluginLibrary("bellwether");
+  Hawthorne_InitConVars();
+  RegPluginLibrary("hawthorne");
   CreateNatives();
   return APLRes_Success;
 }
 
 void OnServerIDUpdated() {
   for (int i = 1; i <= MaxClients; i++)
-    if(IsClientInGame(i) && !IsFakeClient(i) && bw_clients[i] < 1) {
+    if(IsClientInGame(i) && !IsFakeClient(i) && ht_clients[i] < 1) {
 
       MuteGag_OnClientDisconnect(i);
 
@@ -30,7 +30,7 @@ void OnClientIDReceived(int client) {
   //Push event
   Call_StartForward(forward_client);
   Call_PushCell(client);
-  //Call_PushCell(bw_clients[client]);
+  //Call_PushCell(ht_clients[client]);
   Call_Finish();
 
   Bans_OnClientIDReceived(client);

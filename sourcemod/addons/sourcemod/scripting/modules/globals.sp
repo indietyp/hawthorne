@@ -1,5 +1,5 @@
-#define PREFIX          "\x3 \x4[Bellwether] \x1"
-#define PREFIX_BAD      "\x3 \x7[Bellwether] \x1"
+#define PREFIX          "\x3 \x4[hawthorne] \x1"
+#define PREFIX_BAD      "\x3 \x7[hawthorne] \x1"
 #define TYPE_MUTE       0
 #define TYPE_GAG        1
 #define TYPE_SILENCE    2
@@ -14,7 +14,7 @@ char cMuteGagName[][] =  {"mute", "gag", "silence", "unmute", "ungag", "unsilenc
 HTTPClient httpClient;
 
 char server[37] = "",
-     bw_clients[MAXPLAYERS + 1][37],
+     ht_clients[MAXPLAYERS + 1][37],
      last_target[MAXPLAYERS + 1][37];
 
 int iLastMuteGagTime[MAXPLAYERS + 1],

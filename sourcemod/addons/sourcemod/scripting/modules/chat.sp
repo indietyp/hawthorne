@@ -14,8 +14,8 @@ public Action OnPlayerChatMessage(int client, const char[] command, int argc) {
   if (handled > 0) return Plugin_Handled;
 
   if (logs_enabled.IntValue == 0 || StrEqual(server, "")) return Plugin_Continue;
-  if (StrEqual(bw_clients[client], "")) {
-    LogError("[Bellwether] Failed to send message to the API of the manager, the client UUID was not fetched.");
+  if (StrEqual(ht_clients[client], "")) {
+    LogError("[hawthorne] Failed to send message to the API of the manager, the client UUID was not fetched.");
     return Plugin_Continue;
   }
 
@@ -29,7 +29,7 @@ stock void SendChatMessage(int client, char[] message, int type = 0) {
   GetClientIP(client, ip, sizeof(ip));
 
   JSONObject payload = new JSONObject();
-  payload.SetString("user", bw_clients[client]);
+  payload.SetString("user", ht_clients[client]);
   payload.SetString("server", server);
   payload.SetString("ip", ip);
   payload.SetString("message", message);

@@ -30,11 +30,11 @@
 
 
 public Plugin myinfo = {
-  name = "Bellwether",
+  name = "hawthorne",
   author = "indietyp & boomix",
-  description = "Bellwether Admin Panel",
+  description = "hawthorne Admin Panel",
   version = "2.00",
-  url = "bellwether.com"
+  url = "hawthorne.in"
 };
 
 
@@ -62,7 +62,7 @@ public void OnPluginStart() {
 
   //RegConsoleCmd("sm_online", CMD_Online);
 
-  BW_OnPluginStart();
+  Hawthorne_OnPluginStart();
 }
 
 public void OnConfigsExecuted() {
@@ -106,18 +106,18 @@ public void APINoResponseCall(HTTPResponse response, any value) {
 
 bool APIValidator(HTTPResponse response) {
   if (response.Status != HTTPStatus_OK) {
-    LogError("[Bellwether] API ERROR (request did not return 200 OK)");
+    LogError("[hawthorne] API ERROR (request did not return 200 OK)");
     return false;
   }
 
   if (response.Data == null) {
-    LogError("[Bellwether] API ERROR (no response data received)");
+    LogError("[hawthorne] API ERROR (no response data received)");
     return false;
   }
 
   JSONObject data = view_as<JSONObject>(response.Data);
   if (data.GetBool("success") == false) {
-    LogError("[Bellwether] API ERROR (api call failed)");
+    LogError("[hawthorne] API ERROR (api call failed)");
     return false;
   }
 

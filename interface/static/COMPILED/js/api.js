@@ -224,6 +224,15 @@ var cssPath = function(el) {
           }, 1200);
           return data;
         });
+        break;
+      case 'ban':
+        console.log('placeholder');
+        break;
+      case 'mutegag':
+        console.log('placeholder');
+        break;
+      case 'server':
+        console.log('placeholder');
     }
   };
 

@@ -2,7 +2,7 @@
 void Admins_OnClientIDReceived(int client) {
   if(admins_enabled.IntValue == 1 && !StrEqual(server, "")) {
     char url[512] = "users/";
-    StrCat(url, sizeof(url), bw_clients[client]);
+    StrCat(url, sizeof(url), ht_clients[client]);
     StrCat(url, sizeof(url), "?server=");
     StrCat(url, sizeof(url), server);
 
@@ -14,7 +14,7 @@ public void GetClientAdmin(HTTPResponse response, any value) {
   int client = value;
 
   if(response.Status != 200 && response.Status != 403) {
-    LogError("[bellwether] API ERROR (no response data)");
+    LogError("[hawthorne] API ERROR (no response data)");
     return;
   }
 
@@ -25,7 +25,7 @@ public void GetClientAdmin(HTTPResponse response, any value) {
   int success = output.GetBool("success");
 
   if (success == false) {
-    LogError("[bellwether] API ERROR (api call failed)");
+    LogError("[hawthorne] API ERROR (api call failed)");
     return;
   } else {
     JSONObject result = view_as<JSONObject>(output.Get("result"));

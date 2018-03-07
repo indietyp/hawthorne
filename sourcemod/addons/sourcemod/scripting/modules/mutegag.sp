@@ -1,10 +1,10 @@
 // TODO: TESTING
 void MuteGag_OnPluginStart() {
   //Get file locations
-  BuildPath(Path_SM, cMuteReasonsFile,    sizeof(cMuteReasonsFile),     "configs/bellwether/mute-reasons.txt");
-  BuildPath(Path_SM, cGagReasonsFile,     sizeof(cGagReasonsFile),      "configs/bellwether/gag-reasons.txt");
-  BuildPath(Path_SM, cSilenceReasonsFile, sizeof(cSilenceReasonsFile),  "configs/bellwether/silence-reasons.txt");
-  BuildPath(Path_SM, cPunishmentTimeFile, sizeof(cPunishmentTimeFile),  "configs/bellwether/punishment-times.txt");
+  BuildPath(Path_SM, cMuteReasonsFile,    sizeof(cMuteReasonsFile),     "configs/hawthorne/mute-reasons.txt");
+  BuildPath(Path_SM, cGagReasonsFile,     sizeof(cGagReasonsFile),      "configs/hawthorne/gag-reasons.txt");
+  BuildPath(Path_SM, cSilenceReasonsFile, sizeof(cSilenceReasonsFile),  "configs/hawthorne/silence-reasons.txt");
+  BuildPath(Path_SM, cPunishmentTimeFile, sizeof(cPunishmentTimeFile),  "configs/hawthorne/punishment-times.txt");
 
   //Create array lists
   UpdateConfigs();
@@ -69,7 +69,7 @@ public Action CMD_PermaMuteGag(int client, int args) {
 
 
     //Save admins last target ID
-    last_target[client] = (client > 0) ? bw_clients[tlist[0]] : "";
+    last_target[client] = (client > 0) ? ht_clients[tlist[0]] : "";
 
 
     //If mute/gag/silence
@@ -97,7 +97,7 @@ public Action CMD_PermaMuteGag(int client, int args) {
 }
 
 void MuteGag_OnClientPutInServer(int client) {
-  if(!StrEqual(bw_clients[client], "")) {
+  if(!StrEqual(ht_clients[client], "")) {
     for (int i = 0; i < 3; i++)
     {
       if((iMuteGagTimeleft[client][i] >= 0 || bMuteGagPermanent[client][i])) {
@@ -112,7 +112,7 @@ void MuteGag_OnClientPutInServer(int client) {
 public Action TryMuteAgainPlayer(Handle tmr, any userID) {
   int target = GetClientOfUserId(userID);
   if(target > 0) {
-    if (!StrEqual(bw_clients[target], "")) {
+    if (!StrEqual(ht_clients[target], "")) {
       for (int i = 0; i < 3; i++) {
         if(iMuteGagTimeleft[target][i] >= 0 || bMuteGagPermanent[target][i]) {
           PerformMuteGag(target, i, true);
@@ -214,7 +214,7 @@ void MuteGag_OnClientIDReceived(int client) {
 
     //Check if client is muted or gagged or silenced
     char url[512] = "users/";
-    StrCat(url, sizeof(url), bw_clients[client]);
+    StrCat(url, sizeof(url), ht_clients[client]);
     StrCat(url, sizeof(url), "/mutegag?resolved=false&server=");
     StrCat(url, sizeof(url), server);
 
@@ -225,12 +225,12 @@ void MuteGag_OnClientIDReceived(int client) {
 public void OnMuteGagCheck(HTTPResponse response, any value) {
   int client = value;
   if (response.Status != 200) {
-      LogError("[bellwether] API ERROR (request failed)");
+      LogError("[hawthorne] API ERROR (request failed)");
       return;
     }
 
     if (response.Data == null) {
-      LogError("[bellwether] API ERROR (no response data)");
+      LogError("[hawthorne] API ERROR (no response data)");
       return;
     }
 
@@ -238,7 +238,7 @@ public void OnMuteGagCheck(HTTPResponse response, any value) {
     int success = output.GetBool("success");
 
     if (success == false) {
-      LogError("[bellwether] API ERROR (api call failed)");
+      LogError("[hawthorne] API ERROR (api call failed)");
       return;
 
     } else {
@@ -422,7 +422,7 @@ public Action OnPlayerMuteGag(int client, const char[] command, int args) {
 
 
     //Save admins last target ID
-    last_target[client] = (client > 0) ? bw_clients[tlist[0]] : "";
+    last_target[client] = (client > 0) ? ht_clients[tlist[0]] : "";
 
 
     //If mute/gag/silence
@@ -484,7 +484,7 @@ void AddPeopleToMenu(Menu menu)
 void APIMuteGag(int admin, char[] clientID, int type, char[] reason = "", int time = -1) {
   // Update last target for admin
   char adminID[37], serverToBan[37];
-  StrCat(adminID, sizeof(adminID), (admin == 0) ? "" : bw_clients[admin]);
+  StrCat(adminID, sizeof(adminID), (admin == 0) ? "" : ht_clients[admin]);
   StrCat(serverToBan, sizeof(serverToBan), (mutegags_global.IntValue == 0) ? server : "");
 
   JSONObject payload = new JSONObject();
@@ -520,7 +520,7 @@ void APIMuteGag(int admin, char[] clientID, int type, char[] reason = "", int ti
   //Perform mute/gag on player if he is still ingame
   int target = -1;
   for (int i = 1; i < MaxClients; i++) {
-    if(IsClientInGame(i) && !IsFakeClient(i) && StrEqual(bw_clients[i], clientID)) {
+    if(IsClientInGame(i) && !IsFakeClient(i) && StrEqual(ht_clients[i], clientID)) {
       target = i;
 
       if(type < 3) {
