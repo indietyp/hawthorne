@@ -49,17 +49,17 @@ function update() {
     printf "${GREEN}Restarting supervisor\n${NORMAL}"
     supervisorctl reread
     supervisorctl update
-    supervisorctl restart bellwether
+    supervisorctl restart hawthorne
 
     printf "${GREEN}Success! :+1:\n${NORMAL}"
 }
 
 function usage() {
-    echo "The bellwether toolchain is an effort to make updating and fixing easier."
+    echo "The hawthorne toolchain is an effort to make updating and fixing easier."
     echo ""
     echo "Commands that are currently supported:"
     echo "\t${GREEN}help${NORMAL}   - What you see here."
-    echo "\t${GREEN}update${NORMAL} - Update bellwether to the current version."
+    echo "\t${GREEN}update${NORMAL} - Update hawthorne to the current version."
     echo ""
 }
 

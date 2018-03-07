@@ -34,7 +34,7 @@ main() {
 
   export LC_ALL=C
 
-  dir=/bellwether
+  dir=/hawthorne
   printf "${YELLOW}This is the automatic and guided installation. ${NORMAL}\n"
   printf "${RED}You still need to install a webserver of your choosing and provide a mysql server. ${NORMAL}\n\n"
   printf "Everything will be configured by itelf.\n"
@@ -43,7 +43,7 @@ main() {
   while true; do
     read -p "Do you want to define a custom path? ${GREEN}(y)${NORMAL}es or ${RED}(n)${NORMAL}o: " yn
     case $yn in
-        [Yy]* ) read -p "Where should bellwether be installed? " dir; break;;
+        [Yy]* ) read -p "Where should hawthorne be installed? " dir; break;;
         [Nn]* ) break;;
         * ) echo "Please answer with the answers provided.";;
     esac
@@ -98,8 +98,8 @@ main() {
   }
 
   printf "${BLUE}Cloning the project...${NORMAL}\n"
-  env git clone https://github.com/indietyp/bellwether $dir || {
-    printf "${RED}Error:${NORMAL} git clone of bellwether repo failed\n"
+  env git clone https://github.com/indietyp/hawthorne $dir || {
+    printf "${RED}Error:${NORMAL} git clone of hawthorne repo failed\n"
     exit 1
   }
 
@@ -116,20 +116,20 @@ main() {
   printf "${BLUE}Configuring the project...${NORMAL}\n"
   cp $dir/panel/local.default.py $dir/panel/local.py
   cp $dir/supervisor.default.conf $dir/supervisor.conf
-  mkdir -p /var/log/bellwether
+  mkdir -p /var/log/hawthorne
 
   printf "\n\n${YELLOW}Database configuration:${NORMAL}\n"
   while true; do
     read -p 'Host     (default: localhost):  ' dbhost
     read -p 'Port     (default: 3006):       ' dbport
     read -p 'User     (default: root):       ' dbuser
-    read -p 'Database (default: bellwether): ' dbname
+    read -p 'Database (default: hawthorne): ' dbname
     read -p 'Password:                       ' dbpwd
 
     dbhost=${dbhost:-localhost}
     dbport=${dbport:-3306}
     dbuser=${dbuser:-root}
-    dbname=${dbname:-bellwether}
+    dbname=${dbname:-hawthorne}
 
     export MYSQL_PWD=$dbpwd
     export MYSQL_HOST=$dbhost
@@ -150,7 +150,7 @@ main() {
   # replace the stuff in the local.py and supervisor.conf file
   sed -i "s/'HOST': 'localhost'/'HOST': '$dbhost'/g" $dir/panel/local.py
   sed -i "s/'PORT': 'root'/'PORT': '$dbport'/g" $dir/panel/local.py
-  sed -i "s/'NAME': 'bellwether'/'NAME': '$dbname'/g" $dir/panel/local.py
+  sed -i "s/'NAME': 'hawthorne'/'NAME': '$dbname'/g" $dir/panel/local.py
   sed -i "s/'USER': 'root'/'USER': '$dbuser'/g" $dir/panel/local.py
   sed -i "s/'PASSWORD': ''/'PASSWORD': '$dbpwd'/g" $dir/panel/local.py
 
@@ -165,15 +165,18 @@ main() {
   python3 $dir/manage.py collectstatic
 
   printf "${BLUE}Linking to supervisor...${NORMAL}\n"
-  ln -sr $dir/supervisor.conf /etc/supervisor/conf.d/bellwether.conf
+  ln -sr $dir/supervisor.conf /etc/supervisor/conf.d/hawthorne.conf
   supervisorctl reread
   supervisorctl update
-  supervisorctl restart bellwether
-  printf "Started the unix socket at: ${YELLOW}/tmp/bellwether.sock${NORMAL}\n"
+  supervisorctl restart hawthorne
+  printf "Started the unix socket at: ${YELLOW}/tmp/hawthorne.sock${NORMAL}\n"
+
+  printf "${BLUE}Linking the hawthorne command line tool...${NORMAL}\n"
+  ln -s $dir/tools/toolchain.sh /usr/bin/hawthorne
 
   printf "\n\n${GREEN}You did it (Well rather I did). Everything seems to be installed.${NORMAL}\n"
-  printf "Please look over the $dir/${RED}panel/local.py${NORMAL} to see if you want to configure anything. And restart the supervisor with ${YELLOW}supervisorctl restart bellwether${NORMAL}\n"
-  printf "To configure your webserver please refer to the project wiki: ${YELLOW}https://github.com/indietyp/bellwether/wiki/Webserver-Configuration${NORMAL}\n"
+  printf "Please look over the $dir/${RED}panel/local.py${NORMAL} to see if you want to configure anything. And restart the supervisor with ${YELLOW}supervisorctl restart hawthorne${NORMAL}\n"
+  printf "To configure your webserver please refer to the project wiki: ${YELLOW}https://github.com/indietyp/hawthorne/wiki/Webserver-Configuration${NORMAL}\n"
 }
 
 main
