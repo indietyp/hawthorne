@@ -32,21 +32,18 @@ main() {
     exit 1
   fi
 
-  locale-gen --purge en_US.UTF-8
-  echo -e 'LANG="en_US.UTF-8"\nLANGUAGE="en_US:en"\n' > /etc/default/locale
-
   export LC_ALL=C
 
-  BW=/bellwether
+  dir=/bellwether
   printf "${YELLOW}This is the automatic and guided installation. ${NORMAL}\n"
   printf "${RED}You still need to install a webserver of your choosing and provide a mysql server. ${NORMAL}\n\n"
   printf "Everything will be configured by itelf.\n"
-  printf "The configured installation path used will be ${GREEN}${BW}${NORMAL}\n"
+  printf "The configured installation path used will be ${GREEN}${dir}${NORMAL}\n"
 
   while true; do
     read -p "Do you want to define a custom path? ${GREEN}(y)${NORMAL}es or ${RED}(n)${NORMAL}o: " yn
     case $yn in
-        [Yy]* ) read -p "Where should bellwether be installed? " BW; break;;
+        [Yy]* ) read -p "Where should bellwether be installed? " dir; break;;
         [Nn]* ) break;;
         * ) echo "Please answer with the answers provided.";;
     esac
@@ -91,6 +88,9 @@ main() {
     printf "${BLUE}opensource@indietyp.com${NORMAL} or open an issure\n"
   fi
 
+  # we need that toal path boi
+  dir=$(python3 -c "import os; print(os.path.abspath(os.path.expanduser('$dir')))")
+
 
   hash git >/dev/null 2>&1 || {
     echo "Error: git is not installed"
@@ -98,14 +98,14 @@ main() {
   }
 
   printf "${BLUE}Cloning the project...${NORMAL}\n"
-  env git clone https://github.com/indietyp/bellwether $BW || {
+  env git clone https://github.com/indietyp/bellwether $dir || {
     printf "${RED}Error:${NORMAL} git clone of bellwether repo failed\n"
     exit 1
   }
 
   printf "${BLUE}Installing python3 dependencies...${NORMAL}\n"
   pip3 install gunicorn
-  pip3 install -r $BW/requirements.txt
+  pip3 install -r $dir/requirements.txt
 
   printf "${BLUE}Installing ruby and npm dependencies...${NORMAL}\n"
   curl -sL deb.nodesource.com/setup_8.x | sudo -E bash -
@@ -114,8 +114,8 @@ main() {
   gem install sass --no-user-install
 
   printf "${BLUE}Configuring the project...${NORMAL}\n"
-  cp $BW/panel/local.default.py $BW/panel/local.py
-  cp $BW/supervisor.default.conf $BW/supervisor.conf
+  cp $dir/panel/local.default.py $dir/panel/local.py
+  cp $dir/supervisor.default.conf $dir/supervisor.conf
   mkdir -p /var/log/bellwether
 
   printf "\n\n${YELLOW}Database configuration:${NORMAL}\n"
@@ -148,31 +148,31 @@ main() {
 
   printf "\n\n${GREEN}Just doing some file transmutation magic:${NORMAL}\n"
   # replace the stuff in the local.py and supervisor.conf file
-  sed -i "s/'HOST': 'localhost'/'HOST': '$dbhost'/g" $BW/panel/local.py
-  sed -i "s/'PORT': 'root'/'PORT': '$dbport'/g" $BW/panel/local.py
-  sed -i "s/'NAME': 'bellwether'/'NAME': '$dbname'/g" $BW/panel/local.py
-  sed -i "s/'USER': 'root'/'USER': '$dbuser'/g" $BW/panel/local.py
-  sed -i "s/'PASSWORD': ''/'PASSWORD': '$dbpwd'/g" $BW/panel/local.py
+  sed -i "s/'HOST': 'localhost'/'HOST': '$dbhost'/g" $dir/panel/local.py
+  sed -i "s/'PORT': 'root'/'PORT': '$dbport'/g" $dir/panel/local.py
+  sed -i "s/'NAME': 'bellwether'/'NAME': '$dbname'/g" $dir/panel/local.py
+  sed -i "s/'USER': 'root'/'USER': '$dbuser'/g" $dir/panel/local.py
+  sed -i "s/'PASSWORD': ''/'PASSWORD': '$dbpwd'/g" $dir/panel/local.py
 
-  sed -i "s/SOCIAL_AUTH_STEAM_API_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'/SOCIAL_AUTH_STEAM_API_KEY = '$stapi'/g" $BW/panel/local.py
-  sed -i "s#directory=<replace>#directory=$BW#g" $BW/supervisor.conf
+  sed -i "s/SOCIAL_AUTH_STEAM_API_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'/SOCIAL_AUTH_STEAM_API_KEY = '$stapi'/g" $dir/panel/local.py
+  sed -i "s#directory=<replace>#directory=$dir#g" $dir/supervisor.conf
 
   printf "${BLUE}Executing project setupcommands...${NORMAL}\n"
-  sed -i "s/SECRET_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'/SECRET_KEY = '$(python3 $BW/manage.py generatesecret | tail -1)'/g" $BW/panel/local.py
+  sed -i "s/SECRET_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'/SECRET_KEY = '$(python3 $dir/manage.py generatesecret | tail -1)'/g" $dir/panel/local.py
 
-  python3 $BW/manage.py migrate
-  python3 $BW/manage.py compilestatic
-  python3 $BW/manage.py collectstatic
+  python3 $dir/manage.py migrate
+  python3 $dir/manage.py compilestatic
+  python3 $dir/manage.py collectstatic
 
   printf "${BLUE}Linking to supervisor...${NORMAL}\n"
-  ln -sr $BW/supervisor.conf /etc/supervisor/conf.d/bellwether.conf
+  ln -sr $dir/supervisor.conf /etc/supervisor/conf.d/bellwether.conf
   supervisorctl reread
   supervisorctl update
   supervisorctl restart bellwether
   printf "Started the unix socket at: ${YELLOW}/tmp/bellwether.sock${NORMAL}\n"
 
   printf "\n\n${GREEN}You did it (Well rather I did). Everything seems to be installed.${NORMAL}\n"
-  printf "Please look over the $BW/${RED}panel/local.py${NORMAL} to see if you want to configure anything. And restart the supervisor with ${YELLOW}supervisorctl restart bellwether${NORMAL}\n"
+  printf "Please look over the $dir/${RED}panel/local.py${NORMAL} to see if you want to configure anything. And restart the supervisor with ${YELLOW}supervisorctl restart bellwether${NORMAL}\n"
   printf "To configure your webserver please refer to the project wiki: ${YELLOW}https://github.com/indietyp/bellwether/wiki/Webserver-Configuration${NORMAL}\n"
 }
 

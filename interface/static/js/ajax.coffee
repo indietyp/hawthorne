@@ -50,6 +50,9 @@ admin__group = (page=1) ->
 ban__user = (page=1) ->
   $({'csrfmiddlewaretoken': window.csrftoken}).ajax('/ajax/v1/ban/user/' + page, 'POST', (data, status) ->
     if status == 200
+      if page == 1
+        $("#ban__user").html('')
+
       $("#ban__user").htmlAppend(data)
       feather.replace()
 

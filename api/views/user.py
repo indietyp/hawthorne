@@ -301,7 +301,8 @@ def ban(request, u=None, validated={}, *args, **kwargs):
     else:
       length = None
 
-    ban = Ban(user=user, server=server, reason=validated['reason'], length=length)
+    ban = Ban(user=user, server=server, reason=validated['reason'], length=length, created_by=request.user)
+    ban.save()
 
     RConSourcemod(server).ban(ban)
 
@@ -315,7 +316,6 @@ def ban(request, u=None, validated={}, *args, **kwargs):
   return 'successful, nothing to report'
 
 
-# TESTING
 @csrf_exempt
 @json_response
 @authentication_required
@@ -336,7 +336,7 @@ def mutegag(request, u=None, validated={}, *args, **kwargs):
     if validated['resolved'] is not None:
       mutegags.filter(resolved=validated['resolved'])
 
-    return [m for m in mutegags.values('user', 'issuer', 'created_at', 'reason', 'length', 'resolved', 'type')]
+    return [m for m in mutegags.values('user', 'created_by', 'created_at', 'reason', 'length', 'resolved', 'type', 'updated_by', 'updated_at')]
 
   elif request.method == 'POST':
     if 'server' in validated:
@@ -389,7 +389,7 @@ def mutegag(request, u=None, validated={}, *args, **kwargs):
     if validated['type'] == 'both':
       mutegag_type = 'BO'
 
-    mutegag = Mutegag(user=user, server=server, reason=validated['reason'], length=length, type=mutegag_type, issuer=request.user)
+    mutegag = Mutegag(user=user, server=server, reason=validated['reason'], length=length, type=mutegag_type, created_at=request.user)
     mutegag.save()
 
     RConSourcemod(server).mutegag(mutegag)

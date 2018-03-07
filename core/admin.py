@@ -182,7 +182,8 @@ class BanAdmin(admin.ModelAdmin):
         'updated_at',
         'user',
         'server',
-        'issuer',
+        'created_by',
+        'updated_by',
         'reason',
         'length',
         'resolved',
@@ -192,7 +193,8 @@ class BanAdmin(admin.ModelAdmin):
         'updated_at',
         'user',
         'server',
-        'issuer',
+        'created_by',
+        'updated_by',
         'resolved',
     )
     date_hierarchy = 'created_at'
@@ -222,7 +224,8 @@ class MutegagAdmin(admin.ModelAdmin):
         'updated_at',
         'user',
         'server',
-        'issuer',
+        'created_by',
+        'updated_by',
         'type',
         'reason',
         'length',
@@ -233,7 +236,8 @@ class MutegagAdmin(admin.ModelAdmin):
         'updated_at',
         'user',
         'server',
-        'issuer',
+        'created_by',
+        'updated_by',
         'resolved',
     )
     date_hierarchy = 'created_at'

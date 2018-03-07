@@ -268,7 +268,9 @@ class Server(BaseModel):
 class Ban(BaseModel):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   server = models.ForeignKey(Server, on_delete=models.CASCADE, null=True)
-  issuer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ban_issuer')
+
+  created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ban_issuer')
+  updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ban_updated_by')
 
   reason = models.CharField(max_length=255)
   length = models.DurationField(null=True)
@@ -312,7 +314,9 @@ class Chat(BaseModel):
 class Mutegag(BaseModel):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   server = models.ForeignKey(Server, on_delete=models.CASCADE, null=True)
-  issuer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='mutegag_issuer')
+
+  created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='mutegag_issuer')
+  updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='mutegag_updated_by', null=True)
 
   MUTEGAG_CHOICES = (
       ('MU', 'mute'),

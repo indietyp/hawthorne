@@ -1,16 +1,16 @@
 .row.pure-g
   input.hidden.user(type='hidden', value=data.user.id)
-  input.hidden.server(type='hidden', value=data.server.id)
+  input.hidden.server(type='hidden', value="{{data.server.id|default_if_none:''}}")
   .column.icon.username.pure-u-7-24
     span.flag-icon(class="flag-icon-{{data.user.country.code|lower}}")
     img(src=data.user.avatar)
     span= data.user.namespace
   .column.icon.invoker.pure-u-7-24
     i(data-feather="zap")
-    span= data.issuer.namespace
+    span= data.created_by.namespace
   .column.icon.reason.pure-u-10-24
     i(data-feather="paperclip")
-    span= data.user.namespace
+    span= data.reason
   .column.icon.placeholder.pure-u-7-24
   .column.icon.server.pure-u-7-24
     i(data-feather="hard-drive")

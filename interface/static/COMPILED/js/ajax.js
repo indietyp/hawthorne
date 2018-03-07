@@ -67,6 +67,9 @@
       'csrfmiddlewaretoken': window.csrftoken
     }).ajax('/ajax/v1/ban/user/' + page, 'POST', function(data, status) {
       if (status === 200) {
+        if (page === 1) {
+          $("#ban__user").html('');
+        }
         $("#ban__user").htmlAppend(data);
         feather.replace();
         return window.ajax.ban.user(page + 1);
