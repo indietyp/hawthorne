@@ -121,7 +121,7 @@ main() {
   printf "\n\n${YELLOW}Database configuration:${NORMAL}\n"
   while true; do
     read -p 'Host     (default: localhost):  ' dbhost
-    read -p 'Port     (default: 3006):       ' dbport
+    read -p 'Port     (default: 3306):       ' dbport
     read -p 'User     (default: root):       ' dbuser
     read -p 'Database (default: hawthorne): ' dbname
     read -p 'Password:                       ' dbpwd
