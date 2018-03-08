@@ -104,7 +104,7 @@ main() {
   }
 
   printf "${BLUE}Installing python3 dependencies...${NORMAL}\n"
-  pip3 install -U setuptools
+  pip3 install -U setuptools pip
   pip3 install gunicorn
   pip3 install -r $dir/requirements.txt
 
