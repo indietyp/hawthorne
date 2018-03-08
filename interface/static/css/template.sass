@@ -7,12 +7,13 @@ $red: #FF404B
 $green: #79BD9A
 $raspberry: #EC0452
 $purple: #51445F
-$primary: $purple
+$orange: #FFAA00
+$primary: $orange
 $blue: #19648D
 $lblue: #76B1DF
 // $purple: #8B6DFF
 $lipstick: #954070
-$colors: "white" $white, "dgray" $dgray, "gray" $gray, "black" $black, "red" $red, "green" $green, "blue" $blue, "lblue" $lblue, "purple" $purple, "lipstick" $lipstick, "black" #000, "raspberry" $raspberry, 'primary' $primary
+$colors: "white" $white, "dgray" $dgray, "gray" $gray, "black" $black, "red" $red, "green" $green, "blue" $blue, "lblue" $lblue, "purple" $purple, "lipstick" $lipstick, "black" #000, "raspberry" $raspberry, 'primary' $primary, 'orange' $orange
 
 body
     margin: 0
@@ -117,6 +118,13 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
 
 input[type="number"]
     -moz-appearance: textfield
+
+.checkbox-wrapper
+    input[type="checkbox"]
+        display: none
+
+    label
+        width: 100%
 
 .input-wrapper
     position: relative
@@ -490,6 +498,10 @@ input[type="number"]
     cursor: text !important
     width: 100%
 
+    &.no__margin__bottom
+        margin-bottom: 0
+
+
     &.edit
         &:not(.small)
             width: calc(100% - 36px)
@@ -636,6 +648,12 @@ pre.code-command
         .choices__item
             display: flex
             align-items: center
+
+.margin__none
+    margin: 0 !important
+
+.padding__none
+    padding: 0 !important
 
 // media queiers
 @media (max-width: 1000px)

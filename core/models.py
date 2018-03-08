@@ -270,7 +270,7 @@ class Ban(BaseModel):
   server = models.ForeignKey(Server, on_delete=models.CASCADE, null=True)
 
   created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ban_issuer')
-  updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ban_updated_by')
+  updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ban_updated_by', null=True)
 
   reason = models.CharField(max_length=255)
   length = models.DurationField(null=True)

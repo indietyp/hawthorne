@@ -474,7 +474,29 @@ submit = (mode='', that) ->
     when 'kick'
       console.log 'placeholder'
     when 'server'
-      console.log 'placeholder'
+      node = that.parentElement.parentElement.parentElement
+
+      data =
+        name: $("#inputservername").val()
+        ip: $('#inputip').val().match(/^([0-9]{1,3}\.){3}[0-9]{1,3}/)[0]
+        port: parseInt $('#inputip').val().split(':')[1]
+        password: $('#inputpassword').val()
+        game: window.gameinput.getValue(true)
+        mode: $('#inputmode').val()
+
+      window.endpoint.servers.put(data, (err, data) ->
+        if data.success
+          window.style.submit(that)
+        else
+          window.style.submit(that, false)
+
+        return data
+      )
+
+      setTimeout(->
+        window.style.submit(that, false, true)
+        window.ajax.server.server(1)
+      , 3000)
     else
       console.log 'stuff'
 

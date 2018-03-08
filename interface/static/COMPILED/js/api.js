@@ -336,7 +336,7 @@ var cssPath = function(el) {
   };
 
   submit = function(mode = '', that) {
-    var data, i, j, len, now, ref, time, type, user;
+    var data, i, j, len, node, now, ref, time, type, user;
     switch (mode) {
       case 'admin__administrator':
         data = {
@@ -464,7 +464,27 @@ var cssPath = function(el) {
       case 'kick':
         return console.log('placeholder');
       case 'server':
-        return console.log('placeholder');
+        node = that.parentElement.parentElement.parentElement;
+        data = {
+          name: $("#inputservername").val(),
+          ip: $('#inputip').val().match(/^([0-9]{1,3}\.){3}[0-9]{1,3}/)[0],
+          port: parseInt($('#inputip').val().split(':')[1]),
+          password: $('#inputpassword').val(),
+          game: window.gameinput.getValue(true),
+          mode: $('#inputmode').val()
+        };
+        window.endpoint.servers.put(data, function(err, data) {
+          if (data.success) {
+            window.style.submit(that);
+          } else {
+            window.style.submit(that, false);
+          }
+          return data;
+        });
+        return setTimeout(function() {
+          window.style.submit(that, false, true);
+          return window.ajax.server.server(1);
+        }, 3000);
       default:
         return console.log('stuff');
     }

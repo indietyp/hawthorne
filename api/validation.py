@@ -154,7 +154,9 @@ validation = {
             'PUT': {'validation': {'name': {'type': 'string', 'required': True},
                                    'ip': {'type': 'ip', 'required': True},
                                    'port': {'type': 'integer', 'required': True, 'min': 0, 'max': 65535},
-                                   'password': {'type': 'string', 'required': True}},
+                                   'password': {'type': 'string', 'required': True},
+                                   'game': {'type': 'string', 'required': True},
+                                   'mode': {'type': 'string', 'required': False}},
                     'permission': ['core.add_server']}
         },
         'detailed': {
@@ -163,7 +165,9 @@ validation = {
             'POST': {'validation': {'name': {'type': 'string', 'nullable': True, 'default': None},
                                     'ip': {'type': 'ip', 'nullable': True, 'default': None},
                                     'port': {'type': 'integer', 'nullable': True, 'default': None, 'min': 0, 'max': 65535},
-                                    'password': {'type': 'string', 'nullable': True, 'default': None}},
+                                    'password': {'type': 'string', 'nullable': True, 'default': None},
+                                    'game': {'type': 'string', 'nullable': True, 'default': None},
+                                    'gamemode': {'type': 'string', 'nullable': True, 'default': None}},
                      'permission': ['core.change_server']},
             'DELETE': {'validation': {},
                        'permission': ['core.delete_server']}

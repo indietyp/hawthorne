@@ -389,7 +389,7 @@ def mutegag(request, u=None, validated={}, *args, **kwargs):
     if validated['type'] == 'both':
       mutegag_type = 'BO'
 
-    mutegag = Mutegag(user=user, server=server, reason=validated['reason'], length=length, type=mutegag_type, created_at=request.user)
+    mutegag = Mutegag(user=user, server=server, reason=validated['reason'], length=length, type=mutegag_type, created_by=request.user)
     mutegag.save()
 
     RConSourcemod(server).mutegag(mutegag)

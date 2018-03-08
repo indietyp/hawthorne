@@ -34,10 +34,16 @@ def list(request, validated={}, *args, **kwargs):
     server.port = validated['port']
     server.ip = validated['ip']
     server.name = validated['name']
-    server.password = make_password(validated['password'])
+    server.game = validated['game']
+
+    # we don't want to have a plain one, but we need to. RCON does not hash pwds
+    server.password = validated['password']
+    if 'mode' in validated:
+      server.mode = validated['mode']
+
     server.save()
 
-    return 'passed'
+    return ['passed']
 
 
 @csrf_exempt

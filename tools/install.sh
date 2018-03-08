@@ -173,6 +173,9 @@ main() {
 
   printf "${BLUE}Linking the hawthorne command line tool...${NORMAL}\n"
   ln -s $dir/tools/toolchain.sh /usr/bin/hawthorne
+  ln -s $dir/tools/toolchain.sh /usr/bin/ht
+  chmod +x /usr/bin/hawthorne
+  chmod +x /usr/bin/ht
 
   printf "\n\n${GREEN}You did it (Well rather I did). Everything seems to be installed.${NORMAL}\n"
   printf "Please look over the $dir/${RED}panel/local.py${NORMAL} to see if you want to configure anything. And restart the supervisor with ${YELLOW}supervisorctl restart hawthorne${NORMAL}\n"

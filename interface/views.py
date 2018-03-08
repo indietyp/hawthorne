@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+from core.models import Server
 
 
 def login(request):
@@ -23,7 +24,7 @@ def admin(request):
 
 @login_required(login_url='/login')
 def server(request):
-  return render(request, 'components/server.pug', {})
+  return render(request, 'components/server.pug', {'supported': [{'label': x[1], 'value': x[0]} for x in Server.SUPPORTED]})
 
 
 @login_required(login_url='/login')
