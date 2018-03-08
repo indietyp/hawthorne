@@ -59,7 +59,7 @@ main() {
   printf "${BLUE}Installing the package requirements...${NORMAL}\n"
   if hash apt >/dev/null 2>&1; then
     apt update
-    apt install -y --force-yes --fix-missing python3 python3-dev python3-pip ruby ruby-dev redis-server libmysqlclient-dev libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential libssl-dev libffi-dev
+    apt install -y --force-yes --fix-missing python3 python3-dev python3-pip ruby ruby-dev redis-server libmysqlclient-dev libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential
   elif hash yum >/dev/null 2>&1; then
     yum -y update
     yum -y install yum-utils wget
@@ -104,6 +104,7 @@ main() {
   }
 
   printf "${BLUE}Installing python3 dependencies...${NORMAL}\n"
+  pip3 install -U setuptools
   pip3 install gunicorn
   pip3 install -r $dir/requirements.txt
 
