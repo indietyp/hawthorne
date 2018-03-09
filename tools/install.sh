@@ -103,7 +103,7 @@ main() {
 
   printf "${YELLOW}This is the automatic and guided installation. ${NORMAL}\n"
 
-  if [ $utils -ne 1 ] then
+  if [ $utils -ne 1 ]; then
     printf "${RED}You still need to install a webserver of your choosing and provide a mysql server. ${NORMAL}\n\n"
   else
     printf "${RED}You chose the full installation, that installs nginx and mysql-server.${NORMAL}\n\n"
@@ -128,8 +128,8 @@ main() {
     apt update
     apt install -y --force-yes --fix-missing python3 python3-dev python3-pip ruby ruby-dev redis-server libmysqlclient-dev libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential
 
-    if [ $utils -eq 1 ] then
-      if [ $interactive -eq 0 ] then
+    if [ $utils -eq 1 ]; then
+      if [ $interactive -eq 0 ]; then
         debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
         debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
       fi
@@ -202,7 +202,7 @@ main() {
 
   printf "\n\n${YELLOW}Database configuration:${NORMAL}\n"
   while true; do
-    if [ $interactive -eq 1 ] then
+    if [ $interactive -eq 1 ]; then
       read -p 'Host     (default: localhost):  ' dbhost
       read -p 'Port     (default: 3306):       ' dbport
       read -p 'User     (default: root):       ' dbuser
@@ -215,7 +215,7 @@ main() {
     dbuser=${dbuser:-root}
     dbname=${dbname:-hawthorne}
 
-    if [ $interactive -eq 0 ] then
+    if [ $interactive -eq 0 ]; then
       dbpwd=root
     fi
 
@@ -232,7 +232,7 @@ main() {
   done
 
   printf "\n\n${YELLOW}SteamAPI configuration:${NORMAL}\n"
-  if [ $interactive -eq 1 ] then
+  if [ $interactive -eq 1 ]; then
     read -p 'Steam API Key: ' stapi
   fi
 
@@ -244,7 +244,7 @@ main() {
   sed -i "s/'USER': 'root'/'USER': '$dbuser'/g" $dir/panel/local.py
   sed -i "s/'PASSWORD': ''/'PASSWORD': '$dbpwd'/g" $dir/panel/local.py
 
-  if [ $interactive -eq 1 ] then
+  if [ $interactive -eq 1 ]; then
     sed -i "s/SOCIAL_AUTH_STEAM_API_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'/SOCIAL_AUTH_STEAM_API_KEY = '$stapi'/g" $dir/panel/local.py
   fi
 
@@ -254,7 +254,7 @@ main() {
 
   python3 $dir/manage.py migrate
 
-  if [ $interactive -eq 1 ] then
+  if [ $interactive -eq 1 ]; then
     python3 $dir/manage.py superusersteam
   fi
 
@@ -280,7 +280,7 @@ main() {
   printf "Please look over the $dir/${RED}panel/local.py${NORMAL} to see if you want to configure anything. And restart the supervisor with ${YELLOW}supervisorctl restart hawthorne${NORMAL}\n"
   printf "To configure your webserver please refer to the project wiki: ${YELLOW}https://github.com/indietyp/hawthorne/wiki/Webserver-Configuration${NORMAL}\n"
 
-  if [ $interactive -eq 0 ] then
+  if [ $interactive -eq 0 ]; then
     printf "PLEASE RUN ${YELLOW}$dir/manage.py superusersteam${NORMAL}\n"
     printf "INSERT YOUR DEVKEY IN ${YELLOW}$dir/${RED}panel/local.py${NORMAL}\n"
   fi
