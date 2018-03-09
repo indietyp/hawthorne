@@ -68,11 +68,11 @@ while [ "$1" != "" ]; do
     PARAM=`echo $1 | awk -F= '{print $1}'`
     VALUE=`echo $1 | awk -F= '{print $2}'`
     case $PARAM in
-        h(?:elp)?)
+        h|help)
             usage
             exit 1
             ;;
-        u(?:pdate)?)
+        u|update)
             update
             exit 1
             ;;
