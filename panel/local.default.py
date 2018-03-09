@@ -1,3 +1,5 @@
+from socket import gethostname, gethostbyname
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -22,21 +24,35 @@ LOGGING = {
             'filename': '/var/log/hawthorne/debug.log',
             'formatter': 'verbose'
         },
-        'interface': {
-            'level': 'DEBUG',
+        'auto': {
+            'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': '/var/log/hawthorne/interface.log',
-            'formatter': 'request'
+            'filename': '/var/log/hawthorne/auto.log',
+            'formatter': 'verbose'
+        },
+        'database': {
+            'level': 'INFO',
+            'class': 'automated_logging.handlers.DatabaseHandler'
         },
     },
     'loggers': {
-        'django': {
+        'django.request': {
             'handlers': ['file'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'django.server': {
+            'handlers': ['file'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'django': {
+            'handlers': ['file', 'database'],
             'level': 'INFO',
             'propagate': True,
         },
-        'interface': {
-            'handlers': ['interface'],
+        'automated_logging': {
+            'handlers': ['auto', 'database'],
             'level': 'INFO',
             'propagate': True,
         }
@@ -74,7 +90,8 @@ STATIC_PRECOMPILER_DISABLE_AUTO_COMPILE = not DEBUG
 REDISCACHE = 'localhost:6379'
 SOCIAL_AUTH_STEAM_API_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 STATIC_ROOT = '/local/static'
-ALLOWED_HOSTS = ['*']
+
+ALLOWED_HOSTS = [gethostname(), gethostbyname(gethostname())]
 
 # generate me baby
 SECRET_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
