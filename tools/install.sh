@@ -130,8 +130,8 @@ main() {
 
     if [ $utils -eq 1 ]; then
       if [ $interactive -eq 0 ]; then
-        debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
-        debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
+        debconf-set-selections | 'mysql-server mysql-server/root_password password root'
+        debconf-set-selections | 'mysql-server mysql-server/root_password_again password root'
       fi
       apt install -y --force-yew --fix-missing mysql-server nginx
     fi
