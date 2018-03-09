@@ -38,10 +38,8 @@ trap cleanup 1 2 3 6
 usage() {
   echo "The hawthorne installation tool is an effort to make installation easier."
   echo ""
-  echo "Commands that are currently supported:"
-  echo "\t${GREEN}run${NORMAL}  - Run the installation."
-  echo "\t${GREEN}help${NORMAL} - What you see here."
-  echo "\t${GREEN}-n${NORMAL}   --non-interactive"
+  echo "Parameters that are currently supported:"
+  echo "\t${GREEN}-n${NORMAL}   --non-interactive (not recommended)"
   echo "\t${GREEN}-f${NORMAL}   --full"
   echo "\t${GREEN}-h${NORMAL}   --help"
   echo ""
@@ -50,12 +48,11 @@ usage() {
 select() {
   while [ "$1" != "" ]; do
     case $1 in
-        run )                   ;;
         -n | --non-interactive) interactive=0
                                 ;;
         -f | --full)            utils=1
                                 ;;
-        -h | --help)            usage
+        -h | --help | help)     usage
                                 exit
                                 ;;
         * )                     usage
