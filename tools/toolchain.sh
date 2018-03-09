@@ -22,10 +22,10 @@ fi
 
 set -e
 
-dir=$( cd $(dirname $(readlink `[[ $OSTYPE == linux* ]] && echo "-f"` $0)) ; pwd -P)
+dir=$(cd $(dirname $(readlink $([ $(uname | tr '[:upper:]' '[:lower:]') = linux* ] && echo "-f") $0)); pwd -P)
 dir=$(dirname "$dir")
 
-function update() {
+update () {
     if ! [ $(id -u) = 0 ];
       then echo "Please run as ${RED}root${NORMAL}"
       exit 1
@@ -55,7 +55,7 @@ function update() {
     printf "${GREEN}Success! :+1:\n${NORMAL}"
 }
 
-function usage() {
+usage () {
     echo "The hawthorne toolchain is an effort to make updating and fixing easier."
     echo ""
     echo "Commands that are currently supported:"
