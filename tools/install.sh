@@ -2,13 +2,70 @@
 # this is adopted from the oh-my-zsh install script
 
 dir=/hawthorne
-trap cleanup 1 2 3 6
+interactive=1
+utils=0
+
+if which tput >/dev/null 2>&1; then
+  ncolors=$(tput colors)
+fi
+
+if [ -t 1 ] && [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
+  RED="$(tput setaf 1)"
+  GREEN="$(tput setaf 2)"
+  YELLOW="$(tput setaf 3)"
+  BLUE="$(tput setaf 4)"
+  BOLD="$(tput bold)"
+  NORMAL="$(tput sgr0)"
+else
+  RED=""
+  GREEN=""
+  YELLOW=""
+  BLUE=""
+  BOLD=""
+  NORMAL=""
+fi
+
+set -e
+
 
 cleanup() {
   # I AM THE CLEANUP CREW DO NOT MIND ME ^-^
+  printf "${RED}Installation failed... Cleaning up${NORMAL}"
   rm -rf $dir
 }
+trap cleanup 1 2 3 6
 
+usage() {
+  echo "The hawthorne installation tool is an effort to make installation easier."
+  echo ""
+  echo "Commands that are currently supported:"
+  echo "\t${GREEN}run${NORMAL}  - Run the installation."
+  echo "\t${GREEN}help${NORMAL} - What you see here."
+  echo "\t${GREEN}-n${NORMAL}   --non-interactive"
+  echo "\t${GREEN}-f${NORMAL}   --full"
+  echo "\t${GREEN}-h${NORMAL}   --help"
+  echo ""
+}
+
+select() {
+  while [ "$1" != "" ]; do
+    case $1 in
+        run )                   ;;
+        -n | --non-interactive) interactive=0
+                                ;;
+        -f | --full)            utils=1
+                                ;;
+        -h | --help)            usage
+                                exit
+                                ;;
+        * )                     usage
+                                exit 1
+    esac
+    shift
+  done
+  main
+
+}
 
 main() {
   # Use colors, but only if connected to a terminal, and that terminal
@@ -45,7 +102,13 @@ main() {
   export LC_ALL=C
 
   printf "${YELLOW}This is the automatic and guided installation. ${NORMAL}\n"
-  printf "${RED}You still need to install a webserver of your choosing and provide a mysql server. ${NORMAL}\n\n"
+
+  if [ $utils -ne 1 ] then
+    printf "${RED}You still need to install a webserver of your choosing and provide a mysql server. ${NORMAL}\n\n"
+  else
+    printf "${RED}You chose the full installation, that installs nginx and mysql-server.${NORMAL}\n\n"
+  fi
+
   printf "Everything will be configured by itelf.\n"
   printf "The configured installation path used will be ${GREEN}${dir}${NORMAL}\n"
 
@@ -58,17 +121,21 @@ main() {
     esac
   done
 
-  # Prevent the cloned repository from having insecure permissions. Failing to do
-  # so causes compinit() calls to fail with "command not found: compdef" errors
-  # for users with insecure umasks (e.g., "002", allowing group writability). Note
-  # that this will be ignored under Cygwin by default, as Windows ACLs take
-  # precedence over umasks except for filesystems mounted with option "noacl".
   umask g-w,o-w
 
   printf "${BLUE}Installing the package requirements...${NORMAL}\n"
   if hash apt >/dev/null 2>&1; then
     apt update
     apt install -y --force-yes --fix-missing python3 python3-dev python3-pip ruby ruby-dev redis-server libmysqlclient-dev libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential
+
+    if [ $utils -eq 1 ] then
+      if [ $interactive -eq 0 ] then
+        debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
+        debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
+      fi
+      apt install -y --force-yew --fix-missing mysql-server nginx
+    fi
+
   elif hash yum >/dev/null 2>&1; then
     yum -y update
     yum -y install yum-utils wget
@@ -135,16 +202,22 @@ main() {
 
   printf "\n\n${YELLOW}Database configuration:${NORMAL}\n"
   while true; do
-    read -p 'Host     (default: localhost):  ' dbhost
-    read -p 'Port     (default: 3306):       ' dbport
-    read -p 'User     (default: root):       ' dbuser
-    read -p 'Database (default: hawthorne): ' dbname
-    read -p 'Password:                       ' dbpwd
+    if [ $interactive -eq 1 ] then
+      read -p 'Host     (default: localhost):  ' dbhost
+      read -p 'Port     (default: 3306):       ' dbport
+      read -p 'User     (default: root):       ' dbuser
+      read -p 'Database (default: hawthorne):  ' dbname
+      read -p 'Password:                       ' dbpwd
+    fi
 
     dbhost=${dbhost:-localhost}
     dbport=${dbport:-3306}
     dbuser=${dbuser:-root}
     dbname=${dbname:-hawthorne}
+
+    if [ $interactive -eq 0 ] then
+      dbpwd=root
+    fi
 
     export MYSQL_PWD=$dbpwd
     export MYSQL_HOST=$dbhost
@@ -159,7 +232,9 @@ main() {
   done
 
   printf "\n\n${YELLOW}SteamAPI configuration:${NORMAL}\n"
-  read -p 'Steam API key:                   ' stapi
+  if [ $interactive -eq 1 ] then
+    read -p 'Steam API Key: ' stapi
+  fi
 
   printf "\n\n${GREEN}Just doing some file transmutation magic:${NORMAL}\n"
   # replace the stuff in the local.py and supervisor.conf file
@@ -169,16 +244,22 @@ main() {
   sed -i "s/'USER': 'root'/'USER': '$dbuser'/g" $dir/panel/local.py
   sed -i "s/'PASSWORD': ''/'PASSWORD': '$dbpwd'/g" $dir/panel/local.py
 
-  sed -i "s/SOCIAL_AUTH_STEAM_API_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'/SOCIAL_AUTH_STEAM_API_KEY = '$stapi'/g" $dir/panel/local.py
-  sed -i "s#directory=<replace>#directory=$dir#g" $dir/supervisor.conf
+  if [ $interactive -eq 1 ] then
+    sed -i "s/SOCIAL_AUTH_STEAM_API_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'/SOCIAL_AUTH_STEAM_API_KEY = '$stapi'/g" $dir/panel/local.py
+  fi
 
+  sed -i "s#directory=<replace>#directory=$dir#g" $dir/supervisor.conf
   printf "${BLUE}Executing project setupcommands...${NORMAL}\n"
   sed -i "s/SECRET_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'/SECRET_KEY = '$(python3 $dir/manage.py generatesecret | tail -1)'/g" $dir/panel/local.py
 
   python3 $dir/manage.py migrate
-  python3 $dir/manage.py superusersteam
+
+  if [ $interactive -eq 1 ] then
+    python3 $dir/manage.py superusersteam
+  fi
+
   python3 $dir/manage.py compilestatic
-  python3 $dir/manage.py collectstatic
+  python3 $dir/manage.py collectstatic --noinput
 
   printf "${BLUE}Linking to supervisor...${NORMAL}\n"
   ln -sr $dir/supervisor.conf /etc/supervisor/conf.d/hawthorne.conf
@@ -193,9 +274,17 @@ main() {
   chmod +x /usr/bin/hawthorne
   chmod +x /usr/bin/ht
 
+  # still need to paste example nginx config
+
   printf "\n\n${GREEN}You did it (Well rather I did). Everything seems to be installed.${NORMAL}\n"
   printf "Please look over the $dir/${RED}panel/local.py${NORMAL} to see if you want to configure anything. And restart the supervisor with ${YELLOW}supervisorctl restart hawthorne${NORMAL}\n"
   printf "To configure your webserver please refer to the project wiki: ${YELLOW}https://github.com/indietyp/hawthorne/wiki/Webserver-Configuration${NORMAL}\n"
+
+  if [ $interactive -eq 0 ] then
+    printf "PLEASE RUN ${YELLOW}$dir/manage.py superusersteam${NORMAL}\n"
+    printf "INSERT YOUR DEVKEY IN ${YELLOW}$dir/${RED}panel/local.py${NORMAL}\n"
+  fi
+
 }
 
-main
+select
