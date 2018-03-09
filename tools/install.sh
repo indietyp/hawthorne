@@ -180,7 +180,11 @@ main() {
 
   pip3 install cryptography || {
     printf "${BOLD}Too old pip3 version... upgrading${NORMAL}\n"
-    python3 -c "$(curl -fsSL https://bootstrap.pypa.io/get-pip.py)"
+    apt remove -y python3-pip
+    apt install -y wget
+    wget https://bootstrap.pypa.io/get-pip.py
+    python3 get-pip.py
+    rm get-pip.py
   }
 
   pip3 install gunicorn
@@ -271,7 +275,12 @@ main() {
   chmod +x /usr/bin/hawthorne
   chmod +x /usr/bin/ht
 
-  # still need to paste example nginx config
+  if [ $utils -eq 1 ]; then
+    rm /etc/nginx/sites-enabled/hawthorne
+    ln -s $dir/tools/configs/nginx.example.conf /etc/nginx/sites-enabled/hawthorne
+
+    service nginx restart
+  fi
 
   printf "\n\n${GREEN}You did it (Well rather I did). Everything seems to be installed.${NORMAL}\n"
   printf "Please look over the $dir/${RED}panel/local.py${NORMAL} to see if you want to configure anything. And restart the supervisor with ${YELLOW}supervisorctl restart hawthorne${NORMAL}\n"
