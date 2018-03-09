@@ -6,7 +6,7 @@ def populate(strategy, details, backend, user=None, *args, **kwargs):
   if backend.name == 'steam' and user is not None:
     information = details['player']
 
-    if information['realname'] != '':
+    if 'realname' in information and information['realname']:
       information['realname'] = information['realname'].split(' ')
 
       user.first_name = information['realname'][0]

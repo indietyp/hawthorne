@@ -1,4 +1,14 @@
+#!/bin/sh
 # this is adopted from the oh-my-zsh install script
+
+dir=/hawthorne
+trap cleanup 1 2 3 6
+
+cleanup() {
+  # I AM THE CLEANUP CREW DO NOT MIND ME ^-^
+  rm -rf $dir
+}
+
 
 main() {
   # Use colors, but only if connected to a terminal, and that terminal
@@ -34,7 +44,6 @@ main() {
 
   export LC_ALL=C
 
-  dir=/hawthorne
   printf "${YELLOW}This is the automatic and guided installation. ${NORMAL}\n"
   printf "${RED}You still need to install a webserver of your choosing and provide a mysql server. ${NORMAL}\n\n"
   printf "Everything will be configured by itelf.\n"
@@ -104,7 +113,7 @@ main() {
   }
 
   printf "${BLUE}Installing python3 dependencies...${NORMAL}\n"
-  pip3 install -U setuptools pip
+  python3 "$(curl -fsSL https://bootstrap.pypa.io/get-pip.py)"
   pip3 install gunicorn
   pip3 install -r $dir/requirements.txt
 
@@ -162,6 +171,7 @@ main() {
   sed -i "s/SECRET_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'/SECRET_KEY = '$(python3 $dir/manage.py generatesecret | tail -1)'/g" $dir/panel/local.py
 
   python3 $dir/manage.py migrate
+  python3 $dir/manage.py superusersteam
   python3 $dir/manage.py compilestatic
   python3 $dir/manage.py collectstatic
 
