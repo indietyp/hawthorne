@@ -113,7 +113,12 @@ main() {
   }
 
   printf "${BLUE}Installing python3 dependencies...${NORMAL}\n"
-  python3 "$(curl -fsSL https://bootstrap.pypa.io/get-pip.py)"
+
+  pip3 install cryptography || {
+    printf "${BOLD}Too old pip3 version... upgrading${NORMAL}\n"
+    python3 -c "$(curl -fsSL https://bootstrap.pypa.io/get-pip.py)"
+  }
+
   pip3 install gunicorn
   pip3 install -r $dir/requirements.txt
 

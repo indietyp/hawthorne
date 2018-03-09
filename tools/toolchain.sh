@@ -1,4 +1,5 @@
 #!/bin/sh
+
 if which tput >/dev/null 2>&1; then
   ncolors=$(tput colors)
 fi
@@ -67,11 +68,11 @@ while [ "$1" != "" ]; do
     PARAM=`echo $1 | awk -F= '{print $1}'`
     VALUE=`echo $1 | awk -F= '{print $2}'`
     case $PARAM in
-        help)
+        help, h)
             usage
             exit 1
             ;;
-        update)
+        update, u)
             update
             exit 1
             ;;
@@ -83,5 +84,6 @@ while [ "$1" != "" ]; do
     esac
     shift
 done
+
 echo "Well this is awkward... Here are the commands you might need.\n\n"
 usage
