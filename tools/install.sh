@@ -180,7 +180,6 @@ main() {
 
   pip3 install cryptography || {
     printf "${BOLD}Too old pip3 version... upgrading${NORMAL}\n"
-    apt remove -y python3-pip
     apt install -y wget
     wget https://bootstrap.pypa.io/get-pip.py
     python3 get-pip.py
