@@ -3,9 +3,14 @@
   var admin__admin, admin__group, admin__log, ban__user, chat__log, mutegag__user, player__user, server__server;
 
   admin__admin = function(page = 1) {
-    return $({
-      'csrfmiddlewaretoken': window.csrftoken
-    }).ajax('/ajax/v1/admin/user/' + page, 'POST', function(data, status) {
+    var header;
+    header = {
+      "X-CSRFToken": window.csrftoken
+    };
+    return window.endpoint.ajax.admin.user[page].post(header, {}, function(dummy, response) {
+      var data, status;
+      status = response.status;
+      data = response.data;
       if (status === 200) {
         if (page === 1) {
           $("#admin__admin").html('');
@@ -16,14 +21,18 @@
       } else {
         return false;
       }
-      return true;
     });
   };
 
   admin__log = function(page = 1) {
-    return $({
-      'csrfmiddlewaretoken': window.csrftoken
-    }).ajax('/ajax/v1/admin/log/' + page, 'POST', function(data, status) {
+    var header;
+    header = {
+      "X-CSRFToken": window.csrftoken
+    };
+    return window.endpoint.ajax.admin.log[page].post(header, {}, function(dummy, response) {
+      var data, status;
+      status = response.status;
+      data = response.data;
       if (status === 200) {
         $("#admin__log").htmlAppend(data);
         feather.replace();
@@ -31,15 +40,18 @@
       } else {
         return false;
       }
-      return true;
     });
   };
 
   admin__group = function(page = 1) {
-    return $({
-      'csrfmiddlewaretoken': window.csrftoken
-    }).ajax('/ajax/v1/admin/group/' + page, 'POST', function(data, status) {
-      var i, item, j, len, ref;
+    var header;
+    header = {
+      "X-CSRFToken": window.csrftoken
+    };
+    return window.endpoint.ajax.admin.group[page].post(header, {}, function(dummy, response) {
+      var data, i, item, j, len, ref, status;
+      status = response.status;
+      data = response.data;
       if (status === 200) {
         if (page === 1) {
           i = 0;
@@ -58,14 +70,18 @@
       } else {
         return false;
       }
-      return true;
     });
   };
 
   ban__user = function(page = 1) {
-    return $({
-      'csrfmiddlewaretoken': window.csrftoken
-    }).ajax('/ajax/v1/ban/user/' + page, 'POST', function(data, status) {
+    var header;
+    header = {
+      "X-CSRFToken": window.csrftoken
+    };
+    return window.endpoint.ajax.ban.user[page].post(header, {}, function(dummy, response) {
+      var data, status;
+      status = response.status;
+      data = response.data;
       if (status === 200) {
         if (page === 1) {
           $("#ban__user").html('');
@@ -76,14 +92,18 @@
       } else {
         return false;
       }
-      return true;
     });
   };
 
   chat__log = function(page = 1) {
-    return $({
-      'csrfmiddlewaretoken': window.csrftoken
-    }).ajax('/ajax/v1/chat/log/' + page, 'POST', function(data, status) {
+    var header;
+    header = {
+      "X-CSRFToken": window.csrftoken
+    };
+    return window.endpoint.ajax.chat.log[page].post(header, {}, function(dummy, response) {
+      var data, status;
+      status = response.status;
+      data = response.data;
       if (status === 200) {
         $("#chat__log").htmlAppend(data);
         feather.replace();
@@ -91,14 +111,18 @@
       } else {
         return false;
       }
-      return true;
     });
   };
 
   mutegag__user = function(page = 1) {
-    return $({
-      'csrfmiddlewaretoken': window.csrftoken
-    }).ajax('/ajax/v1/mutegag/user/' + page, 'POST', function(data, status) {
+    var header;
+    header = {
+      "X-CSRFToken": window.csrftoken
+    };
+    return window.endpoint.ajax.mutegag.user[page].post(header, {}, function(dummy, response) {
+      var data, status;
+      status = response.status;
+      data = response.data;
       if (status === 200) {
         if (page === 1) {
           $("#mutegag__user").html('');
@@ -109,14 +133,18 @@
       } else {
         return false;
       }
-      return true;
     });
   };
 
   player__user = function(page = 1) {
-    return $({
-      'csrfmiddlewaretoken': window.csrftoken
-    }).ajax('/ajax/v1/player/user/' + page, 'POST', function(data, status) {
+    var header;
+    header = {
+      "X-CSRFToken": window.csrftoken
+    };
+    return window.endpoint.ajax.player.user[page].post(header, {}, function(dummy, response) {
+      var data, status;
+      status = response.status;
+      data = response.data;
       if (status === 200) {
         $("#player__user").htmlAppend(data);
         feather.replace();
@@ -124,15 +152,18 @@
       } else {
         return false;
       }
-      return true;
     });
   };
 
   server__server = function(page = 1) {
-    return $({
-      'csrfmiddlewaretoken': window.csrftoken
-    }).ajax('/ajax/v1/server/server/' + page, 'POST', function(data, status) {
-      var j, len, ref, scr;
+    var header;
+    header = {
+      "X-CSRFToken": window.csrftoken
+    };
+    return window.endpoint.ajax.server.server[page].post(header, {}, function(dummy, response) {
+      var data, j, len, ref, scr, status;
+      status = response.status;
+      data = response.data;
       if (status === 200) {
         $("#server__server").htmlAfter(data);
         ref = $(".chart-section script.execution");
@@ -145,7 +176,6 @@
       } else {
         return false;
       }
-      return true;
     });
   };
 

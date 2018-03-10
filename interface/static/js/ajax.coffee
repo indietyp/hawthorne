@@ -1,5 +1,10 @@
 admin__admin = (page=1) ->
-  $({'csrfmiddlewaretoken': window.csrftoken}).ajax('/ajax/v1/admin/user/' + page, 'POST', (data, status) ->
+  header =
+    "X-CSRFToken": window.csrftoken
+
+  window.endpoint.ajax.admin.user[page].post(header, {}, (dummy, response) ->
+    status = response.status
+    data = response.data
     if status == 200
       if page == 1
         $("#admin__admin").html('')
@@ -8,14 +13,18 @@ admin__admin = (page=1) ->
       feather.replace()
 
       return window.ajax.admin.admins(page+1)
+
     else
       return false
-
-    return true
   )
 
 admin__log = (page=1) ->
-  $({'csrfmiddlewaretoken': window.csrftoken}).ajax('/ajax/v1/admin/log/' + page, 'POST', (data, status) ->
+  header =
+    "X-CSRFToken": window.csrftoken
+
+  window.endpoint.ajax.admin.log[page].post(header, {}, (dummy, response) ->
+    status = response.status
+    data = response.data
     if status == 200
       $("#admin__log").htmlAppend(data)
       feather.replace()
@@ -23,12 +32,15 @@ admin__log = (page=1) ->
       return window.ajax.admin.logs(page+1)
     else
       return false
-
-    return true
   )
 
 admin__group = (page=1) ->
-  $({'csrfmiddlewaretoken': window.csrftoken}).ajax('/ajax/v1/admin/group/' + page, 'POST', (data, status) ->
+  header =
+    "X-CSRFToken": window.csrftoken
+
+  window.endpoint.ajax.admin.group[page].post(header, {}, (dummy, response) ->
+    status = response.status
+    data = response.data
     if status == 200
       if page == 1
         i = 0
@@ -43,28 +55,33 @@ admin__group = (page=1) ->
       return window.ajax.admin.groups(page+1)
     else
       return false
-
-    return true
   )
 
 ban__user = (page=1) ->
-  $({'csrfmiddlewaretoken': window.csrftoken}).ajax('/ajax/v1/ban/user/' + page, 'POST', (data, status) ->
+  header =
+    "X-CSRFToken": window.csrftoken
+
+  window.endpoint.ajax.ban.user[page].post(header, {}, (dummy, response) ->
+    status = response.status
+    data = response.data
     if status == 200
       if page == 1
         $("#ban__user").html('')
-
       $("#ban__user").htmlAppend(data)
       feather.replace()
 
       return window.ajax.ban.user(page+1)
     else
       return false
-
-    return true
   )
 
 chat__log = (page=1) ->
-  $({'csrfmiddlewaretoken': window.csrftoken}).ajax('/ajax/v1/chat/log/' + page, 'POST', (data, status) ->
+  header =
+    "X-CSRFToken": window.csrftoken
+
+  window.endpoint.ajax.chat.log[page].post(header, {}, (dummy, response) ->
+    status = response.status
+    data = response.data
     if status == 200
       $("#chat__log").htmlAppend(data)
       feather.replace()
@@ -72,12 +89,15 @@ chat__log = (page=1) ->
       return window.ajax.chat.logs(page+1)
     else
       return false
-
-    return true
   )
 
 mutegag__user = (page=1) ->
-  $({'csrfmiddlewaretoken': window.csrftoken}).ajax('/ajax/v1/mutegag/user/' + page, 'POST', (data, status) ->
+  header =
+    "X-CSRFToken": window.csrftoken
+
+  window.endpoint.ajax.mutegag.user[page].post(header, {}, (dummy, response) ->
+    status = response.status
+    data = response.data
     if status == 200
       if page == 1
         $("#mutegag__user").html('')
@@ -88,12 +108,15 @@ mutegag__user = (page=1) ->
       return window.ajax.mutegag.user(page+1)
     else
       return false
-
-    return true
   )
 
 player__user = (page=1) ->
-  $({'csrfmiddlewaretoken': window.csrftoken}).ajax('/ajax/v1/player/user/' + page, 'POST', (data, status) ->
+  header =
+    "X-CSRFToken": window.csrftoken
+
+  window.endpoint.ajax.player.user[page].post(header, {}, (dummy, response) ->
+    status = response.status
+    data = response.data
     if status == 200
       $("#player__user").htmlAppend(data)
       feather.replace()
@@ -101,12 +124,16 @@ player__user = (page=1) ->
       return window.ajax.mutegag.user(page+1)
     else
       return false
-
-    return true
   )
 
+
 server__server = (page=1) ->
-  $({'csrfmiddlewaretoken': window.csrftoken}).ajax('/ajax/v1/server/server/' + page, 'POST', (data, status) ->
+  header =
+    "X-CSRFToken": window.csrftoken
+
+  window.endpoint.ajax.server.server[page].post(header, {}, (dummy, response) ->
+    status = response.status
+    data = response.data
     if status == 200
       $("#server__server").htmlAfter(data)
 
@@ -118,8 +145,6 @@ server__server = (page=1) ->
       return window.ajax.server.server(page+1)
     else
       return false
-
-    return true
   )
 
 window.ajax =

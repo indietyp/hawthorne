@@ -23,9 +23,8 @@ var cssPath = function(el) {
 `
 
 server = (query, that=null, selected='') ->
-  $({'query': query}).ajax('/api/v1/servers', 'GET', (data, status) ->
-    data = JSON.parse data
-    data = data['result']
+  window.endpoint.api.servers({'query': query}).get((err, data) ->
+    data = data.result
 
     if that != null
       formatted = [{'value': 'all', 'label': '<b>all</b>'}]
@@ -49,8 +48,7 @@ server = (query, that=null, selected='') ->
   return
 
 group = (query, that=null, selected='') ->
-  $({'query': query}).ajax('/api/v1/roles', 'GET', (data, status) ->
-    data = JSON.parse data
+  window.endpoint.api.roles({'query': query}).get((err, data) ->
     data = data['result']
 
     if that != null
@@ -85,40 +83,44 @@ remove = (mode='', that) ->
 
   switch mode
     when 'admin__administrator'
-      user = $(node.querySelector('input.uuid')).val()
-      role = $(node.querySelector('input.role')).val()
+      user = $('input.uuid', node)[0].value
+      role = $('input.role', node)[0].value
 
       payload =
         reset: true
         role: role
 
-      endpoint = window.endpoint.users[user]
+      endpoint = window.endpoint.api.users[user]
     when 'admin__groups'
-      role = $(node.querySelector('input.uuid')).val()
+      role = $('input.uuid', node)[0].value
 
-      endpoint = window.endpoint.roles[role]
+      endpoint = window.endpoint.api.roles[role]
     when 'ban'
-      user = $(node.querySelector('input.user')).val()
-      server = $(node.querySelector('input.server')).val()
+      user = $('input.user', node)[0].value
+      server = $('input.server', node)[0].value
+
+      console.log $('input.user', node)[0]
+      console.log user
 
       payload =
         server: server
 
-      endpoint = window.endpoint.users[user].ban
+      endpoint = window.endpoint.api.users[user].ban
     when 'mutegag'
-      user = $(node.querySelector('input.user')).val()
-      server = $(node.querySelector('input.server')).val()
+      console.log $('input.user', node)[0].value
+      user = $('input.user', node)[0].value
+      server = $('input.server', node)[0].value
 
       if server != ''
         payload =
           server: server
 
-      endpoint = window.endpoint.users[user].mutegag
+      endpoint = window.endpoint.api.users[user].mutegag
     when 'server'
       node = that.parentElement.parentElement.parentElement.parentElement
-      server = $(node.querySelector('input.uuid')).val()
+      server = $('input.uuid', node)[0].value
 
-      endpoint = window.endpoint.servers[server]
+      endpoint = window.endpoint.api.servers[server]
     else
       return
 
@@ -133,8 +135,8 @@ save = (mode='', that) ->
 
   switch mode
     when 'admin__administrator'
-      role = $(node.querySelector('input.role')).val()
-      uuid = $(node.querySelector('input.uuid')).val()
+      role = $('input.role', node)[0].value
+      uuid = $('input.uuid', node)[0].value
 
       selector = window.api.storage[uuid + '#' + role]
       replacement = selector.getValue(true)
@@ -150,7 +152,7 @@ save = (mode='', that) ->
 
       success = 0
       for payload in payloads
-        window.endpoint.users[uuid].post(payload, (err, data) ->
+        window.endpoint.api.users[uuid].post(payload, (err, data) ->
           if (!data.success)
             return
 
@@ -173,7 +175,7 @@ save = (mode='', that) ->
     when 'admin__groups'
       scope = cssPath node
 
-      uuid = $("#{scope} input.uuid").val()
+      uuid = $("#{scope} input.uuid").value
       console.log uuid
 
       data =
@@ -188,13 +190,13 @@ save = (mode='', that) ->
         data.server = null
 
       for i in $("#{scope} .actions input:checked")
-        data.flags += $(i).val()
+        data.flags += $(i).value
 
       time = $("#{scope} .usetime span").html()
       if time is not null or time != ''
         data.usetime = window.style.duration.parse(time)
 
-      window.endpoint.roles[uuid].post(data, (err, data) ->
+      window.endpoint.api.roles[uuid].post(data, (err, data) ->
         state = that.getAttribute 'class'
         old = state
 
@@ -236,8 +238,8 @@ edit = (mode='', that) ->
     when 'admin__administrator'
       group = node.querySelector('.icon.group')
 
-      uuid = $(node.querySelector('input.uuid')).val()
-      selected = $(node.querySelector('input.role')).val()
+      uuid = $('input.uuid', node)[0].value
+      selected = $('input.role', node)[0].value
       target = group.querySelector('span')
       $(target).remove()
 
@@ -251,12 +253,12 @@ edit = (mode='', that) ->
       })
 
       selector.passedElement.addEventListener('change', (e) ->
-        target = $(node.querySelector('.server span'))
+        target = $('.server span', node)
         server = selector.getValue().customProperties.server
         if server == null
           target.html 'all'
         else
-          window.endpoint.servers[server].get((err, data) ->
+          window.endpoint.api.servers[server].get((err, data) ->
             if not data.success
               return
             target.html data.result.name
@@ -270,8 +272,8 @@ edit = (mode='', that) ->
     when 'admin__groups'
       server = node.querySelector('.icon.server')
 
-      uuid = $(node.querySelector('input.uuid')).val()
-      selected = $(node.querySelector('input.server')).val()
+      uuid = $('input.uuid', node)[0].value
+      selected = $('input.server', node)[0].value
 
       if selected == ''
         selected = 'all'
@@ -311,10 +313,16 @@ edit = (mode='', that) ->
       $(scope + " .icon.name").addClass('input-wrapper')
 
       $(scope + " .icon span").addClass('input')
-      $(scope + " .icon span").attr('contenteditable', 'true')
+      $(scope + " .icon span").setAttribute('contenteditable', 'true')
 
       window.api.storage[uuid] = selector
       window.api.servers('', selector, selected)
+    when 'ban'
+      console.log 'placeholder'
+    when 'mutegag'
+      console.log 'placeholder'
+    when 'server'
+      console.log 'placeholder'
 
   $(that).css('opacity', '0')
   setTimeout(->
@@ -343,7 +351,7 @@ submit = (mode='', that) ->
 
       user = window.usernameinput.getValue(true)
 
-      window.endpoint.users[user].post(data, (err, data) ->
+      window.endpoint.api.users[user].post(data, (err, data) ->
         if data.success
           window.style.submit(that)
         else
@@ -359,9 +367,9 @@ submit = (mode='', that) ->
 
     when 'admin__groups'
       data =
-        name: $("#inputgroupname").val()
+        name: $("#inputgroupname").value
         server: window.serverinput.getValue(true)
-        immunity: parseInt $("#inputimmunityvalue").val()
+        immunity: parseInt $("#inputimmunityvalue").value
         usetime: null
         flags: ''
 
@@ -369,13 +377,13 @@ submit = (mode='', that) ->
         data.server = null
 
       for i in $(".row.add .actions input:checked")
-        data.flags += $(i).val()
+        data.flags += $(i).value
 
-      time = $("#inputtimevalue").val()
+      time = $("#inputtimevalue").value
       if time is not null or time != ''
         data.usetime = window.style.duration.parse(time)
 
-      window.endpoint.roles.put(data, (err, data) ->
+      window.endpoint.api.roles.put(data, (err, data) ->
         if data.success
           window.style.submit(that)
         else
@@ -393,10 +401,10 @@ submit = (mode='', that) ->
       now = new Date()
       now = now.getTime() / 1000
 
-      time = $("#inputduration").val()
+      time = $("#inputduration").value
 
       if time != ''
-        time = new Date $("#inputduration").val()
+        time = new Date $("#inputduration").value
         time = time.getTime() / 1000
       else
         time = 0
@@ -404,14 +412,14 @@ submit = (mode='', that) ->
       user = window.usernameinput.getValue(true)
 
       data =
-        reason: $("#inputdescription").val()
+        reason: $("#inputdescription").value
         length: parseInt(time - now)
 
       server = window.serverinput.getValue(true)
       if server != 'all'
         data.server = server
 
-      window.endpoint.users[user].ban.put(data, (err, data) ->
+      window.endpoint.api.users[user].ban.put(data, (err, data) ->
         if data.success
           window.style.submit(that)
         else
@@ -427,7 +435,7 @@ submit = (mode='', that) ->
       now = new Date()
       now = now.getTime() / 1000
 
-      time = $("#inputduration").val()
+      time = $("#inputduration")[0].value
 
       if time != ''
         time = new Date time
@@ -438,7 +446,7 @@ submit = (mode='', that) ->
       user = window.usernameinput.getValue(true)
 
       type = ''
-      $('.row.add .action .selected').each ((e) ->
+      $('.row.add .action .selected').forEach((e) ->
         type += e.id
       )
 
@@ -449,7 +457,7 @@ submit = (mode='', that) ->
         type = 'both'
 
       data =
-        reason: $("#inputdescription").val()
+        reason: $("#inputdescription")[0].value
         length: parseInt(time - now)
         type: type
 
@@ -457,7 +465,7 @@ submit = (mode='', that) ->
       if server != 'all'
         data.server = server
 
-      window.endpoint.users[user].mutegag.put(data, (err, data) ->
+      window.endpoint.api.users[user].mutegag.put(data, (err, data) ->
         if data.success
           window.style.submit(that)
         else
@@ -477,14 +485,14 @@ submit = (mode='', that) ->
       node = that.parentElement.parentElement.parentElement
 
       data =
-        name: $("#inputservername").val()
-        ip: $('#inputip').val().match(/^([0-9]{1,3}\.){3}[0-9]{1,3}/)[0]
-        port: parseInt $('#inputip').val().split(':')[1]
-        password: $('#inputpassword').val()
+        name: $("#inputservername")[0].value
+        ip: $('#inputip')[0].value.match(/^([0-9]{1,3}\.){3}[0-9]{1,3}/)[0]
+        port: parseInt $('#inputip')[0].value.split(':')[1]
+        password: $('#inputpassword')[0].value
         game: window.gameinput.getValue(true)
-        mode: $('#inputmode').val()
+        mode: $('#inputmode')[0].value
 
-      window.endpoint.servers.put(data, (err, data) ->
+      window.endpoint.api.servers.put(data, (err, data) ->
         if data.success
           window.style.submit(that)
         else

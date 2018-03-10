@@ -26,12 +26,11 @@ var cssPath = function(el) {
   var edit, group, remove, save, server, submit;
 
   server = function(query, that = null, selected = '') {
-    $({
+    window.endpoint.api.servers({
       'query': query
-    }).ajax('/api/v1/servers', 'GET', function(data, status) {
+    }).get(function(err, data) {
       var ele, fmt, formatted, j, len;
-      data = JSON.parse(data);
-      data = data['result'];
+      data = data.result;
       if (that !== null) {
         formatted = [
           {
@@ -60,11 +59,10 @@ var cssPath = function(el) {
   };
 
   group = function(query, that = null, selected = '') {
-    $({
+    window.endpoint.api.roles({
       'query': query
-    }).ajax('/api/v1/roles', 'GET', function(data, status) {
+    }).get(function(err, data) {
       var ele, fmt, formatted, j, len;
-      data = JSON.parse(data);
       data = data['result'];
       if (that !== null) {
         formatted = [];
@@ -100,40 +98,43 @@ var cssPath = function(el) {
     node = that.parentElement.parentElement.parentElement;
     switch (mode) {
       case 'admin__administrator':
-        user = $(node.querySelector('input.uuid')).val();
-        role = $(node.querySelector('input.role')).val();
+        user = $('input.uuid', node)[0].value;
+        role = $('input.role', node)[0].value;
         payload = {
           reset: true,
           role: role
         };
-        endpoint = window.endpoint.users[user];
+        endpoint = window.endpoint.api.users[user];
         break;
       case 'admin__groups':
-        role = $(node.querySelector('input.uuid')).val();
-        endpoint = window.endpoint.roles[role];
+        role = $('input.uuid', node)[0].value;
+        endpoint = window.endpoint.api.roles[role];
         break;
       case 'ban':
-        user = $(node.querySelector('input.user')).val();
-        server = $(node.querySelector('input.server')).val();
+        user = $('input.user', node)[0].value;
+        server = $('input.server', node)[0].value;
+        console.log($('input.user', node)[0]);
+        console.log(user);
         payload = {
           server: server
         };
-        endpoint = window.endpoint.users[user].ban;
+        endpoint = window.endpoint.api.users[user].ban;
         break;
       case 'mutegag':
-        user = $(node.querySelector('input.user')).val();
-        server = $(node.querySelector('input.server')).val();
+        console.log($('input.user', node)[0].value);
+        user = $('input.user', node)[0].value;
+        server = $('input.server', node)[0].value;
         if (server !== '') {
           payload = {
             server: server
           };
         }
-        endpoint = window.endpoint.users[user].mutegag;
+        endpoint = window.endpoint.api.users[user].mutegag;
         break;
       case 'server':
         node = that.parentElement.parentElement.parentElement.parentElement;
-        server = $(node.querySelector('input.uuid')).val();
-        endpoint = window.endpoint.servers[server];
+        server = $('input.uuid', node)[0].value;
+        endpoint = window.endpoint.api.servers[server];
         break;
       default:
         return;
@@ -150,8 +151,8 @@ var cssPath = function(el) {
     node = that.parentElement.parentElement.parentElement;
     switch (mode) {
       case 'admin__administrator':
-        role = $(node.querySelector('input.role')).val();
-        uuid = $(node.querySelector('input.uuid')).val();
+        role = $('input.role', node)[0].value;
+        uuid = $('input.uuid', node)[0].value;
         selector = window.api.storage[uuid + '#' + role];
         replacement = selector.getValue(true);
         payloads = [
@@ -167,7 +168,7 @@ var cssPath = function(el) {
         success = 0;
         for (j = 0, len = payloads.length; j < len; j++) {
           payload = payloads[j];
-          window.endpoint.users[uuid].post(payload, function(err, data) {
+          window.endpoint.api.users[uuid].post(payload, function(err, data) {
             if (!data.success) {
               return;
             }
@@ -188,7 +189,7 @@ var cssPath = function(el) {
         break;
       case 'admin__groups':
         scope = cssPath(node);
-        uuid = $(`${scope} input.uuid`).val();
+        uuid = $(`${scope} input.uuid`).value;
         console.log(uuid);
         data = {
           name: $(`${scope} .name span`).html(),
@@ -204,13 +205,13 @@ var cssPath = function(el) {
         ref = $(`${scope} .actions input:checked`);
         for (k = 0, len1 = ref.length; k < len1; k++) {
           i = ref[k];
-          data.flags += $(i).val();
+          data.flags += $(i).value;
         }
         time = $(`${scope} .usetime span`).html();
         if (time === !null || time !== '') {
           data.usetime = window.style.duration.parse(time);
         }
-        window.endpoint.roles[uuid].post(data, function(err, data) {
+        window.endpoint.api.roles[uuid].post(data, function(err, data) {
           state = that.getAttribute('class');
           old = state;
           if (data.success) {
@@ -249,8 +250,8 @@ var cssPath = function(el) {
     switch (mode) {
       case 'admin__administrator':
         group = node.querySelector('.icon.group');
-        uuid = $(node.querySelector('input.uuid')).val();
-        selected = $(node.querySelector('input.role')).val();
+        uuid = $('input.uuid', node)[0].value;
+        selected = $('input.role', node)[0].value;
         target = group.querySelector('span');
         $(target).remove();
         $(group).htmlAppend(`<select id='group-${uuid + '---' + selected}'></select>`);
@@ -262,12 +263,12 @@ var cssPath = function(el) {
           }
         });
         selector.passedElement.addEventListener('change', function(e) {
-          target = $(node.querySelector('.server span'));
+          target = $('.server span', node);
           server = selector.getValue().customProperties.server;
           if (server === null) {
             return target.html('all');
           } else {
-            return window.endpoint.servers[server].get(function(err, data) {
+            return window.endpoint.api.servers[server].get(function(err, data) {
               if (!data.success) {
                 return;
               }
@@ -280,8 +281,8 @@ var cssPath = function(el) {
         break;
       case 'admin__groups':
         server = node.querySelector('.icon.server');
-        uuid = $(node.querySelector('input.uuid')).val();
-        selected = $(node.querySelector('input.server')).val();
+        uuid = $('input.uuid', node)[0].value;
+        selected = $('input.server', node)[0].value;
         if (selected === '') {
           selected = 'all';
         }
@@ -315,9 +316,18 @@ var cssPath = function(el) {
         $(scope + " .icon.immunity").addClass('input-wrapper');
         $(scope + " .icon.name").addClass('input-wrapper');
         $(scope + " .icon span").addClass('input');
-        $(scope + " .icon span").attr('contenteditable', 'true');
+        $(scope + " .icon span").setAttribute('contenteditable', 'true');
         window.api.storage[uuid] = selector;
         window.api.servers('', selector, selected);
+        break;
+      case 'ban':
+        console.log('placeholder');
+        break;
+      case 'mutegag':
+        console.log('placeholder');
+        break;
+      case 'server':
+        console.log('placeholder');
     }
     $(that).css('opacity', '0');
     setTimeout(function() {
@@ -345,7 +355,7 @@ var cssPath = function(el) {
           force: true
         };
         user = window.usernameinput.getValue(true);
-        window.endpoint.users[user].post(data, function(err, data) {
+        window.endpoint.api.users[user].post(data, function(err, data) {
           if (data.success) {
             window.style.submit(that);
           } else {
@@ -359,9 +369,9 @@ var cssPath = function(el) {
         }, 3000);
       case 'admin__groups':
         data = {
-          name: $("#inputgroupname").val(),
+          name: $("#inputgroupname").value,
           server: window.serverinput.getValue(true),
-          immunity: parseInt($("#inputimmunityvalue").val()),
+          immunity: parseInt($("#inputimmunityvalue").value),
           usetime: null,
           flags: ''
         };
@@ -371,13 +381,13 @@ var cssPath = function(el) {
         ref = $(".row.add .actions input:checked");
         for (j = 0, len = ref.length; j < len; j++) {
           i = ref[j];
-          data.flags += $(i).val();
+          data.flags += $(i).value;
         }
-        time = $("#inputtimevalue").val();
+        time = $("#inputtimevalue").value;
         if (time === !null || time !== '') {
           data.usetime = window.style.duration.parse(time);
         }
-        window.endpoint.roles.put(data, function(err, data) {
+        window.endpoint.api.roles.put(data, function(err, data) {
           if (data.success) {
             window.style.submit(that);
           } else {
@@ -392,23 +402,23 @@ var cssPath = function(el) {
       case 'ban':
         now = new Date();
         now = now.getTime() / 1000;
-        time = $("#inputduration").val();
+        time = $("#inputduration").value;
         if (time !== '') {
-          time = new Date($("#inputduration").val());
+          time = new Date($("#inputduration").value);
           time = time.getTime() / 1000;
         } else {
           time = 0;
         }
         user = window.usernameinput.getValue(true);
         data = {
-          reason: $("#inputdescription").val(),
+          reason: $("#inputdescription").value,
           length: parseInt(time - now)
         };
         server = window.serverinput.getValue(true);
         if (server !== 'all') {
           data.server = server;
         }
-        window.endpoint.users[user].ban.put(data, function(err, data) {
+        window.endpoint.api.users[user].ban.put(data, function(err, data) {
           if (data.success) {
             return window.style.submit(that);
           } else {
@@ -422,7 +432,7 @@ var cssPath = function(el) {
       case 'mutegag':
         now = new Date();
         now = now.getTime() / 1000;
-        time = $("#inputduration").val();
+        time = $("#inputduration")[0].value;
         if (time !== '') {
           time = new Date(time);
           time = time.getTime() / 1000;
@@ -431,9 +441,9 @@ var cssPath = function(el) {
         }
         user = window.usernameinput.getValue(true);
         type = '';
-        $('.row.add .action .selected').each((function(e) {
+        $('.row.add .action .selected').forEach(function(e) {
           return type += e.id;
-        }));
+        });
         if (type.match(/mute/) && type.match(/gag/)) {
           type = 'both';
         }
@@ -441,7 +451,7 @@ var cssPath = function(el) {
           type = 'both';
         }
         data = {
-          reason: $("#inputdescription").val(),
+          reason: $("#inputdescription")[0].value,
           length: parseInt(time - now),
           type: type
         };
@@ -449,7 +459,7 @@ var cssPath = function(el) {
         if (server !== 'all') {
           data.server = server;
         }
-        window.endpoint.users[user].mutegag.put(data, function(err, data) {
+        window.endpoint.api.users[user].mutegag.put(data, function(err, data) {
           if (data.success) {
             window.style.submit(that);
           } else {
@@ -466,14 +476,14 @@ var cssPath = function(el) {
       case 'server':
         node = that.parentElement.parentElement.parentElement;
         data = {
-          name: $("#inputservername").val(),
-          ip: $('#inputip').val().match(/^([0-9]{1,3}\.){3}[0-9]{1,3}/)[0],
-          port: parseInt($('#inputip').val().split(':')[1]),
-          password: $('#inputpassword').val(),
+          name: $("#inputservername")[0].value,
+          ip: $('#inputip')[0].value.match(/^([0-9]{1,3}\.){3}[0-9]{1,3}/)[0],
+          port: parseInt($('#inputip')[0].value.split(':')[1]),
+          password: $('#inputpassword')[0].value,
           game: window.gameinput.getValue(true),
-          mode: $('#inputmode').val()
+          mode: $('#inputmode')[0].value
         };
-        window.endpoint.servers.put(data, function(err, data) {
+        window.endpoint.api.servers.put(data, function(err, data) {
           if (data.success) {
             window.style.submit(that);
           } else {

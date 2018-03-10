@@ -288,6 +288,7 @@ def ban(request, u=None, validated={}, *args, **kwargs):
     if validated['length'] is not None:
       ban.length = datetime.timedelta(seconds=validated['length'])
 
+    ban.updated_by = request.user
     ban.save()
 
   elif request.method == 'PUT':
@@ -369,6 +370,7 @@ def mutegag(request, u=None, validated={}, *args, **kwargs):
     if validated['length'] is not None:
       mutegag.length = datetime.timedelta(seconds=validated['length'])
 
+    mutegag.updated_by = request.user
     mutegag.save()
 
   elif request.method == 'PUT':

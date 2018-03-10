@@ -3,8 +3,7 @@ search = (query, that=null, internal=false) ->
   window.cache.steam =
     _ts: ts
 
-  $({'query': query, '_ts': ts}).ajax('/api/v1/steam/search/' + Number(internal), 'GET', (data, status) ->
-    data = JSON.parse data
+  window.endpoint.api.steam.search[Number(internal)]({'query': query, '_ts': ts}).get((err, data) ->
     data = data.result
 
     if data._ts < window.cache.steam._ts

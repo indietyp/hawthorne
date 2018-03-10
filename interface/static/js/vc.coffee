@@ -5,40 +5,44 @@ change = (destination='home') ->
 
   switch destination
     when 'home'
-      url = '/'
+      url = ''
     when 'player'
-      url = '/players'
+      url = 'players'
     when 'admin'
-      url = '/admins'
+      url = 'admins'
     when 'server'
-      url = '/servers'
+      url = 'servers'
     when 'ban'
-      url = '/bans'
+      url = 'bans'
     when 'mutegag'
-      url = '/mutegags'
+      url = 'mutegags'
     when 'announcements'
-      url = '/announcements'
+      url = 'announcements'
     when 'chat'
-      url = '/chat'
+      url = 'chat'
     when 'settings'
-      url = '/settings'
+      url = 'settings'
     else
       return false
 
-  data =
-    csrfmiddlewaretoken: window.csrftoken
+  header =
+    'X-CSRFTOKEN': window.csrftoken
 
-  $(data).ajax(url, method, (data, status) ->
+  window.endpoint.bare[url].post(header, {}, (dummy, response) ->
+    status = response.status
+    data = response.data
+
     if status == 200
       $("#content").css('opacity', '0')
 
       setTimeout(->
-        $("#content").html(data)
-        for scr in $("#content script.execution")
-          eval($(scr).html())
+        $("#content")[0].innerHTML = data
+        $("#content script.execution").forEach((scr) ->
+          eval(scr.innerHTML)
+        )
         feather.replace()
         $("#content").css('opacity', '')
-      , 200)
+      , 300)
     else
       return false
 

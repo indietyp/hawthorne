@@ -8,12 +8,11 @@
     window.cache.steam = {
       _ts: ts
     };
-    $({
+    window.endpoint.api.steam.search[Number(internal)]({
       'query': query,
       '_ts': ts
-    }).ajax('/api/v1/steam/search/' + Number(internal), 'GET', function(data, status) {
+    }).get(function(err, data) {
       var ele, formatted, i, len;
-      data = JSON.parse(data);
       data = data.result;
       if (data._ts < window.cache.steam._ts) {
         return false;

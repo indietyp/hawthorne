@@ -4,56 +4,56 @@
   var ajax, change;
 
   change = function(destination = 'home') {
-    var data, method, url;
+    var header, method, url;
     method = 'POST';
     switch (destination) {
       case 'home':
-        url = '/';
+        url = '';
         break;
       case 'player':
-        url = '/players';
+        url = 'players';
         break;
       case 'admin':
-        url = '/admins';
+        url = 'admins';
         break;
       case 'server':
-        url = '/servers';
+        url = 'servers';
         break;
       case 'ban':
-        url = '/bans';
+        url = 'bans';
         break;
       case 'mutegag':
-        url = '/mutegags';
+        url = 'mutegags';
         break;
       case 'announcements':
-        url = '/announcements';
+        url = 'announcements';
         break;
       case 'chat':
-        url = '/chat';
+        url = 'chat';
         break;
       case 'settings':
-        url = '/settings';
+        url = 'settings';
         break;
       default:
         return false;
     }
-    data = {
-      csrfmiddlewaretoken: window.csrftoken
+    header = {
+      'X-CSRFTOKEN': window.csrftoken
     };
-    $(data).ajax(url, method, function(data, status) {
+    window.endpoint.bare[url].post(header, {}, function(dummy, response) {
+      var data, status;
+      status = response.status;
+      data = response.data;
       if (status === 200) {
         $("#content").css('opacity', '0');
         setTimeout(function() {
-          var i, len, ref, scr;
-          $("#content").html(data);
-          ref = $("#content script.execution");
-          for (i = 0, len = ref.length; i < len; i++) {
-            scr = ref[i];
-            eval($(scr).html());
-          }
+          $("#content")[0].innerHTML = data;
+          $("#content script.execution").forEach(function(scr) {
+            return eval(scr.innerHTML);
+          });
           feather.replace();
           return $("#content").css('opacity', '');
-        }, 200);
+        }, 300);
       } else {
         return false;
       }
