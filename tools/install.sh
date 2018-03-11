@@ -122,7 +122,8 @@ main() {
 
   printf "${BLUE}Installing the package requirements...${NORMAL}\n"
   if hash apt >/dev/null 2>&1; then
-    apt-get install -y software-properties-common
+    apt update
+    apt install -y software-properties-common
     apt-add-repository -y ppa:brightbox/ruby-ng
     apt update
     apt install -y --force-yes --fix-missing python3 python3-dev python3-pip ruby ruby-dev redis-server libmysqlclient-dev libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential ruby2.4 ruby2.4-dev ruby-switch
