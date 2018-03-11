@@ -1,4 +1,7 @@
 from .__rcon import RCon
+import json
+import valve.rcon
+import datetime
 
 
 class RConSourcemod:
@@ -15,7 +18,18 @@ class RConSourcemod:
     pass
 
   def status(self, *args, **kwargs):
-    return self.rcon.run('json_status')[0]
+    try:
+      response = self.rcon.run('json_status')[0]
+    except valve.rcon.RCONError as e:
+      return [e]
+
+    response = json.loads(response)
+
+    if response['stats']['timeleft'] == -1:
+      response['stats']['timeleft'] = None
+    else:
+      response['stats']['timeleft'] = datetime.timedelta(seconds=response['stats']['timeleft'])
+    return response
 
   def execute(self, *args, **kwargs):
     pass

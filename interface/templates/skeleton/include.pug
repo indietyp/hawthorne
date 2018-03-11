@@ -20,7 +20,17 @@ link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/choices.js/3
 // Own Templates
 link(rel="stylesheet", href='{% static "css/template.sass"|compile %}')
 
-link(rel="shortcut icon", type="image/png", href='{% static "img/favicon.png" %}')
+
+// FAVICONS YAY
+
+link(rel="apple-touch-icon-precomposed", type="image/png", href='{% static "favicons/152.png" %}')
+link(rel="shortcut icon", type="image/png", href='{% static "favicons/16.png" %}')
+
+for i in favicon_sizes
+  - with 'favicons/'|add:i|add:'.png' as url
+    link(rel="shortcut icon", type="image/png", sizes="{{i}}x{{i}}", href="{% static url %}")
+
+
 meta(name="theme-color", content="#2E363F")
 
 // ========================= JavaScript =========================

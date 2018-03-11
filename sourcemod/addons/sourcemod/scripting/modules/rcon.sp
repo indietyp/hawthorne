@@ -132,7 +132,7 @@ int GetClientFromSteamID(char steamid[20]) {
 }
 
 public Action CMD_Status(int client, int args) {
-  if(client != 0)
+  if (client != 0)
     return Plugin_Handled;
 
   int online = 0;
@@ -140,30 +140,37 @@ public Action CMD_Status(int client, int args) {
     if(IsClientInGame(i) && !IsFakeClient(i))
       online++;
 
-  char currentMap[50];
-  GetCurrentMap(currentMap, sizeof(currentMap));
+  char map[64];
+  GetCurrentMap(map, sizeof(map));
 
-  int Tscore  = GetTeamScore(2);
-  int CTscore = GetTeamScore(3);
-
-  int timeleft;
-  GetMapTimeLeft(timeleft);
+  JSONObject scores = new JSONObject();
+  int teams = GetTeamCount();
+  for (int i. = 0, i < teams, i++) {
+    char name[256];
+    GetTeamName(i, name, sizeof(name));
+    scores.SetString(name, GetTeamScore(i))
+  }
 
   JSONObject output = new JSONObject();
   JSONObject stats = new JSONObject();
 
   stats.SetString("uuid", server);
-  stats.SetString("map", currentMap);
+  stats.SetString("map", map);
   stats.SetInt("online", online);
-  stats.SetInt("timeleft", timeleft);
-  stats.SetInt("score__T", Tscore);
-  stats.SetInt("score__CT", CTscore);
+  stats.SetInt("timeleft", GetMapTimeLeft(timeleft));
+  stats.setInt("uptime", GetGameTime())
+  stats.Set("scores", scores);
+
   output.Set("stats", stats);
   output.Set("players", AddToList());
 
   char reply[1024];
   output.ToString(reply, sizeof(reply));
   ReplyToCommand(client, reply);
+
+  delete stats;
+  delete scores;
+  delete output;
 
   return Plugin_Handled;
 }
@@ -172,14 +179,17 @@ JSONArray AddToList() {
   JSONArray output = new JSONArray();
 
   for (int i = 1; i <= MaxClients; i++) {
-    if(IsClientInGame(i) && !IsFakeClient(i)) {
+    if (IsClientInGame(i) && !IsFakeClient(i)) {
       char username[MAX_NAME_LENGTH], steamid[20], cIP[20], cCountry[50];
+
       GetClientName(i, username, sizeof(username));
       ReplaceString(username, sizeof(username), "\\", "");
       ReplaceString(username, sizeof(username), "\"", "''");
+
       GetClientAuthId(i, AuthId_SteamID64, steamid, sizeof(steamid));
       GetClientIP(i, cIP, sizeof(cIP));
       GeoipCountry(cIP, cCountry, sizeof(cCountry));
+
       int kills   = (!IsSpectator(i)) ? GetClientFrags(i) : 0;
       int deaths  = (!IsSpectator(i)) ? GetClientDeaths(i) : 0;
       int online = GetClientTime(i);

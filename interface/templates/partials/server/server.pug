@@ -1,3 +1,5 @@
+- load interface_utils
+
 .item.pure-u-1-1.pure-g.second
   input.hidden.uuid(type='hidden', value=data.id)
   .heading.flex
@@ -16,7 +18,7 @@
         span.content= data.get_game_display
       .section.icon.pure-u-1-2.pure-u-lg-1-3
         i(data-feather='map')
-        span.content de_mirage [DUMMY]
+        span.content= data.executed.stats.map
       .section.icon.pure-u-1-2.pure-u-lg-1-3
         i(data-feather='briefcase')
         span.content
@@ -44,10 +46,14 @@
         span.content 01 - 01 [DUMMY]
       .section.icon.pure-u-1-2.pure-u-lg-1-3
         i(data-feather='users')
-        span.content 12 [DUMMY]
+        span.content= data.executed.stats.online
       .section.icon.pure-u-1-2.pure-u-lg-1-3
         i(data-feather='clock')
-        span.content= data.created_at|timesince
+        span.content
+          if data.executed.stats.timeleft is None
+            i.bpi-unlimited.em2
+          else
+            =data.executed.stats.timeleft|duration
 
   .row.add.pure-g
     .pure-u-1-1.flex.center.relative

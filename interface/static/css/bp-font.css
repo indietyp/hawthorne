@@ -18,6 +18,15 @@
   margin-top: 6px;
 }
 
+.em2[class*='bpi-'] {
+  height: 2em;
+}
+
+.em2[class*='bpi-']:before {
+  margin-top: 6px;
+  font-size: 2em;
+}
+
 [class*='bpi-'] {
   height: 32px;
 }

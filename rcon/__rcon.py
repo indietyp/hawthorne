@@ -8,18 +8,18 @@ class RCon:
       server = Server.objects.get(id=server)
 
     self.server = server
+    self.pwd = self.server.password
+    self.addr = (self.server.ip, self.server.port)
 
   def run(self, command):
-    pwd = self.server.password
-    addr = (self.server.ip, self.server.port)
-
     output = []
-    with valve.rcon.RCON(addr, pwd) as rcon:
-     if isinstance(command, str):
-       command = [command]
+    with valve.rcon.RCON(self.addr, self.pwd) as rcon:
+      rcon.authenticate()
+      if isinstance(command, str):
+        command = [command]
 
-     for cmd in command:
-       response = rcon(cmd)
-       output.append(response)
+      for cmd in command:
+        response = rcon.execute(cmd)
+        output.append(response.text)
 
     return output

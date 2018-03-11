@@ -35,8 +35,19 @@ for file in os.listdir(os.path.dirname(os.path.realpath(__file__))):
     __all__.append(file[:-3])
 
 
-def renderer(request, template, obj, page, extra=[]):
-  data = [o for o in obj[(page - 1) * PAGE_SIZE:page * PAGE_SIZE]]
+def renderer(request, template, obj, page, extra=[], execute=None):
+
+  if execute is None:
+    data = [o for o in obj[(page - 1) * PAGE_SIZE:page * PAGE_SIZE]]
+  else:
+    data = []
+
+    for o in obj[(page - 1) * PAGE_SIZE:page * PAGE_SIZE]:
+      o.executed = execute(o)
+      data.append(o)
+
+    print(data[0].executed)
+
   if page == 1:
     data.extend(extra)
   if len(data) > 0:

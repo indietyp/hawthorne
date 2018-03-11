@@ -135,6 +135,13 @@ server__server = (page=1) ->
     status = response.status
     data = response.data
     if status == 200
+      if page == 1
+        i = 0
+        for item in $("#server__server .row")
+          if i != 0
+            $(item).remove()
+          i++
+
       $("#server__server").htmlAfter(data)
 
       for scr in $(".chart-section script.execution")

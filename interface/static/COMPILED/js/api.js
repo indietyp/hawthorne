@@ -134,6 +134,7 @@ var cssPath = function(el) {
       case 'server':
         node = that.parentElement.parentElement.parentElement.parentElement;
         server = $('input.uuid', node)[0].value;
+        console.log(server);
         endpoint = window.endpoint.api.servers[server];
         break;
       default:
@@ -464,22 +465,23 @@ var cssPath = function(el) {
       case 'ban':
         now = new Date();
         now = now.getTime() / 1000;
-        time = $("#inputduration").value;
+        time = $("#inputduration")[0].value;
         if (time !== '') {
-          time = new Date($("#inputduration").value);
+          time = new Date($("#inputduration")[0].value);
           time = time.getTime() / 1000;
         } else {
           time = 0;
         }
         user = window.usernameinput.getValue(true);
         data = {
-          reason: $("#inputdescription").value,
+          reason: $("#inputdescription")[0].value,
           length: parseInt(time - now)
         };
         server = window.serverinput.getValue(true);
         if (server !== 'all') {
           data.server = server;
         }
+        console.log(data);
         window.endpoint.api.users[user].ban.put(data, function(err, data) {
           if (data.success) {
             return window.style.submit(that);

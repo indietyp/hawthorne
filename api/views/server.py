@@ -1,4 +1,5 @@
 import socket
+import valve.rcon
 from core.models import Server
 from django.contrib.auth.hashers import make_password
 from rcon.sourcemod import RConSourcemod
@@ -30,10 +31,25 @@ def list(request, validated={}, *args, **kwargs):
 
     return [s for s in server]
   elif request.method == 'PUT':
-    # resolve domain to ip
+    try:
+      ip = socket.gethostbyname(validated['ip'])
+    except socket.gaierror as e:
+      return e, 500
+
+    if validated['verify']:
+      addr = (ip, validated['port'])
+
+      try:
+        with valve.rcon.RCON(addr, validated['password']) as rcon:
+          rcon.authenticate()
+      except valve.rcon.RCONTimeoutError:
+        'Could not reach server', 500
+      except valve.rcon.RCONAuthenticationError:
+        'Wrong password was provided', 500
+
     server = Server()
     server.port = validated['port']
-    server.ip = socket.gethostbyname(validated['ip'])
+    server.ip = ip
     server.name = validated['name']
     server.game = validated['game']
 
@@ -57,12 +73,12 @@ def detailed(request, validated={}, s=None, *args, **kwargs):
   server = Server.objects.get(id=s)
 
   if request.method == 'GET':
-    # status = RConSourcemod(server).status()
+    status = RConSourcemod(server).status()
 
-    status = {}
     return {'adress': "{}:{}".format(server.ip, server.port),
             'name': server.name,
             'status': status}
+
   elif request.method == 'POST':
     # resolve domain into ip
     if validated['name'] is not None:
@@ -78,6 +94,7 @@ def detailed(request, validated={}, s=None, *args, **kwargs):
       server.password = make_password(validated['password'])
 
     server.save()
+
   elif request.method == 'DELETE':
     server.delete()
 
