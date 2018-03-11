@@ -129,13 +129,13 @@ main() {
 
     apt install -y --force-yes --fix-missing python3 python3-dev python3-pip redis-server libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential
 
-    wget -O ruby-install-0.6.1.tar.gz https://github.com/postmodern/ruby-install/archive/v0.6.1.tar.gz
-    tar -xzvf ruby-install-0.6.1.tar.gz
-    cd ruby-install-0.6.1/
-    sudo make install --silent
-    cd ..
-    rm -rf ruby-install-0.6.1
-    rm ruby-install-0.6.1.tar.gz
+    # wget -O ruby-install-0.6.1.tar.gz https://github.com/postmodern/ruby-install/archive/v0.6.1.tar.gz
+    # tar -xzvf ruby-install-0.6.1.tar.gz
+    # cd ruby-install-0.6.1/
+    # sudo make install --silent
+    # cd ..
+    # rm -rf ruby-install-0.6.1
+    # rm ruby-install-0.6.1.tar.gz
 
     ruby-install --system --latest ruby
 
@@ -198,6 +198,8 @@ main() {
     wget https://bootstrap.pypa.io/get-pip.py
     python3 get-pip.py
     rm get-pip.py
+
+    alias pip3="/usr/local/bin/pip3"
   }
 
   pip3 install gunicorn
@@ -206,8 +208,9 @@ main() {
   printf "${BLUE}Installing ruby and npm dependencies...${NORMAL}\n"
   curl -sL deb.nodesource.com/setup_8.x | sudo -E bash -
   apt install -y nodejs
-  npm install -g pug coffeescript
-  gem install sass --no-user-install
+  npm install -g pug
+  # coffeescript
+  # gem install sass --no-user-install
 
   printf "${BLUE}Configuring the project...${NORMAL}\n"
   cp $dir/panel/local.default.py $dir/panel/local.py
