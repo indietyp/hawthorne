@@ -123,7 +123,11 @@ main() {
   printf "${BLUE}Installing the package requirements...${NORMAL}\n"
   if hash apt >/dev/null 2>&1; then
     apt update
-    apt install -y --force-yes --fix-missing python3 python3-dev python3-pip redis-server libmysqlclient-dev libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential
+    apt install -y libmysqlclient-dev || {
+      apt install -y default-libmysqlclient-dev
+    }
+
+    apt install -y --force-yes --fix-missing python3 python3-dev python3-pip redis-server libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential
 
     wget -O ruby-install-0.6.1.tar.gz https://github.com/postmodern/ruby-install/archive/v0.6.1.tar.gz
     tar -xzvf ruby-install-0.6.1.tar.gz
