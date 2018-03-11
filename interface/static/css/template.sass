@@ -134,8 +134,13 @@ input[type="number"]
         transition: stroke 0.5s ease-out
         stroke: black
         padding-right: 0 !important
-        top: 2px
         left: 0
+
+        &:not(.adjusted)
+            top: 3px
+
+        &.adjusted
+            top: 5px
 
     .appendix
         position: absolute
@@ -263,6 +268,9 @@ input[type="number"]
             user-select: none
             padding: 6px
 
+            // &.userselect_none
+            //     user-select: none
+
             & .actions
                 display: block
                 width: calc(100% - 36px)
@@ -302,6 +310,10 @@ input[type="number"]
                     &:hover::after
                         max-width: 100px
 
+            &.row:not(.add):not(.add__no-add)
+                & .icon
+                    // experimental change
+                    height: 32px
             & .icon
                 display: flex
                 align-items: center

@@ -99,6 +99,15 @@ mutegag__toggle = (that) ->
     state = state.replace '  ', ' '
     i.setAttribute 'class', state
 
+DatetoISO8601 = (obj) ->
+  year = obj.getFullYear()
+  month = if obj.getMonth().toString().length == 1 then '0' + (obj.getMonth() + 1).toString() else obj.getMonth() + 1
+  date = if obj.getDate().toString().length == 1 then '0' + obj.getDate().toString() else obj.getDate()
+  hours = if obj.getHours().toString().length == 1 then '0' + obj.getHours().toString() else obj.getHours()
+  minutes = if obj.getMinutes().toString().length == 1 then '0' + obj.getMinutes().toString() else obj.getMinutes()
+
+  "#{year}-#{month}-#{date}T#{hours}:#{minutes}"
+
 submit = (that, success=true, cleanup=false) ->
   state = that.getAttribute 'class'
 
@@ -130,6 +139,12 @@ window.style =
     toggle: mutegag__toggle
 
   submit: submit
+
+  utils:
+    date:
+      convert:
+        to:
+          iso: DatetoISO8601
 
 $(() ->
 

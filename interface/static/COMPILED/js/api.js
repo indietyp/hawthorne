@@ -147,7 +147,7 @@ var cssPath = function(el) {
   };
 
   save = function(mode = '', that) {
-    var data, i, j, k, len, len1, node, old, payload, payloads, ref, replacement, role, scope, selector, state, success, time, uuid;
+    var data, i, j, k, len, len1, node, now, old, payload, payloads, ref, replacement, role, scope, selector, state, success, time, user, uuid;
     node = that.parentElement.parentElement.parentElement;
     switch (mode) {
       case 'admin__administrator':
@@ -226,11 +226,53 @@ var cssPath = function(el) {
           return data;
         });
         break;
-      case 'ban':
-        console.log('placeholder');
-        break;
       case 'mutegag':
-        console.log('placeholder');
+      case 'ban':
+        user = $('input.user')[0].value;
+        server = $('input.server')[0].value;
+        now = new Date();
+        now = now.getTime() / 1000;
+        time = $(".icon.time input", node)[0].value;
+        if (time !== '') {
+          time = new Date(time);
+          time = time.getTime() / 1000;
+        } else {
+          time = 0;
+        }
+        payload = {
+          length: parseInt(time - now),
+          reason: $(".icon.reason span", node).html()
+        };
+        if (server !== '') {
+          payload.server = server;
+        }
+        if (mode === 'mutegag') {
+          payload.type = '';
+          $('.icon.modes .red', node).forEach(function(e) {
+            payload.type += e.getAttribute('data-type');
+            return console.log(payload.type);
+          });
+          if (payload.type.match(/mute/) && payload.type.match(/gag/)) {
+            payload.type = 'both';
+          }
+          if (payload.type === '') {
+            payload.type = 'both';
+          }
+        }
+        window.endpoint.api.users[user][mode].post(payload, function(err, data) {
+          state = that.getAttribute('class');
+          old = state;
+          if (data.success) {
+            state += ' explicit green';
+          } else {
+            state += ' explicit red';
+          }
+          that.setAttribute('class', state);
+          setTimeout(function() {
+            return that.setAttribute('class', old);
+          }, 1200);
+          return data;
+        });
         break;
       case 'server':
         console.log('placeholder');
@@ -238,7 +280,7 @@ var cssPath = function(el) {
   };
 
   edit = function(mode = '', that) {
-    var actions, node, scope, selected, selector, target, trigger, uuid;
+    var date, node, now, selected, selector, target, timestamp, trigger, uuid;
     if (that.getAttribute('class').match(/save/)) {
       // this is for the actual process of saving
       save(mode, that);
@@ -296,12 +338,10 @@ var cssPath = function(el) {
             containerOuter: 'choices edit small'
           }
         });
-        actions = node.querySelector('.icon.group .actions');
-        $(actions).removeClass('disabled').addClass('enabled');
-        scope = cssPath(node);
-        $(scope + " .icon.usetime").addClass('input-wrapper');
-        $(scope + " .icon.usetime span i").remove();
-        $(scope + " .icon.usetime span").on('focusout', function(event, ui) {
+        $('.icon.group .actions', node).removeClass('disabled').addClass('enabled');
+        $(".icon.usetime", node).addClass('input-wrapper');
+        $(".icon.usetime span i", node).remove();
+        $(".icon.usetime span", node).on('focusout', function(event, ui) {
           var field, sd, seconds;
           field = $(this);
           sd = field.html();
@@ -313,18 +353,40 @@ var cssPath = function(el) {
             return field.html(window.style.duration.string(seconds));
           }
         });
-        $(scope + " .icon.immunity").addClass('input-wrapper');
-        $(scope + " .icon.name").addClass('input-wrapper');
-        $(scope + " .icon span").addClass('input');
-        $(scope + " .icon span").setAttribute('contenteditable', 'true');
+        $(".icon.immunity", node).addClass('input-wrapper');
+        $(".icon.name", node).addClass('input-wrapper');
+        $(".icon span", node).addClass('input');
+        $(".icon span", node).forEach(function(el) {
+          return el.setAttribute('contenteditable', 'true');
+        });
         window.api.storage[uuid] = selector;
         window.api.servers('', selector, selected);
         break;
       case 'ban':
-        console.log('placeholder');
-        break;
       case 'mutegag':
-        console.log('placeholder');
+        $(".icon.reason", node).addClass('input-wrapper');
+        $(".icon.reason span", node).addClass('input');
+        // $(".icon.reason span", node).css('height', "31px")
+        $(".icon.reason span", node)[0].setAttribute('contenteditable', 'true');
+        $(".icon.time", node).addClass('input-wrapper');
+        timestamp = parseInt($(".icon.time span", node)[0].getAttribute('data-timestamp')) * 1000;
+        date = new Date(timestamp);
+        date = window.style.utils.date.convert.to.iso(date);
+        now = window.style.utils.date.convert.to.iso(new Date());
+        $(".icon.time", node).htmlAppend(`<input type='datetime-local' min='${now}' value='${date}'>`);
+        $(".icon.time span", node).remove();
+        $(".icon.modes div", node).addClass('action').forEach(function(el) {
+          return el.setAttribute('onclick', 'window.style.mutegag.toggle(this)');
+        });
+        $(".icon.modes div svg", node).forEach(function(el) {
+          el = $(el);
+          if (el.hasClass('gray')) {
+            el.removeClass('gray').addClass('red');
+          }
+          if (el.hasClass('white')) {
+            return el.removeClass('white').addClass('gray');
+          }
+        });
         break;
       case 'server':
         console.log('placeholder');

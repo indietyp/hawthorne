@@ -16,18 +16,18 @@
   .column.icon.reason.pure-u-7-24
     i(data-feather="paperclip")
     span= data.reason
-  .column.icon.pure-u-3-24
+  .column.icon.modes.pure-u-3-24
     .spacer
     div
       - if data.type == 'MU' or data.type == 'BO'
-        i.explicit.red(data-feather="volume-x")
+        i.explicit.gray(data-feather="volume-x", data-type='mute')
       - else
-        i.explicit.gray(data-feather="volume-x")
+        i.explicit.white(data-feather="volume-x", data-type='mute')
     div
       - if data.type == 'GA' or data.type == 'BO'
-        i.explicit.red(data-feather="message-circle")
+        i.explicit.gray(data-feather="message-circle", data-type='gag')
       - else
-        i.explicit.gray(data-feather="message-circle")
+        i.explicit.white(data-feather="message-circle", data-type='gag')
 
   .column.icon.placeholder.pure-u-7-24
   .column.icon.server.pure-u-7-24
@@ -37,18 +37,18 @@
     else
       span all
   .column.icon.time.pure-u-7-24
-    i(data-feather="clock")
-    span
+    i.adjusted(data-feather="clock")
+    span(data-timestamp='{{data.created_at|add:data.length|date:"U"}}')
       if data.length is not None
         | until
-        = data.created_at|add:data.length|date:"d.m.y H:i:s"
+        = data.created_at|add:data.length|date:"SHORT_DATETIME_FORMAT"
       else
         i.bpi-unlimited.px24
   .column.icon.pure-u-3-24
     .spacer
     - if perms.core.change_mutegag
       .action
-        i(data-feather="edit-2")
+        i(data-feather="edit-2", onclick="window.api.edit('mutegag', this)")
     - if perms.core.delete_mutegag
       .action
         i(data-feather="trash-2", onclick="window.api.remove('mutegag', this)")

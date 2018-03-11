@@ -37,7 +37,7 @@
               window.steam.search(value, input);
             }
 
-            var call = _.debounce(debounce_search, 200);
+            var call = debounce(debounce_search, 200);
             usernameinput.passedElement.addEventListener('search', function(event) {
               if (event.detail.value.length > 0) {
                 call(event.detail.value, usernameinput);

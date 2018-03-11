@@ -12,7 +12,7 @@
     - if perms.core.view_chat_time
         span
             |[
-            = data.created_at|date:"d.m.Y H:i:s"
+            = data.created_at|date:"SHORT_DATETIME_FORMAT"
             |  ]
   .segment.second
     span.symbol.red $

@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from core.models import Server
+from django.utils import formats
 
 
 def login(request):
@@ -34,7 +35,7 @@ def ban(request):
 
 @login_required(login_url='/login')
 def mutegag(request):
-  return render(request, 'components/mutegag.pug', {})
+  return render(request, 'components/mutegag.pug')
 
 
 @login_required(login_url='/login')

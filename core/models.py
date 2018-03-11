@@ -339,7 +339,6 @@ class Mutegag(BaseModel):
         # ('delete_mutegag', 'Delete mutegags'),  # built-in
     ]
 
-
     unique_together = ('user', 'server')
 
   def __str__(self):

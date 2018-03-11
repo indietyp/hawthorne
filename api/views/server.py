@@ -1,3 +1,4 @@
+import socket
 from core.models import Server
 from django.contrib.auth.hashers import make_password
 from rcon.sourcemod import RConSourcemod
@@ -32,7 +33,7 @@ def list(request, validated={}, *args, **kwargs):
     # resolve domain to ip
     server = Server()
     server.port = validated['port']
-    server.ip = validated['ip']
+    server.ip = socket.gethostbyname(validated['ip'])
     server.name = validated['name']
     server.game = validated['game']
 

@@ -213,11 +213,57 @@ save = (mode='', that) ->
         return data
       )
 
-    when 'ban'
-      console.log 'placeholder'
+    when 'mutegag', 'ban'
+      user = $('input.user')[0].value
+      server = $('input.server')[0].value
 
-    when 'mutegag'
-      console.log 'placeholder'
+      now = new Date()
+      now = now.getTime() / 1000
+
+      time = $(".icon.time input", node)[0].value
+
+      if time != ''
+        time = new Date time
+        time = time.getTime() / 1000
+      else
+        time = 0
+
+      payload =
+        length: parseInt(time - now)
+        reason: $(".icon.reason span", node).html()
+
+      if server != ''
+        payload.server = server
+
+      if mode == 'mutegag'
+        payload.type = ''
+        $('.icon.modes .red', node).forEach((e) ->
+          payload.type += e.getAttribute 'data-type'
+          console.log payload.type
+        )
+
+        if payload.type.match(/mute/) and payload.type.match(/gag/)
+          payload.type = 'both'
+
+        if payload.type == ''
+          payload.type = 'both'
+
+      window.endpoint.api.users[user][mode].post(payload, (err, data) ->
+        state = that.getAttribute 'class'
+        old = state
+
+        if data.success
+          state += ' explicit green'
+        else
+          state += ' explicit red'
+        that.setAttribute 'class', state
+
+        setTimeout(->
+          that.setAttribute 'class', old
+        , 1200)
+
+        return data
+      )
 
     when 'server'
       console.log 'placeholder'
@@ -290,14 +336,10 @@ edit = (mode='', that) ->
         }
       })
 
-      actions = node.querySelector('.icon.group .actions')
-      $(actions).removeClass('disabled').addClass('enabled')
-
-      scope = cssPath node
-
-      $(scope + " .icon.usetime").addClass('input-wrapper')
-      $(scope + " .icon.usetime span i").remove()
-      $(scope + " .icon.usetime span").on('focusout', (event, ui) ->
+      $('.icon.group .actions', node).removeClass('disabled').addClass('enabled')
+      $(".icon.usetime", node).addClass('input-wrapper')
+      $(".icon.usetime span i", node).remove()
+      $(".icon.usetime span", node).on('focusout', (event, ui) ->
         field = $(this)
         sd = field.html()
         seconds = window.style.duration.parse(sd)
@@ -309,18 +351,47 @@ edit = (mode='', that) ->
           field.html window.style.duration.string(seconds)
       )
 
-      $(scope + " .icon.immunity").addClass('input-wrapper')
-      $(scope + " .icon.name").addClass('input-wrapper')
+      $(".icon.immunity", node).addClass('input-wrapper')
+      $(".icon.name", node).addClass('input-wrapper')
 
-      $(scope + " .icon span").addClass('input')
-      $(scope + " .icon span").setAttribute('contenteditable', 'true')
+      $(".icon span", node).addClass('input')
+      $(".icon span", node).forEach((el) ->
+        el.setAttribute 'contenteditable', 'true'
+      )
 
       window.api.storage[uuid] = selector
       window.api.servers('', selector, selected)
-    when 'ban'
-      console.log 'placeholder'
-    when 'mutegag'
-      console.log 'placeholder'
+
+    when 'ban', 'mutegag'
+      $(".icon.reason", node).addClass('input-wrapper')
+      $(".icon.reason span", node).addClass('input')
+      # $(".icon.reason span", node).css('height', "31px")
+      $(".icon.reason span", node)[0].setAttribute('contenteditable', 'true')
+
+      $(".icon.time", node).addClass('input-wrapper')
+      timestamp = parseInt($(".icon.time span", node)[0].getAttribute('data-timestamp')) * 1000
+
+      date = new Date timestamp
+      date = window.style.utils.date.convert.to.iso(date)
+
+      now = window.style.utils.date.convert.to.iso(new Date())
+
+      $(".icon.time", node).htmlAppend("<input type='datetime-local' min='#{now}' value='#{date}'>")
+      $(".icon.time span", node).remove()
+
+      $(".icon.modes div", node).addClass('action').forEach((el) ->
+        el.setAttribute 'onclick', 'window.style.mutegag.toggle(this)'
+      )
+
+      $(".icon.modes div svg", node).forEach((el) ->
+        el = $(el)
+        if el.hasClass('gray')
+          el.removeClass('gray').addClass('red')
+
+        if el.hasClass('white')
+          el.removeClass('white').addClass('gray')
+      )
+
     when 'server'
       console.log 'placeholder'
 

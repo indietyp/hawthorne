@@ -8,9 +8,10 @@
   .column.icon.invoker.pure-u-7-24
     i(data-feather="zap")
     span= data.created_by.namespace
-  .column.icon.reason.pure-u-10-24
+  .column.icon.reason.pure-u-7-24
     i(data-feather="paperclip")
     span= data.reason
+  .column.icon.placeholder.pure-u-3-24
   .column.icon.placeholder.pure-u-7-24
   .column.icon.server.pure-u-7-24
     i(data-feather="hard-drive")
@@ -19,11 +20,11 @@
     - else
       span= data.server.name
   .column.icon.time.pure-u-7-24
-    i(data-feather="clock")
-    span
+    i.adjusted(data-feather="clock")
+    span(data-timestamp='{{data.created_at|add:data.length|date:"U"}}')
       if data.length is not None
         | until
-        = data.created_at|add:data.length|date:"d.m.y H:i:s"
+        = data.created_at|add:data.length|date:"SHORT_DATETIME_FORMAT"
       else
         i.bpi-unlimited.px24
 
@@ -31,7 +32,7 @@
     .spacer
     - if perms.core.change_ban
       .action
-        i(data-feather="edit-2")
+        i(data-feather="edit-2", onclick="window.api.edit('ban', this)")
     - if perms.core.delete_ban
       .action
         i(data-feather="trash-2", onclick="window.api.remove('ban', this)")

@@ -33,24 +33,7 @@
           .action
             i.animated(onclick="window.api.submit('ban', this)", data-feather="plus")
         script.execution.
-          var now = new Date()
-            , year
-            , month
-            , date
-            , hours
-            , minutes
-            , seconds
-            , formattedDateTime
-            ;
-
-          year = now.getFullYear();
-          month = now.getMonth().toString().length === 1 ? '0' + (now.getMonth() + 1).toString() : now.getMonth() + 1;
-          date = now.getDate().toString().length === 1 ? '0' + (now.getDate()).toString() : now.getDate();
-          hours = now.getHours().toString().length === 1 ? '0' + now.getHours().toString() : now.getHours();
-          minutes = now.getMinutes().toString().length === 1 ? '0' + now.getMinutes().toString() : now.getMinutes();
-
-          formattedDateTime = year + '-' + month + '-' + date + 'T' + hours + ':' + minutes;
-          document.getElementById('inputduration').min = formattedDateTime;
+          document.getElementById('inputduration').min = window.style.utils.date.convert.to.iso(new Date());;
           var usernameinput = new Choices('#username-input', {
             searchChoices: false,
             searchPlaceholderValue: "Steam Username",
@@ -64,7 +47,7 @@
             window.steam.search(value, input, true);
           }
 
-          var call = _.debounce(debounce_search, 200);
+          var call = debounce(debounce_search, 200);
           usernameinput.passedElement.addEventListener('search', function(event) {
             if (event.detail.value.length > 0) {
               call(event.detail.value, usernameinput);
