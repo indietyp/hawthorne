@@ -123,11 +123,17 @@ main() {
   printf "${BLUE}Installing the package requirements...${NORMAL}\n"
   if hash apt >/dev/null 2>&1; then
     apt update
-    apt install -y software-properties-common
-    apt-add-repository -y ppa:brightbox/ruby-ng
-    apt update
-    apt install -y --force-yes --fix-missing python3 python3-dev python3-pip ruby ruby-dev redis-server libmysqlclient-dev libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential ruby2.4 ruby2.4-dev ruby-switch
-    ruby-switch --set ruby2.4
+    apt install -y --force-yes --fix-missing python3 python3-dev python3-pip redis-server libmysqlclient-dev libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential
+
+    wget -O ruby-install-0.6.1.tar.gz https://github.com/postmodern/ruby-install/archive/v0.6.1.tar.gz
+    tar -xzvf ruby-install-0.6.1.tar.gz
+    cd ruby-install-0.6.1/
+    sudo make install
+    cd ..
+    rm -rf ruby-install-0.6.1
+    rm ruby-install-0.6.1.tar.gz
+
+    ruby-install --system --latest ruby
 
     if [ $utils -eq 1 ]; then
       if [ $interactive -eq 0 ]; then
