@@ -8,12 +8,12 @@ void CreateNatives() {
 public int Native_GetServerUUID(Handle plugin, int numParams) {
   int maxlength = GetNativeCell(2);
 
-  SetNativeString(1, server, maxlength);
+  SetNativeString(1, SERVER, maxlength);
 }
 
 public int Native_GetClientID(Handle plugin, int numParams) {
   int client = GetNativeCell(3);
   int maxlength = GetNativeCell(2);
 
-  SetNativeString(1, (!IsFakeClient(client)) ? ht_clients[client] : "", maxlength);
+  SetNativeString(1, (!IsFakeClient(client)) ? CLIENTS[client] : "", maxlength);
 }

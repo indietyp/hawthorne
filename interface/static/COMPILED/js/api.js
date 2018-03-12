@@ -148,7 +148,7 @@ var cssPath = function(el) {
   };
 
   save = function(mode = '', that) {
-    var data, i, j, k, len, len1, node, now, old, payload, payloads, ref, replacement, role, scope, selector, state, success, time, user, uuid;
+    var data, j, len, node, now, old, payload, payloads, replacement, role, scope, selector, state, success, time, user, uuid;
     node = that.parentElement.parentElement.parentElement;
     switch (mode) {
       case 'admin__administrator':
@@ -190,8 +190,7 @@ var cssPath = function(el) {
         break;
       case 'admin__groups':
         scope = cssPath(node);
-        uuid = $(`${scope} input.uuid`).value;
-        console.log(uuid);
+        uuid = $("input.uuid", node)[0].value;
         data = {
           name: $(`${scope} .name span`).html(),
           server: window.api.storage[uuid].getValue(true),
@@ -203,11 +202,9 @@ var cssPath = function(el) {
         if (data.server === 'all') {
           data.server = null;
         }
-        ref = $(`${scope} .actions input:checked`);
-        for (k = 0, len1 = ref.length; k < len1; k++) {
-          i = ref[k];
-          data.flags += $(i).value;
-        }
+        $(".actions input:checked", node).forEach(function(i) {
+          return data.flags += i.value;
+        });
         time = $(`${scope} .usetime span`).html();
         if (time === !null || time !== '') {
           data.usetime = window.style.duration.parse(time);

@@ -13,9 +13,9 @@ public Action OnPlayerChatMessage(int client, const char[] command, int argc) {
   int handled = MuteGag_OnPlayerChatMessage(client, message);
   if (handled > 0) return Plugin_Handled;
 
-  if (logs_enabled.IntValue == 0 || StrEqual(server, "")) return Plugin_Continue;
-  if (StrEqual(ht_clients[client], "")) {
-    LogError("[hawthorne] Failed to send message to the API of the manager, the client UUID was not fetched.");
+  if (MODULE_LOG.IntValue == 0 || StrEqual(SERVER, "")) return Plugin_Continue;
+  if (StrEqual(CLIENTS[client], "")) {
+    LogError("[hawthorne] Failed to send message to the API of the MANAGER, the client UUID was not fetched.");
     return Plugin_Continue;
   }
 
@@ -29,8 +29,8 @@ stock void SendChatMessage(int client, char[] message, int type = 0) {
   GetClientIP(client, ip, sizeof(ip));
 
   JSONObject payload = new JSONObject();
-  payload.SetString("user", ht_clients[client]);
-  payload.SetString("server", server);
+  payload.SetString("user", CLIENTS[client]);
+  payload.SetString("server", SERVER);
   payload.SetString("ip", ip);
   payload.SetString("message", message);
   httpClient.Put("system/chat", payload, APINoResponseCall);
@@ -47,7 +47,7 @@ public Action OnClientCommand(int client, int args) {
   // check if the client is an actual person and online
   if (!IsClientInGame(client) || IsFakeClient(client)) return Plugin_Continue;
   if (client < 1) return Plugin_Continue;
-  if (logs_enabled.IntValue == 0 || StrEqual(server, "")) return Plugin_Continue;
+  if (MODULE_LOG.IntValue == 0 || StrEqual(SERVER, "")) return Plugin_Continue;
   if(StrContains(command, "sm_") == -1 || !IsAdminCMD(command)) return Plugin_Continue;
 
   // formatting the command to include the argument used

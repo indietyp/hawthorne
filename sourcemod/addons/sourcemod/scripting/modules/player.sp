@@ -1,7 +1,7 @@
 void Players_OnClientAuthorized(int client) {
-  ht_clients[client] = "";
+  CLIENTS[client] = "";
 
-  if (StrEqual(server, "")) {
+  if (StrEqual(SERVER, "")) {
     GetServerUUID();
   }
 
@@ -20,7 +20,7 @@ void Players_OnClientAuthorized(int client) {
   payload.SetString("username", username);
   payload.SetString("ip", ip);
   payload.SetString("country", country);
-  payload.SetString("server", server);
+  payload.SetString("server", SERVER);
   payload.SetBool("connected", true);
 
   httpClient.Put("users", payload, OnClientIsInAPI, client);
@@ -29,13 +29,13 @@ void Players_OnClientAuthorized(int client) {
 
 void Players_OnClientDisconnect(int client) {
   JSONObject payload = new JSONObject();
-  payload.SetString("id", ht_clients[client]);
-  payload.SetString("server", server);
+  payload.SetString("id", CLIENTS[client]);
+  payload.SetString("server", SERVER);
   payload.SetBool("connected", false);
 
   httpClient.Put("users", payload, APINoResponseCall);
 
-  ht_clients[client] = "";
+  CLIENTS[client] = "";
   delete payload;
 }
 
@@ -52,7 +52,7 @@ public void OnClientIsInAPI(HTTPResponse response, any value) {
     return;
   }
 
-  if (StrEqual(server, ""))
+  if (StrEqual(SERVER, ""))
     return;
 
   JSONObject output = view_as<JSONObject>(response.Data);
@@ -63,7 +63,7 @@ public void OnClientIsInAPI(HTTPResponse response, any value) {
     return;
   } else {
     JSONObject result = view_as<JSONObject>(output.Get("result"));
-    result.GetString("id", ht_clients[client], 37);
+    result.GetString("id", CLIENTS[client], 37);
     delete result;
     OnClientIDReceived(client);
   }
@@ -82,12 +82,12 @@ void PlayersOnline_OnClientDisconnect(int client) {
   payload.SetString("steamid", steamid);
   payload.SetString("username", username);
   payload.SetBool("connected", false);
-  payload.SetString("server", server);
+  payload.SetString("server", SERVER);
 
   httpClient.Put("users", payload, OnClientDisconnectAPI);
   delete payload;
 
-  ht_clients[client] = "";
+  CLIENTS[client] = "";
 }
 
 public void OnClientDisconnectAPI(HTTPResponse response, any value) {

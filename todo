@@ -3,8 +3,15 @@
  ✔ add, remove, change implementation @done (18-02-25 19:25)
  [ ] settings
  [ ] homepage
- [ ] sourcemod
+ ✔ sourcemod @done (18-03-12 15:24)
  [ ] announcements
- [ ] loading spinner bellwether logo
- [ ] new icon as favicon
- [ ] change icon
+ ✘ loading spinner bellwether logo @cancelled (18-03-12 15:24)
+ ✔ new icon as favicon @done (18-03-12 15:24)
+ ✔ change icon @done (18-03-12 15:24)
+ [ ] execute commands from frontend @today @high
+ [ ] show command output in frontend -> slide down -> aswell as signal success @today @high
+ [ ] notification toast in bottom right to signal error -> humanize errors @today @high
+ [ ] test plugin in action
+ [ ] signal if cannot cannot to server  (top right small red text) of server (frontend) @today @high
+ [ ] log into different app called `log` @high
+ [ ] signalify logs @high

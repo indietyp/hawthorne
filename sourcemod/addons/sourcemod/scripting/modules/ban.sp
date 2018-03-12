@@ -7,7 +7,7 @@ void ClientBanKick(int client, char[] cAdminName, char[] cReason, char[] cTotalT
   "\nREASON:    %s"...
   "\nTOTAL:   %s"...
   "\nTIME LEFT:   %s"...
-  "\n", cServerHostName, cAdminName, cReason, cTotalTime, cTime);
+  "\n", SERVER_HOSTNAME, cAdminName, cReason, cTotalTime, cTime);
 }
 
 stock bool GetCommunityID(char[] AuthID, char[] FriendID, int size) {
@@ -91,25 +91,26 @@ stock void SecondsToTime(int seconds, char time[200], bool ShortDate = true) {
 }
 
 void Bans_OnClientIDReceived(int client) {
-  if(bans_enabled.IntValue == 1 && !StrEqual(server, "")) {
+  if(MODULE_BAN.IntValue == 1 && !StrEqual(SERVER, "")) {
     char url[512] = "users/";
-    StrCat(url, sizeof(url), ht_clients[client]);
+    StrCat(url, sizeof(url), CLIENTS[client]);
     StrCat(url, sizeof(url), "/ban?resolved=false&server=");
-    StrCat(url, sizeof(url), server);
+    StrCat(url, sizeof(url), SERVER);
 
     httpClient.Get(url, OnBanCheck, client);
   }
 }
 
 void Bans_OnMapStart() {
-  //Update hostname on each map start
+  // Update hostname on each map start
+
   ConVar hostname = FindConVar("hostname");
-  hostname.GetString(cServerHostName, sizeof(cServerHostName));
+  hostname.GetString(SERVER_HOSTNAME, sizeof(SERVER_HOSTNAME));
 }
 
 //On add ban command
 public Action OnAddBanCommand(int client, const char[] command, int args) {
-  if(bans_enabled.IntValue == 1 && !StrEqual(server, "")) {
+  if (MODULE_BAN.IntValue == 1 && !StrEqual(SERVER, "")) {
 
     // Manually send this command to the chat module, so it gets logged (because such command already exists in sourcemod)
     char cMessage[256];
@@ -157,13 +158,13 @@ public Action OnAddBanCommand(int client, const char[] command, int args) {
 
     char adminID[37], serverToBan[37];
 
-    StrCat(adminID, sizeof(adminID),  (client == 0) ? "" : ht_clients[client]);
-    StrCat(serverToBan, sizeof(serverToBan), (bans_global.IntValue == 0) ? server : "");
+    StrCat(adminID, sizeof(adminID),  (client == 0) ? "" : CLIENTS[client]);
+    StrCat(serverToBan, sizeof(serverToBan), (MODULE_BAN_GLOBAL.IntValue == 0) ? SERVER : "");
 
     JSONObject payload = new JSONObject();
 
     if (!StrEqual(serverToBan, "")) {
-      payload.SetString("server", server);
+      payload.SetString("server", SERVER);
     }
     payload.SetString("reason", cReason);
     payload.SetString("issuer", adminID);
@@ -247,20 +248,20 @@ public void OnBanCheck(HTTPResponse response, any value) {
 
 
 public Action OnBanClient(int client, int time, int flags, const char[] reason, const char[] kick_message, const char[] command, any admin) {
-  if(StrEqual(server, "")) {
+  if(StrEqual(SERVER, "")) {
     ReplyToCommand(admin, "API connection not successful, cannot ban players right now!", PREFIX);
     return Plugin_Stop;
   }
 
   // insert data into the API
   char adminID[37], serverToBan[37];
-  StrCat(adminID, sizeof(adminID), (admin == 0) ? "" : ht_clients[admin]);
-  StrCat(serverToBan, sizeof(serverToBan), (bans_global.IntValue == 0) ? server : "");
+  StrCat(adminID, sizeof(adminID), (admin == 0) ? "" : CLIENTS[admin]);
+  StrCat(serverToBan, sizeof(serverToBan), (MODULE_BAN_GLOBAL.IntValue == 0) ? SERVER : "");
 
   JSONObject payload = new JSONObject();
 
   if (!StrEqual(serverToBan, "")) {
-    payload.SetString("server", server);
+    payload.SetString("server", SERVER);
   }
 
   payload.SetString("reason", reason);
@@ -269,7 +270,7 @@ public Action OnBanClient(int client, int time, int flags, const char[] reason, 
 
 
   char url[512] = "users/";
-  StrCat(url, sizeof(url), ht_clients[client]);
+  StrCat(url, sizeof(url), CLIENTS[client]);
   StrCat(url, sizeof(url), "/ban");
 
   httpClient.Put(url, payload, APINoResponseCall);

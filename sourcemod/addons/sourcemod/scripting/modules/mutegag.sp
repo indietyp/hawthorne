@@ -1,10 +1,10 @@
 // TODO: TESTING
 void MuteGag_OnPluginStart() {
   //Get file locations
-  BuildPath(Path_SM, cMuteReasonsFile,    sizeof(cMuteReasonsFile),     "configs/hawthorne/mute-reasons.txt");
-  BuildPath(Path_SM, cGagReasonsFile,     sizeof(cGagReasonsFile),      "configs/hawthorne/gag-reasons.txt");
-  BuildPath(Path_SM, cSilenceReasonsFile, sizeof(cSilenceReasonsFile),  "configs/hawthorne/silence-reasons.txt");
-  BuildPath(Path_SM, cPunishmentTimeFile, sizeof(cPunishmentTimeFile),  "configs/hawthorne/punishment-times.txt");
+  BuildPath(Path_SM, MUTE_REASONS,    sizeof(MUTE_REASONS),     "configs/hawthorne/mute-reasons.txt");
+  BuildPath(Path_SM, GAG_REASONS,     sizeof(GAG_REASONS),      "configs/hawthorne/gag-reasons.txt");
+  BuildPath(Path_SM, SILENCE_REASONS, sizeof(SILENCE_REASONS),  "configs/hawthorne/silence-reasons.txt");
+  BuildPath(Path_SM, PUNISHMENT_TIMES, sizeof(PUNISHMENT_TIMES),  "configs/hawthorne/punishment-times.txt");
 
   //Create array lists
   UpdateConfigs();
@@ -13,7 +13,7 @@ void MuteGag_OnPluginStart() {
 
 public Action CMD_PermaMuteGag(int client, int args) {
 
-  if(mutegags_enabled.IntValue == 1 && !StrEqual(server, "")) {
+  if(MODULE_MUTEGAG.IntValue == 1 && !StrEqual(SERVER, "")) {
 
     //Get what command player is trying to execute
     char command[50], command3[50];
@@ -30,7 +30,7 @@ public Action CMD_PermaMuteGag(int client, int args) {
     //Replace sm_ with !
     char command2[50];
     command2 = command3;
-    cLastCmd[client] = command3;
+    LAST_COMMAND[client] = command3;
     ReplaceString(command2, sizeof(command2), "sm_", "!");
 
     //Check if enogh arguments are entered
@@ -69,7 +69,7 @@ public Action CMD_PermaMuteGag(int client, int args) {
 
 
     //Save admins last target ID
-    last_target[client] = (client > 0) ? ht_clients[tlist[0]] : "";
+    last_target[client] = (client > 0) ? CLIENTS[tlist[0]] : "";
 
 
     //If mute/gag/silence
@@ -97,7 +97,7 @@ public Action CMD_PermaMuteGag(int client, int args) {
 }
 
 void MuteGag_OnClientPutInServer(int client) {
-  if(!StrEqual(ht_clients[client], "")) {
+  if(!StrEqual(CLIENTS[client], "")) {
     for (int i = 0; i < 3; i++)
     {
       if((iMuteGagTimeleft[client][i] >= 0 || bMuteGagPermanent[client][i])) {
@@ -112,7 +112,7 @@ void MuteGag_OnClientPutInServer(int client) {
 public Action TryMuteAgainPlayer(Handle tmr, any userID) {
   int target = GetClientOfUserId(userID);
   if(target > 0) {
-    if (!StrEqual(ht_clients[target], "")) {
+    if (!StrEqual(CLIENTS[target], "")) {
       for (int i = 0; i < 3; i++) {
         if(iMuteGagTimeleft[target][i] >= 0 || bMuteGagPermanent[target][i]) {
           PerformMuteGag(target, i, true);
@@ -132,7 +132,7 @@ void MuteGag_PlayerTeam(int client) {
       if(iMuteGagTimeleft[client][i] >= 0 || bMuteGagPermanent[client][i]) {
         char time[200];
         SecondsToTime(iMuteGagTimeleft[client][i] * 60, time, false);
-        MuteGagAlert(client, "You have an active \x6%s {BREAK} Reason: %s {BREAK} Timeleft: %s", cMuteGagName[i], cMuteGagReason[client][i], (!bMuteGagPermanent[client][i]) ? time : "permanent");
+        MuteGagAlert(client, "You have an active \x6%s {BREAK} Reason: %s {BREAK} Timeleft: %s", cMuteGagName[i], MUTEGAG_REASONS[client][i], (!bMuteGagPermanent[client][i]) ? time : "permanent");
         PerformMuteGag(client, i, true);
       }
     }
@@ -166,10 +166,10 @@ void MuteGag_OnMapStart()
 }
 
 void UpdateConfigs() {
-  UpdateReasonArray(cMuteReasonsFile, g_MuteReasons, sizeof(g_MuteReasons));
-  UpdateReasonArray(cGagReasonsFile, g_GagReasons, sizeof(g_GagReasons));
-  UpdateReasonArray(cSilenceReasonsFile, g_SilenceReasons, sizeof(g_SilenceReasons));
-  UpdateReasonArray(cPunishmentTimeFile, g_PunishmentTimes, sizeof(g_PunishmentTimes));
+  UpdateReasonArray(MUTE_REASONS, g_MuteReasons, sizeof(g_MuteReasons));
+  UpdateReasonArray(GAG_REASONS, g_GagReasons, sizeof(g_GagReasons));
+  UpdateReasonArray(SILENCE_REASONS, g_SilenceReasons, sizeof(g_SilenceReasons));
+  UpdateReasonArray(PUNISHMENT_TIMES, g_PunishmentTimes, sizeof(g_PunishmentTimes));
 }
 
 void UpdateReasonArray(char[] filepath, char[] string, int size) {
@@ -201,22 +201,22 @@ int AddMenuItems(Menu menu, char[] cFileString, bool punishments = false) {
 
 
 void MuteGag_OnClientIDReceived(int client) {
-  if(mutegags_enabled.IntValue == 1 && !StrEqual(server, "")) {
+  if(MODULE_MUTEGAG.IntValue == 1 && !StrEqual(SERVER, "")) {
 
     //Set default values
     for (int i = 0; i < 3; i++) {
       iMuteGagTimeleft[client][i] = -1;
       bMuteGagPermanent[client][i] = false;
-      cMuteGagReason[client][i] = "";
+      MUTEGAG_REASONS[client][i] = "";
     }
     bShowMuteGagOnce[client]  = true;
     hMuteGagTimer[client]     = null;
 
     //Check if client is muted or gagged or silenced
     char url[512] = "users/";
-    StrCat(url, sizeof(url), ht_clients[client]);
+    StrCat(url, sizeof(url), CLIENTS[client]);
     StrCat(url, sizeof(url), "/mutegag?resolved=false&server=");
-    StrCat(url, sizeof(url), server);
+    StrCat(url, sizeof(url), SERVER);
 
     httpClient.Get(url, OnMuteGagCheck, client);
   }
@@ -269,7 +269,7 @@ public void OnMuteGagCheck(HTTPResponse response, any value) {
         itype = 2;
       }
 
-      cMuteGagReason[client][itype] = reason;
+      MUTEGAG_REASONS[client][itype] = reason;
       AddMuteGag(client, itype, timeleft, length);
     }
 }
@@ -323,7 +323,7 @@ void MuteGag_OnClientDisconnect(int client) {
   for (int i = 0; i < 3; i++) {
     iMuteGagTimeleft[client][i] = -1;
     bMuteGagPermanent[client][i] = false;
-    cMuteGagReason[client][i] = "";
+    MUTEGAG_REASONS[client][i] = "";
   }
   bShowMuteGagOnce[client]  = true;
   hMuteGagTimer[client]     = null;
@@ -349,7 +349,7 @@ public Action TakeAwayMinute(Handle tmr, any userID) {
 
 //-- ALL COMMANDS (mute, gag, ungag, unmUte, silence, unsilence)--//
 public Action OnPlayerMuteGag(int client, const char[] command, int args) {
-  if(mutegags_enabled.IntValue == 1 && !StrEqual(server, "")) {
+  if(MODULE_MUTEGAG.IntValue == 1 && !StrEqual(SERVER, "")) {
 
     /* Few things might be taken from sourcecomms */
 
@@ -358,7 +358,7 @@ public Action OnPlayerMuteGag(int client, const char[] command, int args) {
       return Plugin_Stop;
 
     //Save command
-    Format(cLastCmd[client], sizeof(cLastCmd), "%s", command);
+    Format(LAST_COMMAND[client], sizeof(LAST_COMMAND), "%s", command);
 
     //Manually send this command to the chat module, so it gets logged (because such command already exists in sourcemod by default)
     char cMessage[256];
@@ -422,7 +422,7 @@ public Action OnPlayerMuteGag(int client, const char[] command, int args) {
 
 
     //Save admins last target ID
-    last_target[client] = (client > 0) ? ht_clients[tlist[0]] : "";
+    last_target[client] = (client > 0) ? CLIENTS[tlist[0]] : "";
 
 
     //If mute/gag/silence
@@ -460,7 +460,7 @@ public int MenuHandler_TargetSelected(Menu menu, MenuAction action, int client, 
   {
     char steamid[20];
     menu.GetItem(param, steamid, sizeof(steamid));
-    FakeClientCommand(client, "%s \"#%s\"", cLastCmd[client], steamid);
+    FakeClientCommand(client, "%s \"#%s\"", LAST_COMMAND[client], steamid);
   }
 
   else if (action == MenuAction_End)
@@ -484,13 +484,13 @@ void AddPeopleToMenu(Menu menu)
 void APIMuteGag(int admin, char[] clientID, int type, char[] reason = "", int time = -1) {
   // Update last target for admin
   char adminID[37], serverToBan[37];
-  StrCat(adminID, sizeof(adminID), (admin == 0) ? "" : ht_clients[admin]);
-  StrCat(serverToBan, sizeof(serverToBan), (mutegags_global.IntValue == 0) ? server : "");
+  StrCat(adminID, sizeof(adminID), (admin == 0) ? "" : CLIENTS[admin]);
+  StrCat(serverToBan, sizeof(serverToBan), (MODULE_MUTEGAG_GLOBAL.IntValue == 0) ? server : "");
 
   JSONObject payload = new JSONObject();
 
   if (!StrEqual(serverToBan, "")) {
-    payload.SetString("server", server);
+    payload.SetString("server", SERVER);
   }
 
   char stype[5] = "both";
@@ -520,7 +520,7 @@ void APIMuteGag(int admin, char[] clientID, int type, char[] reason = "", int ti
   //Perform mute/gag on player if he is still ingame
   int target = -1;
   for (int i = 1; i < MaxClients; i++) {
-    if(IsClientInGame(i) && !IsFakeClient(i) && StrEqual(ht_clients[i], clientID)) {
+    if(IsClientInGame(i) && !IsFakeClient(i) && StrEqual(CLIENTS[i], clientID)) {
       target = i;
 
       if(type < 3) {

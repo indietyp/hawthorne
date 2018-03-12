@@ -27,7 +27,7 @@ class User(AbstractUser):
   online = models.BooleanField(default=False)
   ip = models.GenericIPAddressField(null=True)
 
-  roles = models.ManyToManyField('ServerGroup')
+  roles = models.ManyToManyField('ServerGroup', through='Membership')
   country = models.ForeignKey(Country, on_delete=models.CASCADE, null=True)
   avatar = models.URLField(null=True)
   profile = models.URLField(null=True)
@@ -356,3 +356,8 @@ class Log(BaseModel):
 
   def __str__(self):
     return "{} - {}".format(self.user, self.action)
+
+
+class Membership(BaseModel):
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
+  role = models.ForeignKey(ServerGroup, on_delete=models.CASCADE)

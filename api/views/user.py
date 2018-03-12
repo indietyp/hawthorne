@@ -1,4 +1,4 @@
-from core.models import User, Country, UserLogIP, UserLogTime, UserLogUsername, Server, ServerGroup, Ban, Mutegag
+from core.models import User, Country, UserLogIP, UserLogTime, UserLogUsername, Server, ServerGroup, Ban, Mutegag, Membership
 import re
 from django.views.decorators.csrf import csrf_exempt
 from core.utils import UniPanelJSONEncoder
@@ -141,16 +141,23 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
           user.flags = 'ABCDEFGHIJKLN'
           user.immunity = 100
           user.usetime = None
+          user.timeleft = None
         else:
           server = Server.objects.get(id=validated['server'])
           role = user.roles.filter(Q(server=server) | Q(server=None)).order_by('-immunity')[0]
           user.flags = role.flags.convert()
           user.immunity = role.immunity
-          user.usetime = int(role.usetime.total_seconds())
+          if role.usetime is not None:
+            user.usetime = int(role.usetime.total_seconds())
+            # get created at -> change query and system
+          else:
+            user.usetime = None
+            user.timeleft = None
 
         selected.append('flags')
         selected.append('immunity')
         selected.append('usetime')
+        selected.append('timeleft')
       except Exception as e:
         return 'serverrole does not exist for this user - {}'.format(e), 403
 
@@ -195,9 +202,13 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
       group = ServerGroup.objects.get(id=validated['role'])
 
       if validated['promotion']:
-        user.roles.add(group)
+        m = Membership()
+        m.user = user
+        m.role = group
+        m.save()
       else:
-        user.roles.remove(group)
+        m = Membership.objects.get(user=user, role=group)
+        m.delete()
 
     if validated['group'] is not None:
       group = Group.objects.get(id=validated['group'])
@@ -230,7 +241,8 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
       return 'CASCADE DELETE', 200
 
     elif validated['role'] is not None:
-      user.roles.remove(ServerGroup.objects.get(id=validated['role']))
+      m = Membership.objects.get(user=user, role=validated['role'])
+      m.delete()
     else:
       user.is_active = False
       user.is_staff = False

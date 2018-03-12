@@ -1,7 +1,7 @@
 void Hawthorne_OnPluginStart() {
   Hawthorne_InitConVars();
   MuteGag_OnPluginStart();
-  RconCommands_OnPluginStart();
+  RConCommands_OnPluginStart();
 }
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max) {
@@ -13,7 +13,7 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 
 void OnServerIDUpdated() {
   for (int i = 1; i <= MaxClients; i++)
-    if(IsClientInGame(i) && !IsFakeClient(i) && ht_clients[i] < 1) {
+    if(IsClientInGame(i) && !IsFakeClient(i) && CLIENTS[i] < 1) {
 
       MuteGag_OnClientDisconnect(i);
 
@@ -30,7 +30,7 @@ void OnClientIDReceived(int client) {
   //Push event
   Call_StartForward(forward_client);
   Call_PushCell(client);
-  //Call_PushCell(ht_clients[client]);
+  //Call_PushCell(CLIENTS[client]);
   Call_Finish();
 
   Bans_OnClientIDReceived(client);

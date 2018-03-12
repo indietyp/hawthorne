@@ -176,8 +176,7 @@ save = (mode='', that) ->
     when 'admin__groups'
       scope = cssPath node
 
-      uuid = $("#{scope} input.uuid").value
-      console.log uuid
+      uuid = $("input.uuid", node)[0].value
 
       data =
         name: $("#{scope} .name span").html()
@@ -190,8 +189,9 @@ save = (mode='', that) ->
       if data.server == 'all'
         data.server = null
 
-      for i in $("#{scope} .actions input:checked")
-        data.flags += $(i).value
+      $(".actions input:checked", node).forEach((i) ->
+        data.flags += i.value
+      )
 
       time = $("#{scope} .usetime span").html()
       if time is not null or time != ''

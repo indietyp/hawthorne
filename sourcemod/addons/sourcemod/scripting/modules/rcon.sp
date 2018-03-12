@@ -1,14 +1,16 @@
 // TODO: TESTING
-void RconCommands_OnPluginStart() {
-  RegAdminCmd("json_status",        CMD_Status,     ADMFLAG_RCON);
-  RegAdminCmd("rcon_bankick",       CMD_BanKick,    ADMFLAG_RCON);
-  RegAdminCmd("rcon_mutegag__add",  CMD_MuteGagAdd, ADMFLAG_RCON);
-  RegAdminCmd("rcon_mutegag__rem",  CMD_MuteGagRem, ADMFLAG_RCON);
-  RegAdminCmd("rcon_mutegag__res",  CMD_MuteGagRes, ADMFLAG_RCON);
-  RegAdminCmd("rcon_reload__admin", CMD_ReloadAdm,  ADMFLAG_RCON);
+void RConCommands_OnPluginStart() {
+  RegAdminCmd("json_status",        RConStatus,       ADMFLAG_RCON);
+  RegAdminCmd("rcon_init",          RConInit,         ADMFLAG_RCON);
+
+  RegAdminCmd("rcon_bankick",       RConBanKick,      ADMFLAG_RCON);
+  RegAdminCmd("rcon_mutegag__add",  RConMuteGagAdd,   ADMFLAG_RCON);
+  RegAdminCmd("rcon_mutegag__rem",  RConMuteGagRem,   ADMFLAG_RCON);
+  RegAdminCmd("rcon_mutegag__res",  RConMuteGagRes,   ADMFLAG_RCON);
+  RegAdminCmd("rcon_reload__admin", RConReloadAdmin,  ADMFLAG_RCON);
 }
 
-public Action CMD_ReloadAdm(int client, int args) {
+public Action RconReloadAdmin(int client, int args) {
   if(client != 0)
     return Plugin_Handled;
 
@@ -16,14 +18,14 @@ public Action CMD_ReloadAdm(int client, int args) {
   GetCmdArg(1, steamid, sizeof(steamid));
   int target = GetClientFromSteamID(steamid);
 
-  if(target != -1) {
+  if (target != -1) {
     Admins_OnClientIDReceived(target);
   }
 
   return Plugin_Handled;
 }
 
-public Action CMD_MuteGagRes(int client, int args) {
+public Action RconMuteGagRes(int client, int args) {
   if(client != 0)
     return Plugin_Handled;
 
@@ -48,7 +50,7 @@ public Action CMD_MuteGagRes(int client, int args) {
 }
 
 
-public Action CMD_MuteGagRem(int client, int args) {
+public Action RconMuteGagRem(int client, int args) {
   if(client != 0)
     return Plugin_Handled;
 
@@ -69,7 +71,7 @@ public Action CMD_MuteGagRem(int client, int args) {
 }
 
 
-public Action CMD_MuteGagAdd(int client, int args) {
+public Action RconMuteGagAdd(int client, int args) {
   if(client != 0)
     return Plugin_Handled;
 
@@ -94,7 +96,7 @@ public Action CMD_MuteGagAdd(int client, int args) {
   return Plugin_Handled;
 }
 
-public Action CMD_BanKick(int client, int args) {
+public Action RconBanKick(int client, int args) {
   if(client != 0)
     return Plugin_Handled;
 
@@ -131,7 +133,26 @@ int GetClientFromSteamID(char steamid[20]) {
   return -1;
 }
 
-public Action CMD_Status(int client, int args) {
+public Action RconInit(int client, int args) {
+  char token[37], ip[16], port[7], protocol[6];
+
+  GetCmdArg(1, token, sizeof(token));
+  GetCmdArg(2, ip, sizeof(ip));
+  GetCmdArg(3, port, sizeof(port));
+  GetCmdArg(4, protocol, sizeof(protocol));
+
+  APITOKEN.SetString(token)
+  MANAGER_ip.SetString(ip)
+  MANAGER_port.SetString(port)
+
+  if (StrEqual(protocol, "HTTP"))
+    MANAGER_protocol.SetBool(false);
+  else
+    MANAGER_protocol.SetBool(true);
+
+}
+
+public Action RconStatus(int client, int args) {
   if (client != 0)
     return Plugin_Handled;
 
@@ -154,7 +175,7 @@ public Action CMD_Status(int client, int args) {
   JSONObject output = new JSONObject();
   JSONObject stats = new JSONObject();
 
-  stats.SetString("uuid", server);
+  stats.SetString("id", SERVER);
   stats.SetString("map", map);
   stats.SetInt("online", online);
   stats.SetInt("timeleft", GetMapTimeLeft(timeleft));
@@ -196,7 +217,7 @@ JSONArray AddToList() {
 
       JSONObject player = new JSONObject();
 
-      player.SetString("uuid", ht_clients[i]);
+      player.SetString("uuid", CLIENTS[i]);
       player.SetString("username", username);
 
       player.SetInt("team", GetClientTeam(i));

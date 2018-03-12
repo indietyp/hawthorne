@@ -4,6 +4,7 @@
 dir=/hawthorne
 interactive=1
 utils=0
+dev=0
 
 if which tput >/dev/null 2>&1; then
   ncolors=$(tput colors)
@@ -30,19 +31,20 @@ set -e
 
 cleanup() {
   # I AM THE CLEANUP CREW DO NOT MIND ME ^-^
-  printf "${RED}Installation failed... Cleaning up${NORMAL}"
+  printf "${RED}Installation failed... Cleaning up${NORMAL}\n"
   rm -rf $dir
 }
-trap cleanup 1 2 3 6
+# trap cleanup 1 2 3 6
 
 usage() {
-  echo "The hawthorne installation tool is an effort to make installation easier."
-  echo ""
-  echo "Parameters that are currently supported:"
-  echo "\t${GREEN}-n${NORMAL}   --non-interactive (not recommended)"
-  echo "\t${GREEN}-f${NORMAL}   --full"
-  echo "\t${GREEN}-h${NORMAL}   --help"
-  echo ""
+  printf "The hawthorne installation tool is an effort to make installation easier."
+  printf ""
+  printf "Parameters that are currently supported:"
+  printf "\t${GREEN}-n${NORMAL}   --non-interactive (not recommended)"
+  printf "\t${GREEN}-f${NORMAL}   --full"
+  printf "\t${YELLOW}-d${NORMAL}   --development"
+  printf "\t${GREEN}-h${NORMAL}   --help"
+  printf ""
 }
 
 select() {
@@ -52,6 +54,8 @@ select() {
                                 ;;
         -f | --full)            utils=1
                                 ;;
+        -d | --development)     dev=1
+                                ;;
         -h | --help | help)     usage
                                 exit
                                 ;;
@@ -60,7 +64,10 @@ select() {
     esac
     shift
   done
-  main
+  main || {
+    printf "${RED}Detected problem, cleaning up.${NORMAL}\n"
+    cleanup
+  }
 
 }
 
@@ -137,7 +144,7 @@ main() {
     # rm -rf ruby-install-0.6.1
     # rm ruby-install-0.6.1.tar.gz
 
-    ruby-install --system --latest ruby
+    # ruby-install --system --latest ruby
 
     if [ $utils -eq 1 ]; then
       if [ $interactive -eq 0 ]; then
@@ -275,7 +282,7 @@ main() {
     python3 $dir/manage.py superusersteam
   fi
 
-  python3 $dir/manage.py compilestatic
+  # python3 $dir/manage.py compilestatic
   python3 $dir/manage.py collectstatic --noinput
 
   printf "${BLUE}Linking to supervisor...${NORMAL}\n"

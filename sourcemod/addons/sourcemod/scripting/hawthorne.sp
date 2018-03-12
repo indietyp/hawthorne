@@ -3,23 +3,25 @@
 #pragma newdecls required
 
 #include <sourcemod>
-#include <geoip>
-#include <basecomm>
 #include <sdktools>
+#include <basecomm>
 #include <ripext>
+#include <regex>
+#include <geoip>
 
 
 #include "modules/globals.sp"
 #include "modules/convars.sp"
 #include "modules/server.sp"
-#include "modules/players.sp"
+#include "modules/player.sp"
 #include "modules/chat.sp"
-#include "modules/bans.sp"
-#include "modules/admins.sp"
+#include "modules/ban.sp"
+#include "modules/admin.sp"
 #include "modules/mutegag.sp"
 #include "modules/rcon.sp"
+
 #include "modules/natives.sp"
-#include "modules/functions.sp"
+#include "modules/utils.sp"
 
 #pragma newdecls required
 
@@ -66,22 +68,33 @@ public void OnPluginStart() {
 }
 
 public void OnConfigsExecuted() {
-  char protocol[6], ip[16], port[6], token[37];
-  if (GetConVarInt(manager_protocol) == 1) {
-    protocol = "https";
-  } else {
-    protocol = "http";
+  char token[37];
+  GetConVarString(MANAGER, endpoint, sizeof(endpoint));
+
+  if (StrContains(endpoint, "http", false) == -1)
+    Format(endpoint, sizeof(endpoint), "http://%s", endpoint);
+
+  int n = 0;
+  while (endpoint[n] != '\0') {
+    endpoint[n] = CharToLower(endpoint[n]);
+    n++;
   }
 
-  GetConVarString(manager_ip, ip, sizeof(ip));
-  GetConVarString(manager_port, port, sizeof(port));
-  GetConVarString(api_token, token, sizeof(token));
+  for (int n = strlen(endpoint); n >= 0; n--) {
+    if (endpoint[n] == "/") {
+      endpoint[n] = " ";
+    } else {
+      break;
+    }
+  }
+  TrimString(endpoint)
 
-  endpoint = protocol;
-  StrCat(endpoint, sizeof(endpoint), "://");
-  StrCat(endpoint, sizeof(endpoint), ip);
-  StrCat(endpoint, sizeof(endpoint), ":");
-  StrCat(endpoint, sizeof(endpoint), port);
+  Regex regex = CompileRegex("(.+)(?:\/+)$")
+  if (MatchRegex(regex, endpoint) != -1)
+    GetRegexSubString(regex, 0, endpoint, sizeof(endpoint))
+
+
+  GetConVarString(APITOKEN, token, sizeof(token));
   StrCat(endpoint, sizeof(endpoint), "/api/v1");
 
   LogMessage("Configured Endpoint:");

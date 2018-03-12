@@ -1,5 +1,6 @@
 #define PREFIX          "\x3 \x4[hawthorne] \x1"
 #define PREFIX_BAD      "\x3 \x7[hawthorne] \x1"
+
 #define TYPE_MUTE       0
 #define TYPE_GAG        1
 #define TYPE_SILENCE    2
@@ -13,40 +14,39 @@ char cMuteGagName[][] =  {"mute", "gag", "silence", "unmute", "ungag", "unsilenc
 
 HTTPClient httpClient;
 
-char server[37] = "",
-     ht_clients[MAXPLAYERS + 1][37],
+char SERVER[37] = "",
+     CLIENTS[MAXPLAYERS + 1][37],
      last_target[MAXPLAYERS + 1][37];
 
 int iLastMuteGagTime[MAXPLAYERS + 1],
     iLastCommandType[MAXPLAYERS + 1],
     iClientOnlineID[MAXPLAYERS + 1],
     iMuteGagTimeleft[MAXPLAYERS + 1][3],
-    iAdminUpdateTimeleft[MAXPLAYERS + 1];
+    admin_timeleft[MAXPLAYERS + 1];
 
 Handle hMuteGagTimer[MAXPLAYERS + 1],
        forward_client,
-       hAdminTimer[MAXPLAYERS + 1];
+       admin_timer[MAXPLAYERS + 1];
 
-ConVar manager_ip,
-       manager_port,
-       manager_protocol,
-       api_token,
-       bans_enabled,
-       admins_enabled,
-       mutegags_enabled,
-       logs_enabled,
-       mutegags_global,
-       bans_global;
+ConVar MANAGER,
+       APITOKEN,
+       MODULE_BAN,
+       MODULE_ADMIN,
+       MODULE_MUTEGAG,
+       MODULE_LOG,
+       MODULE_MUTEGAG_GLOBAL,
+       MODULE_BAN_GLOBAL;
 
 char endpoint[512];
 
-char cServerHostName[100],
-     cMuteReasonsFile[PLATFORM_MAX_PATH],
-     cGagReasonsFile[PLATFORM_MAX_PATH],
-     cSilenceReasonsFile[PLATFORM_MAX_PATH],
-     cPunishmentTimeFile[PLATFORM_MAX_PATH],
-     cMuteGagReason[MAXPLAYERS + 1][3][150],
-     cLastCmd[MAXPLAYERS + 1][50];
+char SERVER_HOSTNAME[100],
+     GAG_REASONS[PLATFORM_MAX_PATH],
+     MUTE_REASONS[PLATFORM_MAX_PATH],
+     MUTEGAG_REASONS[MAXPLAYERS + 1][3][150],
+
+     SILENCE_REASONS[PLATFORM_MAX_PATH],
+     PUNISHMENT_TIMES[PLATFORM_MAX_PATH],
+     LAST_COMMAND[MAXPLAYERS + 1][50];
 
 char g_MuteReasons[500],
      g_GagReasons[500],
