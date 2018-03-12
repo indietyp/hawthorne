@@ -1,8 +1,7 @@
-from core.models import User, Country, UserLogIP, UserLogTime, UserLogUsername, Server, ServerGroup, Ban, Mutegag, Membership
+from core.models import User, Country, Server, ServerGroup, Ban, Mutegag, Membership
 import re
 from django.views.decorators.csrf import csrf_exempt
 from core.utils import UniPanelJSONEncoder
-from django.utils import timezone
 from core.lib.steam import populate as steam_populate
 from rcon.sourcemod import RConSourcemod
 import datetime
@@ -59,35 +58,13 @@ def list(request, validated=[], *args, **kwargs):
       user.country = Country.objects.get_or_create(code=country)[0]
 
     if validated['ip'] is not None:
-      if user.ip != validated['ip']:
-        user.ip = validated['ip']
-
-      log, created = UserLogIP.objects.get_or_create(user=user, ip=user.ip)
-
-      for l in UserLogIP.objects.filter(user=user, ip=user.ip, is_active=True):
-        l.is_active = False
-        l.save()
-
-      log.is_active = True
+      user.ip = validated['ip']
 
       if validated['connected'] is not None:
+        user.online = validated['connected']
+
         server = Server.objects.get(id=validated['server'])
-        for disconnect in UserLogTime.objects.filter(user=user, server=server, disconnected=None):
-          disconnect.disconnected = timezone.now()
-          disconnect.save()
-
-        if validated['connected']:
-          UserLogTime(user=user, server=server).save()
-          log.connections += 1
-          user.online = True
-        else:
-          user.online = False
-
-        log.save()
-
-    logname, created = UserLogUsername.objects.get_or_create(user=user, username=validated['username'])
-    logname.connections += 1
-    logname.save()
+        user._server = server
 
     # https://stackoverflow.com/questions/13729638/how-can-i-filter-emoji-characters-from-my-input-so-i-can-save-in-mysql-5-5
     try:

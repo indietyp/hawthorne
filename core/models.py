@@ -42,7 +42,6 @@ class User(AbstractUser):
         ('view_user', 'Can view users'),
         ('kick_user', 'Can kick a user'),
         ('view_group', 'Can view a user group'),
-        # ('change_user', 'Can edit a user'),  # built-in
     ]
 
   def __str__(self):
@@ -55,12 +54,12 @@ class Token(BaseModel):
 
   is_active = models.BooleanField(default=True)
   is_anonymous = models.BooleanField(default=False)
-  is_superuser = models.BooleanField(default=False)
+  is_supertoken = models.BooleanField(default=False)
 
   due = models.DateTimeField(null=True)
 
   def has_perm(self, perm, obj=None):
-    if self.is_active and self.is_superuser:
+    if self.is_active and self.is_supertoken:
         return True
 
     perm = perm.split('.')
@@ -78,40 +77,6 @@ class Token(BaseModel):
 
   def __str__(self):
     return "({}) - {}".format(self.owner, self.id)
-
-
-class UserLogIP(BaseModel):
-  user = models.ForeignKey(User, on_delete=models.CASCADE)
-  ip = models.GenericIPAddressField()
-  connections = models.IntegerField(default=0)
-
-  is_active = models.BooleanField(default=False)
-  last_used = models.DateTimeField(auto_now=True)
-
-  def __str__(self):
-    return "{} - {}".format(self.user, self.ip)
-
-
-class UserLogTime(BaseModel):
-  user = models.ForeignKey(User, on_delete=models.CASCADE)
-  server = models.ForeignKey('Server', on_delete=models.CASCADE)
-
-  connected = models.DateTimeField(auto_now_add=True)
-  disconnected = models.DateTimeField(null=True)
-
-  def __str__(self):
-    return "{} - {}".format(self.user, self.server)
-
-
-class UserLogUsername(BaseModel):
-  user = models.ForeignKey(User, on_delete=models.CASCADE)
-  username = models.CharField(max_length=128)
-
-  connections = models.IntegerField(default=0)
-  last_used = models.DateTimeField(auto_now=True)
-
-  def __str__(self):
-    return "{}".format(self.username)
 
 
 class ServerPermission(BaseModel):
@@ -228,9 +193,6 @@ class ServerGroup(BaseModel):
   class Meta:
     permissions = [
         ('view_servergroup', 'Can view server groups'),
-        # ('add_servergroup', 'Can add server groups'),
-        # ('change_servergroup', 'Can edit server groups'),  # built-in
-        # ('delete_servergroup', 'Can delete server groups'),
     ]
 
   def __str__(self):
@@ -256,9 +218,6 @@ class Server(BaseModel):
     permissions = [
         ('view_server', 'Can view a server'),
         ('execute_server', 'Can view a server'),
-        # ('add_server', 'Add a server'),  # built-in
-        # ('change_server', 'Can edit a server'),  # built-in
-        # ('delete_server', 'Delete a server')  # built-in
     ]
 
   def __str__(self):
@@ -279,33 +238,9 @@ class Ban(BaseModel):
   class Meta:
     permissions = [
         ('view_ban', 'Can view a bans'),
-        # ('add_ban', 'Add a ban'),  # built-in
-        # ('change_ban', 'Can edit a ban'),  # built-in
-        # ('delete_ban', 'Delete bans'),  # built-in
     ]
 
     unique_together = ('user', 'server')
-
-  def __str__(self):
-    return "{} - {}".format(self.user, self.server)
-
-
-class Chat(BaseModel):
-  user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-  ip = models.GenericIPAddressField()
-  server = models.ForeignKey(Server, on_delete=models.CASCADE)
-  message = models.CharField(max_length=255)
-
-  command = models.BooleanField(default=False)
-
-  class Meta:
-    permissions = [
-        ('view_chat', 'Can view chat logs'),
-        ('view_chat_ip', 'Can view ip of someone in chat logs'),
-        ('view_chat_server', 'Can view current server of someone in chat logs'),
-        ('view_chat_time', 'Can view current time of message in chat logs'),
-    ]
 
   def __str__(self):
     return "{} - {}".format(self.user, self.server)
@@ -332,30 +267,15 @@ class Mutegag(BaseModel):
   class Meta:
     permissions = [
         ('view_mutegag', 'Can view a mutegag'),
-        # ('add_mutegag', 'Add mutegags'),  # built-in
+
         ('add_mutegag_mute', 'Can add a mutegag mute'),
         ('add_mutegag_gag', 'Can add a mutegag gag'),
-        # ('change_mutegag', 'Can edit a mutegag'),  # built-in
-        # ('delete_mutegag', 'Delete mutegags'),  # built-in
     ]
 
     unique_together = ('user', 'server')
 
   def __str__(self):
     return "{} - {}".format(self.user, self.server)
-
-
-class Log(BaseModel):
-  action = models.CharField(max_length=255)
-  user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-  class Meta:
-    permissions = [
-        ('view_log', 'Can view a server logs')
-    ]
-
-  def __str__(self):
-    return "{} - {}".format(self.user, self.action)
 
 
 class Membership(BaseModel):

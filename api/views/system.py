@@ -1,5 +1,6 @@
 from django.db.models import F
-from core.models import Log, Chat, User, Server
+from core.models import User, Server
+from log.models import ServerAction, ServerChat
 from django.views.decorators.csrf import csrf_exempt
 from core.decorators.api import json_response, validation
 from core.decorators.auth import authentication_required, permission_required
@@ -15,10 +16,10 @@ from django.views.decorators.http import require_http_methods
 def log(request, validated={}, *args, **kwargs):
   if request.method == 'GET':
     direction = '-created_at' if validated['descend'] else 'created_at'
-    logs = Log.objects.filter(action__contains=validated['match'])\
-                      .values('action', 'created_at')\
-                      .order_by(direction)\
-                      .annotate(user=F('user__id'))
+    logs = ServerAction.objects.filter(action__contains=validated['match'])\
+                               .values('action', 'created_at')\
+                               .order_by(direction)\
+                               .annotate(user=F('user__id'))
 
     limit = validated['limit']
     offset = validated['offset']
@@ -26,7 +27,7 @@ def log(request, validated={}, *args, **kwargs):
 
     return [l for l in logs]
   elif request.method == 'PUT':
-    log = Log(action=validated['action'], user=User.objects.get(id=validated['user']))
+    log = ServerAction(action=validated['action'], user=User.objects.get(id=validated['user']))
     log.save()
 
     return 'passed'
@@ -41,10 +42,10 @@ def log(request, validated={}, *args, **kwargs):
 def chat(request, validated={}, *args, **kwargs):
   if request.method == 'GET':
     direction = '-created_at' if validated['descend'] else 'created_at'
-    chats = Chat.objects.filter(message__contains=validated['match'])\
-                        .values('ip', 'message', 'command', 'created_at')\
-                        .order_by(direction)\
-                        .annotate(user=F('user__id'), server=F('server__id'))
+    chats = ServerChat.objects.filter(message__contains=validated['match'])\
+                              .values('ip', 'message', 'command', 'created_at')\
+                              .order_by(direction)\
+                              .annotate(user=F('user__id'), server=F('server__id'))
 
     limit = validated['limit']
     offset = validated['offset']
@@ -52,7 +53,7 @@ def chat(request, validated={}, *args, **kwargs):
 
     return [c for c in chats]
   elif request.method == 'PUT':
-    chat = Chat()
+    chat = ServerChat()
     chat.user = User.objects.get(id=validated['user'])
     chat.server = Server.objects.get(id=validated['server'])
     chat.ip = validated['ip']

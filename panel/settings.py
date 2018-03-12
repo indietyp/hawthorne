@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'django_admin_generator',
     'automated_logging',
     'api',
+    'log',
     'ajax',
     'core',
     'interface'

@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required, permission_required
-from core.models import User, Chat, ServerGroup
+from core.models import User, ServerGroup
+from log.models import ServerChat
 from django.views.decorators.http import require_http_methods
 from ajax.views import renderer
 from django.db.models import F, Count, Value, CharField, IntegerField
@@ -29,7 +30,7 @@ def user(request, page, *args, **kwargs):
 @permission_required('core.view_chat')
 @require_http_methods(['POST'])
 def log(request, page, *args, **kwargs):
-  obj = Chat.objects.filter(command=True)
+  obj = ServerChat.objects.filter(command=True)
   return renderer(request, 'partials/admin/log.pug', obj, page)
 
 
