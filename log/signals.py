@@ -7,9 +7,8 @@ from django.utils import timezone
 
 # https://djangosnippets.org/snippets/2281/
 def compare(state1, state2):
-  included_keys = 'online', 'ip', 'namespace'
-
   d1, d2 = state1.__dict__, state2.__dict__
+  included_keys = 'online', 'ip', 'namespace'
 
   changeset = []
   for k, v in d1.items():
@@ -17,17 +16,17 @@ def compare(state1, state2):
       continue
     try:
       if v != d2[k]:
-        changeset.append[k]
+        changeset.append(k)
 
     except KeyError:
-      changeset.append[k]
+      changeset.append(k)
 
   return changeset
 
 
 @receiver(pre_save, sender=User, weak=False)
 def user_log_handler(sender, instance, raw, using, update_fields, **kwargs):
-  state = User.get(id=instance.id)
+  state = User.objects.get(id=instance.id)
   changelog = compare(state, instance)
 
   for l in UserIP.objects.filter(user=instance, ip=instance.ip, is_active=True):
@@ -38,7 +37,7 @@ def user_log_handler(sender, instance, raw, using, update_fields, **kwargs):
   ip, created = UserIP.objects.get_or_create(user=instance, ip=instance.ip)
   ip.is_active = True
 
-  if 'online' in changelog and '_server' in instance.__dict__:
+  if 'online' in changelog and '_server' in instance.__dict__.keys():
     for disconnect in UserOnlineTime.objects.filter(user=state, server=instance._server, disconnected=None):
       disconnect.disconnected = timezone.now()
       disconnect.save()

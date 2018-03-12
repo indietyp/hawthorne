@@ -67,7 +67,7 @@ class UserNamespace(BaseModel):
   last_used = models.DateTimeField(auto_now=True)
 
   def __str__(self):
-    return "{}".format(self.username)
+    return "{}".format(self.namespace)
 
 
 import log.signals

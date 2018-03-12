@@ -5,7 +5,7 @@ from core.models import Country
 
 
 def populate(user):
-  if user.steam:
+  if user.is_steam:
     steamapi.core.APIConnection(api_key=settings.SOCIAL_AUTH_STEAM_API_KEY, validate_key=True)
     fetched = steamapi.user.SteamUser(userid=user.username)
 

@@ -32,7 +32,7 @@ class User(AbstractUser):
   avatar = models.URLField(null=True)
   profile = models.URLField(null=True)
 
-  steam = models.BooleanField(default=True)
+  is_steam = models.BooleanField(default=True)
 
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)

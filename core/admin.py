@@ -15,9 +15,9 @@ class UserAdmin(admin.ModelAdmin):
     list_display = (
         'username',
         'namespace',
-        'steam',
         'first_name',
         'last_name',
+        'is_steam',
         'is_superuser',
         'is_staff',
         'is_active',
@@ -28,7 +28,7 @@ class UserAdmin(admin.ModelAdmin):
         'is_superuser',
         'is_staff',
         'is_active',
-        'steam',
+        'is_steam',
     )
 
 

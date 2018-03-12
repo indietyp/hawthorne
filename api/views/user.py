@@ -10,6 +10,7 @@ from django.db.models import F, Q, Value, CharField
 from core.decorators.api import json_response, validation
 from core.decorators.auth import authentication_required, permission_required
 from django.views.decorators.http import require_http_methods
+from django.utils import timezone
 
 
 @csrf_exempt
@@ -93,68 +94,66 @@ def list(request, validated=[], *args, **kwargs):
 @require_http_methods(['GET', 'POST', 'DELETE'])
 def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
   if request.method == 'GET':
-    query = User.objects.annotate(has_panel_access=F('is_staff'),
-                                  country_code=F('country__code'))
-
     if u is not None:
       try:
-        user = query.annotate(steamid=Value(None, CharField(null=True)), name=F('username')).get(id=u)
+        user = User.objects.get(id=u)
       except Exception as e:
         return 'not existent user queried - {}'.format(e), 403
 
     if s is not None:
-      user = query.annotate(steamid=F('username'), name=F('namespace')).get(username=s)
-      user.steamid = int(user.steamid)
+      user = User.objects.get(username=s)
       try:
         pass
       except Exception as e:
         return 'not existent steamid provided - {}'.format(e), 403
 
-    # to native dispatch_request
-    selected = ['id', 'ip', 'avatar', 'profile', 'permissions', 'steamid', 'name', 'circles', 'positions']
+    output = {'id': user.id,
+              'ip': user.ip,
+              'username': user.namespace if user.is_steam else user.username,
+              'steamid': int(user.username) if user.is_steam else None,
+              'avatar': user.avatar,
+              'profile': user.profile,
+              'permissions': [a.content_type.app_label + '.' + a.codename for a in user.user_permissions.all()],
+              'groups': [str(a) for a in user.groups.all()],
+              'roles': [],
+              'has_panel_access': user.is_active,
+              'country': None if user.country is None else user.country.code
+              }
+
+    memberships = user.membership_set.filter(user=user)
     if validated['server'] is not None:
-      try:
-        if user.is_superuser:
-          # simulate root role
-          user.flags = 'ABCDEFGHIJKLN'
-          user.immunity = 100
-          user.usetime = None
-          user.timeleft = None
-        else:
-          server = Server.objects.get(id=validated['server'])
-          role = user.roles.filter(Q(server=server) | Q(server=None)).order_by('-immunity')[0]
-          user.flags = role.flags.convert()
-          user.immunity = role.immunity
-          if role.usetime is not None:
-            user.usetime = int(role.usetime.total_seconds())
-            # get created at -> change query and system - if timeleft negative delete and try different one
-          else:
-            user.usetime = None
-            user.timeleft = None
+      server = Server.objects.get(id=validated['server'])
+      memberships.filter(Q(role__server=server) | Q(role__server=None))
 
-        selected.append('flags')
-        selected.append('immunity')
-        selected.append('usetime')
-        selected.append('timeleft')
-      except Exception as e:
-        return 'serverrole does not exist for this user - {}'.format(e), 403
+    memberships = memberships.order_by('-role__immunity')
 
-    user.permissions = [a.content_type.app_label + '.' + a.codename for a in user.user_permissions.all()]
-    user.circles = [str(a) for a in user.groups.all()]
-    user.positions = [{'server': None if a.server is None else a.server.id,
-                       'flags': a.flags.convert(),
-                       'immunity': a.immunity,
-                       'usetime': None if a.usetime is None else a.usetime.total_seconds()
-                       } for a in user.roles.all().order_by('-immunity')]
-    user = user.__dict__
+    if user.is_superuser:
+      # fake root role
+      output['roles'].append({'server': None,
+                              'flags': 'ABCDEFGHIJKLN',
+                              'usetime': None,
+                              'timeleft': None
+                              })
 
-    tmp = {}
-    for k, i in user.items():
-      if k in selected:
-        tmp[k] = i
+    for mem in memberships:
+      usetime = None if mem.role.usetime is None else mem.role.usetime
+      timeleft = None
 
-    user = tmp
-    return user
+      if usetime is not None:
+        timeleft = (mem.created_at + usetime) - timezone.now()
+        usetime = usetime.total_seconds()
+
+        if timeleft < 0:
+          mem.delete()
+          continue
+
+      output['roles'].append({'server': None if mem.role.server is None else mem.role.server.id,
+                              'flags': mem.role.flags.convert(),
+                              'usetime': usetime,
+                              'timeleft': timeleft
+                              })
+
+    return output
 
   elif request.method == 'POST':
     if u is not None:
