@@ -133,6 +133,7 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
       except Exception as e:
         return 'not existent steamid provided - {}'.format(e), 403
 
+    # to native dispatch_request
     selected = ['id', 'ip', 'avatar', 'profile', 'permissions', 'steamid', 'name', 'circles', 'positions']
     if validated['server'] is not None:
       try:
@@ -149,7 +150,7 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
           user.immunity = role.immunity
           if role.usetime is not None:
             user.usetime = int(role.usetime.total_seconds())
-            # get created at -> change query and system
+            # get created at -> change query and system - if timeleft negative delete and try different one
           else:
             user.usetime = None
             user.timeleft = None

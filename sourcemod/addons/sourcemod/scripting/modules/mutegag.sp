@@ -485,7 +485,7 @@ void APIMuteGag(int admin, char[] clientID, int type, char[] reason = "", int ti
   // Update last target for admin
   char adminID[37], serverToBan[37];
   StrCat(adminID, sizeof(adminID), (admin == 0) ? "" : CLIENTS[admin]);
-  StrCat(serverToBan, sizeof(serverToBan), (MODULE_MUTEGAG_GLOBAL.IntValue == 0) ? server : "");
+  StrCat(serverToBan, sizeof(serverToBan), (MODULE_MUTEGAG_GLOBAL.IntValue == 0) ? SERVER : "");
 
   JSONObject payload = new JSONObject();
 

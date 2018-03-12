@@ -1,5 +1,5 @@
 void GetServerUUID() {
-  if (!StrEqual(server, "")) return;
+  if (!StrEqual(SERVER, "")) return;
 
   Handle host_ip = FindConVar("hostip");
   Handle host_port = FindConVar("hostport");

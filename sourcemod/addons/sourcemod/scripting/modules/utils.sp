@@ -30,18 +30,13 @@ void OnClientIDReceived(int client) {
   //Push event
   Call_StartForward(forward_client);
   Call_PushCell(client);
-  //Call_PushCell(CLIENTS[client]);
   Call_Finish();
 
   Bans_OnClientIDReceived(client);
   MuteGag_OnClientIDReceived(client);
-  Admins_OnClientIDReceived(client);
-  //PlayersOnline2_OnClientIDReceived(client);
 }
 
 public void OnMapStart() {
-  //Main_OnMapStart();
-  //ServerID_OnMapStart();
   Bans_OnMapStart();
   MuteGag_OnMapStart();
 }

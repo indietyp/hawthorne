@@ -10,9 +10,11 @@ public Action OnClientPreAdminCheck(int client) {
 
     httpClient.Get(url, APIAdminCheck, client);
 
-    NotifyPostAdminCheck();
+    NotifyPostAdminCheck(client);
     return Plugin_Handled;
   }
+
+  return Plugin_Continue;
 }
 
 public void APIAdminCheck(HTTPResponse response, any value) {
@@ -27,7 +29,7 @@ public void APIAdminCheck(HTTPResponse response, any value) {
 
   int immunity = result.GetInt("immunity");
   int timeleft = result.GetInt("timeleft");
-  if (timeleft == -1) timeleft = 604800
+  if (timeleft == -1) timeleft = 604800;
 
   AdminId admin = CreateAdmin();
   for (int i = 0; i < strlen(flags); i++) {
@@ -46,7 +48,7 @@ public void APIAdminCheck(HTTPResponse response, any value) {
 }
 
 public Action AdminVerificationTimer(Handle tmr, int client) {
-  if (client < 1) return
+  if (client < 1) return Plugin_Continue;
 
   admin_timeleft[client] -= 60;
   if (admin_timeleft[client] <= 0) {
@@ -54,7 +56,10 @@ public Action AdminVerificationTimer(Handle tmr, int client) {
 
     admin_timer[client] = null;
     PrintToChat(client, "%sHey! Your role just got updated!", PREFIX);
+
+    return Plugin_Handled;
   }
+  return Plugin_Continue;
 }
 
 void Admins_OnClientDisconnect(int client) {

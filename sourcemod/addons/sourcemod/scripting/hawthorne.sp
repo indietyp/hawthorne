@@ -80,18 +80,23 @@ public void OnConfigsExecuted() {
     n++;
   }
 
-  for (int n = strlen(endpoint); n >= 0; n--) {
-    if (endpoint[n] == "/") {
-      endpoint[n] = " ";
+  for (n = strlen(endpoint); n >= 0; n--) {
+    if (StrCompare(endpoint[n], "/")) {
+      endpoint[n] = ' ';
     } else {
       break;
     }
   }
-  TrimString(endpoint)
+  TrimString(endpoint);
 
-  Regex regex = CompileRegex("(.+)(?:\/+)$")
+  char error[128];
+  RegexError code;
+
+  Regex regex = CompileRegex("(.+)(?:/+)$", 0, error, sizeof(error), code);
+  LogMessage(error);
+
   if (MatchRegex(regex, endpoint) != -1)
-    GetRegexSubString(regex, 0, endpoint, sizeof(endpoint))
+    GetRegexSubString(regex, 0, endpoint, sizeof(endpoint));
 
 
   GetConVarString(APITOKEN, token, sizeof(token));

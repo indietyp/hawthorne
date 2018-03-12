@@ -7,10 +7,10 @@ void RConCommands_OnPluginStart() {
   RegAdminCmd("rcon_mutegag__add",  RConMuteGagAdd,   ADMFLAG_RCON);
   RegAdminCmd("rcon_mutegag__rem",  RConMuteGagRem,   ADMFLAG_RCON);
   RegAdminCmd("rcon_mutegag__res",  RConMuteGagRes,   ADMFLAG_RCON);
-  RegAdminCmd("rcon_reload__admin", RConReloadAdmin,  ADMFLAG_RCON);
+  RegAdminCmd("rcon_reload",        RConReload,       ADMFLAG_RCON);
 }
 
-public Action RconReloadAdmin(int client, int args) {
+public Action RConReload(int client, int args) {
   if(client != 0)
     return Plugin_Handled;
 
@@ -18,14 +18,12 @@ public Action RconReloadAdmin(int client, int args) {
   GetCmdArg(1, steamid, sizeof(steamid));
   int target = GetClientFromSteamID(steamid);
 
-  if (target != -1) {
-    Admins_OnClientIDReceived(target);
-  }
+  if (target != -1) OnClientPreAdminCheck(target);
 
   return Plugin_Handled;
 }
 
-public Action RconMuteGagRes(int client, int args) {
+public Action RConMuteGagRes(int client, int args) {
   if(client != 0)
     return Plugin_Handled;
 
@@ -50,7 +48,7 @@ public Action RconMuteGagRes(int client, int args) {
 }
 
 
-public Action RconMuteGagRem(int client, int args) {
+public Action RConMuteGagRem(int client, int args) {
   if(client != 0)
     return Plugin_Handled;
 
@@ -71,7 +69,7 @@ public Action RconMuteGagRem(int client, int args) {
 }
 
 
-public Action RconMuteGagAdd(int client, int args) {
+public Action RConMuteGagAdd(int client, int args) {
   if(client != 0)
     return Plugin_Handled;
 
@@ -96,7 +94,7 @@ public Action RconMuteGagAdd(int client, int args) {
   return Plugin_Handled;
 }
 
-public Action RconBanKick(int client, int args) {
+public Action RConBanKick(int client, int args) {
   if(client != 0)
     return Plugin_Handled;
 
@@ -133,26 +131,17 @@ int GetClientFromSteamID(char steamid[20]) {
   return -1;
 }
 
-public Action RconInit(int client, int args) {
-  char token[37], ip[16], port[7], protocol[6];
+public Action RConInit(int client, int args) {
+  char token[37], url[512];
 
-  GetCmdArg(1, token, sizeof(token));
-  GetCmdArg(2, ip, sizeof(ip));
-  GetCmdArg(3, port, sizeof(port));
-  GetCmdArg(4, protocol, sizeof(protocol));
+  GetCmdArg(1, url, sizeof(url));
+  GetCmdArg(2, token, sizeof(token));
 
-  APITOKEN.SetString(token)
-  MANAGER_ip.SetString(ip)
-  MANAGER_port.SetString(port)
-
-  if (StrEqual(protocol, "HTTP"))
-    MANAGER_protocol.SetBool(false);
-  else
-    MANAGER_protocol.SetBool(true);
-
+  APITOKEN.SetString(token);
+  MANAGER.SetString(url);
 }
 
-public Action RconStatus(int client, int args) {
+public Action RConStatus(int client, int args) {
   if (client != 0)
     return Plugin_Handled;
 
@@ -166,20 +155,23 @@ public Action RconStatus(int client, int args) {
 
   JSONObject scores = new JSONObject();
   int teams = GetTeamCount();
-  for (int i. = 0, i < teams, i++) {
+  for (int i = 0; i < teams; i++) {
     char name[256];
     GetTeamName(i, name, sizeof(name));
-    scores.SetString(name, GetTeamScore(i))
+    scores.SetInt(name, GetTeamScore(i));
   }
 
   JSONObject output = new JSONObject();
   JSONObject stats = new JSONObject();
 
+  int timeleft;
+  GetMapTimeLeft(timeleft);
+
   stats.SetString("id", SERVER);
   stats.SetString("map", map);
   stats.SetInt("online", online);
-  stats.SetInt("timeleft", GetMapTimeLeft(timeleft));
-  stats.setInt("uptime", GetGameTime())
+  stats.SetInt("timeleft", timeleft);
+  stats.SetInt("uptime", GetGameTime());
   stats.Set("scores", scores);
 
   output.Set("stats", stats);
