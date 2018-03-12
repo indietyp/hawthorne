@@ -23,11 +23,12 @@ public void APIAdminCheck(HTTPResponse response, any value) {
 
   JSONObject output = view_as<JSONObject>(response.Data);
   JSONObject result = view_as<JSONObject>(output.Get("result"));
-  JSONObject roles = view_as<JSONArray>(result.Get("roles"));
+  JSONArray roles = view_as<JSONArray>(result.Get("roles"));
 
-  if (roles.Length < 1) return
+  if (roles.Length < 1) return;
 
   char flags[25];
+
   JSONObject role = view_as<JSONObject>(roles.Get(0));
   role.GetString("flags", flags, sizeof(flags));
   int immunity = role.GetInt("immunity");
