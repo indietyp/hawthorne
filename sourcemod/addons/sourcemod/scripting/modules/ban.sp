@@ -1,12 +1,9 @@
 // TODO: TESTING
 void ClientBanKick(int client, char[] cAdminName, char[] cReason, char[] cTotalTime, char[] cTime) {
   KickClient(client,
-  "You have been banned from the server\n "...
-  "\nSERVER:    %s"...
-  "\nADMIN:   %s"...
-  "\nREASON:    %s"...
-  "\nTOTAL:   %s"...
-  "\nTIME LEFT:   %s"...
+  "You have been banned from this server %s\n "...
+  "\nThis was caused by %s with the reason: '%s'"...
+  "\n\nOf your total time of %s, %s are left."...
   "\n", SERVER_HOSTNAME, cAdminName, cReason, cTotalTime, cTime);
 }
 
@@ -185,7 +182,7 @@ public Action OnAddBanCommand(int client, const char[] command, int args) {
 
 public void OnBanCheck(HTTPResponse response, any value) {
   int client = value;
-  
+
   if (client < 1) return;
   if (!APIValidator(response)) return;
 
@@ -196,8 +193,8 @@ public void OnBanCheck(HTTPResponse response, any value) {
   JSONObject result = view_as<JSONObject>(results.Get(0));
 
   char passed[200], total[200];
-  char issuer[37], reason[100];
-  result.GetString("created_by", issuer, sizeof(issuer));
+  char issuer[128], reason[128];
+  result.GetString("admin", issuer, sizeof(issuer));
   result.GetString("reason", reason, sizeof(reason));
 
   int creation = result.GetInt("created_at");
@@ -205,12 +202,11 @@ public void OnBanCheck(HTTPResponse response, any value) {
   length = -1;
 
   length = result.GetInt("length");
-  int now;
-  now = GetTime();
+  int now = GetTime();
 
   if (length != -1) {
-    SecondsToTime(creation + length, total);
-    SecondsToTime(creation + length - now, passed);
+    SecondsToTime(length, total);
+    SecondsToTime(now - (creation + length), passed);
   } else {
     total = "permanent";
     passed = "permanent";

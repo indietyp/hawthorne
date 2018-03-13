@@ -255,12 +255,14 @@ def ban(request, u=None, validated={}, *args, **kwargs):
   if request.method == 'GET':
     bans = Ban.objects.filter(user=user)
     if validated['server'] is not None:
-      bans.filter(server=Server.objects.get(id=validated['server']))
+      server = Server.objects.get(id=validated['server'])
+      bans = bans.filter(server=Q(role__server=server) | Q(role__server=None))
 
     if validated['resolved'] is not None:
-      bans.filter(resolved=validated['resolved'])
+      bans = bans.filter(resolved=validated['resolved'])
 
-    return [b for b in bans.values('user', 'server', 'created_at', 'reason', 'resolved', 'created_by', 'length')], 200, UniPanelJSONEncoder
+    return [b for b in bans.annotate(admin=F('created_by__namespace'))
+                           .values('user', 'server', 'created_at', 'reason', 'resolved', 'created_by', 'length', 'admin')], 200
 
   elif request.method == 'POST':
     try:
