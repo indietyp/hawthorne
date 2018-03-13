@@ -8,32 +8,31 @@ void MuteGag_OnPluginStart() {
 
   //Create array lists
   UpdateConfigs();
-
 }
 
 public Action CMD_PermaMuteGag(int client, int args) {
 
   if(MODULE_MUTEGAG.IntValue == 1 && !StrEqual(SERVER, "")) {
 
-    //Get what command player is trying to execute
+    // get what command player is trying to execute
     char command[50], command3[50];
     GetCmdArg(0, command, sizeof(command));
     command3 = command;
     ReplaceString(command, sizeof(command), "p", "");
 
-    //Get command type
+    // get command type
     int type = GetCommandType(command);
     iLastCommandType[client] = type;
     if(type == -1)
           return Plugin_Handled;
 
-    //Replace sm_ with !
+    // replace sm_ with !
     char command2[50];
     command2 = command3;
     LAST_COMMAND[client] = command3;
     ReplaceString(command2, sizeof(command2), "sm_", "!");
 
-    //Check if enogh arguments are entered
+    // check if enogh arguments are entered
     if (args < 1) {
 
       //Show menu with all players
@@ -224,54 +223,54 @@ void MuteGag_OnClientIDReceived(int client) {
 
 public void OnMuteGagCheck(HTTPResponse response, any value) {
   int client = value;
-  if (response.Status != 200) {
+  if (response.Status != HTTPStatus_OK) {
       LogError("[hawthorne] API ERROR (request failed)");
       return;
-    }
+  }
 
-    if (response.Data == null) {
-      LogError("[hawthorne] API ERROR (no response data)");
+  if (response.Data == null) {
+    LogError("[hawthorne] API ERROR (no response data)");
+    return;
+  }
+
+  JSONObject output = view_as<JSONObject>(response.Data);
+  bool success = output.GetBool("success");
+
+  if (!success) {
+    LogError("[hawthorne] API ERROR (api call failed)");
+    return;
+
+  } else {
+    JSONArray results = view_as<JSONArray>(output.Get("result"));
+    if (results.Length == 0) {
       return;
     }
 
-    JSONObject output = view_as<JSONObject>(response.Data);
-    int success = output.GetBool("success");
+    JSONObject result = view_as<JSONObject>(results.Get(0));
 
-    if (success == false) {
-      LogError("[hawthorne] API ERROR (api call failed)");
-      return;
+    int now = GetTime();
+    int itype;
 
+    char stype[3], reason[100];
+    result.GetString("type", stype, sizeof(stype));
+    result.GetString("reason", reason, sizeof(reason));
+    int timeleft = now - (result.GetInt("created_at") + result.GetInt("length"));
+    int length = result.GetInt("length");
+
+    delete result;
+    delete results;
+
+    if (StrEqual(stype, "MU")) {
+      itype = 0;
+    } else if (StrEqual(stype, "GA")) {
+      itype = 1;
     } else {
-      JSONArray results = view_as<JSONArray>(output.Get("result"));
-      if (results.Length == 0) {
-        return;
-      }
-
-      JSONObject result = view_as<JSONObject>(results.Get(0));
-
-      int now = GetTime();
-      int itype;
-
-      char stype[3], reason[100];
-      result.GetString("type", stype, sizeof(stype));
-      result.GetString("reason", reason, sizeof(reason));
-      int timeleft = now - (result.GetInt("created_at") + result.GetInt("length"));
-      int length = result.GetInt("length");
-
-      delete result;
-      delete results;
-
-      if (StrEqual(stype, "MU")) {
-        itype = 0;
-      } else if (StrEqual(stype, "GA")) {
-        itype = 1;
-      } else {
-        itype = 2;
-      }
-
-      MUTEGAG_REASONS[client][itype] = reason;
-      AddMuteGag(client, itype, timeleft, length);
+      itype = 2;
     }
+
+    MUTEGAG_REASONS[client][itype] = reason;
+    AddMuteGag(client, itype, timeleft, length);
+  }
 }
 
 void AddMuteGag(int client, int type, int timeleft, int length, char[] cReason = "") {
@@ -726,8 +725,7 @@ int GetCommandType(const char[] command)
     return -1;
 }
 
-int GetOpositeType(int type)
-{
+int GetOpositeType(int type) {
   if(type == TYPE_MUTE)
     return TYPE_UNMUTE;
   else if(type == TYPE_GAG)

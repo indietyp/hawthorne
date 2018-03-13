@@ -26,6 +26,7 @@ void GetServerUUID() {
 
 public void APIGetServerUUID(HTTPResponse response, any value) {
   if (!APIValidator(response)) return;
+
   JSONObject output = view_as<JSONObject>(response.Data);
   JSONArray data = view_as<JSONArray>(output.Get("result"));
 

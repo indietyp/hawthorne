@@ -11,9 +11,10 @@ $orange: #FFAA00
 $primary: $orange
 $blue: #19648D
 $lblue: #76B1DF
+
 // $purple: #8B6DFF
 $lipstick: #954070
-$colors: "white" $white, "dgray" $dgray, "gray" $gray, "black" $black, "red" $red, "green" $green, "blue" $blue, "lblue" $lblue, "purple" $purple, "lipstick" $lipstick, "black" #000, "raspberry" $raspberry, 'primary' $primary, 'orange' $orange
+$colors: "white" $white, "dgray" $dgray, "gray" $gray, "black" $black, "red" $red, "green" $green, "blue" $blue, "lblue" $lblue, "purple" $purple, "lipstick" $lipstick, "black" #000, "raspberry" $raspberry, "primary" $primary, "orange" $orange
 
 body
     margin: 0
@@ -50,6 +51,7 @@ html, button, input, select, textarea, .pure-g [class*="pure-u"]
 #content-wrapper
     display: flex
     z-index: 1
+
     // width: 100vw
 
 #login-wrapper
@@ -170,6 +172,7 @@ input[type="number"]
 
             &:not(.adjusted)
                 top: 10px
+
             &.adjusted
                 top: 2px
 
@@ -194,9 +197,8 @@ input[type="number"]
     margin-left: 20vw
     width: 100vw
     padding: 24px
-
     opacity: 1
-    transition: .2s opacity ease-out
+    transition: 0.2s opacity ease-out
 
     & > .second-set
         margin-top: 1em
@@ -274,6 +276,7 @@ input[type="number"]
             & .actions
                 display: block
                 width: calc(100% - 36px)
+
                 &.disabled
                     & input[type="checkbox"]:checked + label
                         color: $black
@@ -314,6 +317,7 @@ input[type="number"]
                 & .icon
                     // experimental change
                     height: 32px
+
             & .icon
                 display: flex
                 align-items: center
@@ -412,19 +416,18 @@ input[type="number"]
     &:not(.explicit)
         stroke: white
 
-    transition: stroke .3s ease-out
+    transition: stroke 0.3s ease-out
 
     &.animated
         transition: transform 0.3s ease-out
         transform-origin: 12px 12px 0px
 
         &.opacity
-            transition: opacity .3s ease-out, stroke .6s ease-out
+            transition: opacity 0.3s ease-out, stroke 0.6s ease-out
             opacity: 0
 
             &.animate
                 opacity: 1
-
 
         &.success
             transform: rotate(45deg)
@@ -432,8 +435,7 @@ input[type="number"]
             & line:nth-child(2)
                 transition: transform 0.3s ease-out
                 transform-origin: 12px 12px 0px
-
-                transform: matrix(.5, 0, 0, 1, -4, 7)
+                transform: matrix(0.5, 0, 0, 1, -4, 7)
 
         &.fail
             transform: rotate(45deg)
@@ -443,6 +445,9 @@ input[type="number"]
 
     &.center
         align-items: center
+
+    &.column
+        flex-direction: column
 
 .relative
     position: relative
@@ -513,10 +518,10 @@ input[type="number"]
     &.no__margin__bottom
         margin-bottom: 0
 
-
     &.edit
         &:not(.small)
             width: calc(100% - 36px)
+
         &.small
             width: calc(100% - 36px*2)
 
@@ -556,6 +561,8 @@ pre.code
     border: 1px solid #292929
 
 pre.code
+    margin: 0px
+
     // "Source Code Pro", "Inconsolata",
     font-family: "Monaco", "Consolas", "Andale Mono", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace
     display: block
@@ -563,7 +570,7 @@ pre.code
     overflow-x: auto
     font-size: 13px
     line-height: 19px
-    width: 100%
+    width: calc(100% - 32px)
     color: #ddd
 
 pre.code[contenteditable='true']
@@ -571,20 +578,41 @@ pre.code[contenteditable='true']
     cursor: text
     outline: none
 
-    // add send button
-
     &:empty:not(:focus):before
         content: attr(data-placeholder)
         opacity: 0.8
+
+    &.evaluated
+        border-bottom-left-radius: 0px
+        border-bottom-right-radius: 0px
+
+pre.code.ro
+    margin: 0px
+    // margin-top: -5px
+    border-top-left-radius: 0px
+    border-top-right-radius: 0px
+    cursor: default
+    user-select: none
+    outline: none
+    color: rgba(#ffa726, 0.6)
+    max-height: 0px
+    transition: max-height .5s ease-out
+    overflow: hidden
+
+    &.none
+        display: none
+
+    &.evaluated
+        padding: 0
+        border: none
 
 pre.code-command
     color: #ffa726
 
 .send-command
-    // padding-right: 12px
-    padding-left: 12px
     position: absolute
-    right: 0
+    top: 6px
+    right: 6px
     height: 24px
 
     & svg
@@ -598,10 +626,9 @@ pre.code-command
             stroke: nth($clr, 2) !important
 
         &.hover
-            color: rgba(nth($clr, 2), .8)
-            stroke: rgba(nth($clr, 2), .8) !important
-
-            transition: color,stroke .3s ease-out
+            color: rgba(nth($clr, 2), 0.8)
+            stroke: rgba(nth($clr, 2), 0.8) !important
+            transition: color, stroke 0.3s ease-out
 
             &:hover, &:active, &:focus
                 color: nth($clr, 2)

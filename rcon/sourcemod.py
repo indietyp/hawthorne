@@ -1,6 +1,7 @@
 from .__rcon import RCon
 import json
 import valve.rcon
+from core.models import User
 import datetime
 
 
@@ -29,6 +30,17 @@ class RConSourcemod:
       response['stats']['timeleft'] = None
     else:
       response['stats']['timeleft'] = datetime.timedelta(seconds=response['stats']['timeleft'])
+
+    for player in response['players']:
+      try:
+        user = User.objects.get(id=player['id'])
+      except User.DoesNotExist:
+        user = User.object.creat_user(username=player['steamid'])
+        user.is_active = False
+        user.save()
+
+      # process further
+
     return response
 
   def execute(self, *args, **kwargs):

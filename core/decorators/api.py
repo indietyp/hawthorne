@@ -41,10 +41,10 @@ def jsonparse(content=None, code=200, encoder=None):
 
 def json_response(f):
   def wrapper(request, *args, **kwargs):
-    try:
-      response = f(request, *args, **kwargs)
-    except Exception as e:
-      response = (e.args[-1], 500)
+    # try:
+    response = f(request, *args, **kwargs)
+    # except Exception as e:
+    #   response = (e.args[-1], 500)
 
     if not isinstance(response, tuple) or len(response) > 4:
       response = (response,)

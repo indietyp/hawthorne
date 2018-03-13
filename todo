@@ -12,6 +12,6 @@
  [ ] show command output in frontend -> slide down -> aswell as signal success @today @high
  [ ] notification toast in bottom right to signal error -> humanize errors @today @high
  [ ] test plugin in action
- [ ] signal if cannot cannot to server  (top right small red text) of server (frontend) @today @high
- [ ] log into different app called `log` @high
- [ ] signalify logs @high
+ [ ] signal if cannot connect to server  (top right small red text) of server-card (frontend) @today @high
+ ✔ log into different app called `log` @high @done (18-03-13 01:30)
+ ✔ signalify logs @high @done (18-03-13 01:30)

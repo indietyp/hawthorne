@@ -20,7 +20,7 @@ char SERVER[37] = "",
 
 int iLastMuteGagTime[MAXPLAYERS + 1],
     iLastCommandType[MAXPLAYERS + 1],
-    iClientOnlineID[MAXPLAYERS + 1],
+    //iClientOnlineID[MAXPLAYERS + 1],
     iMuteGagTimeleft[MAXPLAYERS + 1][3],
     admin_timeleft[MAXPLAYERS + 1];
 
@@ -57,4 +57,4 @@ bool b_WaitingChatMessage[MAXPLAYERS + 1],
      bShowMuteGagOnce[MAXPLAYERS + 1],
      bMuteGagPermanent[MAXPLAYERS + 1][3];
 
-ArrayList g_ConnectionTime;
+//ArrayList g_ConnectionTime;

@@ -16,7 +16,7 @@ def token_retrieve(request):
       token = Token.objects.get(id=token, is_active=True, is_anonymous=False)
       request.user = token.owner
 
-      if token.due is not None and token.due > timezone.now():
+      if token.due is not None and token.due < timezone.now():
         token.is_active = False
         token.save()
 

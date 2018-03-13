@@ -171,7 +171,7 @@ public Action RConStatus(int client, int args) {
   stats.SetString("map", map);
   stats.SetInt("online", online);
   stats.SetInt("timeleft", timeleft);
-  stats.SetInt("uptime", GetGameTime());
+  stats.SetFloat("uptime", GetGameTime());
   stats.Set("scores", scores);
 
   output.Set("stats", stats);
@@ -205,17 +205,18 @@ JSONArray AddToList() {
 
       int kills   = (!IsSpectator(i)) ? GetClientFrags(i) : 0;
       int deaths  = (!IsSpectator(i)) ? GetClientDeaths(i) : 0;
-      int online = GetClientTime(i);
+      float online = GetClientTime(i);
 
       JSONObject player = new JSONObject();
 
-      player.SetString("uuid", CLIENTS[i]);
+      player.SetString("id", CLIENTS[i]);
       player.SetString("username", username);
+      player.SetString("steamid", steamid);
 
       player.SetInt("team", GetClientTeam(i));
       player.SetInt("kills", kills);
       player.SetInt("deaths", deaths);
-      player.SetInt("online", online);
+      player.SetFloat("online", online);
 
       output.Push(player);
     }

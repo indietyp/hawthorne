@@ -44,8 +44,6 @@ public void OnMapStart() {
 public void OnClientPutInServer(int client) {
   if(!IsFakeClient(client)) {
     MuteGag_OnClientPutInServer(client);
-    //PlayersOnline2_OnClientPutInServer(client);
-    //Players_OnClientPutInServer(client);
   }
 }
 

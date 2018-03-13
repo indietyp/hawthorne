@@ -56,7 +56,7 @@ public void OnClientIsInAPI(HTTPResponse response, any value) {
     return;
 
   JSONObject output = view_as<JSONObject>(response.Data);
-  int success = output.GetBool("success");
+  bool success = output.GetBool("success");
 
   if (success == false) {
     LogError("[hawthorne] API ERROR (api call failed)");
@@ -69,27 +69,4 @@ public void OnClientIsInAPI(HTTPResponse response, any value) {
   }
 
   delete output;
-}
-
-void PlayersOnline_OnClientDisconnect(int client) {
-  char steamid[20];
-  char username[64];
-
-  GetClientAuthId(client, AuthId_SteamID64, steamid, sizeof(steamid));
-  GetClientName(client, username, sizeof(username));
-
-  JSONObject payload = new JSONObject();
-  payload.SetString("steamid", steamid);
-  payload.SetString("username", username);
-  payload.SetBool("connected", false);
-  payload.SetString("server", SERVER);
-
-  httpClient.Put("users", payload, OnClientDisconnectAPI);
-  delete payload;
-
-  CLIENTS[client] = "";
-}
-
-public void OnClientDisconnectAPI(HTTPResponse response, any value) {
-  return;
 }

@@ -47,8 +47,9 @@ def list(request, validated=[], *args, **kwargs):
       try:
         user = User.objects.get(username=str(validated['steamid']))
         update = True
-      except Exception:
-        user = User.objects.create_user(username=str(validated['steamid']), is_active=False)
+      except User.DoesNotExist:
+        user = User.objects.create_user(username=str(validated['steamid']))
+        user.is_active = False
 
     elif validated['id'] is not None:
       user = User.objects.get(id=validated['id'])

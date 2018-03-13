@@ -139,6 +139,5 @@ bool APIValidator(HTTPResponse response) {
     return false;
   }
 
-  delete data;
   return true;
 }

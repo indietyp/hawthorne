@@ -185,7 +185,7 @@ public Action OnAddBanCommand(int client, const char[] command, int args) {
 
 public void OnBanCheck(HTTPResponse response, any value) {
   int client = value;
-  if (response.Status != 200) {
+  if (response.Status != HTTPStatus_OK) {
     LogError("[hawthorne] API ERROR (request failed)");
     return;
   }
@@ -196,9 +196,9 @@ public void OnBanCheck(HTTPResponse response, any value) {
   }
 
   JSONObject output = view_as<JSONObject>(response.Data);
-  int success = output.GetBool("success");
+  bool success = output.GetBool("success");
 
-  if (success == false) {
+  if (!success) {
     LogError("[hawthorne] API ERROR (api call failed)");
     return;
   } else {

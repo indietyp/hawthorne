@@ -26,7 +26,12 @@ def compare(state1, state2):
 
 @receiver(pre_save, sender=User, weak=False)
 def user_log_handler(sender, instance, raw, using, update_fields, **kwargs):
-  state = User.objects.get(id=instance.id)
+
+  try:
+    state = User.objects.get(id=instance.id)
+  except User.DoesNotExist:
+    return
+
   changelog = compare(state, instance)
 
   for l in UserIP.objects.filter(user=instance, ip=instance.ip, is_active=True):
