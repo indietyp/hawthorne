@@ -184,9 +184,9 @@ public Action OnAddBanCommand(int client, const char[] command, int args) {
 }
 
 public void OnBanCheck(HTTPResponse response, any value) {
-  if (client < 1) return;
-
   int client = value;
+  
+  if (client < 1) return;
   if (!APIValidator(response)) return;
 
   JSONObject output = view_as<JSONObject>(response.Data);
