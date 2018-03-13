@@ -17,7 +17,7 @@ void GetServerUUID() {
   int raw_port = GetConVarInt(host_port);
   IntToString(raw_port, port, sizeof(port));
 
-  char url[512] = "/servers?ip=";
+  char url[512] = "servers?ip=";
   StrCat(url, sizeof(url), ip);
   StrCat(url, sizeof(url), "&port=");
   StrCat(url, sizeof(url), port);
