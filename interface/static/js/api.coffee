@@ -554,6 +554,7 @@ submit = (mode='', that) ->
 
     when 'kick'
       console.log 'placeholder'
+
     when 'server'
       node = that.parentElement.parentElement.parentElement
 
@@ -578,6 +579,42 @@ submit = (mode='', that) ->
         window.style.submit(that, false, true)
         window.ajax.server.server(1)
       , 3000)
+    when 'server__execute'
+      node = that.parentElement.parentElement.parentElement.parentElement
+      uuid = $('input.uuid', node)[0].value
+      value = $('pre.input', node)[0].textContent
+
+      payload =
+        command: value
+
+      $(that).addClass 'orange'
+      window.endpoint.api.servers[uuid].execute.put(payload, (err, data) ->
+        if data.success
+          $(that).addClass 'green'
+          output = $('pre.ro', node)
+          output.html data.result.response
+
+          console.log output[0].innerHTML
+          output[0].innerHTML = "<span class='line'>"+(output[0].textContent.split("\n").filter(Boolean).join("</span>\n<span class='line'>"))+"</span>";
+
+          output.removeClass 'none'
+          $('pre.input', node).addClass 'evaluated'
+          output.css 'max-height', output[0].scrollHeight+'px'
+
+        else
+          $(that).addClass 'red'
+
+        $(that).removeClass 'orange'
+        return data
+      )
+
+      setTimeout(->
+        $(that).removeClass 'red'
+        $(that).removeClass 'green'
+        $(that).addClass 'white'
+        # window.style.submit(that, false, true)
+      , 3000)
+
     else
       console.log 'stuff'
 

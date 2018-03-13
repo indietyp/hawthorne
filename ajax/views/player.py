@@ -10,10 +10,10 @@ from django.db.models import F
 @require_http_methods(['POST'])
 def user(request, page, *args, **kwargs):
   obj = User.objects.filter(online=True)\
-                    .annotate(time=F('userlogtime__disconnected'))\
+                    .annotate(time=F('useronlinetime__disconnected'))\
                     .filter(time=None)\
-                    .annotate(otime=F('userlogtime__connected'))\
-                    .annotate(server=F('userlogtime__server'))\
-                    .annotate(sname=F('userlogtime__server__name'))\
+                    .annotate(otime=F('useronlinetime__connected'))\
+                    .annotate(server=F('useronlinetime__server'))\
+                    .annotate(sname=F('useronlinetime__server__name'))\
                     .order_by('updated_at')
   return renderer(request, 'partials/player/online.pug', obj, page)

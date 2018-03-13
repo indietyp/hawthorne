@@ -33,7 +33,7 @@ validation = {
                     'permission': ['core.view_user']},
             'PUT': {'validation': {'steamid': {'type': 'integer', 'min': 76561197960265729, 'max': 76561202255233023, 'coerce': codes.s_to_i, 'dependencies': {'id': None}, 'nullable': True, 'default': None},
                                    'id': {'type': 'uuid', 'dependencies': {'steamid': None}, 'nullable': True, 'default': None},
-                                   'username': {'type': 'string', 'required': True},
+                                   'username': {'type': 'string', 'required': False},
                                    'country': {'type': 'string', 'nullable': True, 'default': None},
                                    'ip': {'type': 'ip', 'nullable': True, 'default': None},
                                    'connected': {'type': 'boolean', 'dependencies': ['server'], 'nullable': True, 'default': None},

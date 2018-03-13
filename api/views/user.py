@@ -62,11 +62,11 @@ def list(request, validated=[], *args, **kwargs):
     if validated['ip'] is not None:
       user.ip = validated['ip']
 
-      if validated['connected'] is not None:
-        user.online = validated['connected']
+    if validated['connected'] is not None:
+      user.online = validated['connected']
 
-        server = Server.objects.get(id=validated['server'])
-        user._server = server
+      server = Server.objects.get(id=validated['server'])
+      user._server = server
 
     # https://stackoverflow.com/questions/13729638/how-can-i-filter-emoji-characters-from-my-input-so-i-can-save-in-mysql-5-5
     try:
@@ -76,7 +76,9 @@ def list(request, validated=[], *args, **kwargs):
       # UCS-2
       highpoints = re.compile(u'[\uD800-\uDBFF][\uDC00-\uDFFF]')
 
-    user.namespace = highpoints.sub(u'\u25FD', validated['username'])
+    if 'username' in validated:
+      user.namespace = highpoints.sub(u'\u25FD', validated['username'])
+
     user.save()
 
     if update:
@@ -132,6 +134,7 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
       # fake root role
       output['roles'].append({'server': None,
                               'flags': 'ABCDEFGHIJKLN',
+                              'immunity': 100,
                               'usetime': None,
                               'timeleft': None
                               })
@@ -150,6 +153,7 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
 
       output['roles'].append({'server': None if mem.role.server is None else mem.role.server.id,
                               'flags': mem.role.flags.convert(),
+                              'immunity': mem.role.immunity,
                               'usetime': usetime,
                               'timeleft': timeleft
                               })
@@ -256,7 +260,7 @@ def ban(request, u=None, validated={}, *args, **kwargs):
     if validated['resolved'] is not None:
       bans.filter(resolved=validated['resolved'])
 
-    return [b for b in bans.values('user', 'server', 'created_at', 'reason', 'resolved', 'issuer', 'length')], 200, UniPanelJSONEncoder
+    return [b for b in bans.values('user', 'server', 'created_at', 'reason', 'resolved', 'created_by', 'length')], 200, UniPanelJSONEncoder
 
   elif request.method == 'POST':
     try:

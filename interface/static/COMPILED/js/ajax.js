@@ -161,7 +161,7 @@
       "X-CSRFToken": window.csrftoken
     };
     return window.endpoint.ajax.server.server[page].post(header, {}, function(dummy, response) {
-      var data, i, item, j, k, len, len1, ref, ref1, scr, status;
+      var data, i, item, j, len, ref, status;
       status = response.status;
       data = response.data;
       if (status === 200) {
@@ -177,11 +177,9 @@
           }
         }
         $("#server__server").htmlAfter(data);
-        ref1 = $(".chart-section script.execution");
-        for (k = 0, len1 = ref1.length; k < len1; k++) {
-          scr = ref1[k];
-          eval($(scr).html());
-        }
+        $("script.server.execution").forEach(function(src) {
+          return eval(src.innerHTML);
+        });
         feather.replace();
         return window.ajax.server.server(page + 1);
       } else {

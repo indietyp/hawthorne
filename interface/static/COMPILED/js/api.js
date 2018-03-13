@@ -406,7 +406,7 @@ var cssPath = function(el) {
   };
 
   submit = function(mode = '', that) {
-    var data, i, j, len, node, now, ref, time, type, user;
+    var data, i, j, len, node, now, payload, ref, time, type, user, uuid, value;
     switch (mode) {
       case 'admin__administrator':
         data = {
@@ -555,6 +555,37 @@ var cssPath = function(el) {
         return setTimeout(function() {
           window.style.submit(that, false, true);
           return window.ajax.server.server(1);
+        }, 3000);
+      case 'server__execute':
+        node = that.parentElement.parentElement.parentElement.parentElement;
+        uuid = $('input.uuid', node)[0].value;
+        value = $('pre.input', node)[0].textContent;
+        payload = {
+          command: value
+        };
+        $(that).addClass('orange');
+        window.endpoint.api.servers[uuid].execute.put(payload, function(err, data) {
+          var output;
+          if (data.success) {
+            $(that).addClass('green');
+            output = $('pre.ro', node);
+            output.html(data.result.response);
+            console.log(output[0].innerHTML);
+            output[0].innerHTML = "<span class='line'>" + (output[0].textContent.split("\n").filter(Boolean).join("</span>\n<span class='line'>")) + "</span>";
+            output.removeClass('none');
+            $('pre.input', node).addClass('evaluated');
+            output.css('max-height', output[0].scrollHeight + 'px');
+          } else {
+            $(that).addClass('red');
+          }
+          $(that).removeClass('orange');
+          return data;
+        });
+        return setTimeout(function() {
+          $(that).removeClass('red');
+          $(that).removeClass('green');
+          return $(that).addClass('white');
+        // window.style.submit(that, false, true)
         }, 3000);
       default:
         return console.log('stuff');

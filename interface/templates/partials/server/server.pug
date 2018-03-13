@@ -57,13 +57,17 @@
 
   .row.add.pure-g
     .pure-u-1-1.relative
-      .container.flex.center.column(style="width:100%")
-        pre.code.code-command(data-placeholder='Enter command here...', contenteditable="true").evaluated
-        pre.code.code-command.ro
-          | This is
-          | a test
+      .container.flex.center.column(style="width:100%;margin-bottom: 1em;")
+        pre.code.code-command.input(data-placeholder='Enter command here...', contenteditable="true", onkeypress=" return window.style.utils.verify.input('single', event, this)")
+        pre.code.code-command.ro.none
+          // | This is
+          // | a test
+      // script.execution.server.
+      //   var _pre = document.querySelector("pre.ro");
+      //   _pre.innerHTML="<span class='line'>"+(_pre.textContent.split("\n").filter(Boolean).join("</span>\n<span class='line'>"))+"</span>";
+
       .icon.action.send-command
-        i.explicit(data-feather='send')
+        i.explicit(data-feather='send', onclick="window.api.submit('server__execute', this)")
 
     .pure-u-1-2.chart-section
       .ct-chart.ct-minor-seventh(id="chart-{{data.id}}")
@@ -82,7 +86,7 @@
             .content all
             .content time
           .spacer
-      script.execution.
+      script.execution.server.
         var data = {
           labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
           series: [
@@ -102,7 +106,6 @@
           low: 0
         }
         new Chartist.Line("#chart-{{data.id}}", data, options);
-        console.log('test')
     .pure-u-1-2
       .pure-g
         //- partials/server/online.pug

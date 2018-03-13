@@ -588,7 +588,7 @@ pre.code[contenteditable='true']
 
 pre.code.ro
     margin: 0px
-    // margin-top: -5px
+    margin-top: -1px
     border-top-left-radius: 0px
     border-top-right-radius: 0px
     cursor: default
@@ -598,6 +598,10 @@ pre.code.ro
     max-height: 0px
     transition: max-height .5s ease-out
     overflow: hidden
+
+    & .line::before
+        content: ">"
+        padding-right: 8px
 
     &.none
         display: none
@@ -611,8 +615,8 @@ pre.code-command
 
 .send-command
     position: absolute
-    top: 6px
-    right: 6px
+    top: 4px
+    right: 4px
     height: 24px
 
     & svg

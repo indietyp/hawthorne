@@ -109,4 +109,4 @@ def detailed(request, validated={}, s=None, *args, **kwargs):
 @require_http_methods(['PUT'])
 def action(request, validated={}, s=None, *args, **kwargs):
   server = Server.objects.get(id=s)
-  return RConSourcemod(server).execute(validated['command'])
+  return {'response': RConSourcemod(server).execute(validated['command'])}

@@ -46,8 +46,6 @@ def renderer(request, template, obj, page, extra=[], execute=None):
       o.executed = execute(o)
       data.append(o)
 
-    print(data[0].executed)
-
   if page == 1:
     data.extend(extra)
   if len(data) > 0:

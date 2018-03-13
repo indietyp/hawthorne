@@ -1,20 +1,14 @@
 // TODO: TESTING
 public Action OnClientPreAdminCheck(int client) {
-  if (!MODULE_ADMIN.BoolValue) return Plugin_Continue;
+  if (!MODULE_ADMIN.BoolValue || IsFakeClient(client) || !StrEqual(SERVER, "")) return Plugin_Continue;
 
-  if (!StrEqual(SERVER, "")) {
-    char url[512] = "users/";
-    StrCat(url, sizeof(url), CLIENTS[client]);
-    StrCat(url, sizeof(url), "?server=");
-    StrCat(url, sizeof(url), SERVER);
+  char url[512] = "users/";
+  StrCat(url, sizeof(url), CLIENTS[client]);
+  StrCat(url, sizeof(url), "?server=");
+  StrCat(url, sizeof(url), SERVER);
 
-    httpClient.Get(url, APIAdminCheck, client);
-
-    NotifyPostAdminCheck(client);
-    return Plugin_Handled;
-  }
-
-  return Plugin_Continue;
+  httpClient.Get(url, APIAdminCheck, client);
+  return Plugin_Handled;
 }
 
 public void APIAdminCheck(HTTPResponse response, any value) {
@@ -54,6 +48,8 @@ public void APIAdminCheck(HTTPResponse response, any value) {
 
   admin_timeleft[client] = timeleft;
   admin_timer[client] = CreateTimer(60.0, AdminVerificationTimer, client, TIMER_REPEAT);
+
+  NotifyPostAdminCheck(client);
 }
 
 public Action AdminVerificationTimer(Handle tmr, int client) {

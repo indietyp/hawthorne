@@ -108,6 +108,22 @@ DatetoISO8601 = (obj) ->
 
   "#{year}-#{month}-#{date}T#{hours}:#{minutes}"
 
+InputVerification = (mode, event, that) ->
+  keycode = undefined
+  if window.event
+    keycode = window.event.keyCode
+  else if event
+    keycode = event.which
+
+  character = String.fromCharCode(event.keyCode)
+  switch mode
+    when 'single'
+      if keycode == 13
+        return false
+
+  return true
+
+
 submit = (that, success=true, cleanup=false) ->
   state = that.getAttribute 'class'
 
@@ -145,6 +161,9 @@ window.style =
       convert:
         to:
           iso: DatetoISO8601
+
+    verify:
+      input: InputVerification
 
 $(() ->
 

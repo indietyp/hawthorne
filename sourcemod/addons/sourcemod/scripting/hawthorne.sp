@@ -33,9 +33,9 @@
 
 public Plugin myinfo = {
   name = "hawthorne",
-  author = "indietyp & boomix",
-  description = "hawthorne Admin Panel",
-  version = "2.00",
+  author = "indietyp",
+  description = "hawthorne admin plugin",
+  version = "3.00",
   url = "hawthorne.in"
 };
 

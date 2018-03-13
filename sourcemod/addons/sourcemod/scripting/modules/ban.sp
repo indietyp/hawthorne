@@ -91,14 +91,14 @@ stock void SecondsToTime(int seconds, char time[200], bool ShortDate = true) {
 }
 
 void Bans_OnClientIDReceived(int client) {
-  if(MODULE_BAN.IntValue == 1 && !StrEqual(SERVER, "")) {
-    char url[512] = "users/";
-    StrCat(url, sizeof(url), CLIENTS[client]);
-    StrCat(url, sizeof(url), "/ban?resolved=false&server=");
-    StrCat(url, sizeof(url), SERVER);
+  if (!MODULE_BAN.BoolValue || StrEqual(SERVER, "") || IsFakeClient(client)) return;
 
-    httpClient.Get(url, OnBanCheck, client);
-  }
+  char url[512] = "users/";
+  StrCat(url, sizeof(url), CLIENTS[client]);
+  StrCat(url, sizeof(url), "/ban?resolved=false&server=");
+  StrCat(url, sizeof(url), SERVER);
+
+  httpClient.Get(url, OnBanCheck, client);
 }
 
 void Bans_OnMapStart() {
@@ -184,66 +184,43 @@ public Action OnAddBanCommand(int client, const char[] command, int args) {
 }
 
 public void OnBanCheck(HTTPResponse response, any value) {
-  int client = value;
-  if (response.Status != HTTPStatus_OK) {
-    LogError("[hawthorne] API ERROR (request failed)");
-    return;
-  }
+  if (client < 1) return;
 
-  if (response.Data == null) {
-    LogError("[hawthorne] API ERROR (no response data)");
-    return;
-  }
+  int client = value;
+  if (!APIValidator(response)) return;
 
   JSONObject output = view_as<JSONObject>(response.Data);
-  bool success = output.GetBool("success");
+  JSONArray results = view_as<JSONArray>(output.Get("result"));
 
-  if (!success) {
-    LogError("[hawthorne] API ERROR (api call failed)");
-    return;
+  if (results.Length < 1) return;
+  JSONObject result = view_as<JSONObject>(results.Get(0));
+
+  char passed[200], total[200];
+  char issuer[37], reason[100];
+  result.GetString("created_by", issuer, sizeof(issuer));
+  result.GetString("reason", reason, sizeof(reason));
+
+  int creation = result.GetInt("created_at");
+  int length;
+  length = -1;
+
+  length = result.GetInt("length");
+  int now;
+  now = GetTime();
+
+  if (length != -1) {
+    SecondsToTime(creation + length, total);
+    SecondsToTime(creation + length - now, passed);
   } else {
-    JSONArray results = view_as<JSONArray>(output.Get("result"));
-
-    if (results.Length == 0) {
-      return;
-    }
-
-    JSONObject result = view_as<JSONObject>(results.Get(0));
-
-    char passed[200], total[200];
-    char id[37];
-    result.GetString("id", id, sizeof(id));
-
-    // maybe get the username?
-    char issuer[37], reason[100];
-    result.GetString("issuer", issuer, sizeof(issuer));
-    result.GetString("reason", reason, sizeof(reason));
-
-    int creation = result.GetInt("created_at");
-    int length;
-    length = -1;
-
-    length = result.GetInt("length");
-    int now;
-    now = GetTime();
-
-    if (client < 1) {
-      return;
-    }
-
-
-    if (length != -1) {
-      SecondsToTime(creation + length, total);
-      SecondsToTime(creation + length - now, passed);
-    } else {
-      total = "permanent";
-      passed = "permanent";
-    }
-
-    ClientBanKick(client, issuer, reason, total, passed);
-    delete result;
-    delete results;
+    total = "permanent";
+    passed = "permanent";
   }
+
+  ClientBanKick(client, issuer, reason, total, passed);
+
+  delete results;
+  delete result;
+  delete output;
 }
 
 

@@ -22,7 +22,7 @@ class RConSourcemod:
     try:
       response = self.rcon.run('json_status')[0]
     except valve.rcon.RCONError as e:
-      return [e]
+      return {'error': e}
 
     response = json.loads(response)
 
@@ -43,5 +43,8 @@ class RConSourcemod:
 
     return response
 
-  def execute(self, *args, **kwargs):
-    pass
+  def execute(self, command, *args, **kwargs):
+    try:
+      return self.rcon.run(command)[0]
+    except valve.rcon.RCONError as e:
+      return {'error': e}

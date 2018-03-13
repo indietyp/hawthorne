@@ -144,8 +144,9 @@ server__server = (page=1) ->
 
       $("#server__server").htmlAfter(data)
 
-      for scr in $(".chart-section script.execution")
-        eval($(scr).html())
+      $("script.server.execution").forEach((src) ->
+        eval(src.innerHTML)
+      )
 
       feather.replace()
 
