@@ -52,8 +52,8 @@ public void APIAdminCheck(HTTPResponse response, any value) {
   NotifyPostAdminCheck(client);
 }
 
-public Action AdminVerificationTimer(Handle tmr, int client) {
-  if (client < 1) return Plugin_Continue;
+public Action AdminVerificationTimer(Handle timer, int client) {
+  if (client < 1) return Plugin_Stop;
 
   admin_timeleft[client] -= 60;
   if (admin_timeleft[client] <= 0) {
@@ -62,7 +62,7 @@ public Action AdminVerificationTimer(Handle tmr, int client) {
     admin_timer[client] = null;
     PrintToChat(client, "%sHey! Your role just got updated!", PREFIX);
 
-    return Plugin_Handled;
+    return Plugin_Stop;
   }
   return Plugin_Continue;
 }
