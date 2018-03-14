@@ -40,7 +40,7 @@ public void APIAdminCheck(HTTPResponse response, any value) {
     if (FindFlagByChar(flags[i], flag) && !admin.HasFlag(flag, Access_Effective))
       admin.SetFlag(flag, true);
   }
-  SetAdminImmunityLevel(admin, immunity);
+  admin.ImmunityLevel = immunity;
   SetUserAdmin(client, admin, true);
 
   // update the admin after 60 seconds

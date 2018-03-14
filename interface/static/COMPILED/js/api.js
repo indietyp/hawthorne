@@ -406,7 +406,7 @@ var cssPath = function(el) {
   };
 
   submit = function(mode = '', that) {
-    var data, i, j, len, node, now, payload, ref, time, type, user, uuid, value;
+    var data, i, j, len, node, now, output, payload, ref, time, type, user, uuid, value;
     switch (mode) {
       case 'admin__administrator':
         data = {
@@ -564,11 +564,11 @@ var cssPath = function(el) {
           command: value
         };
         $(that).addClass('orange');
+        output = $('pre.ro', node);
+        output.css('max-height', '');
         window.endpoint.api.servers[uuid].execute.put(payload, function(err, data) {
-          var output;
           if (data.success) {
             $(that).addClass('green');
-            output = $('pre.ro', node);
             output.html(data.result.response);
             console.log(output[0].innerHTML);
             output[0].innerHTML = "<span class='line'>" + (output[0].textContent.split("\n").filter(Boolean).join("</span>\n<span class='line'>")) + "</span>";
@@ -585,8 +585,7 @@ var cssPath = function(el) {
           $(that).removeClass('red');
           $(that).removeClass('green');
           return $(that).addClass('white');
-        // window.style.submit(that, false, true)
-        }, 3000);
+        }, 2500);
       default:
         return console.log('stuff');
     }

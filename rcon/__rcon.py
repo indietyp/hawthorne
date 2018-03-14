@@ -14,7 +14,7 @@ class RCon:
   def run(self, command):
     output = []
     with valve.rcon.RCON(self.addr, self.pwd) as rcon:
-      rcon.authenticate()
+      # rcon.authenticate()
       if isinstance(command, str):
         command = [command]
 

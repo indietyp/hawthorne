@@ -588,10 +588,12 @@ submit = (mode='', that) ->
         command: value
 
       $(that).addClass 'orange'
+      output = $('pre.ro', node)
+      output.css 'max-height', ''
+
       window.endpoint.api.servers[uuid].execute.put(payload, (err, data) ->
         if data.success
           $(that).addClass 'green'
-          output = $('pre.ro', node)
           output.html data.result.response
 
           console.log output[0].innerHTML
@@ -612,8 +614,7 @@ submit = (mode='', that) ->
         $(that).removeClass 'red'
         $(that).removeClass 'green'
         $(that).addClass 'white'
-        # window.style.submit(that, false, true)
-      , 3000)
+      , 2500)
 
     else
       console.log 'stuff'

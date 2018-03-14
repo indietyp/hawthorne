@@ -8,10 +8,10 @@
  ✘ loading spinner bellwether logo @cancelled (18-03-12 15:24)
  ✔ new icon as favicon @done (18-03-12 15:24)
  ✔ change icon @done (18-03-12 15:24)
- [ ] execute commands from frontend @today @high
- [ ] show command output in frontend -> slide down -> aswell as signal success @today @high
+ ✔ execute commands from frontend @today @high @done (18-03-13 23:50)
+ ✔ show command output in frontend -> slide down -> aswell as signal success @today @high @done (18-03-13 23:50)
  [ ] notification toast in bottom right to signal error -> humanize errors @today @high
- [ ] test plugin in action
+ ✔ test plugin in action @done (18-03-13 23:50)
  [ ] signal if cannot connect to server  (top right small red text) of server-card (frontend) @today @high
  ✔ log into different app called `log` @high @done (18-03-13 01:30)
  ✔ signalify logs @high @done (18-03-13 01:30)

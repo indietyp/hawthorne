@@ -31,6 +31,8 @@ class RConSourcemod:
     else:
       response['stats']['timeleft'] = datetime.timedelta(seconds=response['stats']['timeleft'])
 
+    response['stats']['uptime'] = datetime.timedelta(seconds=response['stats']['uptime'])
+
     for player in response['players']:
       try:
         user = User.objects.get(id=player['id'])
