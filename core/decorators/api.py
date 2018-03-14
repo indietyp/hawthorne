@@ -80,8 +80,8 @@ def validation(a):
           print(e)
           data = request.body.decode()
 
-          document = json.loads(data) if data != b'' else {}
-          schema = validation[request.method]
+        document = json.loads(data) if data != b'' else {}
+        schema = validation[request.method]
 
       schema = schema['validation']
 
