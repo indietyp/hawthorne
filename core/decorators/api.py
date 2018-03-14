@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.conf import settings
 import json
 import re
+import io
 from api.codes import s_to_l
 from functools import wraps
 from api.validation import validation as valid_dict
@@ -70,17 +71,21 @@ def validation(a):
         document = dict(request.GET)
         schema = validation['GET']
       else:
-        try:
+        if isinstance(request._stream, io.BytesIO):
+          raw = request.read()
+        else:
           raw = request._stream.stream.peek()
-          data = request.body
 
-          if re.match(r'^[0-9a-fA-F]{2}', data.decode()) is not None:
-            data = raw.split(b'\r\n')[1]
-        except Exception as e:
-          print(e)
-          data = request.body.decode()
+        data = request.body
 
-        document = json.loads(data) if data != b'' else {}
+        if re.match(r'^[0-9a-fA-F]{2}', data.decode()) is not None:
+          data = raw.split(b'\r\n')[1]
+
+        try:
+          document = json.loads(data) if data != b'' else {}
+        except:
+          'Could not parse JSON: ' + data, 512
+
         schema = validation[request.method]
 
       schema = schema['validation']
