@@ -76,8 +76,9 @@ def validation(a):
 
           if re.match(r'^[0-9a-fA-F]{2}', data.decode()) is not None:
             data = raw.split(b'\r\n')[1]
-        except:
-          data = request.body
+        except Exception as e:
+          print(e)
+          data = request.body.decode()
 
           document = json.loads(data) if data != b'' else {}
           schema = validation[request.method]
