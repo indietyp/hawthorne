@@ -28,26 +28,22 @@ fi
 
 set -e
 
-
 cleanup() {
   # I AM THE CLEANUP CREW DO NOT MIND ME ^-^
   printf "${RED}Installation failed... Cleaning up${NORMAL}\n"
   rm -rf $dir
 }
-# trap cleanup 1 2 3 6
 
 usage() {
-  printf "The hawthorne installation tool is an effort to make installation easier."
-  printf ""
-  printf "Parameters that are currently supported:"
-  printf "\t${GREEN}-n${NORMAL}   --non-interactive (not recommended)"
-  printf "\t${GREEN}-f${NORMAL}   --full"
-  printf "\t${YELLOW}-d${NORMAL}   --development"
-  printf "\t${GREEN}-h${NORMAL}   --help"
-  printf ""
+  printf "\nThe hawthorne installation tool is an effort to make installation easier."
+  printf "\n\nParameters that are currently supported:"
+  printf "\n\t${GREEN}-n${NORMAL}   --non-interactive (not recommended)"
+  printf "\n\t${GREEN}-f${NORMAL}   --full"
+  printf "\n\t${YELLOW}-d${NORMAL}   --development"
+  printf "\n\t${GREEN}-h${NORMAL}   --help"
 }
 
-select() {
+parser() {
   while [ "$1" != "" ]; do
     case $1 in
         -n | --non-interactive) interactive=0
@@ -316,4 +312,4 @@ main() {
 
 }
 
-select
+parser

@@ -1,25 +1,80 @@
 from api import codes
 import re
 from cerberus import Validator
+from cerberus.errors import BasicErrorHandler
+from django.utils.translation import gettext_lazy as _
+
+
+class HumanReadableValidationError(BasicErrorHandler):
+  messages = {0x00: "{0}",
+
+              0x01: _("document is missing"),
+              0x02: _("required field"),
+              0x03: _("unknown field"),
+              0x04: _("field '{0}' is required"),
+              0x05: _("depends on these values: {constraint}"),
+              0x06: _("{0} must not be present with '{field}'"),
+
+              0x21: _("'{0}' is not a document, must be a dict"),
+              0x22: _("empty values not allowed"),
+              0x23: _("value needs to be supplied"),
+              0x24: _("must be of {constraint} type"),
+              0x25: _("must be of dict type"),
+              0x26: _("length of list should be {constraint}, it is {0}"),
+              0x27: _("min length is {constraint}"),
+              0x28: _("max length is {constraint}"),
+
+              0x41: _("value does not match regex '{constraint}'"),
+              0x42: _("min value is {constraint}"),
+              0x43: _("max value is {constraint}"),
+              0x44: _("unallowed value {value}"),
+              0x45: _("unallowed values {0}"),
+              0x46: _("unallowed value {value}"),
+              0x47: _("unallowed values {0}"),
+
+              0x61: _("field '{field}' cannot be coerced: {0}"),
+              0x62: _("field '{field}' cannot be renamed: {0}"),
+              0x63: _("field is read-only"),
+              0x64: _("default value for '{field}' cannot be set: {0}"),
+
+              0x81: _("mapping doesn't validate subschema: {0}"),
+              0x82: _("one or more sequence-items don't validate: {0}"),
+              0x83: _("one or more keys of a mapping  don't validate: {0}"),
+              0x84: _("one or more values in a mapping don't validate: {0}"),
+              0x85: _("one or more sequence-items don't validate: {0}"),
+
+              0x91: _("one or more definitions validate"),
+              0x92: _("none or more than one rule validate"),
+              0x93: _("no definitions validate"),
+              0x94: _("one or more definitions don't validate")
+              }
 
 
 class Validator(Validator):
+    def __init__(self, *args, **kwargs):
+      kwargs['error_handler'] = HumanReadableValidationError()
+      super().__init__(*args, **kwargs)
+      # self.error_handler = HumanReadableValidationError
+
     def _validate_type_uuid(self, value):
-        re_uuid = re.compile(r'[0-9a-f]{8}(?:(?:-)?[0-9a-f]{4}){3}(?:-)?[0-9a-f]{12}', re.I)
-        if re_uuid.match(value):
-            return True
-            # self._error("Value for field '%s' must be valid UUID" % field)
+      re_uuid = re.compile(r'[0-9a-f]{8}(?:(?:-)?[0-9a-f]{4}){3}(?:-)?[0-9a-f]{12}', re.I)
+      if re_uuid.match(value):
+        return True
 
     def _validate_type_steamid(self, value):
-        re_steamid = re.compile(r'(765611979602657[3-8][0-9]|7656119796026579[0-9]|76561197960265[89][0-9]{2}|7656119796026[6-9][0-9]{3}|765611979602[7-9][0-9]{4}|76561197960[3-9][0-9]{5}|7656119796[1-9][0-9]{6}|765611979[7-9][0-9]{7}|7656119[89][0-9]{9}|7656120[01][0-9]{9}|76561202[01][0-9]{8}|765612022[0-4][0-9]{7}|7656120225[0-4][0-9]{6}|76561202255[01][0-9]{5}|765612022552[0-2][0-9]{4}|7656120225523[0-2][0-9]{3}|765612022552330[01][0-9]|76561202255233020)', re.I)
-        if re_steamid.match(value):
-            return True
-            # self._error("Value for field '%s' must be valid steamid" % field)
+      val = value
+      if isinstance(val, str) and value.isdigit():
+        val = int(val)
+
+      if isinstance(val, int) and 76561197960265729 <= value < 76561202255233023:
+        return True
+
+      return False
 
     def _validate_type_ip(self, value):
-        re_ip = re.compile(r'(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])', re.I)
-        if re_ip.match(value):
-            return True
+      re_ip = re.compile(r'(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])', re.I)
+      if re_ip.match(value):
+          return True
 
 
 validation = {

@@ -13,13 +13,18 @@ class RCon:
 
   def run(self, command):
     output = []
-    with valve.rcon.RCON(self.addr, self.pwd) as rcon:
-      # rcon.authenticate()
-      if isinstance(command, str):
-        command = [command]
+    try:
+      with valve.rcon.RCON(self.addr, self.pwd) as rcon:
+        # rcon.authenticate()
+        if isinstance(command, str):
+          command = [command]
 
-      for cmd in command:
-        response = rcon.execute(cmd)
-        output.append(response.body.decode("utf-8"))
+        for cmd in command:
+          response = rcon.execute(cmd)
+          output.append(response.body.decode("utf-8"))
+    except valve.rcon.RCONAuthenticationError:
+      pass
+    except valve.rcon.RCONTimeoutError:
+      pass
 
     return output

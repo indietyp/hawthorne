@@ -44,7 +44,7 @@ def user_log_handler(sender, instance, raw, using, update_fields, **kwargs):
     ip, created = UserIP.objects.get_or_create(user=instance, ip=instance.ip)
     ip.is_active = True
     iplog = True
-  except:
+  except Exception:
     iplog = False
 
   if 'online' in changelog and '_server' in instance.__dict__.keys():
