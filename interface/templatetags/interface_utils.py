@@ -22,7 +22,6 @@ def dict_to_list(dic, key):
   output = [d[key] for d in dic]
 
   if isinstance(output[0], datetime.date):
-    print(settings.DATE_FORMAT)
-    output = [date(d, settings.DATE_FORMAT) for d in output]
+    output = [date(d, settings.SHORT_DATE_FORMAT) for d in output]
 
   return output

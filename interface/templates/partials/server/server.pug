@@ -93,11 +93,10 @@
             .content time
           .spacer
       script.execution.server.
-        var dataset = {{ data.executed.online|dict_to_list:'date'|safe }}
         var data = {
-          labels: [],
+          labels: {{ data.executed.online|dict_to_list:'date'|safe }},
           series: [
-            [5, 2, 4, 1, 3]
+            {{ data.executed.online|dict_to_list:'active'|safe }}
           ]
         };
         var options = {

@@ -24,7 +24,11 @@ class RConSourcemod:
     except valve.rcon.RCONError as e:
       return {'error': e}
 
-    response = json.loads(response)
+    print(response)
+    try:
+      response = json.loads(response)
+    except:
+      return {'error': 'could not load information', 'raw': response}
 
     if response['stats']['timeleft'] == -1:
       response['stats']['timeleft'] = None

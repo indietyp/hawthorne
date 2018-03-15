@@ -22,15 +22,13 @@ def status(server):
 
     dpoint = online[0]['date']
     dbreak = datetime.date.today()
-    pointer = 1
+    included = [x['date'] for x in online]
 
     while dpoint < dbreak:
       dpoint += datetime.timedelta(days=1)
 
-      if len(online) <= pointer or dpoint != online[pointer]['date']:
+      if dpoint not in included:
         online.append({'date': dpoint, 'active': 0})
-
-      pointer += 1
 
   else:
     online = [{'date': datetime.date.today(), 'active': 0}]
