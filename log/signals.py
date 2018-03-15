@@ -39,8 +39,10 @@ def user_log_handler(sender, instance, raw, using, update_fields, **kwargs):
     l.save()
 
   namespace, created = UserNamespace.objects.get_or_create(user=instance, namespace=instance.namespace)
-  ip, created = UserIP.objects.get_or_create(user=instance, ip=instance.ip)
-  ip.is_active = True
+
+  if instance.ip is not None:
+    ip, created = UserIP.objects.get_or_create(user=instance, ip=instance.ip)
+    ip.is_active = True
 
   if 'online' in changelog and '_server' in instance.__dict__.keys():
     for disconnect in UserOnlineTime.objects.filter(user=state, server=instance._server, disconnected=None):
@@ -49,7 +51,9 @@ def user_log_handler(sender, instance, raw, using, update_fields, **kwargs):
 
     if instance.online:
       UserOnlineTime(user=instance, server=instance._server).save()
-      ip.connections += 1
+
+      if instance.ip is not None:
+        ip.connections += 1
       namespace.connections += 1
 
   namespace.save()

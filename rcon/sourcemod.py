@@ -24,10 +24,10 @@ class RConSourcemod:
     except valve.rcon.RCONError as e:
       return {'error': e}
 
-    print(response)
+    response = response.split('\n')[0]
     try:
       response = json.loads(response)
-    except:
+    except Exception:
       return {'error': 'could not load information', 'raw': response}
 
     if response['stats']['timeleft'] == -1:

@@ -20,6 +20,6 @@ class RCon:
 
       for cmd in command:
         response = rcon.execute(cmd)
-        output.append(response.text)
+        output.append(response.body.decode("utf-8"))
 
     return output
