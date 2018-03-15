@@ -1,4 +1,5 @@
 - load interface_utils
+- load i18n
 
 .row.pure-g
   input.hidden.uuid(type='hidden', value=data.id)
@@ -32,7 +33,7 @@
       if data.server is not None
         = data.server.name
       else
-        | all
+        | {% trans "all" %}
   .column.icon.group.pure-u-14-24
     i.explicit(data-feather="zap")
     .actions.disabled

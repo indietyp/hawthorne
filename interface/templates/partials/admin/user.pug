@@ -1,4 +1,5 @@
 - load interface_utils
+- load i18n
 
 .row.pure-g.userselect_none
   input.hidden.uuid(type='hidden', value=data.id)
@@ -13,7 +14,7 @@
   .column.icon.server.pure-u-7-24
     i(data-feather="hard-drive")
     - if data.server is None
-      span all
+      span {% trans "all" %}
     - else
       span= data.server|truncatechars:18
   .column.icon.username.pure-u-3-24

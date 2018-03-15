@@ -1,3 +1,5 @@
+- load i18n
+
 .row.pure-g
   input.hidden.user(type='hidden', value=data.user.id)
   input.hidden.server(type='hidden', value="{{data.server.id|default_if_none:''}}")
@@ -16,15 +18,16 @@
   .column.icon.server.pure-u-7-24
     i(data-feather="hard-drive")
     - if data.server is None
-      span all
+      span {% trans "all" %}
     - else
       span= data.server.name
   .column.icon.time.pure-u-7-24
     i.adjusted(data-feather="clock")
     span(data-timestamp='{{data.created_at|add:data.length|date:"U"}}')
       if data.length is not None
-        | until
-        = data.created_at|add:data.length|date:"SHORT_DATETIME_FORMAT"
+        {% blocktrans with until=data.created_at|add:data.length|date:"SHORT_DATETIME_FORMAT" %}
+        | until {{until}}
+        {% endblocktrans %}
       else
         i.bpi-unlimited.px24
 

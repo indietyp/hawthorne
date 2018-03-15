@@ -1,3 +1,5 @@
+- load i18n
+
 .command
   .segment.first
     span.symbol.blue #
@@ -6,7 +8,7 @@
         span.symbol.white @
         span.green= data.ip
     - if perms.core.view_chat_server
-        span.symbol.white in
+        span.symbol.white {% trans "in" %}
         span.lipstick= data.server.name
     .spacer
     - if perms.core.view_chat_time

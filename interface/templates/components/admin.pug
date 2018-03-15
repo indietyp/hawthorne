@@ -5,8 +5,7 @@
 - block content
   - if perms.core.view_user
     .item.pure-u-1-1.users
-      .heading
-       - trans "Administration"
+      .heading {% trans "Administration" %}
       .list#admin__admin
         //- partials/admin/user.pug
 
@@ -14,10 +13,10 @@
         .row.add.pure-g
           .column.icon.username.pure-u-7-24
             select#username-input
-              option(placeholder) Username
+              option(placeholder) {% trans "Username" %}
           .column.icon.group.pure-u-14-24
             select#group-input
-              option(placeholder) Group
+              option(placeholder) {% trans "Group" %}
           .column.icon.pure-u-3-24
             .spacer
             .action
@@ -26,11 +25,11 @@
           script.execution.
             var usernameinput = new Choices('#username-input', {
               searchChoices: false,
-              searchPlaceholderValue: "Steam Username",
+              searchPlaceholderValue: "{% trans 'Steam Username' %}",
               choices: [],
-              noResultsText: 'Could not find user',
-              noChoicesText: 'Type something to query',
-              itemSelectText: 'Enter will do it',
+              noResultsText: "{% trans 'could not find user' %}",
+              noChoicesText: "{% trans 'type something to query' %}",
+              itemSelectText: "{% trans 'enter will do it' %}",
             })
 
             debounce_search = function(value, input) {
@@ -73,7 +72,7 @@
             if data.server is not None
               = data.server.name
             else
-              | all
+              | {% trans "all" %}
           .column.icon.group.pure-u-14-24
             i(data-feather="zap")
             span (root)
@@ -119,7 +118,7 @@
           .column.icon.pure-u-3-24
           .column.icon.server.pure-u-7-24
             select#server-input
-              option(placeholder) Server
+              option(placeholder) {% trans "Server" %}
           .column.icon.server.pure-u-14-24
             i(data-feather="zap")
             .actions.enabled
@@ -185,8 +184,7 @@
 
   - if perms.core.view_chat
     .item.pure-u-1-1.pure-u-lg-11-24.second
-      .heading
-        - trans "Logs"
+      .heading {% trans "Logs" %}
       .list
         .row.pure-g#admin__log
           //- partials/admin/group.pug

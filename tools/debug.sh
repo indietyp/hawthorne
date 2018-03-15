@@ -1,5 +1,7 @@
 #!/bin/sh
 
+dir=/hawthorne
+
 printf "Everything will be configured by itelf.\n"
 printf "The configured installation path used will be ${dir}\n"
 

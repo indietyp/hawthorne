@@ -7,7 +7,7 @@
     span= data.server.name|truncatechars:18
   .column.icon.time.pure-u-8-24
     i(data-feather='clock')
-    span= data.created_at|date:"d.m y H:i"
+    span= data.created_at|date:"DATETIME_FORMAT"
   .column.icon.placeholder.pure-u-8-24
   .column.icon.command.pure-u-16-24
     pre.code.code-command= data.message

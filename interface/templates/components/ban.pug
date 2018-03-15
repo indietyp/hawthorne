@@ -14,10 +14,10 @@
       .row.add.pure-g
         .column.icon.username.pure-u-7-24
           select#username-input
-            option(placeholder) Username
+            option(placeholder) {% trans 'Username' %}
         .column.icon.server.pure-u-7-24
           select#server-input
-            option(placeholder) Server
+            option(placeholder) {% trans 'Server' %}
         .column.icon.group.pure-u-7-24.input-wrapper
           input#inputduration(type='datetime-local')
           label(for='inputduration')
@@ -36,11 +36,11 @@
           document.getElementById('inputduration').min = window.style.utils.date.convert.to.iso(new Date());;
           var usernameinput = new Choices('#username-input', {
             searchChoices: false,
-            searchPlaceholderValue: "Steam Username",
+            searchPlaceholderValue: "{% trans 'Steam Username' %}",
             choices: [],
-            noResultsText: 'Could not find user',
-            noChoicesText: 'Type something to query',
-            itemSelectText: 'Enter will do it',
+            noResultsText: "{% trans 'could not find user' %}",
+            noChoicesText: "{% trans 'type something to query' %}",
+            itemSelectText: "{% trans 'enter will do it' %}",
           })
 
           debounce_search = function(value, input) {

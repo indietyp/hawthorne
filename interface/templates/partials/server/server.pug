@@ -1,4 +1,5 @@
 - load interface_utils
+- load i18n
 
 .item.pure-u-1-1.pure-g.second
   input.hidden.uuid(type='hidden', value=data.id)
@@ -48,8 +49,7 @@
             = data.executed.status.stats.scores.CT
             |  -
             = data.executed.status.stats.scores.TERRORIST
-          else
-            | Not supported
+          else {% trans "Not Supported" %}
       .section.icon.pure-u-1-2.pure-u-lg-1-3
         i(data-feather='users')
         span.content= data.executed.status.stats.online
@@ -64,13 +64,8 @@
   .row.add.pure-g
     .pure-u-1-1.relative
       .container.flex.center.column(style="width:100%;margin-bottom: 1em;")
-        pre.code.code-command.input(data-placeholder='Enter command here...', contenteditable="true", onkeypress=" return window.style.utils.verify.input('single', event, this)")
+        pre.code.code-command.input(data-placeholder="{% trans 'Enter command here...'}", contenteditable="true", onkeypress=" return window.style.utils.verify.input('single', event, this)")
         pre.code.code-command.ro.none
-          // | This is
-          // | a test
-      // script.execution.server.
-      //   var _pre = document.querySelector("pre.ro");
-      //   _pre.innerHTML="<span class='line'>"+(_pre.textContent.split("\n").filter(Boolean).join("</span>\n<span class='line'>"))+"</span>";
 
       .icon.action.send-command
         i.explicit(data-feather='send', onclick="window.api.submit('server__execute', this)")
@@ -82,15 +77,15 @@
           .spacer
           span.number 12
           .description
-            .content last
-            .content month
+            .content {% trans "last" %}
+            .content {% trans "month" %}
           .spacer
         .info
           .spacer
           span.number 24
           .description
-            .content all
-            .content time
+            .content {% trans "all" %}
+            .content {% trans "time" %}
           .spacer
       script.execution.server.
         var data = {
