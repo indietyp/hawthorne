@@ -142,6 +142,9 @@ main() {
 
     # ruby-install --system --latest ruby
 
+    curl -sL deb.nodesource.com/setup_8.x | sudo -E bash -
+    apt install -y nodejs
+
     if [ $utils -eq 1 ]; then
       if [ $interactive -eq 0 ]; then
         debconf-set-selections | 'mysql-server mysql-server/root_password password root'
@@ -173,6 +176,10 @@ main() {
     yum -y install mysql mysql-devel mysql-lib
     yum -y install libxml2-devel libffi-devel libxslt-devel openssl-devel
     yum -y install git supervisor
+
+    curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -
+    yum -y install nodejs
+
   else
     printf "Your package manager is currently not supported. Please contact the maintainer\n"
     printf "${BLUE}opensource@indietyp.com${NORMAL} or open an issure\n"
@@ -209,8 +216,6 @@ main() {
   pip3 install -r $dir/requirements.txt
 
   printf "${BLUE}Installing ruby and npm dependencies...${NORMAL}\n"
-  curl -sL deb.nodesource.com/setup_8.x | sudo -E bash -
-  apt install -y nodejs
   npm install -g pug
   # coffeescript
   # gem install sass --no-user-install
