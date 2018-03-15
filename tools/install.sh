@@ -180,6 +180,8 @@ main() {
     curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -
     yum -y install nodejs
 
+    export PATH="$PATH:/usr/local/bin"
+
   else
     printf "Your package manager is currently not supported. Please contact the maintainer\n"
     printf "${BLUE}opensource@indietyp.com${NORMAL} or open an issure\n"
