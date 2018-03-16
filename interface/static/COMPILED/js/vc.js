@@ -57,6 +57,7 @@
       } else {
         return false;
       }
+      url = !url ? '/' : url;
       window.history.pushState("", "", url);
       return true;
     });

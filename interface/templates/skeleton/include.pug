@@ -50,6 +50,7 @@ script(src="//unpkg.com/balalaika@1.0.1/balalaika.min.js")
 // script(src="//cdn.jsdelivr.net/npm/chibijs@3.0.9/chibi-min.min.js")
 
 // Custom JavaScript - uses these libraries
+script(src="{% static 'js/globals.coffee'|compile %}")
 script(src="{% static 'js/style.coffee'|compile %}")
 script(src="{% static 'js/steam.coffee'|compile %}")
 script(src="{% static 'js/api.coffee'|compile %}")

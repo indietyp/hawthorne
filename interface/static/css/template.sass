@@ -22,6 +22,8 @@ body
     background-color: #2E363F
     font-family: "Lato", "Helvetica Neue", Helvetica, Arial
 
+    // overflow-y: hidden
+
 html, button, input, select, textarea, .pure-g [class*="pure-u"]
     font-family: "Lato", "Helvetica Neue", Helvetica, Arial !important
 
@@ -596,7 +598,7 @@ pre.code.ro
     outline: none
     color: rgba(#ffa726, 0.6)
     max-height: 0px
-    transition: max-height .5s ease-out
+    transition: max-height 0.5s ease-out
     overflow: hidden
 
     & .line::before
@@ -698,7 +700,43 @@ pre.code-command
 .padding__none
     padding: 0 !important
 
-// media queiers
+.status-card
+    position: fixed
+    z-index: 9999
+    padding: 1em
+    background-color: #333
+    bottom: 1em
+    right: 1em
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3)
+    opacity: 0
+    user-select: none
+    pointer-events: none
+
+    & .icon
+        padding-right: 1em
+
+        & svg
+            height: 2em
+            width: 2em
+
+    & .info
+        border-left: 1px solid $dgray
+        padding-left: 1em
+
+        & .content
+            padding: 3px
+            color: $gray
+
+    &.fade
+        transition: bottom 0.6s ease-out, opacity 0.6s ease-out
+        opacity: 0
+        bottom: -4em
+
+        &.active
+            opacity: 1
+            bottom: 1em
+
+// media queries
 @media (max-width: 1000px)
     #sidebar .heading
         display: none

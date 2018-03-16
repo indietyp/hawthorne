@@ -46,6 +46,7 @@ change = (destination='home') ->
     else
       return false
 
+    url = if not url then '/' else url
     window.history.pushState "", "", url
     return true
   )
