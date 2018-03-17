@@ -88,7 +88,7 @@ def validation(a):
 
         schema = validation[request.method]
 
-      schema = schema['validation']
+      schema = schema['parameters']
 
       v = Validator(schema, update=True, purge_unknown=True)
       document = v.normalized(document)

@@ -1,8 +1,8 @@
 import socket
 import valve.rcon
 from core.models import Server
-from django.contrib.auth.hashers import make_password
-from rcon.sourcemod import RConSourcemod
+from rcon.base import RCONBase
+from rcon.sourcemod import SourcemodPluginWrapper
 from django.views.decorators.csrf import csrf_exempt
 from core.decorators.api import json_response, validation
 from core.decorators.auth import authentication_required, permission_required
@@ -34,24 +34,28 @@ def list(request, validated={}, *args, **kwargs):
     try:
       ip = socket.gethostbyname(validated['ip'])
     except socket.gaierror as e:
-      return e, 500
-
-    if validated['verify']:
-      addr = (ip, validated['port'])
-
-      try:
-        with valve.rcon.RCON(addr, validated['password']) as rcon:
-          rcon.authenticate()
-      except valve.rcon.RCONTimeoutError:
-        'Could not reach server', 500
-      except valve.rcon.RCONAuthenticationError:
-        'Wrong password was provided', 500
+      return 'Could not resolve host by domain ({})'.format(e), 500
 
     server = Server()
     server.port = validated['port']
     server.ip = ip
     server.name = validated['name']
     server.game = validated['game']
+
+    if validated['verify']:
+      try:
+        conn = RCONBase(server, timeout=3)
+        conn.connect()
+        conn.authenticate(timeout=3)
+        conn.close()
+      except valve.rcon.RCONTimeoutError:
+        return 'Server timed out', 500
+      except valve.rcon.RCONAuthenticationError:
+        return 'Could not authenticate with given password', 500
+      except ConnectionError as e:
+        return 'Could not reach server ({})'.format(e), 500
+      except TimeoutError as e:
+        return 'Could not reach server ({})'.format(e), 500
 
     # we don't want to have a plain one, but we need to. RCON does not hash pwds
     server.password = validated['password']
@@ -73,25 +77,48 @@ def detailed(request, validated={}, s=None, *args, **kwargs):
   server = Server.objects.get(id=s)
 
   if request.method == 'GET':
-    status = RConSourcemod(server).status()
+    status = SourcemodPluginWrapper(server).status()
 
     return {'adress': "{}:{}".format(server.ip, server.port),
             'name': server.name,
             'status': status}
 
   elif request.method == 'POST':
-    # resolve domain into ip
     if validated['name'] is not None:
       server.name = validated['name']
 
     if validated['ip'] is not None:
-      server.ip = validated['ip']
+      try:
+        ip = socket.gethostbyname(validated['ip'])
+      except socket.gaierror as e:
+        return 'Could not resolve host by domain ({})'.format(e), 500
+      server.ip = ip
 
     if validated['port'] is not None:
       server.port = validated['port']
 
+    if validated['gamemode'] is not None:
+      server.gamemode = validated['gamemode']
+
     if validated['password'] is not None:
-      server.password = make_password(validated['password'])
+      server.password = validated['password']
+
+    if validated['verify']:
+      try:
+        conn = RCONBase(server, timeout=3)
+        conn.connect()
+        conn.authenticate(timeout=3)
+        conn.close()
+      except valve.rcon.RCONTimeoutError:
+        return 'Server timed out', 500
+      except valve.rcon.RCONAuthenticationError:
+        return 'Could not authenticate with given password', 500
+      except ConnectionError as e:
+        return 'Could not reach server ({})'.format(e), 500
+      except TimeoutError as e:
+        return 'Could not reach server ({})'.format(e), 500
+      except socket.timeout as e:
+        return 'Could not reach server ({})'.format(e), 500
 
     server.save()
 
@@ -109,4 +136,4 @@ def detailed(request, validated={}, s=None, *args, **kwargs):
 @require_http_methods(['PUT'])
 def action(request, validated={}, s=None, *args, **kwargs):
   server = Server.objects.get(id=s)
-  return {'response': RConSourcemod(server).execute(validated['command'])}
+  return {'response': SourcemodPluginWrapper(server).execute(validated['command'])}

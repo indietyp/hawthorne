@@ -36,7 +36,9 @@ InformationCard = (show=true, reason) ->
   if show
     output = ''
     reason.forEach((i) ->
-      if typeof i == 'object'
+      if typeof i == 'string'
+        output += "<div class='content'>#{i}</div>"
+      else if typeof i == 'object'
         Object.keys(i).forEach((k) ->
           i[k].forEach((state) ->
             state = state.replace /of uuid type/g, 'present'

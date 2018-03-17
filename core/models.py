@@ -42,6 +42,8 @@ class User(AbstractUser):
         ('view_user', 'Can view users'),
         ('kick_user', 'Can kick a user'),
         ('view_group', 'Can view a user group'),
+
+        ('view_capabilities', 'Can view the current capabilities of the system'),
     ]
 
   def __str__(self):

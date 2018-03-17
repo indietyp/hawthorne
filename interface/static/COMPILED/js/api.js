@@ -73,7 +73,7 @@
   var edit, save;
 
   save = function(mode = '', that) {
-    var data, j, len, node, now, o, payload, payloads, replacement, role, selector, server, success, target, time, user, uuid;
+    var data, j, len, node, now, o, password, payload, payloads, replacement, role, selector, server, success, target, time, user, uuid;
     o = {
       target: that,
       skip_animation: false
@@ -173,12 +173,25 @@
         window.endpoint.api.users[user][mode].post(o, {}, payload, function(err, data) {});
         break;
       case 'server':
-        console.log('placeholder');
+        node = node.parentElement;
+        uuid = $('input.uuid', node)[0].value;
+        selector = window.api.storage[uuid];
+        payload = {
+          game: selector.getValue(true),
+          gamemode: $(".icon.gamemode span", node).html(),
+          ip: $(".icon.network span", node).html().split(':')[0],
+          port: parseInt($(".icon.network span", node).html().split(':')[1])
+        };
+        password = $(".icon.password input", node)[0].value;
+        if (password !== '') {
+          payload.password = password;
+        }
+        window.endpoint.api.servers[uuid].post(o, {}, payload, function(err, data) {});
     }
   };
 
   edit = function(mode = '', that) {
-    var date, group, node, now, selected, selector, server, target, timestamp, trigger, uuid;
+    var date, games, group, node, now, selected, selector, server, target, timestamp, trigger, uuid;
     if (that.getAttribute('class').match(/save/)) {
       // this is for the actual process of saving
       save(mode, that);
@@ -287,7 +300,29 @@
         });
         break;
       case 'server':
-        console.log('placeholder');
+        node = node.parentElement;
+        uuid = $('input.uuid', node)[0].value;
+        games = $(".icon.game", node);
+        $('span', games[0]).remove();
+        games.htmlAppend(`<select id='server-${uuid}'></select>`);
+        selector = new Choices(`#server-${uuid}`, {
+          searchEnabled: false,
+          choices: [],
+          classNames: {
+            containerOuter: 'choices edit big'
+          }
+        });
+        window.api.games(selector, games[0].getAttribute('data-value'));
+        $(".icon.gamemode", node).addClass('input-wrapper big');
+        $(".icon.gamemode span", node).addClass('input');
+        $(".icon.gamemode span", node)[0].setAttribute('contenteditable', 'true');
+        $(".icon.network", node).addClass('input-wrapper big');
+        $(".icon.network span", node).addClass('input');
+        $(".icon.network span", node)[0].setAttribute('contenteditable', 'true');
+        $(".icon.password", node).addClass('input-wrapper big');
+        $(".icon.password", node).htmlAppend('<input type="password", placeholder="Password"></input>');
+        $(".icon.password span", node).remove();
+        window.api.storage[uuid] = selector;
     }
     $(that).css('opacity', '0');
     setTimeout(function() {
@@ -469,7 +504,30 @@
   //= require api.delete.coffee
   //= require api.edit.coffee
   //= require api.create.coffee
-  var group, server;
+  var game, group, server;
+
+  game = function(that = null, selected = '') {
+    window.endpoint.api.capabilities.games.get(function(err, data) {
+      var ele, fmt, formatted, i, len;
+      data = data.result;
+      if (that !== null) {
+        formatted = [];
+        for (i = 0, len = data.length; i < len; i++) {
+          ele = data[i];
+          fmt = {
+            value: ele.value,
+            label: ele.label
+          };
+          if (selected !== '' && fmt.value === selected) {
+            fmt.selected = true;
+          }
+          formatted.push(fmt);
+        }
+        that.setChoices(formatted, 'value', 'label', true);
+      }
+      return data;
+    });
+  };
 
   server = function(query, that = null, selected = '') {
     window.endpoint.api.servers({
@@ -535,5 +593,7 @@
   window.api.servers = server;
 
   window.api.groups = group;
+
+  window.api.games = game;
 
 }).call(this);

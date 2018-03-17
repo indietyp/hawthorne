@@ -348,7 +348,9 @@
     if (show) {
       output = '';
       reason.forEach(function(i) {
-        if (typeof i === 'object') {
+        if (typeof i === 'string') {
+          return output += `<div class='content'>${i}</div>`;
+        } else if (typeof i === 'object') {
           return Object.keys(i).forEach(function(k) {
             return i[k].forEach(function(state) {
               state = state.replace(/of uuid type/g, 'present');

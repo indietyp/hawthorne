@@ -67,3 +67,13 @@ def chat(request, validated={}, *args, **kwargs):
 
     chat.save()
     return 'passed'
+
+
+@csrf_exempt
+@json_response
+@authentication_required
+@permission_required('system.token')
+@validation('system.token')
+@require_http_methods(['GET', 'POST', 'PUT'])
+def token(request, validated={}, *args, **kwargs):
+  pass

@@ -1,12 +1,11 @@
 from core.models import User, Country, Server, ServerGroup, Ban, Mutegag, Membership
 import re
 from django.views.decorators.csrf import csrf_exempt
-from core.utils import UniPanelJSONEncoder
 from core.lib.steam import populate as steam_populate
-from rcon.sourcemod import RConSourcemod
+from rcon.sourcemod import SourcemodPluginWrapper
 import datetime
 from django.contrib.auth.models import Group
-from django.db.models import F, Q, Value, CharField
+from django.db.models import F, Q
 from core.decorators.api import json_response, validation
 from core.decorators.auth import authentication_required, permission_required
 from django.views.decorators.http import require_http_methods
@@ -301,7 +300,7 @@ def ban(request, u=None, validated={}, *args, **kwargs):
     ban = Ban(user=user, server=server, reason=validated['reason'], length=length, created_by=request.user)
     ban.save()
 
-    RConSourcemod(server).ban(ban)
+    SourcemodPluginWrapper(server).ban(ban)
 
   elif request.method == 'DELETE':
     server = Server.objects.get(id=validated['server'])
@@ -390,7 +389,7 @@ def mutegag(request, u=None, validated={}, *args, **kwargs):
     mutegag = Mutegag(user=user, server=server, reason=validated['reason'], length=length, type=mutegag_type, created_by=request.user)
     mutegag.save()
 
-    RConSourcemod(server).mutegag(mutegag)
+    SourcemodPluginWrapper(server).mutegag(mutegag)
 
   elif request.method == 'DELETE':
     server = Server.objects.get(id=validated['server'])
@@ -419,4 +418,4 @@ def kick(request, u=None, validated={}, *args, **kwargs):
   except Exception:
     return 'server not found', 500
 
-  return RConSourcemod(server).kick(user=user)
+  return SourcemodPluginWrapper(server).kick(user=user)

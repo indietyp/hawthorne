@@ -8,19 +8,16 @@
     .spacer
     .icons
       .action
-        i(data-feather='edit-2')
+        i(data-feather='edit-2', onclick="window.api.edit('server', this)")
       .action
         i(data-feather='trash-2', onclick="window.api.remove('server', this)")
 
   .pure-u-1-1
     .row.overview.item.pure-g
-      .section.icon.pure-u-1-2.pure-u-lg-1-3
+      .section.icon.pure-u-1-2.pure-u-lg-1-3.game(data-value=data.game)
         i(data-feather='compass')
         span.content= data.get_game_display
-      .section.icon.pure-u-1-2.pure-u-lg-1-3
-        i(data-feather='map')
-        span.content= data.executed.status.stats.map
-      .section.icon.pure-u-1-2.pure-u-lg-1-3
+      .section.icon.pure-u-1-2.pure-u-lg-1-3.gamemode
         i(data-feather='briefcase')
         span.content
           if data.mode is not None
@@ -28,11 +25,14 @@
           else
             | ----
       .section.icon.pure-u-1-2.pure-u-lg-1-3
+        i(data-feather='map')
+        span.content= data.executed.status.stats.map
+      .section.icon.pure-u-1-2.pure-u-lg-1-3.network
         i(data-feather='wifi')
         span.content
           =data.ip|add:":"
           =data.port
-      .section.icon.pure-u-1-2.pure-u-lg-1-3
+      .section.icon.pure-u-1-2.pure-u-lg-1-3.password
         i(data-feather='lock')
         span.content ********
       .section.icon.pure-u-1-2.pure-u-lg-1-3
@@ -49,7 +49,8 @@
             = data.executed.status.stats.scores.CT
             |  -
             = data.executed.status.stats.scores.TERRORIST
-          else {% trans "Not Supported" %}
+          else
+            | {% trans "Not Supported" %}
       .section.icon.pure-u-1-2.pure-u-lg-1-3
         i(data-feather='users')
         span.content= data.executed.status.stats.online
@@ -64,7 +65,7 @@
   .row.add.pure-g
     .pure-u-1-1.relative
       .container.flex.center.column(style="width:100%;margin-bottom: 1em;")
-        pre.code.code-command.input(data-placeholder="{% trans 'Enter command here...'}", contenteditable="true", onkeypress=" return window.style.utils.verify.input('single', event, this)")
+        pre.code.code-command.input(data-placeholder="{% trans 'Enter command here...' %}", contenteditable="true", onkeypress=" return window.style.utils.verify.input('single', event, this)")
         pre.code.code-command.ro.none
 
       .icon.action.send-command
@@ -75,14 +76,14 @@
       .ct-info
         .info
           .spacer
-          span.number 12
+          span.number= data.executed.count.last30.active|stringformat:"02d"
           .description
             .content {% trans "last" %}
             .content {% trans "month" %}
           .spacer
         .info
           .spacer
-          span.number 24
+          span.number= data.executed.count.ever.active|stringformat:"02d"
           .description
             .content {% trans "all" %}
             .content {% trans "time" %}
@@ -109,4 +110,5 @@
         new Chartist.Line("#chart-{{data.id}}", data, options);
     .pure-u-1-2
       .pure-g
-        //- partials/server/online.pug
+        each i in data.executed.status.players
+          - include 'partials/server/online.pug' with data=i

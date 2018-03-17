@@ -133,6 +133,16 @@ input[type="number"]
 .input-wrapper
     position: relative
 
+    &.big
+        & span, & input
+            padding-left: 2em !important
+
+        & > input
+            font-size: 1.25em !important
+
+        & > svg
+            top: (-8px) !important
+
     & > svg
         position: absolute
         transition: stroke 0.5s ease-out
@@ -521,6 +531,9 @@ input[type="number"]
         margin-bottom: 0
 
     &.edit
+        &.big .choices__item
+            font-size: 1.25em !important
+
         &:not(.small)
             width: calc(100% - 36px)
 

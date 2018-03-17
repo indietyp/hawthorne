@@ -1,13 +1,14 @@
-from .__rcon import RCon
+from rcon.base import RCONBase
 import json
 import valve.rcon
 from core.models import User
 import datetime
+from core.lib.steam import populate
 
 
-class RConSourcemod:
+class SourcemodPluginWrapper(RCONBase):
   def __init__(self, server):
-    self.rcon = RCon(server)
+    super(SourcemodPluginWrapper, self).__init__(server)
 
   def ban(self, *args, **kwargs):
     pass
@@ -20,7 +21,7 @@ class RConSourcemod:
 
   def status(self, *args, **kwargs):
     try:
-      response = self.rcon.run('json_status')[0]
+      response = self.run('json_status')[0]
     except valve.rcon.RCONError as e:
       return {'error': e}
 
@@ -37,20 +38,24 @@ class RConSourcemod:
 
     response['stats']['uptime'] = datetime.timedelta(seconds=response['stats']['uptime'])
 
+    users = []
     for player in response['players']:
       try:
         user = User.objects.get(id=player['id'])
       except User.DoesNotExist:
-        user = User.object.creat_user(username=player['steamid'])
+        user = User.object.create_user(username=player['steamid'])
         user.is_active = False
         user.save()
 
-      # process further
+        populate(user)
 
+      users.append(user)
+
+    response['players'] = users
     return response
 
   def execute(self, command, *args, **kwargs):
     try:
-      return self.rcon.run(command)[0]
+      return self.run(command)[0]
     except valve.rcon.RCONError as e:
       return {'error': e}

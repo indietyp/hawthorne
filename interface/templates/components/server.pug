@@ -6,29 +6,24 @@
   .item.pure-u-1-1.add__no-add.pure-g#server__server
     script.execution.
       window.ajax.server.server(1)
-    .row.pure-g
+    .row.pure-g.add__no-add
       .column.icon.group.pure-u-7-24.input-wrapper
-        input#inputservername(type='text')
-        label.adjusted(for='inputservername')
+        input#inputservername(type='text', placeholder="{% trans 'Name' %}")
+        label(style="top: 0px", for='inputservername')
           i.explicit(data-feather='hard-drive')
       .column.icon.immunity.pure-u-7-24.input-wrapper
         input#inputip(placeholder='0.0.0.0:27012', type='text', pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$")
-        label.adjusted(for='inputip')
-          i.explicit.adjusted(data-feather='wifi')
+        label(style="top: 0px", for='inputip')
+          i.explicit(data-feather='wifi')
       .column.icon.time.pure-u-7-24.input-wrapper
-        input#inputpassword(type='password')
-        label.adjusted(for='inputpassword')
+        input#inputpassword(type='password', placeholder="{% trans 'Password' %}")
+        label(style="top: 0px", for='inputpassword')
           i.explicit(data-feather='lock')
       .column.icon.placeholder.pure-u-3-24.checkbox-wrapper
-        // input#checkboxvac(type="checkbox")
-        // label.flex.center(for='checkboxvac')
-        //   .spacer
-        //   i.explicit.animated.fail.red.padding__none(data-feather='plus')
-        //   span VAC
       .column.icon.placeholder.pure-u-7-24
       .column.icon.time.pure-u-7-24.input-wrapper
-        input#inputmode
-        label.adjusted(for='inputmode')
+        input#inputmode(placeholder="{% trans 'Gamemode' %}")
+        label(for='inputmode')
           i.explicit(data-feather='briefcase')
       .column.icon.group.pure-u-7-24
         select#gameinput

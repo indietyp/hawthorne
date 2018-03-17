@@ -1,17 +1,32 @@
- ✔ ban: RESOLVED @done (18-02-25 19:25)
- ✔ homepage: no access implementation @done (18-02-25 19:25)
- ✔ add, remove, change implementation @done (18-02-25 19:25)
  [ ] settings
- [ ] homepage
- ✔ sourcemod @done (18-03-12 15:24)
+ [ ] landingpage @critical @today
+ [ ] homepage @high @today
+ [ ] settings @high
+   [ ] user
+   [ ] token
+   [ ] discord
+ [ ] discord bot
+ [ ] public page
+   [ ] bans
+   [ ] kicks
+   [ ] announcements
+   [ ] staff
  [ ] announcements
+ [ ] signal if cannot connect to server (top right small red text) of server-card (frontend) @high
+
+
+＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+Archive:
+ ✔ notification toast in bottom right to signal error -> humanize errors @today @high @done (18-03-17 18:48)
+ ✔ test plugin in action @done (18-03-13 23:50)
+ ✔ show command output in frontend -> slide down -> aswell as signal success @today @high @done (18-03-13 23:50)
+ ✔ execute commands from frontend @today @high @done (18-03-13 23:50)
+ ✔ signalify logs @high @done (18-03-13 01:30)
+ ✔ log into different app called `log` @high @done (18-03-13 01:30)
  ✘ loading spinner bellwether logo @cancelled (18-03-12 15:24)
+ ✔ sourcemod @done (18-03-12 15:24)
  ✔ new icon as favicon @done (18-03-12 15:24)
  ✔ change icon @done (18-03-12 15:24)
- ✔ execute commands from frontend @today @high @done (18-03-13 23:50)
- ✔ show command output in frontend -> slide down -> aswell as signal success @today @high @done (18-03-13 23:50)
- [ ] notification toast in bottom right to signal error -> humanize errors @today @high
- ✔ test plugin in action @done (18-03-13 23:50)
- [ ] signal if cannot connect to server  (top right small red text) of server-card (frontend) @today @high
- ✔ log into different app called `log` @high @done (18-03-13 01:30)
- ✔ signalify logs @high @done (18-03-13 01:30)
+ ✔ homepage: no access implementation @done (18-02-25 19:25)
+ ✔ ban: RESOLVED @done (18-02-25 19:25)
+ ✔ add, remove, change implementation @done (18-02-25 19:25)

@@ -2,6 +2,26 @@
 #= require api.edit.coffee
 #= require api.create.coffee
 
+game = (that=null, selected='') ->
+  window.endpoint.api.capabilities.games.get((err, data) ->
+    data = data.result
+
+    if that != null
+      formatted = []
+      for ele in data
+        fmt =
+          value: ele.value
+          label: ele.label
+
+        if selected != '' and fmt.value == selected
+          fmt.selected = true
+
+        formatted.push fmt
+      that.setChoices(formatted, 'value', 'label', true)
+
+    return data
+  )
+  return
 
 server = (query, that=null, selected='') ->
   window.endpoint.api.servers({'query': query}).get((err, data) ->
@@ -53,3 +73,4 @@ group = (query, that=null, selected='') ->
 
 window.api.servers = server
 window.api.groups = group
+window.api.games = game
