@@ -5,4 +5,134 @@
 
 
 - block content
-  //- partials/stuff.pug
+  .status-card.flex.center.not__fixed.visible
+    .icon
+      i.explicit.orange(data-feather="alert-octagon")
+    .info.spacer
+      .content This is just a sample system wide announcement
+    .icon
+      i.explicit.gray(data-feather="x-circle")
+  .item.pure-u-1-1.pure-g
+    .row.pure-g
+      .column.pure-u-1-4.info-card
+        .spacer
+        .info
+          i.prefix(data-feather='server')
+          span.number 07
+          .description
+            .content instances
+            .content managed
+        .spacer
+      .column.pure-u-1-4.info-card
+        .spacer
+        .info
+          i.prefix(data-feather='user')
+          span.number 18
+          .description
+            .count current
+            .count month
+          .appendix.green.flex.column(style="height:90%")
+            .content.flex.center
+              i.explicit.green(data-feather="chevron-up")
+              span.msg 30%
+            .spacer
+        .spacer
+      .column.pure-u-1-4.info-card
+        .spacer
+        .info
+          i.prefix(data-feather='user')
+          span.number 27
+          .description
+            .count all
+            .count time
+        .spacer
+      .column.pure-u-1-4.info-card
+        .spacer
+        .info
+          i.prefix(data-feather='zap')
+          span.number 102
+          .description
+            .count actions
+            .count performed
+        .spacer
+
+    .row.pure-g
+      .column.pure-u-1-4.info-card
+        .spacer
+        .info
+          i.prefix(data-feather='users')
+          span.number 13
+          .description
+            .content roles
+            .content managed
+        .spacer
+      .column.pure-u-1-4.info-card
+        .spacer
+        .info
+          i.prefix(data-feather='users')
+          span.number 87
+          .description
+            .count users w/
+            .count roles
+        .spacer
+      .column.pure-u-1-4.info-card
+        .spacer
+        .info
+          i.prefix(data-feather='message-square')
+          span.number 90
+          .description
+            .count chat
+            .count messages
+        .spacer
+      .column.pure-u-1-4.info-card
+        .spacer
+        .info
+          - include "assets/discord.svg"
+          .description
+            .count join our
+            .count discord
+        .spacer
+
+  .item.pure-u-1-1.pure-u-lg-11-24.second
+    .heading Instances
+    .row.pure-g
+      .column.icon.username.pure-u-7-24
+        i(data-feather="hard-drive")
+        span 06
+      .column.icon.username.pure-u-17-24
+        i(data-feather="compass")
+        span Counter-Strike: Global Offensive
+      .column.icon.placeholder.pure-u-7-24
+      .column.icon.username.pure-u-7-24
+        i(data-feather="map")
+        span de_mirage
+      .column.icon.username.pure-u-7-24
+        i(data-feather="users")
+        span 12
+
+  .spacer
+  .item.pure-u-1-1.pure-u-lg-11-24.second
+    .heading Announcements
+    .row.pure-g.inactive
+      .column.icon.username.pure-u-24-24
+        i.explicit(data-feather="file-text")
+        span Occaecat velit quis eiusmod nostrud deserunt id eu deserunt.
+      .column.icon.username.pure-u-2-24
+      .column.icon.username.pure-u-11-24
+        i.explicit(data-feather="hard-drive")
+        span Hawthorne
+      .column.icon.username.pure-u-11-24
+        i.explicit(data-feather="clock")
+        span two days ago
+
+    .row.pure-g
+      .column.icon.username.pure-u-24-24
+        i(data-feather="file-text")
+        span Occaecat velit quis eiusmod nostrud deserunt id eu deserunt.
+      .column.icon.username.pure-u-2-24
+      .column.icon.username.pure-u-11-24
+        i(data-feather="hard-drive")
+        span 06
+      .column.icon.username.pure-u-11-24
+        i(data-feather="clock")
+        span today @ 12am
