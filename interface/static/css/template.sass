@@ -224,6 +224,112 @@ input[type='number']
   & .column.command:not(:last-child)
     margin-bottom: 1em
 
+  & .steam_svg
+    height: 24px
+    width: 24px
+    padding-right: 12px
+
+    & path
+      fill: black
+
+  & .switch
+    padding-top: 12px
+    cursor: pointer
+
+  & .switch-container
+    & > div
+      transition: max-width 0.3s cubic-bezier(1, 0, 0, 1)
+      max-width: 0px
+      overflow: hidden
+
+      &.focus
+        max-width: 4000px
+
+  & .feather-toggle-left
+    transition: stroke 0.5s ease-out
+
+    & circle
+      transition: transform 0.5s ease-out
+
+    &.partially
+      stroke: $orange !important
+
+      & circle
+        transform: translateX(4px)
+
+    &.activated
+      & circle
+        transform: translateX(8px)
+
+  & .permissions
+    padding-top: 12px
+
+  & .permission
+    display: flex
+    align-items: center
+    flex-grow: 1
+    padding-right: 12px
+    padding-left: 12px
+    transition: all 0.5s cubic-bezier(1, 0, 0, 1)
+    max-height: 4000px
+    overflow: hidden
+
+    & .container
+      height: 24px
+
+    &.collapsed
+      max-height: 0
+
+    & .detailed
+      overflow: hidden
+      cursor: pointer
+
+      & label
+        & > .container
+          height: 1em
+
+        & .feather-plus
+          height: 1em !important
+          width: 1em !important
+          transition: transform 0.3s ease-out
+          transform-origin: 0.5em 0.5em 0px
+          transform: rotate(135deg)
+          stroke: $red
+
+          & line:nth-child(2)
+            transition: transform 0.3s ease-out
+            transform-origin: 12px 12px 0px
+
+        & div
+          font-size: 0.8em
+
+    input[type='checkbox']
+      display: none
+
+    input[type='checkbox']:checked + label .feather-toggle-left
+      stroke: $green
+
+      & circle
+        transform: translateX(8px)
+
+    input[type='checkbox']:checked + label .feather-plus
+      transform: rotate(45deg)
+      stroke: $green
+
+      & line:nth-child(2)
+        transform: matrix(0.5, 0, 0, 1, -4, 7)
+
+    & label
+      cursor: pointer
+      flex-grow: 1
+
+    & .feather-toggle-left
+      stroke: $red
+
+    & .feather-chevron-down
+      cursor: s-resize
+      margin-bottom: -6px
+
   & > .item
     padding: 12px
     background-color: $white
@@ -244,12 +350,9 @@ input[type='number']
         margin-bottom: 0.5em
 
         & > .section
-          // padding-bottom: 0.5em
           display: flex
           align-items: center
           margin-bottom: 0.5em
-
-          // margin-left: 1em
 
           & span
             font-size: 1.25em
@@ -273,6 +376,9 @@ input[type='number']
       & svg
         height: 1.5rem
         width: 1.5rem
+
+      & .right
+        float: right
 
       & .sub
         font-size: 1rem
@@ -337,12 +443,22 @@ input[type='number']
         display: flex
         align-items: center
 
-        & .feather:not(.m0), & img, & .flag-icon
+        & .feather:not(.m0), & img
           padding-right: 12px
 
-        & .feather, & img, & .flag-icon
+        & .flag-icon
+          height: 24px
+          width: 36px
+
+        & .feather, & img
           height: 24px
           width: 24px
+
+        & .namespace
+          overflow-x: hidden
+          margin-right: 12px
+          white-space: nowrap
+          text-overflow: ellipsis
 
         &.inverse .feather
           padding-right: 0
@@ -461,7 +577,7 @@ input[type='number']
   &.center
     align-items: center
 
-  &.column
+  &.column:not(.icon)
     flex-direction: column
 
 .relative
@@ -529,6 +645,7 @@ input[type='number']
   background: none
   cursor: text !important
   width: 100%
+  margin-bottom: 0px !important
 
   &.no__margin__bottom
     margin-bottom: 0
@@ -671,31 +788,47 @@ pre.code-command
       border-right: 1px solid $gray
 
   & > .info
+    flex-direction: column
     display: flex
     align-items: center
-
-    & > .appendix
-      font-size: 0.5em
-
-      & svg
-        height: 1.25em
-        width: 1.25em
 
     & > .discord
       height: 2.5em
       width: 2.5em
+      padding-bottom: 6px
 
-    & > svg:not(.discord)
-      height: 2em
-      width: 2em
-      padding-right: 6px
+    & > .data
+      & > svg:not(.discord)
+        height: 2em
+        width: 2em
+        padding-right: 6px
 
-    & > .number
-      font-size: 2.5em
+      & > .number
+        font-size: 2.5em
+
+      & > .appendix
+        height: 4.4em
+        font-size: 0.5em
+
+        & svg
+          height: 1.25em
+          width: 1.25em
 
     & > .description
-      padding-left: 3px
-      font-size: 1em
+      display: flex
+      font-size: 0.8em
+      width: 100%
+
+      // padding-left: 3px
+
+      &.top
+        margin-bottom: -0.8em
+
+      &:not(.top)
+        margin-top: -0.8em
+
+      &.hidden
+        opacity: 0
 
 .ct-info
   display: flex

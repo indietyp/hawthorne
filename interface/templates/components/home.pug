@@ -17,80 +17,87 @@
       .column.pure-u-1-4.info-card
         .spacer
         .info
-          i.prefix(data-feather='server')
-          span.number 07
-          .description
-            .content instances
-            .content managed
-        .spacer
-      .column.pure-u-1-4.info-card
-        .spacer
-        .info
-          i.prefix(data-feather='user')
-          span.number 18
-          .description
-            .count current
-            .count month
-          .appendix.green.flex.column(style="height:90%")
-            .content.flex.center
-              i.explicit.green(data-feather="chevron-up")
-              span.msg 30%
+          .data
+            i.prefix(data-feather='server')
+            span.number 07
+          .description.bottom
             .spacer
+            span.text instances
         .spacer
       .column.pure-u-1-4.info-card
         .spacer
         .info
-          i.prefix(data-feather='user')
-          span.number 27
-          .description
-            .count all
-            .count time
+          .data.flex.center
+            i.prefix(data-feather='user')
+            span.number 07
+            .appendix.green.flex.column
+              .content.flex.center
+                i.explicit.green(data-feather="chevron-up")
+                span.msg 30%
+              .spacer
+          .description.bottom
+            .spacer
+            span.text current month
         .spacer
       .column.pure-u-1-4.info-card
         .spacer
         .info
-          i.prefix(data-feather='zap')
-          span.number 102
-          .description
-            .count actions
-            .count performed
+          .data.flex.center
+            i.prefix(data-feather='user')
+            span.number 27
+          .description.bottom
+            .spacer
+            span.text all time
+        .spacer
+      .column.pure-u-1-4.info-card
+        .spacer
+        .info
+          .data.flex.center
+            i.prefix(data-feather='zap')
+            span.number 102
+          .description.bottom
+            .spacer
+            span.text actions performed
         .spacer
 
     .row.pure-g
       .column.pure-u-1-4.info-card
         .spacer
         .info
-          i.prefix(data-feather='users')
-          span.number 13
-          .description
-            .content roles
-            .content managed
+          .data.flex.center
+            i.prefix(data-feather='users')
+            span.number 13
+          .description.bottom
+            .spacer
+            span.text roles
         .spacer
       .column.pure-u-1-4.info-card
         .spacer
         .info
-          i.prefix(data-feather='users')
-          span.number 87
-          .description
-            .count users w/
-            .count roles
+          .data.flex.center
+            i.prefix(data-feather='users')
+            span.number 87
+          .description.bottom
+            .spacer
+            span.text with roles
         .spacer
       .column.pure-u-1-4.info-card
         .spacer
         .info
-          i.prefix(data-feather='message-square')
-          span.number 90
-          .description
-            .count chat
-            .count messages
+          .data.flex.center
+            i.prefix(data-feather='message-square')
+            span.number 90
+          .description.bottom
+            .spacer
+            span.text messages
         .spacer
       .column.pure-u-1-4.info-card
         .spacer
         .info
           - include "assets/discord.svg"
-          .description
-            .count join our
-            .count discord
+          .description.bottom
+            .spacer
+            span.text our discord
         .spacer
 
   .item.pure-u-1-1.pure-u-lg-11-24.second

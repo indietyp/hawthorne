@@ -8,7 +8,7 @@ class ServerAction(BaseModel):
 
   class Meta:
     permissions = [
-        ('view_log', 'Can view a server logs')
+        ('view_log', 'Can view server log')
     ]
 
   def __str__(self):
@@ -26,10 +26,10 @@ class ServerChat(BaseModel):
 
   class Meta:
     permissions = [
-        ('view_chat', 'Can view chat logs'),
-        ('view_chat_ip', 'Can view ip of someone in chat logs'),
-        ('view_chat_server', 'Can view current server of someone in chat logs'),
-        ('view_chat_time', 'Can view current time of message in chat logs'),
+        ('view_chat', 'Can view chat log'),
+        ('view_chat_ip', 'Can view ip in chat log'),
+        ('view_chat_server', 'Can view server in chat log'),
+        ('view_chat_time', 'Can view time in chat log'),
     ]
 
   def __str__(self):
@@ -47,6 +47,10 @@ class UserIP(BaseModel):
   def __str__(self):
     return "{} - {}".format(self.user, self.ip)
 
+  class Meta:
+    permissions = []
+    default_permissions = ()
+
 
 class UserOnlineTime(BaseModel):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -58,6 +62,10 @@ class UserOnlineTime(BaseModel):
   def __str__(self):
     return "{} - {}".format(self.user, self.server)
 
+  class Meta:
+    permissions = []
+    default_permissions = ()
+
 
 class UserNamespace(BaseModel):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -65,6 +73,10 @@ class UserNamespace(BaseModel):
 
   connections = models.IntegerField(default=0)
   last_used = models.DateTimeField(auto_now=True)
+
+  class Meta:
+    permissions = []
+    default_permissions = ()
 
   def __str__(self):
     return "{}".format(self.namespace)

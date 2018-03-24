@@ -37,80 +37,41 @@
   .column.icon.group.pure-u-14-24
     i.explicit(data-feather="zap")
     .actions.disabled
-      - if data.flags.can_reservation
-        input(type='checkbox', checked, id="reservation-{{data.id|stringformat:'s'}}", value='A').tiny
-      - else
-        input(type='checkbox', id="reservation-{{data.id|stringformat:'s'}}", value='A').tiny
+      input(type='checkbox', checked=data.flags.can_reservation, id="reservation-{{data.id|stringformat:'s'}}", value='A').tiny
       label.tiny(for="reservation-{{data.id|stringformat:'s'}}", data-description='eservation') R
 
-      - if data.flags.can_generic
-        input(type='checkbox', id="generic{{data.id|stringformat:'s'}}", checked, value='B').tiny
-      - else
-        input(type='checkbox', id="generic{{data.id|stringformat:'s'}}", value='B').tiny
+      input(type='checkbox', id="generic{{data.id|stringformat:'s'}}", checked=data.flags.can_generic, value='B').tiny
       label.tiny(for="generic{{data.id|stringformat:'s'}}", data-description='eneric') G
 
-      - if data.flags.can_kick
-        input(type='checkbox', id="kick-{{data.id|stringformat:'s'}}", checked, value='C').tiny
-      - else
-        input(type='checkbox', id="kick-{{data.id|stringformat:'s'}}", value='C').tiny
+      input(type='checkbox', id="kick-{{data.id|stringformat:'s'}}", checked=data.flags.can_kick, value='C').tiny
       label.tiny(for="kick-{{data.id|stringformat:'s'}}", data-description='ick') K
 
-      - if data.flags.can_ban
-        input(type='checkbox', id="ban-{{data.id|stringformat:'s'}}", checked, value='DE').tiny
-      - else
-        input(type='checkbox', id="ban-{{data.id|stringformat:'s'}}", value='DE').tiny
+      input(type='checkbox', id="ban-{{data.id|stringformat:'s'}}", checked=data.flags.can_ban, value='DE').tiny
       label.tiny(for="ban-{{data.id|stringformat:'s'}}", data-description='an') B
 
-      - if data.flags.can_slay
-        input(type='checkbox', id="slay-{{data.id|stringformat:'s'}}", checked, value='F').tiny
-      - else
-        input(type='checkbox', id="slay-{{data.id|stringformat:'s'}}", value='F').tiny
+      input(type='checkbox', id="slay-{{data.id|stringformat:'s'}}", checked=data.flags.can_slay, value='F').tiny
       label.tiny(for="slay-{{data.id|stringformat:'s'}}", data-description='lay') S
 
-      - if data.flags.can_map
-        input(type='checkbox', id="map-{{data.id|stringformat:'s'}}", checked, value='G').tiny
-      - else
-        input(type='checkbox', id="map-{{data.id|stringformat:'s'}}", value='G').tiny
+      input(type='checkbox', id="map-{{data.id|stringformat:'s'}}", checked=data.flags.can_map, value='G').tiny
       label.tiny(for="map-{{data.id|stringformat:'s'}}", data-description='ap') M
 
-      - if data.flags.can_cvar
-        input(type='checkbox', id="cvar-{{data.id|stringformat:'s'}}", checked, value='H').tiny
-      - else
-        input(type='checkbox', id="cvar-{{data.id|stringformat:'s'}}", value='H').tiny
+      input(type='checkbox', id="cvar-{{data.id|stringformat:'s'}}", checked=data.flags.can_cvar, value='H').tiny
       label.tiny(for="cvar-{{data.id|stringformat:'s'}}", data-description='Var') C
 
-      - if data.flags.can_config
-        input(type='checkbox', id="config-{{data.id|stringformat:'s'}}", checked, value='I').tiny
-      - else
-        input(type='checkbox', id="config-{{data.id|stringformat:'s'}}", value='I').tiny
+      input(type='checkbox', id="config-{{data.id|stringformat:'s'}}", checked=data.flags.can_config, value='I').tiny
       label.tiny(for="config-{{data.id|stringformat:'s'}}", data-description='onfig') C
 
-      - if data.flags.can_chat
-        input(type='checkbox', id="chat-{{data.id|stringformat:'s'}}", checked, value='J').tiny
-      - else
-        input(type='checkbox', id="chat-{{data.id|stringformat:'s'}}", value='J').tiny
+      input(type='checkbox', id="chat-{{data.id|stringformat:'s'}}", checked=data.flags.can_chat, value='J').tiny
       label.tiny(for="chat-{{data.id|stringformat:'s'}}", data-description='hat') C
 
-      - if data.flags.can_vote
-        input(type='checkbox', id="vote-{{data.id|stringformat:'s'}}", checked, value='K').tiny
-      - else
-        input(type='checkbox', id="vote-{{data.id|stringformat:'s'}}", value='K').tiny
+      input(type='checkbox', id="vote-{{data.id|stringformat:'s'}}", checked=data.flags.can_vote, value='K').tiny
       label.tiny(for="vote-{{data.id|stringformat:'s'}}", data-description='ote') V
 
-      - if data.flags.can_password
-        input(type='checkbox', id="password-{{data.id|stringformat:'s'}}", checked, value='L').tiny
-      - else
-        input(type='checkbox', id="password-{{data.id|stringformat:'s'}}", value='L').tiny
+      input(type='checkbox', id="password-{{data.id|stringformat:'s'}}", checked=data.flags.can_password, value='L').tiny
       label.tiny(for="password-{{data.id|stringformat:'s'}}", data-description='assword') P
 
-      - if data.flags.can_rcon
-        input(type='checkbox', id="rcon-{{data.id|stringformat:'s'}}", checked, value='M').tiny
-      - else
-        input(type='checkbox', id="rcon-{{data.id|stringformat:'s'}}", value='M').tiny
+      input(type='checkbox', id="rcon-{{data.id|stringformat:'s'}}", checked=data.flags.can_rcon, value='M').tiny
       label.tiny(for="rcon-{{data.id|stringformat:'s'}}", data-description='Con') R
 
-      - if data.flags.can_cheat
-        input(type='checkbox', id="cheat-{{data.id|stringformat:'s'}}", checked, value='N').tiny
-      - else
-        input(type='checkbox', id="cheat-{{data.id|stringformat:'s'}}", value='N').tiny
+      input(type='checkbox', id="cheat-{{data.id|stringformat:'s'}}", checked=data.flags.can_cheat, value='N').tiny
       label.tiny(for="cheat-{{data.id|stringformat:'s'}}", data-description='heats') C

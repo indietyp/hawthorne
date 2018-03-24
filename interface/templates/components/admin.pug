@@ -27,9 +27,9 @@
               searchChoices: false,
               searchPlaceholderValue: "{% trans 'Steam Username' %}",
               choices: [],
-              noResultsText: "{% trans 'could not find user' %}",
-              noChoicesText: "{% trans 'type something to query' %}",
-              itemSelectText: "{% trans 'enter will do it' %}",
+              noResultsText: "{% trans 'Could not find any user' %}",
+              noChoicesText: "{% trans 'Type to search' %}",
+              itemSelectText: "{% trans 'Press to select' %}",
             })
 
             debounce_search = function(value, input) {
@@ -47,13 +47,14 @@
             var groupinput = new Choices('#group-input', {
               searchEnabled: false,
               choices: [],
+              itemSelectText: "{% trans 'Press to select' %}",
             })
             window.groupinput = groupinput
             window.api.groups('', groupinput)
 
   - if perms.core.view_servergroup
     .item.pure-u-1-1.pure-u-lg-11-24.second
-      .heading Groups
+      .heading {% trans 'Groups' %}
       .list#admin__group
         .row.pure-g
           .column.icon.username.pure-u-7-24
@@ -170,6 +171,7 @@
             var serverinput = new Choices('#server-input', {
               searchEnabled: false,
               choices: [],
+              itemSelectText: "{% trans 'Press to select' %}",
             })
             window.serverinput = serverinput
             window.api.servers('', serverinput)

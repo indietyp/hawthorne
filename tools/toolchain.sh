@@ -39,8 +39,10 @@ update () {
     printf "${GREEN}Checking dependencies and executing Django related things.\n${NORMAL}"
     pip3 install -r requirements.txt
     python3 manage.py migrate
-    python3 manage.py compilestatic
     python3 manage.py collectstatic --noinput
+
+    cat $dir/tools/utils/permission_delete.py | python3 manage.py shell
+    python3 manage.py migrate --run-syncdb
 
     hash supervisorctl >/dev/null 2>&1 || {
         printf "${YELLOW}Was unable to detect supervisor - not attempting to restart wsgi\n${NORMAL}"

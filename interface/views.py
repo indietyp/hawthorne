@@ -2,6 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from core.models import Server
 from django.utils import formats
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
 
 
 def login(request):
@@ -50,7 +52,10 @@ def chat(request):
 
 @login_required(login_url='/login')
 def settings(request):
-  return render(request, 'components/home.pug', {})
+  modules = [c for c in ContentType.objects.filter(app_label__in=['core', 'log']) if Permission.objects.filter(content_type=c).count() > 0]
+  perms = Permission.objects.all().order_by('content_type__model')
+
+  return render(request, 'components/settings.pug', {'simple': modules, 'advanced': perms})
 
 
 def dummy(request):

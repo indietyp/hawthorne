@@ -10,14 +10,39 @@ class SourcemodPluginWrapper(RCONBase):
   def __init__(self, server):
     super(SourcemodPluginWrapper, self).__init__(server)
 
-  def ban(self, *args, **kwargs):
-    pass
+  def ban(self, ban, *args, **kwargs):
+    command = 'rcon_ban "{}" "{}" "{}" "{}"'.format(ban.user.username,
+                                                    ban.user.created_by,
+                                                    ban.reason,
+                                                    ban.length.total_seconds())
 
-  def kick(self, *args, **kwargs):
-    pass
+    try:
+      response = self.run(command)[0]
+    except valve.rcon.RCONError as e:
+      return {'error': e}
+
+    return response
+
+  def kick(self, target, reason='', *args, **kwargs):
+    try:
+      response = self.run('sm_kick "#{}" "{}"'.format(target.username, reason))[0]
+    except valve.rcon.RCONError as e:
+      return {'error': e}
+
+    return response
 
   def mutegag(self, mutegag, *args, **kwargs):
-    pass
+    command = 'rcon_mutegag__add "{}" "{}" "{}" "{}"'.format(mutegag.user.username,
+                                                             mutegag.get_type_display(),
+                                                             mutegag.reason,
+                                                             mutegag.length.total_seconds())
+
+    try:
+      response = self.run(command)[0]
+    except valve.rcon.RCONError as e:
+      return {'error': e}
+
+    return response
 
   def status(self, *args, **kwargs):
     try:

@@ -20,33 +20,34 @@ $.fn.hasClass = (className) ->
   return !!this[ 0 ] && this[ 0 ].classList.contains( className )
 
 $.fn.addClass = (className) ->
-  this.forEach((item) ->
+  @forEach((item) ->
     classList = item.classList
     classList.add.apply(classList, className.split( /\s/ ))
   )
   this
 
 $.fn.removeClass = (className) ->
-  this.forEach((item) ->
+  @forEach((item) ->
     classList = item.classList
     classList.remove.apply(classList, className.split( /\s/ ))
   )
   this
 
 $.fn.toggleClass = (className, b) ->
-  this.forEach((item) ->
-    classList = item.classList;
-    if (typeof b != 'boolean')
-      b = !classList.contains( className )
-    classList[ b ? 'add' : 'remove' ].apply(classList, className.split( /\s/ ))
-  )
+  @forEach (item) ->
+    classList = item.classList
+    if typeof b != 'boolean'
+      b = !classList.contains(className)
+
+    classList[if b then 'add' else 'remove'].apply classList, className.split(/\s/)
+    return
   this
 
 $.fn.css = (property, value=null) ->
   if value == null
     console.log 'this is not yet implemented'
   else
-    this.forEach((item) ->
+    @forEach((item) ->
       try
         item.style[property] = value
       catch e
@@ -55,14 +56,14 @@ $.fn.css = (property, value=null) ->
   this
 
 $.fn.remove = () ->
-  this.forEach((item) ->
+  @forEach((item) ->
     item.parentNode.removeChild item
   )
   this
 
 $.fn.val = (value='') ->
   if value != ''
-    this.forEach((item) ->
+    @forEach((item) ->
       item.value = value
     )
 
@@ -72,7 +73,7 @@ $.fn.val = (value='') ->
 
 $.fn.html = (value=null) ->
   if value != null
-    this.forEach((item) ->
+    @forEach((item) ->
       item.innerHTML = value
     )
 

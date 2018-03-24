@@ -16,6 +16,13 @@ class Country(BaseModel):
   code = models.CharField(unique=True, max_length=2)
   name = models.CharField(max_length=100, null=True)
 
+  class Meta:
+    verbose_name = 'country'
+    verbose_name_plural = 'countries'
+
+    permissions = []
+    default_permissions = ()
+
   def __str__(self):
     return self.code.upper()
 
@@ -39,11 +46,11 @@ class User(AbstractUser):
 
   class Meta:
     permissions = [
-        ('view_user', 'Can view users'),
-        ('kick_user', 'Can kick a user'),
-        ('view_group', 'Can view a user group'),
+        ('view_user', 'Can view user'),
+        ('kick_user', 'Can kick user'),
+        ('view_group', 'Can view user group'),
 
-        ('view_capabilities', 'Can view the current capabilities of the system'),
+        ('view_capabilities', 'Can check capabilities'),
     ]
 
   def __str__(self):
@@ -59,6 +66,14 @@ class Token(BaseModel):
   is_supertoken = models.BooleanField(default=False)
 
   due = models.DateTimeField(null=True)
+
+  class Meta:
+    verbose_name = 'token'
+    verbose_name_plural = 'tokens'
+
+    permissions = [
+        ('view_token', 'Can view token'),
+    ]
 
   def has_perm(self, perm, obj=None):
     if self.is_active and self.is_supertoken:
@@ -95,6 +110,10 @@ class ServerPermission(BaseModel):
   can_password = models.BooleanField(default=False)
   can_rcon = models.BooleanField(default=False)
   can_cheat = models.BooleanField(default=False)
+
+  class Meta:
+    default_permissions = ()
+    permissions = ()
 
   def convert(self, conv=None):
     if conv is None:
@@ -193,8 +212,10 @@ class ServerGroup(BaseModel):
   is_supergroup = models.BooleanField(default=False)
 
   class Meta:
+    verbose_name = 'server role'
+    verbose_name_plural = 'server roles'
     permissions = [
-        ('view_servergroup', 'Can view server groups'),
+        ('view_servergroup', 'Can view server role'),
     ]
 
   def __str__(self):
@@ -218,8 +239,8 @@ class Server(BaseModel):
     unique_together = (('ip', 'port'),)
 
     permissions = [
-        ('view_server', 'Can view a server'),
-        ('execute_server', 'Can view a server'),
+        ('view_server', 'Can view server'),
+        ('execute_server', 'Can execute command'),
     ]
 
   def __str__(self):
@@ -239,7 +260,7 @@ class Ban(BaseModel):
 
   class Meta:
     permissions = [
-        ('view_ban', 'Can view a bans'),
+        ('view_ban', 'Can view ban'),
     ]
 
     unique_together = ('user', 'server')
@@ -267,11 +288,14 @@ class Mutegag(BaseModel):
   resolved = models.BooleanField(default=False)
 
   class Meta:
-    permissions = [
-        ('view_mutegag', 'Can view a mutegag'),
+    verbose_name = 'mute & gag'
+    verbose_name_plural = 'mutes & gags'
 
-        ('add_mutegag_mute', 'Can add a mutegag mute'),
-        ('add_mutegag_gag', 'Can add a mutegag gag'),
+    permissions = [
+        ('view_mutegag', 'Can view mute & gag'),
+
+        ('add_mutegag_mute', 'Can add mute'),
+        ('add_mutegag_gag', 'Can add gag'),
     ]
 
     unique_together = ('user', 'server')
@@ -283,3 +307,7 @@ class Mutegag(BaseModel):
 class Membership(BaseModel):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   role = models.ForeignKey(ServerGroup, on_delete=models.CASCADE)
+
+  class Meta:
+    permissions = ()
+    default_permissions = ()

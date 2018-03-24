@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from core.decorators.api import json_response, validation
 from core.decorators.auth import authentication_required, permission_required
 from django.views.decorators.http import require_http_methods
+from django.utils.translation import gettext_lazy as _
 
 
 @csrf_exempt
@@ -34,7 +35,7 @@ def list(request, validated={}, *args, **kwargs):
     try:
       ip = socket.gethostbyname(validated['ip'])
     except socket.gaierror as e:
-      return 'Could not resolve host by domain ({})'.format(e), 500
+      return _('Could not resolve host by domain ({0})').format(e), 500
 
     server = Server()
     server.port = validated['port']
@@ -49,13 +50,13 @@ def list(request, validated={}, *args, **kwargs):
         conn.authenticate(timeout=3)
         conn.close()
       except valve.rcon.RCONTimeoutError:
-        return 'Server timed out', 500
+        return _('Server timed out'), 500
       except valve.rcon.RCONAuthenticationError:
-        return 'Could not authenticate with given password', 500
+        return _('Could not authenticate with given password'), 500
       except ConnectionError as e:
-        return 'Could not reach server ({})'.format(e), 500
+        return _('Could not reach server ({0})').format(e), 500
       except TimeoutError as e:
-        return 'Could not reach server ({})'.format(e), 500
+        return _('Could not reach server ({0})').format(e), 500
 
     # we don't want to have a plain one, but we need to. RCON does not hash pwds
     server.password = validated['password']
@@ -110,15 +111,15 @@ def detailed(request, validated={}, s=None, *args, **kwargs):
         conn.authenticate(timeout=3)
         conn.close()
       except valve.rcon.RCONTimeoutError:
-        return 'Server timed out', 500
+        return _('Server timed out'), 500
       except valve.rcon.RCONAuthenticationError:
-        return 'Could not authenticate with given password', 500
+        return _('Could not authenticate with given password'), 500
       except ConnectionError as e:
-        return 'Could not reach server ({})'.format(e), 500
+        return _('Could not reach server ({0})').format(e), 500
       except TimeoutError as e:
-        return 'Could not reach server ({})'.format(e), 500
+        return _('Could not reach server ({0})').format(e), 500
       except socket.timeout as e:
-        return 'Could not reach server ({})'.format(e), 500
+        return _('Could not reach server ({0})').format(e), 500
 
     server.save()
 

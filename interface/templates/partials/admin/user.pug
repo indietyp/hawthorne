@@ -4,9 +4,10 @@
 .row.pure-g.userselect_none
   input.hidden.uuid(type='hidden', value=data.id)
   .column.icon.username.pure-u-7-24
-    span.flag-icon(class="flag-icon-{{data.country.code|lower}}")
-    img(src="{{ data.avatar }}")
-    span= data.namespace|truncatechars:18
+    .icon-container.flex.center
+      .flag-icon(class="flag-icon-{{data.country.code|lower}}")
+      img(src="{{ data.avatar }}")
+    div.namespace= data.namespace
   .column.icon.group.pure-u-7-24
     input.hidden.role(type='hidden', value=data.role_id)
     i(data-feather="users")

@@ -109,9 +109,7 @@
       if (typeof b !== 'boolean') {
         b = !classList.contains(className);
       }
-      return classList[b != null ? b : {
-        'add': 'remove'
-      }].apply(classList, className.split(/\s/));
+      classList[b ? 'add' : 'remove'].apply(classList, className.split(/\s/));
     });
     return this;
   };
@@ -302,7 +300,7 @@
   //= require style.fermata.coffee
   //= require style.ext.coffee
   //= require style.time.coffee
-  var InformationCard, InputVerification, mutegag__toggle, submit__cleanup, submit__state;
+  var InformationCard, InputVerification, mutegag__toggle, permission__toggle, settings__init, submit__cleanup, submit__state, type__toggle;
 
   mutegag__toggle = function(that) {
     var i, j, len, ref, results, state;
@@ -323,6 +321,88 @@
       results.push(i.setAttribute('class', state));
     }
     return results;
+  };
+
+  permission__toggle = function(that) {
+    var parent;
+    parent = that.parentElement;
+    $('.perms .permission.collapsed', parent).removeClass('collapsed').addClass('previous');
+    $('.perms .permission:not(.previous)', parent).addClass('collapsed');
+    $('.perms .permission.previous', parent).removeClass('previous');
+    $('svg', that).toggleClass('activated');
+    if ($('svg', that).hasClass('activated')) {
+      $('span', that).html('Advanced');
+    } else {
+      $('span', that).html('Simple');
+    }
+  };
+
+  type__toggle = function(that) {
+    var parent, target, toggle;
+    parent = that.parentElement;
+    target = $('.column.username', parent);
+    toggle = $('.choices', target).hasClass('focus');
+    if (toggle) {
+      $('.choices', target).removeClass('focus');
+    } else {
+      $('.input-wrapper', target).removeClass('focus');
+    }
+    setTimeout(function() {
+      if (toggle) {
+        return $('.input-wrapper', target).addClass('focus');
+      } else {
+        return $('.choices', target).addClass('focus');
+      }
+    }, 300);
+    $('svg', that).toggleClass('activated');
+    if ($('svg', that).hasClass('activated')) {
+      return $('span', that).html('Local');
+    } else {
+      return $('span', that).html('Steam');
+    }
+  };
+
+  settings__init = function() {
+    $('.permission__child').on('change', function(event) {
+      var candidates, cl, i, l, t;
+      t = event.target;
+      cl = t.classList.value;
+      cl = cl.replace('permission__child', '');
+      cl = cl.replace(/\s/g, '');
+      candidates = $(`.${cl}`);
+      l = candidates.length;
+      i = 0;
+      candidates.forEach(function(item) {
+        if (item.checked) {
+          return i++;
+        }
+      });
+      if (i === l) {
+        $(`#${cl}`)[0].checked = true;
+      } else if (i === 0) {
+        $(`#${cl}`)[0].checked = false;
+      } else {
+        $(`#${cl}`)[0].checked = false;
+        $(`#${cl} + label svg`).addClass('partially');
+      }
+      if (i === l || i === 0) {
+        return $(`#${cl} + label svg`).removeClass('partially');
+      }
+    });
+    $('.permission__parent').on('change', function(event) {
+      var t;
+      t = event.target;
+      $('label svg', t.parentElement).removeClass('partially');
+      if (t.checked) {
+        return $(`.permission__child.${t.id}`).forEach(function(i) {
+          return i.checked = true;
+        });
+      } else {
+        return $(`.permission__child.${t.id}`).forEach(function(i) {
+          return i.checked = false;
+        });
+      }
+    });
   };
 
   InputVerification = function(mode, event, that) {
@@ -406,6 +486,12 @@
   window.style.getOrCreate('utils').getOrCreate('verify').input = InputVerification;
 
   window.style.getOrCreate('mutegag').toggle = mutegag__toggle;
+
+  window.style.settings = {
+    permissions: permission__toggle,
+    type: type__toggle,
+    init: settings__init
+  };
 
   window.style.submit = {
     state: submit__state,

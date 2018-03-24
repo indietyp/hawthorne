@@ -9,10 +9,10 @@ dateparser
 django-automated-logging
 git+https://github.com/smiley/steamapi
 django-static-precompiler
-django-admin-generator
 argon2-cffi
 django-redis-cache
 redis
 python-valve
 pypugjs
 steam
+django-extensions

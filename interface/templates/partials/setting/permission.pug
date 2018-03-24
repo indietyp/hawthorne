@@ -1,0 +1,19 @@
+.permissions.flex.spacer.pure-g
+  .permission.center.flex.pure-g.collapsed
+    - for p in advanced
+      .detailed.flex.pure-u-1-2.column
+        input.permission__child(class="{{p.content_type.model}}__{{suffix}}", type='checkbox', id="{{p.content_type.model}}__{{p.codename}}__{{suffix}}", checked=p.content_type.app_label not in ['core', 'log'])
+        label.center.flex(for='{{p.content_type.model}}__{{p.codename}}__{{suffix}}')
+          .container
+            i.explicit.m0(data-feather='plus')
+          div= p.name|title
+          .spacer
+
+  .permission.center.flex.pure-g
+    - for m in simple
+      .simple.flex.pure-u-1-4.column
+        input.permission__parent(type='checkbox' id="{{m.model}}__{{suffix}}")
+        label.center.flex(for='{{m.model}}__{{suffix}}')
+          .container
+            i.explicit(data-feather='toggle-left')
+          div= m.name|title

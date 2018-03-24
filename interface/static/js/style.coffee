@@ -16,6 +16,85 @@ mutegag__toggle = (that) ->
     state = state.replace '  ', ' '
     i.setAttribute 'class', state
 
+permission__toggle = (that) ->
+  parent = that.parentElement
+
+  $('.perms .permission.collapsed', parent).removeClass('collapsed').addClass('previous')
+  $('.perms .permission:not(.previous)', parent).addClass 'collapsed'
+
+  $('.perms .permission.previous', parent).removeClass 'previous'
+  $('svg', that).toggleClass 'activated'
+
+  if $('svg', that).hasClass 'activated'
+    $('span', that).html('Advanced')
+  else
+    $('span', that).html('Simple')
+  return
+
+type__toggle = (that) ->
+  parent = that.parentElement
+  target = $('.column.username', parent)
+
+  toggle = $('.choices', target).hasClass 'focus'
+  if toggle
+    $('.choices', target).removeClass 'focus'
+  else
+    $('.input-wrapper', target).removeClass 'focus'
+
+  setTimeout(->
+    if toggle
+      $('.input-wrapper', target).addClass 'focus'
+    else
+      $('.choices', target).addClass 'focus'
+  300)
+
+  $('svg', that).toggleClass 'activated'
+
+  if $('svg', that).hasClass 'activated'
+    $('span', that).html('Local')
+  else
+    $('span', that).html('Steam')
+
+settings__init = () ->
+  $('.permission__child').on('change', (event) ->
+    t = event.target
+
+    cl = t.classList.value
+    cl = cl.replace 'permission__child', ''
+    cl = cl.replace /\s/g, ''
+
+    candidates = $(".#{cl}")
+    l = candidates.length
+    i = 0
+
+    candidates.forEach((item) ->
+      if item.checked
+        i++
+    )
+
+    if i == l
+      $("##{cl}")[0].checked = true
+    else if i == 0
+      $("##{cl}")[0].checked = false
+    else
+      $("##{cl}")[0].checked = false
+      $("##{cl} + label svg").addClass 'partially'
+
+    if i in [l, 0]
+      $("##{cl} + label svg").removeClass 'partially'
+  )
+
+  $('.permission__parent').on('change', (event) ->
+    t = event.target
+
+    $('label svg', t.parentElement).removeClass 'partially'
+    if t.checked
+      $(".permission__child.#{t.id}").forEach((i) -> i.checked = true)
+    else
+      $(".permission__child.#{t.id}").forEach((i) -> i.checked = false)
+  )
+  return
+
 InputVerification = (mode, event, that) ->
   keycode = undefined
   if window.event
@@ -90,6 +169,11 @@ submit__cleanup = (that) ->
 
 window.style.getOrCreate('utils').getOrCreate('verify').input = InputVerification
 window.style.getOrCreate('mutegag').toggle = mutegag__toggle
+window.style.settings =
+  permissions: permission__toggle
+  type: type__toggle
+  init: settings__init
+
 window.style.submit =
   state: submit__state
   clear: submit__cleanup
