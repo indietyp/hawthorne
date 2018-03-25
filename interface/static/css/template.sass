@@ -53,6 +53,7 @@ html, button, input, select, textarea, .pure-g [class*='pure-u']
     display: flex
     align-items: center
     height: 77px
+    cursor: pointer
 
     & .cont
       display: flex
@@ -188,6 +189,7 @@ html, button, input, select, textarea, .pure-g [class*='pure-u']
       width: 50%
       display: flex
       align-items: center
+      z-index: 10
       transition: all 0.5s ease-out
 
       &.left
@@ -203,14 +205,11 @@ html, button, input, select, textarea, .pure-g [class*='pure-u']
         box-shadow: 1em 1em 2em -1em rgba(0, 0, 0, 0.5)
 
       &:hover, &:focus, &:active
-        width: 100vh
-        margin: 0
-
         &.right
-          padding-right: 25px
+          transform: translateX(-70%) scale(1.5)
 
         &.left
-          padding-left: 25px
+          transform: translateX(70%) scale(1.5)
 
       & .img-container
         border-radius: 6px
@@ -258,6 +257,18 @@ html, button, input, select, textarea, .pure-g [class*='pure-u']
 
     & .right
       float: right
+
+    & .righto
+      position: relative
+      top: 2em
+      right: 0
+
+      & svg
+        cursor: pointer
+
+    & .discord
+      stroke: white
+      fill: white
 
     & .reel-5
       position: relative

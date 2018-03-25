@@ -34,37 +34,37 @@ html(lang='en')
         .heading
           span.white haw
           span.primary thorne
-      .item
+      .item(onclick='window.scrollToYPages(1)')
         .spacer
         .cont
           i(data-feather="home")
           span Home
         .spacer
-      .item
+      .item(onclick='window.scrollToYPages(2)')
         .spacer
         .cont
           i(data-feather="layers")
           span Functionality
         .spacer
-      .item
+      .item(onclick='window.scrollToYPages(3)')
         .spacer
         .cont
           i(data-feather="package")
           span Features
         .spacer
-      .item
+      .item(onclick='window.scrollToYPages(4)')
         .spacer
         .cont
           i(data-feather="film")
           span Demo
         .spacer
-      .item
+      .item(onclick='window.scrollToYPages(5)')
         .spacer
         .cont
           i(data-feather="server")
           span Hosting
         .spacer
-      .item
+      .item(onclick='window.scrollToYPages(6)')
         .spacer
         .cont
           i(data-feather="award")
@@ -86,6 +86,10 @@ html(lang='en')
               div finally beautiful
               div brought to the 21st
               div Open Source!
+            .righto.flex.center.links
+              .spacer
+              - include 'assets/discord.svg'
+              i(data-feather="github", onclick="window.open('https://github.com/indietyp/hawthorne','GitHub Hawthorne');")
           .spacer
       .section
         .message
