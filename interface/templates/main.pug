@@ -21,6 +21,7 @@ html(lang='en')
     meta(name="theme-color", content="#2E363F")
     // script(src="//unpkg.com/fermata@0.11.0-beta1/fermata.js")
 
+    script(src="//cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js")
     script(src="//unpkg.com/balalaika@1.0.1/balalaika.min.js")
     script(src="{% static 'js/main.coffee'|compile %}")
   body
@@ -28,19 +29,283 @@ html(lang='en')
     script.
       window.csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
     #header
-      .spacer
-      .information.action.default-cursor
-        i(data-feather="user")
-        - if request.user.steam is False
-          span= request.user.username
-        - else
-          span= request.user.namespace
-      .offline.action(onclick="window.location='{% url 'logout' %}';")
-        i(data-feather="power")
+      .logo
+        - include 'assets/logo.svg'
+        .heading
+          span.white haw
+          span.primary thorne
+      .item
+        .spacer
+        .cont
+          i(data-feather="home")
+          span Home
+        .spacer
+      .item
+        .spacer
+        .cont
+          i(data-feather="layers")
+          span Functionality
+        .spacer
+      .item
+        .spacer
+        .cont
+          i(data-feather="package")
+          span Features
+        .spacer
+      .item
+        .spacer
+        .cont
+          i(data-feather="film")
+          span Demo
+        .spacer
+      .item
+        .spacer
+        .cont
+          i(data-feather="server")
+          span Hosting
+        .spacer
+      .item
+        .spacer
+        .cont
+          i(data-feather="award")
+          span Partners
+        .spacer
 
     #content-wrapper
-      #content.pure-g
-        - block content
-        - endblock
+      .section
+        .picture.left
+          .img-container
+            img(src='{% static "img/1.png" %}')
+        .message
+          .spacer
+          .desc
+            .top Game Server Management
+            .right.reel-5(style="display:flex")
+              div just reinvented
+              div made exciting
+              div finally beautiful
+              div brought to the 21st
+              div Open Source!
+          .spacer
+      .section
+        .message
+          .spacer
+          .list
+            .point
+              i.primary(data-feather="chevron-right")
+              span Multiple Managed Instances
+            .point
+              i.primary(data-feather="chevron-right")
+              span Bans
+            .point
+              i.primary(data-feather="chevron-right")
+              span Mute & Gags
+            .point
+              i.primary(data-feather="chevron-right")
+              span Chat Logs
+            .point
+              i.primary(data-feather="chevron-right")
+              span Overview over active Players
+            .point
+              i.primary(data-feather="chevron-right")
+              span Internal & Gameserver Announcements
+            .point
+              i.primary(data-feather="chevron-right")
+              span Public Accessible Configurable Page
+            .point
+              i.primary(data-feather="chevron-right")
+              span
+                span Direct gameserver integration through
+                span.primary.prefix Sourcemod
+            .point
+              i.primary(data-feather="chevron-right")
+              span Rich Settings
+            .point
+              i.primary(data-feather="chevron-right")
+              span Handcrafted UI
+          .spacer
+        .picture.right
+          .img-container
+            img(src='{% static "img/2.png" %}')
+      .section
+        .picture.left
+          .img-container
+            img(src='{% static "img/3.png" %}')
+        .message
+          .spacer
+          .list
+            .point
+              i.primary(data-feather="chevron-right")
+              span
+                span.primary 120+
+                span.prefix different permissions
+            .point
+              i.primary(data-feather="chevron-right")
+              span Several Integrations Out of the Box
+            .point
+              i.primary(data-feather="chevron-right")
+              span
+                span built with
+                span.prefix.primary modern
+                span.prefix technologies
+            .point
+              i.primary(data-feather="chevron-right")
+              span Lightning-Fast load speeds
+            .point
+              i.primary(data-feather="chevron-right")
+              span Multilingual
+            .point
+              i.primary(data-feather="chevron-right")
+              span One Command Installation
+            .point
+              i.primary(data-feather="chevron-right")
+              span Discord Integration
+            .point
+              i.primary(data-feather="chevron-right")
+              span.primary Open Source
+            .point
+              i.primary(data-feather="chevron-right")
+              span Intuitive & Secure
+          .spacer
+      .section
+        .message
+          .spacer
+          .message.column
+            .main.flex.center
+              i(data-feather="film")
+              span Demo
+              i(data-feather="arrow-up-right")
+            .annotation
+              span The sample servers are provided by
+              span.prefix.link Vengence Gamers
+              span.prefix &
+              span.prefix.link Ace Networks
+          .spacer
+        .picture.right
+          .img-container
+            img(src='{% static "img/4.png" %}')
+      .section
+        .picture.left
+          .img-container
+            img(src='{% static "img/5.png" %}')
+        .message.flex
+          .offer
+            .header
+              .package.flex.center
+                .spacer
+                span S
+                .spacer
+              .info.flex.center
+                .spacer
+                span Hobby
+                .spacer
+            .summary Recommended for up to 2 instances & 100 daily players
+            .comparison
+              .item
+                span.black CPU:
+                .spacer
+                span.dgray shared
+              .item
+                span.black Memory:
+                .spacer
+                span.dgray 256Mb
+              .item
+                span.black Storage:
+                .spacer
+                span.dgray 10Gb
+            .price
+              .tag
+                .spacer
+                span &euro;
+                span 4
+                span.sub 99
+                span.small /mo
+                .spacer
+                i.black(data-feather="shopping-cart")
+                .spacer
+          .offer
+            .header
+              .package.flex.center
+                .spacer
+                span M
+                .spacer
+              .info.flex.center
+                .spacer
+                span Casual
+                .spacer
+            .summary Recommended for up to 5 instances & 1000 daily players
+            .comparison
+              .item
+                span.black CPU:
+                .spacer
+                span.dgray 1 core
+              .item
+                span.black Memory:
+                .spacer
+                span.dgray 512Mb
+              .item
+                span.black Storage:
+                .spacer
+                span.dgray 50Gb
+            .price
+              .tag
+                .spacer
+                span &euro;
+                span 9
+                span.sub 99
+                span.small /mo
+                .spacer
+                i.black(data-feather="shopping-cart")
+                .spacer
+          .offer
+            .header
+              .package.flex.center
+                .spacer
+                span L
+                .spacer
+              .info.flex.center
+                .spacer
+                span Serious
+                .spacer
+            .summary Recommended for up to 25 instances & 100000 daily players
+            .comparison
+              .item
+                span.black CPU:
+                .spacer
+                span.dgray 2 cores
+              .item
+                span.black Memory:
+                .spacer
+                span.dgray 2Gb
+              .item
+                span.black Storage:
+                .spacer
+                span.dgray 100Gb
+            .price
+              .tag
+                .spacer
+                span &euro;
+                span 14
+                span.sub 99
+                span.small /mo
+                .spacer
+                i.black(data-feather="shopping-cart")
+                .spacer
+      .section
+        .message
+          .spacer
+          .message
+            .list
+              .point
+                i.primary(data-feather="chevron-right")
+                .container
+                  .text
+                    span.primary LAEVIS
+                    span.prefix native support and integration
+                  .note LAEVIS is a forum platform that is finally doing forums right.
+          .spacer
+        .picture.right
+          .img-container
+            img(src='{% static "img/6.png" %}')
     script.
       feather.replace()
