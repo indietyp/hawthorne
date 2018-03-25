@@ -1,0 +1,46 @@
+- load i18n
+- load staticfiles
+- load compile_static
+
+!!!5
+html(lang='en')
+  head
+    title hawthorne
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    link(href="https://fonts.googleapis.com/css?family=Lato:300,400,700|Source+Code+Pro" rel="stylesheet")
+    link(rel="stylesheet", href='{% static "css/template.sass"|compile %}')
+
+    link(rel="apple-touch-icon-precomposed", type="image/png", href='{% static "favicons/152.png" %}')
+    link(rel="shortcut icon", type="image/png", href='{% static "favicons/16.png" %}')
+
+    for i in favicon_sizes
+      - with 'favicons/'|add:i|add:'.png' as url
+        link(rel="shortcut icon", type="image/png", sizes="{{i}}x{{i}}", href="{% static url %}")
+
+    meta(name="theme-color", content="#2E363F")
+    // script(src="//unpkg.com/fermata@0.11.0-beta1/fermata.js")
+
+    script(src="//unpkg.com/balalaika@1.0.1/balalaika.min.js")
+    script(src="{% static 'js/main.coffee'|compile %}")
+  body
+    {% csrf_token %}
+    script.
+      window.csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+    #header
+      .spacer
+      .information.action.default-cursor
+        i(data-feather="user")
+        - if request.user.steam is False
+          span= request.user.username
+        - else
+          span= request.user.namespace
+      .offline.action(onclick="window.location='{% url 'logout' %}';")
+        i(data-feather="power")
+
+    #content-wrapper
+      #content.pure-g
+        - block content
+        - endblock
+    script.
+      feather.replace()

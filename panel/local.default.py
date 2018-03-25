@@ -73,7 +73,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
 
-        'NAME': 'hawthorne',
+        'NAME': 'hawthorne_landing',
         'USER': 'root',
         'PASSWORD': '',
 

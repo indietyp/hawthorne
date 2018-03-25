@@ -28,13 +28,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'social_django',
+
     'django_extensions',
     'static_precompiler',
     'automated_logging',
+
     'api',
-    'log',
-    'ajax',
     'core',
     'interface'
 ]
@@ -86,25 +85,8 @@ TEMPLATES = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'social_core.backends.steam.SteamOpenId',
     'django.contrib.auth.backends.ModelBackend',
 ]
-
-SOCIAL_AUTH_PIPELINE = [
-    'social_core.pipeline.social_auth.social_details',
-    'social_core.pipeline.social_auth.social_uid',
-    'social_core.pipeline.social_auth.social_user',
-    'social_core.pipeline.user.get_username',
-    'core.pipeline.system.get_user',
-    'social_core.pipeline.social_auth.associate_user',
-    'core.pipeline.database.populate',
-    # 'social_core.pipeline.social_auth.load_extra_data',
-    # 'social_core.pipeline.user.user_details',
-]
-
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
-SOCIAL_AUTH_LOGIN_URL = '/external/'
-SOCIAL_AUTH_STEAM_EXTRA_DATA = ['player']
 
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.Argon2PasswordHasher',
