@@ -1,7 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from core.models import Server
-from django.utils import formats
+from core.models import Server, ServerGroup, User
+from log.models import UserOnlineTime, ServerChat
+from automated_logging.models import Model as LogModel
+from django.db.models.functions import Cast
+import datetime
+from django.db.models import DateField, Count, Q
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 
@@ -12,7 +16,38 @@ def login(request):
 
 @login_required(login_url='/login')
 def home(request):
-  return render(request, 'components/home.pug', {})
+  query = UserOnlineTime.objects.annotate(date=Cast('disconnected', DateField()))\
+                                .values('user')\
+                                .annotate(active=Count('user', distinct=True))
+
+  last30 = query.filter(date__gte=datetime.date.today() - datetime.timedelta(days=30))
+  prev30 = query.filter(date__gte=datetime.date.today() - datetime.timedelta(days=60))\
+                .filter(date__lte=datetime.date.today() - datetime.timedelta(days=30))
+
+  recent = last30.count()
+  alltime = query.count()
+
+  try:
+    change = int((recent / prev30.count()) - 1) * 100
+  except ZeroDivisionError:
+    change = 100
+
+  payload = {'instances': Server.objects.all().count(),
+             'counts': {'all': alltime,
+                        'month': recent,
+                        'change': change},
+             'roles': ServerGroup.objects.all().count(),
+             'mem_roles': User.objects.filter(Q(roles__isnull=False) | Q(is_superuser=True)).count(),
+             'messages': ServerChat.objects.filter(command=False)
+                                           .annotate(date=Cast('created_at', DateField()))
+                                           .filter(date__gte=datetime.date.today() - datetime.timedelta(days=30))
+                                           .count(),
+             'actions': LogModel.objects.filter(user__isnull=False)
+                                      .annotate(date=Cast('created_at', DateField()))
+                                      .filter(date__gte=datetime.date.today() - datetime.timedelta(days=30))
+                                      .count()
+             }
+  return render(request, 'components/home.pug', payload)
 
 
 @login_required(login_url='/login')

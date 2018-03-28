@@ -1,9 +1,11 @@
 from django.http import JsonResponse
 from django.conf import settings
-import json
 import re
 import io
 from api.codes import s_to_l
+import ruamel.yaml as yaml
+import xmltodict
+import simplejson as json
 from functools import wraps
 from api.validation import validation as valid_dict
 from api.validation import Validator
@@ -29,7 +31,7 @@ def jsonparse(content=None, code=200, encoder=None):
 
   document = v.normalized(document)
   if not v.validate(document):
-    return JsonResponse({'error': 'FATAL ERROR, VALIDATION NOT WORKING. CONTACT SYSTEM ADMINISTRATOR', 'calm': v.errors}, status=500)
+    return JsonResponse({'error': 'FATAL ERROR. Validation Error occured. This should not happen ever. Contact the current maintainer ASAP.', 'calm': v.errors}, status=500)
 
   if code != 200 and settings.DEBUG:
     print(document)
@@ -61,7 +63,6 @@ def validation(a):
     def wrapper(request, *args, **kwargs):
       validation = valid_dict
 
-      # try:
       target = a.split('.')
       for t in target:
         validation = validation[t]
@@ -71,20 +72,34 @@ def validation(a):
         document = dict(request.GET)
         schema = validation['GET']
       else:
-        if isinstance(request._stream, io.BytesIO):
-          raw = request.read()
+        if isinstance(request._stream.stream, io.BufferedReader):
+          data = request._stream.stream.peek()
         else:
-          raw = request._stream.stream.peek()
+          data = request._stream.stream.readall()
 
-        data = request.body
+        if re.match(r'^[0-9a-fA-F]{2}', data.decode()):
+          split = data.split(b'\r\n')
 
-        if re.match(r'^[0-9a-fA-F]{2}', data.decode()) is not None:
-          data = raw.split(b'\r\n')[1]
+          data = ''
+          for i in range(len(split)):
+            if i % 2:
+              data += split[i]
+
+        meta = request.META['CONTENT_TYPE']
+        data = data.decode()
+        parser = None
+
+        if re.match(r'^(text/plain|application/json)', meta):
+          parser = json.loads
+        elif re.match(r'^application/yaml', meta):
+          parser = yaml.safe_load
+        elif re.match(r'^application/xml', meta):
+          parser = lambda x: xmltodict.parse(x)['root']
 
         try:
-          document = json.loads(data) if data != b'' else {}
-        except:
-          'Could not parse JSON: ' + data, 512
+          document = parser(data) if data else {}
+        except Exception as e:
+          'Failed parsing payload ({})'.format(e), 512
 
         schema = validation[request.method]
 
@@ -100,8 +115,6 @@ def validation(a):
         return v.errors, 428
 
       data = document
-
-      print(data)
       return f(request, validated=data, *args, **kwargs)
 
     return wrapper

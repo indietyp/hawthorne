@@ -29,11 +29,9 @@ stock bool GetCommunityID(char[] AuthID, char[] FriendID, int size) {
   return true;
 }
 
-stock void SecondsToTime(int seconds, char time[200], bool ShortDate = true) {
-
-  //DAYS
+stock void HumanizeTime(int seconds, char time[200], bool short=true) {
   int days = (seconds / (3600*24));
-  if(days > 0) {
+  if (days > 0) {
     char s_days[20];
     IntToString(days, s_days, sizeof(s_days));
     StrCat(time, sizeof(time), s_days);
@@ -41,16 +39,15 @@ stock void SecondsToTime(int seconds, char time[200], bool ShortDate = true) {
 
   if(days == 1)
     StrCat(time, sizeof(time), " day ");
-  else if(days > 0)
+  else if (days > 0)
     StrCat(time, sizeof(time), " days ");
 
-  if(ShortDate && days > 0)
+  if (short && days > 0)
     return;
 
-
-  //HOURS
-  if(ShortDate)
+  if (short)
     time = "";
+
   int hours = (seconds / 3600) % 24;
   if(hours > 0) {
     char s_hours[20];
@@ -63,26 +60,26 @@ stock void SecondsToTime(int seconds, char time[200], bool ShortDate = true) {
   else if(hours > 0)
     StrCat(time, sizeof(time), " hours ");
 
-  if(ShortDate && hours > 0)
+  if (short && hours > 0)
     return;
 
 
-  //MINUTES
-  if(ShortDate)
+  if (short)
     time = "";
+
   int minutes = (seconds / 60) % 60;
-  if(minutes > 0) {
+  if (minutes > 0) {
     char s_minutes[20];
     IntToString(minutes, s_minutes, sizeof(s_minutes));
     StrCat(time, sizeof(time), s_minutes);
   }
 
-  if(minutes == 1)
+  if (minutes == 1)
     StrCat(time, sizeof(time), " minute ");
-  else if(minutes > 0)
+  else if (minutes > 0)
     StrCat(time, sizeof(time), " minutes ");
 
-  if(ShortDate && minutes > 0)
+  if (short && minutes > 0)
     return;
 
 }
@@ -145,7 +142,7 @@ public Action OnAddBanCommand(int client, const char[] command, int args) {
 
           //Get data for kick message
           char cAdminUsername[128], cTime[200];
-          if(length > 0) SecondsToTime((length * 60), cTime); else cTime = "permanent";
+          if(length > 0) HumanizeTime((length * 60), cTime); else cTime = "permanent";
           GetClientName(client, cAdminUsername, sizeof(cAdminUsername));
           ClientBanKick(i, cAdminUsername, cReason, cTime, cTime);
 
@@ -205,8 +202,8 @@ public void OnBanCheck(HTTPResponse response, any value) {
   int now = GetTime();
 
   if (length != -1) {
-    SecondsToTime(length, total);
-    SecondsToTime(now - (creation + length), passed);
+    HumanizeTime(length, total);
+    HumanizeTime(now - (creation + length), passed);
   } else {
     total = "permanent";
     passed = "permanent";
@@ -252,7 +249,7 @@ public Action OnBanClient(int client, int time, int flags, const char[] reason, 
   //Get kick message data
   char cAdminName[MAX_NAME_LENGTH], cTime[200];
   GetClientName(admin, cAdminName, sizeof(cAdminName));
-  if(time > 0) SecondsToTime(time * 60, cTime); else cTime = "permanent";
+  if(time > 0) HumanizeTime(time * 60, cTime); else cTime = "permanent";
 
   char cReason[128];
   StrCat(cReason, sizeof(cReason), reason);

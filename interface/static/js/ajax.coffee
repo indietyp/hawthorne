@@ -155,6 +155,22 @@ server__server = (page=1) ->
       return false
   )
 
+home__instance = (page=1) ->
+  header =
+    "X-CSRFToken": window.csrftoken
+
+  window.endpoint.ajax.home.server[page].post(header, {}, (dummy, response) ->
+    status = response.status
+    data = response.data
+    if status == 200
+      $("#home__instance").htmlAppend data
+      feather.replace()
+
+      return window.ajax.home.instance(page+1)
+    else
+      return false
+  )
+
 window.ajax =
   admin:
     admins: admin__admin
@@ -170,3 +186,5 @@ window.ajax =
     user: player__user
   server:
     server: server__server
+  home:
+    instance: home__instance

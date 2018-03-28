@@ -2,19 +2,6 @@ from django.db import models
 from core.models import User, BaseModel, Server
 
 
-class ServerAction(BaseModel):
-  action = models.CharField(max_length=255)
-  user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-  class Meta:
-    permissions = [
-        ('view_log', 'Can view server log')
-    ]
-
-  def __str__(self):
-    return "{} - {}".format(self.user, self.action)
-
-
 class ServerChat(BaseModel):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
 

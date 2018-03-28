@@ -62,8 +62,6 @@ public void OnPluginStart() {
   RegAdminCmd("sm_pgag",      CMD_PermaMuteGag,   ADMFLAG_CHAT);
   RegAdminCmd("sm_psilence",  CMD_PermaMuteGag,   ADMFLAG_CHAT);
 
-  //RegConsoleCmd("sm_online", CMD_Online);
-
   Hawthorne_OnPluginStart();
 }
 
@@ -89,16 +87,6 @@ public void OnConfigsExecuted() {
   }
   TrimString(endpoint);
 
-  //char error[128];
-  //RegexError code;
-
-  //Regex regex = CompileRegex("(.+)(?:/+)$", 0, error, sizeof(error), code);
-  //LogMessage(error);
-
-  //if (MatchRegex(regex, endpoint) != -1)
-  //  GetRegexSubString(regex, 0, endpoint, sizeof(endpoint));
-
-
   GetConVarString(APITOKEN, token, sizeof(token));
   StrCat(endpoint, sizeof(endpoint), "/api/v1");
 
@@ -107,6 +95,7 @@ public void OnConfigsExecuted() {
 
   httpClient = new HTTPClient(endpoint);
   httpClient.SetHeader("X-TOKEN", token);
+  httpClient.SetHeader("Transfer-Encoding", "identity");
 
   GetServerUUID();
 }

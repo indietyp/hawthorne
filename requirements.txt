@@ -16,3 +16,8 @@ python-valve
 pypugjs
 steam
 django-extensions
+xmltodict
+ruamel.yaml
+simplejson
+hashids
+requests

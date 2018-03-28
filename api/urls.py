@@ -31,7 +31,6 @@ urlpatterns = [
     path('servers/<uuid:s>/execute', server.action, name='server.action'),
 
     # system
-    path('system/log', system.log, name='system.log'),
     path('system/chat', system.chat, name='system.chat'),
     path('system/token', system.token, name='system.token'),  # TODO: PUT, POST, GET (only masked)
 

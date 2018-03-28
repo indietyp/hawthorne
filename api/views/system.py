@@ -1,36 +1,10 @@
 from django.db.models import F
 from core.models import User, Server
-from log.models import ServerAction, ServerChat
+from log.models import ServerChat
 from django.views.decorators.csrf import csrf_exempt
 from core.decorators.api import json_response, validation
 from core.decorators.auth import authentication_required, permission_required
 from django.views.decorators.http import require_http_methods
-
-
-@csrf_exempt
-@json_response
-@authentication_required
-@permission_required('system.log')
-@validation('system.log')
-@require_http_methods(['GET', 'PUT'])
-def log(request, validated={}, *args, **kwargs):
-  if request.method == 'GET':
-    direction = '-created_at' if validated['descend'] else 'created_at'
-    logs = ServerAction.objects.filter(action__contains=validated['match'])\
-                               .values('action', 'created_at')\
-                               .order_by(direction)\
-                               .annotate(user=F('user__id'))
-
-    limit = validated['limit']
-    offset = validated['offset']
-    logs = logs[offset:] if limit < 0 else logs[offset:limit]
-
-    return [l for l in logs]
-  elif request.method == 'PUT':
-    log = ServerAction(action=validated['action'], user=User.objects.get(id=validated['user']))
-    log.save()
-
-    return 'passed'
 
 
 @csrf_exempt
@@ -61,7 +35,9 @@ def chat(request, validated={}, *args, **kwargs):
 
     # command == None is a best-guess effort
     if validated['command'] is None:
-      chat.command = True if chat.message.startswith('sm_') else False
+      chat.command = True if chat.message.startswith('sm_') or \
+          chat.message.startswith('rcon_') or \
+          chat.message.startswith('json_') else False
     else:
       chat.command = validated['command']
 

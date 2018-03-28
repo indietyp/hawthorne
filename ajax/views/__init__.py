@@ -36,14 +36,18 @@ for file in os.listdir(os.path.dirname(os.path.realpath(__file__))):
 
 
 def renderer(request, template, obj, page, extra=[], execute=None):
-
   if execute is None:
     data = [o for o in obj[(page - 1) * PAGE_SIZE:page * PAGE_SIZE]]
   else:
     data = []
 
     for o in obj[(page - 1) * PAGE_SIZE:page * PAGE_SIZE]:
-      o.executed = execute(o)
+      try:
+        o.executed = execute(o)
+      except Exception as e:
+        o.executed = []
+        o._excepcetion = e
+
       data.append(o)
 
   if page == 1:

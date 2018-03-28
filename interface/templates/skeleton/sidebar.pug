@@ -25,8 +25,8 @@
 - if perms.core.view_server
   .item.action(onclick="window.vc.change('server')")
     i(data-feather="server")
-    // span {% trans "Servers" %}
-    span {% trans "Instances" %}
+    span {% trans "Servers" %}
+    //- span {% trans "Instances" %}
 
 - if perms.core.view_ban
   .item.action(onclick="window.vc.change('ban')")

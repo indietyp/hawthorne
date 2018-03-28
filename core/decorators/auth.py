@@ -2,6 +2,11 @@ from functools import wraps
 from core.models import Token
 from api.validation import validation as valid_dict
 from django.utils import timezone
+from binascii import hexlify
+from base64 import b85decode
+from uuid import UUID
+from django.conf import settings
+from hashids import Hashids as Hasher
 
 
 def token_retrieve(request):
@@ -12,6 +17,13 @@ def token_retrieve(request):
     token = request.META['HTTP_X_TOKEN']
 
   if token is not None:
+    if len(token) == 20:
+      token = UUID(hexlify(b85decode(token)))
+
+    if len(token) == 25:
+      hasher = Hasher(salt=settings.SECRET_KEY)
+      token = UUID(hasher.decode(token))
+
     try:
       token = Token.objects.get(id=token, is_active=True, is_anonymous=False)
       request.user = token.owner

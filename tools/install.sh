@@ -6,6 +6,13 @@ interactive=1
 utils=0
 dev=0
 
+web="nginx"
+domain=""
+
+stapi=""
+user=""
+conn=""
+
 if which tput >/dev/null 2>&1; then
   ncolors=$(tput colors)
 fi
@@ -37,7 +44,6 @@ cleanup() {
 usage() {
   printf "\nThe hawthorne installation tool is an effort to make installation easier."
   printf "\n\nParameters that are currently supported:"
-  printf "\n\t${GREEN}-n${NORMAL}   --non-interactive (not recommended)"
   printf "\n\t${GREEN}-f${NORMAL}   --full"
   printf "\n\t${YELLOW}-d${NORMAL}   --development"
   printf "\n\t${GREEN}-h${NORMAL}   --help"
@@ -46,8 +52,6 @@ usage() {
 parser() {
   while [ "$1" != "" ]; do
     case $1 in
-        -n | --non-interactive) interactive=0
-                                ;;
         -f | --full)            utils=1
                                 ;;
         -d | --development)     dev=1
@@ -130,28 +134,30 @@ main() {
       apt install -y default-libmysqlclient-dev
     }
 
-    apt install -y --force-yes --fix-missing python3 python3-dev python3-pip redis-server libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential
+    apt install -y -qq --force-yes --fix-missing python3 python3-dev python3-pip redis-server libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential
 
-    # wget -O ruby-install-0.6.1.tar.gz https://github.com/postmodern/ruby-install/archive/v0.6.1.tar.gz
-    # tar -xzvf ruby-install-0.6.1.tar.gz
-    # cd ruby-install-0.6.1/
-    # sudo make install --silent
-    # cd ..
-    # rm -rf ruby-install-0.6.1
-    # rm ruby-install-0.6.1.tar.gz
+    if [ $dev -eq 1 ]; then
+      wget -O ruby-install-0.6.1.tar.gz https://github.com/postmodern/ruby-install/archive/v0.6.1.tar.gz
+      tar -xzvf ruby-install-0.6.1.tar.gz
+      cd ruby-install-0.6.1/
+      sudo make install --silent
+      cd ..
+      rm -rf ruby-install-0.6.1
+      rm ruby-install-0.6.1.tar.gz
+    fi
 
-    # ruby-install --system --latest ruby
 
     curl -sL deb.nodesource.com/setup_8.x | sudo -E bash -
-    apt install -y nodejs
+    apt install -y -qq nodejs
 
     if [ $utils -eq 1 ]; then
-      if [ $interactive -eq 0 ]; then
-        debconf-set-selections | 'mysql-server mysql-server/root_password password root'
-        debconf-set-selections | 'mysql-server mysql-server/root_password_again password root'
-      fi
-      apt install -y --force-yew --fix-missing mysql-server nginx
+      apt install -y -qq --force-yes --fix-missing mysql-server nginx
     fi
+
+    hash git >/dev/null 2>&1 || {
+      printf "${YELLOW}Git not preinstalled. Reinstalling...${NORMAL}\n"
+      apt install -qq git
+    }
 
   elif hash yum >/dev/null 2>&1; then
     yum -y update
@@ -180,29 +186,28 @@ main() {
     curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -
     yum -y install nodejs
 
+    hash git >/dev/null 2>&1 || {
+      printf "${YELLOW}Git not preinstalled. Reinstalling...${NORMAL}\n"
+      yum -y install git
+    }
+
     export PATH="$PATH:/usr/local/bin"
 
   else
     printf "Your package manager is currently not supported. Please contact the maintainer\n"
-    printf "${BLUE}opensource@indietyp.com${NORMAL} or open an issure\n"
+    printf "${BLUE}opensource@indietyp.com${NORMAL} or open an issue\n"
   fi
 
   # we need that toal path boi
   directory=$(python3 -c "import os; print(os.path.abspath(os.path.expanduser('$directory')))")
 
-
-  hash git >/dev/null 2>&1 || {
-    echo "Error: git is not installed"
-    exit 1
-  }
-
-  printf "${BLUE}Cloning the project...${NORMAL}\n"
+  printf "${BOLD}Cloning the project...${NORMAL}\n"
   env git clone https://github.com/indietyp/hawthorne $directory || {
     printf "${RED}Error:${NORMAL} git clone of hawthorne repo failed\n"
     exit 1
   }
 
-  printf "${BLUE}Installing python3 dependencies...${NORMAL}\n"
+  printf "${BOLD}Installing dependencies...${NORMAL}\n"
 
   pip3 install cryptography || {
     printf "${BOLD}Too old pip3 version... upgrading${NORMAL}\n"
@@ -216,35 +221,34 @@ main() {
 
   pip3 install gunicorn
   pip3 install -r $directory/requirements.txt
+  if [ $dev -eq 1 ]; then
+    pip3 install -r $directory/requirements.dev.txt
+  fi
 
-  printf "${BLUE}Installing ruby and npm dependencies...${NORMAL}\n"
-  npm install -g pug
-  # coffeescript
-  # gem install sass --no-user-install
+  npm install -g --quiet pug
 
-  printf "${BLUE}Configuring the project...${NORMAL}\n"
+  if [ $dev -eq 1 ]; then
+    npm install -g --quiet coffeescript
+    gem install -q sass --no-user-install
+  fi
+
+  printf "${BOLD}Configuring the project...${NORMAL}\n"
   cp $directory/panel/local.default.py $directory/panel/local.py
   cp $directory/supervisor.default.conf $directory/supervisor.conf
   mkdir -p /var/log/hawthorne
 
-  printf "\n\n${YELLOW}Database configuration:${NORMAL}\n"
+  printf "\n\n${GREEN}Database configuration:${NORMAL}\n"
   while true; do
-    if [ $interactive -eq 1 ]; then
-      read -p 'Host     (default: localhost):  ' dbhost
-      read -p 'Port     (default: 3306):       ' dbport
-      read -p 'User     (default: root):       ' dbuser
-      read -p 'Database (default: hawthorne):  ' dbname
-      read -p 'Password:                       ' dbpwd
-    fi
+    read -p 'Host     (default: localhost):  ' dbhost
+    read -p 'Port     (default: 3306):       ' dbport
+    read -p 'User     (default: root):       ' dbuser
+    read -p 'Database (default: hawthorne):  ' dbname
+    read -p 'Password:                       ' dbpwd
 
     dbhost=${dbhost:-localhost}
     dbport=${dbport:-3306}
     dbuser=${dbuser:-root}
     dbname=${dbname:-hawthorne}
-
-    if [ $interactive -eq 0 ]; then
-      dbpwd=root
-    fi
 
     export MYSQL_PWD=$dbpwd
     export MYSQL_HOST=$dbhost
@@ -254,25 +258,27 @@ main() {
       printf "\n${GREEN}successfully connected to mysql and created the database.${NORMAL}\n"
       break;
     else
-      printf "\n${YELLOW}I could not connected to mysql with the credentials you provided, try again.${NORMAL}\n"
+      printf "\n${RED}Could not connect${NORMAL} to database with provided credentials.\n"
     fi
   done
 
-  printf "\n\n${YELLOW}SteamAPI configuration:${NORMAL}\n"
-  if [ $interactive -eq 1 ]; then
+  if [ $stapi = "" ]; then
+    printf "\n\n${GREEN}SteamAPI configuration:${NORMAL}\n"
     read -p 'Steam API Key: ' stapi
-  fi
+  elif
 
-  printf "\n\n${GREEN}Just doing some file transmutation magic:${NORMAL}\n"
+  printf "\n\n${BOLD}Configuring project...${NORMAL}\n"
+
   # replace the stuff in the local.py and supervisor.conf file
   sed -i "s/'HOST': 'localhost'/'HOST': '$dbhost'/g" $directory/panel/local.py
   sed -i "s/'PORT': 'root'/'PORT': '$dbport'/g" $directory/panel/local.py
   sed -i "s/'NAME': 'hawthorne'/'NAME': '$dbname'/g" $directory/panel/local.py
   sed -i "s/'USER': 'root'/'USER': '$dbuser'/g" $directory/panel/local.py
   sed -i "s/'PASSWORD': ''/'PASSWORD': '$dbpwd'/g" $directory/panel/local.py
+  sed -i "s/SOCIAL_AUTH_STEAM_API_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'/SOCIAL_AUTH_STEAM_API_KEY = '$stapi'/g" $directory/panel/local.py
 
-  if [ $interactive -eq 1 ]; then
-    sed -i "s/SOCIAL_AUTH_STEAM_API_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'/SOCIAL_AUTH_STEAM_API_KEY = '$stapi'/g" $directory/panel/local.py
+  if [ $dev -eq 1 ]; then
+    sed -i "s/DEBUG = False/DEBUG = True/g" $directory/panel/local.py
   fi
 
   sed -i "s#directory=<replace>#directory=$directory#g" $directory/supervisor.conf
@@ -280,22 +286,61 @@ main() {
   sed -i "s/SECRET_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'/SECRET_KEY = '$(python3 $directory/manage.py generatesecret | tail -1)'/g" $directory/panel/local.py
 
   python3 $directory/manage.py migrate
+  python3 $directory/manage.py superusersteam
+  if [ $dev -eq 1 ]; then
+    python3 $directory/manage.py compilestatic
+  fi
+  python3 $directory/manage.py collectstatic --noinput -v 0
 
-  if [ $interactive -eq 1 ]; then
-    python3 $directory/manage.py superusersteam
+  printf "${BOLD}Configuring Webserver...${NORMAL}\n"
+
+  if [ $util -eq 0 ]; then
+    while true; do
+      read -p "Is your webserver ${BOLD}(A)${NORMAL}pache, ${BOLD}(N)${NORMAL}ginx or ${BOLD}(D)${NORMAL}ifferent? " yn
+      case $yn in
+          [Aa]* ) web="apache"; sed -i "s/bind = 'unix:/tmp/hawthorne.sock'/DEBUG = bind = '127.0.0.1:8000'/g" $directory/panel/local.py; break;;
+          [Nn]* ) break;;
+          [Dd]* ) web="unspecified"; break;;
+          * ) echo "Please answer with the answers provided.";;
+      esac
+    done
   fi
 
-  # python3 $directory/manage.py compilestatic
-  python3 $directory/manage.py collectstatic --noinput
+  if [ $domain != "" ]; then
+    while true; do
+      read -p "Is the site on an ${BOLD}(I)${NORMAL}P or ${BOLD}(D)${NORMAL}omain? " yn
+      case $yn in
+          [Ii]* ) domain=$(curl -sSSL "https://api.ipify.org/?format=text"); break;;
+          [Dd]* ) read -p "Which (sub-)domain will hawthorne be hosted? " domain; break;;
+          * ) echo "Please answer with the answers provided.";;
+      esac
+    done
+  fi
 
-  printf "${BLUE}Linking to supervisor...${NORMAL}\n"
+  if [ $domain != "" ]; then
+    sed -i "s/ALLOWED_HOSTS = [gethostname(), gethostbyname(gethostname())]/ALLOWED_HOSTS = ['"$domain"']/g" $directory/panel/local.py
+  fi
+
+  if [ $util -eq 0 ]; then
+    while true; do
+      read -p "Is your webserver ${BOLD}(A)${NORMAL}pache, ${BOLD}(N)${NORMAL}ginx or ${BOLD}(D)${NORMAL}ifferent? " yn
+      case $yn in
+          [Aa]* ) web="apache"; sed -i "s/bind = 'unix:/tmp/hawthorne.sock'/DEBUG = bind = '127.0.0.1:8000'/g" $directory/panel/local.py; break;;
+          [Nn]* ) break;;
+          [Dd]* ) web="unspecified"; break;;
+          * ) echo "Please answer with the answers provided.";;
+      esac
+    done
+  fi
+
+  printf "${BOLD}Linking to supervisor...${NORMAL}\n"
   ln -sr $directory/supervisor.conf /etc/supervisor/conf.d/hawthorne.conf
   supervisorctl reread
   supervisorctl update
   supervisorctl restart hawthorne
   printf "Started the unix socket at: ${YELLOW}/tmp/hawthorne.sock${NORMAL}\n"
 
-  printf "${BLUE}Linking the hawthorne command line tool...${NORMAL}\n"
+  printf "${GREEN}Linking the hawthorne command line tool...${NORMAL}\n"
   ln -s $directory/tools/toolchain.sh /usr/bin/hawthorne
   ln -s $directory/tools/toolchain.sh /usr/bin/ht
   chmod +x /usr/bin/hawthorne
@@ -310,13 +355,14 @@ main() {
 
   printf "\n\n${GREEN}You did it (Well rather I did). Everything seems to be installed.${NORMAL}\n"
   printf "Please look over the $directory/${RED}panel/local.py${NORMAL} to see if you want to configure anything. And restart the supervisor with ${YELLOW}supervisorctl restart hawthorne${NORMAL}\n"
-  printf "To configure your webserver please refer to the project wiki: ${YELLOW}https://github.com/indietyp/hawthorne/wiki/Webserver-Configuration${NORMAL}\n"
+  printf "To configure your webserver please refer to the project wiki: ${YELLOW}https://github.com/indietyp/hawthorne/wiki/Web-server-configuration${NORMAL}\n\n\n"
 
-  if [ $interactive -eq 0 ]; then
-    printf "PLEASE RUN ${YELLOW}$directory/manage.py superusersteam${NORMAL}\n"
-    printf "INSERT YOUR DEVKEY IN ${YELLOW}$directory/${RED}panel/local.py${NORMAL}\n"
+  printf "${GREEN}Here's an example configuration for your specific system: ${NORMAL}\n\n\n"
+  if [ $web = "nginx" ]; then
+    printf $(sed "s/server_name example.com;/server_name '$domain';/g" $directory/tools/configs/nginx.example.conf)
+  elif [ $web = "apache" ]; then
+    printf $(sed "s/ServerName example.com/ServerName '$domain'/g" $directory/tools/configs/apache.example.conf)
   fi
-
 }
 
 parser

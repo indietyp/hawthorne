@@ -5,13 +5,6 @@
 
 
 - block content
-  .status-card.flex.center.not__fixed.visible
-    .icon
-      i.explicit.orange(data-feather="alert-octagon")
-    .info.spacer
-      .content This is just a sample system wide announcement
-    .icon
-      i.explicit.gray(data-feather="x-circle")
   .item.pure-u-1-1.pure-g
     .row.pure-g
       .column.pure-u-1-4.info-card
@@ -19,7 +12,7 @@
         .info
           .data
             i.prefix(data-feather='server')
-            span.number 07
+            span.number=instances|stringformat:"02d"
           .description.bottom
             .spacer
             span.text instances
@@ -29,11 +22,13 @@
         .info
           .data.flex.center
             i.prefix(data-feather='user')
-            span.number 07
-            .appendix.green.flex.column
+            span.number=counts.month|stringformat:"02d"
+            .appendix.flex.column(class="{% if counts.change < 0 %}red{% else %}green{% endif %}")
               .content.flex.center
                 i.explicit.green(data-feather="chevron-up")
-                span.msg 30%
+                span.msg
+                  =counts.change
+                  |%
               .spacer
           .description.bottom
             .spacer
@@ -44,7 +39,7 @@
         .info
           .data.flex.center
             i.prefix(data-feather='user')
-            span.number 27
+            span.number= counts.all|stringformat:"02d"
           .description.bottom
             .spacer
             span.text all time
@@ -54,7 +49,7 @@
         .info
           .data.flex.center
             i.prefix(data-feather='zap')
-            span.number 102
+            span.number= actions|stringformat:"02d"
           .description.bottom
             .spacer
             span.text actions performed
@@ -66,7 +61,7 @@
         .info
           .data.flex.center
             i.prefix(data-feather='users')
-            span.number 13
+            span.number= roles|stringformat:"02d"
           .description.bottom
             .spacer
             span.text roles
@@ -76,7 +71,7 @@
         .info
           .data.flex.center
             i.prefix(data-feather='users')
-            span.number 87
+            span.number= mem_roles|stringformat:"02d"
           .description.bottom
             .spacer
             span.text with roles
@@ -86,7 +81,7 @@
         .info
           .data.flex.center
             i.prefix(data-feather='message-square')
-            span.number 90
+            span.number= messages|stringformat:"02d"
           .description.bottom
             .spacer
             span.text messages
@@ -94,28 +89,33 @@
       .column.pure-u-1-4.info-card
         .spacer
         .info
-          - include "assets/discord.svg"
-          .description.bottom
-            .spacer
-            span.text our discord
+          a(href='https://discord.gg/3pNEqn8', target='_blank')
+            .data.flex.center
+              .spacer
+              - include "assets/discord.svg"
+            .description.bottom
+              span.text(style="color:black") our discord
         .spacer
 
   .item.pure-u-1-1.pure-u-lg-11-24.second
     .heading Instances
-    .row.pure-g
-      .column.icon.username.pure-u-7-24
-        i(data-feather="hard-drive")
-        span 06
-      .column.icon.username.pure-u-17-24
-        i(data-feather="compass")
-        span Counter-Strike: Global Offensive
-      .column.icon.placeholder.pure-u-7-24
-      .column.icon.username.pure-u-7-24
-        i(data-feather="map")
-        span de_mirage
-      .column.icon.username.pure-u-7-24
-        i(data-feather="users")
-        span 12
+    .list#home__instance
+    // .row.pure-g
+    //   .column.icon.username.pure-u-7-24
+    //     i(data-feather="hard-drive")
+    //     span 06
+    //   .column.icon.username.pure-u-17-24
+    //     i(data-feather="compass")
+    //     span Counter-Strike: Global Offensive
+    //   .column.icon.placeholder.pure-u-7-24
+    //   .column.icon.username.pure-u-7-24
+    //     i(data-feather="map")
+    //     span de_mirage
+    //   .column.icon.username.pure-u-7-24
+    //     i(data-feather="users")
+    //     span 12
+    script.execution.
+      window.ajax.home.instance(1)
 
   .spacer
   .item.pure-u-1-1.pure-u-lg-11-24.second

@@ -22,7 +22,7 @@ def status(server):
   alltime = query.values('server').annotate(active=Count('user', distinct=True))
 
   if len(online) > 1:
-    online = list(online)
+    online = [o for o in online]
 
     dpoint = online[0]['date']
     dbreak = datetime.date.today()
@@ -50,3 +50,11 @@ def status(server):
 def server(request, page, *args, **kwargs):
   obj = Server.objects.all()
   return renderer(request, 'partials/server/server.pug', obj, page, execute=status)
+
+
+@login_required(login_url='/login')
+@permission_required('core.view_server')
+@require_http_methods(['POST'])
+def list(request, page, *args, **kwargs):
+  obj = Server.objects.all()
+  return renderer(request, 'partials/home/instance.pug', obj, page, execute=status)

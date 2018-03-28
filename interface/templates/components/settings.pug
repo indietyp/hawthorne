@@ -263,19 +263,89 @@
   .item.pure-u-1-1.second
     .heading Utilities
     .row.pure-g
-      .column.icon.username.pure-u-24-24
-        | Discordbot
-        | EMail alerts
-        | Usage report to indietyp (what it includes, and why you should do it)
-
-  .item.pure-u-1-1.second
-    .heading Statistics
+      .column.icon.pure-u-12-24
+        - include 'assets/discord.svg'
+        .description
+          span.red Not connected
+          span.prefix to mainframe
+        //- .description
+        //-   span.green Connected
+        //-   span.prefix to Discord server: blablibu
+        //- .description
+        //-   span Token for Bot:
+        //-   span.prefix.orange 2401ffe9-1025-4884-99c0-761629326a34
+      .column.icon.pure-u-12-24
+        .spacer
+        .description(style='padding-right:1em')
+          span.green Connect
+          span.prefix to mainframe:
+          .top (this action is not reversible)
+        .action.flex.center
+          i(data-feather="globe")
     .row.pure-g
-      .column.icon.username.pure-u-24-24
-        span coming soon &trade;
+      .column.icon.username.pure-u-7-24
+        i(style="padding-left:6px", data-feather='mail')
+        .permission.center.flex
+          .simple.spacer
+            input#emailtoggle(type='checkbox')
+            label.center.flex(for='emailtoggle')
+              .container
+                i.explicit(data-feather='toggle-left')
+              div Alerts
+      .column.icon.username.pure-u-7-24.input-wrapper
+        input#inputadmin(placeholder="E-Mail")
+        label.adjusted(for='inputadmin')
+          i.explicit(data-feather='mail')
+      .column.icon.username.pure-u-7-24
+        select#severity-input
+          option(placeholder) {% trans 'Severity' %}
+          option Info
+          option Warning
+          option Error
+          option Critical
+        script.execution.
+          var severityinput = new Choices('#severity-input', {
+            searchEnabled: false,
+            choices: [],
+            itemSelectText: "{% trans 'Press to select' %}",
+          })
+          window.systeminput = systeminput
+      .column.icon.username.pure-u-3-24
+        .spacer
+        .action
+          i(data-feather='save')
+
+    .row.pure-g
+      .column.icon.username.pure-u-14-24
+        i(style="padding-left:6px", data-feather='activity')
+        .permission.center.flex
+          .simple.spacer
+            input#usagetoggle(type='checkbox')
+            label.center.flex(for='usagetoggle')
+              .container
+                i.explicit(data-feather='toggle-left')
+              div Usage Report to Developer
+      .column.icon.username.pure-u-7-24
+        a(href='https://hawthorne.com', target="_blank") Why and what is the usage report?
+      .column.icon.username.pure-u-3-24
+        .spacer
+        .action
+          i(data-feather='save')
 
   .item.pure-u-1-1.second
     .heading Logs
     .row.pure-g
-      .column.icon.username.pure-u-24-24
-        span coming soon &trade;
+      .column.icon.username.pure-u-8-24
+        a.flex.center(href="/admin/automated_logging/model/")
+          span Changelogs:
+          i(data-feather="arrow-right-circle")
+
+      .column.icon.username.pure-u-8-24
+        a.flex.center(href="/admin/automated_logging/unspecified/")
+          span Unspecified:
+          i(data-feather="arrow-right-circle")
+
+      .column.icon.username.pure-u-8-24
+        a.flex.center(href="/admin/automated_logging/request/")
+          span Requests:
+          i(data-feather="arrow-right-circle")

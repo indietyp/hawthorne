@@ -34,9 +34,21 @@ update () {
     cd $dir
 
     printf "${GREEN}Pulling changes.\n${NORMAL}"
+
+    # https://stackoverflow.com/a/3278427/9077988
+    UPSTREAM=${1:-'@{u}'}
+    LOCAL=$(git rev-parse @)
+    REMOTE=$(git rev-parse "$UPSTREAM")
+    BASE=$(git merge-base @ "$UPSTREAM")
+
+    if [ $LOCAL = $REMOTE ]; then
+      printf "${GREEN} System is already up-to-date${NORMAL} - good job!\n\n"
+      exit 1
+    fi
+
     git pull
 
-    printf "${GREEN}Checking dependencies and executing Django related things.\n${NORMAL}"
+    printf "${GREEN}Checking dependencies and updating components.\n${NORMAL}"
     pip3 install -r requirements.txt
     python3 manage.py migrate
     python3 manage.py collectstatic --noinput
@@ -45,8 +57,8 @@ update () {
     python3 manage.py migrate --run-syncdb
 
     hash supervisorctl >/dev/null 2>&1 || {
-        printf "${YELLOW}Was unable to detect supervisor - not attempting to restart wsgi\n${NORMAL}"
-        exit 1
+      printf "${YELLOW}Was unable to detect supervisor - not attempting to restart wsgi\n${NORMAL}"
+      exit 1
     }
 
     printf "${GREEN}Restarting supervisor\n${NORMAL}"
@@ -58,12 +70,20 @@ update () {
 }
 
 usage () {
-    echo "The hawthorne toolchain is an effort to make updating and fixing easier."
-    echo ""
-    echo "Commands that are currently supported:"
-    echo "\t${GREEN}help${NORMAL}   - What you see here."
-    echo "\t${GREEN}update${NORMAL} - Update hawthorne to the current version."
-    echo ""
+  echo "The hawthorne toolchain is an effort to make updating and fixing easier."
+  echo ""
+  echo "Commands that are currently supported:"
+  echo "\t${GREEN}help${NORMAL}   - What you see here."
+  echo "\t${GREEN}update${NORMAL} - Update hawthorne to the current version."
+  echo "\t${GREEN}report${NORMAL} - Report a problem to the maintainer"
+  echo ""
+}
+
+report () {
+  printf "${YELLOW}Sending the report to the maintainer...\n"
+
+  cd $dir
+  python3 manage.py report
 }
 
 while [ "$1" != "" ]; do
@@ -76,6 +96,10 @@ while [ "$1" != "" ]; do
             ;;
         u|update)
             update
+            exit 1
+            ;;
+        r|report)
+            report
             exit 1
             ;;
         *)
