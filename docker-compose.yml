@@ -25,27 +25,36 @@ services:
 
     networks:
       nhtldb:
-        ipv4_address: 172.16.240.24
+        ipv4_address: 172.16.241.24
 
   htldj:
+    build:
+      context: .
+      args:
+        MYSQL_PWD: fKaxvKPTWzFop2j8
+        MYSQL_HOST: 172.16.241.24
+        MYSQL_TCP_PORT: 3306
+        MYSQL_USER: root
+        MYSQL_DATABASE: hawthorne-landing
     build: .
     volumes:
       - "/docker/sockets:/tmp/sockets"
 
     environment:
       MYSQL_PWD: fKaxvKPTWzFop2j8
-      MYSQL_HOST: 172.16.240
+      MYSQL_HOST: 172.16.241.24
       MYSQL_TCP_PORT: 3306
       MYSQL_USER: root
       MYSQL_DATABASE: hawthorne-landing
 
     networks:
-      - nhtldb
+      nhtldb:
+        ipv4_address: 172.16.241.25
 
 networks:
-  nweb:
+  nhtldb:
     driver: bridge
     ipam:
       driver: default
       config:
-        - subnet: 172.16.240.0/24
+        - subnet: 172.16.241.0/24

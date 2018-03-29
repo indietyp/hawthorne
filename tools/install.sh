@@ -124,7 +124,7 @@ main() {
       apt install -y default-libmysqlclient-dev
     }
 
-    apt install -y -qq --force-yes --fix-missing python3 python3-dev python3-pip redis-server libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential
+    apt install -y -q -o=Dpkg::Use-Pty=0 python3 python3-dev python3-pip redis-server libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential
 
     if [ $dev -eq 1 ]; then
       wget -O ruby-install-0.6.1.tar.gz https://github.com/postmodern/ruby-install/archive/v0.6.1.tar.gz
@@ -138,15 +138,15 @@ main() {
 
 
     curl -sL deb.nodesource.com/setup_8.x | sudo -E bash -
-    apt install -y -qq nodejs
+    apt install -y -q -o=Dpkg::Use-Pty=0 nodejs
 
     if [ $utils -eq 1 ]; then
-      apt install -y -qq --force-yes --fix-missing mysql-server nginx
+      apt install -y -q -o=Dpkg::Use-Pty=0 --force-yes --fix-missing mysql-server nginx
     fi
 
     hash git >/dev/null 2>&1 || {
       printf "${YELLOW}Git not preinstalled. Reinstalling...${NORMAL}\n"
-      apt install -qq git
+      apt install -q -o=Dpkg::Use-Pty=0 git
     }
 
   else
@@ -158,7 +158,7 @@ main() {
   directory=$(python3 -c "import os; print(os.path.abspath(os.path.expanduser('$directory')))")
 
   printf "${BOLD}Cloning the project...${NORMAL}\n"
-  env git clone https://github.com/indietyp/hawthorne $directory || {
+  env git clone -b pages https://github.com/indietyp/hawthorne $directory || {
     printf "${RED}Error:${NORMAL} git clone of hawthorne repo failed\n"
     exit 1
   }
@@ -192,11 +192,6 @@ main() {
   cp $directory/supervisor.default.conf $directory/supervisor.conf
   mkdir -p /var/log/hawthorne
   mkdir -p /tmp/sockets
-
-  # export MYSQL_PWD=$dbpwd
-  # export MYSQL_HOST=$dbhost
-  # export MYSQL_TCP_PORT=$dbport
-
   mysql -u $MYSQL_USER -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE"
 
   printf "\n\n${BOLD}Configuring project...${NORMAL}\n"
