@@ -27,6 +27,7 @@ setup () {
   fi
 
   # we need that toal path boi
+  echo_supervisord_conf > /etc/supervisord.conf
   directory=$(python3 -c "import os; print(os.path.abspath(os.path.expanduser('$directory')))")
 
   printf "${BOLD}Cloning the project...${NORMAL}\n"
