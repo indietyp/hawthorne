@@ -223,6 +223,7 @@ main() {
   printf "Started the unix socket at: ${YELLOW}/tmp/hawthorne.sock${NORMAL}\n"
 
   printf "${GREEN}Linking the hawthorne command line tool...${NORMAL}\n"
+  rm -r /usr/bin/hawthorne /usr/bin/ht
   ln -s $directory/tools/toolchain.sh /usr/bin/hawthorne
   ln -s $directory/tools/toolchain.sh /usr/bin/ht
   chmod +x /usr/bin/hawthorne

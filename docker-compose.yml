@@ -16,7 +16,8 @@ services:
               --key-buffer-size=64M,
               --query-cache-size=32M,
               --query-cache-limit=8M,
-              --max-allowed-packet=64M]
+              --max-allowed-packet=64M
+              --bind-address=0.0.0.0]
 
     deploy:
       replicas: 2
@@ -37,7 +38,7 @@ services:
         MYSQL_HOST: 172.16.241.24
         MYSQL_TCP_PORT: 3306
         MYSQL_USER: hawthorne
-        MYSQL_DATABASE: hawthorne-landing
+        MYSQL_DATABASE: hawthorne_landing
     build: .
     volumes:
       - "/docker/sockets:/tmp/sockets"
