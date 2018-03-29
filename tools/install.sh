@@ -124,18 +124,10 @@ main() {
       apt install -y default-libmysqlclient-dev
     }
 
-    apt install -y -q -o=Dpkg::Use-Pty=0 python3 python3-dev python3-pip redis-server libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential
-
-    if [ $dev -eq 1 ]; then
-      wget -O ruby-install-0.6.1.tar.gz https://github.com/postmodern/ruby-install/archive/v0.6.1.tar.gz
-      tar -xzvf ruby-install-0.6.1.tar.gz
-      cd ruby-install-0.6.1/
-      make install --silent
-      cd ..
-      rm -rf ruby-install-0.6.1
-      rm ruby-install-0.6.1.tar.gz
-    fi
-
+    apt install -y software-properties-common
+    apt update
+    apt install -y -q -o=Dpkg::Use-Pty=0 python3 python3-dev python3-pip redis-server libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential ruby2.4 ruby2.4-dev ruby-switch
+    ruby-switch --set ruby2.4
 
     curl -sL deb.nodesource.com/setup_8.x | bash -
     apt install -y -q -o=Dpkg::Use-Pty=0 nodejs
