@@ -34,13 +34,13 @@ services:
     build:
       context: .
       args:
-        directory: /hawthorne
+        DIRECTORY: "/hawthorne"
     build: .
     volumes:
       - "/docker/sockets:/tmp/sockets"
 
     environment:
-      directory: /hawthorne
+      directory: "/hawthorne"
       MYSQL_PWD: fKaxvKPTWzFop2j8
       MYSQL_HOST: 172.16.241.24
       MYSQL_TCP_PORT: 3306

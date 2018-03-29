@@ -1,6 +1,7 @@
 #!/bin/sh
 
 setup () {
+  directory=$DIRECTORY
   printf "${BLUE}Installing the package requirements...${NORMAL}\n"
   if hash apt-get >/dev/null 2>&1; then
     apt-get update
