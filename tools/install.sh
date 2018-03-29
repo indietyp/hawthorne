@@ -183,10 +183,8 @@ main() {
 
   npm install -g --quiet pug
 
-  if [ $dev -eq 1 ]; then
-    npm install -g --quiet coffeescript
-    gem install -q sass --no-user-install
-  fi
+  npm install -g --quiet coffeescript
+  gem install -q sass --no-user-install
 
   printf "${BOLD}Configuring the project...${NORMAL}\n"
   cp $directory/panel/local.default.py $directory/panel/local.py
