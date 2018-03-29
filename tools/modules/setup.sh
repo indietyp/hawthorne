@@ -9,6 +9,7 @@ setup () {
     }
 
     apt-get install -y software-properties-common
+    apt-add-repository -y ppa:brightbox/ruby-ng
     apt-get update
     apt-get install -y -q -o=Dpkg::Use-Pty=0 gcc g++ python3 python3-dev python3-pip redis-server libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential ruby2.4 ruby2.4-dev ruby-switch
     ruby-switch --set ruby2.4
@@ -26,12 +27,11 @@ setup () {
     printf "${BLUE}opensource@indietyp.com${NORMAL} or open an issue\n"
   fi
 
-  # we need that toal path boi
+  # we need that total path boi
   echo_supervisord_conf > /etc/supervisord.conf
-  directory=$(python3 -c "import os; print(os.path.abspath(os.path.expanduser('$directory')))")
+  # directory=$(python3 -c "import os; print(os.path.abspath(os.path.expanduser('$directory')))")
 
   printf "${BOLD}Cloning the project...${NORMAL}\n"
-  rm -rf $directory
   env git clone -b pages https://github.com/indietyp/hawthorne $directory || {
     printf "${RED}Error:${NORMAL} git clone of hawthorne repo failed\n"
     exit 1
