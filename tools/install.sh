@@ -207,7 +207,8 @@ main() {
   python3 $directory/manage.py collectstatic --noinput -v 0
 
   printf "${BOLD}Linking to supervisor...${NORMAL}\n"
-  ln -sr $directory/supervisor.conf /etc/supervisor/conf.d/hawthorne.conf
+  rm -rf /etc/supervisor/conf.d/hawthorne.conf
+  ln -s $directory/supervisor.conf /etc/supervisor/conf.d/hawthorne.conf
   supervisorctl reread
   supervisorctl update
   supervisorctl restart hawthorne
