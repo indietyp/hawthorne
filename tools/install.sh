@@ -107,119 +107,16 @@ main() {
 
   printf "${YELLOW}This is the automatic and guided installation. ${NORMAL}\n"
 
-  if [ $utils -ne 1 ]; then
-    printf "${RED}You still need to install a webserver of your choosing and provide a mysql server. ${NORMAL}\n\n"
-  else
-    printf "${RED}You chose the full installation, that installs nginx and mysql-server.${NORMAL}\n\n"
-  fi
 
   printf "Everything will be configured by itelf.\n"
   printf "The configured installation path used will be ${GREEN}${directory}${NORMAL}\n"
   umask g-w,o-w
 
-  printf "${BLUE}Installing the package requirements...${NORMAL}\n"
-  if hash apt >/dev/null 2>&1; then
-    apt update
-    apt install -y libmysqlclient-dev || {
-      apt install -y default-libmysqlclient-dev
-    }
+  source $directory/panel/modules/setup.sh
+  setup
 
-    apt install -y software-properties-common
-    apt update
-    apt install -y -q -o=Dpkg::Use-Pty=0 python3 python3-dev python3-pip redis-server libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential ruby2.4 ruby2.4-dev ruby-switch
-    ruby-switch --set ruby2.4
-
-    curl -sL deb.nodesource.com/setup_8.x | bash -
-    apt install -y -q -o=Dpkg::Use-Pty=0 nodejs
-
-    if [ $utils -eq 1 ]; then
-      apt install -y -q -o=Dpkg::Use-Pty=0 --force-yes --fix-missing mysql-server nginx
-    fi
-
-    hash git >/dev/null 2>&1 || {
-      printf "${YELLOW}Git not preinstalled. Reinstalling...${NORMAL}\n"
-      apt install -y -q -o=Dpkg::Use-Pty=0 git
-    }
-
-  else
-    printf "Your package manager is currently not supported. Please contact the maintainer\n"
-    printf "${BLUE}opensource@indietyp.com${NORMAL} or open an issue\n"
-  fi
-
-  # we need that toal path boi
-  directory=$(python3 -c "import os; print(os.path.abspath(os.path.expanduser('$directory')))")
-
-  printf "${BOLD}Cloning the project...${NORMAL}\n"
-  rm -rf $directory
-  env git clone -b pages https://github.com/indietyp/hawthorne $directory || {
-    printf "${RED}Error:${NORMAL} git clone of hawthorne repo failed\n"
-    exit 1
-  }
-
-  printf "${BOLD}Installing dependencies...${NORMAL}\n"
-  pip3 install cryptography || {
-    printf "${BOLD}Too old pip3 version... upgrading${NORMAL}\n"
-    apt install -y wget
-    wget https://bootstrap.pypa.io/get-pip.py
-    python3 get-pip.py
-    rm get-pip.py
-
-    alias pip3="/usr/local/bin/pip3"
-  }
-
-  redis-server --daemonize yes
-  pip3 install gunicorn
-  pip3 install -r $directory/requirements.txt
-  if [ $dev -eq 1 ]; then
-    pip3 install -r $directory/requirements.dev.txt
-  fi
-
-  npm install -g --quiet pug
-
-  npm install -g --quiet coffeescript
-  gem install -q sass --no-user-install
-
-  printf "${BOLD}Configuring the project...${NORMAL}\n"
-  cp $directory/panel/local.default.py $directory/panel/local.py
-  cp $directory/supervisor.default.conf $directory/supervisor.conf
-  mkdir -p /var/log/hawthorne
-  mkdir -p /tmp/sockets
-  mysql -u $MYSQL_USER -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE"
-
-  printf "\n\n${BOLD}Configuring project...${NORMAL}\n"
-  # replace the stuff in the local.py and supervisor.conf file
-  sed -i "s/'HOST': 'localhost'/'HOST': '$MYSQL_HOST'/g" $directory/panel/local.py
-  sed -i "s/'PORT': 'root'/'PORT': '$MYSQL_TCP_PORT'/g" $directory/panel/local.py
-  sed -i "s/'NAME': 'hawthorne'/'NAME': '$MYSQL_DATABASE'/g" $directory/panel/local.py
-  sed -i "s/'USER': 'root'/'USER': '$MYSQL_USER'/g" $directory/panel/local.py
-  sed -i "s/'PASSWORD': ''/'PASSWORD': '$MYSQL_PWD'/g" $directory/panel/local.py
-
-  if [ $dev -eq 1 ]; then
-    sed -i "s/DEBUG = False/DEBUG = True/g" $directory/panel/local.py
-  fi
-
-  sed -i "s#directory=<replace>#directory=$directory#g" $directory/supervisor.conf
-  printf "${BLUE}Executing project setupcommands...${NORMAL}\n"
-  sed -i "s/SECRET_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'/SECRET_KEY = '$(python3 $directory/manage.py generatesecret | tail -1)'/g" $directory/panel/local.py
-
-  python3 $directory/manage.py migrate
-  python3 $directory/manage.py compilestatic
-  python3 $directory/manage.py collectstatic --noinput -v 0
-
-  printf "${BOLD}Linking to supervisor...${NORMAL}\n"
-  rm -rf /etc/supervisor/conf.d/hawthorne.conf
-  ln -s $directory/supervisor.conf /etc/supervisor/conf.d/hawthorne.conf
-  supervisorctl reread
-  supervisorctl update
-  supervisorctl restart hawthorne
-  printf "Started the unix socket at: ${YELLOW}/tmp/hawthorne.sock${NORMAL}\n"
-
-  printf "${GREEN}Linking the hawthorne command line tool...${NORMAL}\n"
-  rm -rf /usr/bin/hawthorne /usr/bin/ht
-  ln -s $directory/tools/toolchain.sh /usr/bin/hawthorne
-  ln -s $directory/tools/toolchain.sh /usr/bin/ht
-  chmod +x /usr/bin/hawthorne
-  chmod +x /usr/bin/ht
+  source $directory/panel/modules/configured.sh
+  configure
 }
 
 parser
