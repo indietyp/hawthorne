@@ -191,6 +191,7 @@ main() {
   cp $directory/panel/local.default.py $directory/panel/local.py
   cp $directory/supervisor.default.conf $directory/supervisor.conf
   mkdir -p /var/log/hawthorne
+  mkdir -p /tmp/sockets
 
   # export MYSQL_PWD=$dbpwd
   # export MYSQL_HOST=$dbhost
