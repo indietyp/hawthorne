@@ -5,6 +5,8 @@ services:
     volumes:
       - "/docker/hawthorne-landing/database:/var/lib/mysql"
     environment:
+      MYSQL_USER: hawthorne@%
+      MYSQL_PASSWORD: fKaxvKPTWzFop2j8
       MYSQL_ROOT_PASSWORD: fKaxvKPTWzFop2j8
     command: [mysqld,
               --character-set-server=utf8mb4,
@@ -34,7 +36,7 @@ services:
         MYSQL_PWD: fKaxvKPTWzFop2j8
         MYSQL_HOST: 172.16.241.24
         MYSQL_TCP_PORT: 3306
-        MYSQL_USER: root
+        MYSQL_USER: hawthorne
         MYSQL_DATABASE: hawthorne-landing
     build: .
     volumes:

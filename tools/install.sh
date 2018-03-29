@@ -130,14 +130,14 @@ main() {
       wget -O ruby-install-0.6.1.tar.gz https://github.com/postmodern/ruby-install/archive/v0.6.1.tar.gz
       tar -xzvf ruby-install-0.6.1.tar.gz
       cd ruby-install-0.6.1/
-      sudo make install --silent
+      make install --silent
       cd ..
       rm -rf ruby-install-0.6.1
       rm ruby-install-0.6.1.tar.gz
     fi
 
 
-    curl -sL deb.nodesource.com/setup_8.x | sudo -E bash -
+    curl -sL deb.nodesource.com/setup_8.x | bash -
     apt install -y -q -o=Dpkg::Use-Pty=0 nodejs
 
     if [ $utils -eq 1 ]; then
@@ -158,6 +158,7 @@ main() {
   directory=$(python3 -c "import os; print(os.path.abspath(os.path.expanduser('$directory')))")
 
   printf "${BOLD}Cloning the project...${NORMAL}\n"
+  rm -r $directory
   env git clone -b pages https://github.com/indietyp/hawthorne $directory || {
     printf "${RED}Error:${NORMAL} git clone of hawthorne repo failed\n"
     exit 1
