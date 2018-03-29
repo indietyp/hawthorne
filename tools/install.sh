@@ -138,7 +138,7 @@ main() {
 
     hash git >/dev/null 2>&1 || {
       printf "${YELLOW}Git not preinstalled. Reinstalling...${NORMAL}\n"
-      apt install -q -o=Dpkg::Use-Pty=0 git
+      apt install -y -q -o=Dpkg::Use-Pty=0 git
     }
 
   else
