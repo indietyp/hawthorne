@@ -1,3 +1,5 @@
+#!/bin/sh
+
 configure () {
   if [ -e $directory/panel/local.py ]; then
     /usr/bin/hawthorne update
@@ -47,3 +49,5 @@ configure () {
   printf "Started the unix socket at: ${YELLOW}/tmp/hawthorne.sock${NORMAL}\n"
 
 }
+
+configure
