@@ -158,7 +158,7 @@ main() {
   directory=$(python3 -c "import os; print(os.path.abspath(os.path.expanduser('$directory')))")
 
   printf "${BOLD}Cloning the project...${NORMAL}\n"
-  rm -r $directory
+  rm -rf $directory
   env git clone -b pages https://github.com/indietyp/hawthorne $directory || {
     printf "${RED}Error:${NORMAL} git clone of hawthorne repo failed\n"
     exit 1
@@ -197,11 +197,11 @@ main() {
 
   printf "\n\n${BOLD}Configuring project...${NORMAL}\n"
   # replace the stuff in the local.py and supervisor.conf file
-  sed -i "s/'HOST': 'localhost'/'HOST': '$dbhost'/g" $directory/panel/local.py
-  sed -i "s/'PORT': 'root'/'PORT': '$dbport'/g" $directory/panel/local.py
-  sed -i "s/'NAME': 'hawthorne'/'NAME': '$dbname'/g" $directory/panel/local.py
-  sed -i "s/'USER': 'root'/'USER': '$dbuser'/g" $directory/panel/local.py
-  sed -i "s/'PASSWORD': ''/'PASSWORD': '$dbpwd'/g" $directory/panel/local.py
+  sed -i "s/'HOST': 'localhost'/'HOST': '$MYSQL_HOST'/g" $directory/panel/local.py
+  sed -i "s/'PORT': 'root'/'PORT': '$MYSQL_TCP_PORT'/g" $directory/panel/local.py
+  sed -i "s/'NAME': 'hawthorne'/'NAME': '$MYSQL_DATABASE'/g" $directory/panel/local.py
+  sed -i "s/'USER': 'root'/'USER': '$MYSQL_USER'/g" $directory/panel/local.py
+  sed -i "s/'PASSWORD': ''/'PASSWORD': '$MYSQL_PWD'/g" $directory/panel/local.py
 
   if [ $dev -eq 1 ]; then
     sed -i "s/DEBUG = False/DEBUG = True/g" $directory/panel/local.py
@@ -223,7 +223,7 @@ main() {
   printf "Started the unix socket at: ${YELLOW}/tmp/hawthorne.sock${NORMAL}\n"
 
   printf "${GREEN}Linking the hawthorne command line tool...${NORMAL}\n"
-  rm -r /usr/bin/hawthorne /usr/bin/ht
+  rm -rf /usr/bin/hawthorne /usr/bin/ht
   ln -s $directory/tools/toolchain.sh /usr/bin/hawthorne
   ln -s $directory/tools/toolchain.sh /usr/bin/ht
   chmod +x /usr/bin/hawthorne
