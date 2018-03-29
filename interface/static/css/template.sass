@@ -204,19 +204,20 @@ html, button, input, select, textarea, .pure-g [class*='pure-u']
       &.left .img-container
         box-shadow: 1em 1em 2em -1em rgba(0, 0, 0, 0.5)
 
-      &:hover, &:focus, &:active
-        &.right
-          transform: translateX(-70%) scale(1.5)
-
-        &.left
-          transform: translateX(70%) scale(1.5)
-
       & .img-container
         border-radius: 6px
         border: 1px transparent solid
         overflow: hidden
         display: grid
         position: relative
+        transition: transform 0.5s ease-out
+
+        &:hover, &:focus, &:active
+          &.right
+            transform: translateX(-70%) scale(1.4)
+
+          &.left
+            transform: translateX(70%) scale(1.4)
 
         & img
           width: 100%
@@ -265,6 +266,20 @@ html, button, input, select, textarea, .pure-g [class*='pure-u']
 
       & svg
         cursor: pointer
+
+    & .rightu
+      position: relative
+      top: 2em
+      right: 0
+      flex-direction: column
+
+      & > .text
+        font-size: 2rem
+        padding-bottom: 6px
+
+      & > pre
+        user-select: text
+        cursor: text
 
     & .discord
       stroke: white
@@ -317,6 +332,69 @@ span
 
     &:hover, &:active, &:focus
       color: $orange
+
+pre
+  background: #333
+  white-space: pre
+  word-wrap: break-word
+  overflow: auto
+
+pre.code
+  border-radius: 4px
+  border: 1px solid #292929
+
+pre.code
+  margin: 0px
+
+  // 'Source Code Pro', 'Inconsolata',
+  font-family: 'Monaco', 'Consolas', 'Andale Mono', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace
+  display: block
+  padding: 6px 16px 6px
+  overflow-x: auto
+  font-size: 13px
+  line-height: 19px
+  width: calc(100% - 32px)
+  color: #ddd
+
+pre.code[contenteditable='true']
+  // width: unset
+  cursor: text
+  outline: none
+
+  &:empty:not(:focus):before
+    content: attr(data-placeholder)
+    opacity: 0.8
+
+  &.evaluated
+    border-bottom-left-radius: 0px
+    border-bottom-right-radius: 0px
+
+pre.code.ro
+  margin: 0px
+  margin-top: -1px
+  border-top-left-radius: 0px
+  border-top-right-radius: 0px
+  cursor: default
+  user-select: none
+  outline: none
+  color: rgba(#ffa726, 0.6)
+  max-height: 0px
+  transition: max-height 0.5s ease-out
+  overflow: hidden
+
+  & .line::before
+    content: '>'
+    padding-right: 8px
+
+  &.none
+    display: none
+
+  &.evaluated
+    padding: 0
+    border: none
+
+pre.code-command
+  color: #ffa726
 
 .flex
   display: flex

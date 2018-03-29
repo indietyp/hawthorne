@@ -99,3 +99,4 @@ ENV/
 .DS_Store
 .sass-cache/
 supervisor.conf
+logs/

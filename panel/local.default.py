@@ -91,7 +91,7 @@ REDISCACHE = 'localhost:6379'
 SOCIAL_AUTH_STEAM_API_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 STATIC_ROOT = '/local/static'
 
-ALLOWED_HOSTS = [gethostname(), gethostbyname(gethostname())]
+ALLOWED_HOSTS = ['hawthorne.in']
 
 # generate me baby
 SECRET_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'

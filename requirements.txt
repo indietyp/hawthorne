@@ -16,3 +16,4 @@ python-valve
 pypugjs
 steam
 django-extensions
+hashids
