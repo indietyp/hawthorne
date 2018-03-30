@@ -61,11 +61,6 @@ update () {
       exit 1
     }
 
-    printf "${GREEN}Restarting supervisor\n${NORMAL}"
-    supervisorctl reread
-    supervisorctl update
-    supervisorctl restart hawthorne
-
     printf "${GREEN}Success! :+1:\n${NORMAL}"
 }
 

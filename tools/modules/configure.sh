@@ -1,7 +1,7 @@
 #!/bin/sh
 
 configure () {
-  if [ -e /hawthorne/panel/local.py ]; then
+  if [ -f "/hawthorne/panel/local.py" ]; then
     /usr/bin/hawthorne update
   else
     printf "${BOLD}Configuring the project...${NORMAL}\n"
@@ -27,6 +27,9 @@ configure () {
     printf "${BLUE}Executing project setupcommands...${NORMAL}\n"
     sed -i "s/SECRET_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'/SECRET_KEY = '$(python3 /hawthorne/manage.py generatesecret | tail -1)'/g" /hawthorne/panel/local.py
 
+    python3 /hawthorne/manage.py migrate
+    python3 /hawthorne/manage.py compilestatic
+    python3 /hawthorne/manage.py collectstatic --noinput -v 0
 
     printf "${BOLD}Linking to supervisor...${NORMAL}\n"
     rm -rf /etc/supervisor/conf.d/hawthorne.conf
@@ -39,15 +42,14 @@ configure () {
     chmod +x /usr/bin/hawthorne
     chmod +x /usr/bin/ht
   fi
-  python3 /hawthorne/manage.py migrate
-  python3 /hawthorne/manage.py compilestatic
-  python3 /hawthorne/manage.py collectstatic --noinput -v 0
 
-  supervisord
-  supervisorctl reread
-  supervisorctl update
-  supervisorctl restart hawthorne
-  printf "Started the unix socket at: ${YELLOW}/tmp/hawthorne.sock${NORMAL}\n"
+  printf "Starting at unix socket at: ${YELLOW}/tmp/hawthorne.sock${NORMAL}\n"
+  cd /hawthorne
+  python3 -m gunicorn.app.wsgiapp panel.wsgi:application
+  # supervisord
+  # supervisorctl reread
+  # supervisorctl update
+  # supervisorctl restart hawthorne
 
 }
 
