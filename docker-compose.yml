@@ -64,5 +64,5 @@ networks:
 
   proxyweb:
     external:
-      name: nweb
+      name: indded03uscwgen_nweb
 
