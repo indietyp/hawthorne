@@ -38,6 +38,7 @@ services:
     build: .
     volumes:
       - "/docker/sockets:/tmp/sockets"
+      - "/docker/static/htl:/local/static"
 
     environment:
       DIRECTORY: "/hawthorne"
