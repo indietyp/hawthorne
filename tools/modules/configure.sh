@@ -46,11 +46,6 @@ configure () {
   printf "Starting at unix socket at: ${YELLOW}/tmp/hawthorne.sock${NORMAL}\n"
   cd /hawthorne
   python3 -m gunicorn.app.wsgiapp panel.wsgi:application
-  # supervisord
-  # supervisorctl reread
-  # supervisorctl update
-  # supervisorctl restart hawthorne
-
 }
 
 configure

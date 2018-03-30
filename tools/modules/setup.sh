@@ -29,9 +29,6 @@ setup () {
   fi
 
   # we need that total path boi
-  echo_supervisord_conf > /etc/supervisord.conf
-  # directory=$(python3 -c "import os; print(os.path.abspath(os.path.expanduser('/hawthorne')))")
-
   printf "${BOLD}Cloning the project...${NORMAL}\n"
   env git clone -b pages https://github.com/indietyp/hawthorne /hawthorne || {
     printf "${RED}Error:${NORMAL} git clone of hawthorne repo failed\n"
@@ -57,6 +54,8 @@ setup () {
 
   npm install -g --quiet coffeescript
   gem install -q sass --no-user-install
+
+  chmod -R 777 /hawthorne
 }
 
 setup
