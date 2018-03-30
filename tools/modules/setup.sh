@@ -1,7 +1,7 @@
 #!/bin/sh
 
 setup () {
-  directory=$DIRECTORY
+  directory=/hawthorne
   printf "${BLUE}Installing the package requirements...${NORMAL}\n"
   if hash apt-get >/dev/null 2>&1; then
     apt-get update
@@ -30,12 +30,10 @@ setup () {
 
   # we need that total path boi
   echo_supervisord_conf > /etc/supervisord.conf
-  # directory=$(python3 -c "import os; print(os.path.abspath(os.path.expanduser('$directory')))")
-  echo $directory
-  echo $DIRECTORY
+  # directory=$(python3 -c "import os; print(os.path.abspath(os.path.expanduser('/hawthorne')))")
 
   printf "${BOLD}Cloning the project...${NORMAL}\n"
-  env git clone -b pages https://github.com/indietyp/hawthorne $directory || {
+  env git clone -b pages https://github.com/indietyp/hawthorne /hawthorne || {
     printf "${RED}Error:${NORMAL} git clone of hawthorne repo failed\n"
     exit 1
   }
@@ -53,7 +51,7 @@ setup () {
 
   redis-server --daemonize yes
   pip3 install gunicorn
-  pip3 install -r $directory/requirements.txt
+  pip3 install -r /hawthorne/requirements.txt
 
   npm install -g --quiet pug
 
