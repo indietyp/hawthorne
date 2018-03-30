@@ -50,6 +50,8 @@ services:
     networks:
       nhtldb:
         ipv4_address: 172.16.241.25
+      proxyweb:
+        ipv4_address: 172.16.238.25
 
 networks:
   nhtldb:
@@ -58,3 +60,6 @@ networks:
       driver: default
       config:
         - subnet: 172.16.241.0/24
+
+  proxyweb:
+    name: nweb
