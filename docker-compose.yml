@@ -40,7 +40,7 @@ services:
       - "/docker/sockets:/tmp/sockets"
 
     environment:
-      directory: "/hawthorne"
+      DIRECTORY: "/hawthorne"
       MYSQL_PWD: fKaxvKPTWzFop2j8
       MYSQL_HOST: 172.16.241.24
       MYSQL_TCP_PORT: 3306
