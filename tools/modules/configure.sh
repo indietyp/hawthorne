@@ -19,10 +19,6 @@ configure () {
     sed -i "s/'USER': 'root'/'USER': '$MYSQL_USER'/g" /hawthorne/panel/local.py
     sed -i "s/'PASSWORD': ''/'PASSWORD': '$MYSQL_PWD'/g" /hawthorne/panel/local.py
 
-    if [ $dev -eq 1 ]; then
-      sed -i "s/DEBUG = False/DEBUG = True/g" /hawthorne/panel/local.py
-    fi
-
     sed -i "s#directory=<replace>#directory=/hawthorne#g" /hawthorne/supervisor.conf
     printf "${BLUE}Executing project setupcommands...${NORMAL}\n"
     sed -i "s/SECRET_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'/SECRET_KEY = '$(python3 /hawthorne/manage.py generatesecret | tail -1)'/g" /hawthorne/panel/local.py
