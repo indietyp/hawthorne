@@ -43,6 +43,7 @@ configure () {
   python3 /hawthorne/manage.py compilestatic
   python3 /hawthorne/manage.py collectstatic --noinput -v 0
 
+  supervisord
   supervisorctl reread
   supervisorctl update
   supervisorctl restart hawthorne
