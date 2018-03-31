@@ -98,8 +98,8 @@ main() {
   # which may fail on systems lacking tput or terminfo
   set -e
 
-  if ! [ $(id -u) = 0 ];
-    then echo "Please run as ${RED}root${NORMAL}"
+  if ! [ $(id -u) = 0 ]; then
+    echo "Please run as ${RED}root${NORMAL}"
     exit 1
   fi
 
@@ -265,7 +265,7 @@ main() {
   if [ $stapi = "" ]; then
     printf "\n\n${GREEN}SteamAPI configuration:${NORMAL}\n"
     read -p 'Steam API Key: ' stapi
-  elif
+  fi
 
   printf "\n\n${BOLD}Configuring project...${NORMAL}\n"
 
