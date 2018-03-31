@@ -105,7 +105,6 @@ def validation(a):
 
       data = document
 
-      print(data)
       return f(request, validated=data, *args, **kwargs)
 
     return wrapper
