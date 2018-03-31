@@ -76,6 +76,7 @@ def validation(a):
         else:
           data = request.body
 
+        print(data)
         if re.match(r'^[0-9a-fA-F]{2}', data.decode()):
           split = data.split(b'\r\n')
 
