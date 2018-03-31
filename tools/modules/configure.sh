@@ -40,6 +40,7 @@ configure () {
   fi
 
   printf "Starting at unix socket at: ${YELLOW}/tmp/hawthorne.sock${NORMAL}\n"
+  redis-server --daemonize yes
   cd /hawthorne
   python3 -m gunicorn.app.wsgiapp panel.wsgi:application
 }

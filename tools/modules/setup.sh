@@ -46,7 +46,6 @@ setup () {
     alias pip3="/usr/local/bin/pip3"
   }
 
-  redis-server --daemonize yes
   pip3 install gunicorn
   pip3 install -r /hawthorne/requirements.txt
 
