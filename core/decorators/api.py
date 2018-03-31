@@ -74,7 +74,7 @@ def validation(a):
         if isinstance(request._stream.stream, io.BufferedReader):
           data = request._stream.stream.peek()
         else:
-          data = request._stream.stream.read()
+          data = request.body
 
         if re.match(r'^[0-9a-fA-F]{2}', data.decode()):
           split = data.split(b'\r\n')
@@ -85,7 +85,7 @@ def validation(a):
               data += split[i]
 
         try:
-          document = json.loads(data) if data != b'' else {}
+          document = json.loads(data) if data else {}
         except:
           'Could not parse JSON: ' + data, 512
 
