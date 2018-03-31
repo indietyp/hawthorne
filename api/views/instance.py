@@ -41,7 +41,7 @@ def report(request, validated={}, i=None, *args, **kwargs):
     report.system = json.dumps(validated['system'])
     report.distribution = validated['distro']
 
-    hasher = hashids.Hashids(salt=''.join(random.choices(string.ascii_letters, k=5)))
+    hasher = hashids.Hashids(salt=''.join([random.choice(string.ascii_letters) for _ in range(5)]))
     report.log.save(hasher.encode(1238914084053279234) + '.log', ContentFile(validated['log']))
     report.save()
 
