@@ -71,15 +71,18 @@ def validation(a):
         document = dict(request.GET)
         schema = validation['GET']
       else:
-        if isinstance(request._stream, io.BytesIO):
-          raw = request.read()
+        if isinstance(request._stream.stream, io.BufferedReader):
+          data = request._stream.stream.peek()
         else:
-          raw = request._stream.stream.peek()
+          data = request._stream.stream.read()
 
-        data = request.body
+        if re.match(r'^[0-9a-fA-F]{2}', data.decode()):
+          split = data.split(b'\r\n')
 
-        if re.match(r'^[0-9a-fA-F]{2}', data.decode()) is not None:
-          data = raw.split(b'\r\n')[1]
+          data = ''
+          for i in range(len(split)):
+            if i % 2:
+              data += split[i]
 
         try:
           document = json.loads(data) if data != b'' else {}
