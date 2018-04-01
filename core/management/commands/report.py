@@ -45,8 +45,7 @@ class Command(BaseCommand):
 
     if register:
       r = requests.get('https://api.ipify.org?format=json')
-      r = requests.put("http://{}/api/v1/instance".format(settings.MAINFRAME), data=r.text)
-
+      r = requests.put("https://{}/api/v1/instance".format(settings.MAINFRAME), json=r.json())
       config[settings.MAINFRAME] = {}
       config[settings.MAINFRAME]['ID'] = r.json()['result']['id']
 
@@ -66,7 +65,7 @@ class Command(BaseCommand):
         'directory': settings.BASE_DIR
     }
 
-    response = requests.put("http://{}/api/v1/instance/{}/report".format(settings.MAINFRAME, config[settings.MAINFRAME]['ID']), data=json.dumps(payload))
+    response = requests.put("https://{}/api/v1/instance/{}/report".format(settings.MAINFRAME, config[settings.MAINFRAME]['ID']), json=payload)
     identifier = response.json()['result']['id']
 
     self.stdout.write(self.style.SUCCESS('When talking to the maintainer indietyp, please use this ID to identify your ticket:'))

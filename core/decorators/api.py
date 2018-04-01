@@ -75,7 +75,7 @@ def validation(a):
         if isinstance(request._stream.stream, io.BufferedReader):
           data = request._stream.stream.peek()
         else:
-          data = request._stream.stream.readall()
+          data = request._stream.stream.read()
 
         if re.match(r'^[0-9a-fA-F]{2}', data.decode()):
           split = data.split(b'\r\n')

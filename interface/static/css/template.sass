@@ -447,9 +447,12 @@ input[type='number']
         & .feather:not(.m0), & img
           padding-right: 12px
 
-        & .flag-icon
+        .img__circle__container
+          border-radius: 12px
+          overflow: hidden
           height: 24px
-          width: 36px
+          width: 24px
+          margin-right: 6px
 
         & .discord
           height: 36px
@@ -553,7 +556,7 @@ input[type='number']
   &:not(.explicit)
     stroke: white
 
-  transition: stroke 0.3s ease-out
+  transition: all 0.3s ease-out
 
   &.animated
     transition: transform 0.3s ease-out
@@ -972,3 +975,10 @@ a
 
     & > span
       display: none
+
+.rainbow
+  background-image: -webkit-gradient(linear, left top, right top, color-stop(0, #f22), color-stop(0.15, #f2f), color-stop(0.3, #22f), color-stop(0.45, #2ff), color-stop(0.6, #2f2), color-stop(0.75, #2f2), color-stop(0.9, #ff2), color-stop(1, #f22))
+  background-image: gradient(linear, left top, right top, color-stop(0, #f22), color-stop(0.15, #f2f), color-stop(0.3, #22f), color-stop(0.45, #2ff), color-stop(0.6, #2f2), color-stop(0.75, #2f2), color-stop(0.9, #ff2), color-stop(1, #f22))
+  color: transparent
+  -webkit-background-clip: text
+  background-clip: text

@@ -1,3 +1,10 @@
+/*
+Credits to ...
+  ... asherkin - help admin commands logging
+  ... `11530` https://forums.alliedmods.net/showthread.php?t=183443
+  ... boomix and boompanel - this is an adaptation
+*/
+
 #pragma semicolon 1
 #define DEBUG
 #pragma newdecls required
@@ -10,32 +17,28 @@
 #include <geoip>
 
 
-#include "modules/globals.sp"
-#include "modules/convars.sp"
-#include "modules/server.sp"
-#include "modules/player.sp"
-#include "modules/chat.sp"
-#include "modules/ban.sp"
-#include "modules/admin.sp"
-#include "modules/mutegag.sp"
-#include "modules/rcon.sp"
+#include "hawthorne/globals.sp"
+#include "hawthorne/convars.sp"
+#include "hawthorne/server.sp"
+#include "hawthorne/player.sp"
+#include "hawthorne/chat.sp"
+#include "hawthorne/ban.sp"
+#include "hawthorne/admin.sp"
+#include "hawthorne/mutegag.sp"
+#include "hawthorne/rcon.sp"
 
-#include "modules/natives.sp"
-#include "modules/utils.sp"
+#include "hawthorne/natives.sp"
+#include "hawthorne/utils.sp"
+#include "hawthorne/humanize.sp"
+#include "hawthorne/steam.sp"
 
 #pragma newdecls required
-
-//Credits
-// asherkin - help admin commands logging
-// Credits to `11530` https://forums.alliedmods.net/showthread.php?t=183443
-// Credits to boomix and the boompanel - this is an adaptation
-
 
 public Plugin myinfo = {
   name = "hawthorne",
   author = "indietyp",
-  description = "hawthorne admin plugin",
-  version = "3.00",
+  description = "Admin plugin for the integration into the hawthorne gameserver panel, for managing multiple servers from an web interface.",
+  version = "4.00",
   url = "hawthorne.in"
 };
 

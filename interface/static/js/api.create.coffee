@@ -19,24 +19,25 @@ submit = (mode='', that) ->
 
     when 'admin__groups'
       data =
-        name: $("#inputgroupname").value
+        name: $("#inputgroupname")[0].value
         server: window.serverinput.getValue(true)
-        immunity: parseInt $("#inputimmunityvalue").value
+        immunity: parseInt $("#inputimmunityvalue")[0].value
         usetime: null
         flags: ''
 
       if data.server == 'all'
         data.server = null
 
-      for i in $(".row.add .actions input:checked")
-        data.flags += $(i).value
+      $(".row.add .actions input:checked").forEach((i) ->
+        data.flags += i.value
+      )
 
-      time = $("#inputtimevalue").value
+      time = $("#inputtimevalue")[0].value
       if time is not null or time != ''
         data.usetime = window.style.duration.parse(time)
 
       window.endpoint.api.roles.put(o, {}, data, (err, data) ->
-        window.ajax.ban.user(1)
+        window.ajax.admin.groups(1)
         return data
       )
 

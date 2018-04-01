@@ -348,7 +348,7 @@
   var submit;
 
   submit = function(mode = '', that) {
-    var data, i, j, len, node, now, o, output, payload, ref, server, time, type, user, uuid, value;
+    var data, node, now, o, output, payload, server, time, type, user, uuid, value;
     o = {
       target: that,
       skip_animation: false
@@ -367,26 +367,24 @@
         });
       case 'admin__groups':
         data = {
-          name: $("#inputgroupname").value,
+          name: $("#inputgroupname")[0].value,
           server: window.serverinput.getValue(true),
-          immunity: parseInt($("#inputimmunityvalue").value),
+          immunity: parseInt($("#inputimmunityvalue")[0].value),
           usetime: null,
           flags: ''
         };
         if (data.server === 'all') {
           data.server = null;
         }
-        ref = $(".row.add .actions input:checked");
-        for (j = 0, len = ref.length; j < len; j++) {
-          i = ref[j];
-          data.flags += $(i).value;
-        }
-        time = $("#inputtimevalue").value;
+        $(".row.add .actions input:checked").forEach(function(i) {
+          return data.flags += i.value;
+        });
+        time = $("#inputtimevalue")[0].value;
         if (time === !null || time !== '') {
           data.usetime = window.style.duration.parse(time);
         }
         return window.endpoint.api.roles.put(o, {}, data, function(err, data) {
-          window.ajax.ban.user(1);
+          window.ajax.admin.groups(1);
           return data;
         });
       case 'ban':

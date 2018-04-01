@@ -98,6 +98,9 @@ ENV/
 # macOS related stuff
 .DS_Store
 .sass-cache/
+
+# configs
 supervisor.conf
+gunicorn.conf.py
 
 mainframe.ini

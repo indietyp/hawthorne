@@ -1,5 +1,5 @@
 import datetime
-from core.models import User, Server, ServerGroup, ServerPermission
+from core.models import User, Server, ServerGroup, ServerPermission, Membership
 from django.forms.models import model_to_dict
 from django.views.decorators.csrf import csrf_exempt
 from core.decorators.api import json_response, validation
@@ -47,8 +47,12 @@ def list(request, validated={}, *args, **kwargs):
       role.usetime = datetime.timedelta(seconds=validated['usetime'])
 
     role.save()
-    role.user_set.set(users)
-    role.save()
+
+    for u in users:
+      m = Membership(user=u, role=role)
+      m.save()
+    # role.user_set.set(users)
+    # role.save()
 
     return 'passed'
 

@@ -1,12 +1,16 @@
 - load interface_utils
 - load i18n
+- load staticfiles
 
 .row.pure-g.userselect_none
   input.hidden.uuid(type='hidden', value=data.id)
   .column.icon.username.pure-u-7-24
     .icon-container.flex.center
-      .flag-icon(class="flag-icon-{{data.country.code|lower}}")
-      img(src="{{ data.avatar }}")
+      .img__circle__container
+        - with 'flags/'|add:data.country.code|lower|add:'.svg' as url
+          img(src='{% static url %}')
+      .img__circle__container
+        img(src="{{ data.avatar }}")
     div.namespace= data.namespace
   .column.icon.group.pure-u-7-24
     input.hidden.role(type='hidden', value=data.role_id)

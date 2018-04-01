@@ -1,10 +1,15 @@
 - load interface_utils
+- load staticfiles
 
 .row.pure-g(style="width:100%")
   .column.icon.username.pure-u-7-24
-    span.flag-icon(class="flag-icon-{{data.country.code|lower}}")
-    img(src=data.avatar)
-    span= data.namespace
+    .icon-container.flex.center
+          .img__circle__container
+            - with 'flags/'|add:data.country.code|lower|add:'.svg' as url
+              img(src='{% static url %}')
+          .img__circle__container
+            img(src="{{ data.avatar }}")
+        div.namespace= data.namespace
   .column.icon.server.pure-u-7-24
     i(data-feather="hard-drive")
     span= data.sname

@@ -54,6 +54,7 @@ update () {
     python3 manage.py collectstatic --noinput
 
     cat $dir/tools/utils/permission_delete.py | python3 manage.py shell
+    python manage.py sqlsequencereset auth
     python3 manage.py migrate --run-syncdb
 
     hash supervisorctl >/dev/null 2>&1 || {

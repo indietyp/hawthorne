@@ -234,7 +234,8 @@ main() {
 
   printf "${BOLD}Configuring the project...${NORMAL}\n"
   cp $directory/panel/local.default.py $directory/panel/local.py
-  cp $directory/supervisor.default.conf $directory/supervisor.conf
+  cp $directory/tools/configs/gunicorn.default.conf.py $directory/gunicorn.conf.py
+  cp $directory/tools/configs/supervisor.default.conf $directory/supervisor.conf
   mkdir -p /var/log/hawthorne
 
   printf "\n\n${GREEN}Database configuration:${NORMAL}\n"
