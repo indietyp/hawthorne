@@ -1,4 +1,4 @@
-admin__admin = (page=1) ->
+admin__admin = (page = 1) ->
   header =
     "X-CSRFToken": window.csrftoken
 
@@ -12,13 +12,13 @@ admin__admin = (page=1) ->
       $("#admin__admin").htmlAppend(data)
       feather.replace()
 
-      return window.ajax.admin.admins(page+1)
+      return window.ajax.admin.admins(page + 1)
 
     else
       return false
   )
 
-admin__log = (page=1) ->
+admin__log = (page = 1) ->
   header =
     "X-CSRFToken": window.csrftoken
 
@@ -29,12 +29,12 @@ admin__log = (page=1) ->
       $("#admin__log").htmlAppend(data)
       feather.replace()
 
-      return window.ajax.admin.logs(page+1)
+      return window.ajax.admin.logs(page + 1)
     else
       return false
   )
 
-admin__group = (page=1) ->
+admin__group = (page = 1) ->
   header =
     "X-CSRFToken": window.csrftoken
 
@@ -52,12 +52,12 @@ admin__group = (page=1) ->
       $("#admin__group").htmlAppend(data)
       feather.replace()
 
-      return window.ajax.admin.groups(page+1)
+      return window.ajax.admin.groups(page + 1)
     else
       return false
   )
 
-ban__user = (page=1) ->
+ban__user = (page = 1) ->
   header =
     "X-CSRFToken": window.csrftoken
 
@@ -70,12 +70,12 @@ ban__user = (page=1) ->
       $("#ban__user").htmlAppend(data)
       feather.replace()
 
-      return window.ajax.ban.user(page+1)
+      return window.ajax.ban.user(page + 1)
     else
       return false
   )
 
-chat__log = (page=1) ->
+chat__log = (page = 1) ->
   header =
     "X-CSRFToken": window.csrftoken
 
@@ -86,12 +86,12 @@ chat__log = (page=1) ->
       $("#chat__log").htmlAppend(data)
       feather.replace()
 
-      return window.ajax.chat.logs(page+1)
+      return window.ajax.chat.logs(page + 1)
     else
       return false
   )
 
-mutegag__user = (page=1) ->
+mutegag__user = (page = 1) ->
   header =
     "X-CSRFToken": window.csrftoken
 
@@ -105,12 +105,12 @@ mutegag__user = (page=1) ->
       $("#mutegag__user").htmlAppend(data)
       feather.replace()
 
-      return window.ajax.mutegag.user(page+1)
+      return window.ajax.mutegag.user(page + 1)
     else
       return false
   )
 
-player__user = (page=1) ->
+player__user = (page = 1) ->
   header =
     "X-CSRFToken": window.csrftoken
 
@@ -121,13 +121,13 @@ player__user = (page=1) ->
       $("#player__user").htmlAppend(data)
       feather.replace()
 
-      return window.ajax.mutegag.user(page+1)
+      return window.ajax.mutegag.user(page + 1)
     else
       return false
   )
 
 
-server__server = (page=1) ->
+server__server = (page = 1) ->
   header =
     "X-CSRFToken": window.csrftoken
 
@@ -150,12 +150,12 @@ server__server = (page=1) ->
 
       feather.replace()
 
-      return window.ajax.server.server(page+1)
+      return window.ajax.server.server(page + 1)
     else
       return false
   )
 
-home__instance = (page=1) ->
+home__instance = (page = 1) ->
   header =
     "X-CSRFToken": window.csrftoken
 
@@ -166,7 +166,7 @@ home__instance = (page=1) ->
       $("#home__instance").htmlAppend data
       feather.replace()
 
-      return window.ajax.home.instance(page+1)
+      return window.ajax.home.instance(page + 1)
     else
       return false
   )

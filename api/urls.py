@@ -1,7 +1,8 @@
 from django.urls import register_converter, path
-from api.views import *
-from api.views import documentation
+
 from api.converters import SteamIDConverter
+from api.views import documentation
+from api.views import *
 
 register_converter(SteamIDConverter, 'steamid')
 
@@ -39,5 +40,9 @@ urlpatterns = [
     path('steam/search/<int:i>', steam.search, name='steam.search'),
 
     # different current capabilities of the system
-    path('capabilities/games', capabilities.games, name='capabilities.games')
+    path('capabilities/games', capabilities.games, name='capabilities.games'),
+
+    # mainframe connection
+    path('mainframe/connect', capabilities.games, name='capabilities.games'),
+    # path('mainframe/invite', capabilities.games, name='capabilities.games'),
 ]

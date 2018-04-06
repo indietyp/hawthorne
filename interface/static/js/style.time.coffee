@@ -12,8 +12,8 @@ to_seconds = (dd, hh, mm) ->
   # if (isNaN(m)) m = 0
 
   t = d * 24 * 60 * 60 +
-      h * 60 * 60 +
-      m * 60
+    h * 60 * 60 +
+    m * 60
   return t
 
 # expects 1d 11h 11m, or 1d 11h,
@@ -34,7 +34,7 @@ parseDuration = (sDuration) ->
   hours = 0
   minutes = 0
   if morx.test(sDuration)
-    days += morx.exec(sDuration)[1]*31
+    days += morx.exec(sDuration)[1] * 31
   if mrx.test(sDuration)
     minutes = mrx.exec(sDuration)[1]
   if hrx.test(sDuration)
@@ -42,9 +42,9 @@ parseDuration = (sDuration) ->
   if drx.test(sDuration)
     days += drx.exec(sDuration)[1]
   if wrx.test(sDuration)
-    days += wrx.exec(sDuration)[1]*7
+    days += wrx.exec(sDuration)[1] * 7
   if yrx.test(sDuration)
-    days += yrx.exec(sDuration)[1]*365
+    days += yrx.exec(sDuration)[1] * 365
 
   return to_seconds(days, hours, minutes)
 
@@ -55,9 +55,9 @@ toDurationString = (iDuration) ->
   if iDuration <= 0
     return ''
 
-  m = Math.floor((iDuration/60)%60)
-  h = Math.floor((iDuration/3600)%24)
-  d = Math.floor(iDuration/86400)
+  m = Math.floor((iDuration / 60) % 60)
+  h = Math.floor((iDuration / 3600) % 24)
+  d = Math.floor(iDuration / 86400)
   result = ''
   if d > 0
     result = result + d + 'd '

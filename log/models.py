@@ -1,4 +1,5 @@
 from django.db import models
+
 from core.models import User, BaseModel, Server
 
 
@@ -67,6 +68,3 @@ class UserNamespace(BaseModel):
 
   def __str__(self):
     return "{}".format(self.namespace)
-
-
-import log.signals

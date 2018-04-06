@@ -4,19 +4,18 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
+  dependencies = [
+    ('core', '0028_server_vac'),
+  ]
 
-    dependencies = [
-        ('core', '0028_server_vac'),
-    ]
-
-    operations = [
-        migrations.RenameField(
-            model_name='userlogip',
-            old_name='active',
-            new_name='is_active',
-        ),
-        migrations.AlterUniqueTogether(
-            name='servergroup',
-            unique_together=set(),
-        ),
-    ]
+  operations = [
+    migrations.RenameField(
+      model_name='userlogip',
+      old_name='active',
+      new_name='is_active',
+    ),
+    migrations.AlterUniqueTogether(
+      name='servergroup',
+      unique_together=set(),
+    ),
+  ]

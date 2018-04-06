@@ -2,9 +2,10 @@
 #= require api.edit.coffee
 #= require api.create.coffee
 
-game = (that=null, selected='') ->
+game = (that = null, selected = '') ->
   window.endpoint.api.capabilities.games.get((err, data) ->
     data = data.result
+
 
     if that != null
       formatted = []
@@ -23,7 +24,7 @@ game = (that=null, selected='') ->
   )
   return
 
-server = (query, that=null, selected='') ->
+server = (query, that = null, selected = '') ->
   window.endpoint.api.servers({'query': query}).get((err, data) ->
     data = data.result
 
@@ -48,7 +49,7 @@ server = (query, that=null, selected='') ->
   )
   return
 
-group = (query, that=null, selected='') ->
+group = (query, that = null, selected = '') ->
   window.endpoint.api.roles({'query': query}).get((err, data) ->
     data = data['result']
 

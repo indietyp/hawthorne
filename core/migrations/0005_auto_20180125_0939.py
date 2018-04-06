@@ -4,20 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+  dependencies = [
+    ('core', '0004_token_is_active'),
+  ]
 
-    dependencies = [
-        ('core', '0004_token_is_active'),
-    ]
-
-    operations = [
-        migrations.AddField(
-            model_name='token',
-            name='is_anonymous',
-            field=models.BooleanField(default=False),
-        ),
-        migrations.AddField(
-            model_name='token',
-            name='is_superuse',
-            field=models.BooleanField(default=True),
-        ),
-    ]
+  operations = [
+    migrations.AddField(
+      model_name='token',
+      name='is_anonymous',
+      field=models.BooleanField(default=False),
+    ),
+    migrations.AddField(
+      model_name='token',
+      name='is_superuse',
+      field=models.BooleanField(default=True),
+    ),
+  ]

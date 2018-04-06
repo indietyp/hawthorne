@@ -4,22 +4,21 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
+  dependencies = [
+    ('log', '0004_auto_20180316_2203'),
+  ]
 
-    dependencies = [
-        ('log', '0004_auto_20180316_2203'),
-    ]
-
-    operations = [
-        migrations.AlterModelOptions(
-            name='userip',
-            options={},
-        ),
-        migrations.AlterModelOptions(
-            name='usernamespace',
-            options={},
-        ),
-        migrations.AlterModelOptions(
-            name='useronlinetime',
-            options={},
-        ),
-    ]
+  operations = [
+    migrations.AlterModelOptions(
+      name='userip',
+      options={},
+    ),
+    migrations.AlterModelOptions(
+      name='usernamespace',
+      options={},
+    ),
+    migrations.AlterModelOptions(
+      name='useronlinetime',
+      options={},
+    ),
+  ]

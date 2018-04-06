@@ -348,7 +348,7 @@
   var submit;
 
   submit = function(mode = '', that) {
-    var data, node, now, o, output, payload, server, time, type, user, uuid, value;
+    var data, node, now, o, output, payload, perms, server, time, type, user, uuid, value;
     o = {
       target: that,
       skip_animation: false
@@ -444,12 +444,19 @@
           return data;
         });
       case 'kick':
-        return console.log('placeholder');
+        user = $('input.uuid', node)[0].value;
+        data = {
+          server: $('input.server', node)[0].value
+        };
+        return window.endpoint.api.users[user].kick.put(o, {}, data, function(err, data) {
+          window.ajax.player.user(1);
+          return data;
+        });
       case 'server':
         node = that.parentElement.parentElement.parentElement;
         data = {
           name: $("#inputservername")[0].value,
-          ip: $('#inputip')[0].value.match(/^([0-9]{1,3}\.){3}[0-9]{1,3}/)[0],
+          ip: $('#inputip')[0].value.split(':')[0],
           port: parseInt($('#inputip')[0].value.split(':')[1]),
           password: $('#inputpassword')[0].value,
           game: window.gameinput.getValue(true),
@@ -489,6 +496,25 @@
           $(that).removeClass('green');
           return $(that).addClass('white');
         }, 2500);
+      case 'setting__user':
+        node = that.parentElement.parentElement.parentElement;
+        perms = [];
+        $('.permission__child:checked', node).forEach(function(i) {
+          var cl;
+          cl = i.id;
+          cl = cl.replace(/\s/g, '');
+          cl = cl.split('__');
+          cl = `${cl[0]}.${cl[1]}`;
+          return perms.push(cl);
+        });
+        if ($(".scope__toggle", node).hasClass('activated')) {
+          return console.log('Hi');
+        }
+        break;
+      case 'setting__group':
+        return console.log('placeholder');
+      case 'setting__token':
+        return console.log('placeholder');
       default:
         return console.warning('You little bastard! This is not implemented....');
     }

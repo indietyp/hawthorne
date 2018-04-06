@@ -2,6 +2,8 @@
 - load staticfiles
 
 .row.pure-g(style="width:100%")
+  input.uuid.hidden(type="hidden", value=data.id)
+  input.server.hidden(type="hidden", value=data.server.id)
   .column.icon.username.pure-u-7-24
     .icon-container.flex.center
           .img__circle__container
@@ -26,4 +28,4 @@
         svg.feather(width='24', height='24').red.fill
           circle(cx="12", cy="12", r="12", stroke="none")
     .action
-      i.red(data-feather="slash")
+      i.animated.fancy(onclick="window.api.submit('kick', this)", data-feather="slash")

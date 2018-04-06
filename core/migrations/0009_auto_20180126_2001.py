@@ -4,24 +4,24 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+  dependencies = [
+    ('core', '0008_auto_20180125_0950'),
+  ]
 
-    dependencies = [
-        ('core', '0008_auto_20180125_0950'),
-    ]
-
-    operations = [
-        migrations.AlterModelOptions(
-            name='user',
-            options={'permissions': [('view_user', 'View users'), ('kick_user', 'Kick a user'), ('modify_user', 'Kick a user')]},
-        ),
-        migrations.AlterField(
-            model_name='userlogusername',
-            name='connections',
-            field=models.IntegerField(default=0),
-        ),
-        migrations.AlterField(
-            model_name='userlogusername',
-            name='last_used',
-            field=models.DateTimeField(auto_now=True),
-        ),
-    ]
+  operations = [
+    migrations.AlterModelOptions(
+      name='user',
+      options={'permissions': [('view_user', 'View users'), ('kick_user', 'Kick a user'),
+                               ('modify_user', 'Kick a user')]},
+    ),
+    migrations.AlterField(
+      model_name='userlogusername',
+      name='connections',
+      field=models.IntegerField(default=0),
+    ),
+    migrations.AlterField(
+      model_name='userlogusername',
+      name='last_used',
+      field=models.DateTimeField(auto_now=True),
+    ),
+  ]

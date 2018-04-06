@@ -4,20 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+  dependencies = [
+    ('core', '0014_auto_20180131_1238'),
+  ]
 
-    dependencies = [
-        ('core', '0014_auto_20180131_1238'),
-    ]
-
-    operations = [
-        migrations.RemoveField(
-            model_name='servergroup',
-            name='immunity',
-        ),
-        migrations.AddField(
-            model_name='servergroup',
-            name='amunity',
-            field=models.PositiveSmallIntegerField(default=0),
-            preserve_default=False,
-        ),
-    ]
+  operations = [
+    migrations.RemoveField(
+      model_name='servergroup',
+      name='immunity',
+    ),
+    migrations.AddField(
+      model_name='servergroup',
+      name='amunity',
+      field=models.PositiveSmallIntegerField(default=0),
+      preserve_default=False,
+    ),
+  ]

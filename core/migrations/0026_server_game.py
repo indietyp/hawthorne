@@ -4,16 +4,16 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+  dependencies = [
+    ('core', '0025_auto_20180211_2357'),
+  ]
 
-    dependencies = [
-        ('core', '0025_auto_20180211_2357'),
-    ]
-
-    operations = [
-        migrations.AddField(
-            model_name='server',
-            name='game',
-            field=models.CharField(choices=[('csgo', 'Counter-Strike: Global Offensive')], default='csgo', max_length=255),
-            preserve_default=False,
-        ),
-    ]
+  operations = [
+    migrations.AddField(
+      model_name='server',
+      name='game',
+      field=models.CharField(choices=[('csgo', 'Counter-Strike: Global Offensive')], default='csgo',
+                             max_length=255),
+      preserve_default=False,
+    ),
+  ]

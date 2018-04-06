@@ -1,10 +1,14 @@
+"""API interface for server roles"""
+
 import datetime
-from core.models import User, Server, ServerGroup, ServerPermission, Membership
+
 from django.forms.models import model_to_dict
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+
 from core.decorators.api import json_response, validation
 from core.decorators.auth import authentication_required, permission_required
-from django.views.decorators.http import require_http_methods
+from core.models import User, Server, ServerGroup, ServerPermission, Membership
 
 
 @csrf_exempt

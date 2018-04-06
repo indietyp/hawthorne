@@ -1,32 +1,34 @@
-from core.decorators.api import json_response
-from django.views.decorators.http import require_http_methods
-from copy import deepcopy
 import os
+from copy import deepcopy
+
+from django.views.decorators.http import require_http_methods
+
+from core.decorators.api import json_response
 
 
 def walk(d, scope, answer=None, so_far=None):
-    if so_far is None:
-        so_far = []
+  if so_far is None:
+    so_far = []
 
-    if answer is None:
-        answer = []
+  if answer is None:
+    answer = []
 
-    for k, v in d.items():
-        if k == scope:
-            answer.append(so_far + [k])
-        if isinstance(v, dict):
-            walk(v, scope, answer, so_far + [k])
+  for k, v in d.items():
+    if k == scope:
+      answer.append(so_far + [k])
+    if isinstance(v, dict):
+      walk(v, scope, answer, so_far + [k])
 
-    return answer
+  return answer
 
 
 def delete_key(d, scope):
-    for path in walk(d, scope):
-        dd = d
-        while len(path) > 1:
-            dd = dd[path[0]]
-            path.pop(0)
-        dd.pop(path[0])
+  for path in walk(d, scope):
+    dd = d
+    while len(path) > 1:
+      dd = dd[path[0]]
+      path.pop(0)
+    dd.pop(path[0])
 
 
 __all__ = []

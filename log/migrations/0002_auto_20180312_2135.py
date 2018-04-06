@@ -5,16 +5,15 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
+  dependencies = [
+    ('core', '0046_auto_20180312_2134'),
+    migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+    ('log', '0001_initial'),
+  ]
 
-    dependencies = [
-        ('core', '0046_auto_20180312_2134'),
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('log', '0001_initial'),
-    ]
-
-    operations = [
-        migrations.RenameModel(
-            old_name='UserUsetime',
-            new_name='UserOnlineTime',
-        ),
-    ]
+  operations = [
+    migrations.RenameModel(
+      old_name='UserUsetime',
+      new_name='UserOnlineTime',
+    ),
+  ]

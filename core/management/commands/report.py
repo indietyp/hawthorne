@@ -1,11 +1,12 @@
-from django.core.management.base import BaseCommand
-from django.conf import settings
-from configparser import ConfigParser
-import sys
-import platform
 import os
+import platform
+import sys
+
 import requests
-import json
+from django.conf import settings
+from django.core.management.base import BaseCommand
+
+from lib.mainframe import Mainframe
 
 
 class Command(BaseCommand):
@@ -31,42 +32,23 @@ class Command(BaseCommand):
     return ''.join(result[-lines:])
 
   def handle(self, *args, **options):
-    config = ConfigParser()
-    file = '{}/panel/mainframe.ini'.format(settings.BASE_DIR)
-    register = False
+    with Mainframe() as mainframe:
+      uname = platform.uname()
+      with open(settings.LOGGING['handlers']['file']['filename'], 'r') as log:
+        traceback = self.tail(log, 100)
 
-    if os.path.exists(file):
-      config.read(file)
-
-      if settings.MAINFRAME not in config.sections():
-        register = True
-    else:
-      register = True
-
-    if register:
-      r = requests.get('https://api.ipify.org?format=json')
-      r = requests.put("https://{}/api/v1/instance".format(settings.MAINFRAME), json=r.json())
-      config[settings.MAINFRAME] = {}
-      config[settings.MAINFRAME]['ID'] = r.json()['result']['id']
-
-      with open(file, 'w') as configfile:
-        config.write(configfile)
-
-    uname = platform.uname()
-    with open(settings.LOGGING['handlers']['file']['filename'], 'r') as log:
-      traceback = self.tail(log, 100)
-
-    payload = {
+      payload = {
         'path': sys.path,
         'version': platform.python_version(),
         'system': {x: uname.__getattribute__(x) for x in uname._fields},
         'distro': '-'.join(platform.linux_distribution()),
         'log': traceback,
         'directory': settings.BASE_DIR
-    }
+      }
+      response = requests.put("https://{}/api/v1/instance/{}/report".format(settings.MAINFRAME, mainframe().id),
+                              json=payload)
+      identifier = response.json()['result']['id']
 
-    response = requests.put("https://{}/api/v1/instance/{}/report".format(settings.MAINFRAME, config[settings.MAINFRAME]['ID']), json=payload)
-    identifier = response.json()['result']['id']
-
-    self.stdout.write(self.style.SUCCESS('When talking to the maintainer indietyp, please use this ID to identify your ticket:'))
-    self.stdout.write(identifier)
+      self.stdout.write(self.style.SUCCESS(
+        'When talking to the maintainer indietyp, please use this ID to identify your ticket:'))
+      self.stdout.write(identifier)

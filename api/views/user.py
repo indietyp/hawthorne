@@ -1,15 +1,20 @@
-import re
+"""API module for users"""
+
 import datetime
-from django.utils import timezone
+import re
+
+from django.contrib.auth.models import Group, Permission
 from django.db.models import F, Q
-from django.contrib.auth.models import Group
-from rcon.sourcemod import SourcemodPluginWrapper
-from core.lib.steam import populate as steam_populate
+from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
-from core.decorators.api import json_response, validation
 from django.views.decorators.http import require_http_methods
+
+from core.decorators.api import json_response, validation
 from core.decorators.auth import authentication_required, permission_required
+from core.lib.steam import populate as steam_populate
 from core.models import User, Country, Server, ServerGroup, Ban, Mutegag, Membership
+from lib.mainframe import Mainframe
+from lib.sourcemod import SourcemodPluginWrapper
 
 
 @csrf_exempt
@@ -24,9 +29,9 @@ def list(request, validated=[], *args, **kwargs):
     limit = validated['limit']
     offset = validated['offset']
 
-    selected = User.objects.annotate(steamid=F('username'), name=F('namespace'), has_panel_access=F('is_staff'))\
-                           .values('id', 'name', 'steamid', 'profile', 'has_panel_access')\
-                           .filter(username__contains=validated['match'])
+    selected = User.objects.annotate(steamid=F('username'), name=F('namespace'), has_panel_access=F('is_staff')) \
+      .values('id', 'name', 'steamid', 'profile', 'has_panel_access') \
+      .filter(username__contains=validated['match'])
 
     if validated['has_panel_access'] is not None:
       selected = selected.filter(has_panel_access=validated['has_panel_access'])
@@ -53,6 +58,29 @@ def list(request, validated=[], *args, **kwargs):
     elif validated['id'] is not None:
       user = User.objects.get(id=validated['id'])
       update = True
+
+    elif validated['local']:
+      user = User.objects.create_user(username=validated['email'])
+      user.email = validated['email']
+      user.is_steam = False
+
+      with Mainframe() as mainframe:
+        mainframe.invite(request, user)
+
+    if validated['internal']:
+      user.is_active = True
+      user.is_staff = False
+
+      perms = []
+      for perm in validated['permissions']:
+        perm = perm.split('.')
+        for p in Permission.objects.filter(name=perm[1], content_type__app_label=perm[0]):
+          perms.append(p)
+
+      user.user_permissions.set(*perms)
+
+      for group in Group.objects.filter(name__in=validated['groups']):
+        user.groups.add(group)
 
     if validated['country'] is not None and len(validated['country']) == 2:
       country = validated['country'].upper()
@@ -82,6 +110,8 @@ def list(request, validated=[], *args, **kwargs):
 
     if update:
       return {'info': 'updated user', 'id': user.id}
+    elif not update and validated['local']:
+      return {'info': 'created panel accessible user', 'id': user.id}
     else:
       return {'info': 'created non panel accessible user', 'id': user.id}
 
@@ -261,7 +291,7 @@ def ban(request, u=None, validated={}, *args, **kwargs):
       bans = bans.filter(resolved=validated['resolved'])
 
     return [b for b in bans.annotate(admin=F('created_by__namespace'))
-                           .values('user', 'server', 'created_at', 'reason', 'resolved', 'created_by', 'length', 'admin')], 200
+      .values('user', 'server', 'created_at', 'reason', 'resolved', 'created_by', 'length', 'admin')], 200
 
   elif request.method == 'POST':
     try:
@@ -332,7 +362,8 @@ def mutegag(request, u=None, validated={}, *args, **kwargs):
     if validated['resolved'] is not None:
       mutegags.filter(resolved=validated['resolved'])
 
-    return [m for m in mutegags.values('user', 'created_by', 'created_at', 'reason', 'length', 'resolved', 'type', 'updated_by', 'updated_at')]
+    return [m for m in mutegags.values('user', 'created_by', 'created_at', 'reason', 'length', 'resolved', 'type',
+                                       'updated_by', 'updated_at')]
 
   elif request.method == 'POST':
     if 'server' in validated:
@@ -386,7 +417,8 @@ def mutegag(request, u=None, validated={}, *args, **kwargs):
     if validated['type'] == 'both':
       mutegag_type = 'BO'
 
-    mutegag = Mutegag(user=user, server=server, reason=validated['reason'], length=length, type=mutegag_type, created_by=request.user)
+    mutegag = Mutegag(user=user, server=server, reason=validated['reason'], length=length, type=mutegag_type,
+                      created_by=request.user)
     mutegag.save()
 
     SourcemodPluginWrapper(server).mutegag(mutegag)
@@ -411,11 +443,11 @@ def kick(request, u=None, validated={}, *args, **kwargs):
   try:
     user = User.objects.get(id=u)
   except Exception:
-    return 'user not found', 500
+    return 'user not found', 403
 
   try:
     server = Server.objects.get(id=validated['server'])
   except Exception:
-    return 'server not found', 500
+    return 'server not found', 403
 
   return SourcemodPluginWrapper(server).kick(user=user)

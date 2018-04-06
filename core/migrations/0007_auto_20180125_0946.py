@@ -4,20 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+  dependencies = [
+    ('core', '0006_auto_20180125_0939'),
+  ]
 
-    dependencies = [
-        ('core', '0006_auto_20180125_0939'),
-    ]
-
-    operations = [
-        migrations.RenameField(
-            model_name='token',
-            old_name='permissions',
-            new_name='user_permissions',
-        ),
-        migrations.AlterField(
-            model_name='token',
-            name='is_superuser',
-            field=models.BooleanField(default=False),
-        ),
-    ]
+  operations = [
+    migrations.RenameField(
+      model_name='token',
+      old_name='permissions',
+      new_name='user_permissions',
+    ),
+    migrations.AlterField(
+      model_name='token',
+      name='is_superuser',
+      field=models.BooleanField(default=False),
+    ),
+  ]

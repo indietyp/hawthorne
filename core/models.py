@@ -1,6 +1,7 @@
 import uuid
-from django.db import models
+
 from django.contrib.auth.models import AbstractUser, Permission
+from django.db import models
 
 
 class BaseModel(models.Model):
@@ -72,12 +73,12 @@ class Token(BaseModel):
     verbose_name_plural = 'tokens'
 
     permissions = [
-        ('view_token', 'Can view token'),
+      ('view_token', 'Can view token'),
     ]
 
   def has_perm(self, perm, obj=None):
     if self.is_active and self.is_supertoken:
-        return True
+      return True
 
     perm = perm.split('.')
 
@@ -215,7 +216,7 @@ class ServerGroup(BaseModel):
     verbose_name = 'server role'
     verbose_name_plural = 'server roles'
     permissions = [
-        ('view_servergroup', 'Can view server role'),
+      ('view_servergroup', 'Can view server role'),
     ]
 
   def __str__(self):
@@ -229,7 +230,7 @@ class Server(BaseModel):
   password = models.CharField(max_length=255)
 
   SUPPORTED = (
-      ('csgo', 'Counter-Strike: Global Offensive'),
+    ('csgo', 'Counter-Strike: Global Offensive'),
   )
   game = models.CharField(max_length=255, choices=SUPPORTED)
   mode = models.CharField(max_length=255, null=True)
@@ -239,8 +240,8 @@ class Server(BaseModel):
     unique_together = (('ip', 'port'),)
 
     permissions = [
-        ('view_server', 'Can view server'),
-        ('execute_server', 'Can execute command'),
+      ('view_server', 'Can view server'),
+      ('execute_server', 'Can execute command'),
     ]
 
   def __str__(self):
@@ -260,7 +261,7 @@ class Ban(BaseModel):
 
   class Meta:
     permissions = [
-        ('view_ban', 'Can view ban'),
+      ('view_ban', 'Can view ban'),
     ]
 
     unique_together = ('user', 'server')
@@ -277,9 +278,9 @@ class Mutegag(BaseModel):
   updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='mutegag_updated_by', null=True)
 
   MUTEGAG_CHOICES = (
-      ('MU', 'mute'),
-      ('GA', 'gag'),
-      ('BO', 'both')
+    ('MU', 'mute'),
+    ('GA', 'gag'),
+    ('BO', 'both')
   )
   type = models.CharField(max_length=2, choices=MUTEGAG_CHOICES, default='MU')
 
@@ -292,10 +293,10 @@ class Mutegag(BaseModel):
     verbose_name_plural = 'mutes & gags'
 
     permissions = [
-        ('view_mutegag', 'Can view mute & gag'),
+      ('view_mutegag', 'Can view mute & gag'),
 
-        ('add_mutegag_mute', 'Can add mute'),
-        ('add_mutegag_gag', 'Can add gag'),
+      ('add_mutegag_mute', 'Can add mute'),
+      ('add_mutegag_gag', 'Can add gag'),
     ]
 
     unique_together = ('user', 'server')

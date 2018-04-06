@@ -1,13 +1,17 @@
+"""API interface for servers"""
+
 import socket
+
 import valve.rcon
-from core.models import Server
-from rcon.base import RCONBase
-from rcon.sourcemod import SourcemodPluginWrapper
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+
 from core.decorators.api import json_response, validation
 from core.decorators.auth import authentication_required, permission_required
-from django.views.decorators.http import require_http_methods
-from django.utils.translation import gettext_lazy as _
+from core.models import Server
+from lib.base import RCONBase
+from lib.sourcemod import SourcemodPluginWrapper
 
 
 @csrf_exempt

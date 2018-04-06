@@ -4,19 +4,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+  dependencies = [
+    ('core', '0009_auto_20180126_2001'),
+  ]
 
-    dependencies = [
-        ('core', '0009_auto_20180126_2001'),
-    ]
-
-    operations = [
-        migrations.RemoveField(
-            model_name='user',
-            name='steamid',
-        ),
-        migrations.AddField(
-            model_name='user',
-            name='ingame',
-            field=models.CharField(max_length=255, null=True),
-        ),
-    ]
+  operations = [
+    migrations.RemoveField(
+      model_name='user',
+      name='steamid',
+    ),
+    migrations.AddField(
+      model_name='user',
+      name='ingame',
+      field=models.CharField(max_length=255, null=True),
+    ),
+  ]

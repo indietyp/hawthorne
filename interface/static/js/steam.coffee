@@ -1,4 +1,4 @@
-search = (query, that=null, internal=false) ->
+search = (query, that = null, internal = false) ->
   ts = new Date().getTime()
   window.cache.steam =
     _ts: ts

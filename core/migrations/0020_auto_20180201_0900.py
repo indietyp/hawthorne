@@ -4,14 +4,14 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
+  dependencies = [
+    ('core', '0019_auto_20180201_0858'),
+  ]
 
-    dependencies = [
-        ('core', '0019_auto_20180201_0858'),
-    ]
-
-    operations = [
-        migrations.AlterModelOptions(
-            name='user',
-            options={'permissions': [('view_user', 'Can view users'), ('kick_user', 'Can kick a user'), ('view_group', 'Can view a user group')]},
-        ),
-    ]
+  operations = [
+    migrations.AlterModelOptions(
+      name='user',
+      options={'permissions': [('view_user', 'Can view users'), ('kick_user', 'Can kick a user'),
+                               ('view_group', 'Can view a user group')]},
+    ),
+  ]

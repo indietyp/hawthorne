@@ -1,13 +1,15 @@
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-from core.models import Server, ServerGroup, User
-from log.models import UserOnlineTime, ServerChat
-from automated_logging.models import Model as LogModel
-from django.db.models.functions import Cast
 import datetime
-from django.db.models import DateField, Count, Q
+
+from automated_logging.models import Model as LogModel
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import DateField, Count, Q
+from django.db.models.functions import Cast
+from django.shortcuts import render
+
+from core.models import Server, ServerGroup, User
+from log.models import UserOnlineTime, ServerChat
 
 
 def login(request):
@@ -16,13 +18,13 @@ def login(request):
 
 @login_required(login_url='/login')
 def home(request):
-  query = UserOnlineTime.objects.annotate(date=Cast('disconnected', DateField()))\
-                                .values('user')\
-                                .annotate(active=Count('user', distinct=True))
+  query = UserOnlineTime.objects.annotate(date=Cast('disconnected', DateField())) \
+    .values('user') \
+    .annotate(active=Count('user', distinct=True))
 
   last30 = query.filter(date__gte=datetime.date.today() - datetime.timedelta(days=30))
-  prev30 = query.filter(date__gte=datetime.date.today() - datetime.timedelta(days=60))\
-                .filter(date__lte=datetime.date.today() - datetime.timedelta(days=30))
+  prev30 = query.filter(date__gte=datetime.date.today() - datetime.timedelta(days=60)) \
+    .filter(date__lte=datetime.date.today() - datetime.timedelta(days=30))
 
   recent = last30.count()
   alltime = query.count()
@@ -39,13 +41,13 @@ def home(request):
              'roles': ServerGroup.objects.all().count(),
              'mem_roles': User.objects.filter(Q(roles__isnull=False) | Q(is_superuser=True)).count(),
              'messages': ServerChat.objects.filter(command=False)
-                                           .annotate(date=Cast('created_at', DateField()))
-                                           .filter(date__gte=datetime.date.today() - datetime.timedelta(days=30))
-                                           .count(),
+               .annotate(date=Cast('created_at', DateField()))
+               .filter(date__gte=datetime.date.today() - datetime.timedelta(days=30))
+               .count(),
              'actions': LogModel.objects.filter(user__isnull=False)
-                                      .annotate(date=Cast('created_at', DateField()))
-                                      .filter(date__gte=datetime.date.today() - datetime.timedelta(days=30))
-                                      .count()
+               .annotate(date=Cast('created_at', DateField()))
+               .filter(date__gte=datetime.date.today() - datetime.timedelta(days=30))
+               .count()
              }
   return render(request, 'components/home.pug', payload)
 
@@ -62,7 +64,8 @@ def admin(request):
 
 @login_required(login_url='/login')
 def server(request):
-  return render(request, 'components/server.pug', {'supported': [{'label': x[1], 'value': x[0]} for x in Server.SUPPORTED]})
+  return render(request, 'components/server.pug',
+                {'supported': [{'label': x[1], 'value': x[0]} for x in Server.SUPPORTED]})
 
 
 @login_required(login_url='/login')
@@ -87,7 +90,8 @@ def chat(request):
 
 @login_required(login_url='/login')
 def settings(request):
-  modules = [c for c in ContentType.objects.filter(app_label__in=['core', 'log']) if Permission.objects.filter(content_type=c).count() > 0]
+  modules = [c for c in ContentType.objects.filter(app_label__in=['core', 'log']) if
+             Permission.objects.filter(content_type=c).count() > 0]
   perms = Permission.objects.all().order_by('content_type__model')
 
   return render(request, 'components/settings.pug', {'simple': modules, 'advanced': perms})

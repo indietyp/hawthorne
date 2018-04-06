@@ -1,6 +1,7 @@
-from django.utils import translation
-from django.conf import settings
 import logging
+
+from django.conf import settings
+from django.utils import translation
 
 logger = logging.getLogger(__name__)
 

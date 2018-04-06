@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+  dependencies = [
+    ('core', '0030_auto_20180226_0900'),
+  ]
 
-    dependencies = [
-        ('core', '0030_auto_20180226_0900'),
-    ]
-
-    operations = [
-        migrations.AddField(
-            model_name='token',
-            name='due',
-            field=models.DateTimeField(null=True),
-        ),
-    ]
+  operations = [
+    migrations.AddField(
+      model_name='token',
+      name='due',
+      field=models.DateTimeField(null=True),
+    ),
+  ]

@@ -1,4 +1,4 @@
-save = (mode='', that) ->
+save = (mode = '', that) ->
   o =
     target: that
     skip_animation: false
@@ -121,9 +121,9 @@ save = (mode='', that) ->
 
   return
 
-edit = (mode='', that) ->
+edit = (mode = '', that) ->
   if that.getAttribute('class').match /save/
-    # this is for the actual process of saving
+# this is for the actual process of saving
     save mode, that
     return
 
@@ -282,7 +282,7 @@ edit = (mode='', that) ->
 
     # we need this timeout so that the transition can be applied properly
     # i know this is not the perfect way, but it is still better than twilight
-    setTimeout( ->
+    setTimeout(->
       transition.setAttribute 'onclick', trigger
       $(transition).css('opacity', '1')
     , 300)

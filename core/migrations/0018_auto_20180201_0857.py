@@ -4,34 +4,39 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
+  dependencies = [
+    ('core', '0017_auto_20180201_0857'),
+  ]
 
-    dependencies = [
-        ('core', '0017_auto_20180201_0857'),
-    ]
-
-    operations = [
-        migrations.AlterModelOptions(
-            name='ban',
-            options={'permissions': [('view_ban', 'Can view a bans'), ('modify_ban', 'Can edit a ban')]},
-        ),
-        migrations.AlterModelOptions(
-            name='mutegag',
-            options={'permissions': [('view_mutegag', 'Can view a mutegag'), ('add_mutegag_mute', 'Can add a mutegag mute'), ('add_mutegag_gag', 'Can add a mutegag gag'), ('modify_mutegag', 'Can edit a mutegag')]},
-        ),
-        migrations.AlterModelOptions(
-            name='server',
-            options={'permissions': [('view_server', 'Can view a server'), ('modify_server', 'Can edit a server')]},
-        ),
-        migrations.AlterModelOptions(
-            name='servergroup',
-            options={'permissions': [('view_servergroup', 'Can view server groups'), ('modify_servergroup', 'Can edit server groups')]},
-        ),
-        migrations.AlterModelOptions(
-            name='serverrole',
-            options={'permissions': [('view_serverrole', 'Can view a server role'), ('modify_serverrole', 'Can edit server role')]},
-        ),
-        migrations.AlterModelOptions(
-            name='user',
-            options={'permissions': [('view_user', 'Can view users'), ('kick_user', 'Can kick a user'), ('modify_user', 'Can edit a user')]},
-        ),
-    ]
+  operations = [
+    migrations.AlterModelOptions(
+      name='ban',
+      options={'permissions': [('view_ban', 'Can view a bans'), ('modify_ban', 'Can edit a ban')]},
+    ),
+    migrations.AlterModelOptions(
+      name='mutegag',
+      options={
+        'permissions': [('view_mutegag', 'Can view a mutegag'), ('add_mutegag_mute', 'Can add a mutegag mute'),
+                        ('add_mutegag_gag', 'Can add a mutegag gag'),
+                        ('modify_mutegag', 'Can edit a mutegag')]},
+    ),
+    migrations.AlterModelOptions(
+      name='server',
+      options={'permissions': [('view_server', 'Can view a server'), ('modify_server', 'Can edit a server')]},
+    ),
+    migrations.AlterModelOptions(
+      name='servergroup',
+      options={'permissions': [('view_servergroup', 'Can view server groups'),
+                               ('modify_servergroup', 'Can edit server groups')]},
+    ),
+    migrations.AlterModelOptions(
+      name='serverrole',
+      options={'permissions': [('view_serverrole', 'Can view a server role'),
+                               ('modify_serverrole', 'Can edit server role')]},
+    ),
+    migrations.AlterModelOptions(
+      name='user',
+      options={'permissions': [('view_user', 'Can view users'), ('kick_user', 'Can kick a user'),
+                               ('modify_user', 'Can edit a user')]},
+    ),
+  ]

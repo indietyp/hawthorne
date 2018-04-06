@@ -1,97 +1,72 @@
 // TODO: TESTING
 void MuteGag_OnPluginStart() {
-  //Get file locations
-  BuildPath(Path_SM, MUTE_REASONS,    sizeof(MUTE_REASONS),     "configs/hawthorne/mute-reasons.txt");
-  BuildPath(Path_SM, GAG_REASONS,     sizeof(GAG_REASONS),      "configs/hawthorne/gag-reasons.txt");
-  BuildPath(Path_SM, SILENCE_REASONS, sizeof(SILENCE_REASONS),  "configs/hawthorne/silence-reasons.txt");
-  BuildPath(Path_SM, PUNISHMENT_TIMES, sizeof(PUNISHMENT_TIMES),  "configs/hawthorne/punishment-times.txt");
+  BuildPath(Path_SM, MUTE_REASONS,      sizeof(MUTE_REASONS),      "configs/hawthorne/mute-reasons.txt");
+  BuildPath(Path_SM, GAG_REASONS,       sizeof(GAG_REASONS),       "configs/hawthorne/gag-reasons.txt");
+  BuildPath(Path_SM, SILENCE_REASONS,   sizeof(SILENCE_REASONS),   "configs/hawthorne/silence-reasons.txt");
+  BuildPath(Path_SM, PUNISHMENT_TIMES,  sizeof(PUNISHMENT_TIMES),  "configs/hawthorne/punishment-times.txt");
 
-  //Create array lists
   UpdateConfigs();
 }
 
 public Action CMD_PermaMuteGag(int client, int args) {
+  if (MODULE_MUTEGAG.IntValue == 0 || StrEqual(SERVER, "")) return;
 
-  if(MODULE_MUTEGAG.IntValue == 1 && !StrEqual(SERVER, "")) {
+  // get what command player is trying to execute
+  char command[50];
+  GetCmdArg(0, command, sizeof(command));
+  ReplaceString(command, sizeof(command), "p", "");
 
-    // get what command player is trying to execute
-    char command[50], command3[50];
-    GetCmdArg(0, command, sizeof(command));
-    command3 = command;
-    ReplaceString(command, sizeof(command), "p", "");
+  // get command type
+  int type = GetCommandType(command);
+  iLastCommandType[client] = type;
+  if (type == -1) return Plugin_Handled;
 
-    // get command type
-    int type = GetCommandType(command);
-    iLastCommandType[client] = type;
-    if(type == -1)
-          return Plugin_Handled;
+  LAST_COMMAND[client] = command;
+  ReplaceString(command, sizeof(command), "sm_", "!");
 
-    // replace sm_ with !
-    char command2[50];
-    command2 = command3;
-    LAST_COMMAND[client] = command3;
-    ReplaceString(command2, sizeof(command2), "sm_", "!");
+  if (args < 1) {
+    // Show menu with all players
+    Menu menu = new Menu(MenuHandler_TargetSelected);
 
-    // check if enogh arguments are entered
-    if (args < 1) {
+    menu.SetTitle("Please select a player:");
 
-      //Show menu with all players
-      Menu menu = new Menu(MenuHandler_TargetSelected);
-      menu.SetTitle("Select player");
-      AddPeopleToMenu(menu);
-      menu.ExitButton = true;
-      menu.Display(client, 20);
+    AddPeopleToMenu(menu);
+    menu.ExitButton = true;
+    menu.Display(client, 20);
 
-
-      ReplyToCommand(client, "%s %s <player> %s", PREFIX, command2, (type <= TYPE_SILENCE) ? "[reason]" : "");
-      return Plugin_Handled;
-      }
-
-      //Get target/s
-    char tname[MAX_TARGET_LENGTH], cTarget[50];
-    int tlist[MAXPLAYERS], tcount;
-    bool tn_is_ml;
-    GetCmdArg(1, cTarget, sizeof(cTarget));
-    if ((tcount = ProcessTargetString(cTarget, client, tlist, MAXPLAYERS, COMMAND_FILTER_NO_BOTS, tname, sizeof(tname), tn_is_ml)) <= 0) {
-      ReplyToCommand(client, "%sPlayer not found!", PREFIX);
-      return Plugin_Handled;
-    }
-
-
-    //Check if there are multiple targets
-    if(tcount > 1) {
-
-      PrintToChat(client, "%sYou can only target one player with using this command!", PREFIX);
-      return Plugin_Handled;
-
-    }
-
-
-    //Save admins last target ID
-    last_target[client] = (client > 0) ? CLIENTS[tlist[0]] : "";
-
-
-    //If mute/gag/silence
-    if(type < 3) {
-
-      if(args < 2)
-        ShowReasonMenu(client);
-      else {
-
-        //Get all arguments
-        char cReason[150];
-        GetCmdArg(2, cReason, sizeof(cReason));
-        APIMuteGag(client, last_target[client], type, cReason, 0);
-
-      }
-
-    }
-
-
+    ReplyToCommand(client, "%s %s <player> %s", PREFIX, command, (type <= TYPE_SILENCE) ? "[reason]" : "");
+    return Plugin_Handled;
   }
 
+  // get target(s)
+  char tname[MAX_TARGET_LENGTH], cTarget[50];
+  int tlist[MAXPLAYERS], tcount;
+  bool tn_is_ml;
+  GetCmdArg(1, cTarget, sizeof(cTarget));
+  if ((tcount = ProcessTargetString(cTarget, client, tlist, MAXPLAYERS, COMMAND_FILTER_NO_BOTS, tname, sizeof(tname), tn_is_ml)) <= 0) {
+    ReplyToCommand(client, "%sPlayer not found!", PREFIX);
+    return Plugin_Handled;
+  }
 
+  // abort if multiple selected
+  if (tcount > 1) {
+    PrintToChat(client, "%sYou can only target one player with using this command!", PREFIX);
+    return Plugin_Handled;
+  }
 
+  // save admins last target ID
+  last_target[client] = (client > 0) ? CLIENTS[tlist[0]] : "";
+
+  // if either mute/gag/silence
+  if(type < 3) {
+    if(args < 2) {
+      ShowReasonMenu(client);
+    } else {
+      char reason[150];
+      GetCmdArg(2, reason, sizeof(reason));
+      APIMuteGag(client, last_target[client], type, reason, 0);
+    }
+  }
   return Plugin_Handled;
 }
 
@@ -665,8 +640,7 @@ void MuteGagAlertAll(bool positive, char[] message, any:...) {
 }
 
 
-stock int ConverTimeToMinutes(char[] time, int size)
-{
+stock int ConverTimeToMinutes(char[] time, int size) {
   //If just casual date is entered
   if(StrContains(time, "d") == -1 && StrContains(time, "h") == -1 && StrContains(time, "m") == -1)
     return StringToInt(time);
@@ -691,12 +665,9 @@ stock int ConverTimeToMinutes(char[] time, int size)
     iminutes = (StringToInt(minutes)) * 60;
   }
   return RoundToFloor((idays + ihours + iminutes) / 60.0);
-
 }
 
-void PerformMuteGag(int client, int type, bool b)
-{
-
+void PerformMuteGag(int client, int type, bool b) {
   if(type == TYPE_GAG || type == TYPE_UNGAG)
     BaseComm_SetClientGag(client, b);
   else if(type == TYPE_MUTE || type == TYPE_UNMUTE)
@@ -707,8 +678,7 @@ void PerformMuteGag(int client, int type, bool b)
   }
 }
 
-int GetCommandType(const char[] command)
-{
+int GetCommandType(const char[] command) {
   if (StrEqual(command, "sm_gag", false))
     return TYPE_GAG;
   else if (StrEqual(command, "sm_mute", false))

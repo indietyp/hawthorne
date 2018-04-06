@@ -50,7 +50,7 @@
 
     .row.add.pure-g
       .column.icon.pure-u-3-24(onclick="window.style.settings.type(this)")
-        i(data-feather='toggle-left')
+        i.scope__toggle(data-feather='toggle-left')
         span Steam
       .column.icon.username.pure-u-9-24.switch-container
         select#username-input
@@ -75,7 +75,8 @@
       .column.icon.pure-u-3-24(style="align-items:flex-start")
         .spacer
         .action
-          i.animated.fancy(onclick="window.api.submit('user', this)", data-feather="plus")
+          i.animated.fancy(onclick="window.api.submit('setting__user', this)", data-feather="plus")
+
       script.execution.
         var usernameinput = new Choices('#username-input', {
           searchChoices: false,
@@ -147,7 +148,7 @@
       .column.icon.pure-u-3-24(style="align-items:flex-start")
         .spacer
         .action
-          i.animated.fancy(onclick="window.api.submit('user', this)", data-feather="plus")
+          i.animated.fancy(onclick="window.api.submit('setting__group', this)", data-feather="plus")
 
   .item.pure-u-1-1.second
     .heading API Tokens

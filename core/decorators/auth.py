@@ -1,12 +1,14 @@
-from functools import wraps
-from core.models import Token
-from api.validation import validation as valid_dict
-from django.utils import timezone
-from binascii import hexlify
 from base64 import b85decode
+from binascii import hexlify
+from functools import wraps
 from uuid import UUID
+
 from django.conf import settings
+from django.utils import timezone
 from hashids import Hashids as Hasher
+
+from api.validation import validation as valid_dict
+from core.models import Token
 
 
 def token_retrieve(request):
@@ -46,6 +48,7 @@ def authentication_required(f):
       return 'Authentication of User failed', 401
 
     return f(request, *args, **kwargs)
+
   return wrapper
 
 
@@ -76,5 +79,7 @@ def permission_required(a):
         return 'Insufficient Permissions', 403
 
       return f(request, *args, **kwargs)
+
     return wrapper
+
   return argument_decorator

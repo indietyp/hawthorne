@@ -1,4 +1,4 @@
-remove = (mode='', that) ->
+remove = (mode = '', that) ->
   trans = $(that)
 
   if not trans.hasClass 'confirmation'

@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+
 from core.models import User
 
 
@@ -8,10 +9,10 @@ class Command(BaseCommand):
   def add_arguments(self, parser):
     # parser.add_argument('poll_id', nargs='+', type=int)
     parser.add_argument(
-        '--steamid',
-        action='store',
-        dest='steam',
-        help='creates a local superuser account - using steam',
+      '--steamid',
+      action='store',
+      dest='steam',
+      help='creates a local superuser account - using steam',
     )
 
   def handle(self, *args, **options):

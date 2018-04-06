@@ -1,7 +1,8 @@
 from django.contrib.auth.decorators import login_required, permission_required
-from log.models import ServerChat
 from django.views.decorators.http import require_http_methods
+
 from ajax.views import renderer
+from log.models import ServerChat
 
 
 @login_required(login_url='/login')

@@ -1,8 +1,9 @@
-from django.template.defaulttags import register
-from django.conf import settings
 import datetime
+
 import natural.date
+from django.conf import settings
 from django.template.defaultfilters import date
+from django.template.defaulttags import register
 
 
 @register.filter

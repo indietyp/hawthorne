@@ -4,19 +4,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+  dependencies = [
+    ('core', '0023_auto_20180205_1104'),
+  ]
 
-    dependencies = [
-        ('core', '0023_auto_20180205_1104'),
-    ]
-
-    operations = [
-        migrations.AlterModelOptions(
-            name='server',
-            options={'permissions': [('view_server', 'Can view a server'), ('execute_server', 'Can view a server')]},
-        ),
-        migrations.AddField(
-            model_name='user',
-            name='online',
-            field=models.BooleanField(default=False),
-        ),
-    ]
+  operations = [
+    migrations.AlterModelOptions(
+      name='server',
+      options={'permissions': [('view_server', 'Can view a server'), ('execute_server', 'Can view a server')]},
+    ),
+    migrations.AddField(
+      model_name='user',
+      name='online',
+      field=models.BooleanField(default=False),
+    ),
+  ]

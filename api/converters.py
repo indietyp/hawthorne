@@ -1,5 +1,4 @@
 class SteamIDConverter:
-
   # http://gamon.webfactional.com/regexnumericrangegenerator/
   # MIN: 76561197960265729
   # MAX: 76561202255233023

@@ -4,18 +4,17 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
+  dependencies = [
+    ('core', '0034_auto_20180301_1010'),
+  ]
 
-    dependencies = [
-        ('core', '0034_auto_20180301_1010'),
-    ]
-
-    operations = [
-        migrations.AlterUniqueTogether(
-            name='ban',
-            unique_together={('user', 'server')},
-        ),
-        migrations.AlterUniqueTogether(
-            name='mutegag',
-            unique_together={('user', 'server')},
-        ),
-    ]
+  operations = [
+    migrations.AlterUniqueTogether(
+      name='ban',
+      unique_together={('user', 'server')},
+    ),
+    migrations.AlterUniqueTogether(
+      name='mutegag',
+      unique_together={('user', 'server')},
+    ),
+  ]

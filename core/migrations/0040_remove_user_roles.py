@@ -4,14 +4,13 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
+  dependencies = [
+    ('core', '0039_auto_20180307_2131'),
+  ]
 
-    dependencies = [
-        ('core', '0039_auto_20180307_2131'),
-    ]
-
-    operations = [
-        migrations.RemoveField(
-            model_name='user',
-            name='roles',
-        ),
-    ]
+  operations = [
+    migrations.RemoveField(
+      model_name='user',
+      name='roles',
+    ),
+  ]

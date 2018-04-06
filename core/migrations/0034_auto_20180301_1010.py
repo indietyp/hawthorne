@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+  dependencies = [
+    ('core', '0033_auto_20180227_2336'),
+  ]
 
-    dependencies = [
-        ('core', '0033_auto_20180227_2336'),
-    ]
-
-    operations = [
-        migrations.AlterField(
-            model_name='mutegag',
-            name='length',
-            field=models.DurationField(null=True),
-        ),
-    ]
+  operations = [
+    migrations.AlterField(
+      model_name='mutegag',
+      name='length',
+      field=models.DurationField(null=True),
+    ),
+  ]

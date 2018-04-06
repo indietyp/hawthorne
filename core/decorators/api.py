@@ -1,14 +1,16 @@
-from django.http import JsonResponse
-from django.conf import settings
-import re
 import io
-from api.codes import s_to_l
-import ruamel.yaml as yaml
-import xmltodict
-import simplejson as json
+import re
 from functools import wraps
-from api.validation import validation as valid_dict
+
+import ruamel.yaml as yaml
+import simplejson as json
+import xmltodict
+from django.conf import settings
+from django.http import JsonResponse
+
+from api.codes import s_to_l
 from api.validation import Validator
+from api.validation import validation as valid_dict
 from core.utils import UniPanelJSONEncoder
 
 
@@ -31,7 +33,9 @@ def jsonparse(content=None, code=200, encoder=None):
 
   document = v.normalized(document)
   if not v.validate(document):
-    return JsonResponse({'error': 'FATAL ERROR. Validation Error occured. This should not happen ever. Contact the current maintainer ASAP.', 'calm': v.errors}, status=500)
+    return JsonResponse({
+      'error': 'FATAL ERROR. Validation Error occured. This should not happen ever. Contact the current maintainer ASAP.',
+      'calm': v.errors}, status=500)
 
   if code != 200 and settings.DEBUG:
     print(document)
@@ -53,6 +57,7 @@ def json_response(f):
       response = (response,)
 
     return jsonparse(*response)
+
   return wrapper
 
 
@@ -118,4 +123,5 @@ def validation(a):
       return f(request, validated=data, *args, **kwargs)
 
     return wrapper
+
   return argument_decorator

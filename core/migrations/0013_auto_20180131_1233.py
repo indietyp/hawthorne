@@ -4,15 +4,14 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
+  dependencies = [
+    ('core', '0012_auto_20180131_1211'),
+  ]
 
-    dependencies = [
-        ('core', '0012_auto_20180131_1211'),
-    ]
-
-    operations = [
-        migrations.RenameField(
-            model_name='servergroup',
-            old_name='isadmingroup',
-            new_name='is_admin',
-        ),
-    ]
+  operations = [
+    migrations.RenameField(
+      model_name='servergroup',
+      old_name='isadmingroup',
+      new_name='is_admin',
+    ),
+  ]

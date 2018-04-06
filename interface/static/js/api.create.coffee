@@ -1,4 +1,4 @@
-submit = (mode='', that) ->
+submit = (mode = '', that) ->
   o =
     target: that
     skip_animation: false
@@ -107,14 +107,21 @@ submit = (mode='', that) ->
       )
 
     when 'kick'
-      console.log 'placeholder'
+      user = $('input.uuid', node)[0].value
+      data =
+        server: $('input.server', node)[0].value
+
+      window.endpoint.api.users[user].kick.put(o, {}, data, (err, data) ->
+        window.ajax.player.user(1)
+        return data
+      )
 
     when 'server'
       node = that.parentElement.parentElement.parentElement
 
       data =
         name: $("#inputservername")[0].value
-        ip: $('#inputip')[0].value.match(/^([0-9]{1,3}\.){3}[0-9]{1,3}/)[0]
+        ip: $('#inputip')[0].value.split(':')[0]
         port: parseInt $('#inputip')[0].value.split(':')[1]
         password: $('#inputpassword')[0].value
         game: window.gameinput.getValue(true)
@@ -143,11 +150,11 @@ submit = (mode='', that) ->
           output.html data.result.response
 
           console.log output[0].innerHTML
-          output[0].innerHTML = "<span class='line'>"+(output[0].textContent.split("\n").filter(Boolean).join("</span>\n<span class='line'>"))+"</span>";
+          output[0].innerHTML = "<span class='line'>" + (output[0].textContent.split("\n").filter(Boolean).join("</span>\n<span class='line'>")) + "</span>";
 
           output.removeClass 'none'
           $('pre.input', node).addClass 'evaluated'
-          output.css 'max-height', output[0].scrollHeight+'px'
+          output.css 'max-height', output[0].scrollHeight + 'px'
 
         else
           $(that).addClass 'red'
@@ -161,6 +168,42 @@ submit = (mode='', that) ->
         $(that).removeClass 'green'
         $(that).addClass 'white'
       , 2500)
+
+    when 'setting__user'
+      node = that.parentElement.parentElement.parentElement
+      perms = []
+
+      $('.permission__child:checked', node).forEach((i) ->
+        cl = i.id
+        cl = cl.replace /\s/g, ''
+
+        cl = cl.split '__'
+        cl = "#{cl[0]}.#{cl[1]}"
+
+        perms.push cl
+      )
+
+      if $(".scope__toggle", node).hasClass 'activated'
+        local = true
+      else
+        local = false
+
+      payload =
+        permissions: perms
+        internal: true
+        local: local
+        groups: []
+
+      if not local
+        payload.steamid = window.usernameinput.getValue(true)
+      else
+        payload.username = $("#inputemail", node)[0].value
+
+    when 'setting__group'
+      console.log 'placeholder'
+
+    when 'setting__token'
+      console.log 'placeholder'
 
     else
       console.warning 'You little bastard! This is not implemented....'

@@ -1,22 +1,24 @@
-from django.contrib.auth.decorators import login_required, permission_required
-from core.models import Server
-from log.models import UserOnlineTime
-from django.views.decorators.http import require_http_methods
-from django.db.models.functions import Cast
 import datetime
+
+from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import DateField, Count
+from django.db.models.functions import Cast
+from django.views.decorators.http import require_http_methods
+
 from ajax.views import renderer
-from rcon.sourcemod import SourcemodPluginWrapper
+from core.models import Server
+from lib.sourcemod import SourcemodPluginWrapper
+from log.models import UserOnlineTime
 
 
 def status(server):
-  query = UserOnlineTime.objects.filter(server=server)\
-                                .annotate(date=Cast('disconnected', DateField()))
+  query = UserOnlineTime.objects.filter(server=server) \
+    .annotate(date=Cast('disconnected', DateField()))
 
   last30 = query.filter(date__gte=datetime.date.today() - datetime.timedelta(days=30))
-  online = last30.values('date')\
-                 .annotate(active=Count('user', distinct=True))\
-                 .order_by('date')
+  online = last30.values('date') \
+    .annotate(active=Count('user', distinct=True)) \
+    .order_by('date')
 
   recent = last30.values('server').annotate(active=Count('user', distinct=True))
   alltime = query.values('server').annotate(active=Count('user', distinct=True))

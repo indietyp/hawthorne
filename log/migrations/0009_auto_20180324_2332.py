@@ -4,17 +4,16 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
+  dependencies = [
+    ('log', '0008_auto_20180320_2128'),
+  ]
 
-    dependencies = [
-        ('log', '0008_auto_20180320_2128'),
-    ]
-
-    operations = [
-        migrations.RemoveField(
-            model_name='serveraction',
-            name='user',
-        ),
-        migrations.DeleteModel(
-            name='ServerAction',
-        ),
-    ]
+  operations = [
+    migrations.RemoveField(
+      model_name='serveraction',
+      name='user',
+    ),
+    migrations.DeleteModel(
+      name='ServerAction',
+    ),
+  ]

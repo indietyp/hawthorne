@@ -1,6 +1,8 @@
 import re
+
 import steamapi
 from django.conf import settings
+
 from core.models import Country
 
 

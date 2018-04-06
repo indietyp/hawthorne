@@ -1,6 +1,6 @@
 # view controller
 
-change = (destination='home') ->
+change = (destination = 'home') ->
   method = 'POST'
 
   switch destination

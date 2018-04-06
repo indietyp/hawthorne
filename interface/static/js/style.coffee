@@ -46,7 +46,7 @@ type__toggle = (that) ->
       $('.input-wrapper', target).addClass 'focus'
     else
       $('.choices', target).addClass 'focus'
-  300)
+    300)
 
   $('svg', that).toggleClass 'activated'
 
@@ -111,7 +111,7 @@ InputVerification = (mode, event, that) ->
   return true
 
 
-InformationCard = (show=true, reason) ->
+InformationCard = (show = true, reason) ->
   if show
     output = ''
     reason.forEach((i) ->
@@ -137,7 +137,7 @@ InformationCard = (show=true, reason) ->
     $('.status-card').removeClass 'active'
 
 
-submit__state = (that, success=true) ->
+submit__state = (that, success = true) ->
   target = $(that)
   animated = false
 
@@ -182,5 +182,5 @@ window.style.card = InformationCard
 
 window.endpoint =
   api: fermata.hawpi "/api/v1"
-  ajax: fermata.raw {base:window.location.origin + "/ajax/v1"}
-  bare: fermata.raw {base:window.location.origin}
+  ajax: fermata.raw {base: window.location.origin + "/ajax/v1"}
+  bare: fermata.raw {base: window.location.origin}

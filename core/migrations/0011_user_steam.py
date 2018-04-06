@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+  dependencies = [
+    ('core', '0010_auto_20180126_2044'),
+  ]
 
-    dependencies = [
-        ('core', '0010_auto_20180126_2044'),
-    ]
-
-    operations = [
-        migrations.AddField(
-            model_name='user',
-            name='steam',
-            field=models.BooleanField(default=True),
-        ),
-    ]
+  operations = [
+    migrations.AddField(
+      model_name='user',
+      name='steam',
+      field=models.BooleanField(default=True),
+    ),
+  ]

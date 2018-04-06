@@ -4,14 +4,14 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
+  dependencies = [
+    ('core', '0051_auto_20180320_2125'),
+  ]
 
-    dependencies = [
-        ('core', '0051_auto_20180320_2125'),
-    ]
-
-    operations = [
-        migrations.AlterModelOptions(
-            name='servergroup',
-            options={'permissions': [('view_servergroup', 'Can view server role')], 'verbose_name': 'server role', 'verbose_name_plural': 'server roles'},
-        ),
-    ]
+  operations = [
+    migrations.AlterModelOptions(
+      name='servergroup',
+      options={'permissions': [('view_servergroup', 'Can view server role')], 'verbose_name': 'server role',
+               'verbose_name_plural': 'server roles'},
+    ),
+  ]
