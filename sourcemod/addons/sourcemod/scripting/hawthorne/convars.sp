@@ -63,6 +63,6 @@ public void OnServerConVarChange(ConVar convar, char[] oldValue, char[] newValue
   OnConfigsExecuted();
 }
 
-public void OnHostnameConVarChange(ConVar convar, char[] oldValue, char[512] newValue) {
-  SERVER_HOSTNAME = newValue;
+public void OnHostnameConVarChange(ConVar convar, char[] oldValue, char[] newValue) {
+  StrCopy(SERVER_HOSTNAME, sizeof(SERVER_HOSTNAME), newValue);
 }
