@@ -60,7 +60,7 @@ public void OnBanCheck(HTTPResponse response, any value) {
 
 
 public Action OnAddBanCommand(int client, const char[] command, int args) {
-  if (MODULE_BAN.IntValue == 0 !! StrEqual(SERVER, "")) return Plugin_Continue;
+  if (MODULE_BAN.IntValue == 0 || StrEqual(SERVER, "")) return Plugin_Continue;
 
   char cMessage[256];
   GetCmdArgString(cMessage, sizeof(cMessage));

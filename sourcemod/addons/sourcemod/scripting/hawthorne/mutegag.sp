@@ -9,7 +9,7 @@ void MuteGag_OnPluginStart() {
 }
 
 public Action CMD_PermaMuteGag(int client, int args) {
-  if (MODULE_MUTEGAG.IntValue == 0 || StrEqual(SERVER, "")) return;
+  if (MODULE_MUTEGAG.IntValue == 0 || StrEqual(SERVER, "")) return Plugin_Continue;
 
   // get what command player is trying to execute
   char command[50];
@@ -105,7 +105,7 @@ void MuteGag_PlayerTeam(int client) {
     {
       if(iMuteGagTimeleft[client][i] >= 0 || bMuteGagPermanent[client][i]) {
         char time[200];
-        SecondsToTime(iMuteGagTimeleft[client][i] * 60, time, false);
+        HumanizeTime(iMuteGagTimeleft[client][i] * 60, time, false);
         MuteGagAlert(client, "You have an active \x6%s {BREAK} Reason: %s {BREAK} Timeleft: %s", cMuteGagName[i], MUTEGAG_REASONS[client][i], (!bMuteGagPermanent[client][i]) ? time : "permanent");
         PerformMuteGag(client, i, true);
       }
@@ -265,7 +265,7 @@ void AddMuteGag(int client, int type, int timeleft, int length, char[] cReason =
       if(!StrEqual(cReason, ""))
       {
         char cTime[200];
-        SecondsToTime(length * 60, cTime, false);
+        HumanizeTime(length * 60, cTime, false);
         MuteGagAlert(client, "You just received an \x6%s {BREAK} Reason: %s {BREAK} Length: %s", cMuteGagName[type], cReason, cTime);
       }
 
@@ -285,7 +285,7 @@ void RestoreMuteGag(int client, int type, int length, int timeleft) {
   bMuteGagPermanent[client][type] = (length == 0) ? true : false;
   PerformMuteGag(client, type, true);
   char cTime[200];
-  SecondsToTime(timeleft * 60, cTime, false);
+  HumanizeTime(timeleft * 60, cTime, false);
   MuteGagAlert(client, "Your \x6%s\x1 was restored! {BREAK} Timeleft: %s", cMuteGagName[type], cTime);
 }
 
@@ -499,7 +499,7 @@ void APIMuteGag(int admin, char[] clientID, int type, char[] reason = "", int ti
 
       if(type < 3) {
         char cTime[200];
-        SecondsToTime(time * 60, cTime, false);
+        HumanizeTime(time * 60, cTime, false);
         bool b = (type < 3) ? true : false;
         PerformMuteGag(i, type, b);
         if(time == 0)

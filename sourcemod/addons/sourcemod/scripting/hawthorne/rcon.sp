@@ -109,7 +109,7 @@ public Action RConBanKick(int client, int args) {
     GetCmdArg(3, cReason, sizeof(cReason));
     GetCmdArg(4, cLength, sizeof(cLength));
     int iLength = StringToInt(cLength);
-    if(iLength > 0) SecondsToTime(iLength * 60, cTime); else cTime = "permanent";
+    if(iLength > 0) HumanizeTime(iLength * 60, cTime); else cTime = "permanent";
     ClientBanKick(target, cAdminUsername, cReason, cTime, cTime);
     ReplyToCommand(client, "[hawthorne] Player ban kicked!");
   }
