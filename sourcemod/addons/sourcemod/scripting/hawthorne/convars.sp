@@ -50,13 +50,13 @@ void Hawthorne_InitConVars() {
                                          true, 0.0,
                                          true, 1.0);
 
-  MANAGER.AddChangeHook(OnServerConVarChange);
-  APITOKEN.AddChangeHook(OnServerConVarChange);
+  ConVar hostname = FindConVar("hostname");
+
+  HookConVarChange(MANAGER, OnServerConVarChange)
+  HookConVarChange(APITOKEN, OnServerConVarChange)
+  HookConVarChange(hostname, OnHostnameConVarChange)
 
   AutoExecConfig(true, "hawthorne");
-
-  ConVar hostname = FindConVar("hostname");
-  hostname.AddChangeHook(OnHostnameConVarChange);
 }
 
 public void OnServerConVarChange(ConVar convar, char[] oldValue, char[] newValue) {
