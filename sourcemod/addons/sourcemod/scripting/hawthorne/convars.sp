@@ -52,9 +52,9 @@ void Hawthorne_InitConVars() {
 
   ConVar hostname = FindConVar("hostname");
 
-  HookConVarChange(MANAGER, OnServerConVarChange)
-  HookConVarChange(APITOKEN, OnServerConVarChange)
-  HookConVarChange(hostname, OnHostnameConVarChange)
+  HookConVarChange(MANAGER, OnServerConVarChange);
+  HookConVarChange(APITOKEN, OnServerConVarChange);
+  HookConVarChange(hostname, OnHostnameConVarChange);
 
   AutoExecConfig(true, "hawthorne");
 }
