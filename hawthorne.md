@@ -10,24 +10,32 @@ sh -c "$(curl -fsSL raw.githubusercontent.com/indietyp/hawthorne/master/tools/in
 
 ### Prerequisites
 
-* Web Server \(\*nginx recommended\*\)
-* MySQL or MariaDB instance \(\*either local or remote\*\)
+* Web Server \(_nginx recommended_\)
+* MySQL or MariaDB instance \(_either local or remote_\)
 
 ### Information
 
 Because there are several different environments out there, it is not possible to say that it will work on your machine reliably. It was tested on numerous machines and over and over tweaked. If there’s a problem with your configuration, let me know over an pull request on [GitHub](https://www.github.com/indietyp/hawthorne) or write [me](mailto:hawthorne@indietyp.com?subject=installation) instead.
 
+{% hint style="info" %}
 The current only supported mode is _interactive_. A non-interactive mode is planned, but currently not a priority. This script has been tested on Debian 8+, Ubuntu 13+ as well as CentOS 7+. Windows and macOS are currently **not** supported.
+{% endhint %}
 
 ## **Toolchain Integration**
 
-Upon installing the toolchain has been linked to your system over the commands \`hawthorne\` and \`ht\`. There are several commands integrated. It is \*highly recommended\* that \`hawthorne update\` is to be included in a weekly crontab to ensure that hawthorne updates itself.
+Upon installing the toolchain has been linked to your system over the commands `hawthorne` and `ht`. There are several commands integrated. 
+
+{% hint style="info" %}
+It is _highly recommended_ that `hawthorne update` is to be included in a weekly crontab to ensure that hawthorne updates itself.
+{% endhint %}
+
+{% page-ref page="toolchain.md" %}
 
 ## **Web Server Integration**
 
-The current web servers that have been reliably tested are \*nginx\* and \*Apache 2\*. It is to note that every web server that has the capability of redirecting traffic over a proxy is capable of being used, due to the usage of the \[WSGI\]\(https://en.wikipedia.org/wiki/Web\_Server\_Gateway\_Interface\) technology.
+The current web servers that have been reliably tested are _nginx_ and _Apache 2_. It is to note that every web server that has the capability of redirecting traffic over a proxy is capable of being used, due to the usage of the [WSGI](https://en.wikipedia.org/wiki/Web_Server_Gateway_Interface) technology.
 
-Example configurations are provided \[here\]\(https://github.com/indietyp/hawthorne/tree/master/tools/configs\). Please pay close attention to the comments provided. That guide you through the process of configuration.
+Example configurations are provided [here](https://github.com/indietyp/hawthorne/tree/master/tools/configs). Please pay close attention to the comments provided. That guide you through the process of configuration.
 
 If the recommended path of the automated installation has been chosen, an pre-configured script for your system would have been displayed.
 
