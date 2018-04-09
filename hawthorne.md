@@ -1,7 +1,5 @@
 # Hawthorne
 
-Welcome to the documentation of hawthorne. This documentation is subdivided into hawthorne - the main application - as well as the toolchain, installation script, the SourceMod plugin and an extensive API interface.
-
 ## **Getting Started with Hawthorne**
 
 Hawthorne is an application that has multiple components, reaching from an API to a logging instance. To provide the best possible results in the installation process a shell script was created. To start the automated installation process execute the following command:
