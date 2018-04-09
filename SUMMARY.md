@@ -1,6 +1,7 @@
 # Table of contents
 
 * [Hawthorne](README.md)
+* [Hawthorne](hawthorne.md)
 * Toolchain
 * API
 * Sourcemod
