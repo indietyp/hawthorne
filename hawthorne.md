@@ -1,4 +1,4 @@
-# Hawthorne
+# Introduction
 
 ## **Getting Started with Hawthorne**
 

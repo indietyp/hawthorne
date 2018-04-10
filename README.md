@@ -9,15 +9,9 @@ description: >-
 
 ## Getting Started?
 
-### Installation Instructions:
-
-{% page-ref page="./" %}
-
-### API
+{% page-ref page="hawthorne.md" %}
 
 {% page-ref page="untitled-1.md" %}
-
-### Sourcemod
 
 {% page-ref page="sourcemod.md" %}
 
