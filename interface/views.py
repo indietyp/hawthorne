@@ -6,6 +6,10 @@ def home(request):
   return render(request, 'main.pug', {})
 
 
+def mail(request):
+  return render(request, 'mail.pug', {})
+
+
 def login(request):
   return render(request, 'login.pug', {})
 

@@ -11,5 +11,6 @@ urlpatterns = [
 
     # instance
     path('instance', instance.list, name='instance.list'),
-    path('instance/<uuid:i>/report', instance.report, name='instance.report')
+    path('instance/<uuid:i>/report', instance.report, name='instance.report'),
+    path('instance/<uuid:i>/invite', instance.invite, name='instance.invite')
 ]

@@ -1,0 +1,140 @@
+!!!5
+html(lang='en')
+  head
+    title hawthorne
+
+    link(href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet")
+
+    style.
+      body {
+        margin: 0;
+        background-color: #1F262D;
+        font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial;
+      }
+
+      .wrapper {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        background-color: #1F262D;
+        font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial;
+      }
+
+      .content {
+        width: 50%;
+        margin-top: 4em;
+      }
+
+      span, .desc {
+        color: #F7FDFA;
+      }
+
+      .spacer {
+        flex-grow: 1;
+      }
+
+      .section {
+        margin-top: 2em;
+      }
+
+      .flex {
+        display: flex;
+      }
+
+      .flex.center {
+        align-items: center;
+      }
+
+      .title {
+        color: #F7FDFA;
+        font-size: 5em;
+        margin-left: 18px;
+      }
+
+      button {
+        padding: 12px 18px;
+        border: 1px solid transparent;
+        outline: none;
+        cursor: pointer;
+        background-color: #2E363F;
+        border-radius: 3px;
+        color: #F7FDFA;
+        box-shadow: 0 1em 2em -1em rgba(0, 0, 0, 0.5);
+      }
+
+      * {
+        font-size: 1em;
+        user-select: none;
+      }
+
+      span, .desc {
+        font-size: 1.5em;
+      }
+
+      span.small {
+        font-size: 1em;
+      }
+
+      .desc {
+        display: block;
+        line-height: 1.5em;
+        padding-top: 2em;
+        text-decoration: none;
+      }
+
+      img.small {
+        height: 24px;
+        width: 24px;
+        margin-right: 12px;
+        cursor: pointer;
+      }
+
+      .link {
+        cursor: pointer;
+        color: #4B4A54;
+        transition: color .5s ease-out;
+      }
+
+      .link:hover {
+        color: #FFAA00;
+      }
+
+      @media (max-width: 1070px) {
+        .content {
+          width: 100%;
+          padding: 1em;
+        }
+
+        .title {
+          display: none;
+        }
+      }
+
+  body(bgcolor="#1F262D")
+    .wrapper
+      .spacer
+      .content
+        .section.flex.center
+          .spacer
+          img(src="cid:logo.png")
+          .title hawthorne
+          .spacer
+        .section
+          .desc Congratulations! 🎉🎉🎉
+          .desc You just got invited to the hawthorne panel of {{target}}. <br \>To begin using the panel just click the button below! <br \> We will then setup your credentials. c:
+          a.desc.link(href="https://hawthorne.in") What is hawthorne?
+        .section.flex.center
+          .spacer
+          a(href="https://discord.gg/3pNEqn8")
+            img.small(src="cid:discord.png")
+          a(href="https://github.com/indietyp/hawthorne")
+            img.small(src="cid:github.png")
+          a(href=url)
+            button(bgcolor="#2E363F") Join Now!
+
+        .section.flex.center
+          .spacer
+          span.small hawthorne &mdash; gameserver management made simple
+
+
+      .spacer

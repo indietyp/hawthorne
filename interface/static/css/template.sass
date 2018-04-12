@@ -419,3 +419,22 @@ pre.code-command
 
     &.fill
       fill: nth($clr, 2) !important
+
+// media queries
+@media (max-width: 1070px)
+  #header .item span
+    display: none
+
+  #content-wrapper .section
+    & > .picture
+      display: none
+
+    & > .message
+      width: 100%
+
+      & > .partners
+        width: unset
+
+      &.offer-selection
+        // flex-direction: column
+        transform: scale(0.8)

@@ -24,11 +24,18 @@ class Validator(Validator):
       if re_ip.match(value):
           return True
 
+    def _validate_type_email(self, value):
+      re_email = re.compile(r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)')
+
+      if re_email.match(value):
+        return True
+
 
 validation = {
     'instance': {
         'list': {
-            'PUT': {'parameters': {'ip': {'type': 'ip', 'required': True}},
+            'PUT': {'parameters': {'name': {'type': 'string', 'required': False},
+                                   'owner': {'type': 'steamid', 'required': False}},
                     'permission': []}
         },
         'report': {
@@ -39,6 +46,12 @@ validation = {
                                    'log': {'type': 'string', 'required': True},
                                    'directory': {'type': 'string', 'required': True}},
                     'permission': []},
+        },
+        'invite': {
+            'PUT': {'parameters': {'user': {'type': 'uuid', 'required': True},
+                                   'target': {'type': 'email', 'required': True},
+                                   'from': {'type': 'string', 'required': True}},
+                    'permission': []}
         },
     }
 }

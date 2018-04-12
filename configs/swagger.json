@@ -1,0 +1,10 @@
+{
+    "defaults": {
+    },
+    "partials": {
+    },
+    "transformations": [
+        { "input": "README.md", "output": "README.md" },
+        { "template": "{{{swagger-json}}}", "output": "swagger.json" }
+    ]
+}

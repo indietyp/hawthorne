@@ -1,4 +1,6 @@
 import uuid
+import random
+import string
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Permission
 
@@ -21,7 +23,7 @@ class Plan(BaseModel):
 class User(AbstractUser):
   id = models.UUIDField(primary_key=True, auto_created=True, default=uuid.uuid4, editable=False, unique=True)
 
-  plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
+  plan = models.ForeignKey(Plan, on_delete=models.CASCADE, null=True)
 
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
@@ -37,8 +39,29 @@ class DiscordGuild(BaseModel):
   identifier = models.CharField(max_length=255)
 
 
+def generate_salt():
+  out = []
+  for _ in range(20):
+    out.append(random.choice(string.ascii_letters))
+
+  return ''.join(out)
+
+
+class Mail(BaseModel):
+  url = models.URLField()
+  target = models.CharField(max_length=255, null=True)
+
+  instance = models.ForeignKey('Instance', on_delete=models.CASCADE)
+
+
 class Instance(BaseModel):
   ip = models.GenericIPAddressField()
+  domain = models.CharField(max_length=255)
+
+  name = models.CharField(max_length=255, null=True)
+  owner = models.CharField(max_length=255, null=True)
+
+  salt = models.CharField(max_length=20, default=generate_salt)
 
 
 class Report(BaseModel):

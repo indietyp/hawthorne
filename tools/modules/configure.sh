@@ -23,6 +23,9 @@ configure () {
     sed -i "s#directory=<replace>#directory=/hawthorne#g" /hawthorne/supervisor.conf
     printf "${BLUE}Executing project setupcommands...${NORMAL}\n"
     sed -i "s/SECRET_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'/SECRET_KEY = '$(python3 /hawthorne/manage.py generatesecret | tail -1)'/g" /hawthorne/panel/local.py
+    sed -i "s/EMAIL_HOST_USER = 'sendgrid_username'/EMAIL_HOST_USER = '$SENDGRID_USER'/g" /hawthorne/panel/local.py
+    sed -i "s/EMAIL_HOST_PASSWORD = 'sendgrid_password''/EMAIL_HOST_PASSWORD = '$SENDGRID_PWD'/g" /hawthorne/panel/local.py
+
 
     python3 /hawthorne/manage.py migrate
     python3 /hawthorne/manage.py compilestatic
