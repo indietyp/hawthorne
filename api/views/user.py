@@ -51,9 +51,11 @@ def list(request, validated=[], *args, **kwargs):
       try:
         user = User.objects.get(username=str(validated['steamid']))
         update = True
+
       except User.DoesNotExist:
         user = User.objects.create_user(username=str(validated['steamid']))
         user.is_active = False
+        user.is_steam = True
 
     elif validated['id'] is not None:
       user = User.objects.get(id=validated['id'])
@@ -71,15 +73,25 @@ def list(request, validated=[], *args, **kwargs):
       user.is_active = True
       user.is_staff = False
 
+      base = Permission.objects if request.user.is_superuser else request.user.user_permissions
+      exceptions = []
       perms = []
       for perm in validated['permissions']:
         perm = perm.split('.')
-        for p in Permission.objects.filter(name=perm[1], content_type__app_label=perm[0]):
-          perms.append(p)
+        p = base.filter(content_type__app_label=perm[0], codename=perm[1])
 
-      user.user_permissions.set(*perms)
+        if not p:
+          exceptions.append('.'.join(perm))
 
-      for group in Group.objects.filter(name__in=validated['groups']):
+        perms.extend(p)
+
+      if exceptions:
+        return {'info': 'You are trying to assign permissions that either do not exist or are out of your scope.', 'affects': exceptions}, 403
+
+      user.save()
+      user.user_permissions.set(perms)
+
+      for group in Group.objects.filter(id__in=validated['groups']):
         user.groups.add(group)
 
     if validated['country'] is not None and len(validated['country']) == 2:
@@ -247,6 +259,12 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
       return 'user not using panel'
 
     if validated['purge']:
+      if not user.is_superuser:
+        return 'superuser cannot be removed', 403
+
+      if request.user == user:
+        return 'you cannot disable yourself', 403
+
       user.delete()
 
       return 'CASCADE DELETE', 200
@@ -255,6 +273,12 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
       m = Membership.objects.get(user=user, role=validated['role'])
       m.delete()
     else:
+      if not user.is_superuser:
+        return 'superuser cannot be deactivated', 403
+
+      if request.user == user:
+        return 'you cannot disable yourself', 403
+
       user.is_active = False
       user.is_staff = False
       user.is_superuser = False
@@ -285,7 +309,7 @@ def ban(request, u=None, validated={}, *args, **kwargs):
     bans = Ban.objects.filter(user=user)
     if validated['server'] is not None:
       server = Server.objects.get(id=validated['server'])
-      bans = bans.filter(server=Q(role__server=server) | Q(role__server=None))
+      bans = bans.filter(Q(server=server) | Q(server=None))
 
     if validated['resolved'] is not None:
       bans = bans.filter(resolved=validated['resolved'])
@@ -299,11 +323,7 @@ def ban(request, u=None, validated={}, *args, **kwargs):
     except Exception:
       return 'server not found', 500
 
-    try:
-      ban = Ban.objects.get(user=user, server=server)
-    except Exception:
-      return 'ban not found', 500
-
+    ban = Ban.objects.get(user=user, server=server)
     if validated['resolved'] is not None:
       ban.resolved = validated['resolved']
 
@@ -330,14 +350,14 @@ def ban(request, u=None, validated={}, *args, **kwargs):
     ban = Ban(user=user, server=server, reason=validated['reason'], length=length, created_by=request.user)
     ban.save()
 
-    SourcemodPluginWrapper(server).ban(ban)
+    return SourcemodPluginWrapper(server).ban(ban)
 
   elif request.method == 'DELETE':
     server = Server.objects.get(id=validated['server'])
-    ban = Ban.objects.get(user=user, server=server)
-    ban.resolved = True
+    for ban in Ban.objects.filter(user=user, server=server):
+      ban.resolved = True
 
-    ban.save()
+      ban.save()
 
   return 'successful, nothing to report'
 
@@ -432,7 +452,6 @@ def mutegag(request, u=None, validated={}, *args, **kwargs):
   return 'successful, nothing to report'
 
 
-# TESTING
 @csrf_exempt
 @json_response
 @authentication_required
@@ -450,4 +469,19 @@ def kick(request, u=None, validated={}, *args, **kwargs):
   except Exception:
     return 'server not found', 403
 
-  return SourcemodPluginWrapper(server).kick(user=user)
+  return SourcemodPluginWrapper(server).kick(target=user)
+
+
+@csrf_exempt
+@json_response
+@authentication_required
+@permission_required('user.auth')
+@validation('user.auth')
+@require_http_methods(['GET'])
+def auth(request, u=None, validated={}, *args, **kwargs):
+  user = User.objects.filter(id=u)
+
+  if user and user[0].check_password(validated['password']):
+    return 'credentials are correct', 200
+
+  return 'credentials not correct', 401

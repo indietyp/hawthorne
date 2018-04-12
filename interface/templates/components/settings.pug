@@ -5,188 +5,131 @@
 
 
 - block content
-  .item.pure-u-1-1.pure-g
-    .heading Users
-      a.right(href="https://paypal.me/indietyp/5", target="_blank")
-        i(data-feather="dollar-sign")
-    .row.pure-g
-      .column.icon.username.pure-u-7-24
-        .icon-container.flex.center
-          i(data-feather='database')
-        .namespace bilalmahmoud@posteo.de
-      .column.icon.username.pure-u-7-24
-        i(data-feather='layers')
-        span root, admin
-      .column.icon.username.pure-u-7-24
-        i(data-feather='zap')
-        span 75% granted
-      .column.icon.pure-u-3-24
-        .spacer
-        .action
-          i(data-feather="mail", onclick="window.api.edit('mutegag', this)")
-        .action
-          i(data-feather="edit-2", onclick="window.api.edit('mutegag', this)")
-        .action
-          i(data-feather="trash-2", onclick="window.api.remove('mutegag', this)")
-    .row.pure-g
-      .column.icon.username.pure-u-7-24
-        .icon-container.flex.center
-          - include 'assets/steam.svg'
-        .namespace indietyp
-      .column.icon.username.pure-u-7-24
-        i(data-feather='layers')
-        span peasant
-      .column.icon.username.pure-u-7-24
-        i(data-feather='zap')
-        span 12% granted
-      .column.icon.pure-u-3-24
-        .spacer
-        .action
-          i(data-feather="mail", onclick="window.api.edit('mutegag', this)")
-        .action
-          i(data-feather="edit-2", onclick="window.api.edit('mutegag', this)")
-        .action
-          i(data-feather="trash-2", onclick="window.api.remove('mutegag', this)")
-
-    .row.add.pure-g
-      .column.icon.pure-u-3-24(onclick="window.style.settings.type(this)")
-        i.scope__toggle(data-feather='toggle-left')
-        span Steam
-      .column.icon.username.pure-u-9-24.switch-container
-        select#username-input
-          option(placeholder) {% trans 'Username' %}
-        .input-wrapper(style="width:100%")
-          input#inputemail(type='email', placeholder="E-Mail")
-          label.adjusted(for='inputemail')
-            i.explicit(data-feather='mail')
-      .column.icon.group.pure-u-9-24.input-wrapper
-        select#group-input
-          option(placeholder) {% trans 'Group' %}
-      .column.icon.placeholder.pure-u-3-24.input-wrapper
-      .column.icon.switch.pure-u-3-24(onclick="window.style.settings.permissions(this)", style="align-items:flex-start")
-        i(data-feather='toggle-left')
-        span Simple
-      .column.icon.perms.pure-u-18-24.flex.center
-          - include 'partials/setting/permission.pug' with advanced=advanced simple=simple suffix='user'
-
-          script.execution.
-            window.style.settings.init()
-
-      .column.icon.pure-u-3-24(style="align-items:flex-start")
-        .spacer
-        .action
-          i.animated.fancy(onclick="window.api.submit('setting__user', this)", data-feather="plus")
-
+  - if perms.core.view_user
+    .item.pure-u-1-1.pure-g
+      .heading Users
+        a.right(href="https://paypal.me/indietyp/5", target="_blank")
+          i(data-feather="dollar-sign")
+      .list#setting__user
       script.execution.
-        var usernameinput = new Choices('#username-input', {
-          searchChoices: false,
-          searchPlaceholderValue: "{% trans 'Steam Username' %}",
-          choices: [],
-          noResultsText: "{% trans 'Could not find any user' %}",
-          noChoicesText: "{% trans 'Type to search' %}",
-          itemSelectText: "{% trans 'Press to select' %}",
-          classNames: {
-            containerOuter: 'choices focus'
-          },
-        })
+        window.ajax.setting.user(1)
 
-        debounce_search = function(value, input) {
-          window.steam.search(value, input);
-        }
+      .row.add.pure-g
+        .column.icon.pure-u-3-24(onclick="window.style.settings.type(this)")
+          i.scope__toggle(data-feather='toggle-left')
+          span Steam
+        .column.icon.username.pure-u-9-24.switch-container
+          select#username-input
+            option(placeholder) {% trans 'Username' %}
+          .input-wrapper(style="width:100%")
+            input#inputemail(type='email', placeholder="E-Mail")
+            label.adjusted(for='inputemail')
+              i.explicit(data-feather='mail')
+        .column.icon.group.pure-u-9-24.input-wrapper
+          select#group-input(multiple=true)
+        .column.icon.placeholder.pure-u-3-24.input-wrapper
+        .column.icon.switch.pure-u-3-24(onclick="window.style.settings.permissions(this)", style="align-items:flex-start")
+          i(data-feather='toggle-left')
+          span Simple
+        .column.icon.perms.pure-u-18-24.flex.center
+            - include 'partials/setting/permission.pug' with advanced=advanced simple=simple suffix='user'
 
-        var call = debounce(debounce_search, 200);
-        usernameinput.passedElement.addEventListener('search', function(event) {
-          if (event.detail.value.length > 0) {
-            call(event.detail.value, usernameinput);
+            script.execution.
+              window.style.settings.init()
+
+        .column.icon.pure-u-3-24(style="align-items:flex-start")
+          .spacer
+          .action
+            i.animated.fancy(onclick="window.api.submit('setting__user', this)", data-feather="plus")
+
+        script.execution.
+          var usernameinput = new Choices('#username-input', {
+            searchChoices: false,
+            searchPlaceholderValue: "{% trans 'Steam Username' %}",
+            choices: [],
+            noResultsText: "{% trans 'Could not find any user' %}",
+            noChoicesText: "{% trans 'Type to search' %}",
+            itemSelectText: "{% trans 'Press to select' %}",
+            classNames: {
+              containerOuter: 'choices focus'
+            },
+          })
+
+          debounce_search = function(value, input) {
+            window.steam.search(value, input);
           }
-        }, false);
-        window.usernameinput = usernameinput
 
-        var groupinput = new Choices('#group-input', {
-          searchEnabled: false,
-          choices: [],
-          itemSelectText: "{% trans 'Press to select' %}",
-        })
-        window.groupinput = groupinput
-        //- window.api.groups('', groupinput)
+          var call = debounce(debounce_search, 200);
+          usernameinput.passedElement.addEventListener('search', function(event) {
+            if (event.detail.value.length > 0) {
+              call(event.detail.value, usernameinput);
+            }
+          }, false);
+          window.usernameinput = usernameinput
 
-  .item.pure-u-1-1.second
-    .heading Groups
-    .row.pure-g
-      .column.icon.username.pure-u-7-24
-        i(data-feather='tag')
-        span root
-      .column.icon.username.pure-u-7-24
-        i(data-feather='users')
-        span 17 users
-      .column.icon.username.pure-u-7-24
-        i(data-feather='zap')
-        span 100% granted
-      .column.icon.pure-u-3-24
-        .spacer
-        .action
-          i(data-feather="edit-2", onclick="window.api.edit('mutegag', this)")
-        .action
-          i(data-feather="trash-2", onclick="window.api.remove('mutegag', this)")
+          var groupinput = new Choices('#group-input', {
+            searchEnabled: false,
+            choices: [],
+            duplicateItems: false,
+            paste: false,
+            searchEnabled: false,
+            searchChoices: false,
+            placeholderValue: "{% trans 'Group' %}",
+            removeItemButton: true,
+            itemSelectText: "{% trans 'Press to select' %}",
+          })
+          window.groupinput = groupinput
+          window.api.groups('', groupinput)
 
-    .row.add.pure-g
-      .column.icon.pure-u-3-24
-      .column.icon.username.pure-u-18-24.input-wrapper
-        input#inputgroupname(type='text', placeholder="Name")
-        label.adjusted(for='inputgroupname')
-          i.explicit(data-feather='tag')
-      .column.icon.placeholder.pure-u-3-24.input-wrapper
-      .column.icon.switch.pure-u-3-24(onclick="window.style.settings.permissions(this)", style="align-items:flex-start")
-        i(data-feather='toggle-left')
-        span Simple
-      .column.icon.perms.pure-u-18-24.flex.center
-          - include 'partials/setting/permission.pug' with advanced=advanced simple=simple suffix='group'
+  - if perms.core.view_group
+    .item.pure-u-1-1.second
+      .heading Groups
+      .list#setting__group
+      script.execution.
+        window.ajax.setting.group(1)
 
-          script.execution.
-            window.style.settings.init()
+      .row.add.pure-g
+        .column.icon.pure-u-3-24
+        .column.icon.username.pure-u-18-24.input-wrapper
+          input#inputgroupname(type='text', placeholder="Name")
+          label.adjusted(for='inputgroupname')
+            i.explicit(data-feather='tag')
+        .column.icon.placeholder.pure-u-3-24.input-wrapper
+        .column.icon.switch.pure-u-3-24(onclick="window.style.settings.permissions(this)", style="align-items:flex-start")
+          i(data-feather='toggle-left')
+          span Simple
+        .column.icon.perms.pure-u-18-24.flex.center
+            - include 'partials/setting/permission.pug' with advanced=advanced simple=simple suffix='group'
 
-      .column.icon.pure-u-3-24(style="align-items:flex-start")
-        .spacer
-        .action
-          i.animated.fancy(onclick="window.api.submit('setting__group', this)", data-feather="plus")
+            script.execution.
+              window.style.settings.init()
 
-  .item.pure-u-1-1.second
-    .heading API Tokens
-    .row.pure-g
-      .column.icon.username.pure-u-7-24
-        i(data-feather='hash')
-        span(style="user-select: text") ^7i4H52j3HjVie••••••
-        //- {Beh^{
-        //- span 6c765c41-17c0-4768-87db-4d040ea8d7c3
-      .column.icon.username.pure-u-7-24
-        i(data-feather='user')
-        span indietyp
-      .column.icon.username.pure-u-7-24
-        i(data-feather='zap')
-        span 100% granted
-      .column.icon.pure-u-3-24
-        .spacer
-        .action
-          i(data-feather="copy", onclick="window.api.edit('mutegag', this)")
-        .action
-          i(data-feather="edit-2", onclick="window.api.edit('mutegag', this)")
-        .action
-          i(data-feather="trash-2", onclick="window.api.remove('mutegag', this)")
+        .column.icon.pure-u-3-24(style="align-items:flex-start")
+          .spacer
+          .action
+            i.animated.fancy(onclick="window.api.submit('setting__group', this)", data-feather="plus")
 
-    .row.add.pure-g
-      .column.icon.switch.pure-u-3-24(onclick="window.style.settings.permissions(this)", style="align-items:flex-start")
-        i(data-feather='toggle-left')
-        span Simple
-      .column.icon.perms.pure-u-18-24.flex.center
-          - include 'partials/setting/permission.pug' with advanced=advanced simple=simple suffix='token'
+  - if perms.core.view_token
+    .item.pure-u-1-1.second
+      .heading API Tokens
+      .list#setting__token
+      script.execution.
+        window.ajax.setting.token(1)
 
-          script.execution.
-            window.style.settings.init()
+      .row.add.pure-g
+        .column.icon.switch.pure-u-3-24(onclick="window.style.settings.permissions(this)", style="align-items:flex-start")
+          i(data-feather='toggle-left')
+          span Simple
+        .column.icon.perms.pure-u-18-24.flex.center
+            - include 'partials/setting/permission.pug' with advanced=advanced simple=simple suffix='token'
 
-      .column.icon.pure-u-3-24(style="align-items:flex-start")
-        .spacer
-        .action
-          i.animated.fancy(onclick="window.api.submit('user', this)", data-feather="plus")
+            script.execution.
+              window.style.settings.init()
+
+        .column.icon.pure-u-3-24(style="align-items:flex-start")
+          .spacer
+          .action
+            i.animated.fancy(onclick="window.api.submit('setting__token', this)", data-feather="plus")
 
 
   .item.pure-u-1-1.second

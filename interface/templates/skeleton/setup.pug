@@ -23,19 +23,11 @@ html(lang='en')
             span.white haw
             span.primary thorne
           .spacer
-        .login-container.selector
-          .spacer
-          a(onclick="$('.selector').toggleClass('collapsed');$('.login').toggleClass('collapsed')")
-            i(data-feather='database')
-          .spacer
-          a(href="{% url 'social:begin' 'steam' %}?{{ request.GET.urlencode }}")
-            - include 'assets/steam.svg'
-          .spacer
-        .login-container.column.login.collapsed
+        .login-container.column
           input.uuid.hidden(type='hidden', value=user.id)
           input.username(placeholder="Username")
           input.password(placeholder="Password", type='password')
-          button(type='submit', onclick='window.api.login(this)')
+          button(type='submit', onclick='window.api.setup(this)')
             .spacer
             i(data-feather='log-in')
       .spacer

@@ -16,7 +16,7 @@ html(lang='en')
       .spacer
       .information.action.default-cursor
         i(data-feather="user")
-        - if request.user.steam is False
+        - if not request.user.is_steam
           span= request.user.username
         - else
           span= request.user.namespace
@@ -36,3 +36,8 @@ html(lang='en')
 
     script.
       feather.replace()
+
+    // .modal
+    //   .spacer
+    //   .wrapper
+    //   .spacer

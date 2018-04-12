@@ -73,7 +73,7 @@ class Token(BaseModel):
     verbose_name_plural = 'tokens'
 
     permissions = [
-      ('view_token', 'Can view token'),
+        ('view_token', 'Can view token'),
     ]
 
   def has_perm(self, perm, obj=None):
@@ -83,15 +83,12 @@ class Token(BaseModel):
     perm = perm.split('.')
 
     try:
-      permission = self.permissions.get(codename=perm[-1])
+      self.permissions.get(codename=perm[-1], content_type__app_label=perm[0])
     except Exception as e:
       print(e)
       return False
 
-    if permission.content_type.app_label == perm[0]:
-      return True
-
-    return False
+    return True
 
   def __str__(self):
     return "({}) - {}".format(self.owner, self.id)
@@ -264,7 +261,7 @@ class Ban(BaseModel):
       ('view_ban', 'Can view ban'),
     ]
 
-    unique_together = ('user', 'server')
+    # unique_together = ('user', 'server')
 
   def __str__(self):
     return "{} - {}".format(self.user, self.server)
@@ -312,3 +309,6 @@ class Membership(BaseModel):
   class Meta:
     permissions = ()
     default_permissions = ()
+
+
+from core.signals import user_log_handler

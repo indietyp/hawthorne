@@ -1,0 +1,34 @@
+- load i18n
+
+.row.pure-g
+  .column.icon.username.pure-u-7-24
+    .icon-container.flex.center
+      if data.is_steam
+        - include 'assets/steam.svg'
+      else
+        i(data-feather='database')
+    if data.is_steam
+      .namespace= data.namespace
+    else
+      .namespace= data.username
+  .column.icon.username.pure-u-7-24
+    i(data-feather='layers')
+    span= data.groups.all|join:", "|default:"----"
+  .column.icon.username.pure-u-7-24
+    i(data-feather='zap')
+    if data.is_superuser
+      span {% blocktrans with permission_percentage=100%}{{permission_percentage}}% granted{% endblocktrans %}
+    else
+      span {% blocktrans with permission_percentage=data.perms %}{{permission_percentage}}% granted{% endblocktrans %}
+  .column.icon.pure-u-3-24
+    .spacer
+    - with 'mailto:'|add:data.email as email
+      a.action(href='{{data.profile|default_if_none:email}}', target='{{data.profile|yesno:"_blank,_self"}}')
+        i(data-feather="mail")
+    // - if perms.core.change_user
+    //   - if request.user.is_superuser or request.user.user_permission.count > data.user_permission.count
+    //     .action
+    //       i(data-feather="edit-2", onclick="window.api.edit('setting__user', this)")
+    - if perms.core.delete_user and request.user != data
+      .action
+        i(data-feather="trash-2", onclick="window.api.remove('setting__user', this)")

@@ -7,7 +7,7 @@ from django.conf import settings
 from django.utils import timezone
 from hashids import Hashids as Hasher
 
-from api.validation import validation as valid_dict
+from api.specification import validation as valid_dict
 from core.models import Token
 
 
@@ -44,6 +44,7 @@ def token_retrieve(request):
 def authentication_required(f):
   def wrapper(request, *args, **kwargs):
     token = token_retrieve(request)
+
     if not request.user.is_authenticated and token is None:
       return 'Authentication of User failed', 401
 

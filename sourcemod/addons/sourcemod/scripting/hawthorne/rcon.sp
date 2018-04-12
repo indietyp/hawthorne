@@ -95,21 +95,19 @@ public Action RConMuteGagAdd(int client, int args) {
 }
 
 public Action RConBanKick(int client, int args) {
-  if(client != 0)
-    return Plugin_Handled;
-
+  if (client != 0) return Plugin_Handled;
 
   char steamid[20];
   GetCmdArg(1, steamid, sizeof(steamid));
   int target = GetClientFromSteamID(steamid);
 
-  if(target != -1) {
+  if (target != -1) {
     char cAdminUsername[128], cReason[150], cLength[50], cTime[200];
     GetCmdArg(2, cAdminUsername, sizeof(cAdminUsername));
     GetCmdArg(3, cReason, sizeof(cReason));
     GetCmdArg(4, cLength, sizeof(cLength));
     int iLength = StringToInt(cLength);
-    if(iLength > 0) HumanizeTime(iLength * 60, cTime); else cTime = "permanent";
+    if(iLength > 0) HumanizeTime(iLength, cTime); else cTime = "permanent";
     ClientBanKick(target, cAdminUsername, cReason, cTime, cTime);
     ReplyToCommand(client, "[hawthorne] Player ban kicked!");
   }
@@ -120,10 +118,10 @@ public Action RConBanKick(int client, int args) {
 
 int GetClientFromSteamID(char steamid[20]) {
   for (int i = 1; i < MaxClients; i++) {
-    if(IsClientInGame(i) && !IsFakeClient(i)) {
+    if (IsClientInGame(i) && !IsFakeClient(i)) {
       char steamid2[20];
-      GetClientAuthId(i, AuthId_Steam2, steamid2, sizeof(steamid2));
-      if(StrEqual(steamid, steamid2))
+      GetClientAuthId(i, AuthId_SteamID64, steamid2, sizeof(steamid2));
+      if (StrEqual(steamid, steamid2))
         return i;
     }
   }

@@ -37,7 +37,7 @@ public void APIAdminCheck(HTTPResponse response, any value) {
   AdminId admin = CreateAdmin();
   for (int i = 0; i < strlen(flags); i++) {
     AdminFlag flag;
-    if (FindFlagByChar(flags[i], flag) && !admin.HasFlag(flag, Access_Effective))
+    if (FindFlagByChar(flags[i], flag))
       admin.SetFlag(flag, true);
   }
 

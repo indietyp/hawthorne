@@ -14,7 +14,7 @@ class SourcemodPluginWrapper(RCONBase):
 
   def ban(self, ban, *args, **kwargs):
     command = 'rcon_ban "{}" "{}" "{}" "{}"'.format(ban.user.username,
-                                                    ban.user.created_by,
+                                                    ban.created_by.namespace,
                                                     ban.reason,
                                                     ban.length.total_seconds())
 
@@ -25,9 +25,9 @@ class SourcemodPluginWrapper(RCONBase):
 
     return response
 
-  def kick(self, target, reason='', *args, **kwargs):
+  def kick(self, target, reason='powered by hawthorne', *args, **kwargs):
     try:
-      response = self.run('sm_kick "#{}" "{}"'.format(target.username, reason))[0]
+      response = self.run('sm_kick {} {}'.format(target.namespace, reason))[0]
     except valve.rcon.RCONError as e:
       return {'error': e}
 

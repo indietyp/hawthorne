@@ -21,3 +21,5 @@ ruamel.yaml
 simplejson
 hashids
 requests
+Faker
+rstr

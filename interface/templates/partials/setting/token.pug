@@ -1,0 +1,26 @@
+- load interface_utils
+- load i18n
+
+.row.pure-g
+  input.uuid.hidden(type="hidden", value=data.id)
+  .column.icon.username.pure-u-7-24
+    i(data-feather='hash')
+    span(style="user-select: text")
+      if request.user == data.owner
+        = data.id|base85
+      else
+        = data.id|base85|mask
+  .column.icon.username.pure-u-7-24
+    i(data-feather='user')
+    span= data.owner.namespace
+  .column.icon.username.pure-u-7-24
+    i(data-feather='zap')
+    span {% blocktrans with permission_percentage=data.perms %}{{permission_percentage}}% granted{% endblocktrans %}
+  .column.icon.pure-u-3-24
+    .spacer
+    .action
+      i(data-feather="copy", onclick="window.style.copy('{{data.id}}'); window.style.card(true, ['copied extended format to your clipboard']); setTimeout(function(){window.style.card(false)}, 2400)")
+
+    - if perms.core.delete_token
+      .action
+        i(data-feather="trash-2", onclick="window.api.remove('setting__token', this)")

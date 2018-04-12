@@ -98,7 +98,6 @@ public void OnConfigsExecuted() {
 
   httpClient = new HTTPClient(endpoint);
   httpClient.SetHeader("X-TOKEN", token);
-  httpClient.SetHeader("Transfer-Encoding", "identity");
 
   GetServerUUID();
 }

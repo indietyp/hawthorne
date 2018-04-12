@@ -49,8 +49,8 @@ server = (query, that = null, selected = '') ->
   )
   return
 
-group = (query, that = null, selected = '') ->
-  window.endpoint.api.roles({'query': query}).get((err, data) ->
+role = (query, that = null, selected = '') ->
+  window.endpoint.api.roles({'match': query}).get((err, data) ->
     data = data['result']
 
     if that != null
@@ -72,6 +72,61 @@ group = (query, that = null, selected = '') ->
   )
   return
 
+group = (query, that = null, selected = '') ->
+  window.endpoint.api.groups({'match': query}).get((err, data) ->
+    data = data['result']
+
+    if that != null
+      formatted = []
+      for ele in data
+        fmt =
+          value: ele.id
+          label: ele.name
+
+        if selected != '' and fmt.value == selected
+          fmt.selected = true
+
+        formatted.push fmt
+      that.setChoices(formatted, 'value', 'label', true)
+
+    return data
+  )
+  return
+
+setup = (that) ->
+  node = that.parentNode.parentNode
+  header =
+    "X-CSRFToken": window.csrftoken
+
+  payload =
+    username: $('input.username', node)[0].value
+    password: $('input.password', node)[0].value
+
+  uuid = $('input.uuid', node)[0].value
+
+  fermata.json("/setup")[uuid].put(header, payload, (err, data) ->
+    window.location.href = "/login";
+  )
+
+login = (that) ->
+  node = that.parentNode.parentNode
+  header =
+    "X-CSRFToken": window.csrftoken
+    'Content-Type': "application/x-www-form-urlencoded; charset=utf-8"
+
+  # payload =
+  #   username: $('input.username', node)[0].value
+  #   password: $('input.password', node)[0].value
+
+  payload = "username=#{$('input.username', node)[0].value}&password=#{$('input.password', node)[0].value}"
+
+  fermata.raw({base: window.location.origin + "/internal/login"}).post(header, payload, (dummy, data) ->
+    window.location.href = "/";
+  )
+
 window.api.servers = server
+window.api.roles = role
 window.api.groups = group
 window.api.games = game
+window.api.setup = setup
+window.api.login = login

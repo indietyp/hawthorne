@@ -52,17 +52,17 @@ void Hawthorne_InitConVars() {
 
   ConVar hostname = FindConVar("hostname");
 
-  HookConVarChange(MANAGER, OnServerConVarChange);
-  HookConVarChange(APITOKEN, OnServerConVarChange);
+  //HookConVarChange(MANAGER, OnServerConVarChange);
+  //HookConVarChange(APITOKEN, OnServerConVarChange);
   HookConVarChange(hostname, OnHostnameConVarChange);
 
   AutoExecConfig(true, "hawthorne");
 }
 
-public void OnServerConVarChange(ConVar convar, char[] oldValue, char[] newValue) {
-  OnConfigsExecuted();
-}
+//public void OnServerConVarChange(ConVar convar, char[] oldValue, char[] newValue) {
+  //OnConfigsExecuted();
+//}
 
 public void OnHostnameConVarChange(ConVar convar, char[] oldValue, char[] newValue) {
-  StrCopy(SERVER_HOSTNAME, sizeof(SERVER_HOSTNAME), newValue);
+  strcopy(SERVER_HOSTNAME, sizeof(SERVER_HOSTNAME), newValue);
 }

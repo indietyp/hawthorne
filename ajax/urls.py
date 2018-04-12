@@ -18,4 +18,8 @@ urlpatterns = [
   path('server/server/<int:page>', server.server),
 
   path('home/server/<int:page>', server.list),
+
+  path('setting/user/<int:page>', setting.user),
+  path('setting/group/<int:page>', setting.group),
+  path('setting/token/<int:page>', setting.token),
 ]

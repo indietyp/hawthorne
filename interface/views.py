@@ -1,3 +1,4 @@
+import json
 import datetime
 
 from automated_logging.models import Model as LogModel
@@ -6,7 +7,10 @@ from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import DateField, Count, Q
 from django.db.models.functions import Cast
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate
+from django.http import JsonResponse
+from django.contrib.auth.password_validation import validate_password
 
 from core.models import Server, ServerGroup, User
 from log.models import UserOnlineTime, ServerChat
@@ -14,6 +18,29 @@ from log.models import UserOnlineTime, ServerChat
 
 def login(request):
   return render(request, 'skeleton/login.pug', {})
+
+
+def setup(request, u=None):
+  try:
+    user = User.objects.get(id=u)
+  except User.ObjectDoesNotExist:
+    return redirect('/login')
+
+  if user.username != user.email:
+    return redirect('/login')
+
+  if request.method == 'PUT':
+    data = json.loads(request.body)
+
+    user.namespace = data['username']
+    user.username = data['username']
+    user.set_password(data['password'])
+
+    user.save()
+
+    return redirect('/login')
+  else:
+    return render(request, 'skeleton/setup.pug', {'user': user})
 
 
 @login_required(login_url='/login')
@@ -92,7 +119,9 @@ def chat(request):
 def settings(request):
   modules = [c for c in ContentType.objects.filter(app_label__in=['core', 'log']) if
              Permission.objects.filter(content_type=c).count() > 0]
-  perms = Permission.objects.all().order_by('content_type__model')
+
+  base = request.user.user_permissions if not request.user.is_superuser else Permission.objects
+  perms = base.all().order_by('content_type__model')
 
   return render(request, 'components/settings.pug', {'simple': modules, 'advanced': perms})
 

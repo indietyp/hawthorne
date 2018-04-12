@@ -300,7 +300,7 @@
   //= require style.fermata.coffee
   //= require style.ext.coffee
   //= require style.time.coffee
-  var InformationCard, InputVerification, mutegag__toggle, permission__toggle, settings__init, submit__cleanup, submit__state, type__toggle;
+  var InformationCard, InputVerification, copyTextToClipboard, mutegag__toggle, permission__toggle, settings__init, submit__cleanup, submit__state, type__toggle;
 
   mutegag__toggle = function(that) {
     var i, j, len, ref, results, state;
@@ -349,11 +349,12 @@
     }
     setTimeout(function() {
       if (toggle) {
-        return $('.input-wrapper', target).addClass('focus');
+        $('.input-wrapper', target).addClass('focus');
       } else {
-        return $('.choices', target).addClass('focus');
+        $('.choices', target).addClass('focus');
       }
-    }, 300);
+      return 300;
+    });
     $('svg', that).toggleClass('activated');
     if ($('svg', that).hasClass('activated')) {
       return $('span', that).html('Local');
@@ -403,6 +404,34 @@
         });
       }
     });
+  };
+
+  copyTextToClipboard = function(text) {
+    var err, msg, successful, textArea;
+    textArea = document.createElement('textarea');
+    // https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript
+    textArea.style.position = 'fixed';
+    textArea.style.top = 0;
+    textArea.style.left = 0;
+    textArea.style.width = '2em';
+    textArea.style.height = '2em';
+    textArea.style.padding = 0;
+    textArea.style.border = 'none';
+    textArea.style.outline = 'none';
+    textArea.style.boxShadow = 'none';
+    textArea.style.background = 'transparent';
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      successful = document.execCommand('copy');
+      msg = successful ? 'successful' : 'unsuccessful';
+    } catch (error) {
+      err = error;
+      console.log('Oops, unable to copy');
+    }
+    document.body.removeChild(textArea);
   };
 
   InputVerification = function(mode, event, that) {
@@ -499,6 +528,8 @@
   };
 
   window.style.card = InformationCard;
+
+  window.style.copy = copyTextToClipboard;
 
   window.endpoint = {
     api: fermata.hawpi("/api/v1"),

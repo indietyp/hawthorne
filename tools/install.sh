@@ -335,7 +335,9 @@ main() {
   fi
 
   printf "${BOLD}Linking to supervisor...${NORMAL}\n"
-  ln -sr $directory/supervisor.conf /etc/supervisor/conf.d/hawthorne.conf
+
+  cp $directory/tools/configs/gunicorn.default.conf.py $directory/gunicorn.conf.py
+  ln -sr $directory/tools/configs/supervisor.default.conf /etc/supervisor/conf.d/hawthorne.conf
   supervisorctl reread
   supervisorctl update
   supervisorctl restart hawthorne

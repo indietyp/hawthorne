@@ -26,7 +26,7 @@ void Players_OnClientAuthorized(int client) {
 }
 
 void Players_OnClientDisconnect(int client) {
-  if (IsFakeClient(client))return;
+  if (IsFakeClient(client)) return;
 
   JSONObject payload = new JSONObject();
   payload.SetString("id", CLIENTS[client]);

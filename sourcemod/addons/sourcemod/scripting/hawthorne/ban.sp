@@ -36,16 +36,17 @@ public void OnBanCheck(HTTPResponse response, any value) {
   result.GetString("admin", issuer, sizeof(issuer));
   result.GetString("reason", reason, sizeof(reason));
 
-  int creation = result.GetInt("created_at");
-  int length;
-  length = -1;
-
-  length = result.GetInt("length");
+  int creation = RoundFloat(result.GetFloat("created_at"));
+  int length = RoundFloat(result.GetFloat("length"));
   int now = GetTime();
 
-  if (length != -1) {
+  LogMessage("Length: %i", length);
+  LogMessage("Created: %i", creation);
+  LogMessage("Now: %i", now);
+
+  if (length != -1 && length != 2147483647) {
     HumanizeTime(length, total);
-    HumanizeTime(now - (creation + length), passed);
+    HumanizeTime((creation + length) - now, passed);
   } else {
     total = "permanent";
     passed = "permanent";

@@ -1,0 +1,22 @@
+- load i18n
+
+.row.pure-g
+  .column.icon.username.pure-u-7-24
+    i(data-feather='tag')
+    span= data.name
+  .column.icon.username.pure-u-7-24
+    i(data-feather='users')
+    span {% blocktrans with user_count=data.user_set.all.count %}{{user_count}} user{{user_count|pluralize}}{% endblocktrans %}
+  .column.icon.username.pure-u-7-24
+    i(data-feather='zap')
+    span {% blocktrans with permission_percentage=data.perms %}{{permission_percentage}}% granted{% endblocktrans %}
+  .column.icon.pure-u-3-24
+    .spacer
+
+    // - if perms.auth.change_group
+    //   .action
+    //     i(data-feather="edit-2", onclick="window.api.edit('mutegag', this)")
+
+    - if perms.auth.delete_group
+      .action
+        i(data-feather="trash-2", onclick="window.api.remove('mutegag', this)")

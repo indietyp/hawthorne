@@ -3,7 +3,6 @@ from django.dispatch import receiver
 from django.utils import timezone
 
 from core.models import User
-from log.models import UserOnlineTime, UserIP, UserNamespace
 
 
 # https://djangosnippets.org/snippets/2281/
@@ -27,6 +26,7 @@ def compare(state1, state2):
 
 @receiver(pre_save, sender=User, weak=False)
 def user_log_handler(sender, instance, raw, using, update_fields, **kwargs):
+  from log.models import UserNamespace, UserOnlineTime, UserIP
   try:
     state = User.objects.get(id=instance.id)
   except User.DoesNotExist:

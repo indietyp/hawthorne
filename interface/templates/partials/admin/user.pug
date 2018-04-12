@@ -25,7 +25,7 @@
   .column.icon.username.pure-u-3-24
     .spacer
     - if data.role != 'root'
-      - if perms.core.modify_user
+      - if perms.core.change_user
         .action
           i.animate.opacity.animated(data-feather="edit-2", onclick="window.api.edit('admin__administrator', this)")
       - if perms.core.delete_user

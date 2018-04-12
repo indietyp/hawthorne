@@ -1,7 +1,10 @@
 import os
 import re
+import rstr
 import json
 import uuid
+import random
+from faker import Faker
 from django.contrib.auth.models import Permission
 
 from django.core.management.base import BaseCommand
@@ -12,23 +15,50 @@ class Command(BaseCommand):
   help = 'Generate OpenAPI specification'
 
   def cerberus_to_swagger(self, rules):
+    fake = Faker()
+
     conversion = {}
-    examples = {}
     required = []
     for key, rule in rules.items():
       if rule['type'] in ['email', 'date', 'uuid', 'ip']:
         converted = {'type': 'string', 'format': rule['type']}
       elif rule['type'] == 'list':
+        example = []
+        samples = random.randint(3, 5)
         if 'type' not in rule['schema']:
           specification = {'type': 'string'}
+
           if 'regex' in rule['schema']:
-            specification['pattern'] = rule['schema']['regex']
+            if rule['schema']['regex'] == '\w+\.\w+\_\w+':
+              # special on for permissions
+              p = Permission.objects.all()
+              for _ in range(samples):
+                c = random.randint(0, p.count())
+                example.append("{1}.{0}".format(p[c].codename, p[c].content_type.app_label))
+            else:
+              specification['pattern'] = rule['schema']['regex']
+              for _ in range(samples):
+                example.append(rstr.xeger(rule['schema']['regex']))
+
         elif rule['schema']['type'] in ['email', 'date', 'uuid']:
           specification = {'type': 'string', 'format': rule['schema']['type']}
+
+          if rule['schema']['type'] == 'email':
+            for _ in range(samples):
+              example.append(fake.email())
+
+          if rule['schema']['type'] == 'uuid':
+            for _ in range(samples):
+              example.append(str(uuid.uuid4()))
+
         else:
           specification = {'type': rule['schema']['type']}
 
         converted = {'type': 'array', 'items': specification}
+
+        if example:
+          converted['example'] = example
+
       else:
         converted = {'type': rule['type']}
 
@@ -52,6 +82,15 @@ class Command(BaseCommand):
           rule['allowed'] = [rule['allowed']]
 
         converted['anyOf'] = [{'enum': rule['allowed']}]
+
+      if rule['type'] == 'email':
+        converted['example'] = fake.email()
+
+      if rule['type'] == 'uuid':
+        converted['example'] = str(uuid.uuid4())
+
+      if rule['type'] == 'ip':
+        converted['example'] = fake.ipv4()
 
       conversion[key] = converted
 
@@ -86,7 +125,8 @@ class Command(BaseCommand):
         'type': 'object',
         'properties': {
             'success': {
-                'type': 'boolean'
+                'type': 'boolean',
+                'example': True
             },
             'result': {
                 'type': 'object'
@@ -98,7 +138,8 @@ class Command(BaseCommand):
         'type': 'object',
         'properties': {
             'success': {
-                'type': 'boolean'
+                'type': 'boolean',
+                'example': False
             },
             'reason': {
                 'type': 'object'
@@ -113,13 +154,13 @@ class Command(BaseCommand):
     for module in modules:
       exec("from api.views import {}".format(module))
       base['tags'].append({
-          'name': module,
+          'name': module.capitalize(),
           'description': eval("{}.__doc__".format(module))
       })
 
     base['paths'] = {}
     from api.urls import urlpatterns
-    from api.validation import validation
+    from api.specification import validation
 
     for url in urlpatterns[1:]:
       pattern = "/{}".format(url.pattern)
@@ -137,7 +178,7 @@ class Command(BaseCommand):
         properties, required = self.cerberus_to_swagger(value['parameters'])
 
         base['paths'][pattern][method] = {
-            'tags': [name.split('.')[0]],
+            'tags': [name.split('.')[0].capitalize()],
             'summary': url.callback.__doc__ if url.callback.__doc__ else '',
             'description': "",
             'parameters': [],

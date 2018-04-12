@@ -164,7 +164,7 @@ edit = (mode = '', that) ->
       , false)
 
       window.api.storage[uuid + '#' + selected] = selector
-      window.api.groups('', selector, selected)
+      window.api.roles('', selector, selected)
 
     when 'admin__groups'
       server = node.querySelector('.icon.server')

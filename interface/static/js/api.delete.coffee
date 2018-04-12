@@ -48,6 +48,16 @@ remove = (mode = '', that) ->
 
       endpoint = window.endpoint.api.servers[server]
 
+    when 'setting__user'
+      console.log 'test'
+
+    when 'setting__group'
+      console.log 'test'
+
+    when 'setting__token'
+      token = $('input.uuid', node)[0].value
+
+      endpoint = window.endpoint.api.system.tokens[token]
     else
       console.warning 'mode not implemented'
       return

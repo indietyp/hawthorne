@@ -95,6 +95,35 @@ settings__init = () ->
   )
   return
 
+copyTextToClipboard = (text) ->
+  textArea = document.createElement('textarea')
+  # https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript
+  textArea.style.position = 'fixed'
+  textArea.style.top = 0
+  textArea.style.left = 0
+
+  textArea.style.width = '2em'
+  textArea.style.height = '2em'
+  textArea.style.padding = 0
+
+  textArea.style.border = 'none'
+  textArea.style.outline = 'none'
+  textArea.style.boxShadow = 'none'
+
+  textArea.style.background = 'transparent'
+  textArea.value = text
+  document.body.appendChild textArea
+  textArea.focus()
+  textArea.select()
+  try
+    successful = document.execCommand('copy')
+    msg = if successful then 'successful' else 'unsuccessful'
+  catch err
+    console.log 'Oops, unable to copy'
+
+  document.body.removeChild textArea
+  return
+
 InputVerification = (mode, event, that) ->
   keycode = undefined
   if window.event
@@ -178,6 +207,7 @@ window.style.submit =
   state: submit__state
   clear: submit__cleanup
 window.style.card = InformationCard
+window.style.copy = copyTextToClipboard
 
 
 window.endpoint =

@@ -54,6 +54,7 @@ def renderer(request, template, obj, page, extra=[], execute=None):
 
   if page == 1:
     data.extend(extra)
+
   if len(data) > 0:
     return render(request, 'skeleton/pagination.pug', {'data': data, 'template': template})
   else:

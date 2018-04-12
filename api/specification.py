@@ -1,103 +1,15 @@
-import re
-
-from cerberus import Validator
-from cerberus.errors import BasicErrorHandler
-from django.utils.translation import gettext_lazy as _
-
-from api import codes
-
-
-class HumanReadableValidationError(BasicErrorHandler):
-  messages = {0x00: "{0}",
-
-              0x01: _("document is missing"),
-              0x02: _("required field"),
-              0x03: _("unknown field"),
-              0x04: _("field '{0}' is required"),
-              0x05: _("depends on these values: {constraint}"),
-              0x06: _("{0} must not be present with '{field}'"),
-
-              0x21: _("'{0}' is not a document, must be a dict"),
-              0x22: _("empty values not allowed"),
-              0x23: _("value needs to be supplied"),
-              0x24: _("must be of {constraint} type"),
-              0x25: _("must be of dict type"),
-              0x26: _("length of list should be {constraint}, it is {0}"),
-              0x27: _("min length is {constraint}"),
-              0x28: _("max length is {constraint}"),
-
-              0x41: _("value does not match regex '{constraint}'"),
-              0x42: _("min value is {constraint}"),
-              0x43: _("max value is {constraint}"),
-              0x44: _("unallowed value {value}"),
-              0x45: _("unallowed values {0}"),
-              0x46: _("unallowed value {value}"),
-              0x47: _("unallowed values {0}"),
-
-              0x61: _("field '{field}' cannot be coerced: {0}"),
-              0x62: _("field '{field}' cannot be renamed: {0}"),
-              0x63: _("field is read-only"),
-              0x64: _("default value for '{field}' cannot be set: {0}"),
-
-              0x81: _("mapping doesn't validate subschema: {0}"),
-              0x82: _("one or more sequence-items don't validate: {0}"),
-              0x83: _("one or more keys of a mapping  don't validate: {0}"),
-              0x84: _("one or more values in a mapping don't validate: {0}"),
-              0x85: _("one or more sequence-items don't validate: {0}"),
-
-              0x91: _("one or more definitions validate"),
-              0x92: _("none or more than one rule validate"),
-              0x93: _("no definitions validate"),
-              0x94: _("one or more definitions don't validate")
-              }
-
-
-class Validator(Validator):
-  def __init__(self, *args, **kwargs):
-    kwargs['error_handler'] = HumanReadableValidationError()
-    super().__init__(*args, **kwargs)
-
-  def _validate_type_uuid(self, value):
-    re_uuid = re.compile(r'[0-9a-f]{8}(?:(?:-)?[0-9a-f]{4}){3}(?:-)?[0-9a-f]{12}', re.I)
-    if re_uuid.match(value):
-      return True
-
-  def _validate_type_steamid(self, value):
-    val = value
-    if isinstance(val, str) and value.isdigit():
-      val = int(val)
-
-    if isinstance(val, int) and 76561197960265729 <= value < 76561202255233023:
-      return True
-
-    return False
-
-  def _validate_type_ip(self, value):
-    re_ip = re.compile(
-      r'(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])',
-      re.I)
-    if re_ip.match(value):
-      return True
-
-  def _validate_type_email(self, value):
-    re_email = re.compile(r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)')
-
-    if re_email.match(value):
-      return True
-
+from api import utils
 
 validation = {
     'user': {
         'list': {
-            'GET': {'parameters': {'offset': {'type': 'integer', 'min': 0, 'default': 0, 'coerce': codes.l_to_i},
-                                   'limit': {'type': 'integer', 'min': -1, 'default': -1, 'coerce': codes.l_to_i},
-                                   'match': {'type': 'string', 'default': '', 'coerce': codes.l_to_s},
-                                   'has_panel_access': {'type': 'boolean', 'default': None, 'nullable': True,
-                                                        'coerce': codes.l_to_b},
-                                   'role': {'type': 'uuid', 'default': None, 'nullable': True, 'coerce': codes.l_to_s}},
+            'GET': {'parameters': {'offset': {'type': 'integer', 'min': 0, 'default': 0},
+                                   'limit': {'type': 'integer', 'min': -1, 'default': -1},
+                                   'match': {'type': 'string', 'default': ''},
+                                   'has_panel_access': {'type': 'boolean', 'default': None, 'nullable': True},
+                                   'role': {'type': 'uuid', 'default': None, 'nullable': True}},
                     'permission': ['core.view_user']},
-            'PUT': {'parameters': {'steamid': {'type': 'integer', 'min': 76561197960265729, 'max': 76561202255233023,
-                                               'coerce': codes.s_to_i, 'dependencies': {'id': None}, 'nullable': True,
+            'PUT': {'parameters': {'steamid': {'type': 'integer', 'min': 76561197960265729, 'max': 76561202255233023, 'dependencies': {'id': None}, 'nullable': True,
                                                'default': None},
                                    'id': {'type': 'uuid', 'dependencies': {'steamid': None}, 'nullable': True,
                                           'default': None},
@@ -113,15 +25,14 @@ validation = {
                                    'internal': {'type': 'boolean', 'default': False},
                                    'permissions': {'type': 'list', 'schema': {'regex': '\w+\.\w+\_\w+'},
                                                    'dependencies': {'internal': True}},
-                                   'groups': {'type': 'list', 'nullable': True, 'dependencies': {'internal': True}, 'schema': {'type': 'string'}},
+                                   'groups': {'type': 'list', 'nullable': True, 'dependencies': {'internal': True}, 'schema': {'type': 'integer'}},
 
-                                   'local': {'type': 'boolean', 'default': False, 'dependencies': {'internal': True}},
+                                   'local': {'type': 'boolean', 'dependencies': {'internal': True}},
                                    'email': {'type': 'email', 'dependencies': {'local': True}}},
                     'permission': ['core.add_user']}
         },
         'detailed': {
-            'GET': {'parameters': {'server': {'type': 'uuid', 'default': None, 'nullable': True, 'required': False,
-                                              'coerce': codes.l_to_s}},
+            'GET': {'parameters': {'server': {'type': 'uuid', 'default': None, 'nullable': True, 'required': False}},
                     'permission': ['core.view_user']},
             'POST': {'parameters': {'promotion': {'type': 'boolean', 'default': False},
                                     'force': {'type': 'boolean', 'default': False},
@@ -134,8 +45,8 @@ validation = {
                        'permission': ['core.delete_user']}
         },
         'ban': {
-            'GET': {'parameters': {'server': {'type': 'uuid', 'nullable': True, 'default': None, 'coerce': codes.l_to_s},
-                                   'resolved': {'type': 'boolean', 'nullable': True, 'default': None, 'coerce': codes.l_to_b}},
+            'GET': {'parameters': {'server': {'type': 'uuid', 'nullable': True, 'default': None},
+                                   'resolved': {'type': 'boolean', 'nullable': True, 'default': None}},
                     'permission': ['core.view_ban']},
             'POST': {'parameters': {'server': {'type': 'uuid', 'required': True},
                                     'resolved': {'type': 'boolean', 'nullable': True, 'default': None},
@@ -154,21 +65,25 @@ validation = {
             'PUT': {'parameters': {'server': {'type': 'uuid', 'required': True}},
                     'permission': ['core.kick_user']},
         },
+        'auth': {
+            'GET': {'parameters': {'password': {'type': 'string', 'required': True}},
+                    'permission': ['core.view_user']},
+        },
         'mutegag': {
-            'GET': {'parameters': {'server': {'type': 'uuid', 'nullable': True, 'default': None, 'coerce': codes.l_to_s},
-                                   'resolved': {'type': 'boolean', 'nullable': True, 'default': None, 'coerce': codes.l_to_b}},
+            'GET': {'parameters': {'server': {'type': 'uuid', 'nullable': True, 'default': None},
+                                   'resolved': {'type': 'boolean', 'nullable': True, 'default': None}},
                     'permission': ['core.view_mutegag']},
             'POST': {'parameters': {'server': {'type': 'uuid', 'required': False},
                                     'resolved': {'type': 'boolean', 'nullable': True, 'default': None},
                                     'type': {'type': 'string', 'allowed': ['mute', 'gag', 'both'], 'default': 'both',
-                                             'coerce': codes.lower},
+                                             'coerce': utils.lower},
                                     'reason': {'type': 'string', 'nullable': True, 'default': None},
                                     'length': {'type': 'integer', 'nullable': True, 'default': None}},
                      'permission': ['core.change_mutegag']},
             'PUT': {'parameters': {'server': {'type': 'uuid', 'required': False},
                                    'reason': {'type': 'string', 'required': True},
                                    'type': {'type': 'string', 'allowed': ['mute', 'gag', 'both'], 'default': 'both',
-                                            'coerce': codes.lower},
+                                            'coerce': utils.lower},
                                    'length': {'type': 'integer', 'required': True}},
                     'permission': ['core.add_mutegag']},
             'DELETE': {'parameters': {'server': {'type': 'uuid', 'required': True}},
@@ -177,9 +92,9 @@ validation = {
     },
     'group': {
         'list': {
-            'GET': {'parameters': {'offset': {'type': 'integer', 'min': 0, 'default': 0, 'coerce': codes.l_to_i},
-                                   'limit': {'type': 'integer', 'min': -1, 'default': -1, 'coerce': codes.l_to_i},
-                                   'match': {'type': 'string', 'default': '', 'coerce': codes.l_to_s}},
+            'GET': {'parameters': {'offset': {'type': 'integer', 'min': 0, 'default': 0},
+                                   'limit': {'type': 'integer', 'min': -1, 'default': -1},
+                                   'match': {'type': 'string', 'default': ''}},
                     'permission': ['core.view_group']},
             'PUT': {'parameters': {'name': {'type': 'string', 'required': True},
                                    'permissions': {'type': 'list', 'default': [], 'schema': {'regex': '\w+\.\w+\_\w+'}},
@@ -200,9 +115,9 @@ validation = {
     },
     'role': {
         'list': {
-            'GET': {'parameters': {'offset': {'type': 'integer', 'min': 0, 'default': 0, 'coerce': codes.l_to_i},
-                                   'limit': {'type': 'integer', 'min': -1, 'default': -1, 'coerce': codes.l_to_i},
-                                   'match': {'type': 'string', 'default': '', 'coerce': codes.l_to_s}},
+            'GET': {'parameters': {'offset': {'type': 'integer', 'min': 0, 'default': 0},
+                                   'limit': {'type': 'integer', 'min': -1, 'default': -1},
+                                   'match': {'type': 'string', 'default': ''}},
                     'permission': ['core.view_servergroup']},
             'PUT': {'parameters': {'name': {'type': 'string', 'required': True},
                                    'immunity': {'type': 'integer', 'required': True, 'min': 0, 'max': 100},
@@ -229,12 +144,12 @@ validation = {
     },
     'server': {
         'list': {
-            'GET': {'parameters': {'offset': {'type': 'integer', 'min': 0, 'default': 0, 'coerce': codes.l_to_i},
-                                   'limit': {'type': 'integer', 'min': -1, 'default': -1, 'coerce': codes.l_to_i},
-                                   'match': {'type': 'string', 'default': '', 'coerce': codes.l_to_s},
-                                   'ip': {'type': 'ip', 'nullable': True, 'default': None, 'coerce': codes.l_to_s},
+            'GET': {'parameters': {'offset': {'type': 'integer', 'min': 0, 'default': 0},
+                                   'limit': {'type': 'integer', 'min': -1, 'default': -1},
+                                   'match': {'type': 'string', 'default': ''},
+                                   'ip': {'type': 'ip', 'nullable': True, 'default': None},
                                    'port': {'type': 'integer', 'nullable': True, 'default': None, 'min': 0,
-                                            'max': 65535, 'coerce': codes.l_to_i}},
+                                            'max': 65535}},
                     'permission': ['core.view_server']},
             'PUT': {'parameters': {'name': {'type': 'string', 'required': True},
                                    'ip': {'type': 'ip', 'required': True},
@@ -267,9 +182,9 @@ validation = {
     },
     'system': {
         'chat': {
-            'GET': {'parameters': {'offset': {'type': 'integer', 'min': 0, 'default': 0, 'coerce': codes.l_to_i},
-                                   'limit': {'type': 'integer', 'min': -1, 'default': -1, 'coerce': codes.l_to_i},
-                                   'match': {'type': 'string', 'default': '', 'coerce': codes.l_to_s}},
+            'GET': {'parameters': {'offset': {'type': 'integer', 'min': 0, 'default': 0},
+                                   'limit': {'type': 'integer', 'min': -1, 'default': -1},
+                                   'match': {'type': 'string', 'default': ''}},
                     'permission': ['log.view_chat']},
             'PUT': {'parameters': {'user': {'type': 'uuid', 'required': True},
                                    'server': {'type': 'uuid', 'required': True},
@@ -278,14 +193,29 @@ validation = {
                                    'command': {'type': 'boolean', 'default': None, 'nullable': True}},
                     'permission': ['log.add_chat']}
         },
-        'token': {}
+        'token': {
+            'GET': {'parameters': {'offset': {'type': 'integer', 'min': 0, 'default': 0},
+                                   'limit': {'type': 'integer', 'min': -1, 'default': -1},
+                                   'active': {'type': 'boolean', 'default': True, 'nullable': True}},
+                    'permission': ['core.view_token']},
+            'PUT': {'parameters': {'permissions': {'type': 'list', 'schema': {'regex': '\w+\.\w+\_\w+'}, 'required': True},
+                                   'due': {'type': 'integer', 'default': None, 'nullable': True},
+                                   'active': {'type': 'boolean', 'default': True}},
+                    'permission': ['core.add_token']},
+        },
+        'token[detailed]': {
+            'GET': {'parameters': {},
+                    'permission': ['core.view_token']},
+            'DELETE': {'parameters': {},
+                       'permission': ['core.delete_token']},
+        }
     },
     'steam': {
         'search': {
-            'GET': {'parameters': {'scope': {'type': 'string', 'allowed': ['user'], 'default': 'user', 'coerce': codes.l_to_s},
-                                   'query': {'type': 'string', 'required': True, 'coerce': codes.l_to_s},
-                                   'mode': {'type': 'string', 'allowed': ['best-guess'], 'default': 'best-guess', 'coerce': codes.l_to_s},
-                                   '_ts': {'type': 'integer', 'required': False, 'coerce': codes.l_to_i}},
+            'GET': {'parameters': {'scope': {'type': 'string', 'allowed': ['user'], 'default': 'user'},
+                                   'query': {'type': 'string', 'required': True},
+                                   'mode': {'type': 'string', 'allowed': ['best-guess'], 'default': 'best-guess'},
+                                   '_ts': {'type': 'integer', 'required': False}},
                     'permission': []}
         }
     },

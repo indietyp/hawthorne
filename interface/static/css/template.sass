@@ -65,10 +65,52 @@ html, button, input, select, textarea, .pure-g [class*='pure-u']
 
   & .action-container
     width: 50vw
+    overflow: hidden
 
     & .login-container
       display: flex
       align-items: center
+      transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)
+
+      &.column
+        flex-direction: column
+
+      &.login
+        margin-top: -15vh
+
+      &.collapsed
+        transform: translateX(-100%)
+
+    & input, button
+      background-color: $white
+      height: 2em
+      width: 75%
+      font-size: 2em
+      padding: 0 1em
+      border-radius: 1em
+      text-align: center
+      margin-top: 1em
+      border: 1px solid transparent
+      outline: none
+
+    & button
+      background-color: transparent
+      border: none
+      outline: none
+
+    & span
+      font-size: 2em
+      color: $white
+      text-align: center
+
+    & button
+      display: flex
+      align-items: center
+      width: 95%
+
+      .feather-log-in
+        height: 2em
+        width: 2em
 
     & a
       background: transparent
@@ -659,6 +701,27 @@ input[type='number']
   &.no__margin__bottom
     margin-bottom: 0
 
+  &[data-type='select-multiple']
+    & .choices__inner
+      display: flex
+      align-items: center
+      flex-wrap: wrap
+
+    & .choices__list--multiple
+      & .choices__item
+        width: 100%
+        width: max-content
+        background-color: $dgray !important
+        border-radius: 12px
+
+        & button
+          border-left-color: $white !important
+
+    & input
+      cursor: pointer
+      width: unset !important
+      flex-grow: 1
+
   &.edit
     &.big .choices__item
       font-size: 1.25em !important
@@ -982,3 +1045,24 @@ a
   color: transparent
   -webkit-background-clip: text
   background-clip: text
+
+.modal
+  position: fixed
+  display: flex
+  top: 0
+  left: 0
+  z-index: 9999
+  height: 100vh
+  width: 100vw
+  background-color: rgba($dgray, 0.8)
+  align-items: center
+
+  .wrapper
+    height: 50vh
+    width: 50vw
+    padding: 12px
+    background-color: $white
+    border: 1px solid transparent
+    border-radius: 12px
+    font-size: 1.25em
+    box-shadow: 0 1em 2em -1em rgba(0, 0, 0, 0.5)

@@ -14,6 +14,7 @@ urlpatterns = [
     path('users', user.list, name='user.list'),
     path('users/<uuid:u>', user.detailed, name='user.detailed'),
     path('users/<steamid:s>', user.detailed, name='user.detailed'),
+    path('users/<uuid:u>/auth', user.auth, name='user.auth'),
     path('users/<uuid:u>/ban', user.ban, name='user.ban'),
     path('users/<uuid:u>/kick', user.kick, name='user.kick'),
     path('users/<uuid:u>/mutegag', user.mutegag, name='user.mutegag'),
@@ -33,7 +34,8 @@ urlpatterns = [
 
     # system
     path('system/chat', system.chat, name='system.chat'),
-    path('system/token', system.token, name='system.token'),  # TODO: PUT, POST, GET (only masked)
+    path('system/tokens', system.token, name='system.token'),
+    path('system/tokens/<uuid:t>', system.token_detailed, name='system.token[detailed]'),  # GET, DELETE
 
     # steam
     path('steam/search', steam.search, name='steam.search'),
@@ -44,5 +46,4 @@ urlpatterns = [
 
     # mainframe connection
     path('mainframe/connect', capabilities.games, name='capabilities.games'),
-    # path('mainframe/invite', capabilities.games, name='capabilities.games'),
 ]

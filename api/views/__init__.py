@@ -41,7 +41,7 @@ for file in os.listdir(os.path.dirname(os.path.realpath(__file__))):
 @require_http_methods(['GET'])
 def documentation(request, *args, **kwargs):
   from api import urls
-  from api.validation import validation
+  from api.specification import validation
 
   v = deepcopy(validation)
   delete_key(v, 'coerce')

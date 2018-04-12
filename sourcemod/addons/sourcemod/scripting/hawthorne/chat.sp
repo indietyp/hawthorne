@@ -1,6 +1,6 @@
 public Action OnPlayerChatMessage(int client, const char[] command, int argc) {
   // check if the client is an actual person
-  if(client < 1) return Plugin_Continue;
+  if (client < 1) return Plugin_Continue;
 
   char message[256];
   GetCmdArgString(message, sizeof(message));
@@ -24,7 +24,7 @@ public Action OnPlayerChatMessage(int client, const char[] command, int argc) {
 }
 
 stock void SendChatMessage(int client, char[] message, int type = 0) {
-  char ip[10];
+  char ip[128];
 
   GetClientIP(client, ip, sizeof(ip));
 

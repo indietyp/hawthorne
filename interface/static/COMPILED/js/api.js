@@ -3,7 +3,7 @@
   var remove;
 
   remove = function(mode = '', that) {
-    var endpoint, node, options, payload, role, server, trans, user;
+    var endpoint, node, options, payload, role, server, token, trans, user;
     trans = $(that);
     if (!trans.hasClass('confirmation')) {
       trans.addClass('explicit red confirmation');
@@ -49,6 +49,16 @@
         node = that.parentElement.parentElement.parentElement.parentElement;
         server = $('input.uuid', node)[0].value;
         endpoint = window.endpoint.api.servers[server];
+        break;
+      case 'setting__user':
+        console.log('test');
+        break;
+      case 'setting__group':
+        console.log('test');
+        break;
+      case 'setting__token':
+        token = $('input.uuid', node)[0].value;
+        endpoint = window.endpoint.api.system.tokens[token];
         break;
       default:
         console.warning('mode not implemented');
@@ -231,7 +241,7 @@
           }
         }, false);
         window.api.storage[uuid + '#' + selected] = selector;
-        window.api.groups('', selector, selected);
+        window.api.roles('', selector, selected);
         break;
       case 'admin__groups':
         server = node.querySelector('.icon.server');
@@ -348,7 +358,7 @@
   var submit;
 
   submit = function(mode = '', that) {
-    var data, node, now, o, output, payload, perms, server, time, type, user, uuid, value;
+    var data, local, node, now, o, output, payload, perms, server, time, type, user, uuid, value;
     o = {
       target: that,
       skip_animation: false
@@ -508,13 +518,65 @@
           return perms.push(cl);
         });
         if ($(".scope__toggle", node).hasClass('activated')) {
-          return console.log('Hi');
+          local = true;
+        } else {
+          local = false;
         }
-        break;
+        payload = {
+          permissions: perms,
+          internal: true,
+          local: local,
+          groups: window.groupinput.getValue(true)
+        };
+        if (!local) {
+          payload.steamid = window.usernameinput.getValue(true);
+        } else {
+          payload.email = $("#inputemail", node)[0].value;
+        }
+        return window.endpoint.api.users.put(o, {}, payload, function(err, data) {
+          window.ajax.setting.user(1);
+          return data;
+        });
       case 'setting__group':
-        return console.log('placeholder');
+        node = that.parentElement.parentElement.parentElement;
+        perms = [];
+        $('.permission__child:checked', node).forEach(function(i) {
+          var cl;
+          cl = i.id;
+          cl = cl.replace(/\s/g, '');
+          cl = cl.split('__');
+          cl = `${cl[0]}.${cl[1]}`;
+          return perms.push(cl);
+        });
+        payload = {
+          name: $("#inputgroupname", node)[0].value,
+          permissions: perms,
+          members: []
+        };
+        return window.endpoint.api.groups.put(o, {}, payload, function(err, data) {
+          window.ajax.setting.group(1);
+          return data;
+        });
       case 'setting__token':
-        return console.log('placeholder');
+        node = that.parentElement.parentElement.parentElement;
+        perms = [];
+        $('.permission__child:checked', node).forEach(function(i) {
+          var cl;
+          cl = i.id;
+          cl = cl.replace(/\s/g, '');
+          cl = cl.split('__');
+          cl = `${cl[0]}.${cl[1]}`;
+          return perms.push(cl);
+        });
+        payload = {
+          permissions: perms,
+          due: null,
+          active: true
+        };
+        return window.endpoint.api.system.tokens.put(o, {}, payload, function(err, data) {
+          window.ajax.setting.token(1);
+          return data;
+        });
       default:
         return console.warning('You little bastard! This is not implemented....');
     }
@@ -528,7 +590,7 @@
   //= require api.delete.coffee
   //= require api.edit.coffee
   //= require api.create.coffee
-  var game, group, server;
+  var game, group, login, role, server, setup;
 
   game = function(that = null, selected = '') {
     window.endpoint.api.capabilities.games.get(function(err, data) {
@@ -586,9 +648,9 @@
     });
   };
 
-  group = function(query, that = null, selected = '') {
+  role = function(query, that = null, selected = '') {
     window.endpoint.api.roles({
-      'query': query
+      'match': query
     }).get(function(err, data) {
       var ele, fmt, formatted, i, len;
       data = data['result'];
@@ -614,10 +676,75 @@
     });
   };
 
+  group = function(query, that = null, selected = '') {
+    window.endpoint.api.groups({
+      'match': query
+    }).get(function(err, data) {
+      var ele, fmt, formatted, i, len;
+      data = data['result'];
+      if (that !== null) {
+        formatted = [];
+        for (i = 0, len = data.length; i < len; i++) {
+          ele = data[i];
+          fmt = {
+            value: ele.id,
+            label: ele.name
+          };
+          if (selected !== '' && fmt.value === selected) {
+            fmt.selected = true;
+          }
+          formatted.push(fmt);
+        }
+        that.setChoices(formatted, 'value', 'label', true);
+      }
+      return data;
+    });
+  };
+
+  setup = function(that) {
+    var header, node, payload, uuid;
+    node = that.parentNode.parentNode;
+    header = {
+      "X-CSRFToken": window.csrftoken
+    };
+    payload = {
+      username: $('input.username', node)[0].value,
+      password: $('input.password', node)[0].value
+    };
+    uuid = $('input.uuid', node)[0].value;
+    return fermata.json("/setup")[uuid].put(header, payload, function(err, data) {
+      return window.location.href = "/login";
+    });
+  };
+
+  login = function(that) {
+    var header, node, payload;
+    node = that.parentNode.parentNode;
+    header = {
+      "X-CSRFToken": window.csrftoken,
+      'Content-Type': "application/x-www-form-urlencoded; charset=utf-8"
+    };
+    // payload =
+    //   username: $('input.username', node)[0].value
+    //   password: $('input.password', node)[0].value
+    payload = `username=${($('input.username', node)[0].value)}&password=${($('input.password', node)[0].value)}`;
+    return fermata.raw({
+      base: window.location.origin + "/internal/login"
+    }).post(header, payload, function(dummy, data) {
+      return window.location.href = "/";
+    });
+  };
+
   window.api.servers = server;
+
+  window.api.roles = role;
 
   window.api.groups = group;
 
   window.api.games = game;
+
+  window.api.setup = setup;
+
+  window.api.login = login;
 
 }).call(this);

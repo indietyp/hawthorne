@@ -8,10 +8,11 @@ import xmltodict
 from django.conf import settings
 from django.http import JsonResponse
 
-from api.codes import s_to_l
-from api.validation import Validator
-from api.validation import validation as valid_dict
-from core.utils import UniPanelJSONEncoder
+from api.utils import s_to_l
+from lib.normalize import Normalize
+from lib.validator import BaseValidator
+from api.specification import validation as valid_dict
+from core.utils import HawthorneJSONEncoder
 
 
 def jsonparse(content=None, code=200, encoder=None):
@@ -20,7 +21,7 @@ def jsonparse(content=None, code=200, encoder=None):
   schema = {'success': {'type': 'boolean', 'required': True},
             'reason': {'type': ['dict', 'list'], 'dependencies': {'success': False}, 'coerce': s_to_l},
             'result': {'dependencies': {'success': True}}}
-  v = Validator(schema, update=True, purge_unknown=True)
+  v = BaseValidator(schema, update=True, purge_unknown=True)
 
   if content is None:
     content = 'no return value was supplied'
@@ -41,7 +42,7 @@ def jsonparse(content=None, code=200, encoder=None):
     print(document)
 
   if encoder is None:
-    return JsonResponse(document, status=code, encoder=UniPanelJSONEncoder)
+    return JsonResponse(document, status=code, encoder=HawthorneJSONEncoder)
   else:
     return JsonResponse(document, status=code, encoder=encoder)
 
@@ -50,10 +51,13 @@ def json_response(f):
   def wrapper(request, *args, **kwargs):
     try:
       response = f(request, *args, **kwargs)
-    except Exception as e:
-      response = (e.args[-1], 500)
 
-    if not isinstance(response, tuple) or len(response) > 4:
+      if not response:
+        response = 'success'
+    except Exception as e:
+      response = (e.__str__(), 500)
+
+    if not isinstance(response, tuple) or len(response) > 3:
       response = (response,)
 
     return jsonparse(*response)
@@ -85,7 +89,7 @@ def validation(a):
         if re.match(r'^[0-9a-fA-F]{2}', data.decode()):
           split = data.split(b'\r\n')
 
-          data = ''
+          data = b''
           for i in range(len(split)):
             if i % 2:
               data += split[i]
@@ -108,9 +112,14 @@ def validation(a):
 
         schema = validation[request.method]
 
-      schema = schema['parameters']
+      converted = {}
+      for k, v in schema['parameters'].items():
+        converted[k] = v
 
-      v = Validator(schema, update=True, purge_unknown=True)
+        if 'coerce' not in converted[k]:
+          converted[k]['coerce'] = Normalize(converted[k]['type']).convert
+
+      v = BaseValidator(converted, update=True, purge_unknown=True)
       document = v.normalized(document)
 
       if document is None:

@@ -118,6 +118,9 @@ player__user = (page = 1) ->
     status = response.status
     data = response.data
     if status == 200
+      if page == 1
+        $("#player__user").html('')
+
       $("#player__user").htmlAppend(data)
       feather.replace()
 
@@ -171,6 +174,65 @@ home__instance = (page = 1) ->
       return false
   )
 
+setting__user = (page = 1) ->
+  header =
+    "X-CSRFToken": window.csrftoken
+
+  window.endpoint.ajax.setting.user[page].post(header, {}, (dummy, response) ->
+    status = response.status
+    data = response.data
+    if status == 200
+      if page == 1
+        $("#setting__user").html('')
+
+      $("#setting__user").htmlAppend data
+      feather.replace()
+
+      return window.ajax.setting.user(page + 1)
+    else
+      return false
+  )
+
+
+setting__group = (page = 1) ->
+  header =
+    "X-CSRFToken": window.csrftoken
+
+  window.endpoint.ajax.setting.group[page].post(header, {}, (dummy, response) ->
+    status = response.status
+    data = response.data
+    if status == 200
+      if page == 1
+        $("#setting__group").html('')
+
+      $("#setting__group").htmlAppend data
+      feather.replace()
+
+      return window.ajax.setting.group(page + 1)
+    else
+      return false
+  )
+
+setting__token = (page = 1) ->
+  header =
+    "X-CSRFToken": window.csrftoken
+
+  window.endpoint.ajax.setting.token[page].post(header, {}, (dummy, response) ->
+    status = response.status
+    data = response.data
+    if status == 200
+      if page == 1
+        $("#setting__token").html('')
+
+      $("#setting__token").htmlAppend data
+      feather.replace()
+
+      return window.ajax.setting.token(page + 1)
+    else
+      return false
+  )
+
+
 window.ajax =
   admin:
     admins: admin__admin
@@ -188,3 +250,7 @@ window.ajax =
     server: server__server
   home:
     instance: home__instance
+  setting:
+    user: setting__user
+    group: setting__group
+    token: setting__token

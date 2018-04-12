@@ -26,12 +26,20 @@ def list(request, validated={}, *args, **kwargs):
 
     return [g for g in groups]
   else:
+    base = Permission.objects if request.user.is_superuser else request.user.user_permissions
+    exceptions = []
     perms = []
     for perm in validated['permissions']:
       perm = perm.split('.')
-      for p in Permission.objects.filter(name=perm[1]):
-        if p.content_type.app_label == perm[0]:
-          perms.append(p)
+      p = base.filter(content_type__app_label=perm[0], codename=perm[1])
+
+      if not p:
+        exceptions.append('.'.join(perm))
+
+      perms.extend(p)
+
+    if exceptions:
+      return {'info': 'You are trying to assign permissions you do not have yourself.', 'affects': exceptions}, 403
 
     users = []
     for user in validated['members']:

@@ -4,16 +4,18 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-  path('', views.home),
-  path('bans', views.ban),
-  path('chat', views.chat),
-  path('admins', views.admin),
-  path('servers', views.server),
-  path('players', views.player),
-  path('mutegags', views.mutegag),
-  path('settings', views.settings),
-  path('announcements', views.announcement),
+    path('', views.home),
+    path('bans', views.ban),
+    path('chat', views.chat),
+    path('admins', views.admin),
+    path('servers', views.server),
+    path('players', views.player),
+    path('mutegags', views.mutegag),
+    path('settings', views.settings),
+    path('announcements', views.announcement),
 
-  path('login', views.login),
-  path('logout', auth_views.LogoutView.as_view(next_page='/'), name='logout')
+    path('setup/<uuid:u>', views.setup),
+    path('login', views.login),
+    path('logout', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
+    path('internal/login', auth_views.LoginView.as_view(redirect_authenticated_user=True, template_name='skeleton/login.pug')),
 ]

@@ -192,18 +192,65 @@ submit = (mode = '', that) ->
         permissions: perms
         internal: true
         local: local
-        groups: []
+        groups: window.groupinput.getValue(true)
 
       if not local
         payload.steamid = window.usernameinput.getValue(true)
       else
-        payload.username = $("#inputemail", node)[0].value
+        payload.email = $("#inputemail", node)[0].value
+
+      window.endpoint.api.users.put(o, {}, payload, (err, data) ->
+        window.ajax.setting.user(1)
+        return data
+      )
 
     when 'setting__group'
-      console.log 'placeholder'
+      node = that.parentElement.parentElement.parentElement
+      perms = []
+
+      $('.permission__child:checked', node).forEach((i) ->
+        cl = i.id
+        cl = cl.replace /\s/g, ''
+
+        cl = cl.split '__'
+        cl = "#{cl[0]}.#{cl[1]}"
+
+        perms.push cl
+      )
+
+      payload =
+        name: $("#inputgroupname", node)[0].value
+        permissions: perms
+        members: []
+
+      window.endpoint.api.groups.put(o, {}, payload, (err, data) ->
+        window.ajax.setting.group(1)
+        return data
+      )
 
     when 'setting__token'
-      console.log 'placeholder'
+      node = that.parentElement.parentElement.parentElement
+      perms = []
+
+      $('.permission__child:checked', node).forEach((i) ->
+        cl = i.id
+        cl = cl.replace /\s/g, ''
+
+        cl = cl.split '__'
+        cl = "#{cl[0]}.#{cl[1]}"
+
+        perms.push cl
+      )
+
+      payload =
+        permissions: perms
+        due: null
+        active: true
+
+      window.endpoint.api.system.tokens.put(o, {}, payload, (err, data) ->
+        window.ajax.setting.token(1)
+        return data
+      )
 
     else
       console.warning 'You little bastard! This is not implemented....'
