@@ -56,7 +56,7 @@ class Mail(BaseModel):
 
 class Instance(BaseModel):
   ip = models.GenericIPAddressField()
-  domain = models.CharField(max_length=255)
+  domain = models.CharField(max_length=255, null=True)
 
   name = models.CharField(max_length=255, null=True)
   owner = models.CharField(max_length=255, null=True)

@@ -28,7 +28,12 @@ from django.views.decorators.http import require_http_methods
 def list(request, validated={}, *args, **kwargs):
   if request.method == 'PUT':
     ip = request.META['REMOTE_ADDR']
-    domain = socket.gethostbyaddr(ip)[0]
+    print(ip)
+
+    try:
+      domain = socket.gethostbyaddr(ip)[0]
+    except:
+      domain = None
 
     instance, created = Instance.objects.get_or_create(ip=ip, domain=domain)
 
@@ -85,7 +90,10 @@ def invite(request, validated={}, i=None, *args, **kwargs):
   instance = Instance.objects.get(id=i)
 
   instance.ip = request.META['REMOTE_ADDR']
-  instance.domain = socket.gethostbyaddr(instance.ip)[0]
+  try:
+    instance.domain = socket.gethostbyaddr(instance.ip)[0]
+  except:
+    instance.domain = None
   instance.save()
 
   if request.method == 'PUT':
