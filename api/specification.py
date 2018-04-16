@@ -224,5 +224,15 @@ validation = {
             'GET': {'parameters': {},
                     'permission': ['core.view_capabilities']}
         }
+    },
+    'mainframe': {
+        'connect': {
+            'GET': {'parameters': {'offset': {'type': 'integer', 'min': 0, 'default': 0},
+                                   'limit': {'type': 'integer', 'min': -1, 'default': -1},
+                                   'match': {'type': 'string', 'default': ''}},
+                    'permission': ['core.view_mainframe']},
+            'PUT': {'parameters': {'mainframe': {'type': 'string', 'default': None, 'nullable': True}},
+                    'permission': ['core.add_mainframe']},
+        }
     }
 }

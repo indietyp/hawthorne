@@ -7,34 +7,47 @@ from django.conf import settings
 
 
 class Mainframe:
-  def __init__(self):
+  def __init__(self, target=None):
     self.current = namedtuple('Mainframe', ['id', 'salt', 'mainframe'])
 
     self.file = '{}/mainframe.ini'.format(settings.BASE_DIR)
     self.config = ConfigParser()
 
+    self.target = target if target else settings.MAINFRAME
+
   def __enter__(self):
     if not self.check():
       self.register()
 
-    self.current.id = self.config[settings.MAINFRAME]['ID']
-
-    if 'SALT' in self.config[settings.MAINFRAME]:
-      self.current.salt = self.config[settings.MAINFRAME]['SALT']
-
-    self.current.mainframe = settings.MAINFRAME
+    self.populate()
     return self
 
   def __exit__(self, *args, **kwargs):
     self.save()
 
+  def populate(self):
+    self.current.id = self.config[self.target]['ID']
+
+    if 'SALT' in self.config[self.target]:
+      self.current.salt = self.config[self.target]['SALT']
+
+    self.current.mainframe = self.target
+
+    return self
+
+  def collect(self):
+    output = {}
+    for target in self.config.sections():
+      output[target] = self.config[target]['ID']
+
+    return output
+
   def __call__(self):
     return self.current
 
   def register(self):
-    # r = requests.get('https://api.ipify.org?format=json')
     payload = {}
-    r = requests.put("http://{}/api/v1/instance".format(settings.MAINFRAME), json=payload)
+    r = requests.put("https://{}/api/v1/instance".format(self.target), json=payload)
 
     o = r.json()
     if 'result' not in o:
@@ -42,13 +55,13 @@ class Mainframe:
 
     result = o['result']
 
-    if settings.MAINFRAME not in self.config.sections():
-      self.config[settings.MAINFRAME] = {}
+    if self.target not in self.config.sections():
+      self.config[self.target] = {}
 
-    self.config[settings.MAINFRAME]['ID'] = result['id']
+    self.config[self.target]['ID'] = result['id']
 
     if 'salt' in result:
-      self.config[settings.MAINFRAME]['SALT'] = result['salt']
+      self.config[self.target]['SALT'] = result['salt']
 
     return True
 
@@ -63,7 +76,7 @@ class Mainframe:
 
     if exists:
       self.config.read(self.file)
-      if settings.MAINFRAME not in self.config.sections():
+      if self.target not in self.config.sections():
         return False
     else:
       return False
@@ -75,7 +88,7 @@ class Mainframe:
                'target': target.email,
                'from': request.user.namespace if request.user.is_steam else request.user.username}
 
-    r = requests.put("http://{}/api/v1/instance/{}/invite".format(settings.MAINFRAME, self.current.id),
+    r = requests.put("https://{}/api/v1/instance/{}/invite".format(self.target, self.current.id),
                      json=payload)
     result = r.json()
 

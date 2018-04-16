@@ -577,6 +577,12 @@
           window.ajax.setting.token(1);
           return data;
         });
+      case 'mainframe':
+        node = that.parentElement.parentElement.parentElement;
+        return window.endpoint.api.mainframe.connect.put(o, {}, {}, function(err, data) {
+          $('.description.info-container').html(`<span class='green'> Connected </span><span class='prefix primary'>${data.result.id}</span>`);
+          return $('.action-container').css('display', 'none');
+        });
       default:
         return console.warning('You little bastard! This is not implemented....');
     }
@@ -590,7 +596,7 @@
   //= require api.delete.coffee
   //= require api.edit.coffee
   //= require api.create.coffee
-  var game, group, login, role, server, setup;
+  var game, group, login, mainframe, role, server, setup;
 
   game = function(that = null, selected = '') {
     window.endpoint.api.capabilities.games.get(function(err, data) {
@@ -733,6 +739,10 @@
     }).post(header, payload, function(dummy, data) {
       return window.location.href = "/";
     });
+  };
+
+  mainframe = function(that) {
+    return window.endpoint.api.mainframe.connect();
   };
 
   window.api.servers = server;

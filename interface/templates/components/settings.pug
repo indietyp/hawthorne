@@ -207,25 +207,31 @@
   .item.pure-u-1-1.second
     .heading Utilities
     .row.pure-g
-      .column.icon.pure-u-12-24
+      .column.icon(class="{{mainframe|yesno:'pure-u-24-24,pure-u-12-24'}}")
         - include 'assets/discord.svg'
-        .description
-          span.red Not connected
-          span.prefix to mainframe
-        //- .description
-        //-   span.green Connected
-        //-   span.prefix to Discord server: blablibu
-        //- .description
-        //-   span Token for Bot:
-        //-   span.prefix.orange 2401ffe9-1025-4884-99c0-761629326a34
-      .column.icon.pure-u-12-24
-        .spacer
-        .description(style='padding-right:1em')
-          span.green Connect
-          span.prefix to mainframe:
-          .top (this action is not reversible)
-        .action.flex.center
-          i(data-feather="globe")
+
+        - if mainframe
+          - if discord
+            .description
+              span.green Connected
+              span.prefix to Discord server: blablibu
+          - else
+            .description
+              span Token for Bot:
+              span.prefix.orange= mainframe
+        - else
+          .description.info-container
+            span.red Not connected
+            span.prefix to mainframe
+      - if not mainframe
+        .column.icon.pure-u-12-24.action-container
+          .spacer
+          .description(style='padding-right:1em')
+            span.green Connect
+            span.prefix to mainframe:
+            .top (this action is not reversible)
+          .action.flex.center
+            i(onclick="window.api.submit('mainframe', this)", data-feather="globe")
     .row.pure-g
       .column.icon.username.pure-u-7-24
         i(style="padding-left:6px", data-feather='mail')
@@ -270,7 +276,7 @@
                 i.explicit(data-feather='toggle-left')
               div Usage Report to Developer
       .column.icon.username.pure-u-7-24
-        a(href='https://hawthorne.com', target="_blank") Why and what is the usage report?
+        a(href='https://hawthorne.in', target="_blank") Why and what is the usage report?
       .column.icon.username.pure-u-3-24
         .spacer
         .action

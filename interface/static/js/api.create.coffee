@@ -252,6 +252,12 @@ submit = (mode = '', that) ->
         return data
       )
 
+    when 'mainframe'
+      node = that.parentElement.parentElement.parentElement
+      window.endpoint.api.mainframe.connect.put(o, {}, {}, (err, data) ->
+        $('.description.info-container').html("<span class='green'> Connected </span><span class='prefix primary'>#{data.result.id}</span>")
+        $('.action-container').css('display', 'none')
+      )
     else
       console.warning 'You little bastard! This is not implemented....'
 

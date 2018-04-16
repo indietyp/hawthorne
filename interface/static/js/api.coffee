@@ -2,6 +2,7 @@
 #= require api.edit.coffee
 #= require api.create.coffee
 
+
 game = (that = null, selected = '') ->
   window.endpoint.api.capabilities.games.get((err, data) ->
     data = data.result
@@ -123,6 +124,9 @@ login = (that) ->
   fermata.raw({base: window.location.origin + "/internal/login"}).post(header, payload, (dummy, data) ->
     window.location.href = "/";
   )
+
+mainframe = (that) ->
+  window.endpoint.api.mainframe.connect()
 
 window.api.servers = server
 window.api.roles = role

@@ -163,4 +163,4 @@ AUTOMATED_LOGGING = {
     'exclude': ['automated_logging', 'Session', 'basehttp', 'django.server']
 }
 
-MAINFRAME = "127.0.0.1:7999"
+MAINFRAME = "hawthorne.in"

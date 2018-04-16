@@ -46,6 +46,7 @@ update () {
       exit 1
     fi
 
+    git fetch
     git pull
 
     printf "${GREEN}Checking dependencies and updating components.\n${NORMAL}"
@@ -71,7 +72,7 @@ update () {
 }
 
 usage () {
-  echo "The hawthorne toolchain is an effort to make updating and fixing easier."
+  echo "The hawthorne toolchain is an effort to make updating, reporting and fixing hawthorne easier."
   echo ""
   echo "Commands that are currently supported:"
   echo "\t${GREEN}help${NORMAL}   - What you see here."

@@ -104,3 +104,5 @@ supervisor.conf
 gunicorn.conf.py
 
 mainframe.ini
+
+*.plist

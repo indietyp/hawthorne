@@ -51,7 +51,11 @@ class User(AbstractUser):
         ('kick_user', 'Can kick user'),
         ('view_group', 'Can view user group'),
 
+        ('view_settings', 'Can view settings'),
         ('view_capabilities', 'Can check capabilities'),
+
+        ('add_mainframe', 'Can add mainframe'),
+        ('view_mainframe', 'Can check mainframe'),
     ]
 
   def __str__(self):

@@ -2,9 +2,9 @@
 # this is adopted from the oh-my-zsh install script
 
 directory=/hawthorne
-interactive=1
 utils=0
 dev=0
+path=0
 
 web="nginx"
 domain=""
@@ -42,14 +42,21 @@ cleanup() {
 }
 
 usage() {
-  printf "\nThe hawthorne installation tool is an effort to make installation easier."
-  printf "\n\nParameters that are currently supported:"
+  printf "\nThe hawthorne installation tool is an effort to make the installation on unix based system a bit easier and automated."
+  printf "\n${RED}Installation Modes:${NORMAL}"
   printf "\n\t${GREEN}-f${NORMAL}   --full"
-  printf "\n\t${YELLOW}-d${NORMAL}   --development"
+  printf "\n\t${GREEN}-d${NORMAL}   --development"
   printf "\n\t${GREEN}-h${NORMAL}   --help"
+  printf "\n\n${RED}Optional Arguments:${NORMAL}"
+  printf "\n\t${GREEN}+d <domain>${NORMAL}          --domain example.com"
+  printf "\n\t${GREEN}+s <steam api key>${NORMAL}   --steam 665F388103DAF49235356BA3EFD0849E"
+  printf "\n\t${GREEN}+p${NORMAL}                   --path"
+  printf "\n"
 }
 
 parser() {
+  printf "Hello! $0"
+  printf "Hello! $1"
   while [ "$1" != "" ]; do
     case $1 in
         -f | --full)            utils=1
@@ -58,6 +65,14 @@ parser() {
                                 ;;
         -h | --help | help)     usage
                                 exit
+                                ;;
+        +d | --domain)          shift
+                                domain=$1
+                                ;;
+        +s | --steam)           shift
+                                stapi=$1
+                                ;;
+        +p | --path)            path=1
                                 ;;
         * )                     usage
                                 exit 1
@@ -72,33 +87,7 @@ parser() {
 }
 
 main() {
-  # Use colors, but only if connected to a terminal, and that terminal
-  # supports them.
-  if which tput >/dev/null 2>&1; then
-    ncolors=$(tput colors)
-  fi
-
-  if [ -t 1 ] && [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
-    RED="$(tput setaf 1)"
-    GREEN="$(tput setaf 2)"
-    YELLOW="$(tput setaf 3)"
-    BLUE="$(tput setaf 4)"
-    BOLD="$(tput bold)"
-    NORMAL="$(tput sgr0)"
-  else
-    RED=""
-    GREEN=""
-    YELLOW=""
-    BLUE=""
-    BOLD=""
-    NORMAL=""
-  fi
-
-  # Only enable exit-on-error after the non-critical colorization stuff,
-  # which may fail on systems lacking tput or terminfo
-  set -e
-
-  if ! [ $(id -u) = 0 ]; then
+  if ! [ $(id -u) -eq 0 ]; then
     echo "Please run as ${RED}root${NORMAL}"
     exit 1
   fi
@@ -116,14 +105,16 @@ main() {
   printf "Everything will be configured by itelf.\n"
   printf "The configured installation path used will be ${GREEN}${directory}${NORMAL}\n"
 
-  while true; do
-    read -p "Do you want to define a custom path? ${GREEN}(y)${NORMAL}es or ${RED}(n)${NORMAL}o: " yn
-    case $yn in
-        [Yy]* ) read -p "Where should hawthorne be installed? " directory; break;;
-        [Nn]* ) break;;
-        * ) echo "Please answer with the answers provided.";;
-    esac
-  done
+  if [ $path -eq 0 ]; then
+    while true; do
+      read -p "Do you want to define a custom path? ${GREEN}(y)${NORMAL}es or ${RED}(n)${NORMAL}o: " yn
+      case $yn in
+          [Yy]* ) read -p "Where should hawthorne be installed? " directory; break;;
+          [Nn]* ) break;;
+          * ) echo "Please answer with the answers provided.";;
+      esac
+    done
+  fi
 
   umask g-w,o-w
 
@@ -263,7 +254,7 @@ main() {
     fi
   done
 
-  if [ $stapi = "" ]; then
+  if [ "$stapi" == "" ]; then
     printf "\n\n${GREEN}SteamAPI configuration:${NORMAL}\n"
     read -p 'Steam API Key: ' stapi
   fi
@@ -295,11 +286,11 @@ main() {
 
   printf "${BOLD}Configuring Webserver...${NORMAL}\n"
 
-  if [ $util -eq 0 ]; then
+  if [ $utils -eq 0 ]; then
     while true; do
       read -p "Is your webserver ${BOLD}(A)${NORMAL}pache, ${BOLD}(N)${NORMAL}ginx or ${BOLD}(D)${NORMAL}ifferent? " yn
       case $yn in
-          [Aa]* ) web="apache"; sed -i "s/bind = 'unix:/tmp/hawthorne.sock'/DEBUG = bind = '127.0.0.1:8000'/g" $directory/panel/local.py; break;;
+          [Aa]* ) web="apache"; sed -i "s/bind = 'unix:/tmp/hawthorne.sock'/DEBUG = bind = '127.0.0.1:8000'/g" $directory/gunicorn.conf.py; break;;
           [Nn]* ) break;;
           [Dd]* ) web="unspecified"; break;;
           * ) echo "Please answer with the answers provided.";;
@@ -307,7 +298,7 @@ main() {
     done
   fi
 
-  if [ $domain != "" ]; then
+  if [ "$domain" != "" ]; then
     while true; do
       read -p "Is the site on an ${BOLD}(I)${NORMAL}P or ${BOLD}(D)${NORMAL}omain? " yn
       case $yn in
@@ -318,15 +309,13 @@ main() {
     done
   fi
 
-  if [ $domain != "" ]; then
-    sed -i "s/ALLOWED_HOSTS = [gethostname(), gethostbyname(gethostname())]/ALLOWED_HOSTS = ['"$domain"']/g" $directory/panel/local.py
-  fi
+  sed -i "s/ALLOWED_HOSTS = [gethostname(), gethostbyname(gethostname())]/ALLOWED_HOSTS = ['"$domain"']/g" $directory/panel/local.py
 
   if [ $util -eq 0 ]; then
     while true; do
       read -p "Is your webserver ${BOLD}(A)${NORMAL}pache, ${BOLD}(N)${NORMAL}ginx or ${BOLD}(D)${NORMAL}ifferent? " yn
       case $yn in
-          [Aa]* ) web="apache"; sed -i "s/bind = 'unix:/tmp/hawthorne.sock'/DEBUG = bind = '127.0.0.1:8000'/g" $directory/panel/local.py; break;;
+          [Aa]* ) web="apache"; sed -i "s/bind = 'unix:/tmp/hawthorne.sock'/DEBUG = bind = '127.0.0.1:8000'/g" $directory/gunicorn.conf.py; break;;
           [Nn]* ) break;;
           [Dd]* ) web="unspecified"; break;;
           * ) echo "Please answer with the answers provided.";;
@@ -361,11 +350,11 @@ main() {
   printf "To configure your webserver please refer to the project wiki: ${YELLOW}https://github.com/indietyp/hawthorne/wiki/Web-server-configuration${NORMAL}\n\n\n"
 
   printf "${GREEN}Here's an example configuration for your specific system: ${NORMAL}\n\n\n"
-  if [ $web = "nginx" ]; then
+  if [ "$web" == "nginx" ]; then
     printf $(sed "s/server_name example.com;/server_name '$domain';/g" $directory/tools/configs/nginx.example.conf)
-  elif [ $web = "apache" ]; then
+  elif [ "$web" == "apache" ]; then
     printf $(sed "s/ServerName example.com/ServerName '$domain'/g" $directory/tools/configs/apache.example.conf)
   fi
 }
 
-parser
+parser "$1"

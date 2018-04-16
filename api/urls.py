@@ -45,5 +45,5 @@ urlpatterns = [
     path('capabilities/games', capabilities.games, name='capabilities.games'),
 
     # mainframe connection
-    path('mainframe/connect', capabilities.games, name='capabilities.games'),
+    path('mainframe/connect', mainframe.connect, name='mainframe.connect'),
 ]
