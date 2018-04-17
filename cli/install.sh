@@ -13,6 +13,8 @@ stapi=""
 user=""
 conn=""
 
+export LC_ALL=C
+
 if which tput >/dev/null 2>&1; then
   ncolors=$(tput colors)
 fi
@@ -36,65 +38,91 @@ fi
 set -e
 
 cleanup() {
-  # I AM THE CLEANUP CREW DO NOT MIND ME ^-^
-  printf "${RED}Installation failed... Cleaning up${NORMAL}\n"
+  printf "${RED}Configuration or Installation have failed... Cleaning up the downloaded repo${NORMAL}\n"
   rm -rf $directory
 }
 
 usage() {
   printf "\nThe hawthorne installation tool is an effort to make the installation on unix based system a bit easier and automated."
-  printf "\n${RED}Installation Modes:${NORMAL}"
-  printf "\n\t${GREEN}-f${NORMAL}   --full"
-  printf "\n\t${GREEN}-d${NORMAL}   --development"
-  printf "\n\t${GREEN}-h${NORMAL}   --help"
+  printf "\n\n${RED}Installation Modes:${NORMAL}"
+  printf "\n\t${GREEN}help${NORMAL}"
+  printf "\n\t${GREEN}full${NORMAL}                                     (${RED}default${NORMAL})"
+  printf "\n\t${GREEN}install${NORMAL}"
+  printf "\n\t${GREEN}configure${NORMAL}"
+  printf "\n\n${RED}Installation Options:${NORMAL}"
+  printf "\n\t${GREEN}-e${NORMAL}                                       --extras"
+  printf "\n\t${GREEN}-d${NORMAL}                                       --development"
+  printf "\n\t${GREEN}-h${NORMAL}                                       --help"
   printf "\n\n${RED}Optional Arguments:${NORMAL}"
-  printf "\n\t${GREEN}+d <domain>${NORMAL}          --domain example.com"
-  printf "\n\t${GREEN}+s <steam api key>${NORMAL}   --steam 665F388103DAF49235356BA3EFD0849E"
-  printf "\n\t${GREEN}+p${NORMAL}                   --path"
+  printf "\n\t${GREEN}+d <domain>${NORMAL}                              --domain example.com"
+  printf "\n\t${GREEN}+s <steam api key>${NORMAL}                       --steam 665F388103DAF49235356BA3EFD0849E"
+  printf "\n\t${GREEN}+p <path>${NORMAL}                                --path /hawthorne"
+  printf "\n\t${GREEN}+h <user>:<password>@<host>/<database>${NORMAL}   --database root:12345@localhost:3306/hawthorne"
   printf "\n"
 }
 
 parser() {
-  printf "Hello! $0"
-  printf "Hello! $1"
+  configure=0
+  install=0
   while [ "$1" != "" ]; do
     case $1 in
-        -f | --full)            utils=1
-                                ;;
-        -d | --development)     dev=1
-                                ;;
-        -h | --help | help)     usage
-                                exit
-                                ;;
+        -e | --extras)                    utils=1
+                                          ;;
+        -d | --development)               dev=1
+                                          ;;
+        -h | --help | help)               usage
+                                          exit
+                                          ;;
+        -c | --configure | configure)     configure=1
+                                          ;;
+        -i | --install | install)         install=1
+                                          ;;
+
         +d | --domain)          shift
                                 domain=$1
                                 ;;
         +s | --steam)           shift
                                 stapi=$1
                                 ;;
-        +p | --path)            path=1
+        +p | --path)            shift
+                                path=1
+                                directory=$1
+                                ;;
+        +h | --database)        shift
+                                conn=$1
                                 ;;
         * )                     usage
                                 exit 1
     esac
     shift
   done
-  main || {
-    printf "${RED}Detected problem, cleaning up.${NORMAL}\n"
-    cleanup
-  }
+
+  if [ install -eq 0 && configure -eq 0 ]; then
+    main || {
+      printf "${RED}Detected problem, cleaning up.${NORMAL}\n"
+      cleanup
+    }
+  elif [ install -eq 1 ]; then
+    install || {
+      printf "${RED}Detected problem, cleaning up.${NORMAL}\n"
+      cleanup
+    }
+  elif [ configure -eq 1 ]; then
+    configure || {
+      printf "${RED}Detected problem, cleaning up.${NORMAL}\n"
+      cleanup
+    }
+  fi
 
 }
 
-main() {
+install() {
   if ! [ $(id -u) -eq 0 ]; then
     echo "Please run as ${RED}root${NORMAL}"
     exit 1
   fi
 
-  export LC_ALL=C
-
-  printf "${YELLOW}This is the automatic and guided installation. ${NORMAL}\n"
+  printf "${GREEN}You have entered the installation part of the installations script. ${NORMAL}\n"
 
   if [ $utils -ne 1 ]; then
     printf "${RED}You still need to install a webserver of your choosing and provide a mysql server. ${NORMAL}\n\n"
@@ -118,7 +146,7 @@ main() {
 
   umask g-w,o-w
 
-  printf "${BLUE}Installing the package requirements...${NORMAL}\n"
+  printf "${BLUE}Installing system wide package requirements...${NORMAL}\n"
   if hash apt >/dev/null 2>&1; then
     apt update
     apt install -y libmysqlclient-dev || {
@@ -189,7 +217,7 @@ main() {
     printf "${BLUE}opensource@indietyp.com${NORMAL} or open an issue\n"
   fi
 
-  # we need that toal path boi
+  # we need that total path boi
   directory=$(python3 -c "import os; print(os.path.abspath(os.path.expanduser('$directory')))")
 
   printf "${BOLD}Cloning the project...${NORMAL}\n"
@@ -199,7 +227,6 @@ main() {
   }
 
   printf "${BOLD}Installing dependencies...${NORMAL}\n"
-
   pip3 install cryptography || {
     printf "${BOLD}Too old pip3 version... upgrading${NORMAL}\n"
     apt install -y wget
@@ -223,19 +250,48 @@ main() {
     gem install -q sass --no-user-install
   fi
 
-  printf "${BOLD}Configuring the project...${NORMAL}\n"
+  printf "${GREEN}Installation has been successfully finished...${NORMAL}\n"
+}
+
+configure() {
+  printf "${GREEN}Configuration has been successfully started...${NORMAL}\n"
+  printf "${BOLD}Copying the loal only files...${NORMAL}\n"
   cp $directory/panel/local.default.py $directory/panel/local.py
   cp $directory/tools/configs/gunicorn.default.conf.py $directory/gunicorn.conf.py
   cp $directory/tools/configs/supervisor.default.conf $directory/supervisor.conf
   mkdir -p /var/log/hawthorne
 
-  printf "\n\n${GREEN}Database configuration:${NORMAL}\n"
-  while true; do
-    read -p 'Host     (default: localhost):  ' dbhost
-    read -p 'Port     (default: 3306):       ' dbport
-    read -p 'User     (default: root):       ' dbuser
-    read -p 'Database (default: hawthorne):  ' dbname
-    read -p 'Password:                       ' dbpwd
+  if [ "$conn" == "" ]; then
+    printf "\n\n${GREEN}Database configuration:${NORMAL}\n"
+    while true; do
+      read -p 'Host     (default: localhost):  ' dbhost
+      read -p 'Port     (default: 3306):       ' dbport
+      read -p 'User     (default: root):       ' dbuser
+      read -p 'Database (default: hawthorne):  ' dbname
+      read -p 'Password:                       ' dbpwd
+
+      dbhost=${dbhost:-localhost}
+      dbport=${dbport:-3306}
+      dbuser=${dbuser:-root}
+      dbname=${dbname:-hawthorne}
+
+      export MYSQL_PWD=$dbpwd
+      export MYSQL_HOST=$dbhost
+      export MYSQL_TCP_PORT=$dbport
+
+      if mysql -u $dbuser -e "CREATE DATABASE IF NOT EXISTS $dbname"; then
+        printf "\n${GREEN}Successfully connected to database.${NORMAL}\n"
+        break;
+      else
+        printf "\n${RED}Could not connect${NORMAL} to database with provided credentials.\n"
+      fi
+    done
+  else
+    dbuser=$(echo $conn | sed 's#(.+)\:#\1#')
+    dbpwd=$(echo $conn | sed 's#\:(.*)\@#\1#')
+    dbhost=$(echo $conn | sed 's#\@(.+)\:#\1#')
+    dbport=$(echo $conn | sed 's#\:(\d+)\/#\1#')
+    dbname=$(echo $conn | sed 's#\/(.+)$#\1#')
 
     dbhost=${dbhost:-localhost}
     dbport=${dbport:-3306}
@@ -247,10 +303,10 @@ main() {
     export MYSQL_TCP_PORT=$dbport
 
     if mysql -u $dbuser -e "CREATE DATABASE IF NOT EXISTS $dbname"; then
-      printf "\n${GREEN}successfully connected to mysql and created the database.${NORMAL}\n"
-      break;
+      printf "\n${GREEN}Successfully connected.${NORMAL}\n"
     else
-      printf "\n${RED}Could not connect${NORMAL} to database with provided credentials.\n"
+      printf "\n${RED}Could not connect${NORMAL} to database with provided credentials. Exiting configuration\n"
+      exit 1
     fi
   done
 
@@ -259,9 +315,7 @@ main() {
     read -p 'Steam API Key: ' stapi
   fi
 
-  printf "\n\n${BOLD}Configuring project...${NORMAL}\n"
-
-  # replace the stuff in the local.py and supervisor.conf file
+  printf "\n\n${BOLD}Setting project specific settings...${NORMAL}\n"
   sed -i "s/'HOST': 'localhost'/'HOST': '$dbhost'/g" $directory/panel/local.py
   sed -i "s/'PORT': 'root'/'PORT': '$dbport'/g" $directory/panel/local.py
   sed -i "s/'NAME': 'hawthorne'/'NAME': '$dbname'/g" $directory/panel/local.py
@@ -274,9 +328,9 @@ main() {
   fi
 
   sed -i "s#directory=<replace>#directory=$directory#g" $directory/supervisor.conf
-  printf "${BLUE}Executing project setupcommands...${NORMAL}\n"
-  sed -i "s/SECRET_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'/SECRET_KEY = '$(python3 $directory/manage.py generatesecret | tail -1)'/g" $directory/panel/local.py
 
+  printf "${BLUE}Setting up the project...${NORMAL}\n"
+  sed -i "s/SECRET_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'/SECRET_KEY = '$(python3 $directory/manage.py generatesecret | tail -1)'/g" $directory/panel/local.py
   python3 $directory/manage.py migrate
   python3 $directory/manage.py superusersteam
   if [ $dev -eq 1 ]; then
@@ -284,13 +338,12 @@ main() {
   fi
   python3 $directory/manage.py collectstatic --noinput -v 0
 
-  printf "${BOLD}Configuring Webserver...${NORMAL}\n"
-
   if [ $utils -eq 0 ]; then
+    printf "${BOLD}Setting up the web server...${NORMAL}\n"
     while true; do
       read -p "Is your webserver ${BOLD}(A)${NORMAL}pache, ${BOLD}(N)${NORMAL}ginx or ${BOLD}(D)${NORMAL}ifferent? " yn
       case $yn in
-          [Aa]* ) web="apache"; sed -i "s/bind = 'unix:/tmp/hawthorne.sock'/DEBUG = bind = '127.0.0.1:8000'/g" $directory/gunicorn.conf.py; break;;
+          [Aa]* ) web="apache"; sed -i "s/bind = 'unix:/tmp/sockets/hawthorne.sock'/bind = '127.0.0.1:8000'/g" $directory/gunicorn.conf.py; break;;
           [Nn]* ) break;;
           [Dd]* ) web="unspecified"; break;;
           * ) echo "Please answer with the answers provided.";;
@@ -323,16 +376,14 @@ main() {
     done
   fi
 
-  printf "${BOLD}Linking to supervisor...${NORMAL}\n"
-
+  printf "${BOLD}Setting up supervisor...${NORMAL}\n"
   cp $directory/tools/configs/gunicorn.default.conf.py $directory/gunicorn.conf.py
   ln -sr $directory/tools/configs/supervisor.default.conf /etc/supervisor/conf.d/hawthorne.conf
   supervisorctl reread
   supervisorctl update
   supervisorctl restart hawthorne
-  printf "Started the unix socket at: ${YELLOW}/tmp/hawthorne.sock${NORMAL}\n"
 
-  printf "${GREEN}Linking the hawthorne command line tool...${NORMAL}\n"
+  printf "${BOLD}Setting up the toolchain...${NORMAL}\n"
   ln -s $directory/tools/toolchain.sh /usr/bin/hawthorne
   ln -s $directory/tools/toolchain.sh /usr/bin/ht
   chmod +x /usr/bin/hawthorne
@@ -345,16 +396,21 @@ main() {
     service nginx restart
   fi
 
-  printf "\n\n${GREEN}You did it (Well rather I did). Everything seems to be installed.${NORMAL}\n"
-  printf "Please look over the $directory/${RED}panel/local.py${NORMAL} to see if you want to configure anything. And restart the supervisor with ${YELLOW}supervisorctl restart hawthorne${NORMAL}\n"
-  printf "To configure your webserver please refer to the project wiki: ${YELLOW}https://github.com/indietyp/hawthorne/wiki/Web-server-configuration${NORMAL}\n\n\n"
+  printf "\n\n${GREEN}The installation tool has finished the configuration process${NORMAL}\n"
+  printf "Please look over the $directory/${RED}panel/local.py${NORMAL} for additional configuration options. You can restart hawthorne with ${YELLOW}supervisorctl restart hawthorne${NORMAL}\n"
+  printf "For additional information about the configuration please refer to ${YELLOW}https://docs.hawthorne.in/#/getting-started?id=web-server-configuration${NORMAL}\n\n\n"
 
-  printf "${GREEN}Here's an example configuration for your specific system: ${NORMAL}\n\n\n"
+  printf "${GREEN}These example configurations have been specificially generated for your system, they might need some tweaking: ${NORMAL}\n\n\n"
   if [ "$web" == "nginx" ]; then
     printf $(sed "s/server_name example.com;/server_name '$domain';/g" $directory/tools/configs/nginx.example.conf)
   elif [ "$web" == "apache" ]; then
     printf $(sed "s/ServerName example.com/ServerName '$domain'/g" $directory/tools/configs/apache.example.conf)
   fi
+}
+
+main() {
+  install
+  configure
 }
 
 parser "$1"
