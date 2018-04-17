@@ -3,7 +3,7 @@
 Hawthorne is an application that has multiple components, reaching from an API to a logging instance. To provide the best possible results in the installation process a shell script was created. To start the automated installation process execute the following command:
 
 ```bash
-sh -c "$(curl -fsSL raw.githubusercontent.com/indietyp/hawthorne/master/tools/install.sh)"
+sh -c "$(curl -fsSL raw.githubusercontent.com/indietyp/hawthorne/master/cli/install.sh)"
 ```
 
 ## Prerequisites
