@@ -257,8 +257,8 @@ configure() {
   printf "${GREEN}Configuration has been successfully started...${NORMAL}\n"
   printf "${BOLD}Copying the loal only files...${NORMAL}\n"
   cp $directory/panel/local.default.py $directory/panel/local.py
-  cp $directory/tools/configs/gunicorn.default.conf.py $directory/gunicorn.conf.py
-  cp $directory/tools/configs/supervisor.default.conf $directory/supervisor.conf
+  cp $directory/cli/configs/gunicorn.default.conf.py $directory/gunicorn.conf.py
+  cp $directory/cli/configs/supervisor.default.conf $directory/supervisor.conf
   mkdir -p /var/log/hawthorne
 
   if [ "$conn" == "" ]; then
@@ -377,21 +377,21 @@ configure() {
   fi
 
   printf "${BOLD}Setting up supervisor...${NORMAL}\n"
-  cp $directory/tools/configs/gunicorn.default.conf.py $directory/gunicorn.conf.py
-  ln -sr $directory/tools/configs/supervisor.default.conf /etc/supervisor/conf.d/hawthorne.conf
+  cp $directory/cli/configs/gunicorn.default.conf.py $directory/gunicorn.conf.py
+  ln -sr $directory/cli/configs/supervisor.default.conf /etc/supervisor/conf.d/hawthorne.conf
   supervisorctl reread
   supervisorctl update
   supervisorctl restart hawthorne
 
   printf "${BOLD}Setting up the toolchain...${NORMAL}\n"
-  ln -s $directory/tools/toolchain.sh /usr/bin/hawthorne
-  ln -s $directory/tools/toolchain.sh /usr/bin/ht
+  ln -s $directory/cli/toolchain.sh /usr/bin/hawthorne
+  ln -s $directory/cli/toolchain.sh /usr/bin/ht
   chmod +x /usr/bin/hawthorne
   chmod +x /usr/bin/ht
 
   if [ $utils -eq 1 ]; then
     rm /etc/nginx/sites-enabled/hawthorne
-    ln -s $directory/tools/configs/nginx.example.conf /etc/nginx/sites-enabled/hawthorne
+    ln -s $directory/cli/configs/nginx.example.conf /etc/nginx/sites-enabled/hawthorne
 
     service nginx restart
   fi
@@ -402,9 +402,9 @@ configure() {
 
   printf "${GREEN}These example configurations have been specificially generated for your system, they might need some tweaking: ${NORMAL}\n\n\n"
   if [ "$web" == "nginx" ]; then
-    printf $(sed "s/server_name example.com;/server_name '$domain';/g" $directory/tools/configs/nginx.example.conf)
+    printf $(sed "s/server_name example.com;/server_name '$domain';/g" $directory/cli/configs/nginx.example.conf)
   elif [ "$web" == "apache" ]; then
-    printf $(sed "s/ServerName example.com/ServerName '$domain'/g" $directory/tools/configs/apache.example.conf)
+    printf $(sed "s/ServerName example.com/ServerName '$domain'/g" $directory/cli/configs/apache.example.conf)
   fi
 }
 
