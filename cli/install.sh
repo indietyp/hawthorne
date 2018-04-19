@@ -5,11 +5,14 @@ directory=/hawthorne
 utils=0
 dev=0
 path=0
+local=0
+docker=0
 
 web="nginx"
 domain=""
 
 stapi=""
+admin=""
 user=""
 conn=""
 
@@ -58,12 +61,14 @@ usage() {
   printf "\n\t${GREEN}+s <steam api key>${NORMAL}                       --steam 665F388103DAF49235356BA3EFD0849E"
   printf "\n\t${GREEN}+p <path>${NORMAL}                                --path /hawthorne"
   printf "\n\t${GREEN}+h <user>:<password>@<host>/<database>${NORMAL}   --database root:12345@localhost:3306/hawthorne"
+  printf "\n\t${GREEN}+l${NORMAL}                                       --local"
   printf "\n"
 }
 
 parser() {
   configure=0
   install=0
+
   while [ "$1" != "" ]; do
     case $1 in
         -e | --extras)                    utils=1
@@ -77,9 +82,11 @@ parser() {
                                           ;;
         -i | --install | install)         install=1
                                           ;;
-
         +d | --domain)          shift
                                 domain=$1
+                                ;;
+        +l | --local)           local=1
+                                utils=2
                                 ;;
         +s | --steam)           shift
                                 stapi=$1
@@ -88,8 +95,13 @@ parser() {
                                 path=1
                                 directory=$1
                                 ;;
+        +a | --admin)           shift
+                                admin=$1
+                                ;;
         +h | --database)        shift
                                 conn=$1
+                                ;;
+        +f | --docker)          docker=1
                                 ;;
         * )                     usage
                                 exit 1
@@ -97,23 +109,22 @@ parser() {
     shift
   done
 
-  if [ install -eq 0 && configure -eq 0 ]; then
+  if [ $install -eq 0 -a $configure -eq 0 ]; then
     main || {
       printf "${RED}Detected problem, cleaning up.${NORMAL}\n"
       cleanup
     }
-  elif [ install -eq 1 ]; then
+  elif [ $install -eq 1 ]; then
     install || {
       printf "${RED}Detected problem, cleaning up.${NORMAL}\n"
       cleanup
     }
-  elif [ configure -eq 1 ]; then
+  elif [ $configure -eq 1 ]; then
     configure || {
       printf "${RED}Detected problem, cleaning up.${NORMAL}\n"
       cleanup
     }
   fi
-
 }
 
 install() {
@@ -153,7 +164,7 @@ install() {
       apt install -y default-libmysqlclient-dev
     }
 
-    apt install -y -qq --force-yes --fix-missing python3 python3-dev python3-pip redis-server libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential
+    apt install -y -qq --force-yes --fix-missing python3 python3-dev python3-pip redis-server libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential curl bash
 
     if [ $dev -eq 1 ]; then
       wget -O ruby-install-0.6.1.tar.gz https://github.com/postmodern/ruby-install/archive/v0.6.1.tar.gz
@@ -166,7 +177,7 @@ install() {
     fi
 
 
-    curl -sL deb.nodesource.com/setup_8.x | sudo -E bash -
+    curl -sL deb.nodesource.com/setup_8.x | bash -
     apt install -y -qq nodejs
 
     if [ $utils -eq 1 ]; then
@@ -220,11 +231,21 @@ install() {
   # we need that total path boi
   directory=$(python3 -c "import os; print(os.path.abspath(os.path.expanduser('$directory')))")
 
-  printf "${BOLD}Cloning the project...${NORMAL}\n"
-  env git clone https://github.com/indietyp/hawthorne $directory || {
-    printf "${RED}Error:${NORMAL} git clone of hawthorne repo failed\n"
-    exit 1
-  }
+  if [ $local -eq 0 ]; then
+    printf "${BOLD}Cloning the project...${NORMAL}\n"
+    env git clone https://github.com/indietyp/hawthorne $directory || {
+      printf "${RED}Error:${NORMAL} git clone of hawthorne repo failed\n"
+      exit 1
+    }
+  else
+    printf "${BOLD}Moving files...${NORMAL}\n"
+
+    SCRIPT=$(readlink -f "$0")
+    current=$(dirname $(dirname "$SCRIPT"))
+
+    mv "$current" "$directory"
+    chmod -R +x $directory
+  fi
 
   printf "${BOLD}Installing dependencies...${NORMAL}\n"
   pip3 install cryptography || {
@@ -255,13 +276,13 @@ install() {
 
 configure() {
   printf "${GREEN}Configuration has been successfully started...${NORMAL}\n"
-  printf "${BOLD}Copying the loal only files...${NORMAL}\n"
-  cp $directory/panel/local.default.py $directory/panel/local.py
-  cp $directory/cli/configs/gunicorn.default.conf.py $directory/gunicorn.conf.py
-  cp $directory/cli/configs/supervisor.default.conf $directory/supervisor.conf
+  printf "${BOLD}Copying the local only files...${NORMAL}\n"
+  cp -rf $directory/panel/local.default.py $directory/panel/local.py
+  cp -rf $directory/cli/configs/gunicorn.default.conf.py $directory/gunicorn.conf.py
+  cp -rf $directory/cli/configs/supervisor.default.conf $directory/supervisor.conf
   mkdir -p /var/log/hawthorne
 
-  if [ "$conn" == "" ]; then
+  if [ "$conn" = "" ]; then
     printf "\n\n${GREEN}Database configuration:${NORMAL}\n"
     while true; do
       read -p 'Host     (default: localhost):  ' dbhost
@@ -287,11 +308,11 @@ configure() {
       fi
     done
   else
-    dbuser=$(echo $conn | sed 's#(.+)\:#\1#')
-    dbpwd=$(echo $conn | sed 's#\:(.*)\@#\1#')
-    dbhost=$(echo $conn | sed 's#\@(.+)\:#\1#')
-    dbport=$(echo $conn | sed 's#\:(\d+)\/#\1#')
-    dbname=$(echo $conn | sed 's#\/(.+)$#\1#')
+    dbuser=$(echo "$conn" | sed -nE 's#^([[:alpha:]]+)[:@].*#\1#p')
+    dbpwd=$(echo "$conn" | sed -nE 's#.*:([^@]+)@.*#\1#p')
+    dbhost=$(echo "$conn" | sed -nE 's#.*\@([^:]+)[:/].*#\1#p')
+    dbport=$(echo "$conn" | sed -nE 's#.*:([0-9]+)/.*#\1#p')
+    dbname=$(echo "$conn" | sed -nE 's#.*/([[:alpha:]]+).*#\1#p')
 
     dbhost=${dbhost:-localhost}
     dbport=${dbport:-3306}
@@ -308,9 +329,9 @@ configure() {
       printf "\n${RED}Could not connect${NORMAL} to database with provided credentials. Exiting configuration\n"
       exit 1
     fi
-  done
+  fi
 
-  if [ "$stapi" == "" ]; then
+  if [ "$stapi" = "" ]; then
     printf "\n\n${GREEN}SteamAPI configuration:${NORMAL}\n"
     read -p 'Steam API Key: ' stapi
   fi
@@ -332,7 +353,13 @@ configure() {
   printf "${BLUE}Setting up the project...${NORMAL}\n"
   sed -i "s/SECRET_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'/SECRET_KEY = '$(python3 $directory/manage.py generatesecret | tail -1)'/g" $directory/panel/local.py
   python3 $directory/manage.py migrate
-  python3 $directory/manage.py superusersteam
+
+  if [ "$admin" = "" ]; then
+    python3 $directory/manage.py superusersteam
+  else
+    python3 $directory/manage.py superusersteam --steamid $admin --check
+  fi
+
   if [ $dev -eq 1 ]; then
     python3 $directory/manage.py compilestatic
   fi
@@ -351,7 +378,7 @@ configure() {
     done
   fi
 
-  if [ "$domain" != "" ]; then
+  if [ "$domain" = "" ]; then
     while true; do
       read -p "Is the site on an ${BOLD}(I)${NORMAL}P or ${BOLD}(D)${NORMAL}omain? " yn
       case $yn in
@@ -362,49 +389,45 @@ configure() {
     done
   fi
 
-  sed -i "s/ALLOWED_HOSTS = [gethostname(), gethostbyname(gethostname())]/ALLOWED_HOSTS = ['"$domain"']/g" $directory/panel/local.py
-
-  if [ $util -eq 0 ]; then
-    while true; do
-      read -p "Is your webserver ${BOLD}(A)${NORMAL}pache, ${BOLD}(N)${NORMAL}ginx or ${BOLD}(D)${NORMAL}ifferent? " yn
-      case $yn in
-          [Aa]* ) web="apache"; sed -i "s/bind = 'unix:/tmp/hawthorne.sock'/DEBUG = bind = '127.0.0.1:8000'/g" $directory/gunicorn.conf.py; break;;
-          [Nn]* ) break;;
-          [Dd]* ) web="unspecified"; break;;
-          * ) echo "Please answer with the answers provided.";;
-      esac
-    done
-  fi
+  sed -i "s|ALLOWED_HOSTS = \[gethostname(), gethostbyname(gethostname())\]|ALLOWED_HOSTS = \['$domain'\]|g" $directory/panel/local.py
 
   printf "${BOLD}Setting up supervisor...${NORMAL}\n"
-  cp $directory/cli/configs/gunicorn.default.conf.py $directory/gunicorn.conf.py
-  ln -sr $directory/cli/configs/supervisor.default.conf /etc/supervisor/conf.d/hawthorne.conf
-  supervisorctl reread
-  supervisorctl update
-  supervisorctl restart hawthorne
+  cp -rf $directory/cli/configs/gunicorn.default.conf.py $directory/gunicorn.conf.py
+  ln -sr $directory/supervisor.conf /etc/supervisor/conf.d/hawthorne.conf
 
-  printf "${BOLD}Setting up the toolchain...${NORMAL}\n"
-  ln -s $directory/cli/toolchain.sh /usr/bin/hawthorne
-  ln -s $directory/cli/toolchain.sh /usr/bin/ht
-  chmod +x /usr/bin/hawthorne
-  chmod +x /usr/bin/ht
+  if [ $docker -eq 1 ]; then
+    cd $directory
+    python3 -m gunicorn.app.wsgiapp panel.wsgi:application
+  else
+    supervisorctl reread
+    supervisorctl update
+    supervisorctl restart hawthorne
 
-  if [ $utils -eq 1 ]; then
-    rm /etc/nginx/sites-enabled/hawthorne
-    ln -s $directory/cli/configs/nginx.example.conf /etc/nginx/sites-enabled/hawthorne
+    printf "${BOLD}Setting up the toolchain...${NORMAL}\n"
+    ln -s $directory/cli/toolchain.sh /usr/bin/hawthorne
+    ln -s $directory/cli/toolchain.sh /usr/bin/ht
+    chmod +x /usr/bin/hawthorne
+    chmod +x /usr/bin/ht
 
-    service nginx restart
-  fi
+    if [ $utils -eq 1 ]; then
+      rm /etc/nginx/sites-enabled/hawthorne
+      ln -s $directory/cli/configs/nginx.example.conf /etc/nginx/sites-enabled/hawthorne
 
-  printf "\n\n${GREEN}The installation tool has finished the configuration process${NORMAL}\n"
-  printf "Please look over the $directory/${RED}panel/local.py${NORMAL} for additional configuration options. You can restart hawthorne with ${YELLOW}supervisorctl restart hawthorne${NORMAL}\n"
-  printf "For additional information about the configuration please refer to ${YELLOW}https://docs.hawthorne.in/#/getting-started?id=web-server-configuration${NORMAL}\n\n\n"
+      service nginx restart
+    fi
 
-  printf "${GREEN}These example configurations have been specificially generated for your system, they might need some tweaking: ${NORMAL}\n\n\n"
-  if [ "$web" == "nginx" ]; then
-    printf $(sed "s/server_name example.com;/server_name '$domain';/g" $directory/cli/configs/nginx.example.conf)
-  elif [ "$web" == "apache" ]; then
-    printf $(sed "s/ServerName example.com/ServerName '$domain'/g" $directory/cli/configs/apache.example.conf)
+    printf "\n\n${GREEN}The installation tool has finished the configuration process${NORMAL}\n"
+    printf "Please look over the $directory/${RED}panel/local.py${NORMAL} for additional configuration options. You can restart hawthorne with ${YELLOW}supervisorctl restart hawthorne${NORMAL}\n"
+    printf "For additional information about the configuration please refer to ${YELLOW}https://docs.hawthorne.in/#/getting-started?id=web-server-configuration${NORMAL}\n\n\n"
+
+    if [ $utils -ne 2 ]; then
+      printf "${GREEN}These example configurations have been specificially generated for your system, they might need some tweaking: ${NORMAL}\n\n\n"
+      if [ "$web" = "nginx" ]; then
+        printf $(sed "s/server_name example.com;/server_name '$domain';/g" $directory/cli/configs/nginx.example.conf)
+      elif [ "$web" = "apache" ]; then
+        printf $(sed "s/ServerName example.com/ServerName '$domain'/g" $directory/cli/configs/apache.example.conf)
+      fi
+    fi
   fi
 }
 
@@ -413,4 +436,4 @@ main() {
   configure
 }
 
-parser "$1"
+parser "$@"
