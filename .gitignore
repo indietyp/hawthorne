@@ -102,6 +102,7 @@ ENV/
 # configs
 supervisor.conf
 gunicorn.conf.py
+docker-compose.yml
 
 mainframe.ini
 

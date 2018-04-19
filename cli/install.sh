@@ -370,7 +370,7 @@ configure() {
     while true; do
       read -p "Is your webserver ${BOLD}(A)${NORMAL}pache, ${BOLD}(N)${NORMAL}ginx or ${BOLD}(D)${NORMAL}ifferent? " yn
       case $yn in
-          [Aa]* ) web="apache"; sed -i "s/bind = 'unix:/tmp/sockets/hawthorne.sock'/bind = '127.0.0.1:8000'/g" $directory/gunicorn.conf.py; break;;
+          [Aa]* ) web="apache"; sed -i "s#bind = 'unix:/tmp/sockets/hawthorne.sock'#bind = '127.0.0.1:8000'#g" $directory/gunicorn.conf.py; break;;
           [Nn]* ) break;;
           [Dd]* ) web="unspecified"; break;;
           * ) echo "Please answer with the answers provided.";;
@@ -396,6 +396,8 @@ configure() {
   ln -sr $directory/supervisor.conf /etc/supervisor/conf.d/hawthorne.conf
 
   if [ $docker -eq 1 ]; then
+    sed -i "s#bind = 'unix:/tmp/sockets/hawthorne.sock'#bind = '0.0.0.0:8000'#g" $directory/gunicorn.conf.py
+
     cd $directory
     python3 -m gunicorn.app.wsgiapp panel.wsgi:application
   else
