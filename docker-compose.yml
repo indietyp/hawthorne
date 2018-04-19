@@ -1,0 +1,56 @@
+version: '3'
+services:
+  database:
+    image: "mariadb:latest"
+    volumes:
+      - "/docker/hawthorne/database:/var/lib/mysql"
+    environment:
+      MYSQL_USER: hawthorne@%
+      MYSQL_PASSWORD: fKaxvKPTWzFop2j8
+      MYSQL_ROOT_PASSWORD: fKaxvKPTWzFop2j8
+    command: [mysqld,
+              --character-set-server=utf8mb4,
+              --collation-server=utf8mb4_unicode_ci,
+              --wait-timeout=7200,
+              --interactive-timeout=7200,
+              --key-buffer-size=64M,
+              --query-cache-size=32M,
+              --query-cache-limit=8M,
+              --max-allowed-packet=64M
+              --bind-address=0.0.0.0]
+
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+
+    restart: always
+
+    networks:
+      nhtldb:
+        ipv4_address: 172.16.241.24
+
+  hawthorne:
+    build: .
+    volumes:
+      - "/docker/sockets:/tmp/sockets"
+      - "/docker/static/hawthorne:/local/static"
+
+    environment:
+      DOMAIN: localhost
+      DB: root:fKaxvKPTWzFop2j8@172.16.241.24/hawthorne
+      API: 74BAE66A95B0AB6E9E4443EB232E1D64
+      ADMIN: "76561198056522926"
+
+    networks:
+      nhtldb:
+        ipv4_address: 172.16.241.25
+
+networks:
+  nhtldb:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.241.0/24
+

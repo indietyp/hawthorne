@@ -13,6 +13,11 @@ class BaseModel(models.Model):
     abstract = True
 
 
+class Mainframe(BaseModel):
+  assigned = models.UUIDField(null=True)
+  token = models.UUIDField(null=True)
+
+
 class Country(BaseModel):
   code = models.CharField(unique=True, max_length=2)
   name = models.CharField(max_length=100, null=True)
