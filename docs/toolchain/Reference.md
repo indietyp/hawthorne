@@ -29,9 +29,9 @@ This command detects if changes happened to the remote repository and then pull 
 hawthorne update
 ```
 
-!> It is to the upmost importance that you **do not** tinker with files in the directory, except for `/panel/local.py`.
+!\> It is to the upmost importance that you **do not** tinker with files in the directory, except for `/panel/local.py`.
 
-?> This command is recommended to be included in a regular _weekly_ crontab.
+?\> This command is recommended to be included in a regular _weekly_ crontab.
 
 # Report
 > **available** since v0.7
@@ -48,9 +48,9 @@ This command saves the data required for common debugging of your problem. It ha
 hawthorne report
 ```
 
-?> You submitted data will be saved for 24 hours.
+?> Your submitted data will be saved for 24 hours.
 
-!> You will be registered to the mainframe, and therefor your instance will be known by a database. **Please bear that in mind.** Only data that is necessary will be saved for the shortest time possible. For more information on the topic please refer to this [chapter](mainframe/quickstart.md).
+!> You will be registered to the mainframe, and therefor your instance will be known by a database. **Please bear that in mind.** Only data that is necessary will be saved for the shortest time possible. For more information on the topic please refer to this [chapter].
 
 # Server
 ## Start

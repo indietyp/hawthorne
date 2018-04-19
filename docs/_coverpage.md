@@ -1,6 +1,6 @@
-![logo](images/logo.svg)
+![logo][image-1]
 
-# hawthorne <small>0.7.1</small>
+# hawthorne <small>0.7.2</small>
 
 > Just reimagined game server management.
 
@@ -9,7 +9,13 @@
 * Built with modern technologies
 * Server ressource friendly
 
-[GitHub](https://github.com/indietyp/hawthorne/)
-[Get Started](getting-started#getting-started-with-hawthorne)
+[GitHub][1]
+[Get Started][2]
 
-![color](#1F262D)
+![color][image-2]
+
+[1]:	https://github.com/indietyp/hawthorne/
+[2]:	getting-started#getting-started-with-hawthorne
+
+[image-1]:	images/logo.svg
+[image-2]:	#1F262D

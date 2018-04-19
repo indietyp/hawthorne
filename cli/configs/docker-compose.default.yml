@@ -42,8 +42,8 @@ services:
     environment:
       DOMAIN: localhost
       DB: root:fKaxvKPTWzFop2j8@172.16.241.24/hawthorne
-      API: 74BAE66A95B0AB6E9E4443EB232E1D64
-      ADMIN: "76561198056522926"
+      API: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+      ADMIN: "XXXXXXXXXXXXXXXXX"
 
     networks:
       nhtldb:

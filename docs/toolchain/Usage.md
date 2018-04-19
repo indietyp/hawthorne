@@ -6,4 +6,4 @@ To execute the toolchain execute the following command. Please note that `<direc
 sh <directory>/tools/toolchain.sh
 ```
 
-?> The automatic installation tool symlinks it to `/usr/bin` with the aliases **hawthorne** and **ht**
+?> The automatic installation tool symlinks it to /usr/bin with the aliases **hawthorne** and **ht**

@@ -18,7 +18,7 @@ Because there are several different environments out there, it is not possible t
 ## Toolchain integration
 Upon installing, the toolchain has been linked to your system over the commands `hawthorne` and `ht`. There are several commands integrated.
 
-!\> It is _highly recommended_ that hawthorne update is to be included in a weekly crontab to ensure that hawthorne updates itself.
+!> It is _highly recommended_ that hawthorne update is to be included in a weekly crontab to ensure that hawthorne updates itself.
 
 [More information available here][3]
 
