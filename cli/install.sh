@@ -2,7 +2,8 @@
 # this is adopted from the oh-my-zsh install script
 
 directory=/hawthorne
-utils=0
+nginx=0
+demo=0
 dev=0
 path=0
 local=0
@@ -53,7 +54,6 @@ usage() {
   printf "\n\t${GREEN}install${NORMAL}"
   printf "\n\t${GREEN}configure${NORMAL}"
   printf "\n\n${RED}Installation Options:${NORMAL}"
-  printf "\n\t${GREEN}-e${NORMAL}                                       --extras"
   printf "\n\t${GREEN}-d${NORMAL}                                       --development"
   printf "\n\t${GREEN}-h${NORMAL}                                       --help"
   printf "\n\n${RED}Optional Arguments:${NORMAL}"
@@ -73,8 +73,6 @@ parser() {
 
   while [ "$1" != "" ]; do
     case $1 in
-        -e | --extras)                    utils=1
-                                          ;;
         -d | --development)               dev=1
                                           ;;
         -h | --help | help)               usage
@@ -88,7 +86,7 @@ parser() {
                                 domain=$1
                                 ;;
         +l | --local)           local=1
-                                utils=2
+                                nginx=2
                                 ;;
         +s | --steam)           shift
                                 stapi=$1
@@ -104,6 +102,10 @@ parser() {
                                 conn=$1
                                 ;;
         +f | --docker)          docker=1
+                                ;;
+        +n | --nginx)           nginx=1
+                                ;;
+        +o | --demo)            demo=1
                                 ;;
         * )                     usage
                                 exit 1
@@ -137,10 +139,10 @@ install() {
 
   printf "${GREEN}You have entered the installation part of the installations script. ${NORMAL}\n"
 
-  if [ $utils -ne 1 ]; then
+  if [ $nginx -ne 1 ]; then
     printf "${RED}You still need to install a webserver of your choosing and provide a mysql server. ${NORMAL}\n\n"
   else
-    printf "${RED}You chose the full installation, that installs nginx and mysql-server.${NORMAL}\n\n"
+    printf "We are going to install ${RED}nginx.${NORMAL}\n\n"
   fi
 
   printf "Everything will be configured by itelf.\n"
@@ -182,8 +184,8 @@ install() {
     curl -sL deb.nodesource.com/setup_8.x | bash -
     apt install -y -qq nodejs
 
-    if [ $utils -eq 1 ]; then
-      apt install -y -qq --force-yes --fix-missing mysql-server nginx
+    if [ $nginx -eq 1 ]; then
+      apt install -y -qq --force-yes --fix-missing nginx
     fi
 
     hash git >/dev/null 2>&1 || {
@@ -193,7 +195,7 @@ install() {
 
   elif hash yum >/dev/null 2>&1; then
     yum -y update
-    yum -y install yum-utils wget
+    yum -y install yum-nginx wget
     yum-builddep python
     curl -O https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz
     tar xf Python-3.6.4.tgz
@@ -350,6 +352,10 @@ configure() {
     sed -i "s/DEBUG = False/DEBUG = True/g" $directory/panel/local.py
   fi
 
+  if [ $demo -eq 1 ]; then
+    sed -i "s/DEMO = False/DEMO = True/g" $directory/panel/local.py
+  fi
+
   sed -i "s#directory=<replace>#directory=$directory#g" $directory/supervisor.conf
 
   printf "${BLUE}Setting up the project...${NORMAL}\n"
@@ -367,7 +373,7 @@ configure() {
   fi
   python3 $directory/manage.py collectstatic --noinput -v 0
 
-  if [ $utils -eq 0 ]; then
+  if [ $nginx -eq 0 ]; then
     printf "${BOLD}Setting up the web server...${NORMAL}\n"
     while true; do
       read -p "Is your webserver ${BOLD}(A)${NORMAL}pache, ${BOLD}(N)${NORMAL}ginx or ${BOLD}(D)${NORMAL}ifferent? " yn
@@ -413,7 +419,7 @@ configure() {
     chmod +x /usr/bin/hawthorne
     chmod +x /usr/bin/ht
 
-    if [ $utils -eq 1 ]; then
+    if [ $nginx -eq 1 ]; then
       rm /etc/nginx/sites-enabled/hawthorne
       ln -s $directory/cli/configs/nginx.example.conf /etc/nginx/sites-enabled/hawthorne
 
@@ -424,7 +430,7 @@ configure() {
     printf "Please look over the $directory/${RED}panel/local.py${NORMAL} for additional configuration options. You can restart hawthorne with ${YELLOW}supervisorctl restart hawthorne${NORMAL}\n"
     printf "For additional information about the configuration please refer to ${YELLOW}https://docs.hawthorne.in/#/getting-started?id=web-server-configuration${NORMAL}\n\n\n"
 
-    if [ $utils -ne 2 ]; then
+    if [ $nginx -ne 2 ]; then
       printf "${GREEN}These example configurations have been specificially generated for your system, they might need some tweaking: ${NORMAL}\n\n\n"
       if [ "$web" = "nginx" ]; then
         printf $(sed "s/server_name example.com;/server_name '$domain';/g" $directory/cli/configs/nginx.example.conf)
