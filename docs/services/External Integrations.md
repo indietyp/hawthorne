@@ -10,7 +10,7 @@
 
 ## Discord Bot
 
-!\> ETA v0.9
+!> ETA v0.9
 
 
 ## More

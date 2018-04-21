@@ -1,7 +1,7 @@
 # Reference
 This part of the documentation references to different commands that are implemented or will be implemented by the toolchain. Some of the functions are planned, but not realised and may nor have an ETA (estimated time of arrival)
 
-!> This document and the tools are a subject of change. 
+!> This document and the tools are a subject of change.
 
 # Help
 > **available** since v0.0
@@ -20,6 +20,19 @@ Verifies the module and deletes or changes files if necessary. You need to confi
 hawthorne verify
 ```
 
+# Version
+> **available** since v0.7.3
+
+Does exactly what the command does. What do you think? This is some vodoo magic? Prints the current version and tells you if you are behind.
+
+It that everything? **Yes**
+
+```bash
+hawthorne version
+```
+
+?> suggested by **Czar**
+
 # Update
 > **available** since v0.0
 
@@ -29,9 +42,9 @@ This command detects if changes happened to the remote repository and then pull 
 hawthorne update
 ```
 
-!\> It is to the upmost importance that you **do not** tinker with files in the directory, except for `/panel/local.py`.
+!> It is to the upmost importance that you **do not** tinker with files in the directory, except for `/panel/local.py`.
 
-?\> This command is recommended to be included in a regular _weekly_ crontab.
+?> This command is recommended to be included in a regular _weekly_ crontab.
 
 # Report
 > **available** since v0.7

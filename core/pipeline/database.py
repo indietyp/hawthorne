@@ -23,7 +23,10 @@ def populate(strategy, details, backend, user=None, *args, **kwargs):
       highpoints = re.compile(u'[\uD800-\uDBFF][\uDC00-\uDFFF]')
 
     user.namespace = highpoints.sub(u'\u25FD', information['personaname'])
-    user.country = Country.objects.get_or_create(code=information['loccountrycode'])[0]
+
+    if 'loccountrycode' in information and information['loccountrycode']:
+      user.country = Country.objects.get_or_create(code=information['loccountrycode'])[0]
+
     user.avatar = information['avatar']
     user.profile = information['profileurl']
     user.save()

@@ -17,6 +17,11 @@ class Mainframe(BaseModel):
   assigned = models.UUIDField(null=True)
   token = models.UUIDField(null=True)
 
+  class Meta:
+    permissions = [
+        ('view_mainframe', 'Can check mainframe'),
+    ]
+
 
 class Country(BaseModel):
   code = models.CharField(unique=True, max_length=2)
@@ -58,9 +63,6 @@ class User(AbstractUser):
 
         ('view_settings', 'Can view settings'),
         ('view_capabilities', 'Can check capabilities'),
-
-        ('add_mainframe', 'Can add mainframe'),
-        ('view_mainframe', 'Can check mainframe'),
     ]
 
   def __str__(self):

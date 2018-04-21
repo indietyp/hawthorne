@@ -1,6 +1,6 @@
 ![logo][image-1]
 
-# hawthorne <small>0.7.2</small>
+# hawthorne <small>0.7.3</small>
 
 > Just reimagined game server management.
 

@@ -31,7 +31,7 @@ services:
         ipv4_address: 172.16.241.24
 
   hawthorne:
-    build: .
+    image: "indietyp/hawthorne:latest"
     volumes:
       - "/docker/sockets:/tmp/sockets"
       - "/docker/static/hawthorne:/local/static"
