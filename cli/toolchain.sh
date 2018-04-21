@@ -32,9 +32,9 @@ update () {
     fi
 
     cd $dir
+    git fetch
 
     printf "${GREEN}Pulling changes.\n${NORMAL}"
-
     # https://stackoverflow.com/a/3278427/9077988
     UPSTREAM=${1:-'@{u}'}
     LOCAL=$(git rev-parse @)
@@ -46,7 +46,6 @@ update () {
       exit 1
     fi
 
-    git fetch
     git pull
 
     printf "${GREEN}Checking dependencies and updating components.\n${NORMAL}"
@@ -55,7 +54,7 @@ update () {
     python3 manage.py collectstatic --noinput
 
     cat $dir/tools/utils/permission_delete.py | python3 manage.py shell
-    python manage.py sqlsequencereset auth
+    python3 manage.py sqlsequencereset auth
     python3 manage.py migrate --run-syncdb
 
     hash supervisorctl >/dev/null 2>&1 || {
@@ -88,6 +87,21 @@ report () {
   python3 manage.py report
 }
 
+version () {
+  printf "${YELLOW}Checking your current version${NORMAL}"
+  git fetch --tags
+
+  upstream=$(git describe origin/master --abbrev=0 --tags --match="v*")
+  local=$(git describe --abbrev=0 --tags --match="v*")
+
+  if [ "$upstream" != "$local" ]; then
+    printf "\n\nYou really should ${GREEN}update${NORMAL}! Your current version is ${BLUE}$local${NORMAL}, the lastest version is ${BLUE}$upstream${NORMAL}.\n"
+  else
+    printf "\n\nYou are ${GREEN}up-to-date${NORMAL}!\n(btw you are on version ${BLUE}$local${NORMAL} right now.)\n"
+  fi
+
+}
+
 while [ "$1" != "" ]; do
     PARAM=`echo $1 | awk -F= '{print $1}'`
     VALUE=`echo $1 | awk -F= '{print $2}'`
@@ -102,6 +116,10 @@ while [ "$1" != "" ]; do
             ;;
         r|report)
             report
+            exit 1
+            ;;
+        v|version)
+            version
             exit 1
             ;;
         *)
