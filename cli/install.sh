@@ -62,6 +62,8 @@ usage() {
   printf "\n\t${GREEN}+p <path>${NORMAL}                                --path /hawthorne"
   printf "\n\t${GREEN}+h <user>:<password>@<host>/<database>${NORMAL}   --database root:12345@localhost:3306/hawthorne"
   printf "\n\t${GREEN}+l${NORMAL}                                       --local"
+  printf "\n\t${GREEN}+n${NORMAL}                                       --nginx"
+  printf "\n\t${GREEN}+o${NORMAL}                                       --demo"
   printf "\n"
 }
 

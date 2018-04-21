@@ -6,7 +6,7 @@ Hawthorne is a project aimed to provide an easy and modern way to interact with 
 
 0.x.x is the beta version, while beginning from 1.x.x a full release is planned.
 
-The current version is **v0.7.1**.
+The current version is **v0.7.2**. This is an unstable beta release.
 
 ## Functionality & Features
 * Handcrafted, modern, responsive and user friendly UI
@@ -22,8 +22,12 @@ The current version is **v0.7.1**.
 * Direct Sourcemod integration
 
 ## Showcase
-![](images/1.png)
-![](images/7.png)
-![](images/5.png)
+![][image-1]
+![][image-2]
+![][image-3]
 
 [1]:	https://semver.org/
+
+[image-1]:	images/1.png
+[image-2]:	images/7.png
+[image-3]:	images/5.png

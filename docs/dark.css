@@ -402,7 +402,7 @@ body.sticky .sidebar, body.sticky .sidebar-toggle {
   border-top: 1px solid #ccc;
 }
 
-.markdown-section p.tip, .markdown-section tr:nth-child(2n) {
+.markdown-section p.tip {
   background-color: #f8f8f8;
 }
 
