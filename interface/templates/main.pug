@@ -88,11 +88,10 @@ html(lang='en')
               div open source!
             .righto.flex.center.links
               .spacer
+              i(data-feather="book", onclick="window.open('https://docs.hawthorne.in','Documentation');")
+              i(data-feather="code", onclick="window.open('https://api.hawthorne.in','API Documentation');")
               - include 'assets/discord.svg'
               i(data-feather="github", onclick="window.open('https://github.com/indietyp/hawthorne','GitHub Hawthorne');")
-            //- .rightu.flex
-            //-   .text Installation:
-            //-   pre.code.code-command sh -c "$(curl -fsSL raw.githubusercontent.com/indietyp/hawthorne/master/tools/install.sh)"
           .spacer
       .section
         .message
