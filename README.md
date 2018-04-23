@@ -6,17 +6,28 @@ Hawthorne is a project aimed to provide an easy and modern way to interact with 
 
 0.x.x is the beta version, while beginning from 1.x.x a full release is planned.
 
-The current version is **v0.7**.
+The current version is **v0.7.3**. This is an unstable beta release.
 
-*more may come later*
+## Functionality & Features
+* Handcrafted, modern, responsive and user friendly UI
+* Bans
+* Mute & Gags (_ETA v0.8_)
+* Extensive logs
+* Internal and gameserver wide announcements (_ETA v0.9_)
+* Public accesible, configurable page
+* Rich settings and 120+ permissions
+* Mature API and webhooks
+* Discord integration (_ETA v0.10_)
+* Intuitive & Secure
+* Direct Sourcemod integration
 
-We have one huge [wiki](https://docs.hawthorne.in) and an [api](https://api.hawthorne.in) documentation.
-
-How to install? It is simple as one command!
-```bash
-sh -c "$(curl -fsSL raw.githubusercontent.com/indietyp/hawthorne/master/tools/install.sh)"
-```
-
-You just need a webserver and a database. Make sre to check out the [documentation](https://docs.hawthorne.in) for more detailed information and an [getting started guide](https://docs.hawthorne.in/#/getting-started)
+## Showcase
+![][image-1]
+![][image-2]
+![][image-3]
 
 [1]:  https://semver.org/
+
+[image-1]:  docs/images/1.png
+[image-2]:  docs/images/7.png
+[image-3]:  docs/images/5.png

@@ -45,10 +45,10 @@ def renderer(request, template, obj, page, extra=[], execute=None):
 
     for o in obj[(page - 1) * PAGE_SIZE:page * PAGE_SIZE]:
       try:
-        o.executed = execute(o)
+        o.executed = execute(o, request=request)
       except Exception as e:
         o.executed = []
-        o._excepcetion = e
+        o.exception = e
 
       data.append(o)
 

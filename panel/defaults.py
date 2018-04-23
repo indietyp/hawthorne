@@ -66,3 +66,5 @@ STATIC_PRECOMPILER_COMPILERS = (
         "output_style": "compressed",
     }),
 )
+
+DEMO = False

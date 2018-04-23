@@ -11,7 +11,7 @@ from lib.sourcemod import SourcemodPluginWrapper
 from log.models import UserOnlineTime
 
 
-def status(server):
+def status(server, *args, **kwargs):
   query = UserOnlineTime.objects.filter(server=server) \
     .annotate(date=Cast('disconnected', DateField()))
 

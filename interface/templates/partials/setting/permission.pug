@@ -2,7 +2,10 @@
   .permission.center.flex.pure-g.collapsed
     - for p in advanced
       .detailed.flex.pure-u-1-2.column
-        input.permission__child(class="{{p.content_type.model}}__{{suffix}}", type='checkbox', id="{{p.content_type.app_label}}__{{p.codename}}__{{suffix}}", checked=p.content_type.app_label not in ['core', 'log'])
+        if checked
+          input.permission__child(class="{{p.content_type.model}}__{{suffix}}", type='checkbox', id="{{p.content_type.app_label}}__{{p.codename}}__{{suffix}}", checked=p in checked)
+        else
+          input.permission__child(class="{{p.content_type.model}}__{{suffix}}", type='checkbox', id="{{p.content_type.app_label}}__{{p.codename}}__{{suffix}}", checked=p.content_type.app_label not in ['core', 'log'])
         label.center.flex(for='{{p.content_type.app_label}}__{{p.codename}}__{{suffix}}')
           .container
             i.explicit.m0(data-feather='plus')

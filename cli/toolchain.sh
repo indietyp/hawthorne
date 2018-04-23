@@ -53,8 +53,9 @@ update () {
     python3 manage.py migrate
     python3 manage.py collectstatic --noinput
 
-    cat $dir/tools/utils/permission_delete.py | python3 manage.py shell
-    python3 manage.py sqlsequencereset auth
+    printf "${GREEN}Recreating permissions.\n${NORMAL}"
+    cat $dir/cli/utils/permission_delete.py | python3 manage.py shell
+    echo "ALTER TABLE auth_permission AUTO_INCREMENT = 1;" | python3 manage.py dbshell
     python3 manage.py migrate --run-syncdb
 
     hash supervisorctl >/dev/null 2>&1 || {
@@ -89,7 +90,7 @@ report () {
 
 version () {
   printf "${YELLOW}Checking your current version${NORMAL}"
-  git fetch --tags
+  git fetch --tags >/dev/null 2>&1
 
   upstream=$(git describe origin/master --abbrev=0 --tags --match="v*")
   local=$(git describe --abbrev=0 --tags --match="v*")

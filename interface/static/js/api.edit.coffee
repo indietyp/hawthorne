@@ -123,7 +123,7 @@ save = (mode = '', that) ->
 
 edit = (mode = '', that) ->
   if that.getAttribute('class').match /save/
-# this is for the actual process of saving
+    # this is for the actual process of saving
     save mode, that
     return
 
@@ -271,6 +271,12 @@ edit = (mode = '', that) ->
       $(".icon.password span", node).remove()
 
       window.api.storage[uuid] = selector
+
+    when 'setting__user'
+      console.log 'placeholder'
+
+    when 'setting__group'
+      console.log 'placeholder'
 
   $(that).css('opacity', '0')
   setTimeout(->

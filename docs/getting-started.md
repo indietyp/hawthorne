@@ -6,6 +6,10 @@ Hawthorne is an application that has multiple components, reaching from an API t
 sh -c "$(curl -fsSL raw.githubusercontent.com/indietyp/hawthorne/master/cli/install.sh)"
 ```
 
+!> In *v0.7.3* the `--nginx` flag was added, it installs nginx and configures it accordingly.
+
+?> The script has several modes, you can inspect them by using `--help` on the script.
+
 ## Prerequisites
 * Web Server (_nginx recommended_)
 * MySQL or MariaDB instance (either _local_ or _remote_)
@@ -28,11 +32,15 @@ The current web servers that have been reliably tested are _nginx_ and _Apache 2
 
 Example configurations are provided [here][5].
 
-!> Please pay close attention to the comments provided. That guide you through the process of configuration.
+
+?> Please pay close attention to the comments provided. That guide you through the process of configuration.
+
+**Note:** if nginx is installed over apt(-get), then the config has to be placed in `/etc/nginx/sites-avaiable` *The only thing you should change is the server_name* **Do not change any proxy_\* related things, this will break the configuration.**
 
 If the recommended path of the automated installation has been chosen, a pre-configured script for your system would have been displayed.
 
 ## Neat things to know
+1. 3 Eastereggs are currently hidden
 
 ## Current known system limitations
 1. Currently, Hawthorne is unable to run on a subpath like /ht/. It needs to have it’s own _(sub-)domain_.
