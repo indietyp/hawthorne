@@ -215,7 +215,6 @@ install() {
 
     yum -y install mysql mysql-devel mysql-lib
     yum -y install libxml2-devel libffi-devel libxslt-devel openssl-devel
-    yum -y install git supervisor
 
     curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -
     yum -y install nodejs
@@ -224,6 +223,8 @@ install() {
       printf "${YELLOW}Git not preinstalled. Reinstalling...${NORMAL}\n"
       yum -y install git
     }
+
+    pip3 install supervisor
 
     mkdir -p /etc/supervisor/conf.d/
     cp $dir/cli/configs/supervisord.default.conf /etc/supervisord.conf
