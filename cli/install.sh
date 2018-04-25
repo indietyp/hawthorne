@@ -225,6 +225,13 @@ install() {
       yum -y install git
     }
 
+    mkdir -p /etc/supervisor/conf.d/
+    cp $dir/cli/configs/supervisord.default.conf /etc/supervisord.conf
+
+    wget https://gist.githubusercontent.com/mozillazg/6cbdcccbf46fe96a4edd/raw/2f5c6f5e88fc43e27b974f8a4c19088fc22b1bd5/supervisord.service -O /usr/lib/systemd/system/supervisord.service
+    systemctl start supervisord
+    systemctl enable supervisord
+
     export PATH="$PATH:/usr/local/bin"
 
   else
@@ -363,7 +370,7 @@ configure() {
   python3 $directory/manage.py migrate
 
   if [ "$admin" = "" ]; then
-    python3 $directory/manage.py superusersteam
+    python3 $directory/manage.py superusersteam --check
   else
     python3 $directory/manage.py superusersteam --steamid $admin --check
   fi
