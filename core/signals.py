@@ -38,6 +38,9 @@ def user_log_handler(sender, instance, raw, using, update_fields, **kwargs):
     l.is_active = False
     l.save()
 
+  if UserNamespace.objects.filter(user=instance, namespace=instance.namespace).count() > 1:
+    return
+
   namespace, created = UserNamespace.objects.get_or_create(user=instance, namespace=instance.namespace)
 
   try:
