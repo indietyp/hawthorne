@@ -17,6 +17,8 @@ class Mainframe(BaseModel):
   assigned = models.UUIDField(null=True)
   token = models.UUIDField(null=True)
 
+  domain = models.CharField(max_length=255, null=True)
+
   class Meta:
     permissions = [
         ('view_mainframe', 'Can check mainframe'),

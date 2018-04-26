@@ -10,7 +10,7 @@ def get_user(backend, details, response, uid, user, *args, **kwargs):
 
   try:
     return {'user': User.objects.get(username=information['steamid'], is_active=True)}
-  except User.ObjectDoesNotExist:
+  except User.DoesNotExist:
     if settings.DEMO:
       user = User.objects.create_user(username=information['steamid'])
       user.is_active = True
