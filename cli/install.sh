@@ -227,13 +227,15 @@ install() {
     pip3 install supervisor
 
     mkdir -p /etc/supervisor/conf.d/
-    cp $dir/cli/configs/supervisord.default.conf /etc/supervisord.conf
+    mkdir -p /etc/supervisord
+    cp $dir/cli/configs/supervisord.default.conf /etc/supervisord/supervisord.conf
 
     wget https://gist.githubusercontent.com/mozillazg/6cbdcccbf46fe96a4edd/raw/2f5c6f5e88fc43e27b974f8a4c19088fc22b1bd5/supervisord.service -O /usr/lib/systemd/system/supervisord.service
     systemctl start supervisord
     systemctl enable supervisord
 
-    export PATH="$PATH:/usr/local/bin"
+    ln -s /usr/local/bin/python3 /usr/bin/python3
+    # export PATH="$PATH:/usr/local/bin"
 
   else
     printf "Your package manager is currently not supported. Please contact the maintainer\n"
@@ -386,9 +388,12 @@ configure() {
     while true; do
       read -p "Is your webserver ${BOLD}(A)${NORMAL}pache, ${BOLD}(N)${NORMAL}ginx or ${BOLD}(D)${NORMAL}ifferent? " yn
       case $yn in
-          [Aa]* ) web="apache"; sed -i "s#bind = 'unix:/tmp/sockets/hawthorne.sock'#bind = '127.0.0.1:8000'#g" $directory/gunicorn.conf.py; break;;
+          [Aa]* ) web="apache"
+                  sed -i "s#bind = 'unix:/tmp/sockets/hawthorne.sock'#bind = '127.0.0.1:8000'#g" $directory/gunicorn.conf.py
+                  break;;
           [Nn]* ) break;;
-          [Dd]* ) web="unspecified"; break;;
+          [Dd]* ) web="unspecified"
+                  break;;
           * ) echo "Please answer with the answers provided.";;
       esac
     done
