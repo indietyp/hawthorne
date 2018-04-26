@@ -273,7 +273,8 @@ edit = (mode = '', that) ->
       window.api.storage[uuid] = selector
 
     when 'setting__user'
-      console.log 'placeholder'
+      $('.column.animated', node).toggleClass('collapsed')
+      window.style.settings.init(true)
 
     when 'setting__group'
       console.log 'placeholder'

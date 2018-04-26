@@ -333,6 +333,13 @@
         $(".icon.password", node).htmlAppend('<input type="password", placeholder="Password"></input>');
         $(".icon.password span", node).remove();
         window.api.storage[uuid] = selector;
+        break;
+      case 'setting__user':
+        $('.column.animated', node).toggleClass('collapsed');
+        window.style.settings.init(true);
+        break;
+      case 'setting__group':
+        console.log('placeholder');
     }
     $(that).css('opacity', '0');
     setTimeout(function() {

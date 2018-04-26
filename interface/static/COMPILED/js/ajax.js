@@ -224,6 +224,9 @@
           $("#setting__user").html('');
         }
         $("#setting__user").htmlAppend(data);
+        $("script.afterload.execution").forEach(function(src) {
+          return eval(src.innerHTML);
+        });
         feather.replace();
         return window.ajax.setting.user(page + 1);
       } else {

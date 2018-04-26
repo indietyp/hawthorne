@@ -263,6 +263,14 @@ input[type='number']
     & .column span:not(.flag-icon)
       width: calc(100% - 36px)
 
+  & .column.animated
+    transition: all 0.5s cubic-bezier(1, 0, 0, 1)
+    max-height: 4000px
+    overflow: hidden
+
+    &.collapsed
+      max-height: 0
+
   & .column.command:not(:last-child)
     margin-bottom: 1em
 

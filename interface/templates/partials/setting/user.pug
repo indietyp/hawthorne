@@ -34,9 +34,12 @@
         i(data-feather="trash-2", onclick="window.api.remove('setting__user', this)")
   - if perms.core.change_user and not data.is_superuser
     - if request.user.is_superuser or request.user.user_permission.count > data.user_permission.count
-      .column.icon.switch.pure-u-3-24(onclick="window.style.settings.permissions(this)", style="align-items:flex-start")
+      .column.icon.switch.pure-u-3-24.animated.collapsed(onclick="window.style.settings.permissions(this)", style="align-items:flex-start")
           i(data-feather='toggle-left')
           span Simple
-      .column.icon.perms.pure-u-18-24.flex.center.special
-        - include 'partials/setting/permission.pug' with advanced=data.executed.advanced simple=data.executed.base checked=data.executed.used suffix=data.uuid
-      .column.icon.pure-u-3-24
+      .column.icon.perms.pure-u-18-24.flex.center.special.animated.collapsed
+        - include 'partials/setting/permission.pug' with advanced=data.executed.advanced simple=data.executed.base checked=data.executed.used suffix=data.id
+      .column.icon.pure-u-3-24.animated.collapsed
+
+      // script.afterload.execution.
+      //   window.style.settings.init(true)

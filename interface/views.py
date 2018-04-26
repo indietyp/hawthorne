@@ -25,7 +25,7 @@ def login(request):
 def setup(request, u=None):
   try:
     user = User.objects.get(id=u)
-  except User.ObjectDoesNotExist:
+  except User.DoesNotExist:
     return redirect('/login')
 
   if user.username != user.email:

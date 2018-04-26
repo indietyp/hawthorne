@@ -55,7 +55,7 @@ type__toggle = (that) ->
   else
     $('span', that).html('Steam')
 
-settings__init = () ->
+settings__init = (init=false) ->
   $('.permission__child').on('change', (event) ->
     t = event.target
 
@@ -93,6 +93,23 @@ settings__init = () ->
     else
       $(".permission__child.#{t.id}").forEach((i) -> i.checked = false)
   )
+
+  if init
+    $('.permission__parent').forEach((parent) ->
+      candidates = {true: 0, false: 0}
+      $(".permission__child.#{parent.id}").forEach((i) -> candidates[i.checked] += 1)
+
+      if candidates[true] == 0
+        parent.checked = false
+      else if candidates[false] == 0
+        parent.checked = true
+      else
+        parent.checked = false
+        $("label svg", parent.parentElement).addClass 'partially'
+
+      return
+    )
+
   return
 
 copyTextToClipboard = (text) ->

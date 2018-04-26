@@ -258,6 +258,8 @@ submit = (mode = '', that) ->
         $('.description.info-container').html("<span class='green'> Connected </span><span class='prefix primary'>#{data.result.id}</span>")
         $('.action-container').css('display', 'none')
       )
+
+
     else
       console.warning 'You little bastard! This is not implemented....'
 
