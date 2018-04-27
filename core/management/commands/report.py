@@ -47,6 +47,7 @@ class Command(BaseCommand):
       }
       response = requests.put("https://{}/api/v1/instance/{}/report".format(settings.MAINFRAME, mainframe().id),
                               json=payload)
+
       identifier = response.json()['result']['id']
 
       self.stdout.write(self.style.SUCCESS(

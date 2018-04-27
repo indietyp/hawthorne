@@ -14,7 +14,7 @@
 
 ![color][image-2]
 
-[1]:	https://github.com/indietyp/hawthorne/
+[1]:	https://github.com/laevis/hawthorne/
 [2]:	getting-started#getting-started-with-hawthorne
 
 [image-1]:	images/logo.svg

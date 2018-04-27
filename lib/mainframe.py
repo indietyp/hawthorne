@@ -22,9 +22,11 @@ class Mainframe:
     self.save()
 
   def populate(self):
+    self.mainframe = MainframeModel.objects.filter(domain=self.target)[0]
+
     self.current.id = self.mainframe.assigned
 
-    if 'token' in self.mainframe.__dir__:
+    if 'token' in self.mainframe.__dir__():
       self.current.token = self.mainframe.token
 
     self.current.mainframe = self.target
@@ -51,13 +53,13 @@ class Mainframe:
 
     result = o['result']
 
-    self.mainframe, created = Mainframe.objects.get_or_create(domain=self.target)
-
-    self.assigned = result['id']
+    self.mainframe, created = MainframeModel.objects.get_or_create(domain=self.target)
+    self.mainframe.assigned = result['id']
 
     if 'token' in result:
-      self.token = result['token']
+      self.mainframe.token = result['token']
 
+    self.mainframe.save()
     return True
 
   def save(self):

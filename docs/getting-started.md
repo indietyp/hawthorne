@@ -3,7 +3,7 @@
 Hawthorne is an application that has multiple components, reaching from an API to a logging instance. To provide the best possible results in the installation process a shell script was created. To start the automated installation process execute the following command:
 
 ```bash
-sh -c "$(curl -fsSL raw.githubusercontent.com/indietyp/hawthorne/master/cli/install.sh)"
+sh -c "$(curl -fsSL raw.githubusercontent.com/laevis/hawthorne/master/cli/install.sh)"
 ```
 
 !> In *v0.7.3* the `--nginx` flag was added, it installs nginx and configures it accordingly.
@@ -35,7 +35,9 @@ Example configurations are provided [here][5].
 
 ?> Please pay close attention to the comments provided. That guide you through the process of configuration.
 
-**Note:** if nginx is installed over apt(-get), then the config has to be placed in `/etc/nginx/sites-avaiable` *The only thing you should change is the server_name* **Do not change any proxy_\* related things, this will break the configuration.**
+!> **Note:** if nginx is installed over apt(-get), then the config has to be placed in `/etc/nginx/sites-avaiable` *The only thing you should change is the server_name* **Do not change any proxy_\* related things, this will break the configuration.**
+
+!> **Note:** If you are using SELinux (_RHEL or centOS_) you need to enable that httpd is able to proxy connections. To do so please execute: `user=instance, namespace=instance.namespace`
 
 If the recommended path of the automated installation has been chosen, a pre-configured script for your system would have been displayed.
 
@@ -62,11 +64,11 @@ If the recommended path of the automated installation has been chosen, a pre-con
 4. Is your problem not listed? You can get in touch with me via [e-mail][8] or [Discord][9]  Want to insult me? Please go ahead under `i-am-a-cunt@indietyp.com` or `insult@indietyp.com`. Get creative. Let me be your guidance into an anger free lifestyle!
 
 
-[1]:	https://www.github.com/indietyp/hawthorne
+[1]:	https://www.github.com/laevis/hawthorne
 [2]:	mailto:hawthorne@indietyp.com?subject=installation
 [3]:	toolchain.md "More Information"
 [4]:	https://en.wikipedia.org/wiki/Web_Server_Gateway_Interface
-[5]:	https://github.com/indietyp/hawthorne/tree/master/tools/configs
+[5]:	https://github.com/laevis/hawthorne/tree/master/cli/configs
 [6]:	https://stackoverflow.com/a/21627550/9077988
 [7]:	https://stackoverflow.com/a/16288118/9077988
 [8]:	mailto:hawthorne@indietyp.com

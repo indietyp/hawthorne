@@ -20,7 +20,7 @@ You are not worthy enough currently, please unlock the **ultimate power**, then 
 ?> The packages are for apt are: _git python3 python3-dev python3-pip redis-server libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential curl nodejs_
 
 # Setup
-1. Clone project over GitHub directory: `https://github.com/indietyp/hawthorne`
+1. Clone project over GitHub directory: `https://github.com/laevis/hawthorne`
 2. Install python requirements over `pip` and _gunicorn_
 3. Install pug over `npm`
 4. Create `/var/log/hawthorne`

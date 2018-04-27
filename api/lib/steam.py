@@ -10,12 +10,12 @@ from steam import WebAPI
 
 def search(query=''):
   # Request
-  # GET http://steamcommunity.com/search/SearchCommunityAjax
+  # GET https://steamcommunity.com/search/SearchCommunityAjax
 
   fake_session = uuid.uuid4().hex
   try:
     response = requests.get(
-      url="http://steamcommunity.com/search/SearchCommunityAjax",
+      url="https://steamcommunity.com/search/SearchCommunityAjax",
       params={
         "text": query,
         "filter": "users",
@@ -28,7 +28,7 @@ def search(query=''):
         "Pragma": "no-cache",
         "Cookie": "sessionid=" + fake_session,
         "Content-Type": "multipart/form-data; charset=utf-8; boundary=__X_PAW_BOUNDARY__",
-        "Referer": "http://steamcommunity.com/search/users/",
+        "Referer": "https://steamcommunity.com/search/users/",
       },
       files={
       },
