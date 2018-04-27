@@ -60,7 +60,12 @@ def report(request, validated={}, i=None, *args, **kwargs):
   instance = Instance.objects.get(id=i)
 
   instance.ip = request.META['REMOTE_ADDR']
-  instance.domain = socket.gethostbyaddr(instance.ip)[0]
+
+  try:
+    instance.domain = socket.gethostbyaddr(instance.ip)[0]
+  except:
+    pass
+
   instance.save()
 
   if request.method == 'PUT':
