@@ -235,10 +235,44 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
 
     if validated['group'] is not None:
       group = Group.objects.get(id=validated['group'])
+
       if validated['promotion']:
         user.groups.add(group)
       else:
         user.groups.remove(group)
+
+    if validated['roles']:
+      Membership.objects.filter(user=user).delete()
+
+      for role in validated['roles']:
+        group = ServerGroup.objects.get(id=role)
+        m = Membership()
+        m.user = user
+        m.role = group
+        m.save()
+
+    if validated['groups']:
+      groups = Group.objects.filter(id__in=validated['groups'])
+      user.groups.set(groups)
+
+    if validated['permissions'] is not None:
+      base = Permission.objects if request.user.is_superuser else request.user.user_permissions
+      exceptions = []
+      perms = []
+      for perm in validated['permissions']:
+        perm = perm.split('.')
+        p = base.filter(content_type__app_label=perm[0], codename=perm[1])
+
+        if not p:
+          exceptions.append('.'.join(perm))
+
+        perms.extend(p)
+
+      if exceptions:
+        return {'info': 'You are trying to assign permissions that either do not exist or are out of your scope.', 'affects': exceptions}, 403
+
+      user.user_permissions.set(perms)
+      user.save()
 
     return ':+1:'
 
@@ -259,7 +293,7 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
       return 'user not using panel'
 
     if validated['purge']:
-      if not user.is_superuser:
+      if user.is_superuser:
         return 'superuser cannot be removed', 403
 
       if request.user == user:
@@ -273,7 +307,7 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
       m = Membership.objects.get(user=user, role=validated['role'])
       m.delete()
     else:
-      if not user.is_superuser:
+      if user.is_superuser:
         return 'superuser cannot be deactivated', 403
 
       if request.user == user:
@@ -292,7 +326,6 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
     return '+1'
 
 
-# TESTING
 @csrf_exempt
 @json_response
 @authentication_required

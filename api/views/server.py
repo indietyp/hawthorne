@@ -43,6 +43,7 @@ def list(request, validated={}, *args, **kwargs):
 
     server = Server()
     server.port = validated['port']
+    server.password = validated['password']
     server.ip = ip
     server.name = validated['name']
     server.game = validated['game']

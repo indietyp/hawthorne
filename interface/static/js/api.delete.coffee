@@ -49,10 +49,14 @@ remove = (mode = '', that) ->
       endpoint = window.endpoint.api.servers[server]
 
     when 'setting__user'
-      console.log 'test'
+      uuid = $('input.uuid', node)[0].value
+
+      endpoint = window.endpoint.api.users[uuid]
 
     when 'setting__group'
-      console.log 'test'
+      uuid = $('input.uuid', node)[0].value
+
+      endpoint = window.endpoint.api.groups[uuid]
 
     when 'setting__token'
       token = $('input.uuid', node)[0].value

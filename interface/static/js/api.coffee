@@ -73,7 +73,7 @@ role = (query, that = null, selected = '') ->
   )
   return
 
-group = (query, that = null, selected = '') ->
+group = (query, that = null, selected = ['']) ->
   window.endpoint.api.groups({'match': query}).get((err, data) ->
     data = data['result']
 
@@ -84,7 +84,7 @@ group = (query, that = null, selected = '') ->
           value: ele.id
           label: ele.name
 
-        if selected != '' and fmt.value == selected
+        if selected != '' and fmt.value in selected
           fmt.selected = true
 
         formatted.push fmt

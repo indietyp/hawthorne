@@ -14,7 +14,7 @@ def get_perms(o, request, *args, **kwargs):
 
   base = request.user.user_permissions if not request.user.is_superuser else Permission.objects
   perms = base.all().order_by('content_type__model')
-  used = o.permissions if 'permissions' in o.__dict__ else o.user_permissions
+  used = o.permissions if 'permissions' in [f.name for f in o._meta.get_fields()] else o.user_permissions
 
   return {'advanced': perms, 'base': modules, 'used': used.all()}
 
@@ -38,7 +38,7 @@ def group(request, page, *args, **kwargs):
   obj = Group.objects.all()\
                      .annotate(perms=(Count('permissions') / perms) * 100)\
                      .order_by('perms')
-  return renderer(request, 'partials/setting/group.pug', obj, page)
+  return renderer(request, 'partials/setting/group.pug', obj, page, execute=get_perms)
 
 
 @login_required(login_url='/login')

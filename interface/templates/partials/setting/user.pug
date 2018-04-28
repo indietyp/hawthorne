@@ -1,6 +1,7 @@
 - load i18n
 
 .row.pure-g
+  input.hidden.uuid(value=data.id)
   .column.icon.username.pure-u-7-24
     .icon-container.flex.center
       if data.is_steam
@@ -11,7 +12,7 @@
       .namespace= data.namespace
     else
       .namespace= data.username
-  .column.icon.username.pure-u-7-24
+  .column.icon.groups.pure-u-7-24
     i(data-feather='layers')
     span= data.groups.all|join:", "|default:"----"
   .column.icon.username.pure-u-7-24
@@ -40,6 +41,3 @@
       .column.icon.perms.pure-u-18-24.flex.center.special.animated.collapsed
         - include 'partials/setting/permission.pug' with advanced=data.executed.advanced simple=data.executed.base checked=data.executed.used suffix=data.id
       .column.icon.pure-u-3-24.animated.collapsed
-
-      // script.afterload.execution.
-      //   window.style.settings.init(true)
