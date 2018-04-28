@@ -119,6 +119,47 @@ save = (mode = '', that) ->
 
       window.endpoint.api.servers[uuid].post(o, {}, payload, (err, data) ->)
 
+    when 'setting__user'
+      uuid = $('input.uuid', node)[0].value
+      selector = window.api.storage[uuid]
+
+      perms = []
+
+      $('.permission__child:checked', node).forEach((i) ->
+        cl = i.id
+        cl = cl.replace /\s/g, ''
+
+        cl = cl.split '__'
+        cl = "#{cl[0]}.#{cl[1]}"
+
+        perms.push cl
+      )
+
+      payload =
+        permissions: perms
+        groups: selector.getValue(true)
+
+      window.endpoint.api.users[uuid].post(o, {}, payload, (err, data) ->)
+
+    when 'setting__group'
+      uuid = $('input.uuid', node)[0].value
+      perms = []
+
+      $('.permission__child:checked', node).forEach((i) ->
+        cl = i.id
+        cl = cl.replace /\s/g, ''
+
+        cl = cl.split '__'
+        cl = "#{cl[0]}.#{cl[1]}"
+
+        perms.push cl
+      )
+
+      payload =
+        permissions: perms
+
+      window.endpoint.api.groups[uuid].post(o, {}, payload, (err, data) ->)
+
   return
 
 edit = (mode = '', that) ->
@@ -273,10 +314,32 @@ edit = (mode = '', that) ->
       window.api.storage[uuid] = selector
 
     when 'setting__user'
-      console.log 'placeholder'
+      $('.column.animated', node).toggleClass('collapsed')
+      uuid = $('input.uuid', node)[0].value
+      roles = $('.column.groups', node)
+
+      roles.htmlAppend("<select id='user-group-#{uuid}' multiple></select>")
+      selector = new Choices("#user-group-#{uuid}", {
+        searchEnabled: false,
+        choices: [],
+        duplicateItems: false,
+        paste: false,
+        searchEnabled: false,
+        searchChoices: false,
+        removeItemButton: true,
+        classNames: {
+          containerOuter: 'choices edit'
+        }
+      })
+      window.api.groups('', selector, $('span', roles).html().split(', '))
+      $('span', roles).remove()
+
+      window.style.settings.init(true)
+      window.api.storage[uuid] = selector
 
     when 'setting__group'
-      console.log 'placeholder'
+      $('.column.animated', node).toggleClass('collapsed')
+      window.style.settings.init(true)
 
   $(that).css('opacity', '0')
   setTimeout(->

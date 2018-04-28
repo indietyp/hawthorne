@@ -363,7 +363,7 @@
     }
   };
 
-  settings__init = function() {
+  settings__init = function(init = false) {
     $('.permission__child').on('change', function(event) {
       var candidates, cl, i, l, t;
       t = event.target;
@@ -404,6 +404,26 @@
         });
       }
     });
+    if (init) {
+      $('.permission__parent').forEach(function(parent) {
+        var candidates;
+        candidates = {
+          true: 0,
+          false: 0
+        };
+        $(`.permission__child.${parent.id}`).forEach(function(i) {
+          return candidates[i.checked] += 1;
+        });
+        if (candidates[true] === 0) {
+          parent.checked = false;
+        } else if (candidates[false] === 0) {
+          parent.checked = true;
+        } else {
+          parent.checked = false;
+          $("label svg", parent.parentElement).addClass('partially');
+        }
+      });
+    }
   };
 
   copyTextToClipboard = function(text) {

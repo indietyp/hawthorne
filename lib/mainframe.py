@@ -1,17 +1,13 @@
-import os
 from collections import namedtuple
-from configparser import ConfigParser
 
 import requests
 from django.conf import settings
+from core.models import Mainframe as MainframeModel
 
 
 class Mainframe:
   def __init__(self, target=None):
     self.current = namedtuple('Mainframe', ['id', 'salt', 'mainframe'])
-
-    self.file = '{}/mainframe.ini'.format(settings.BASE_DIR)
-    self.config = ConfigParser()
 
     self.target = target if target else settings.MAINFRAME
 
@@ -26,10 +22,12 @@ class Mainframe:
     self.save()
 
   def populate(self):
-    self.current.id = self.config[self.target]['ID']
+    self.mainframe = MainframeModel.objects.filter(domain=self.target)[0]
 
-    if 'SALT' in self.config[self.target]:
-      self.current.salt = self.config[self.target]['SALT']
+    self.current.id = self.mainframe.assigned
+
+    if 'token' in self.mainframe.__dir__():
+      self.current.token = self.mainframe.token
 
     self.current.mainframe = self.target
 
@@ -37,8 +35,8 @@ class Mainframe:
 
   def collect(self):
     output = {}
-    for target in self.config.sections():
-      output[target] = self.config[target]['ID']
+    for target in MainframeModel.objects.all():
+      output[target.domain] = target.assigned
 
     return output
 
@@ -55,33 +53,22 @@ class Mainframe:
 
     result = o['result']
 
-    if self.target not in self.config.sections():
-      self.config[self.target] = {}
+    self.mainframe, created = MainframeModel.objects.get_or_create(domain=self.target)
+    self.mainframe.assigned = result['id']
 
-    self.config[self.target]['ID'] = result['id']
+    if 'token' in result:
+      self.mainframe.token = result['token']
 
-    if 'salt' in result:
-      self.config[self.target]['SALT'] = result['salt']
-
+    self.mainframe.save()
     return True
 
   def save(self):
-    with open(self.file, 'w') as out:
-      self.config.write(out)
+    self.mainframe.save()
 
     return self
 
   def check(self):
-    exists = True if os.path.exists(self.file) else False
-
-    if exists:
-      self.config.read(self.file)
-      if self.target not in self.config.sections():
-        return False
-    else:
-      return False
-
-    return True
+    return bool(MainframeModel.objects.filter(domain=self.target))
 
   def invite(self, request, target):
     payload = {'user': str(target.id),

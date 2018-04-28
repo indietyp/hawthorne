@@ -19,8 +19,7 @@ validation = {
                                    'country': {'type': 'string', 'nullable': True, 'default': None},
 
                                    'server': {'type': 'uuid'},
-                                   'connected': {'type': 'boolean', 'dependencies': ['server'], 'nullable': True,
-                                                 'default': None},
+                                   'connected': {'type': 'boolean', 'dependencies': ['server'], 'nullable': True},
 
                                    'internal': {'type': 'boolean', 'default': False},
                                    'permissions': {'type': 'list', 'schema': {'regex': '\w+\.\w+\_\w+'},
@@ -37,7 +36,11 @@ validation = {
             'POST': {'parameters': {'promotion': {'type': 'boolean', 'default': False},
                                     'force': {'type': 'boolean', 'default': False},
                                     'role': {'type': 'uuid', 'default': None, 'nullable': True, 'required': False},
-                                    'group': {'type': 'uuid', 'default': None, 'nullable': True, 'required': False}},
+                                    'group': {'type': 'integer', 'default': None, 'nullable': True, 'required': False},
+
+                                    'roles': {'type': 'list', 'default': None, 'nullable': True, 'schema': {'type': 'uuid'}},
+                                    'groups': {'type': 'list', 'default': None, 'nullable': True, 'schema': {'type': 'integer'}},
+                                    'permissions': {'type': 'list', 'schema': {'regex': '\w+\.\w+\_\w+'}, 'nullable': True, 'default': None}},
                      'permission': ['core.change_user']},
             'DELETE': {'parameters': {'purge': {'type': 'boolean', 'default': False, 'required': False},
                                       'reset': {'type': 'boolean', 'default': True, 'required': False},

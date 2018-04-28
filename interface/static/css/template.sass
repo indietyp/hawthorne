@@ -263,6 +263,14 @@ input[type='number']
     & .column span:not(.flag-icon)
       width: calc(100% - 36px)
 
+  & .column.animated
+    transition: all 0.5s cubic-bezier(1, 0, 0, 1)
+    max-height: 4000px
+    overflow: hidden
+
+    &.collapsed
+      max-height: 0
+
   & .column.command:not(:last-child)
     margin-bottom: 1em
 
@@ -701,27 +709,6 @@ input[type='number']
   &.no__margin__bottom
     margin-bottom: 0
 
-  &[data-type='select-multiple']
-    & .choices__inner
-      display: flex
-      align-items: center
-      flex-wrap: wrap
-
-    & .choices__list--multiple
-      & .choices__item
-        width: 100%
-        width: max-content
-        background-color: $dgray !important
-        border-radius: 12px
-
-        & button
-          border-left-color: $white !important
-
-    & input
-      cursor: pointer
-      width: unset !important
-      flex-grow: 1
-
   &.edit
     &.big .choices__item
       font-size: 1.25em !important
@@ -756,6 +743,35 @@ input[type='number']
 
   & .choices__item, & .choices__input
     padding: 6px !important
+
+  &[data-type='select-multiple']
+    &:not(.edit)
+      & .choices__inner
+        flex-wrap: wrap
+
+    &.edit
+      & .choices__list--multiple
+        display: flex !important
+
+    & .choices__inner
+      display: flex
+      align-items: center
+
+    & .choices__list--multiple
+      & .choices__item
+        width: 100%
+        width: max-content
+        background-color: $dgray !important
+        border-radius: 12px
+        padding: 3px !important
+
+        & button
+          border-left-color: $white !important
+
+    & input
+      cursor: pointer
+      width: unset !important
+      flex-grow: 1
 
 pre
   background: #333

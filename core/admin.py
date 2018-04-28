@@ -31,6 +31,15 @@ class UserAdmin(admin.ModelAdmin):
   )
 
 
+class MainframeAdmin(admin.ModelAdmin):
+  list_display = (
+    'domain',
+    'assigned',
+    'token',
+  )
+  list_filter = ()
+
+
 class TokenAdmin(admin.ModelAdmin):
   list_display = (
     'id',
@@ -50,59 +59,6 @@ class TokenAdmin(admin.ModelAdmin):
     'is_supertoken',
   )
   date_hierarchy = 'created_at'
-
-
-# class UserLogIPAdmin(admin.ModelAdmin):
-
-#     list_display = (
-#         'id',
-#         'created_at',
-#         'updated_at',
-#         'user',
-#         'ip',
-#         'connections',
-#         'is_active',
-#         'last_used',
-#     )
-#     list_filter = ('created_at', 'updated_at', 'user', 'is_active', 'last_used')
-#     date_hierarchy = 'created_at'
-
-
-# class UserLogTimeAdmin(admin.ModelAdmin):
-
-#     list_display = (
-#         'id',
-#         'created_at',
-#         'updated_at',
-#         'user',
-#         'server',
-#         'connected',
-#         'disconnected',
-#     )
-#     list_filter = (
-#         'created_at',
-#         'updated_at',
-#         'user',
-#         'server',
-#         'connected',
-#         'disconnected',
-#     )
-#     date_hierarchy = 'created_at'
-
-
-# class UserLogUsernameAdmin(admin.ModelAdmin):
-
-#     list_display = (
-#         'id',
-#         'created_at',
-#         'updated_at',
-#         'user',
-#         'username',
-#         'connections',
-#         'last_used',
-#     )
-#     list_filter = ('created_at', 'updated_at', 'user', 'last_used')
-#     date_hierarchy = 'created_at'
 
 
 class ServerPermissionAdmin(admin.ModelAdmin):
@@ -194,22 +150,6 @@ class BanAdmin(admin.ModelAdmin):
   date_hierarchy = 'created_at'
 
 
-# class ChatAdmin(admin.ModelAdmin):
-
-#     list_display = (
-#         'id',
-#         'created_at',
-#         'updated_at',
-#         'user',
-#         'ip',
-#         'server',
-#         'message',
-#         'command',
-#     )
-#     list_filter = ('created_at', 'updated_at', 'user', 'server', 'command')
-#     date_hierarchy = 'created_at'
-
-
 class MutegagAdmin(admin.ModelAdmin):
   list_display = (
     'id',
@@ -236,13 +176,6 @@ class MutegagAdmin(admin.ModelAdmin):
   date_hierarchy = 'created_at'
 
 
-# class LogAdmin(admin.ModelAdmin):
-
-#     list_display = ('id', 'created_at', 'updated_at', 'action', 'user')
-#     list_filter = ('created_at', 'updated_at', 'user')
-#     date_hierarchy = 'created_at'
-
-
 def _register(model, admin_class):
   admin.site.register(model, admin_class)
 
@@ -250,13 +183,9 @@ def _register(model, admin_class):
 _register(models.Country, CountryAdmin)
 _register(models.User, UserAdmin)
 _register(models.Token, TokenAdmin)
-# _register(models.UserLogIP, UserLogIPAdmin)
-# _register(models.UserLogTime, UserLogTimeAdmin)
-# _register(models.UserLogUsername, UserLogUsernameAdmin)
 _register(models.ServerPermission, ServerPermissionAdmin)
 _register(models.ServerGroup, ServerGroupAdmin)
 _register(models.Server, ServerAdmin)
 _register(models.Ban, BanAdmin)
-# _register(models.Chat, ChatAdmin)
 _register(models.Mutegag, MutegagAdmin)
-# _register(models.Log, LogAdmin)
+_register(models.Mainframe, MainframeAdmin)

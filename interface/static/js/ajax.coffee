@@ -186,6 +186,11 @@ setting__user = (page = 1) ->
         $("#setting__user").html('')
 
       $("#setting__user").htmlAppend data
+
+      $("script.afterload.execution").forEach((src) ->
+        eval(src.innerHTML)
+      )
+
       feather.replace()
 
       return window.ajax.setting.user(page + 1)

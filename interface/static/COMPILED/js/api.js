@@ -3,7 +3,7 @@
   var remove;
 
   remove = function(mode = '', that) {
-    var endpoint, node, options, payload, role, server, token, trans, user;
+    var endpoint, node, options, payload, role, server, token, trans, user, uuid;
     trans = $(that);
     if (!trans.hasClass('confirmation')) {
       trans.addClass('explicit red confirmation');
@@ -51,10 +51,12 @@
         endpoint = window.endpoint.api.servers[server];
         break;
       case 'setting__user':
-        console.log('test');
+        uuid = $('input.uuid', node)[0].value;
+        endpoint = window.endpoint.api.users[uuid];
         break;
       case 'setting__group':
-        console.log('test');
+        uuid = $('input.uuid', node)[0].value;
+        endpoint = window.endpoint.api.groups[uuid];
         break;
       case 'setting__token':
         token = $('input.uuid', node)[0].value;
@@ -83,7 +85,7 @@
   var edit, save;
 
   save = function(mode = '', that) {
-    var data, j, len, node, now, o, password, payload, payloads, replacement, role, selector, server, success, target, time, user, uuid;
+    var data, j, len, node, now, o, password, payload, payloads, perms, replacement, role, selector, server, success, target, time, user, uuid;
     o = {
       target: that,
       skip_animation: false
@@ -197,11 +199,45 @@
           payload.password = password;
         }
         window.endpoint.api.servers[uuid].post(o, {}, payload, function(err, data) {});
+        break;
+      case 'setting__user':
+        uuid = $('input.uuid', node)[0].value;
+        selector = window.api.storage[uuid];
+        perms = [];
+        $('.permission__child:checked', node).forEach(function(i) {
+          var cl;
+          cl = i.id;
+          cl = cl.replace(/\s/g, '');
+          cl = cl.split('__');
+          cl = `${cl[0]}.${cl[1]}`;
+          return perms.push(cl);
+        });
+        payload = {
+          permissions: perms,
+          groups: selector.getValue(true)
+        };
+        window.endpoint.api.users[uuid].post(o, {}, payload, function(err, data) {});
+        break;
+      case 'setting__group':
+        uuid = $('input.uuid', node)[0].value;
+        perms = [];
+        $('.permission__child:checked', node).forEach(function(i) {
+          var cl;
+          cl = i.id;
+          cl = cl.replace(/\s/g, '');
+          cl = cl.split('__');
+          cl = `${cl[0]}.${cl[1]}`;
+          return perms.push(cl);
+        });
+        payload = {
+          permissions: perms
+        };
+        window.endpoint.api.groups[uuid].post(o, {}, payload, function(err, data) {});
     }
   };
 
   edit = function(mode = '', that) {
-    var date, games, group, node, now, selected, selector, server, target, timestamp, trigger, uuid;
+    var date, games, group, node, now, roles, selected, selector, server, target, timestamp, trigger, uuid;
     if (that.getAttribute('class').match(/save/)) {
       // this is for the actual process of saving
       save(mode, that);
@@ -333,6 +369,32 @@
         $(".icon.password", node).htmlAppend('<input type="password", placeholder="Password"></input>');
         $(".icon.password span", node).remove();
         window.api.storage[uuid] = selector;
+        break;
+      case 'setting__user':
+        $('.column.animated', node).toggleClass('collapsed');
+        uuid = $('input.uuid', node)[0].value;
+        roles = $('.column.groups', node);
+        roles.htmlAppend(`<select id='user-group-${uuid}' multiple></select>`);
+        selector = new Choices(`#user-group-${uuid}`, {
+          searchEnabled: false,
+          choices: [],
+          duplicateItems: false,
+          paste: false,
+          searchEnabled: false,
+          searchChoices: false,
+          removeItemButton: true,
+          classNames: {
+            containerOuter: 'choices edit'
+          }
+        });
+        window.api.groups('', selector, $('span', roles).html().split(', '));
+        $('span', roles).remove();
+        window.style.settings.init(true);
+        window.api.storage[uuid] = selector;
+        break;
+      case 'setting__group':
+        $('.column.animated', node).toggleClass('collapsed');
+        window.style.settings.init(true);
     }
     $(that).css('opacity', '0');
     setTimeout(function() {
@@ -596,7 +658,8 @@
   //= require api.delete.coffee
   //= require api.edit.coffee
   //= require api.create.coffee
-  var game, group, login, mainframe, role, server, setup;
+  var game, group, login, mainframe, role, server, setup,
+    indexOf = [].indexOf;
 
   game = function(that = null, selected = '') {
     window.endpoint.api.capabilities.games.get(function(err, data) {
@@ -682,11 +745,11 @@
     });
   };
 
-  group = function(query, that = null, selected = '') {
+  group = function(query, that = null, selected = ['']) {
     window.endpoint.api.groups({
       'match': query
     }).get(function(err, data) {
-      var ele, fmt, formatted, i, len;
+      var ele, fmt, formatted, i, len, ref;
       data = data['result'];
       if (that !== null) {
         formatted = [];
@@ -696,7 +759,7 @@
             value: ele.id,
             label: ele.name
           };
-          if (selected !== '' && fmt.value === selected) {
+          if (selected !== '' && (ref = fmt.value, indexOf.call(selected, ref) >= 0)) {
             fmt.selected = true;
           }
           formatted.push(fmt);
