@@ -46,7 +46,7 @@ class SourcemodPluginWrapper(RCONBase):
 
     return response
 
-  def status(self, *args, **kwargs):
+  def status(self, truncated=False, *args, **kwargs):
     try:
       response = self.run('json_status')[0]
     except valve.rcon.RCONError as e:
@@ -64,6 +64,9 @@ class SourcemodPluginWrapper(RCONBase):
       response['stats']['timeleft'] = datetime.timedelta(seconds=response['stats']['timeleft'])
 
     response['stats']['uptime'] = datetime.timedelta(seconds=response['stats']['uptime'])
+
+    if truncated:
+      response['stats']['map'] = response['stats']['map'].split('/')[-1]
 
     users = []
     for player in response['players']:

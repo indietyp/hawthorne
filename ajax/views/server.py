@@ -41,7 +41,12 @@ def status(server, *args, **kwargs):
 
   online = sorted(online, key=lambda x: x['date'])
 
-  return {'status': SourcemodPluginWrapper(server).status(),
+  if not recent:
+    recent = [{'active': 0}]
+  if not alltime:
+    alltime = [{'active': 0}]
+
+  return {'status': SourcemodPluginWrapper(server).status(truncated=True),
           'online': online,
           'count': {'last30': recent[0], 'ever': alltime[0]}}
 

@@ -23,7 +23,7 @@ def duration(delta):
 def dict_to_list(dic, key):
   output = [d[key] for d in dic]
 
-  if isinstance(output[0], datetime.date):
+  if len(output) > 0 and isinstance(output[0], datetime.date):
     output = [date(d, settings.SHORT_DATE_FORMAT) for d in output]
 
   return output
