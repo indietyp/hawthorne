@@ -11,212 +11,209 @@ msgstr ""
 "POT-Creation-Date: 2018-03-23 21:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Bilal Mahmoud <bilalmahmoud@posteo.net>, 2018\n"
-"Language-Team: German (https://www.transifex.com/laevisug/teams/85920/de/)\n"
+"Language-Team: Dutch (https://www.transifex.com/laevisug/teams/85920/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
+"Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: api/validation.py:11
 msgid "document is missing"
-msgstr "Dokument ist nicht vorhanden"
+msgstr "document ontbreekt"
 
 #: api/validation.py:12
 msgid "required field"
-msgstr "Feld erforderlich"
+msgstr "verplicht veld"
 
 #: api/validation.py:13
 msgid "unknown field"
-msgstr "Feld unbekannt"
+msgstr "onbekend veld"
 
 #: api/validation.py:14
 #, python-brace-format
 msgid "field '{0}' is required"
-msgstr "Feld '{0}' ist erforderlich"
+msgstr "veld '{0}' is vereist"
 
 #: api/validation.py:15
 #, python-brace-format
 msgid "depends on these values: {constraint}"
-msgstr "hängt vom Wert {constraint} ab"
+msgstr "hangt af van deze waardes: {constraint}"
 
 #: api/validation.py:16
 #, python-brace-format
 msgid "{0} must not be present with '{field}'"
-msgstr "{0} darf nicht im Feld '{field}' vorkommen"
+msgstr "{0} moet niet aanwezig zijn met'{field}'"
 
 #: api/validation.py:18
 #, python-brace-format
 msgid "'{0}' is not a document, must be a dict"
-msgstr "'{0}' ist kein Dokument, muss ein dict sein"
+msgstr "'{0}' is niet een document, moet een dict zijn"
 
 #: api/validation.py:19
 msgid "empty values not allowed"
-msgstr "Leere Werte sind nicht zugelassen"
+msgstr "lege waarde niet toegestaan"
 
 #: api/validation.py:20
 msgid "value needs to be supplied"
-msgstr "Wert muss vorhanden sein"
+msgstr ""
 
 #: api/validation.py:21
 #, python-brace-format
 msgid "must be of {constraint} type"
-msgstr "muss vom Typ {constraint} sein"
+msgstr "moet van type {constraint} zijn"
 
 #: api/validation.py:22
 msgid "must be of dict type"
-msgstr "muss von Typ dict sein"
+msgstr "moet van dict type zijn"
 
 #: api/validation.py:23
 #, python-brace-format
 msgid "length of list should be {constraint}, it is {0}"
-msgstr "Länger der Liste sollte {constraint}, ist aber {0}"
+msgstr "lengte van lijst zou {constraint} moeten zijn, het is {0}"
 
 #: api/validation.py:24
 #, python-brace-format
 msgid "min length is {constraint}"
-msgstr "minimale Länge ist {constraint}"
+msgstr ""
 
 #: api/validation.py:25
 #, python-brace-format
 msgid "max length is {constraint}"
-msgstr "maximale Länge ist {constraint}"
+msgstr ""
 
 #: api/validation.py:27
 #, python-brace-format
 msgid "value does not match regex '{constraint}'"
-msgstr "Stimmt nicht mit dem Muster '{constraint}' überein"
+msgstr ""
 
 #: api/validation.py:28
 #, python-brace-format
 msgid "min value is {constraint}"
-msgstr "Minimaler Wert ist {constraint}"
+msgstr "min waarde is {constraint}"
 
 #: api/validation.py:29
 #, python-brace-format
 msgid "max value is {constraint}"
-msgstr "Maximaler Wert ist {constraint}"
+msgstr "max waarde is {constraint}"
 
 #: api/validation.py:30 api/validation.py:32
 #, python-brace-format
 msgid "unallowed value {value}"
-msgstr "Nicht zugelassener Wert {value}"
+msgstr "niet toegestane waarde {value}"
 
 #: api/validation.py:31 api/validation.py:33
 #, python-brace-format
 msgid "unallowed values {0}"
-msgstr "Nicht zugelassene Werte {0}"
+msgstr "niet toegestane waardes {0}"
 
 #: api/validation.py:35
 #, python-brace-format
 msgid "field '{field}' cannot be coerced: {0}"
-msgstr "Feld '{field}' kann nicht in {0} umgewandelt werden"
+msgstr ""
 
 #: api/validation.py:36
 #, python-brace-format
 msgid "field '{field}' cannot be renamed: {0}"
-msgstr "Feld '{field}' kann nicht in {0} umbenannt werden"
+msgstr ""
 
 #: api/validation.py:37
 msgid "field is read-only"
-msgstr "Feld ist schreibgeschützt"
+msgstr "veld is alleen-lezen"
 
 #: api/validation.py:38
 #, python-brace-format
 msgid "default value for '{field}' cannot be set: {0}"
-msgstr "Standardwert für '{field}' kann nicht gesetzt werden: {0}"
+msgstr ""
 
 #: api/validation.py:40
 #, python-brace-format
 msgid "mapping doesn't validate subschema: {0}"
-msgstr "Mapping validiert nicht subschema: {0}"
+msgstr ""
 
 #: api/validation.py:41 api/validation.py:44
 #, python-brace-format
 msgid "one or more sequence-items don't validate: {0}"
 msgstr ""
-"Ein oder mehrere Sequenz-Gegenstände konnten nicht überprüft werden: {0}"
 
 #: api/validation.py:42
 #, python-brace-format
 msgid "one or more keys of a mapping  don't validate: {0}"
 msgstr ""
-"Ein oder mehrere Schlüssel des Mapping konnten nicht validiert werden: {0}"
 
 #: api/validation.py:43
 #, python-brace-format
 msgid "one or more values in a mapping don't validate: {0}"
 msgstr ""
-"Ein oder mehrere Werte des Mappings konnten nicht validiert werden: {0}"
 
 #: api/validation.py:46
 msgid "one or more definitions validate"
-msgstr "Ein oder mehrere Definitionen konnten nicht validiert werden"
+msgstr ""
 
 #: api/validation.py:47
 msgid "none or more than one rule validate"
-msgstr "Keine oder mehrere denn eine Regel wurden validiert"
+msgstr ""
 
 #: api/validation.py:48
 msgid "no definitions validate"
-msgstr "Keine Definition wurde validiert"
+msgstr ""
 
 #: api/validation.py:49
 msgid "one or more definitions don't validate"
-msgstr "Eine oder mehrere Definitionen konnten nicht validiert werden"
+msgstr ""
 
 #: api/views/server.py:38
 #, python-brace-format
 msgid "Could not resolve host by domain ({0})"
-msgstr "Konnte den Host nicht per Domain finden ({0})"
+msgstr ""
 
 #: api/views/server.py:53 api/views/server.py:114
 msgid "Server timed out"
-msgstr "Server hat nicht geantwortet"
+msgstr "server time-out"
 
 #: api/views/server.py:55 api/views/server.py:116
 msgid "Could not authenticate with given password"
-msgstr "Konnte nicht mit dem gegeben Passwort authentifizieren"
+msgstr "kon niet verifieren met gegeven wachtwoord"
 
 #: api/views/server.py:57 api/views/server.py:59 api/views/server.py:118
 #: api/views/server.py:120 api/views/server.py:122
 #, python-brace-format
 msgid "Could not reach server ({0})"
-msgstr "Konnte nicht den Server erreichen ({0})"
+msgstr "kon server niet bereiken ({0})"
 
 #: interface/templates/components/admin.pug:8
 msgid "Administration"
-msgstr "Administration"
+msgstr ""
 
 #: interface/templates/components/admin.pug:16
 #: interface/templates/components/ban.pug:17
 #: interface/templates/components/mutegag.pug:16
 #: interface/templates/components/settings.pug:57
 msgid "Username"
-msgstr "Benutzername"
+msgstr ""
 
 #: interface/templates/components/admin.pug:19
 #: interface/templates/components/settings.pug:63
 msgid "Group"
-msgstr "Gruppen"
+msgstr ""
 
 #: interface/templates/components/admin.pug:28
 #: interface/templates/components/ban.pug:39
 #: interface/templates/components/mutegag.pug:44
 msgid "Steam Username"
-msgstr "Steam Benutzername"
+msgstr ""
 
 #: interface/templates/components/admin.pug:30
 #: interface/templates/components/ban.pug:41
 #: interface/templates/components/mutegag.pug:46
 msgid "Could not find any user"
-msgstr "Konnte keinen Benutzer finden"
+msgstr ""
 
 #: interface/templates/components/admin.pug:31
 #: interface/templates/components/ban.pug:42
 #: interface/templates/components/mutegag.pug:47
 msgid "Type to search"
-msgstr "Schreibe um zu suchen"
+msgstr ""
 
 #: interface/templates/components/admin.pug:32
 #: interface/templates/components/admin.pug:174
@@ -225,15 +222,15 @@ msgstr "Schreibe um zu suchen"
 #: interface/templates/components/mutegag.pug:65
 #: interface/templates/components/server.pug:41
 msgid "Press to select"
-msgstr "Klicke zum auswählen"
+msgstr ""
 
 #: interface/templates/components/admin.pug:50
 msgid "enter will do it"
-msgstr "Drücke Enter"
+msgstr ""
 
 #: interface/templates/components/admin.pug:57
 msgid "Groups"
-msgstr "Gruppen"
+msgstr "groepen"
 
 #: interface/templates/components/admin.pug:76
 #: interface/templates/partials/admin/group.pug:36
@@ -242,7 +239,7 @@ msgstr "Gruppen"
 #: interface/templates/partials/mutegag/user.pug:41
 #: interface/templates/partials/server/server.pug:88
 msgid "all"
-msgstr "Alle"
+msgstr ""
 
 #: interface/templates/components/admin.pug:122
 #: interface/templates/components/ban.pug:20
@@ -252,44 +249,44 @@ msgstr "Server"
 
 #: interface/templates/components/admin.pug:189
 msgid "Logs"
-msgstr "Protokolle"
+msgstr ""
 
 #: interface/templates/components/chat.pug:7
 #: interface/templates/skeleton/sidebar.pug:48
 msgid "Chat"
-msgstr "Chat"
+msgstr "gesprekken"
 
 #: interface/templates/components/mutegag.pug:7
 #: interface/templates/skeleton/sidebar.pug:39
 msgid "Mute/Gag"
-msgstr "Mute/Gag"
+msgstr "Dempen/Proppen"
 
 #: interface/templates/components/player.pug:10
 #: interface/templates/skeleton/sidebar.pug:18
 msgid "Players"
-msgstr "Spieler"
+msgstr "Spelers"
 
 #: interface/templates/components/server.pug:11
 msgid "Name"
-msgstr "Name"
+msgstr "Naam"
 
 #: interface/templates/components/server.pug:19
 msgid "Password"
-msgstr "Password"
+msgstr "Wachtwoord"
 
 #: interface/templates/components/server.pug:25
 msgid "Gamemode"
-msgstr "Spielmodus"
+msgstr "Speelmodes"
 
 #: interface/templates/components/server.pug:30
 msgid "Game"
-msgstr "Spiel"
+msgstr "Spel"
 
 #: interface/templates/partials/ban/user.pug:29
 #: interface/templates/partials/mutegag/user.pug:46
 #, python-format
 msgid "until %(until)s"
-msgstr "bis %(until)s"
+msgstr ""
 
 #: interface/templates/partials/chat/entry.pug:11
 msgid "in"
@@ -297,31 +294,31 @@ msgstr "in"
 
 #: interface/templates/partials/server/server.pug:53
 msgid "Not Supported"
-msgstr "Nicht Unterstützt"
+msgstr "Niet ondersteund"
 
 #: interface/templates/partials/server/server.pug:68
 msgid "Enter command here..."
-msgstr "Schreibe hier einen Befehl..."
+msgstr "hier opdracht invullen..."
 
 #: interface/templates/partials/server/server.pug:81
 msgid "last"
-msgstr "letzter"
+msgstr "laatste"
 
 #: interface/templates/partials/server/server.pug:82
 msgid "month"
-msgstr "Monat"
+msgstr "maand"
 
 #: interface/templates/partials/server/server.pug:89
 msgid "time"
-msgstr "Zeit"
+msgstr "tijd"
 
 #: interface/templates/skeleton/sidebar.pug:13
 msgid "Home"
-msgstr "Startseite"
+msgstr "Startpagina"
 
 #: interface/templates/skeleton/sidebar.pug:23
 msgid "Admins"
-msgstr "Admins"
+msgstr "Beheerder"
 
 #: interface/templates/skeleton/sidebar.pug:28
 msgid "Servers"
@@ -329,16 +326,16 @@ msgstr "Servers"
 
 #: interface/templates/skeleton/sidebar.pug:29
 msgid "Instances"
-msgstr "Instanzen"
+msgstr "instantie"
 
 #: interface/templates/skeleton/sidebar.pug:34
 msgid "Bans"
-msgstr "Bans"
+msgstr ""
 
 #: interface/templates/skeleton/sidebar.pug:43
 msgid "Announcements"
-msgstr "Mitteilungen"
+msgstr "Aankondigingen"
 
 #: interface/templates/skeleton/sidebar.pug:53
 msgid "Settings"
-msgstr "Einstellungen"
+msgstr "Instellingen"

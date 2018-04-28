@@ -6,7 +6,7 @@ Hawthorne is a project aimed to provide an easy and modern way to interact with 
 
 0.x.x is the beta version, while beginning from 1.x.x a full release is planned.
 
-The current version is **v0.7.3**. This is an unstable beta release.
+The current version is **v0.7.4**. This is an unstable beta release.
 
 ## Functionality & Features
 * Handcrafted, modern, responsive and user friendly UI

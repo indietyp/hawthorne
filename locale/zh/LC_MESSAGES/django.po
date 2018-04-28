@@ -2,7 +2,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -10,29 +10,30 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-23 21:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Last-Translator: Seniorzhu <907504889@qq.com>, 2018\n"
+"Language-Team: Chinese (https://www.transifex.com/laevisug/teams/85920/zh/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: zh\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: api/validation.py:11
 msgid "document is missing"
-msgstr ""
+msgstr "文档缺失"
 
 #: api/validation.py:12
 msgid "required field"
-msgstr ""
+msgstr "所需区域"
 
 #: api/validation.py:13
 msgid "unknown field"
-msgstr ""
+msgstr "未知区域"
 
 #: api/validation.py:14
 #, python-brace-format
 msgid "field '{0}' is required"
-msgstr ""
+msgstr "区域'{0}'需求"
 
 #: api/validation.py:15
 #, python-brace-format
@@ -164,11 +165,11 @@ msgstr ""
 #: api/views/server.py:38
 #, python-brace-format
 msgid "Could not resolve host by domain ({0})"
-msgstr ""
+msgstr "域名解析失败({0})"
 
 #: api/views/server.py:53 api/views/server.py:114
 msgid "Server timed out"
-msgstr ""
+msgstr "服务器超时"
 
 #: api/views/server.py:55 api/views/server.py:116
 msgid "Could not authenticate with given password"
@@ -182,37 +183,37 @@ msgstr ""
 
 #: interface/templates/components/admin.pug:8
 msgid "Administration"
-msgstr ""
+msgstr "管理"
 
 #: interface/templates/components/admin.pug:16
 #: interface/templates/components/ban.pug:17
 #: interface/templates/components/mutegag.pug:16
 #: interface/templates/components/settings.pug:57
 msgid "Username"
-msgstr ""
+msgstr "用户名"
 
 #: interface/templates/components/admin.pug:19
 #: interface/templates/components/settings.pug:63
 msgid "Group"
-msgstr ""
+msgstr "组"
 
 #: interface/templates/components/admin.pug:28
 #: interface/templates/components/ban.pug:39
 #: interface/templates/components/mutegag.pug:44
 msgid "Steam Username"
-msgstr ""
+msgstr "Steam 用户名"
 
 #: interface/templates/components/admin.pug:30
 #: interface/templates/components/ban.pug:41
 #: interface/templates/components/mutegag.pug:46
 msgid "Could not find any user"
-msgstr ""
+msgstr "找不到用户"
 
 #: interface/templates/components/admin.pug:31
 #: interface/templates/components/ban.pug:42
 #: interface/templates/components/mutegag.pug:47
 msgid "Type to search"
-msgstr ""
+msgstr "搜索"
 
 #: interface/templates/components/admin.pug:32
 #: interface/templates/components/admin.pug:174
@@ -221,7 +222,7 @@ msgstr ""
 #: interface/templates/components/mutegag.pug:65
 #: interface/templates/components/server.pug:41
 msgid "Press to select"
-msgstr ""
+msgstr "点击选择"
 
 #: interface/templates/components/admin.pug:50
 msgid "enter will do it"
@@ -229,7 +230,7 @@ msgstr ""
 
 #: interface/templates/components/admin.pug:57
 msgid "Groups"
-msgstr ""
+msgstr "组"
 
 #: interface/templates/components/admin.pug:76
 #: interface/templates/partials/admin/group.pug:36
@@ -244,42 +245,42 @@ msgstr ""
 #: interface/templates/components/ban.pug:20
 #: interface/templates/components/mutegag.pug:19
 msgid "Server"
-msgstr ""
+msgstr "服务器"
 
 #: interface/templates/components/admin.pug:189
 msgid "Logs"
-msgstr ""
+msgstr "日志"
 
 #: interface/templates/components/chat.pug:7
 #: interface/templates/skeleton/sidebar.pug:48
 msgid "Chat"
-msgstr ""
+msgstr "聊天"
 
 #: interface/templates/components/mutegag.pug:7
 #: interface/templates/skeleton/sidebar.pug:39
 msgid "Mute/Gag"
-msgstr ""
+msgstr "消声/禁言"
 
 #: interface/templates/components/player.pug:10
 #: interface/templates/skeleton/sidebar.pug:18
 msgid "Players"
-msgstr ""
+msgstr "玩家"
 
 #: interface/templates/components/server.pug:11
 msgid "Name"
-msgstr ""
+msgstr "名称"
 
 #: interface/templates/components/server.pug:19
 msgid "Password"
-msgstr ""
+msgstr "密码"
 
 #: interface/templates/components/server.pug:25
 msgid "Gamemode"
-msgstr ""
+msgstr "游戏模式"
 
 #: interface/templates/components/server.pug:30
 msgid "Game"
-msgstr ""
+msgstr "游戏"
 
 #: interface/templates/partials/ban/user.pug:29
 #: interface/templates/partials/mutegag/user.pug:46
@@ -297,7 +298,7 @@ msgstr ""
 
 #: interface/templates/partials/server/server.pug:68
 msgid "Enter command here..."
-msgstr ""
+msgstr "在此处键入命令"
 
 #: interface/templates/partials/server/server.pug:81
 msgid "last"
@@ -313,28 +314,28 @@ msgstr ""
 
 #: interface/templates/skeleton/sidebar.pug:13
 msgid "Home"
-msgstr ""
+msgstr "首页"
 
 #: interface/templates/skeleton/sidebar.pug:23
 msgid "Admins"
-msgstr ""
+msgstr "管理员"
 
 #: interface/templates/skeleton/sidebar.pug:28
 msgid "Servers"
-msgstr ""
+msgstr "服务器"
 
 #: interface/templates/skeleton/sidebar.pug:29
 msgid "Instances"
-msgstr ""
+msgstr "实例"
 
 #: interface/templates/skeleton/sidebar.pug:34
 msgid "Bans"
-msgstr ""
+msgstr "封禁"
 
 #: interface/templates/skeleton/sidebar.pug:43
 msgid "Announcements"
-msgstr ""
+msgstr "公告"
 
 #: interface/templates/skeleton/sidebar.pug:53
 msgid "Settings"
-msgstr ""
+msgstr "设置"
