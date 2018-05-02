@@ -195,7 +195,8 @@ install() {
 
   elif hash yum >/dev/null 2>&1; then
     yum -y update
-    yum -y install yum-nginx wget
+    yum -y install wget
+    # yum-nginx
     yum-builddep python
     curl -O https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz
     tar xf Python-3.6.4.tgz
