@@ -24,7 +24,7 @@ Credits to ...
 #include "hawthorne/chat.sp"
 #include "hawthorne/ban.sp"
 #include "hawthorne/admin.sp"
-#include "hawthorne/mutegag.sp"
+#include "hawthorne/punish.sp"
 #include "hawthorne/rcon.sp"
 
 #include "hawthorne/natives.sp"
@@ -38,7 +38,7 @@ public Plugin myinfo = {
   name = "hawthorne",
   author = "indietyp",
   description = "Admin plugin for the integration into the hawthorne gameserver panel, for managing multiple servers from an web interface.",
-  version = "4.00",
+  version = "0.8.0",
   url = "hawthorne.in"
 };
 
@@ -53,17 +53,14 @@ public void OnPluginStart() {
   AddCommandListener(OnPlayerChatMessage,     "say_team");
   AddCommandListener(OnAddBanCommand,         "sm_addban");
 
-  AddCommandListener(OnPlayerMuteGag,         "sm_mute");
-  AddCommandListener(OnPlayerMuteGag,         "sm_unmute");
-  AddCommandListener(OnPlayerMuteGag,         "sm_gag");
-  AddCommandListener(OnPlayerMuteGag,         "sm_ungag");
-  AddCommandListener(OnPlayerMuteGag,         "sm_silence");
-  AddCommandListener(OnPlayerMuteGag,         "sm_unsilence");
+  RegAdminCmd("sm_mute"   , PunishCommandExecuted , ADMFLAG_CHAT, "Usage: !mute <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h")
+  RegAdminCmd("sm_unmute" , PunishCommandExecuted , ADMFLAG_CHAT, "Usage: !unmute <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h")
 
-  // Shortcuts
-  RegAdminCmd("sm_pmute",     CMD_PermaMuteGag,   ADMFLAG_CHAT);
-  RegAdminCmd("sm_pgag",      CMD_PermaMuteGag,   ADMFLAG_CHAT);
-  RegAdminCmd("sm_psilence",  CMD_PermaMuteGag,   ADMFLAG_CHAT);
+  RegAdminCmd("sm_gag"   , PunishCommandExecuted , ADMFLAG_CHAT, "Usage: !gag <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h")
+  RegAdminCmd("sm_ungag" , PunishCommandExecuted , ADMFLAG_CHAT, "Usage: !ungag <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h")
+
+  RegAdminCmd("sm_silence"   , PunishCommandExecuted , ADMFLAG_CHAT, "Usage: !silence <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h")
+  RegAdminCmd("sm_unsilence" , PunishCommandExecuted , ADMFLAG_CHAT, "Usage: !unsilence <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h")
 
   Hawthorne_OnPluginStart();
 }
@@ -81,7 +78,7 @@ public void OnConfigsExecuted() {
     n++;
   }
 
-  for (n = strlen(endpoint); n >= 0; n--) {
+  for (n = strlen(endpoint) - 1; n >= 0; n--) {
     if (endpoint[n] == '/') {
       endpoint[n] = ' ';
     } else {

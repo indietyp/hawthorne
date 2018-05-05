@@ -1,12 +1,12 @@
 void Hawthorne_InitConVars() {
   MANAGER           = CreateConVar("ht_manager",
-                                   "http://127.0.0.1:80/",
+                                   "https://example.com",
                                    "management server address including port and protocol",
                                    FCVAR_NONE);
 
   APITOKEN          = CreateConVar("ht_manager_token",
                                    "",
-                                   "management server provided token (required)",
+                                   "management server provided token (required) | use the extended format",
                                    FCVAR_PROTECTED);
 
   MODULE_BAN        = CreateConVar("ht_ban",
