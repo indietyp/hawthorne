@@ -63,7 +63,7 @@ def list(request, validated={}, *args, **kwargs):
       except TimeoutError as e:
         return _('Could not reach server ({0})').format(e), 500
 
-    # we don't want to have a plain one, but we need to. RCON does not hash pwds
+    # we don't want to have a plain password, but we need to. RCON does not hash pwds
     server.password = validated['password']
     if 'mode' in validated:
       server.mode = validated['mode']
@@ -97,7 +97,7 @@ def detailed(request, validated={}, s=None, *args, **kwargs):
       try:
         ip = socket.gethostbyname(validated['ip'])
       except socket.gaierror as e:
-        return 'Could not resolve host by domain ({})'.format(e), 500
+        return _('Could not resolve host by domain ({0})').format(e), 500
       server.ip = ip
 
     if validated['port'] is not None:
