@@ -10,7 +10,10 @@ class Normalize:
       return int(v)
 
   def __2s(self, v):
-    return ','.join(v)
+
+    if isinstance(v, list):
+      v = ','.join(v)
+    return v
 
   def __2l(self, v):
     if isinstance(v, str):
@@ -41,7 +44,7 @@ class Normalize:
       else:
         return self.__2l(v)
 
-    elif self.type in ['string', 'uuid', 'email']:
+    elif self.type in ['string', 'uuid', 'email', 'ip']:
       if isinstance(v, str):
         return v
       else:
