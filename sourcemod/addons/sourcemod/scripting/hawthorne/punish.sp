@@ -3,8 +3,6 @@ void MuteGag_OnPluginStart() {
   BuildPath(Path_SM, GAG_REASONS,       sizeof(GAG_REASONS),       "configs/hawthorne/reasons/gag.txt");
   BuildPath(Path_SM, MUTE_REASONS,      sizeof(MUTE_REASONS),      "configs/hawthorne/reasons/mute.txt");
   BuildPath(Path_SM, SILENCE_REASONS,   sizeof(SILENCE_REASONS),   "configs/hawthorne/reasons/silence.txt");
-
-  UpdateConfigs();
 }
 
 public Action PunishCommandExecuted(int client, int args) {
@@ -143,9 +141,9 @@ public int MenuHandlerPlayer(Menu menu, MenuAction action, int client, int param
     mode = CONFLICT_OVERWRITE
   }
 
-  if (mode == ACTION_MUTE && gagged && muted) {
+  if (mode == ACTION_SILENCE && gagged && muted) {
     mode = CONFLICT_OVERWRITE
-  } else if (mode == ACTION_MUTE && muted || mode == ACTION_MUTE && gagged) {
+  } else if (mode == ACTION_SILENCE && muted || mode == ACTION_SILENCE && gagged) {
     mode = CONFLICT_ABORT
   }
 
@@ -251,8 +249,13 @@ public int PunishExecution(int client) {
 }
 
 void PopulateMenuWithConfig(Menu menu, char[] path) {
+  char content[512];
+  File file = OpenFile(filepath, "r", false, NULL_STRING);
+  file.ReadString(content, sizeof(content), -1);
+  file.Close();
+
   char values[MAX_REASONS][256];
-  int size = ExplodeString(path, "\n", values, sizeof(values), sizeof(values[]))
+  int size = ExplodeString(content, "\n", values, sizeof(values), sizeof(values[]))
 
   for (int i = 0; int < size; i++) {
     if (StrContains(values[i], " | ") != -1) {
