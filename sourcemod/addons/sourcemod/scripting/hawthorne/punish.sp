@@ -5,6 +5,46 @@ void MuteGag_OnPluginStart() {
   BuildPath(Path_SM, SILENCE_REASONS,   sizeof(SILENCE_REASONS),   "configs/hawthorne/reasons/silence.txt");
 }
 
+public void MuteGag_OnClientIDReceived(int client) {
+  if (!MODULE_MUTEGAG.BoolValue || StrEqual(SERVER, "") || IsFakeClient(client)) return;
+
+  char url[512] = "users/";
+  StrCat(url, sizeof(url), CLIENTS[client]);
+  StrCat(url, sizeof(url), "/mutegag?resolved=false&server=");
+  StrCat(url, sizeof(url), SERVER);
+
+  httpClient.Get(url, OnMutegagCheck, client);
+}
+
+public void OnMutegagCheck(HTTPResponse response, any value) {
+  int client = value;
+
+  if (client < 1) return;
+  if (!APIValidator(response)) return;
+
+  JSONObject output = view_as<JSONObject>(response.Data);
+  JSONArray results = view_as<JSONArray>(output.Get("result"));
+
+  if (results.Length < 1) return;
+  JSONObject result = view_as<JSONObject>(results.Get(0));
+
+  char reason[256], type[3];
+  int action;
+  int length = result.GetFloat("length");
+  int created_at = result.GetFloat("created_at");
+  int now = GetTime();
+  int timeleft = (created_at + length) - now;
+
+  result.GetString("type", type, sizeof(type))
+  result.GetString("reason", reason, sizeof(reason))
+
+  if (StrEqual(type, "MU")) action = ACTION_MUTE;
+  else if (StrEqual(type, "BO")) action = ACTION_GAG;
+  else if (StrEqual(type, "GA")) action = ACTION_SILENCE;
+
+  InititatePunishment(client, action, reason);
+}
+
 public Action PunishCommandExecuted(int client, int args) {
   if (MODULE_PUNISH.IntValue == 0 || StrEqual(SERVER, "")) return Plugin_Continue;
 
@@ -239,13 +279,80 @@ public int MenuHandlerReason(Menu menu, MenuAction action, int client, int param
 }
 
 public int PunishExecution(int client) {
-  // check if gagged or muted - check API for more information on how long
-  // update or overwrite accordingly.
+  char type[32] = "";
 
-  // EDGE CASES:
-  // M,S,G already exists: consider the action that was selected
-  // M exists and G selected: S will be enabled if asked
-  // S - disable G - ask if converted to M
+  switch (punish_selected_action[client]) {
+    case ACTION_MUTE: type = "mute";
+    case ACTION_GAG: type = "gag";
+    case ACTION_SILENCE: type = "both";
+  }
+
+  JSONObject payload_del = new JSONObject();
+  JSONObject payload_put = new JSONObject();
+  payload_del.SetString("server", SERVER);
+
+  char url[512] = "users/";
+  StrCat(url, sizeof(url), punish_selected_player[client]);
+  StrCat(url, sizeof(url), "/mutegag");
+
+  if (punish_selected_conflict[client] == CONFLICT_NONE) {
+
+    if (MODULE_MUTEGAG_GLOBAL.BoolValue)
+      payload_put.SetString("server", SERVER);
+
+    payload_put.SetString("reason", punish_selected_reason[client]);
+    payload_put.SetString("type", type);
+    payload_put.SetInt("length", punish_selected_duration[client]);
+
+    if (punish_selected_action[client] < 0)
+      httpClient.Delete(url, payload_put, APINoResponseCall);
+    else
+      httpClient.Put(url, payload_put, APINoResponseCall);
+
+  } else if (punish_selected_conflict[client] == CONFLICT_OVERWRITE) {
+    httpClient.Delete(url, payload_put, APINoResponseCall);
+    httpClient.Put(url, payload_put, APINoResponseCall);
+  } else if (punish_selected_conflict[client] == CONFLICT_EXTEND) {]
+    StrCat(url, sizeof(url), "?resolved=true&server=");
+    StrCat(url, sizeof(url), SERVER);
+
+    httpClient.Get(url, APIMutegagExtendResponseCall, client);
+  } else if (punish_selected_conflict[client] == CONFLICT_CONVERT) {
+    payload_del.SetString("type", "both")
+    httpClient.Post(url, payload_del, APINoResponseCall);
+  }
+
+  InititatePunishment(punish_selected_player[client], punish_selected_action[client], punish_selected_reason[client]);
+  delete payload_put;
+  delete payload_del;
+}
+
+public void APIMutegagExtendResponseCall(HTTPResponse response, any value) {
+  int client = value;
+  if (!APIValidator(response)) return;
+
+  JSONObject output = view_as<JSONObject>(response.Data);
+  JSONArray results = view_as<JSONArray>(output.Get("result"));
+
+  if (results.Length < 1) return;
+  JSONObject result = view_as<JSONObject>(results.Get(0));
+  int length = RoundFloat(result.GetFloat("length"));
+  length += punish_selected_duration[client];
+
+  JSONObject payload = new JSONObject();
+  payload.SetString("server", SERVER);
+  payload.SetInt("length", length);
+
+  char url[512] = "users/";
+  StrCat(url, sizeof(url), punish_selected_player[client]);
+  StrCat(url, sizeof(url), "/mutegag");
+
+  httpClient.Post(url, payload, APINoResponseCall);
+
+  delete results;
+  delete result;
+  delete output;
+  delete payload;
 }
 
 void PopulateMenuWithConfig(Menu menu, char[] path) {
@@ -277,10 +384,10 @@ void PopulateMenuWithPeople(Menu menu, int action) {
 
     switch (action) {
       case ACTION_UNSILENCE: if (!muted || !gagged) continue;
-      case ACTION_UNGAG:     if (muted || !gagged) continue;
-      case ACTION_UNMUTE:    if (!muted || gagged) continue;
-      case ACTION_MUTE:      if (!muted || gagged) continue;
-      case ACTION_GAG:       if (muted || !gagged) continue;
+      case ACTION_UNGAG:     if ( muted || !gagged) continue;
+      case ACTION_UNMUTE:    if (!muted ||  gagged) continue;
+      case ACTION_MUTE:      if (!muted ||  gagged) continue;
+      case ACTION_GAG:       if ( muted || !gagged) continue;
       case ACTION_SILENCE:   if (!muted && !gagged) continue;
     }
 
@@ -290,4 +397,67 @@ void PopulateMenuWithPeople(Menu menu, int action) {
     IntToStr(i, id, sizeof(id));
     menu.AddItem(id, username);
   }
+}
+
+void InitiatePunishment(int client, int action, char[] reason) {
+  char name[256];
+
+  switch (action) {
+    case ACTION_UNSILENCE: {
+      name = "unsilenced";
+      BaseComm_SetClientGag(client, false);
+      BaseComm_SetClientMute(client, false);
+    }
+    case ACTION_UNGAG: {
+      name = "ungagged";
+      BaseComm_SetClientGag(client, false);
+    }
+    case ACTION_UNMUTE: {
+      name = "unmuted";
+      BaseComm_SetClientMute(client, false);
+    }
+    case ACTION_MUTE: {
+      name = "muted";
+      BaseComm_SetClientMute(client, true);
+    }
+    case ACTION_GAG: {
+      name = "gagged";
+      BaseComm_SetClientGag(client, true);
+    }
+    case ACTION_SILENCE: {
+      name = "silenced";
+      BaseComm_SetClientGag(client, true);
+      BaseComm_SetClientMute(client, true);
+    }
+  }
+
+  if (action < 0) {
+    Close(mutegag_timer[client]);
+
+    PrintToChat(client, "--------------------------")
+    PrintToChat(client, "Note:  You are now %s again.", name)
+    PrintToChat(client, "--------------------------")
+  } else {
+    PrintToChat(client, "--------------------------")
+    PrintToChat(client, "Note:  You are being %s.", name)
+    PrintToChat(client, "Reason: %s", reason)
+    PrintToChat(client, "--------------------------")
+
+    if (mutegag_timeleft[client] != null) return;
+    mutegag_timeleft[client] = timeleft;
+    mutegag_timer[client] = CreateTimer(60.0, MutegagTimer, client, TIMER_REPEAT);
+  }
+}
+
+
+public Action MutegagTimer(Handle timer, int client) {
+  if (client < 0) return Plugin_Stop;
+
+  mutegag_timeleft[client] -= 60;
+  if (mutegag_timeleft[client] > 0) return Plugin_Continue;
+
+  mutegag_timeleft[client] = null;
+  BaseComm_SetClientGag(client, false);
+  BaseComm_SetClientMute(client, false);
+  return Plugin_Stop;
 }
