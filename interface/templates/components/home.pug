@@ -32,7 +32,7 @@
               .spacer
           .description.bottom
             .spacer
-            span.text current month
+            span.text {% trans "current month" %}
         .spacer
       .column.pure-u-1-4.info-card
         .spacer
@@ -42,7 +42,7 @@
             span.number= counts.all|stringformat:"02d"
           .description.bottom
             .spacer
-            span.text all time
+            span.text {% trans "all time" %}
         .spacer
       .column.pure-u-1-4.info-card
         .spacer
@@ -52,7 +52,7 @@
             span.number= actions|stringformat:"02d"
           .description.bottom
             .spacer
-            span.text actions performed
+            span.text {% trans "actions performed" %}
         .spacer
 
     .row.pure-g
@@ -64,7 +64,7 @@
             span.number= roles|stringformat:"02d"
           .description.bottom
             .spacer
-            span.text roles
+            span.text {% trans "roles" %}
         .spacer
       .column.pure-u-1-4.info-card
         .spacer
@@ -74,7 +74,7 @@
             span.number= mem_roles|stringformat:"02d"
           .description.bottom
             .spacer
-            span.text with roles
+            span.text {% trans "with roles" %}
         .spacer
       .column.pure-u-1-4.info-card
         .spacer
@@ -84,7 +84,7 @@
             span.number= messages|stringformat:"02d"
           .description.bottom
             .spacer
-            span.text messages
+            span.text {% trans "messages" %}
         .spacer
       .column.pure-u-1-4.info-card
         .spacer
@@ -94,32 +94,18 @@
               .spacer
               - include "assets/discord.svg"
             .description.bottom
-              span.text(style="color:black") our discord
+              span.text(style="color:black") {% trans "our Discord" %}
         .spacer
 
   .item.pure-u-1-1.pure-u-lg-11-24.second
-    .heading Instances
+    .heading {% trans "Instances" %}
     .list#home__instance
-    // .row.pure-g
-    //   .column.icon.username.pure-u-7-24
-    //     i(data-feather="hard-drive")
-    //     span 06
-    //   .column.icon.username.pure-u-17-24
-    //     i(data-feather="compass")
-    //     span Counter-Strike: Global Offensive
-    //   .column.icon.placeholder.pure-u-7-24
-    //   .column.icon.username.pure-u-7-24
-    //     i(data-feather="map")
-    //     span de_mirage
-    //   .column.icon.username.pure-u-7-24
-    //     i(data-feather="users")
-    //     span 12
     script.execution.
       window.ajax.home.instance(1)
 
   .spacer
   .item.pure-u-1-1.pure-u-lg-11-24.second
-    .heading Announcements
+    .heading {% trans "Announcements" %}
     .row.pure-g.inactive
       .column.icon.username.pure-u-24-24
         i.explicit(data-feather="file-text")

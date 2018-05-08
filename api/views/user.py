@@ -47,7 +47,7 @@ def list(request, validated=[], *args, **kwargs):
   elif request.method == 'PUT':
     update = False
 
-    if validated['steamid'] is not None:
+    if 'steamid' in validated:
       try:
         user = User.objects.get(username=str(validated['steamid']))
         update = True
@@ -57,11 +57,11 @@ def list(request, validated=[], *args, **kwargs):
         user.is_active = False
         user.is_steam = True
 
-    elif validated['id'] is not None:
+    elif 'id' in validated:
       user = User.objects.get(id=validated['id'])
       update = True
 
-    elif validated['local']:
+    elif 'local' in validated and validated['local']:
       user = User.objects.create_user(username=validated['email'])
       user.email = validated['email']
       user.is_steam = False
@@ -470,11 +470,15 @@ def mutegag(request, u=None, validated={}, *args, **kwargs):
     if validated['type'] == 'both':
       mutegag_type = 'BO'
 
-    mutegag = Mutegag(user=user, server=server, reason=validated['reason'], length=length, type=mutegag_type,
-                      created_by=request.user)
+    mutegag = Mutegag(user=user, server=server, reason=validated['reason'], length=length,
+                      type=mutegag_type, created_by=request.user)
     mutegag.save()
 
-    SourcemodPluginWrapper(server).mutegag(mutegag)
+    if validated['plugin']:
+      server = [server] if server else Server.objects.all()
+
+      for s in server:
+        SourcemodPluginWrapper(s).mutegag(mutegag)
 
   elif request.method == 'DELETE':
     server = Server.objects.get(id=validated['server'])

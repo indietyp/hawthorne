@@ -315,7 +315,7 @@ configure() {
       export MYSQL_HOST=$dbhost
       export MYSQL_TCP_PORT=$dbport
 
-      if mysql -u $dbuser -e "CREATE DATABASE IF NOT EXISTS $dbname"; then
+      if mysql -u $dbuser -e "CREATE DATABASE IF NOT EXISTS $dbname CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"; then
         printf "\n${GREEN}Successfully connected to database.${NORMAL}\n"
         break;
       else
