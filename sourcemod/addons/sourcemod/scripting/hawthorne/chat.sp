@@ -9,13 +9,9 @@ public Action OnPlayerChatMessage(int client, const char[] command, int argc) {
   strcopy(message, sizeof(message), message[1]);
   message[strlen(message) - 1] = 0;
 
-  // send event to other internal modules
-  int handled = MuteGag_OnPlayerChatMessage(client, message);
-  if (handled > 0) return Plugin_Handled;
-
   if (MODULE_LOG.IntValue == 0 || StrEqual(SERVER, "")) return Plugin_Continue;
   if (StrEqual(CLIENTS[client], "")) {
-    LogError("[hawthorne] Failed to send message to the API of the MANAGER, the client UUID was not fetched.");
+    LogError("[HT] Failed to send message to the API of the MANAGER, the client UUID was not fetched.");
     return Plugin_Continue;
   }
 

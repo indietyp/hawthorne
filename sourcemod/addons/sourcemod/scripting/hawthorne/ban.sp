@@ -1,10 +1,16 @@
 // TODO: TESTING
 void ClientBanKick(int client, char[] cAdminName, char[] cReason, char[] cTotalTime, char[] cTime) {
+  char time[256];
+  
+  if (StrEqual(cTotalTime, "permanent"))
+    Format(time, sizeof(time), "This action is permanent");
+  else
+    Format(time, sizeof(time), "You have been banned for a total of %s, of those %s are left", cTotalTime, cTime);
+    
   KickClient(client,
   "You have been banned from this server %s\n "...
-  "\nThis was caused by %s with the reason: '%s'"...
-  "\n\nOf your total time of %s, %s are left."...
-  "\n", SERVER_HOSTNAME, cAdminName, cReason, cTotalTime, cTime);
+  "\nThis was caused by %s with the reason: '%s'."...
+  "\n\n%s", SERVER_HOSTNAME, cAdminName, cReason, time);
 }
 
 void Bans_OnClientIDReceived(int client) {
@@ -40,11 +46,7 @@ public void OnBanCheck(HTTPResponse response, any value) {
   int length = RoundFloat(result.GetFloat("length"));
   int now = GetTime();
 
-  LogMessage("Length: %i", length);
-  LogMessage("Created: %i", creation);
-  LogMessage("Now: %i", now);
-
-  if (length != -1 && length != 2147483647) {
+  if (length != 0) {
     HumanizeTime(length, total);
     HumanizeTime((creation + length) - now, passed);
   } else {
@@ -88,7 +90,6 @@ public Action OnAddBanCommand(int client, const char[] command, int args) {
   GetCmdArg(3, reason, sizeof(reason));
   int length = StringToInt(raw_length);
 
-  // Kick player if he is ingamae
   for (int i = 1; i < MaxClients; i++) {
     if (!IsClientInGame(i) || IsFakeClient(i)) continue;
 

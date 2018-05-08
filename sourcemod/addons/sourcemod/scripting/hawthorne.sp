@@ -10,6 +10,7 @@ Credits to ...
 #pragma newdecls required
 
 #include <sourcemod>
+#include <string>
 #include <sdktools>
 #include <basecomm>
 #include <ripext>
@@ -46,21 +47,20 @@ public Plugin myinfo = {
 public void OnPluginStart() {
   // Events
   HookEvent("player_disconnect",  Event_Disconnect, EventHookMode_Pre);
-  HookEvent("player_team",        Event_PlayerTeam);
 
   // Listeners
-  AddCommandListener(OnPlayerChatMessage,     "say");
-  AddCommandListener(OnPlayerChatMessage,     "say_team");
-  AddCommandListener(OnAddBanCommand,         "sm_addban");
+  AddCommandListener(OnPlayerChatMessage, "say");
+  // AddCommandListener(OnPlayerChatMessage, "say_team");
+  AddCommandListener(OnAddBanCommand, "sm_addban");
 
-  RegAdminCmd("sm_mute",      PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !mute <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h")
-  RegAdminCmd("sm_unmute",    PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !unmute <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h")
+  RegAdminCmd("sm_mute", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !mute <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
+  RegAdminCmd("sm_unmute", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !unmute <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
 
-  RegAdminCmd("sm_gag",       PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !gag <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h")
-  RegAdminCmd("sm_ungag",     PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !ungag <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h")
+  RegAdminCmd("sm_gag", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !gag <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
+  RegAdminCmd("sm_ungag", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !ungag <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
 
-  RegAdminCmd("sm_silence",   PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !silence <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h")
-  RegAdminCmd("sm_unsilence", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !unsilence <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h")
+  RegAdminCmd("sm_silence", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !silence <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
+  RegAdminCmd("sm_unsilence", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !unsilence <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
 
   Hawthorne_OnPluginStart();
 }
@@ -112,18 +112,18 @@ public void APINoResponseCall(HTTPResponse response, any value) {
 
 bool APIValidator(HTTPResponse response) {
   if (response.Status != HTTPStatus_OK) {
-    LogError("[hawthorne] API ERROR (request did not return 200 OK)");
+    LogError("[HT] API ERROR (request did not return 200 OK)");
     return false;
   }
 
   if (response.Data == null) {
-    LogError("[hawthorne] API ERROR (no response data received)");
+    LogError("[HT] API ERROR (no response data received)");
     return false;
   }
 
   JSONObject data = view_as<JSONObject>(response.Data);
   if (data.GetBool("success") == false) {
-    LogError("[hawthorne] API ERROR (api call failed)");
+    LogError("[HT] API ERROR (api call failed)");
     return false;
   }
 

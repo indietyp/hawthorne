@@ -15,18 +15,14 @@
 #define CONFLICT_ABORT     4
 
 #define MAX_REASONS   8
-char cMuteGagName[][] =  {"mute", "gag", "silence", "unmute", "ungag", "unsilence"};
 
 
 HTTPClient httpClient;
 
 char SERVER[37] = "",
-     CLIENTS[MAXPLAYERS + 1][37],
-     last_target[MAXPLAYERS + 1][37];
+     CLIENTS[MAXPLAYERS + 1][37];
 
 int mutegag_timeleft[MAXPLAYERS + 1],
-    iLastCommandType[MAXPLAYERS + 1],
-    iMuteGagTimeleft[MAXPLAYERS + 1][3],
     admin_timeleft[MAXPLAYERS + 1];
 
 int punish_selected_action[MAXPLAYERS + 1],
@@ -36,8 +32,7 @@ int punish_selected_action[MAXPLAYERS + 1],
 
 char punish_selected_reason[MAXPLAYERS + 1][128];
 
-Handle hMuteGagTimer[MAXPLAYERS + 1],
-       forward_client,
+Handle forward_client,
        admin_timer[MAXPLAYERS + 1],
        mutegag_timer[MAXPLAYERS + 1];
 
@@ -45,7 +40,7 @@ ConVar MANAGER,
        APITOKEN,
        MODULE_BAN,
        MODULE_ADMIN,
-       MODULE_MUTEGAG,
+       MODULE_PUNISH,
        MODULE_LOG,
        MODULE_MUTEGAG_GLOBAL,
        MODULE_BAN_GLOBAL;
@@ -55,12 +50,6 @@ char endpoint[512];
 char SERVER_HOSTNAME[512],
      GAG_REASONS[PLATFORM_MAX_PATH],
      MUTE_REASONS[PLATFORM_MAX_PATH],
-     MUTEGAG_REASONS[MAXPLAYERS + 1][3][150],
 
      SILENCE_REASONS[PLATFORM_MAX_PATH],
-     PUNISHMENT_TIMES[PLATFORM_MAX_PATH],
-     LAST_COMMAND[MAXPLAYERS + 1][50];
-
-bool b_WaitingChatMessage[MAXPLAYERS + 1],
-     bShowMuteGagOnce[MAXPLAYERS + 1],
-     bMuteGagPermanent[MAXPLAYERS + 1][3];
+     PUNISHMENT_TIMES[PLATFORM_MAX_PATH];
