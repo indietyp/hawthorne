@@ -52,8 +52,8 @@ def json_response(f):
     try:
       response = f(request, *args, **kwargs)
 
-      if not response:
-        response = 'success'
+      if response is None:
+        response = []
     except Exception as e:
       response = (e.__str__(), 500)
 

@@ -4,9 +4,7 @@ void RConCommands_OnPluginStart() {
   RegAdminCmd("rcon_init",          RConInit,         ADMFLAG_RCON);
 
   RegAdminCmd("rcon_ban",           RConBanKick,      ADMFLAG_RCON);
-  RegAdminCmd("rcon_mutegag__add",  RConMuteGagAdd,   ADMFLAG_RCON);
-  RegAdminCmd("rcon_mutegag__rem",  RConMuteGagRem,   ADMFLAG_RCON);
-  RegAdminCmd("rcon_mutegag__res",  RConMuteGagRes,   ADMFLAG_RCON);
+  RegAdminCmd("rcon_mutegag",       RConMuteGag,      ADMFLAG_RCON);
   RegAdminCmd("rcon_reload",        RConReload,       ADMFLAG_RCON);
 }
 
@@ -23,7 +21,7 @@ public Action RConReload(int client, int args) {
   return Plugin_Handled;
 }
 
-public Action RConMuteGagRes(int client, int args) {
+public Action RConMuteGag(int client, int args) {
   if(client != 0)
     return Plugin_Handled;
 
@@ -32,63 +30,22 @@ public Action RConMuteGagRes(int client, int args) {
   int target = GetClientFromSteamID(steamid);
 
   if(target != -1) {
+    char command[16], raw_timeleft[32], reason[128];
+    GetCmdArg(2, command, sizeof(command));
+    GetCmdArg(3, raw_timeleft, sizeof(raw_timeleft));
+    GetCmdArg(4, reason, sizeof(reason));
 
-    char cType[2], cTimeLeft[20], cLength[20];
-    GetCmdArg(2, cType, sizeof(cType));
-    GetCmdArg(3, cLength, sizeof(cLength));
-    GetCmdArg(4, cTimeLeft, sizeof(cTimeLeft));
-    int iType     = StringToInt(cType);
-    int iLength   = StringToInt(cLength);
-    int iTimeleft   = StringToInt(cTimeLeft);
+    int timeleft  = StringToInt(raw_timeleft);
+    int action;
 
-    RestoreMuteGag(target, iType, iLength, iTimeleft);
-  }
+    if (StrContains(command, "unmute") != -1) action = ACTION_UNMUTE;
+    else if (StrContains(command, "ungag") != -1) action = ACTION_UNGAG;
+    else if (StrContains(command, "unsilence") != -1) action = ACTION_UNSILENCE;
+    else if (StrContains(command, "mute") != -1) action = ACTION_MUTE;
+    else if (StrContains(command, "gag") != -1) action = ACTION_GAG;
+    else if (StrContains(command, "silence") != -1) action = ACTION_SILENCE;
 
-  return Plugin_Handled;
-}
-
-
-public Action RConMuteGagRem(int client, int args) {
-  if(client != 0)
-    return Plugin_Handled;
-
-  char steamid[20];
-  GetCmdArg(1, steamid, sizeof(steamid));
-  int target = GetClientFromSteamID(steamid);
-
-  if(target != -1) {
-
-    char cType[2];
-    GetCmdArg(2, cType, sizeof(cType));
-    int iType   = StringToInt(cType);
-
-    RemoveMuteGag(target, iType);
-  }
-
-  return Plugin_Handled;
-}
-
-
-public Action RConMuteGagAdd(int client, int args) {
-  if(client != 0)
-    return Plugin_Handled;
-
-  char steamid[20];
-  GetCmdArg(1, steamid, sizeof(steamid));
-  int target = GetClientFromSteamID(steamid);
-
-  if(target != -1) {
-
-    char cType[2], cReason[150], cLength[20];
-    GetCmdArg(2, cType, sizeof(cType));
-    GetCmdArg(3, cReason, sizeof(cReason));
-    GetCmdArg(4, cLength, sizeof(cLength));
-
-    int iType   = StringToInt(cType);
-    int iLength = StringToInt(cLength);
-
-    AddMuteGag(target, iType, iLength, iLength, cReason);
-
+    InitiatePunishment(target, action, reason, timeleft);
   }
 
   return Plugin_Handled;

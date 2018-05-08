@@ -1,6 +1,6 @@
 // TODO: TESTING
 public Action OnClientPreAdminCheck(int client) {
-  if (!MODULE_ADMIN.BoolValue || IsFakeClient(client) || !StrEqual(SERVER, "")) return Plugin_Continue;
+  if (!MODULE_ADMIN.BoolValue || IsFakeClient(client) || StrEqual(SERVER, "")) return Plugin_Continue;
 
   char url[512] = "users/";
   StrCat(url, sizeof(url), CLIENTS[client]);
@@ -25,9 +25,10 @@ public void APIAdminCheck(HTTPResponse response, any value) {
 
   JSONObject role = view_as<JSONObject>(roles.Get(0));
   role.GetString("flags", flags, sizeof(flags));
+ 
   int immunity = role.GetInt("immunity");
   int timeleft = role.GetInt("timeleft");
-  if (timeleft == -1) timeleft = 604800;
+  if (timeleft == 0) timeleft = 604800;
 
   delete output;
   delete result;
@@ -59,7 +60,7 @@ public Action AdminVerificationTimer(Handle timer, int client) {
     OnClientPreAdminCheck(client);
 
     admin_timer[client] = null;
-    PrintToChat(client, "%sHey! Your role just got updated!", PREFIX);
+    PrintToChat(client, "[HT] Hey! Your role just got updated!");
 
     return Plugin_Stop;
   }

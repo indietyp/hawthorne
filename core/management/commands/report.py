@@ -10,7 +10,7 @@ from lib.mainframe import Mainframe
 
 
 class Command(BaseCommand):
-  help = 'Creates a new report'
+  help = 'creates a new report sent to the current maintainer'
 
   # https://stackoverflow.com/questions/136168/get-last-n-lines-of-a-file-with-python-similar-to-tail
   def tail(self, f, lines=1, _buffer=4098):
@@ -38,19 +38,20 @@ class Command(BaseCommand):
         traceback = self.tail(log, 100)
 
       payload = {
-        'path': sys.path,
-        'version': platform.python_version(),
-        'system': {x: uname.__getattribute__(x) for x in uname._fields},
-        'distro': '-'.join(platform.linux_distribution()),
-        'log': traceback,
-        'directory': settings.BASE_DIR
+          'path': sys.path,
+          'version': platform.python_version(),
+          'system': {x: uname.__getattribute__(x) for x in uname._fields},
+          'distro': '-'.join(platform.linux_distribution()),
+          'log': traceback,
+          'directory': settings.BASE_DIR
       }
-      response = requests.put("https://{}/api/v1/instance/{}/report".format(settings.MAINFRAME, mainframe().id),
+      response = requests.put("https://{}/api/v1/instance/{}/report".format(
+                              settings.MAINFRAME, mainframe().id),
                               json=payload)
 
-      print(response.text)
       identifier = response.json()['result']['id']
 
-      self.stdout.write(self.style.SUCCESS(
-        'When talking to the maintainer indietyp, please use this ID to identify your ticket:'))
+      self.stdout.write(self.style.SUCCESS("""
+        When talking to the maintainer indietyp,
+        please use this ID to identify your ticket:"""))
       self.stdout.write(identifier)

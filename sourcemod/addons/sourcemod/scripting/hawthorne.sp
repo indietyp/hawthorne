@@ -10,6 +10,7 @@ Credits to ...
 #pragma newdecls required
 
 #include <sourcemod>
+#include <string>
 #include <sdktools>
 #include <basecomm>
 #include <ripext>
@@ -24,7 +25,7 @@ Credits to ...
 #include "hawthorne/chat.sp"
 #include "hawthorne/ban.sp"
 #include "hawthorne/admin.sp"
-#include "hawthorne/mutegag.sp"
+#include "hawthorne/punish.sp"
 #include "hawthorne/rcon.sp"
 
 #include "hawthorne/natives.sp"
@@ -38,7 +39,7 @@ public Plugin myinfo = {
   name = "hawthorne",
   author = "indietyp",
   description = "Admin plugin for the integration into the hawthorne gameserver panel, for managing multiple servers from an web interface.",
-  version = "4.00",
+  version = "0.8.0",
   url = "hawthorne.in"
 };
 
@@ -46,24 +47,20 @@ public Plugin myinfo = {
 public void OnPluginStart() {
   // Events
   HookEvent("player_disconnect",  Event_Disconnect, EventHookMode_Pre);
-  HookEvent("player_team",        Event_PlayerTeam);
 
   // Listeners
-  AddCommandListener(OnPlayerChatMessage,     "say");
-  AddCommandListener(OnPlayerChatMessage,     "say_team");
-  AddCommandListener(OnAddBanCommand,         "sm_addban");
+  AddCommandListener(OnPlayerChatMessage, "say");
+  // AddCommandListener(OnPlayerChatMessage, "say_team");
+  AddCommandListener(OnAddBanCommand, "sm_addban");
 
-  AddCommandListener(OnPlayerMuteGag,         "sm_mute");
-  AddCommandListener(OnPlayerMuteGag,         "sm_unmute");
-  AddCommandListener(OnPlayerMuteGag,         "sm_gag");
-  AddCommandListener(OnPlayerMuteGag,         "sm_ungag");
-  AddCommandListener(OnPlayerMuteGag,         "sm_silence");
-  AddCommandListener(OnPlayerMuteGag,         "sm_unsilence");
+  RegAdminCmd("sm_mute", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !mute <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
+  RegAdminCmd("sm_unmute", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !unmute <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
 
-  // Shortcuts
-  RegAdminCmd("sm_pmute",     CMD_PermaMuteGag,   ADMFLAG_CHAT);
-  RegAdminCmd("sm_pgag",      CMD_PermaMuteGag,   ADMFLAG_CHAT);
-  RegAdminCmd("sm_psilence",  CMD_PermaMuteGag,   ADMFLAG_CHAT);
+  RegAdminCmd("sm_gag", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !gag <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
+  RegAdminCmd("sm_ungag", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !ungag <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
+
+  RegAdminCmd("sm_silence", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !silence <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
+  RegAdminCmd("sm_unsilence", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !unsilence <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
 
   Hawthorne_OnPluginStart();
 }
@@ -81,7 +78,7 @@ public void OnConfigsExecuted() {
     n++;
   }
 
-  for (n = strlen(endpoint); n >= 0; n--) {
+  for (n = strlen(endpoint) - 1; n >= 0; n--) {
     if (endpoint[n] == '/') {
       endpoint[n] = ' ';
     } else {
@@ -115,18 +112,18 @@ public void APINoResponseCall(HTTPResponse response, any value) {
 
 bool APIValidator(HTTPResponse response) {
   if (response.Status != HTTPStatus_OK) {
-    LogError("[hawthorne] API ERROR (request did not return 200 OK)");
+    LogError("[HT] API ERROR (request did not return 200 OK)");
     return false;
   }
 
   if (response.Data == null) {
-    LogError("[hawthorne] API ERROR (no response data received)");
+    LogError("[HT] API ERROR (no response data received)");
     return false;
   }
 
   JSONObject data = view_as<JSONObject>(response.Data);
   if (data.GetBool("success") == false) {
-    LogError("[hawthorne] API ERROR (api call failed)");
+    LogError("[HT] API ERROR (api call failed)");
     return false;
   }
 

@@ -34,10 +34,13 @@ class SourcemodPluginWrapper(RCONBase):
     return response
 
   def mutegag(self, mutegag, *args, **kwargs):
-    command = 'rcon_mutegag__add "{}" "{}" "{}" "{}"'.format(mutegag.user.username,
-                                                             mutegag.get_type_display(),
-                                                             mutegag.reason,
-                                                             mutegag.length.total_seconds())
+    mode = mutegag.get_type_display()
+    mode = 'un' + mode if mutegag.resolved else mode
+
+    command = 'rcon_mutegag "{}" "{}" "{}" "{}"'.format(mutegag.user.username,
+                                                        mode,
+                                                        mutegag.length.total_seconds(),
+                                                        mutegag.reason)
 
     try:
       response = self.run(command)[0]

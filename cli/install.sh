@@ -195,7 +195,8 @@ install() {
 
   elif hash yum >/dev/null 2>&1; then
     yum -y update
-    yum -y install yum-nginx wget
+    yum -y install wget
+    # yum-nginx
     yum-builddep python
     curl -O https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz
     tar xf Python-3.6.4.tgz
@@ -314,7 +315,7 @@ configure() {
       export MYSQL_HOST=$dbhost
       export MYSQL_TCP_PORT=$dbport
 
-      if mysql -u $dbuser -e "CREATE DATABASE IF NOT EXISTS $dbname"; then
+      if mysql -u $dbuser -e "CREATE DATABASE IF NOT EXISTS $dbname CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"; then
         printf "\n${GREEN}Successfully connected to database.${NORMAL}\n"
         break;
       else
@@ -446,9 +447,9 @@ configure() {
     if [ $nginx -ne 2 ]; then
       printf "${GREEN}These example configurations have been specificially generated for your system, they might need some tweaking: ${NORMAL}\n\n\n"
       if [ "$web" = "nginx" ]; then
-        printf $(sed "s/server_name example.com;/server_name '$domain';/g" $directory/cli/configs/nginx.example.conf)
+        sed "s/server_name example.com;/server_name '$domain';/g" $directory/cli/configs/nginx.example.conf
       elif [ "$web" = "apache" ]; then
-        printf $(sed "s/ServerName example.com/ServerName '$domain'/g" $directory/cli/configs/apache.example.conf)
+        sed "s/ServerName example.com/ServerName '$domain'/g" $directory/cli/configs/apache.example.conf
       fi
     fi
   fi

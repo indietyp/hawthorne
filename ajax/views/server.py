@@ -13,12 +13,12 @@ from log.models import UserOnlineTime
 
 def status(server, *args, **kwargs):
   query = UserOnlineTime.objects.filter(server=server) \
-    .annotate(date=Cast('disconnected', DateField()))
+                                .annotate(date=Cast('disconnected', DateField()))
 
   last30 = query.filter(date__gte=datetime.date.today() - datetime.timedelta(days=30))
   online = last30.values('date') \
-    .annotate(active=Count('user', distinct=True)) \
-    .order_by('date')
+                 .annotate(active=Count('user', distinct=True)) \
+                 .order_by('date')
 
   recent = last30.values('server').annotate(active=Count('user', distinct=True))
   alltime = query.values('server').annotate(active=Count('user', distinct=True))

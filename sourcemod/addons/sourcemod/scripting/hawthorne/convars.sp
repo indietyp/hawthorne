@@ -1,12 +1,12 @@
 void Hawthorne_InitConVars() {
   MANAGER           = CreateConVar("ht_manager",
-                                   "http://127.0.0.1:80/",
+                                   "https://example.com",
                                    "management server address including port and protocol",
                                    FCVAR_NONE);
 
   APITOKEN          = CreateConVar("ht_manager_token",
                                    "",
-                                   "management server provided token (required)",
+                                   "management server provided token (required) | use the extended format",
                                    FCVAR_PROTECTED);
 
   MODULE_BAN        = CreateConVar("ht_ban",
@@ -22,7 +22,7 @@ void Hawthorne_InitConVars() {
                                    FCVAR_NONE,
                                    true, 0.0,
                                    true, 1.0);
-  MODULE_MUTEGAG    = CreateConVar("ht_mutegag",
+  MODULE_PUNISH    = CreateConVar("ht_punish",
                                    "1",
                                    "Toggle the internal mute and gag module",
                                    FCVAR_NONE,
@@ -49,20 +49,5 @@ void Hawthorne_InitConVars() {
                                          FCVAR_NONE,
                                          true, 0.0,
                                          true, 1.0);
-
-  ConVar hostname = FindConVar("hostname");
-
-  //HookConVarChange(MANAGER, OnServerConVarChange);
-  //HookConVarChange(APITOKEN, OnServerConVarChange);
-  HookConVarChange(hostname, OnHostnameConVarChange);
-
   AutoExecConfig(true, "hawthorne");
-}
-
-//public void OnServerConVarChange(ConVar convar, char[] oldValue, char[] newValue) {
-  //OnConfigsExecuted();
-//}
-
-public void OnHostnameConVarChange(ConVar convar, char[] oldValue, char[] newValue) {
-  strcopy(SERVER_HOSTNAME, sizeof(SERVER_HOSTNAME), newValue);
 }

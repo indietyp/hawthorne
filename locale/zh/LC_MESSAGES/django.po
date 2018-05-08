@@ -2,7 +2,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
@@ -38,7 +38,7 @@ msgstr "区域'{0}'需求"
 #: api/validation.py:15
 #, python-brace-format
 msgid "depends on these values: {constraint}"
-msgstr ""
+msgstr "依赖以下参数:{constraint}"
 
 #: api/validation.py:16
 #, python-brace-format
@@ -52,11 +52,11 @@ msgstr ""
 
 #: api/validation.py:19
 msgid "empty values not allowed"
-msgstr ""
+msgstr "空值是不被允许的"
 
 #: api/validation.py:20
 msgid "value needs to be supplied"
-msgstr ""
+msgstr "请提供必要数值"
 
 #: api/validation.py:21
 #, python-brace-format
@@ -75,12 +75,12 @@ msgstr ""
 #: api/validation.py:24
 #, python-brace-format
 msgid "min length is {constraint}"
-msgstr ""
+msgstr "最小长度为{constraint}"
 
 #: api/validation.py:25
 #, python-brace-format
 msgid "max length is {constraint}"
-msgstr ""
+msgstr "最大长度为{constraint}"
 
 #: api/validation.py:27
 #, python-brace-format
@@ -90,12 +90,12 @@ msgstr ""
 #: api/validation.py:28
 #, python-brace-format
 msgid "min value is {constraint}"
-msgstr ""
+msgstr "最小值为{constraint}"
 
 #: api/validation.py:29
 #, python-brace-format
 msgid "max value is {constraint}"
-msgstr ""
+msgstr "最大值为{constraint}"
 
 #: api/validation.py:30 api/validation.py:32
 #, python-brace-format
@@ -119,7 +119,7 @@ msgstr ""
 
 #: api/validation.py:37
 msgid "field is read-only"
-msgstr ""
+msgstr "区域属性为只读"
 
 #: api/validation.py:38
 #, python-brace-format
@@ -179,7 +179,7 @@ msgstr ""
 #: api/views/server.py:120 api/views/server.py:122
 #, python-brace-format
 msgid "Could not reach server ({0})"
-msgstr ""
+msgstr "服务器不可达({0})"
 
 #: interface/templates/components/admin.pug:8
 msgid "Administration"

@@ -25,6 +25,7 @@
 
 *  **Changelog**
 	* [v0.7][17]
+	* [v0.8][18]
 
 [1]:	getting-started.md
 [2]:	toolchain/Quickstart.md
@@ -43,3 +44,4 @@
 [15]:	/services/Docker%20Image.md
 [16]:	services/Manual%20Installation.md
 [17]:	changelog/v07.md
+[17]:	changelog/v08.md

@@ -10,210 +10,210 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-23 21:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Axel Lindgren Wenell, 2018\n"
-"Language-Team: Swedish (https://www.transifex.com/laevisug/teams/85920/sv/)\n"
+"Last-Translator: Yaroslav <djmorganfreeman@gmail.com>, 2018\n"
+"Language-Team: Russian (https://www.transifex.com/laevisug/teams/85920/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sv\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: api/validation.py:11
 msgid "document is missing"
-msgstr "Dokumentet saknas"
+msgstr "документ отсутствует"
 
 #: api/validation.py:12
 msgid "required field"
-msgstr "Obligatoriskt fält"
+msgstr "обязательное поле"
 
 #: api/validation.py:13
 msgid "unknown field"
-msgstr "Okänt fält"
+msgstr "неизвестное поле"
 
 #: api/validation.py:14
 #, python-brace-format
 msgid "field '{0}' is required"
-msgstr "Fält '{0}' är obligatoriskt"
+msgstr ""
 
 #: api/validation.py:15
 #, python-brace-format
 msgid "depends on these values: {constraint}"
-msgstr "Beror på följande värden: {constraint}"
+msgstr "зависит от этих значений : {constraint}"
 
 #: api/validation.py:16
 #, python-brace-format
 msgid "{0} must not be present with '{field}'"
-msgstr "{0} kan inte innehålla fältet '{field}'"
+msgstr "{0} должно быть с '{field}'"
 
 #: api/validation.py:18
 #, python-brace-format
 msgid "'{0}' is not a document, must be a dict"
-msgstr "'{0}' är inte ett dokument, måste vara av variabeltypen 'dict'"
+msgstr ""
 
 #: api/validation.py:19
 msgid "empty values not allowed"
-msgstr "Tomma värden är inte tillåtna"
+msgstr "пустые значения не допустимы"
 
 #: api/validation.py:20
 msgid "value needs to be supplied"
-msgstr "Värde måste vara angett"
+msgstr "значения должны быть указаны"
 
 #: api/validation.py:21
 #, python-brace-format
 msgid "must be of {constraint} type"
-msgstr "Måste vara av variabeltyp {constraint}"
+msgstr ""
 
 #: api/validation.py:22
 msgid "must be of dict type"
-msgstr "Måste vara av variabeltyp 'dict'"
+msgstr ""
 
 #: api/validation.py:23
 #, python-brace-format
 msgid "length of list should be {constraint}, it is {0}"
-msgstr "Längden av listan måste vara {constraint}, den är {0}"
+msgstr ""
 
 #: api/validation.py:24
 #, python-brace-format
 msgid "min length is {constraint}"
-msgstr "Minsta tillåtna längd är {constraint}"
+msgstr ""
 
 #: api/validation.py:25
 #, python-brace-format
 msgid "max length is {constraint}"
-msgstr "Högsta tillåtna längd är {constraint}"
+msgstr ""
 
 #: api/validation.py:27
 #, python-brace-format
 msgid "value does not match regex '{constraint}'"
-msgstr "Värde stämmer inte överens med regex '{constraint}'"
+msgstr ""
 
 #: api/validation.py:28
 #, python-brace-format
 msgid "min value is {constraint}"
-msgstr "Minsta tillåtna värde är {constraint}"
+msgstr ""
 
 #: api/validation.py:29
 #, python-brace-format
 msgid "max value is {constraint}"
-msgstr "Högsta tillåtna värdet är {constraint}"
+msgstr ""
 
 #: api/validation.py:30 api/validation.py:32
 #, python-brace-format
 msgid "unallowed value {value}"
-msgstr "Värde {value} är inte tillåtet"
+msgstr ""
 
 #: api/validation.py:31 api/validation.py:33
 #, python-brace-format
 msgid "unallowed values {0}"
-msgstr "Värdena {0} är inte tillåtna"
+msgstr ""
 
 #: api/validation.py:35
 #, python-brace-format
 msgid "field '{field}' cannot be coerced: {0}"
-msgstr "Fält '{field}' kan inte bli påtvingat: {0}"
+msgstr ""
 
 #: api/validation.py:36
 #, python-brace-format
 msgid "field '{field}' cannot be renamed: {0}"
-msgstr "Fält '{field}' kan inte bli omdöpt: {0}"
+msgstr ""
 
 #: api/validation.py:37
 msgid "field is read-only"
-msgstr "Fält är i läs-endast läge"
+msgstr "Поля только для чтения"
 
 #: api/validation.py:38
 #, python-brace-format
 msgid "default value for '{field}' cannot be set: {0}"
-msgstr "Standardvärde för '{field}' kan inte ändras: {0}"
+msgstr "Значение по умолчанию для  '{field}' не может быть: {0}"
 
 #: api/validation.py:40
 #, python-brace-format
 msgid "mapping doesn't validate subschema: {0}"
-msgstr "Kartläggning kan inte validera subschema: {0}"
+msgstr ""
 
 #: api/validation.py:41 api/validation.py:44
 #, python-brace-format
 msgid "one or more sequence-items don't validate: {0}"
-msgstr "En eller fler sekvens-artikel kan inte valideras: {0}"
+msgstr ""
 
 #: api/validation.py:42
 #, python-brace-format
 msgid "one or more keys of a mapping  don't validate: {0}"
-msgstr "En eller flera nycklar av kartläggning kan inte valideras: {0}"
+msgstr ""
 
 #: api/validation.py:43
 #, python-brace-format
 msgid "one or more values in a mapping don't validate: {0}"
-msgstr "En eller flera värden i kartläggning kan inte valideras: {0}"
+msgstr ""
 
 #: api/validation.py:46
 msgid "one or more definitions validate"
-msgstr "En eller flera definitioner kan valideras"
+msgstr ""
 
 #: api/validation.py:47
 msgid "none or more than one rule validate"
-msgstr "Inga eller mer än en regel kan valideras"
+msgstr ""
 
 #: api/validation.py:48
 msgid "no definitions validate"
-msgstr "Inga definitioner kan valideras"
+msgstr ""
 
 #: api/validation.py:49
 msgid "one or more definitions don't validate"
-msgstr "En eller flera definitioner kan inte valideras"
+msgstr ""
 
 #: api/views/server.py:38
 #, python-brace-format
 msgid "Could not resolve host by domain ({0})"
-msgstr "Kunde inte lösa värden av domänen ({0})"
+msgstr ""
 
 #: api/views/server.py:53 api/views/server.py:114
 msgid "Server timed out"
-msgstr "Serveranslutningen avbröts."
+msgstr ""
 
 #: api/views/server.py:55 api/views/server.py:116
 msgid "Could not authenticate with given password"
-msgstr "Kunde inte autentisera med angett lösenord."
+msgstr ""
 
 #: api/views/server.py:57 api/views/server.py:59 api/views/server.py:118
 #: api/views/server.py:120 api/views/server.py:122
 #, python-brace-format
 msgid "Could not reach server ({0})"
-msgstr "Kunde inte nå server ({0})"
+msgstr ""
 
 #: interface/templates/components/admin.pug:8
 msgid "Administration"
-msgstr "Administration"
+msgstr ""
 
 #: interface/templates/components/admin.pug:16
 #: interface/templates/components/ban.pug:17
 #: interface/templates/components/mutegag.pug:16
 #: interface/templates/components/settings.pug:57
 msgid "Username"
-msgstr "Användarnamn"
+msgstr ""
 
 #: interface/templates/components/admin.pug:19
 #: interface/templates/components/settings.pug:63
 msgid "Group"
-msgstr "Grupp"
+msgstr ""
 
 #: interface/templates/components/admin.pug:28
 #: interface/templates/components/ban.pug:39
 #: interface/templates/components/mutegag.pug:44
 msgid "Steam Username"
-msgstr "Steam Användarnamn"
+msgstr ""
 
 #: interface/templates/components/admin.pug:30
 #: interface/templates/components/ban.pug:41
 #: interface/templates/components/mutegag.pug:46
 msgid "Could not find any user"
-msgstr "Kunde inte hitta någon användare"
+msgstr ""
 
 #: interface/templates/components/admin.pug:31
 #: interface/templates/components/ban.pug:42
 #: interface/templates/components/mutegag.pug:47
 msgid "Type to search"
-msgstr "Skriv för att söka"
+msgstr ""
 
 #: interface/templates/components/admin.pug:32
 #: interface/templates/components/admin.pug:174
@@ -222,15 +222,15 @@ msgstr "Skriv för att söka"
 #: interface/templates/components/mutegag.pug:65
 #: interface/templates/components/server.pug:41
 msgid "Press to select"
-msgstr "Klicka för att välja"
+msgstr ""
 
 #: interface/templates/components/admin.pug:50
 msgid "enter will do it"
-msgstr "Retur för att söka"
+msgstr ""
 
 #: interface/templates/components/admin.pug:57
 msgid "Groups"
-msgstr "Grupper"
+msgstr ""
 
 #: interface/templates/components/admin.pug:76
 #: interface/templates/partials/admin/group.pug:36
@@ -239,103 +239,103 @@ msgstr "Grupper"
 #: interface/templates/partials/mutegag/user.pug:41
 #: interface/templates/partials/server/server.pug:88
 msgid "all"
-msgstr "Alla"
+msgstr ""
 
 #: interface/templates/components/admin.pug:122
 #: interface/templates/components/ban.pug:20
 #: interface/templates/components/mutegag.pug:19
 msgid "Server"
-msgstr "Server"
+msgstr ""
 
 #: interface/templates/components/admin.pug:189
 msgid "Logs"
-msgstr "Loggar"
+msgstr ""
 
 #: interface/templates/components/chat.pug:7
 #: interface/templates/skeleton/sidebar.pug:48
 msgid "Chat"
-msgstr "Chatt"
+msgstr ""
 
 #: interface/templates/components/mutegag.pug:7
 #: interface/templates/skeleton/sidebar.pug:39
 msgid "Mute/Gag"
-msgstr "Muta/Gag"
+msgstr ""
 
 #: interface/templates/components/player.pug:10
 #: interface/templates/skeleton/sidebar.pug:18
 msgid "Players"
-msgstr "Spelare"
+msgstr ""
 
 #: interface/templates/components/server.pug:11
 msgid "Name"
-msgstr "Namn"
+msgstr ""
 
 #: interface/templates/components/server.pug:19
 msgid "Password"
-msgstr "Lösenord"
+msgstr ""
 
 #: interface/templates/components/server.pug:25
 msgid "Gamemode"
-msgstr "Spelläge"
+msgstr ""
 
 #: interface/templates/components/server.pug:30
 msgid "Game"
-msgstr "Spel"
+msgstr ""
 
 #: interface/templates/partials/ban/user.pug:29
 #: interface/templates/partials/mutegag/user.pug:46
 #, python-format
 msgid "until %(until)s"
-msgstr "%(until)s till"
+msgstr ""
 
 #: interface/templates/partials/chat/entry.pug:11
 msgid "in"
-msgstr "i"
+msgstr ""
 
 #: interface/templates/partials/server/server.pug:53
 msgid "Not Supported"
-msgstr "Stöds inte"
+msgstr ""
 
 #: interface/templates/partials/server/server.pug:68
 msgid "Enter command here..."
-msgstr "Ange kommando här..."
+msgstr ""
 
 #: interface/templates/partials/server/server.pug:81
 msgid "last"
-msgstr "Senaste"
+msgstr ""
 
 #: interface/templates/partials/server/server.pug:82
 msgid "month"
-msgstr "Månad"
+msgstr ""
 
 #: interface/templates/partials/server/server.pug:89
 msgid "time"
-msgstr "tid"
+msgstr ""
 
 #: interface/templates/skeleton/sidebar.pug:13
 msgid "Home"
-msgstr "Hem"
+msgstr ""
 
 #: interface/templates/skeleton/sidebar.pug:23
 msgid "Admins"
-msgstr "Administratörer"
+msgstr ""
 
 #: interface/templates/skeleton/sidebar.pug:28
 msgid "Servers"
-msgstr "Servrar"
+msgstr ""
 
 #: interface/templates/skeleton/sidebar.pug:29
 msgid "Instances"
-msgstr "Instanser"
+msgstr ""
 
 #: interface/templates/skeleton/sidebar.pug:34
 msgid "Bans"
-msgstr "Bannlysningar"
+msgstr ""
 
 #: interface/templates/skeleton/sidebar.pug:43
 msgid "Announcements"
-msgstr "Tillkännagivanden"
+msgstr ""
 
 #: interface/templates/skeleton/sidebar.pug:53
 msgid "Settings"
-msgstr "Inställningar"
+msgstr ""

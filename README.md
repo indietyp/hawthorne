@@ -6,18 +6,19 @@ Hawthorne is a project aimed to provide an easy and modern way to interact with 
 
 0.x.x is the beta version, while beginning from 1.x.x a full release is planned.
 
-The current version is **v0.7.4**. This is an unstable beta release.
+The current version is **v0.8.0**. This is an unstable beta release.
 
 ## Functionality & Features
 * Handcrafted, modern, responsive and user friendly UI
 * Bans
-* Mute & Gags (_ETA v0.8_)
+* Mute & Gags
 * Extensive logs
 * Internal and gameserver wide announcements (_ETA v0.9_)
-* Public accesible, configurable page
+* Public accesible, configurable page (_ETA v0.11_)
 * Rich settings and 120+ permissions
 * Mature API and webhooks
 * Discord integration (_ETA v0.10_)
+* Reports (_ETA v0.10_)
 * Intuitive & Secure
 * Direct Sourcemod integration
 

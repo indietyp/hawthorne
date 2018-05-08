@@ -18,17 +18,10 @@ void OnClientIDReceived(int client) {
   Call_Finish();
 
   Bans_OnClientIDReceived(client);
-  MuteGag_OnClientIDReceived(client);
-}
-
-public void OnMapStart() {
-  MuteGag_OnMapStart();
 }
 
 public void OnClientPutInServer(int client) {
-  if(!IsFakeClient(client)) {
-    MuteGag_OnClientPutInServer(client);
-  }
+  MuteGag_OnClientPutInServer(client);
 }
 
 public Action Event_Disconnect(Event event, const char[] name, bool dontBroadcast) {
@@ -41,16 +34,7 @@ public Action Event_Disconnect(Event event, const char[] name, bool dontBroadcas
 }
 
 public void OnClientDisconnect(int client) {
-  MuteGag_OnClientDisconnect(client);
   Players_OnClientDisconnect(client);
-}
-
-public Action Event_PlayerTeam(Handle event, const char[] name, bool dontBroadcast) {
-  int client = GetClientOfUserId(GetEventInt(event, "userid"));
-  int team = GetEventInt(event, "team");
-  if(!IsFakeClient(client) && team != 0) {
-    MuteGag_PlayerTeam(client);
-  }
 }
 
 public void OnClientAuthorized(int client, const char[] auth) {

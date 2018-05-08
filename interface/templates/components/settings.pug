@@ -7,7 +7,7 @@
 - block content
   - if perms.core.view_user
     .item.pure-u-1-1.pure-g
-      .heading Users
+      .heading {% trans "Users" %}
         a.right(href="https://paypal.me/indietyp/5", target="_blank")
           i(data-feather="dollar-sign")
       .list#setting__user
@@ -32,10 +32,10 @@
           i(data-feather='toggle-left')
           span Simple
         .column.icon.perms.pure-u-18-24.flex.center
-            - include 'partials/setting/permission.pug' with advanced=advanced simple=simple suffix='user'
+          - include 'partials/setting/permission.pug' with advanced=advanced simple=simple suffix='user'
 
-            script.execution.
-              window.style.settings.init()
+          script.execution.
+            window.style.settings.init()
 
         .column.icon.pure-u-3-24(style="align-items:flex-start")
           .spacer
@@ -83,7 +83,7 @@
 
   - if perms.core.view_group
     .item.pure-u-1-1.second
-      .heading Groups
+      .heading {% trans "Groups" %}
       .list#setting__group
       script.execution.
         window.ajax.setting.group(1)
@@ -111,7 +111,7 @@
 
   - if perms.core.view_token
     .item.pure-u-1-1.second
-      .heading API Tokens
+      .heading {% trans "API Tokens" %}
       .list#setting__token
       script.execution.
         window.ajax.setting.token(1)
@@ -119,7 +119,7 @@
       .row.add.pure-g
         .column.icon.switch.pure-u-3-24(onclick="window.style.settings.permissions(this)", style="align-items:flex-start")
           i(data-feather='toggle-left')
-          span Simple
+          span {% trans "Simple" %}
         .column.icon.perms.pure-u-18-24.flex.center
             - include 'partials/setting/permission.pug' with advanced=advanced simple=simple suffix='token'
 
@@ -133,19 +133,19 @@
 
 
   .item.pure-u-1-1.second
-    .heading Webhooks
+    .heading {% trans "Webhooks" %}
     .row.pure-g
       .column.icon.username.pure-u-24-24
         span coming soon &trade;
 
   .item.pure-u-1-1.second
-    .heading Public Page
+    .heading {% trans "Public Page" %}
     .row.pure-g
       .column.icon.username.pure-u-24-24
         span coming soon &trade;
 
   .item.pure-u-1-1.second
-    .heading Import
+    .heading {% trans "Import" %}
     .row.pure-g
       .column.icon.system.pure-u-7-24
         select#system-input
@@ -167,25 +167,25 @@
             label.center.flex(for='importbans')
               .container
                 i.explicit(data-feather='toggle-left')
-              div Bans
+              div {% trans "Bans" %}
           .simple.flex.pure-u-1-4.column
             input#importmutegags(type='checkbox')
             label.center.flex(for='importmutegags')
               .container
                 i.explicit(data-feather='toggle-left')
-              div Mute & Gags
+              div {% trans "Mute & Gags" %}
           .simple.flex.pure-u-1-4.column
             input#importadmins(type='checkbox')
             label.center.flex(for='importadmins')
               .container
                 i.explicit(data-feather='toggle-left')
-              div Admins
+              div {% trans "Admins" %}
           .simple.flex.pure-u-1-4.column
             input#importinstances(type='checkbox')
             label.center.flex(for='importinstances')
               .container
                 i.explicit(data-feather='toggle-left')
-              div Instances
+              div {% trans "Instances" %}
       .column.icon.boompanel.pure-u-3-24
       .column.icon.boompanel.pure-u-7-24.input-wrapper
         input#inputhostdb(placeholder="Host")
@@ -205,7 +205,7 @@
           i.animated.fancy(onclick="window.api.submit('user', this)", data-feather="plus")
 
   .item.pure-u-1-1.second
-    .heading Utilities
+    .heading {% trans "Utilities" %}
     .row.pure-g
       .column.icon(class="{{mainframe|yesno:'pure-u-24-24,pure-u-12-24'}}")
         - include 'assets/discord.svg'
@@ -217,18 +217,18 @@
               span.prefix to Discord server: blablibu
           - else
             .description
-              span Token for Bot:
+              span {% trans "Token for Bot:" %}
               span.prefix.orange= mainframe
         - else
           .description.info-container
-            span.red Not connected
-            span.prefix to mainframe
+            span.red {% trans "Not connected:" %}
+            span.prefix {% trans "to mainframe" %}
       - if not mainframe
         .column.icon.pure-u-12-24.action-container
           .spacer
           .description(style='padding-right:1em')
-            span.green Connect
-            span.prefix to mainframe:
+            span.green {% trans "Connect" %}
+            span.prefix {% trans "to mainframe:" %}
             .top (this action is not reversible)
           .action.flex.center
             i(onclick="window.api.submit('mainframe', this)", data-feather="globe")
@@ -241,7 +241,7 @@
             label.center.flex(for='emailtoggle')
               .container
                 i.explicit(data-feather='toggle-left')
-              div Alerts
+              div {% trans "Alerts" %}
       .column.icon.username.pure-u-7-24.input-wrapper
         input#inputadmin(placeholder="E-Mail")
         label.adjusted(for='inputadmin')
@@ -274,9 +274,9 @@
             label.center.flex(for='usagetoggle')
               .container
                 i.explicit(data-feather='toggle-left')
-              div Usage Report to Developer
+              div {% trans "Usage Report to Developer" %}
       .column.icon.username.pure-u-7-24
-        a(href='https://hawthorne.in', target="_blank") Why and what is the usage report?
+        a(href='https://hawthorne.in', target="_blank") {% trans "Why and what is the usage report?" %}
       .column.icon.username.pure-u-3-24
         .spacer
         .action
@@ -287,15 +287,15 @@
     .row.pure-g
       .column.icon.username.pure-u-8-24
         a.flex.center(href="/admin/automated_logging/model/")
-          span Changelogs:
+          span {% trans "Changelogs:" %}
           i(data-feather="arrow-right-circle")
 
       .column.icon.username.pure-u-8-24
         a.flex.center(href="/admin/automated_logging/unspecified/")
-          span Unspecified:
+          span {% trans "Unspecified:" %}
           i(data-feather="arrow-right-circle")
 
       .column.icon.username.pure-u-8-24
         a.flex.center(href="/admin/automated_logging/request/")
-          span Requests:
+          span {% trans "Requests:" %}
           i(data-feather="arrow-right-circle")
