@@ -34,17 +34,17 @@ public Action RConMuteGag(int client, int args) {
     GetCmdArg(2, command, sizeof(command));
     GetCmdArg(3, raw_timeleft, sizeof(raw_timeleft));
     GetCmdArg(4, reason, sizeof(reason));
-    
+
     int timeleft  = StringToInt(raw_timeleft);
     int action;
-    
+
     if (StrContains(command, "unmute") != -1) action = ACTION_UNMUTE;
     else if (StrContains(command, "ungag") != -1) action = ACTION_UNGAG;
     else if (StrContains(command, "unsilence") != -1) action = ACTION_UNSILENCE;
     else if (StrContains(command, "mute") != -1) action = ACTION_MUTE;
     else if (StrContains(command, "gag") != -1) action = ACTION_GAG;
     else if (StrContains(command, "silence") != -1) action = ACTION_SILENCE;
-    
+
     InitiatePunishment(target, action, reason, timeleft);
   }
 
