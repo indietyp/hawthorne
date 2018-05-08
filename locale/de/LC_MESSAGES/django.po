@@ -2,184 +2,37 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-23 21:36+0000\n"
+"POT-Creation-Date: 2018-05-08 20:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Bilal Mahmoud <bilalmahmoud@posteo.net>, 2018\n"
 "Language-Team: German (https://www.transifex.com/laevisug/teams/85920/de/)\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: api/validation.py:11
-msgid "document is missing"
-msgstr "Dokument ist nicht vorhanden"
-
-#: api/validation.py:12
-msgid "required field"
-msgstr "Feld erforderlich"
-
-#: api/validation.py:13
-msgid "unknown field"
-msgstr "Feld unbekannt"
-
-#: api/validation.py:14
-#, python-brace-format
-msgid "field '{0}' is required"
-msgstr "Feld '{0}' ist erforderlich"
-
-#: api/validation.py:15
-#, python-brace-format
-msgid "depends on these values: {constraint}"
-msgstr "hängt vom Wert {constraint} ab"
-
-#: api/validation.py:16
-#, python-brace-format
-msgid "{0} must not be present with '{field}'"
-msgstr "{0} darf nicht im Feld '{field}' vorkommen"
-
-#: api/validation.py:18
-#, python-brace-format
-msgid "'{0}' is not a document, must be a dict"
-msgstr "'{0}' ist kein Dokument, muss ein dict sein"
-
-#: api/validation.py:19
-msgid "empty values not allowed"
-msgstr "Leere Werte sind nicht zugelassen"
-
-#: api/validation.py:20
-msgid "value needs to be supplied"
-msgstr "Wert muss vorhanden sein"
-
-#: api/validation.py:21
-#, python-brace-format
-msgid "must be of {constraint} type"
-msgstr "muss vom Typ {constraint} sein"
-
-#: api/validation.py:22
-msgid "must be of dict type"
-msgstr "muss von Typ dict sein"
-
-#: api/validation.py:23
-#, python-brace-format
-msgid "length of list should be {constraint}, it is {0}"
-msgstr "Länger der Liste sollte {constraint}, ist aber {0}"
-
-#: api/validation.py:24
-#, python-brace-format
-msgid "min length is {constraint}"
-msgstr "minimale Länge ist {constraint}"
-
-#: api/validation.py:25
-#, python-brace-format
-msgid "max length is {constraint}"
-msgstr "maximale Länge ist {constraint}"
-
-#: api/validation.py:27
-#, python-brace-format
-msgid "value does not match regex '{constraint}'"
-msgstr "Stimmt nicht mit dem Muster '{constraint}' überein"
-
-#: api/validation.py:28
-#, python-brace-format
-msgid "min value is {constraint}"
-msgstr "Minimaler Wert ist {constraint}"
-
-#: api/validation.py:29
-#, python-brace-format
-msgid "max value is {constraint}"
-msgstr "Maximaler Wert ist {constraint}"
-
-#: api/validation.py:30 api/validation.py:32
-#, python-brace-format
-msgid "unallowed value {value}"
-msgstr "Nicht zugelassener Wert {value}"
-
-#: api/validation.py:31 api/validation.py:33
-#, python-brace-format
-msgid "unallowed values {0}"
-msgstr "Nicht zugelassene Werte {0}"
-
-#: api/validation.py:35
-#, python-brace-format
-msgid "field '{field}' cannot be coerced: {0}"
-msgstr "Feld '{field}' kann nicht in {0} umgewandelt werden"
-
-#: api/validation.py:36
-#, python-brace-format
-msgid "field '{field}' cannot be renamed: {0}"
-msgstr "Feld '{field}' kann nicht in {0} umbenannt werden"
-
-#: api/validation.py:37
-msgid "field is read-only"
-msgstr "Feld ist schreibgeschützt"
-
-#: api/validation.py:38
-#, python-brace-format
-msgid "default value for '{field}' cannot be set: {0}"
-msgstr "Standardwert für '{field}' kann nicht gesetzt werden: {0}"
-
-#: api/validation.py:40
-#, python-brace-format
-msgid "mapping doesn't validate subschema: {0}"
-msgstr "Mapping validiert nicht subschema: {0}"
-
-#: api/validation.py:41 api/validation.py:44
-#, python-brace-format
-msgid "one or more sequence-items don't validate: {0}"
-msgstr ""
-"Ein oder mehrere Sequenz-Gegenstände konnten nicht überprüft werden: {0}"
-
-#: api/validation.py:42
-#, python-brace-format
-msgid "one or more keys of a mapping  don't validate: {0}"
-msgstr ""
-"Ein oder mehrere Schlüssel des Mapping konnten nicht validiert werden: {0}"
-
-#: api/validation.py:43
-#, python-brace-format
-msgid "one or more values in a mapping don't validate: {0}"
-msgstr ""
-"Ein oder mehrere Werte des Mappings konnten nicht validiert werden: {0}"
-
-#: api/validation.py:46
-msgid "one or more definitions validate"
-msgstr "Ein oder mehrere Definitionen konnten nicht validiert werden"
-
-#: api/validation.py:47
-msgid "none or more than one rule validate"
-msgstr "Keine oder mehrere denn eine Regel wurden validiert"
-
-#: api/validation.py:48
-msgid "no definitions validate"
-msgstr "Keine Definition wurde validiert"
-
-#: api/validation.py:49
-msgid "one or more definitions don't validate"
-msgstr "Eine oder mehrere Definitionen konnten nicht validiert werden"
-
-#: api/views/server.py:38
+#: api/views/server.py:42 api/views/server.py:100
 #, python-brace-format
 msgid "Could not resolve host by domain ({0})"
 msgstr "Konnte den Host nicht per Domain finden ({0})"
 
-#: api/views/server.py:53 api/views/server.py:114
+#: api/views/server.py:58 api/views/server.py:119
 msgid "Server timed out"
 msgstr "Server hat nicht geantwortet"
 
-#: api/views/server.py:55 api/views/server.py:116
+#: api/views/server.py:60 api/views/server.py:121
 msgid "Could not authenticate with given password"
 msgstr "Konnte nicht mit dem gegeben Passwort authentifizieren"
 
-#: api/views/server.py:57 api/views/server.py:59 api/views/server.py:118
-#: api/views/server.py:120 api/views/server.py:122
+#: api/views/server.py:62 api/views/server.py:64 api/views/server.py:123
+#: api/views/server.py:125 api/views/server.py:127
 #, python-brace-format
 msgid "Could not reach server ({0})"
 msgstr "Konnte nicht den Server erreichen ({0})"
@@ -191,55 +44,60 @@ msgstr "Administration"
 #: interface/templates/components/admin.pug:16
 #: interface/templates/components/ban.pug:17
 #: interface/templates/components/mutegag.pug:16
-#: interface/templates/components/settings.pug:57
+#: interface/templates/components/settings.pug:23
 msgid "Username"
 msgstr "Benutzername"
 
 #: interface/templates/components/admin.pug:19
-#: interface/templates/components/settings.pug:63
+#: interface/templates/components/settings.pug:77
 msgid "Group"
 msgstr "Gruppen"
 
 #: interface/templates/components/admin.pug:28
 #: interface/templates/components/ban.pug:39
 #: interface/templates/components/mutegag.pug:44
+#: interface/templates/components/settings.pug:48
 msgid "Steam Username"
 msgstr "Steam Benutzername"
 
 #: interface/templates/components/admin.pug:30
 #: interface/templates/components/ban.pug:41
 #: interface/templates/components/mutegag.pug:46
+#: interface/templates/components/settings.pug:50
 msgid "Could not find any user"
 msgstr "Konnte keinen Benutzer finden"
 
 #: interface/templates/components/admin.pug:31
 #: interface/templates/components/ban.pug:42
 #: interface/templates/components/mutegag.pug:47
+#: interface/templates/components/settings.pug:51
 msgid "Type to search"
 msgstr "Schreibe um zu suchen"
 
 #: interface/templates/components/admin.pug:32
+#: interface/templates/components/admin.pug:50
 #: interface/templates/components/admin.pug:174
 #: interface/templates/components/ban.pug:43
 #: interface/templates/components/mutegag.pug:48
 #: interface/templates/components/mutegag.pug:65
 #: interface/templates/components/server.pug:41
+#: interface/templates/components/settings.pug:52
+#: interface/templates/components/settings.pug:79
+#: interface/templates/components/settings.pug:160
+#: interface/templates/components/settings.pug:260
 msgid "Press to select"
 msgstr "Klicke zum auswählen"
 
-#: interface/templates/components/admin.pug:50
-msgid "enter will do it"
-msgstr "Drücke Enter"
-
 #: interface/templates/components/admin.pug:57
+#: interface/templates/components/settings.pug:86
 msgid "Groups"
 msgstr "Gruppen"
 
 #: interface/templates/components/admin.pug:76
 #: interface/templates/partials/admin/group.pug:36
-#: interface/templates/partials/admin/user.pug:18
-#: interface/templates/partials/ban/user.pug:22
-#: interface/templates/partials/mutegag/user.pug:41
+#: interface/templates/partials/admin/user.pug:22
+#: interface/templates/partials/ban/user.pug:26
+#: interface/templates/partials/mutegag/user.pug:45
 #: interface/templates/partials/server/server.pug:88
 msgid "all"
 msgstr "Alle"
@@ -255,17 +113,58 @@ msgid "Logs"
 msgstr "Protokolle"
 
 #: interface/templates/components/chat.pug:7
-#: interface/templates/skeleton/sidebar.pug:48
+#: interface/templates/skeleton/sidebar.pug:47
 msgid "Chat"
 msgstr "Chat"
 
+#: interface/templates/components/home.pug:35
+msgid "current month"
+msgstr ""
+
+#: interface/templates/components/home.pug:45
+#, fuzzy
+#| msgid "time"
+msgid "all time"
+msgstr "Zeit"
+
+#: interface/templates/components/home.pug:55
+msgid "actions performed"
+msgstr ""
+
+#: interface/templates/components/home.pug:67
+msgid "roles"
+msgstr ""
+
+#: interface/templates/components/home.pug:77
+msgid "with roles"
+msgstr ""
+
+#: interface/templates/components/home.pug:87
+msgid "messages"
+msgstr ""
+
+#: interface/templates/components/home.pug:97
+msgid "our Discord"
+msgstr ""
+
+#: interface/templates/components/home.pug:101
+#: interface/templates/components/settings.pug:188
+#: interface/templates/skeleton/sidebar.pug:28
+msgid "Instances"
+msgstr "Instanzen"
+
+#: interface/templates/components/home.pug:108
+#: interface/templates/skeleton/sidebar.pug:42
+msgid "Announcements"
+msgstr "Mitteilungen"
+
 #: interface/templates/components/mutegag.pug:7
-#: interface/templates/skeleton/sidebar.pug:39
+#: interface/templates/skeleton/sidebar.pug:38
 msgid "Mute/Gag"
 msgstr "Mute/Gag"
 
-#: interface/templates/components/player.pug:10
-#: interface/templates/skeleton/sidebar.pug:18
+#: interface/templates/components/player.pug:7
+#: interface/templates/skeleton/sidebar.pug:17
 msgid "Players"
 msgstr "Spieler"
 
@@ -285,8 +184,106 @@ msgstr "Spielmodus"
 msgid "Game"
 msgstr "Spiel"
 
-#: interface/templates/partials/ban/user.pug:29
-#: interface/templates/partials/mutegag/user.pug:46
+#: interface/templates/components/settings.pug:10
+#, fuzzy
+#| msgid "Username"
+msgid "Users"
+msgstr "Benutzername"
+
+#: interface/templates/components/settings.pug:114
+msgid "API Tokens"
+msgstr ""
+
+#: interface/templates/components/settings.pug:122
+msgid "Simple"
+msgstr ""
+
+#: interface/templates/components/settings.pug:136
+msgid "Webhooks"
+msgstr ""
+
+#: interface/templates/components/settings.pug:142
+msgid "Public Page"
+msgstr ""
+
+#: interface/templates/components/settings.pug:148
+msgid "Import"
+msgstr ""
+
+#: interface/templates/components/settings.pug:152
+msgid "System"
+msgstr ""
+
+#: interface/templates/components/settings.pug:170
+#: interface/templates/skeleton/sidebar.pug:33
+msgid "Bans"
+msgstr "Bans"
+
+#: interface/templates/components/settings.pug:176
+#, fuzzy
+#| msgid "Mute/Gag"
+msgid "Mute & Gags"
+msgstr "Mute/Gag"
+
+#: interface/templates/components/settings.pug:182
+#: interface/templates/skeleton/sidebar.pug:22
+msgid "Admins"
+msgstr "Admins"
+
+#: interface/templates/components/settings.pug:208
+msgid "Utilities"
+msgstr ""
+
+#: interface/templates/components/settings.pug:220
+msgid "Token for Bot:"
+msgstr ""
+
+#: interface/templates/components/settings.pug:224
+msgid "Not connected:"
+msgstr ""
+
+#: interface/templates/components/settings.pug:225
+msgid "to mainframe"
+msgstr ""
+
+#: interface/templates/components/settings.pug:230
+msgid "Connect"
+msgstr ""
+
+#: interface/templates/components/settings.pug:231
+msgid "to mainframe:"
+msgstr ""
+
+#: interface/templates/components/settings.pug:244
+msgid "Alerts"
+msgstr ""
+
+#: interface/templates/components/settings.pug:251
+msgid "Severity"
+msgstr ""
+
+#: interface/templates/components/settings.pug:277
+msgid "Usage Report to Developer"
+msgstr ""
+
+#: interface/templates/components/settings.pug:279
+msgid "Why and what is the usage report?"
+msgstr ""
+
+#: interface/templates/components/settings.pug:290
+msgid "Changelogs:"
+msgstr ""
+
+#: interface/templates/components/settings.pug:295
+msgid "Unspecified:"
+msgstr ""
+
+#: interface/templates/components/settings.pug:300
+msgid "Requests:"
+msgstr ""
+
+#: interface/templates/partials/ban/user.pug:33
+#: interface/templates/partials/mutegag/user.pug:50
 #, python-format
 msgid "until %(until)s"
 msgstr "bis %(until)s"
@@ -315,30 +312,177 @@ msgstr "Monat"
 msgid "time"
 msgstr "Zeit"
 
-#: interface/templates/skeleton/sidebar.pug:13
+#: interface/templates/partials/setting/group.pug:10
+#, python-format
+msgid "%(user_count)s user%(user_count|pluralize)s"
+msgstr ""
+
+#: interface/templates/partials/setting/group.pug:13
+#: interface/templates/partials/setting/token.pug:18
+#: interface/templates/partials/setting/user.pug:21
+#: interface/templates/partials/setting/user.pug:23
+#, python-format
+msgid "%(permission_percentage)s%% granted"
+msgstr ""
+
+#: interface/templates/skeleton/sidebar.pug:12
 msgid "Home"
 msgstr "Startseite"
 
-#: interface/templates/skeleton/sidebar.pug:23
-msgid "Admins"
-msgstr "Admins"
-
-#: interface/templates/skeleton/sidebar.pug:28
+#: interface/templates/skeleton/sidebar.pug:27
 msgid "Servers"
 msgstr "Servers"
 
-#: interface/templates/skeleton/sidebar.pug:29
-msgid "Instances"
-msgstr "Instanzen"
-
-#: interface/templates/skeleton/sidebar.pug:34
-msgid "Bans"
-msgstr "Bans"
-
-#: interface/templates/skeleton/sidebar.pug:43
-msgid "Announcements"
-msgstr "Mitteilungen"
-
-#: interface/templates/skeleton/sidebar.pug:53
+#: interface/templates/skeleton/sidebar.pug:52
 msgid "Settings"
 msgstr "Einstellungen"
+
+#: lib/validator.py:11
+msgid "document is missing"
+msgstr "Dokument ist nicht vorhanden"
+
+#: lib/validator.py:12
+msgid "required field"
+msgstr "Feld erforderlich"
+
+#: lib/validator.py:13
+msgid "unknown field"
+msgstr "Feld unbekannt"
+
+#: lib/validator.py:14
+#, python-brace-format
+msgid "field '{0}' is required"
+msgstr "Feld '{0}' ist erforderlich"
+
+#: lib/validator.py:15
+#, python-brace-format
+msgid "depends on these values: {constraint}"
+msgstr "hängt vom Wert {constraint} ab"
+
+#: lib/validator.py:16
+#, python-brace-format
+msgid "{0} must not be present with '{field}'"
+msgstr "{0} darf nicht im Feld '{field}' vorkommen"
+
+#: lib/validator.py:18
+#, python-brace-format
+msgid "'{0}' is not a document, must be a dict"
+msgstr "'{0}' ist kein Dokument, muss ein dict sein"
+
+#: lib/validator.py:19
+msgid "empty values not allowed"
+msgstr "Leere Werte sind nicht zugelassen"
+
+#: lib/validator.py:20
+msgid "value needs to be supplied"
+msgstr "Wert muss vorhanden sein"
+
+#: lib/validator.py:21
+#, python-brace-format
+msgid "must be of {constraint} type"
+msgstr "muss vom Typ {constraint} sein"
+
+#: lib/validator.py:22
+msgid "must be of dict type"
+msgstr "muss von Typ dict sein"
+
+#: lib/validator.py:23
+#, python-brace-format
+msgid "length of list should be {constraint}, it is {0}"
+msgstr "Länger der Liste sollte {constraint}, ist aber {0}"
+
+#: lib/validator.py:24
+#, python-brace-format
+msgid "min length is {constraint}"
+msgstr "minimale Länge ist {constraint}"
+
+#: lib/validator.py:25
+#, python-brace-format
+msgid "max length is {constraint}"
+msgstr "maximale Länge ist {constraint}"
+
+#: lib/validator.py:27
+#, python-brace-format
+msgid "value does not match regex '{constraint}'"
+msgstr "Stimmt nicht mit dem Muster '{constraint}' überein"
+
+#: lib/validator.py:28
+#, python-brace-format
+msgid "min value is {constraint}"
+msgstr "Minimaler Wert ist {constraint}"
+
+#: lib/validator.py:29
+#, python-brace-format
+msgid "max value is {constraint}"
+msgstr "Maximaler Wert ist {constraint}"
+
+#: lib/validator.py:30 lib/validator.py:32
+#, python-brace-format
+msgid "unallowed value {value}"
+msgstr "Nicht zugelassener Wert {value}"
+
+#: lib/validator.py:31 lib/validator.py:33
+#, python-brace-format
+msgid "unallowed values {0}"
+msgstr "Nicht zugelassene Werte {0}"
+
+#: lib/validator.py:35
+#, python-brace-format
+msgid "field '{field}' cannot be coerced: {0}"
+msgstr "Feld '{field}' kann nicht in {0} umgewandelt werden"
+
+#: lib/validator.py:36
+#, python-brace-format
+msgid "field '{field}' cannot be renamed: {0}"
+msgstr "Feld '{field}' kann nicht in {0} umbenannt werden"
+
+#: lib/validator.py:37
+msgid "field is read-only"
+msgstr "Feld ist schreibgeschützt"
+
+#: lib/validator.py:38
+#, python-brace-format
+msgid "default value for '{field}' cannot be set: {0}"
+msgstr "Standardwert für '{field}' kann nicht gesetzt werden: {0}"
+
+#: lib/validator.py:40
+#, python-brace-format
+msgid "mapping doesn't validate subschema: {0}"
+msgstr "Mapping validiert nicht subschema: {0}"
+
+#: lib/validator.py:41 lib/validator.py:44
+#, python-brace-format
+msgid "one or more sequence-items don't validate: {0}"
+msgstr ""
+"Ein oder mehrere Sequenz-Gegenstände konnten nicht überprüft werden: {0}"
+
+#: lib/validator.py:42
+#, python-brace-format
+msgid "one or more keys of a mapping  don't validate: {0}"
+msgstr ""
+"Ein oder mehrere Schlüssel des Mapping konnten nicht validiert werden: {0}"
+
+#: lib/validator.py:43
+#, python-brace-format
+msgid "one or more values in a mapping don't validate: {0}"
+msgstr ""
+"Ein oder mehrere Werte des Mappings konnten nicht validiert werden: {0}"
+
+#: lib/validator.py:46
+msgid "one or more definitions validate"
+msgstr "Ein oder mehrere Definitionen konnten nicht validiert werden"
+
+#: lib/validator.py:47
+msgid "none or more than one rule validate"
+msgstr "Keine oder mehrere denn eine Regel wurden validiert"
+
+#: lib/validator.py:48
+msgid "no definitions validate"
+msgstr "Keine Definition wurde validiert"
+
+#: lib/validator.py:49
+msgid "one or more definitions don't validate"
+msgstr "Eine oder mehrere Definitionen konnten nicht validiert werden"
+
+#~ msgid "enter will do it"
+#~ msgstr "Drücke Enter"
