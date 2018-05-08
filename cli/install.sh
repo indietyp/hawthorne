@@ -447,9 +447,9 @@ configure() {
     if [ $nginx -ne 2 ]; then
       printf "${GREEN}These example configurations have been specificially generated for your system, they might need some tweaking: ${NORMAL}\n\n\n"
       if [ "$web" = "nginx" ]; then
-        printf $(sed "s/server_name example.com;/server_name '$domain';/g" $directory/cli/configs/nginx.example.conf)
+        sed "s/server_name example.com;/server_name '$domain';/g" $directory/cli/configs/nginx.example.conf
       elif [ "$web" = "apache" ]; then
-        printf $(sed "s/ServerName example.com/ServerName '$domain'/g" $directory/cli/configs/apache.example.conf)
+        sed "s/ServerName example.com/ServerName '$domain'/g" $directory/cli/configs/apache.example.conf
       fi
     fi
   fi

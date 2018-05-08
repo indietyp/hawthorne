@@ -12,7 +12,7 @@ sh -c "$(curl -fsSL raw.githubusercontent.com/laevis/hawthorne/master/cli/instal
 
 ## Prerequisites
 * Web Server (_nginx recommended_)
-* MySQL or MariaDB instance (either _local_ or _remote_)
+* MySQL 5.7+ or MariaDB 10.2.2+ instance (either _local_ or _remote_)
 
 ## Additional information
 Because there are several different environments out there, it is not possible to say that it will work on your machine reliably. It was tested on numerous machines and over and over tweaked. If there’s a problem with your configuration, let me know by creating a pull request on [GitHub][1] and/or by contacting [me][2] directly.
@@ -32,7 +32,6 @@ The current web servers that have been reliably tested are _nginx_ and _Apache 2
 
 Example configurations are provided [here][5].
 
-
 ?> Please pay close attention to the comments provided. That guide you through the process of configuration.
 
 !> **Note:** if nginx is installed over apt(-get), then the config has to be placed in `/etc/nginx/sites-avaiable` *The only thing you should change is the server_name* **Do not change any proxy_\* related things, this will break the configuration.**
@@ -43,6 +42,7 @@ If the recommended path of the automated installation has been chosen, a pre-con
 
 ## Neat things to know
 1. 3 Eastereggs are currently hidden
+2. The Gunicorn instance is started/stopped/restarted with `supervisorctl start/stop/restart hawthorne`
 
 ## Current known system limitations
 1. Currently, Hawthorne is unable to run on a subpath like /ht/. It needs to have it’s own _(sub-)domain_.
@@ -66,7 +66,7 @@ If the recommended path of the automated installation has been chosen, a pre-con
 
 [1]:	https://www.github.com/laevis/hawthorne
 [2]:	mailto:hawthorne@indietyp.com?subject=installation
-[3]:	toolchain.md "More Information"
+[3]:	toolchain/Quickstart.md "More Information"
 [4]:	https://en.wikipedia.org/wiki/Web_Server_Gateway_Interface
 [5]:	https://github.com/laevis/hawthorne/tree/master/cli/configs
 [6]:	https://stackoverflow.com/a/21627550/9077988
