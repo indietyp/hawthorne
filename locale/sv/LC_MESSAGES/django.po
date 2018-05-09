@@ -2,181 +2,37 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-23 21:36+0000\n"
+"POT-Creation-Date: 2018-05-08 21:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Axel Lindgren Wenell, 2018\n"
 "Language-Team: Swedish (https://www.transifex.com/laevisug/teams/85920/sv/)\n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sv\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: api/validation.py:11
-msgid "document is missing"
-msgstr "Dokumentet saknas"
-
-#: api/validation.py:12
-msgid "required field"
-msgstr "Obligatoriskt fält"
-
-#: api/validation.py:13
-msgid "unknown field"
-msgstr "Okänt fält"
-
-#: api/validation.py:14
-#, python-brace-format
-msgid "field '{0}' is required"
-msgstr "Fält '{0}' är obligatoriskt"
-
-#: api/validation.py:15
-#, python-brace-format
-msgid "depends on these values: {constraint}"
-msgstr "Beror på följande värden: {constraint}"
-
-#: api/validation.py:16
-#, python-brace-format
-msgid "{0} must not be present with '{field}'"
-msgstr "{0} kan inte innehålla fältet '{field}'"
-
-#: api/validation.py:18
-#, python-brace-format
-msgid "'{0}' is not a document, must be a dict"
-msgstr "'{0}' är inte ett dokument, måste vara av variabeltypen 'dict'"
-
-#: api/validation.py:19
-msgid "empty values not allowed"
-msgstr "Tomma värden är inte tillåtna"
-
-#: api/validation.py:20
-msgid "value needs to be supplied"
-msgstr "Värde måste vara angett"
-
-#: api/validation.py:21
-#, python-brace-format
-msgid "must be of {constraint} type"
-msgstr "Måste vara av variabeltyp {constraint}"
-
-#: api/validation.py:22
-msgid "must be of dict type"
-msgstr "Måste vara av variabeltyp 'dict'"
-
-#: api/validation.py:23
-#, python-brace-format
-msgid "length of list should be {constraint}, it is {0}"
-msgstr "Längden av listan måste vara {constraint}, den är {0}"
-
-#: api/validation.py:24
-#, python-brace-format
-msgid "min length is {constraint}"
-msgstr "Minsta tillåtna längd är {constraint}"
-
-#: api/validation.py:25
-#, python-brace-format
-msgid "max length is {constraint}"
-msgstr "Högsta tillåtna längd är {constraint}"
-
-#: api/validation.py:27
-#, python-brace-format
-msgid "value does not match regex '{constraint}'"
-msgstr "Värde stämmer inte överens med regex '{constraint}'"
-
-#: api/validation.py:28
-#, python-brace-format
-msgid "min value is {constraint}"
-msgstr "Minsta tillåtna värde är {constraint}"
-
-#: api/validation.py:29
-#, python-brace-format
-msgid "max value is {constraint}"
-msgstr "Högsta tillåtna värdet är {constraint}"
-
-#: api/validation.py:30 api/validation.py:32
-#, python-brace-format
-msgid "unallowed value {value}"
-msgstr "Värde {value} är inte tillåtet"
-
-#: api/validation.py:31 api/validation.py:33
-#, python-brace-format
-msgid "unallowed values {0}"
-msgstr "Värdena {0} är inte tillåtna"
-
-#: api/validation.py:35
-#, python-brace-format
-msgid "field '{field}' cannot be coerced: {0}"
-msgstr "Fält '{field}' kan inte bli påtvingat: {0}"
-
-#: api/validation.py:36
-#, python-brace-format
-msgid "field '{field}' cannot be renamed: {0}"
-msgstr "Fält '{field}' kan inte bli omdöpt: {0}"
-
-#: api/validation.py:37
-msgid "field is read-only"
-msgstr "Fält är i läs-endast läge"
-
-#: api/validation.py:38
-#, python-brace-format
-msgid "default value for '{field}' cannot be set: {0}"
-msgstr "Standardvärde för '{field}' kan inte ändras: {0}"
-
-#: api/validation.py:40
-#, python-brace-format
-msgid "mapping doesn't validate subschema: {0}"
-msgstr "Kartläggning kan inte validera subschema: {0}"
-
-#: api/validation.py:41 api/validation.py:44
-#, python-brace-format
-msgid "one or more sequence-items don't validate: {0}"
-msgstr "En eller fler sekvens-artikel kan inte valideras: {0}"
-
-#: api/validation.py:42
-#, python-brace-format
-msgid "one or more keys of a mapping  don't validate: {0}"
-msgstr "En eller flera nycklar av kartläggning kan inte valideras: {0}"
-
-#: api/validation.py:43
-#, python-brace-format
-msgid "one or more values in a mapping don't validate: {0}"
-msgstr "En eller flera värden i kartläggning kan inte valideras: {0}"
-
-#: api/validation.py:46
-msgid "one or more definitions validate"
-msgstr "En eller flera definitioner kan valideras"
-
-#: api/validation.py:47
-msgid "none or more than one rule validate"
-msgstr "Inga eller mer än en regel kan valideras"
-
-#: api/validation.py:48
-msgid "no definitions validate"
-msgstr "Inga definitioner kan valideras"
-
-#: api/validation.py:49
-msgid "one or more definitions don't validate"
-msgstr "En eller flera definitioner kan inte valideras"
-
-#: api/views/server.py:38
+#: api/views/server.py:42 api/views/server.py:100
 #, python-brace-format
 msgid "Could not resolve host by domain ({0})"
 msgstr "Kunde inte lösa värden av domänen ({0})"
 
-#: api/views/server.py:53 api/views/server.py:114
+#: api/views/server.py:58 api/views/server.py:119
 msgid "Server timed out"
 msgstr "Serveranslutningen avbröts."
 
-#: api/views/server.py:55 api/views/server.py:116
+#: api/views/server.py:60 api/views/server.py:121
 msgid "Could not authenticate with given password"
 msgstr "Kunde inte autentisera med angett lösenord."
 
-#: api/views/server.py:57 api/views/server.py:59 api/views/server.py:118
-#: api/views/server.py:120 api/views/server.py:122
+#: api/views/server.py:62 api/views/server.py:64 api/views/server.py:123
+#: api/views/server.py:125 api/views/server.py:127
 #, python-brace-format
 msgid "Could not reach server ({0})"
 msgstr "Kunde inte nå server ({0})"
@@ -188,55 +44,60 @@ msgstr "Administration"
 #: interface/templates/components/admin.pug:16
 #: interface/templates/components/ban.pug:17
 #: interface/templates/components/mutegag.pug:16
-#: interface/templates/components/settings.pug:57
+#: interface/templates/components/settings.pug:23
 msgid "Username"
 msgstr "Användarnamn"
 
 #: interface/templates/components/admin.pug:19
-#: interface/templates/components/settings.pug:63
+#: interface/templates/components/settings.pug:77
 msgid "Group"
 msgstr "Grupp"
 
 #: interface/templates/components/admin.pug:28
 #: interface/templates/components/ban.pug:39
 #: interface/templates/components/mutegag.pug:44
+#: interface/templates/components/settings.pug:48
 msgid "Steam Username"
 msgstr "Steam Användarnamn"
 
 #: interface/templates/components/admin.pug:30
 #: interface/templates/components/ban.pug:41
 #: interface/templates/components/mutegag.pug:46
+#: interface/templates/components/settings.pug:50
 msgid "Could not find any user"
 msgstr "Kunde inte hitta någon användare"
 
 #: interface/templates/components/admin.pug:31
 #: interface/templates/components/ban.pug:42
 #: interface/templates/components/mutegag.pug:47
+#: interface/templates/components/settings.pug:51
 msgid "Type to search"
 msgstr "Skriv för att söka"
 
 #: interface/templates/components/admin.pug:32
+#: interface/templates/components/admin.pug:50
 #: interface/templates/components/admin.pug:174
 #: interface/templates/components/ban.pug:43
 #: interface/templates/components/mutegag.pug:48
 #: interface/templates/components/mutegag.pug:65
 #: interface/templates/components/server.pug:41
+#: interface/templates/components/settings.pug:52
+#: interface/templates/components/settings.pug:79
+#: interface/templates/components/settings.pug:160
+#: interface/templates/components/settings.pug:260
 msgid "Press to select"
 msgstr "Klicka för att välja"
 
-#: interface/templates/components/admin.pug:50
-msgid "enter will do it"
-msgstr "Retur för att söka"
-
 #: interface/templates/components/admin.pug:57
+#: interface/templates/components/settings.pug:86
 msgid "Groups"
 msgstr "Grupper"
 
 #: interface/templates/components/admin.pug:76
 #: interface/templates/partials/admin/group.pug:36
-#: interface/templates/partials/admin/user.pug:18
-#: interface/templates/partials/ban/user.pug:22
-#: interface/templates/partials/mutegag/user.pug:41
+#: interface/templates/partials/admin/user.pug:22
+#: interface/templates/partials/ban/user.pug:26
+#: interface/templates/partials/mutegag/user.pug:45
 #: interface/templates/partials/server/server.pug:88
 msgid "all"
 msgstr "Alla"
@@ -252,17 +113,58 @@ msgid "Logs"
 msgstr "Loggar"
 
 #: interface/templates/components/chat.pug:7
-#: interface/templates/skeleton/sidebar.pug:48
+#: interface/templates/skeleton/sidebar.pug:47
 msgid "Chat"
 msgstr "Chatt"
 
+#: interface/templates/components/home.pug:35
+msgid "current month"
+msgstr ""
+
+#: interface/templates/components/home.pug:45
+#, fuzzy
+#| msgid "time"
+msgid "all time"
+msgstr "tid"
+
+#: interface/templates/components/home.pug:55
+msgid "actions performed"
+msgstr ""
+
+#: interface/templates/components/home.pug:67
+msgid "roles"
+msgstr ""
+
+#: interface/templates/components/home.pug:77
+msgid "with roles"
+msgstr ""
+
+#: interface/templates/components/home.pug:87
+msgid "messages"
+msgstr ""
+
+#: interface/templates/components/home.pug:97
+msgid "our Discord"
+msgstr ""
+
+#: interface/templates/components/home.pug:101
+#: interface/templates/components/settings.pug:188
+#: interface/templates/skeleton/sidebar.pug:28
+msgid "Instances"
+msgstr "Instanser"
+
+#: interface/templates/components/home.pug:108
+#: interface/templates/skeleton/sidebar.pug:42
+msgid "Announcements"
+msgstr "Tillkännagivanden"
+
 #: interface/templates/components/mutegag.pug:7
-#: interface/templates/skeleton/sidebar.pug:39
+#: interface/templates/skeleton/sidebar.pug:38
 msgid "Mute/Gag"
 msgstr "Muta/Gag"
 
-#: interface/templates/components/player.pug:10
-#: interface/templates/skeleton/sidebar.pug:18
+#: interface/templates/components/player.pug:7
+#: interface/templates/skeleton/sidebar.pug:17
 msgid "Players"
 msgstr "Spelare"
 
@@ -282,8 +184,106 @@ msgstr "Spelläge"
 msgid "Game"
 msgstr "Spel"
 
-#: interface/templates/partials/ban/user.pug:29
-#: interface/templates/partials/mutegag/user.pug:46
+#: interface/templates/components/settings.pug:10
+#, fuzzy
+#| msgid "Username"
+msgid "Users"
+msgstr "Användarnamn"
+
+#: interface/templates/components/settings.pug:114
+msgid "API Tokens"
+msgstr ""
+
+#: interface/templates/components/settings.pug:122
+msgid "Simple"
+msgstr ""
+
+#: interface/templates/components/settings.pug:136
+msgid "Webhooks"
+msgstr ""
+
+#: interface/templates/components/settings.pug:142
+msgid "Public Page"
+msgstr ""
+
+#: interface/templates/components/settings.pug:148
+msgid "Import"
+msgstr ""
+
+#: interface/templates/components/settings.pug:152
+msgid "System"
+msgstr ""
+
+#: interface/templates/components/settings.pug:170
+#: interface/templates/skeleton/sidebar.pug:33
+msgid "Bans"
+msgstr "Bannlysningar"
+
+#: interface/templates/components/settings.pug:176
+#, fuzzy
+#| msgid "Mute/Gag"
+msgid "Mute & Gags"
+msgstr "Muta/Gag"
+
+#: interface/templates/components/settings.pug:182
+#: interface/templates/skeleton/sidebar.pug:22
+msgid "Admins"
+msgstr "Administratörer"
+
+#: interface/templates/components/settings.pug:208
+msgid "Utilities"
+msgstr ""
+
+#: interface/templates/components/settings.pug:220
+msgid "Token for Bot:"
+msgstr ""
+
+#: interface/templates/components/settings.pug:224
+msgid "Not connected:"
+msgstr ""
+
+#: interface/templates/components/settings.pug:225
+msgid "to mainframe"
+msgstr ""
+
+#: interface/templates/components/settings.pug:230
+msgid "Connect"
+msgstr ""
+
+#: interface/templates/components/settings.pug:231
+msgid "to mainframe:"
+msgstr ""
+
+#: interface/templates/components/settings.pug:244
+msgid "Alerts"
+msgstr ""
+
+#: interface/templates/components/settings.pug:251
+msgid "Severity"
+msgstr ""
+
+#: interface/templates/components/settings.pug:277
+msgid "Usage Report to Developer"
+msgstr ""
+
+#: interface/templates/components/settings.pug:279
+msgid "Why and what is the usage report?"
+msgstr ""
+
+#: interface/templates/components/settings.pug:290
+msgid "Changelogs:"
+msgstr ""
+
+#: interface/templates/components/settings.pug:295
+msgid "Unspecified:"
+msgstr ""
+
+#: interface/templates/components/settings.pug:300
+msgid "Requests:"
+msgstr ""
+
+#: interface/templates/partials/ban/user.pug:33
+#: interface/templates/partials/mutegag/user.pug:50
 #, python-format
 msgid "until %(until)s"
 msgstr "%(until)s till"
@@ -312,30 +312,174 @@ msgstr "Månad"
 msgid "time"
 msgstr "tid"
 
-#: interface/templates/skeleton/sidebar.pug:13
+#: interface/templates/partials/setting/group.pug:10
+#, python-format
+msgid "%(user_count)s user%(user_count|pluralize)s"
+msgstr ""
+
+#: interface/templates/partials/setting/group.pug:13
+#: interface/templates/partials/setting/token.pug:18
+#: interface/templates/partials/setting/user.pug:21
+#: interface/templates/partials/setting/user.pug:23
+#, python-format
+msgid "%(permission_percentage)s%% granted"
+msgstr ""
+
+#: interface/templates/skeleton/sidebar.pug:12
 msgid "Home"
 msgstr "Hem"
 
-#: interface/templates/skeleton/sidebar.pug:23
-msgid "Admins"
-msgstr "Administratörer"
-
-#: interface/templates/skeleton/sidebar.pug:28
+#: interface/templates/skeleton/sidebar.pug:27
 msgid "Servers"
 msgstr "Servrar"
 
-#: interface/templates/skeleton/sidebar.pug:29
-msgid "Instances"
-msgstr "Instanser"
-
-#: interface/templates/skeleton/sidebar.pug:34
-msgid "Bans"
-msgstr "Bannlysningar"
-
-#: interface/templates/skeleton/sidebar.pug:43
-msgid "Announcements"
-msgstr "Tillkännagivanden"
-
-#: interface/templates/skeleton/sidebar.pug:53
+#: interface/templates/skeleton/sidebar.pug:52
 msgid "Settings"
 msgstr "Inställningar"
+
+#: lib/validator.py:11
+msgid "document is missing"
+msgstr "Dokumentet saknas"
+
+#: lib/validator.py:12
+msgid "required field"
+msgstr "Obligatoriskt fält"
+
+#: lib/validator.py:13
+msgid "unknown field"
+msgstr "Okänt fält"
+
+#: lib/validator.py:14
+#, python-brace-format
+msgid "field '{0}' is required"
+msgstr "Fält '{0}' är obligatoriskt"
+
+#: lib/validator.py:15
+#, python-brace-format
+msgid "depends on these values: {constraint}"
+msgstr "Beror på följande värden: {constraint}"
+
+#: lib/validator.py:16
+#, python-brace-format
+msgid "{0} must not be present with '{field}'"
+msgstr "{0} kan inte innehålla fältet '{field}'"
+
+#: lib/validator.py:18
+#, python-brace-format
+msgid "'{0}' is not a document, must be a dict"
+msgstr "'{0}' är inte ett dokument, måste vara av variabeltypen 'dict'"
+
+#: lib/validator.py:19
+msgid "empty values not allowed"
+msgstr "Tomma värden är inte tillåtna"
+
+#: lib/validator.py:20
+msgid "value needs to be supplied"
+msgstr "Värde måste vara angett"
+
+#: lib/validator.py:21
+#, python-brace-format
+msgid "must be of {constraint} type"
+msgstr "Måste vara av variabeltyp {constraint}"
+
+#: lib/validator.py:22
+msgid "must be of dict type"
+msgstr "Måste vara av variabeltyp 'dict'"
+
+#: lib/validator.py:23
+#, python-brace-format
+msgid "length of list should be {constraint}, it is {0}"
+msgstr "Längden av listan måste vara {constraint}, den är {0}"
+
+#: lib/validator.py:24
+#, python-brace-format
+msgid "min length is {constraint}"
+msgstr "Minsta tillåtna längd är {constraint}"
+
+#: lib/validator.py:25
+#, python-brace-format
+msgid "max length is {constraint}"
+msgstr "Högsta tillåtna längd är {constraint}"
+
+#: lib/validator.py:27
+#, python-brace-format
+msgid "value does not match regex '{constraint}'"
+msgstr "Värde stämmer inte överens med regex '{constraint}'"
+
+#: lib/validator.py:28
+#, python-brace-format
+msgid "min value is {constraint}"
+msgstr "Minsta tillåtna värde är {constraint}"
+
+#: lib/validator.py:29
+#, python-brace-format
+msgid "max value is {constraint}"
+msgstr "Högsta tillåtna värdet är {constraint}"
+
+#: lib/validator.py:30 lib/validator.py:32
+#, python-brace-format
+msgid "unallowed value {value}"
+msgstr "Värde {value} är inte tillåtet"
+
+#: lib/validator.py:31 lib/validator.py:33
+#, python-brace-format
+msgid "unallowed values {0}"
+msgstr "Värdena {0} är inte tillåtna"
+
+#: lib/validator.py:35
+#, python-brace-format
+msgid "field '{field}' cannot be coerced: {0}"
+msgstr "Fält '{field}' kan inte bli påtvingat: {0}"
+
+#: lib/validator.py:36
+#, python-brace-format
+msgid "field '{field}' cannot be renamed: {0}"
+msgstr "Fält '{field}' kan inte bli omdöpt: {0}"
+
+#: lib/validator.py:37
+msgid "field is read-only"
+msgstr "Fält är i läs-endast läge"
+
+#: lib/validator.py:38
+#, python-brace-format
+msgid "default value for '{field}' cannot be set: {0}"
+msgstr "Standardvärde för '{field}' kan inte ändras: {0}"
+
+#: lib/validator.py:40
+#, python-brace-format
+msgid "mapping doesn't validate subschema: {0}"
+msgstr "Kartläggning kan inte validera subschema: {0}"
+
+#: lib/validator.py:41 lib/validator.py:44
+#, python-brace-format
+msgid "one or more sequence-items don't validate: {0}"
+msgstr "En eller fler sekvens-artikel kan inte valideras: {0}"
+
+#: lib/validator.py:42
+#, python-brace-format
+msgid "one or more keys of a mapping  don't validate: {0}"
+msgstr "En eller flera nycklar av kartläggning kan inte valideras: {0}"
+
+#: lib/validator.py:43
+#, python-brace-format
+msgid "one or more values in a mapping don't validate: {0}"
+msgstr "En eller flera värden i kartläggning kan inte valideras: {0}"
+
+#: lib/validator.py:46
+msgid "one or more definitions validate"
+msgstr "En eller flera definitioner kan valideras"
+
+#: lib/validator.py:47
+msgid "none or more than one rule validate"
+msgstr "Inga eller mer än en regel kan valideras"
+
+#: lib/validator.py:48
+msgid "no definitions validate"
+msgstr "Inga definitioner kan valideras"
+
+#: lib/validator.py:49
+msgid "one or more definitions don't validate"
+msgstr "En eller flera definitioner kan inte valideras"
+
+#~ msgid "enter will do it"
+#~ msgstr "Retur för att söka"

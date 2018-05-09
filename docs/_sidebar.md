@@ -1,4 +1,5 @@
 * [Getting Started with Hawthorne][1]
+* [Frequently Asked Questions][19]
 * **Toolchain**
 	* [Quickstart][2]
 	* [Usage][3]
@@ -12,11 +13,12 @@
 	* [Quickstart][7]
 	* [Usage][8]
 	* [Reference][9]
+
 * **Mainframe**
 	* [Quickstart][10]
 	* [Explanation][11]
 
-* **Services**
+* **Miscellaneous**
 	* [Hosting][12]
 	* [Integrations][13]
 	* [Partners][14]
@@ -44,4 +46,5 @@
 [15]:	/services/Docker%20Image.md
 [16]:	services/Manual%20Installation.md
 [17]:	changelog/v07.md
-[17]:	changelog/v08.md
+[18]:	changelog/v08.md
+[19]:	faq.md
