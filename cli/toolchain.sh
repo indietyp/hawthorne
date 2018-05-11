@@ -78,6 +78,7 @@ usage () {
   echo "\t${GREEN}help${NORMAL}   - What you see here."
   echo "\t${GREEN}update${NORMAL} - Update hawthorne to the current version."
   echo "\t${GREEN}report${NORMAL} - Report a problem to the maintainer"
+  echo "\t${GREEN}verify${NORMAL} - Report a problem to the maintainer"
   echo ""
 }
 
@@ -86,6 +87,23 @@ report () {
 
   cd $dir
   python3 manage.py report
+}
+
+verify () {
+  if git diff-index --quiet HEAD --; then
+    printf "${GREEN}You are good to go!${NORMAL}"
+  else
+    printf "${RED}You are not compatible with remote branch.${NORMAL}\n"
+
+    while true; do
+      read -p "Do you want to stash you custom changes? ${GREEN}(y)${NORMAL}es or ${RED}(n)${NORMAL}o: " yn
+      case $yn in
+          [Yy]* ) git stash; printf "${GREEN}You are now compatible with the remote branch again!${NORMAL}"; break;;
+          [Nn]* ) break;;
+          * ) echo "Please answer with the answers provided.";;
+      esac
+    done
+  fi
 }
 
 version () {
@@ -121,6 +139,10 @@ while [ "$1" != "" ]; do
             ;;
         v|version)
             version
+            exit 1
+            ;;
+        verify)
+            verify
             exit 1
             ;;
         *)

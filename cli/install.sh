@@ -236,8 +236,7 @@ install() {
     systemctl enable supervisord
 
     ln -s /usr/local/bin/python3 /usr/bin/python3
-    # export PATH="$PATH:/usr/local/bin"
-
+    /usr/sbin/setsebool -P httpd_can_network_connect 1
   else
     printf "Your package manager is currently not supported. Please contact the maintainer\n"
     printf "${BLUE}opensource@indietyp.com${NORMAL} or open an issue\n"

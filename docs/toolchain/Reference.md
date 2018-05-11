@@ -1,7 +1,7 @@
 # Reference
 This part of the documentation references to different commands that are implemented or will be implemented by the toolchain. Some of the functions are planned, but not realised and may nor have an ETA (estimated time of arrival)
 
-!> This document and the tools are a subject of change.
+!> This document and the tools are subject of change.
 
 # Help
 > **available** since v0.0
@@ -12,9 +12,9 @@ hawthorne help
 ```
 
 # Verify
-> **ETA** v0.8
+> **available** since v0.8.1
 
-Verifies the module and deletes or changes files if necessary. You need to confirm changes or use the flag `-y`. This makes sure that `hawthorne update` does not fail.
+Verifies the module and deletes or changes files if necessary. You have the choice if you want to stash your local changes. This makes sure that `hawthorne update` does not fail.
 
 ```bash
 hawthorne verify

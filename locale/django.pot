@@ -10,15 +10,12 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-08 21:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Yaroslav <djmorganfreeman@gmail.com>, 2018\n"
-"Language-Team: Russian (https://www.transifex.com/laevisug/teams/85920/ru/)\n"
-"Language: ru\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
-"%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: api/views/server.py:42 api/views/server.py:100
 #, python-brace-format
@@ -335,15 +332,15 @@ msgstr ""
 
 #: lib/validator.py:11
 msgid "document is missing"
-msgstr "документ отсутствует"
+msgstr ""
 
 #: lib/validator.py:12
 msgid "required field"
-msgstr "обязательное поле"
+msgstr ""
 
 #: lib/validator.py:13
 msgid "unknown field"
-msgstr "неизвестное поле"
+msgstr ""
 
 #: lib/validator.py:14
 #, python-brace-format
@@ -353,12 +350,12 @@ msgstr ""
 #: lib/validator.py:15
 #, python-brace-format
 msgid "depends on these values: {constraint}"
-msgstr "зависит от этих значений : {constraint}"
+msgstr ""
 
 #: lib/validator.py:16
 #, python-brace-format
 msgid "{0} must not be present with '{field}'"
-msgstr "{0} должно быть с '{field}'"
+msgstr ""
 
 #: lib/validator.py:18
 #, python-brace-format
@@ -367,11 +364,11 @@ msgstr ""
 
 #: lib/validator.py:19
 msgid "empty values not allowed"
-msgstr "пустые значения не допустимы"
+msgstr ""
 
 #: lib/validator.py:20
 msgid "value needs to be supplied"
-msgstr "значения должны быть указаны"
+msgstr ""
 
 #: lib/validator.py:21
 #, python-brace-format
@@ -434,12 +431,12 @@ msgstr ""
 
 #: lib/validator.py:37
 msgid "field is read-only"
-msgstr "Поля только для чтения"
+msgstr ""
 
 #: lib/validator.py:38
 #, python-brace-format
 msgid "default value for '{field}' cannot be set: {0}"
-msgstr "Значение по умолчанию для  '{field}' не может быть: {0}"
+msgstr ""
 
 #: lib/validator.py:40
 #, python-brace-format

@@ -12,6 +12,5 @@ The mainframe **only** saves data that is necessary and is the core application 
 - usage data (_this feature is not yet implemented_)
 - discord bot usage (_this feature is not yet implemented_)
 - local users
-	- This might sound contradictory, but because for sending emails a mail server is used and setting one up is a pain and quite some stuff can go wrong a centralised rate limited main server was created.
 
 [1]:	toolchain/reference.md

@@ -4,6 +4,8 @@ The main way hawthorne interacts with your game server is through a custom plugi
 
 ?> This system is currently tested with LGSM and the steam way and works with both.
 
+You can find the latest release under: https://github.com/laevis/hawthorne/releases
+
 ## Prerequisites
 - Sourcemod
 - Metamod
