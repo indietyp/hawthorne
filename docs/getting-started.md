@@ -12,19 +12,21 @@ sh -c "$(curl -fsSL raw.githubusercontent.com/laevis/hawthorne/master/cli/instal
 
 > To discover the different installation modes please refer to the `--help` argument.
 
+!> hawthorne also offers a [Docker][6] image for a more easy and managed installation.
+
 ## Web server configuration
 Currently hawthorne has been tested with _nginx_ and _Apache 2_, every server that is able to redirect traffic through a proxy should be able to serve hawthorne.
 
-> This is because hawthorne makes use of the [WSGI][4] standard.
+> Hawthorne makes use of the [WSGI][4] standard.
 
 !> Example configurations are provided [here][5].
 
-> **Nginx:** Configuration files are usually placed in `/etc/nginx/sites-avaiable`
+!> **Nginx:** Configuration files are usually placed in `/etc/nginx/sites-avaiable`
 
 ## Additional information
 Because there are several different environments out there, it is not possible to say that it will work on your machine reliably. It was tested on numerous machines and over and over tweaked. If there’s a problem with your configuration, let me know by creating a pull request on [GitHub][1] and/or by contacting [me][2] directly.
 
-?> The current only supported mode is _interactive_. A non-interactive mode is planned, but currently not a priority. This script has been tested on Debian 8+, Ubuntu 13+ as well as CentOS 7+. Windows and macOS are currently **not** supported by the installation script.
+> This script has been tested on Debian 8+, Ubuntu 13+ as well as CentOS 7+. Windows and macOS are currently **not** supported by the installation script.
 
 ## Toolchain integration
 Upon installing, the toolchain has been linked to your system over the commands `hawthorne` and `ht`. There are several commands integrated.
@@ -43,3 +45,4 @@ Upon installing, the toolchain has been linked to your system over the commands 
 [3]:	toolchain/Quickstart.md
 [4]:	https://en.wikipedia.org/wiki/Web_Server_Gateway_Interface
 [5]:	https://github.com/laevis/hawthorne/tree/master/cli/configs
+[6]: 	services/Docker%20Image.md

@@ -58,7 +58,7 @@ ht_log "1"
 // Default: "1"
 // Minimum: "0.000000"
 // Maximum: "1.000000"
-ht_mutegag "1"
+ht_punish "1"
 ```
 
 

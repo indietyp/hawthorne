@@ -14,7 +14,7 @@ hawthorne help
 # Verify
 > **available** since v0.8.1
 
-Verifies the module and deletes or changes files if necessary. You need to confirm changes or use the flag `-y`. This makes sure that `hawthorne update` does not fail.
+Verifies the module and deletes or changes files if necessary. You have the choice if you want to stash your local changes. This makes sure that `hawthorne update` does not fail.
 
 ```bash
 hawthorne verify

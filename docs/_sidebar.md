@@ -5,7 +5,7 @@
 	* [Usage][3]
 	* [Reference][4]
 
-* **Sourcemod**
+* **SourceMod**
 	* [Quickstart][5]
 	* [Configuration][6]
 
