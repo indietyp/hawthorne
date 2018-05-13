@@ -1,13 +1,20 @@
+- load interface_utils
+
 .row.pure-g
-  .column.icon.username.pure-u-7-24
-    span.flag-icon.flag-icon-de
-    img(src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/0f/0f7d37f4f53260811d53bfd7fcbfb77a48997093.jpg")
-    span indietyp
-  .column.icon.server.pure-u-7-24
-  .column.icon.online.pure-u-7-24
+  input.uuid.hidden(type="hidden", value=data.id)
+  input.server.hidden(type="hidden", value=server.id)
+  .column.icon.username.pure-u-10-24
+    .icon-container.flex.center
+      .img__circle__container
+        - with 'flags/'|add:data.country.code|lower|add:'.svg' as url
+          img(src='{% static url %}')
+      .img__circle__container
+        img(src="{{ data.avatar }}")
+    div.namespace= data.namespace
+  .column.icon.online.pure-u-10-24
     i(data-feather="clock")
-    span 3 minutes
-  .column.icon.username.pure-u-3-24
+    span= data.usetime|duration
+  .column.icon.username.pure-u-4-24
     .spacer
     .action
-      i.red(data-feather="slash")
+      i(onclick="window.api.submit('kick', this)", data-feather="slash")
