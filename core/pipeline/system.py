@@ -13,6 +13,7 @@ def get_user(backend, details, response, uid, user, *args, **kwargs):
   except User.DoesNotExist:
     if settings.DEMO:
       user = User.objects.create_user(username=information['steamid'])
+      user.namespace = information['personaname']
       user.is_active = True
       user.is_steam = True
       user.save()

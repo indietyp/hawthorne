@@ -33,7 +33,6 @@ services:
   hawthorne:
     image: "indietyp/hawthorne:latest"
     volumes:
-      - "/docker/sockets:/tmp/sockets"
       - "/docker/static/hawthorne:/local/static"
 
     ports:

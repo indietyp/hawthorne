@@ -13,7 +13,7 @@ from log.models import ServerChat
 def user(request, page, *args, **kwargs):
   # superuser = root
   obj = User.objects.annotate(rct=Count('roles')) \
-    .filter(is_active=True, rct__gt=0) \
+    .filter(rct__gt=0) \
     .annotate(server=F('roles__server__name')) \
     .annotate(role=F('roles__name')) \
     .annotate(role_id=F('roles__id')) \

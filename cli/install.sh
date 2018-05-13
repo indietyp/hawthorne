@@ -196,7 +196,6 @@ install() {
   elif hash yum >/dev/null 2>&1; then
     yum -y update
     yum -y install wget
-    # yum-nginx
     yum-builddep python
     curl -O https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz
     tar xf Python-3.6.4.tgz
@@ -210,7 +209,7 @@ install() {
 
     yum -y install epel-release
     yum -y update
-    yum -y install redis
+    yum -y install redis supervisor
     systemctl start redis
     systemctl enable redis
 
@@ -225,21 +224,12 @@ install() {
       yum -y install git
     }
 
-    pip3 install supervisor
-
-    mkdir -p /etc/supervisor/conf.d/
-    mkdir -p /etc/supervisord
-    cp $dir/cli/configs/supervisord.default.conf /etc/supervisord/supervisord.conf
-
-    wget https://gist.githubusercontent.com/mozillazg/6cbdcccbf46fe96a4edd/raw/2f5c6f5e88fc43e27b974f8a4c19088fc22b1bd5/supervisord.service -O /usr/lib/systemd/system/supervisord.service
-    systemctl start supervisord
-    systemctl enable supervisord
-
     ln -s /usr/local/bin/python3 /usr/bin/python3
     /usr/sbin/setsebool -P httpd_can_network_connect 1
   else
     printf "Your package manager is currently not supported. Please contact the maintainer\n"
     printf "${BLUE}opensource@indietyp.com${NORMAL} or open an issue\n"
+    exit 1
   fi
 
   # we need that total path boi
@@ -414,6 +404,17 @@ configure() {
 
   printf "${BOLD}Setting up supervisor...${NORMAL}\n"
   cp -rf $directory/cli/configs/gunicorn.default.conf.py $directory/gunicorn.conf.py
+
+  if hash yum >/dev/null 2>&1; then
+    mkdir -p /etc/supervisor/conf.d/
+    mkdir -p /etc/supervisord
+    cp $directory/cli/configs/supervisord.default.conf /etc/supervisord/supervisord.conf
+
+    wget https://gist.githubusercontent.com/mozillazg/6cbdcccbf46fe96a4edd/raw/2f5c6f5e88fc43e27b974f8a4c19088fc22b1bd5/supervisord.service -O /usr/lib/systemd/system/supervisord.service
+    systemctl start supervisord
+    systemctl enable supervisord
+  fi
+
   ln -sr $directory/supervisor.conf /etc/supervisor/conf.d/hawthorne.conf
 
   if [ $docker -eq 1 ]; then
