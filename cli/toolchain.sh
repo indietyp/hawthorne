@@ -109,7 +109,7 @@ verify () {
 
 version () {
   printf "${YELLOW}Checking your current version${NORMAL}"
-  git fetch --tags >/dev/null 2>&1
+  git fetch >/dev/null 2>&1
 
   upstream=$(git describe origin/master --abbrev=0 --tags --match="v*")
   local=$(git describe --abbrev=0 --tags --match="v*")
@@ -119,7 +119,6 @@ version () {
   else
     printf "\n\nYou are ${GREEN}up-to-date${NORMAL}!\n(btw you are on version ${BLUE}$local${NORMAL} right now.)\n"
   fi
-
 }
 
 while [ "$1" != "" ]; do
