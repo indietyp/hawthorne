@@ -75,10 +75,11 @@ usage () {
   echo "The hawthorne toolchain is an effort to make updating, reporting and fixing hawthorne easier."
   echo ""
   echo "Commands that are currently supported:"
-  echo "\t${GREEN}help${NORMAL}   - What you see here."
-  echo "\t${GREEN}update${NORMAL} - Update hawthorne to the current version."
-  echo "\t${GREEN}report${NORMAL} - Report a problem to the maintainer"
-  echo "\t${GREEN}verify${NORMAL} - Report a problem to the maintainer"
+  echo "    ${GREEN}help${NORMAL}    - What you see here."
+  echo "    ${GREEN}update${NORMAL}  - Update hawthorne to the current version."
+  echo "    ${GREEN}report${NORMAL}  - Report a problem to the maintainer"
+  echo "    ${GREEN}verify${NORMAL}  - Verifies the hawthorne installation to ensure a safe update process"
+  echo "    ${GREEN}version${NORMAL} - Checks if a new version for hawthorne is available."
   echo ""
 }
 
@@ -108,7 +109,7 @@ verify () {
 
 version () {
   printf "${YELLOW}Checking your current version${NORMAL}"
-  git fetch --tags >/dev/null 2>&1
+  git fetch >/dev/null 2>&1
 
   upstream=$(git describe origin/master --abbrev=0 --tags --match="v*")
   local=$(git describe --abbrev=0 --tags --match="v*")
@@ -118,7 +119,6 @@ version () {
   else
     printf "\n\nYou are ${GREEN}up-to-date${NORMAL}!\n(btw you are on version ${BLUE}$local${NORMAL} right now.)\n"
   fi
-
 }
 
 while [ "$1" != "" ]; do

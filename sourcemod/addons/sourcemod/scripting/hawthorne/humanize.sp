@@ -78,5 +78,5 @@ stock int DehumanizeTime(char[] time, int size) {
     SplitString(time, "m", minutes, sizeof(minutes));
     iminutes = (StringToInt(minutes)) * 60;
   }
-  return RoundToFloor(idays + ihours + iminutes);
+  return idays + ihours + iminutes;
 }

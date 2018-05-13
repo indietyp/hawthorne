@@ -6,6 +6,7 @@ import valve.rcon
 from core.lib.steam import populate
 from core.models import User
 from lib.base import RCONBase
+from log.models import UserOnlineTime
 
 
 class SourcemodPluginWrapper(RCONBase):
@@ -16,7 +17,7 @@ class SourcemodPluginWrapper(RCONBase):
     command = 'rcon_ban "{}" "{}" "{}" "{}"'.format(ban.user.username,
                                                     ban.created_by.namespace,
                                                     ban.reason,
-                                                    ban.length.total_seconds())
+                                                    ban.length.total_seconds() if ban.length else 0)
 
     try:
       response = self.run(command)[0]
@@ -39,7 +40,7 @@ class SourcemodPluginWrapper(RCONBase):
 
     command = 'rcon_mutegag "{}" "{}" "{}" "{}"'.format(mutegag.user.username,
                                                         mode,
-                                                        mutegag.length.total_seconds(),
+                                                        mutegag.length.total_seconds() if mutegag.length else 0,
                                                         mutegag.reason)
 
     try:
@@ -82,6 +83,8 @@ class SourcemodPluginWrapper(RCONBase):
 
         populate(user)
 
+      usetime = UserOnlineTime.objects.filter(user=user, disconnected=None)[0]
+      user.usetime = datetime.datetime.now() - usetime.connected
       users.append(user)
 
     response['players'] = users

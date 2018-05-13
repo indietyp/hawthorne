@@ -88,8 +88,9 @@ validation = {
                                             'coerce': utils.lower},
                                    'length': {'type': 'integer', 'required': True},
                                    'plugin': {'type': 'boolean', 'default': True}},
-                    'permission': ['core.add_mutegag']},
-            'DELETE': {'parameters': {'server': {'type': 'uuid', 'nullable': True, 'default': None}},
+                  'permission': ['core.add_mutegag']},
+            'DELETE': {'parameters': {'server': {'type': 'uuid', 'nullable': True, 'default': None},
+                                      'plugin': {'type': 'boolean', 'default': True}},
                        'permission': ['core.delete_mutegag']},
         }
     },

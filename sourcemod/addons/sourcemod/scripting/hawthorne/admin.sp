@@ -13,6 +13,8 @@ public Action OnClientPreAdminCheck(int client) {
 
 public void APIAdminCheck(HTTPResponse response, any value) {
   int client = value;
+  NotifyPostAdminCheck(client);
+  
   if (!APIValidator(response)) return;
 
   JSONObject output = view_as<JSONObject>(response.Data);
@@ -25,7 +27,7 @@ public void APIAdminCheck(HTTPResponse response, any value) {
 
   JSONObject role = view_as<JSONObject>(roles.Get(0));
   role.GetString("flags", flags, sizeof(flags));
- 
+
   int immunity = role.GetInt("immunity");
   int timeleft = role.GetInt("timeleft");
   if (timeleft == 0) timeleft = 604800;
@@ -48,8 +50,6 @@ public void APIAdminCheck(HTTPResponse response, any value) {
   if(admin_timer[client] != null) return;
   admin_timeleft[client] = timeleft;
   admin_timer[client] = CreateTimer(60.0, AdminVerificationTimer, client, TIMER_REPEAT);
-
-  NotifyPostAdminCheck(client);
 }
 
 public Action AdminVerificationTimer(Handle timer, int client) {

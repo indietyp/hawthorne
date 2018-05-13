@@ -25,7 +25,6 @@
   .item.action(onclick="window.vc.change('server')")
     i(data-feather="server")
     span {% trans "Servers" %}
-    //- span {% trans "Instances" %}
 
 - if perms.core.view_ban
   .item.action(onclick="window.vc.change('ban')")
@@ -41,7 +40,7 @@
   i(data-feather="phone-outgoing")
   span {% trans "Announcements" %}
 
-- if perms.core.view_chat
+- if perms.log.view_chat
   .item.action(onclick="window.vc.change('chat')")
     i(data-feather="message-circle")
     span {% trans "Chat" %}
