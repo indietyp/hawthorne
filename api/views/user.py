@@ -29,7 +29,7 @@ def list(request, validated=[], *args, **kwargs):
     limit = validated['limit']
     offset = validated['offset']
 
-    selected = User.objects.annotate(steamid=F('username'), name=F('namespace'), has_panel_access=F('is_staff')) \
+    selected = User.objects.annotate(steamid=F('username'), name=F('namespace'), has_panel_access=F('is_active')) \
       .values('id', 'name', 'steamid', 'profile', 'has_panel_access') \
       .filter(username__contains=validated['match'])
 
@@ -495,7 +495,7 @@ def mutegag(request, u=None, validated={}, *args, **kwargs):
       mutegag.save()
 
       if validated['plugin']:
-        SourcemodPluginWrapper(s).mutegag(mutegag)
+        SourcemodPluginWrapper(server).mutegag(mutegag)
 
   return 'successful, nothing to report'
 

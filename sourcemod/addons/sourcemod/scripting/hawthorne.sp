@@ -17,6 +17,10 @@ Credits to ...
 #include <regex>
 #include <geoip>
 
+#undef REQUIRE_PLUGIN
+#include <hextags>
+#define REQUIRE_PLUGIN
+
 
 #include "hawthorne/globals.sp"
 #include "hawthorne/convars.sp"
@@ -52,6 +56,8 @@ public void OnPluginStart() {
   AddCommandListener(OnPlayerChatMessage, "say");
   // AddCommandListener(OnPlayerChatMessage, "say_team");
   AddCommandListener(OnAddBanCommand, "sm_addban");
+
+  RegAdminCmd("sm_reloadadmins", OnClientReloadAdmins, ADMFLAG_CHAT);
 
   RegAdminCmd("sm_mute", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !mute <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
   RegAdminCmd("sm_unmute", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !unmute <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");

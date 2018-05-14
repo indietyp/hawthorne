@@ -1,6 +1,27 @@
-// TODO: TESTING
 public Action OnClientPreAdminCheck(int client) {
-  if (!MODULE_ADMIN.BoolValue || IsFakeClient(client) || StrEqual(SERVER, "")) return Plugin_Continue;
+  if (!MODULE_ADMIN_MERGE.BoolValue && AdminCheck(client)) {
+    NotifyPostAdminCheck(client);
+    return Plugin_Handled;
+  } else
+    return Plugin_Continue;
+}
+
+public void OnClientPostAdminFilter(int client) {
+  if (!MODULE_ADMIN_MERGE.BoolValue) return;
+
+  AdminCheck(client);
+}
+
+public Action OnClientReloadAdmins(int client, int args) {
+  for (int i = 1; i < MaxClients; i++) {
+    AdminCheck(i);
+  }
+
+  return Plugin_Handled;
+}
+
+bool AdminCheck(int client) {
+  if (!MODULE_ADMIN.BoolValue || IsFakeClient(client) || StrEqual(SERVER, "")) return false;
 
   char url[512] = "users/";
   StrCat(url, sizeof(url), CLIENTS[client]);
@@ -8,13 +29,12 @@ public Action OnClientPreAdminCheck(int client) {
   StrCat(url, sizeof(url), SERVER);
 
   httpClient.Get(url, APIAdminCheck, client);
-  return Plugin_Handled;
+  return true;
 }
 
-public void APIAdminCheck(HTTPResponse response, any value) {
+void APIAdminCheck(HTTPResponse response, any value) {
   int client = value;
-  NotifyPostAdminCheck(client);
-  
+
   if (!APIValidator(response)) return;
 
   JSONObject output = view_as<JSONObject>(response.Data);
@@ -37,15 +57,19 @@ public void APIAdminCheck(HTTPResponse response, any value) {
   delete roles;
   delete role;
 
-  AdminId admin = CreateAdmin();
-  for (int i = 0; i < strlen(flags); i++) {
-    AdminFlag flag;
-    if (FindFlagByChar(flags[i], flag))
-      admin.SetFlag(flag, true);
-  }
+  if (MODULE_ADMIN_MERGE.BoolValue) {
+    SetUserFlagBits(client, GetUserFlagBits(client) | ReadFlagString(flags));
+  } else {
+    AdminId admin = CreateAdmin();
+    for (int i = 0; i < strlen(flags); i++) {
+      AdminFlag flag;
+      if (FindFlagByChar(flags[i], flag))
+        admin.SetFlag(flag, true);
+    }
 
-  admin.ImmunityLevel = immunity;
-  SetUserAdmin(client, admin, true);
+    admin.ImmunityLevel = immunity;
+    SetUserAdmin(client, admin, true);
+  }
 
   if(admin_timer[client] != null) return;
   admin_timeleft[client] = timeleft;
@@ -59,6 +83,7 @@ public Action AdminVerificationTimer(Handle timer, int client) {
   if (admin_timeleft[client] <= 0) {
     OnClientPreAdminCheck(client);
 
+    CloseHandle(admin_timer[client]);
     admin_timer[client] = null;
     PrintToChat(client, "[HT] Hey! Your role just got updated!");
 
@@ -69,5 +94,6 @@ public Action AdminVerificationTimer(Handle timer, int client) {
 
 void Admins_OnClientDisconnect(int client) {
   // reset the timer
+  CloseHandle(admin_timer[client]);
   admin_timer[client] = null;
 }

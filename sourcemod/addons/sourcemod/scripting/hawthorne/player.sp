@@ -1,4 +1,4 @@
-void Players_OnClientAuthorized(int client) {
+public void OnClientAuthorized(int client) {
   CLIENTS[client] = "";
 
   if (StrEqual(SERVER, "") || IsFakeClient(client)) return;
@@ -22,10 +22,11 @@ void Players_OnClientAuthorized(int client) {
   payload.SetBool("connected", true);
 
   httpClient.Put("users", payload, OnClientIsInAPI, client);
+
   delete payload;
 }
 
-void Players_OnClientDisconnect(int client) {
+public void OnClientDisconnect(int client) {
   if (IsFakeClient(client)) return;
 
   JSONObject payload = new JSONObject();
@@ -40,7 +41,7 @@ void Players_OnClientDisconnect(int client) {
   delete payload;
 }
 
-public void OnClientIsInAPI(HTTPResponse response, any value) {
+void OnClientIsInAPI(HTTPResponse response, any value) {
   int client = value;
 
   if (!APIValidator(response) || StrEqual(SERVER, "")) return;

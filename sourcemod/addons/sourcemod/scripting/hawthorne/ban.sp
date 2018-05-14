@@ -1,12 +1,12 @@
 // TODO: TESTING
 void ClientBanKick(int client, char[] cAdminName, char[] cReason, char[] cTotalTime, char[] cTime) {
   char time[256];
-  
+
   if (StrEqual(cTotalTime, "permanent"))
     Format(time, sizeof(time), "This action is permanent");
   else
     Format(time, sizeof(time), "You have been banned for a total of %s, of those %s are left", cTotalTime, cTime);
-    
+
   KickClient(client,
   "You have been banned from this server %s\n "...
   "\nThis was caused by %s with the reason: '%s'."...

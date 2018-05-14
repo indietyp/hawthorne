@@ -5,7 +5,6 @@ void Hawthorne_OnPluginStart() {
 }
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max) {
-  Hawthorne_InitConVars();
   RegPluginLibrary("hawthorne");
   CreateNatives();
   return APLRes_Success;
@@ -26,19 +25,9 @@ public void OnClientPutInServer(int client) {
 
 public Action Event_Disconnect(Event event, const char[] name, bool dontBroadcast) {
   int client = GetClientOfUserId(event.GetInt("userid"));
-  if(client > 0 && !IsFakeClient(client)) {
+  if (client > 0 && !IsFakeClient(client)) {
     Admins_OnClientDisconnect(client);
   }
 
   return Plugin_Continue;
-}
-
-public void OnClientDisconnect(int client) {
-  Players_OnClientDisconnect(client);
-}
-
-public void OnClientAuthorized(int client, const char[] auth) {
-  if (IsFakeClient(client)) return;
-
-  Players_OnClientAuthorized(client);
 }
