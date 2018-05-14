@@ -6,7 +6,6 @@ Credits to ...
 */
 
 #pragma semicolon 1
-#define DEBUG
 #pragma newdecls required
 
 #include <sourcemod>
