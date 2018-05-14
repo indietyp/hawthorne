@@ -6,7 +6,6 @@ Credits to ...
 */
 
 #pragma semicolon 1
-#define DEBUG
 #pragma newdecls required
 
 #include <sourcemod>
@@ -112,7 +111,7 @@ public void APINoResponseCall(HTTPResponse response, any value) {
 
 bool APIValidator(HTTPResponse response) {
   if (response.Status != HTTPStatus_OK) {
-    LogError("[HT] API ERROR (request did not return 200 OK)");
+    LogError("[HT] API ERROR (request did not return 200 OK, but %d)", response.Status);
     return false;
   }
 
