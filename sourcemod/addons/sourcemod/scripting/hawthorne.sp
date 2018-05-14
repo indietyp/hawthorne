@@ -112,7 +112,7 @@ public void APINoResponseCall(HTTPResponse response, any value) {
 
 bool APIValidator(HTTPResponse response) {
   if (response.Status != HTTPStatus_OK) {
-    LogError("[HT] API ERROR (request did not return 200 OK)");
+    LogError("[HT] API ERROR (request did not return 200 OK, but %d)", response.Status);
     return false;
   }
 
