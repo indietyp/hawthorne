@@ -21,7 +21,7 @@ HTTPClient httpClient;
 
 char SERVER[37] = "",
      CLIENTS[MAXPLAYERS + 1][37];
-
+     
 int mutegag_timeleft[MAXPLAYERS + 1],
     admin_timeleft[MAXPLAYERS + 1];
 
@@ -57,3 +57,5 @@ char SERVER_HOSTNAME[512],
      PUNISHMENT_TIMES[PLATFORM_MAX_PATH];
 
 bool hextags;
+
+char tag[MAXPLAYERS + 1][128];

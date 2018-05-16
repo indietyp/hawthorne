@@ -16,7 +16,7 @@ public Action RConReload(int client, int args) {
   GetCmdArg(1, steamid, sizeof(steamid));
   int target = GetClientFromSteamID(steamid);
 
-  if (target != -1) OnClientPreAdminCheck(target);
+  if (target != -1) AdminCheck(target);
 
   return Plugin_Handled;
 }

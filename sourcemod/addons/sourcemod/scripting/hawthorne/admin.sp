@@ -1,15 +1,5 @@
-public Action OnClientPreAdminCheck(int client) {
-  if (!MODULE_ADMIN_MERGE.BoolValue && AdminCheck(client)) {
-    NotifyPostAdminCheck(client);
-    return Plugin_Handled;
-  } else
-    return Plugin_Continue;
-}
-
 public void OnClientPostAdminFilter(int client) {
-  if (!MODULE_ADMIN_MERGE.BoolValue) return;
-
-  AdminCheck(client);
+  	AdminCheck(client);
 }
 
 public Action OnClientReloadAdmins(int client, int args) {
@@ -36,18 +26,18 @@ void APIAdminCheck(HTTPResponse response, any value) {
   int client = value;
 
   if (!APIValidator(response)) return;
-
+	
   JSONObject output = view_as<JSONObject>(response.Data);
   JSONObject result = view_as<JSONObject>(output.Get("result"));
   JSONArray roles = view_as<JSONArray>(result.Get("roles"));
 
   if (roles.Length < 1) return;
 
-  char flags[25], name[128];
+  char flags[25];
 
   JSONObject role = view_as<JSONObject>(roles.Get(0));
   role.GetString("flags", flags, sizeof(flags));
-  role.GetString("name", name, sizeof(name));
+  role.GetString("name", tag[client], sizeof(tag[]));
 
   int immunity = role.GetInt("immunity");
   int timeleft = role.GetInt("timeleft");
@@ -58,10 +48,15 @@ void APIAdminCheck(HTTPResponse response, any value) {
   delete roles;
   delete role;
 
+  AdminId admin;
   if (MODULE_ADMIN_MERGE.BoolValue) {
     SetUserFlagBits(client, GetUserFlagBits(client) | ReadFlagString(flags));
+    admin = GetUserAdmin(client);
+    if (admin != INVALID_ADMIN_ID){
+  	 admin.ImmunityLevel = immunity;
+    }
   } else {
-    AdminId admin = CreateAdmin();
+    admin = CreateAdmin();
     for (int i = 0; i < strlen(flags); i++) {
       AdminFlag flag;
       if (FindFlagByChar(flags[i], flag))
@@ -73,21 +68,23 @@ void APIAdminCheck(HTTPResponse response, any value) {
   }
 
   if (MODULE_HEXTAGS.BoolValue && hextags) {
-    HexTags_SetClientTag(client, ScoreTag, name);
-    HexTags_SetClientTag(client, ChatTag, name);
+    HexTags_SetClientTag(client, ScoreTag, tag[client]);
+    HexTags_SetClientTag(client, ChatTag, tag[client]);
   }
 
   if(admin_timer[client] != null) return;
   admin_timeleft[client] = timeleft;
-  admin_timer[client] = CreateTimer(60.0, AdminVerificationTimer, client, TIMER_REPEAT);
+  admin_timer[client] = CreateTimer(60.0, AdminVerificationTimer, GetClientUserId(client), TIMER_REPEAT);
 }
 
-public Action AdminVerificationTimer(Handle timer, int client) {
-  if (client < 1) return Plugin_Stop;
+public Action AdminVerificationTimer(Handle timer, any userid) {
+  int client = GetClientOfUserId(userid);
+  if (!client)
+    return Plugin_Stop;
 
   admin_timeleft[client] -= 60;
   if (admin_timeleft[client] <= 0) {
-    OnClientPreAdminCheck(client);
+    AdminCheck(client);
 
     CloseHandle(admin_timer[client]);
     admin_timer[client] = null;
@@ -100,6 +97,12 @@ public Action AdminVerificationTimer(Handle timer, int client) {
 
 void Admins_OnClientDisconnect(int client) {
   // reset the timer
-  CloseHandle(admin_timer[client]);
+  admin_timer[client].Close();
   admin_timer[client] = null;
+}
+
+public void HexTags_OnTagsUpdated(int client)
+{
+  HexTags_SetClientTag(client, ScoreTag, tag[client]);
+  HexTags_SetClientTag(client, ChatTag, tag[client]);
 }
