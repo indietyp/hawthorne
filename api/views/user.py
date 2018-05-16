@@ -173,8 +173,9 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
 
     if user.is_superuser:
       # fake root role
-      output['roles'].append({'server': None,
-                              'flags': 'ABCDEFGHIJKLN'.lower(),
+      output['roles'].append({'name': 'root',
+                              'server': None,
+                              'flags': 'ABCDEFGHIJKLNMNOPQRSTUVXYZ'.lower(),
                               'immunity': 100,
                               'usetime': None,
                               'timeleft': None
@@ -192,7 +193,8 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
           mem.delete()
           continue
 
-      output['roles'].append({'server': None if mem.role.server is None else mem.role.server.id,
+      output['roles'].append({'name': mem.role.name,
+                              'server': None if not mem.role.server else mem.role.server.id,
                               'flags': mem.role.flags.convert().lower(),
                               'immunity': mem.role.immunity,
                               'usetime': usetime,

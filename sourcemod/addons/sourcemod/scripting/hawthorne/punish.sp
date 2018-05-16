@@ -121,7 +121,7 @@ public Action PunishCommandExecuted(int client, int args) {
 
     if (target == -1) {
       ReplyToCommand(client, "Could not find the user requested.");
-      return Plugin_Handled;
+      return Plugin_Stop;
     }
 
     punish_selected_player[client] = target;
@@ -132,7 +132,7 @@ public Action PunishCommandExecuted(int client, int args) {
     players.Display(client, 20);
   }
 
-  return Plugin_Handled;
+  return Plugin_Stop;
 }
 
 public int MenuHandlerPlayer(Menu menu, MenuAction action, int client, int param) {
@@ -320,9 +320,9 @@ public int PunishExecution(int client) {
 
   } else if (punish_selected_conflict[client] == CONFLICT_OVERWRITE) {
     httpClient.Put(url, payload_put, APINoResponseCall);
-    
+
     StrCat(url, sizeof(url), "?server=");
-    StrCat(url, sizeof(url), SERVER);    
+    StrCat(url, sizeof(url), SERVER);
     httpClient.Delete(url, APINoResponseCall);
   } else if (punish_selected_conflict[client] == CONFLICT_EXTEND) {
     StrCat(url, sizeof(url), "?resolved=true&server=");
@@ -454,7 +454,7 @@ void InitiatePunishment(int client, int action, char[] reason, int timeleft) {
   } else {
     char humanized_time[200];
     HumanizeTime(timeleft, humanized_time);
-    
+
     PrintToChat(client, "[HT] --------------------------");
     PrintToChat(client, "[HT] Note:  You are being %s.", name);
     PrintToChat(client, "[HT] Reason: %s", reason);

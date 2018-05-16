@@ -31,3 +31,7 @@ public Action Event_Disconnect(Event event, const char[] name, bool dontBroadcas
 
   return Plugin_Continue;
 }
+
+public void OnAllPluginsLoaded() {
+  hextags = LibraryExists("hextags");
+}

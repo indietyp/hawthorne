@@ -36,6 +36,14 @@ void Hawthorne_InitConVars() {
                                    true, 0.0,
                                    true, 1.0);
 
+  MODULE_HEXTAGS    = CreateConVar("ht_hextags",
+                                   "1",
+                                   "Enables hextag support",
+                                   FCVAR_NONE,
+                                   true, 0.0,
+                                   true, 1.0);
+
+
   MODULE_MUTEGAG_GLOBAL   = CreateConVar("ht_global_mutegag",
                                          "0",
                                          "Toggle of serverwide mute & gags",
@@ -56,6 +64,7 @@ void Hawthorne_InitConVars() {
                                          FCVAR_NONE,
                                          true, 0.0,
                                          true, 1.0);
+
 
   AutoExecConfig(true, "hawthorne");
 }

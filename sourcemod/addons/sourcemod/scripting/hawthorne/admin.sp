@@ -43,10 +43,11 @@ void APIAdminCheck(HTTPResponse response, any value) {
 
   if (roles.Length < 1) return;
 
-  char flags[25];
+  char flags[25], name[128];
 
   JSONObject role = view_as<JSONObject>(roles.Get(0));
   role.GetString("flags", flags, sizeof(flags));
+  role.GetString("name", name, sizeof(name));
 
   int immunity = role.GetInt("immunity");
   int timeleft = role.GetInt("timeleft");
@@ -69,6 +70,11 @@ void APIAdminCheck(HTTPResponse response, any value) {
 
     admin.ImmunityLevel = immunity;
     SetUserAdmin(client, admin, true);
+  }
+
+  if (MODULE_HEXTAGS.BoolValue && hextags) {
+    HexTags_SetClientTag(client, ScoreTag, name);
+    HexTags_SetClientTag(client, ChatTag, name);
   }
 
   if(admin_timer[client] != null) return;

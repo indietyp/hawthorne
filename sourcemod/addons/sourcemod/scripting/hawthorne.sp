@@ -42,21 +42,20 @@ public Plugin myinfo = {
   name = "hawthorne",
   author = "indietyp",
   description = "Admin plugin for the integration into the hawthorne gameserver panel, for managing multiple servers from an web interface.",
-  version = "0.8.0",
+  version = "0.8.3",
   url = "hawthorne.in"
 };
 
 
 public void OnPluginStart() {
-  // Events
   HookEvent("player_disconnect",  Event_Disconnect, EventHookMode_Pre);
 
-  // Listeners
   AddCommandListener(OnPlayerChatMessage, "say");
-  // AddCommandListener(OnPlayerChatMessage, "say_team");
+  AddCommandListener(OnPlayerChatMessage, "say_team");
+  
   AddCommandListener(OnAddBanCommand, "sm_addban");
 
-  RegAdminCmd("sm_reloadadmins", OnClientReloadAdmins, ADMFLAG_CHAT);
+  RegAdminCmd("sm_reloadadmins", OnClientReloadAdmins, ADMFLAG_CONFIG);
 
   RegAdminCmd("sm_mute", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !mute <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
   RegAdminCmd("sm_unmute", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !unmute <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
