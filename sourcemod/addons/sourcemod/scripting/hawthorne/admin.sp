@@ -26,7 +26,7 @@ void APIAdminCheck(HTTPResponse response, any value) {
   int client = value;
 
   if (!APIValidator(response)) return;
-	
+
   JSONObject output = view_as<JSONObject>(response.Data);
   JSONObject result = view_as<JSONObject>(output.Get("result"));
   JSONArray roles = view_as<JSONArray>(result.Get("roles"));
