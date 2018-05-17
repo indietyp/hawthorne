@@ -9,7 +9,7 @@ public Action OnPlayerChatMessage(int client, const char[] command, int argc) {
   strcopy(message, sizeof(message), message[1]);
   message[strlen(message) - 1] = 0;
 
-  if (MODULE_LOG.IntValue == 0 || StrEqual(SERVER, "")) return Plugin_Continue;
+  if (!MODULE_LOG.BoolValue || StrEqual(SERVER, "")) return Plugin_Continue;
   if (StrEqual(CLIENTS[client], "")) {
     LogError("[HT] Failed to send message to the API of the MANAGER, the client UUID was not fetched.");
     return Plugin_Continue;
@@ -43,8 +43,8 @@ public Action OnClientCommand(int client, int args) {
   // check if the client is an actual person and online
   if (!IsClientInGame(client) || IsFakeClient(client)) return Plugin_Continue;
   if (client < 1) return Plugin_Continue;
-  if (MODULE_LOG.IntValue == 0 || StrEqual(SERVER, "")) return Plugin_Continue;
-  if(StrContains(command, "sm_") == -1 || !IsAdminCMD(command)) return Plugin_Continue;
+  if (!MODULE_LOG.BoolValue || StrEqual(SERVER, "")) return Plugin_Continue;
+  if (StrContains(command, "sm_") == -1 || !IsAdminCMD(command)) return Plugin_Continue;
 
   // formatting the command to include the argument used
   char arguments[512];
@@ -57,7 +57,6 @@ public Action OnClientCommand(int client, int args) {
 }
 
 bool IsAdminCMD(char[] command) {
-
   // we are excluding VIP privileges
   AdminId admin = CreateAdmin();
   admin.SetFlag(Admin_Custom1, true);

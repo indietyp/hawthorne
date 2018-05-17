@@ -29,7 +29,7 @@ def list(request, validated=[], *args, **kwargs):
     limit = validated['limit']
     offset = validated['offset']
 
-    selected = User.objects.annotate(steamid=F('username'), name=F('namespace'), has_panel_access=F('is_staff')) \
+    selected = User.objects.annotate(steamid=F('username'), name=F('namespace'), has_panel_access=F('is_active')) \
       .values('id', 'name', 'steamid', 'profile', 'has_panel_access') \
       .filter(username__contains=validated['match'])
 
@@ -173,8 +173,9 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
 
     if user.is_superuser:
       # fake root role
-      output['roles'].append({'server': None,
-                              'flags': 'ABCDEFGHIJKLN'.lower(),
+      output['roles'].append({'name': 'root',
+                              'server': None,
+                              'flags': 'ABCDEFGHIJKLNMNOPQRSTUVXYZ'.lower(),
                               'immunity': 100,
                               'usetime': None,
                               'timeleft': None
@@ -192,7 +193,8 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
           mem.delete()
           continue
 
-      output['roles'].append({'server': None if mem.role.server is None else mem.role.server.id,
+      output['roles'].append({'name': mem.role.name,
+                              'server': None if not mem.role.server else mem.role.server.id,
                               'flags': mem.role.flags.convert().lower(),
                               'immunity': mem.role.immunity,
                               'usetime': usetime,
@@ -495,7 +497,7 @@ def mutegag(request, u=None, validated={}, *args, **kwargs):
       mutegag.save()
 
       if validated['plugin']:
-        SourcemodPluginWrapper(s).mutegag(mutegag)
+        SourcemodPluginWrapper(server).mutegag(mutegag)
 
   return 'successful, nothing to report'
 

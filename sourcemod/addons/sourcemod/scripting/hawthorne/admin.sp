@@ -1,6 +1,17 @@
-// TODO: TESTING
-public Action OnClientPreAdminCheck(int client) {
-  if (!MODULE_ADMIN.BoolValue || IsFakeClient(client) || StrEqual(SERVER, "")) return Plugin_Continue;
+public void OnClientPostAdminFilter(int client) {
+  	AdminCheck(client);
+}
+
+public Action OnClientReloadAdmins(int client, int args) {
+  for (int i = 1; i < MaxClients; i++) {
+    AdminCheck(i);
+  }
+
+  return Plugin_Handled;
+}
+
+bool AdminCheck(int client) {
+  if (!MODULE_ADMIN.BoolValue || IsFakeClient(client) || StrEqual(SERVER, "")) return false;
 
   char url[512] = "users/";
   StrCat(url, sizeof(url), CLIENTS[client]);
@@ -8,13 +19,12 @@ public Action OnClientPreAdminCheck(int client) {
   StrCat(url, sizeof(url), SERVER);
 
   httpClient.Get(url, APIAdminCheck, client);
-  return Plugin_Handled;
+  return true;
 }
 
-public void APIAdminCheck(HTTPResponse response, any value) {
+void APIAdminCheck(HTTPResponse response, any value) {
   int client = value;
-  NotifyPostAdminCheck(client);
-  
+
   if (!APIValidator(response)) return;
 
   JSONObject output = view_as<JSONObject>(response.Data);
@@ -27,6 +37,7 @@ public void APIAdminCheck(HTTPResponse response, any value) {
 
   JSONObject role = view_as<JSONObject>(roles.Get(0));
   role.GetString("flags", flags, sizeof(flags));
+  role.GetString("name", tag[client], sizeof(tag[]));
 
   int immunity = role.GetInt("immunity");
   int timeleft = role.GetInt("timeleft");
@@ -37,28 +48,45 @@ public void APIAdminCheck(HTTPResponse response, any value) {
   delete roles;
   delete role;
 
-  AdminId admin = CreateAdmin();
-  for (int i = 0; i < strlen(flags); i++) {
-    AdminFlag flag;
-    if (FindFlagByChar(flags[i], flag))
-      admin.SetFlag(flag, true);
+  AdminId admin;
+  if (MODULE_ADMIN_MERGE.BoolValue) {
+    SetUserFlagBits(client, GetUserFlagBits(client) | ReadFlagString(flags));
+    admin = GetUserAdmin(client);
+    if (admin != INVALID_ADMIN_ID){
+  	 admin.ImmunityLevel = immunity;
+    }
+  } else {
+    admin = CreateAdmin();
+    for (int i = 0; i < strlen(flags); i++) {
+      AdminFlag flag;
+      if (FindFlagByChar(flags[i], flag))
+        admin.SetFlag(flag, true);
+    }
+
+    admin.ImmunityLevel = immunity;
+    SetUserAdmin(client, admin, true);
   }
 
-  admin.ImmunityLevel = immunity;
-  SetUserAdmin(client, admin, true);
+  if (MODULE_HEXTAGS.BoolValue && hextags) {
+    HexTags_SetClientTag(client, ScoreTag, tag[client]);
+    HexTags_SetClientTag(client, ChatTag, tag[client]);
+  }
 
   if(admin_timer[client] != null) return;
   admin_timeleft[client] = timeleft;
-  admin_timer[client] = CreateTimer(60.0, AdminVerificationTimer, client, TIMER_REPEAT);
+  admin_timer[client] = CreateTimer(60.0, AdminVerificationTimer, GetClientUserId(client), TIMER_REPEAT);
 }
 
-public Action AdminVerificationTimer(Handle timer, int client) {
-  if (client < 1) return Plugin_Stop;
+public Action AdminVerificationTimer(Handle timer, any userid) {
+  int client = GetClientOfUserId(userid);
+  if (!client)
+    return Plugin_Stop;
 
   admin_timeleft[client] -= 60;
   if (admin_timeleft[client] <= 0) {
-    OnClientPreAdminCheck(client);
+    AdminCheck(client);
 
+    CloseHandle(admin_timer[client]);
     admin_timer[client] = null;
     PrintToChat(client, "[HT] Hey! Your role just got updated!");
 
@@ -69,5 +97,12 @@ public Action AdminVerificationTimer(Handle timer, int client) {
 
 void Admins_OnClientDisconnect(int client) {
   // reset the timer
+  admin_timer[client].Close();
   admin_timer[client] = null;
+}
+
+public void HexTags_OnTagsUpdated(int client)
+{
+  HexTags_SetClientTag(client, ScoreTag, tag[client]);
+  HexTags_SetClientTag(client, ChatTag, tag[client]);
 }

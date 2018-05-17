@@ -19,7 +19,14 @@ from log.models import UserOnlineTime, ServerChat
 
 
 def login(request):
-  return render(request, 'skeleton/login.pug', {})
+  if request.method == "GET":
+    return render(request, 'skeleton/login.pug', {})
+  else:
+    payload = json.loads(request.body)
+    if authenticate(request, payload["username"], payload["password"]):
+      return JsonResponse({"success": True})
+
+    return JsonResponse({"success": False, "reason": "credentials incorrect or unkown"})
 
 
 def setup(request, u=None):

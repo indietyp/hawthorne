@@ -108,104 +108,56 @@ class Token(BaseModel):
 
 
 class ServerPermission(BaseModel):
-  can_reservation = models.BooleanField(default=False)
-  can_generic = models.BooleanField(default=False)
-  can_kick = models.BooleanField(default=False)
-  can_ban = models.BooleanField(default=False)
-  can_slay = models.BooleanField(default=False)
-  can_map = models.BooleanField(default=False)
-  can_config = models.BooleanField(default=False)
-  can_cvar = models.BooleanField(default=False)
-  can_chat = models.BooleanField(default=False)
-  can_vote = models.BooleanField(default=False)
-  can_password = models.BooleanField(default=False)
-  can_rcon = models.BooleanField(default=False)
-  can_cheat = models.BooleanField(default=False)
+  can_reservation = models.BooleanField(default=False, help_text='A')
+  can_generic     = models.BooleanField(default=False, help_text='B')
+  can_kick        = models.BooleanField(default=False, help_text='C')
+  can_ban         = models.BooleanField(default=False, help_text='DE')
+  can_slay        = models.BooleanField(default=False, help_text='F')
+  can_map         = models.BooleanField(default=False, help_text='G')
+  can_config      = models.BooleanField(default=False, help_text='H')
+  can_cvar        = models.BooleanField(default=False, help_text='I')
+  can_chat        = models.BooleanField(default=False, help_text='J')
+  can_vote        = models.BooleanField(default=False, help_text='K')
+  can_password    = models.BooleanField(default=False, help_text='L')
+  can_rcon        = models.BooleanField(default=False, help_text='M')
+  can_cheat       = models.BooleanField(default=False, help_text='N')
+
+  can_custom_1    = models.BooleanField(default=False, help_text='O')
+  can_custom_2    = models.BooleanField(default=False, help_text='P')
+  can_custom_3    = models.BooleanField(default=False, help_text='Q')
+  can_custom_4    = models.BooleanField(default=False, help_text='R')
+  can_custom_5    = models.BooleanField(default=False, help_text='S')
+  can_custom_6    = models.BooleanField(default=False, help_text='T')
 
   class Meta:
     default_permissions = ()
     permissions = ()
 
   def convert(self, conv=None):
-    if conv is None:
-      if 'servergroup' in self.__dict__.keys() and self.servergroup.is_supergroup:
-        return 'ABCDEFGHIJKLMN'
+    fields = {}
+    tmp = self._meta.get_fields()
+    for field in tmp:
+      fields[field.name] = field
 
+    if not conv:
+      if 'servergroup' in self.__dict__.keys() and self.servergroup.is_supergroup:
+        return 'Z'
       flags = []
-      if self.can_reservation:
-        flags.append('A')
-      if self.can_generic:
-        flags.append('B')
-      if self.can_kick:
-        flags.append('C')
-      if self.can_ban:
-        flags.append('D')
-        flags.append('E')
-      if self.can_slay:
-        flags.append('F')
-      if self.can_map:
-        flags.append('G')
-      if self.can_cvar:
-        flags.append('H')
-      if self.can_config:
-        flags.append('I')
-      if self.can_chat:
-        flags.append('J')
-      if self.can_vote:
-        flags.append('K')
-      if self.can_password:
-        flags.append('L')
-      if self.can_rcon:
-        flags.append('M')
-      if self.can_cheat:
-        flags.append('N')
+
+      for field, value in self.__dict__.items():
+        if field in fields and value is True:
+          flags.append(fields[field].help_text)
 
       return ''.join(flags)
     else:
+      conv = ''.join(sorted(set(conv.upper())))
       if 'servergroup' in self.__dict__.keys() and self.servergroup.is_supergroup:
-        conv = 'ABCDEFGHIJKLMN'
+        conv = 'ABCDEFGHIJKLMNOPQRST'
 
-      self.can_reservation = False
-      self.can_generic = False
-      self.can_kick = False
-      self.can_ban = False
-      self.can_slay = False
-      self.can_map = False
-      self.can_cvar = False
-      self.can_config = False
-      self.can_chat = False
-      self.can_vote = False
-      self.can_password = False
-      self.can_rcon = False
-      self.can_cheat = False
-
-      for char in conv:
-        if char in ['A']:
-          self.can_reservation = True
-        if char in ['B']:
-          self.can_generic = True
-        if char in ['C']:
-          self.can_kick = True
-        if char in ['D', 'E']:
-          self.can_ban = True
-        if char in ['F']:
-          self.can_slay = True
-        if char in ['G']:
-          self.can_map = True
-        if char in ['H']:
-          self.can_cvar = True
-        if char in ['I']:
-          self.can_config = True
-        if char in ['J']:
-          self.can_chat = True
-        if char in ['K']:
-          self.can_vote = True
-        if char in ['L']:
-          self.can_password = True
-        if char in ['M']:
-          self.can_rcon = True
-        if char in ['N']:
-          self.can_cheat = True
+      for field in [x for x in self._meta.get_fields() if x.name.startswith('can')]:
+        exec("self.{} = False".format(field.name))
+        if field.help_text in conv:
+          exec("self.{} = True".format(field.name))
 
       return self
 
@@ -309,7 +261,7 @@ class Mutegag(BaseModel):
       ('add_mutegag_gag', 'Can add gag'),
     ]
 
-    unique_together = ('user', 'server')
+    # unique_together = ('user', 'server')
 
   def __str__(self):
     return "{} - {}".format(self.user, self.server)

@@ -6,7 +6,6 @@ Credits to ...
 */
 
 #pragma semicolon 1
-#define DEBUG
 #pragma newdecls required
 
 #include <sourcemod>
@@ -16,6 +15,10 @@ Credits to ...
 #include <ripext>
 #include <regex>
 #include <geoip>
+
+#undef REQUIRE_PLUGIN
+#include <hextags>
+#define REQUIRE_PLUGIN
 
 
 #include "hawthorne/globals.sp"
@@ -27,6 +30,7 @@ Credits to ...
 #include "hawthorne/admin.sp"
 #include "hawthorne/punish.sp"
 #include "hawthorne/rcon.sp"
+// #include "hawthorne/autoban.sp"
 
 #include "hawthorne/natives.sp"
 #include "hawthorne/utils.sp"
@@ -39,19 +43,20 @@ public Plugin myinfo = {
   name = "hawthorne",
   author = "indietyp",
   description = "Admin plugin for the integration into the hawthorne gameserver panel, for managing multiple servers from an web interface.",
-  version = "0.8.0",
+  version = "0.8.3",
   url = "hawthorne.in"
 };
 
 
 public void OnPluginStart() {
-  // Events
   HookEvent("player_disconnect",  Event_Disconnect, EventHookMode_Pre);
 
-  // Listeners
   AddCommandListener(OnPlayerChatMessage, "say");
-  // AddCommandListener(OnPlayerChatMessage, "say_team");
+  AddCommandListener(OnPlayerChatMessage, "say_team");
+
   AddCommandListener(OnAddBanCommand, "sm_addban");
+
+  RegAdminCmd("sm_reloadadmins", OnClientReloadAdmins, ADMFLAG_CONFIG);
 
   RegAdminCmd("sm_mute", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !mute <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
   RegAdminCmd("sm_unmute", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !unmute <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
@@ -112,7 +117,7 @@ public void APINoResponseCall(HTTPResponse response, any value) {
 
 bool APIValidator(HTTPResponse response) {
   if (response.Status != HTTPStatus_OK) {
-    LogError("[HT] API ERROR (request did not return 200 OK)");
+    LogError("[HT] API ERROR (request did not return 200 OK, but %d)", response.Status);
     return false;
   }
 

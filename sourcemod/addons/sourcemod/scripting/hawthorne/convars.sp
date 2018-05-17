@@ -22,7 +22,7 @@ void Hawthorne_InitConVars() {
                                    FCVAR_NONE,
                                    true, 0.0,
                                    true, 1.0);
-  MODULE_PUNISH    = CreateConVar("ht_punish",
+  MODULE_PUNISH     = CreateConVar("ht_punish",
                                    "1",
                                    "Toggle the internal mute and gag module",
                                    FCVAR_NONE,
@@ -35,6 +35,14 @@ void Hawthorne_InitConVars() {
                                    FCVAR_NONE,
                                    true, 0.0,
                                    true, 1.0);
+
+  MODULE_HEXTAGS    = CreateConVar("ht_hextags",
+                                   "1",
+                                   "Enables hextag support",
+                                   FCVAR_NONE,
+                                   true, 0.0,
+                                   true, 1.0);
+
 
   MODULE_MUTEGAG_GLOBAL   = CreateConVar("ht_global_mutegag",
                                          "0",
@@ -49,5 +57,20 @@ void Hawthorne_InitConVars() {
                                          FCVAR_NONE,
                                          true, 0.0,
                                          true, 1.0);
+
+  MODULE_ADMIN_MERGE      = CreateConVar("ht_admin_merge",
+                                         "0",
+                                         "Toggle merging with existing modules",
+                                         FCVAR_NONE,
+                                         true, 0.0,
+                                         true, 1.0);
+
+  MODULE_AUTOBAN = CreateConVar("ht_autoban_disable",
+                      "1",
+                      "Enable automatic bans for suspected alternate accounts from already banned users.",
+                      FCVAR_NONE,
+                      true, 0.0,
+                      true, 1.0);
+
   AutoExecConfig(true, "hawthorne");
 }

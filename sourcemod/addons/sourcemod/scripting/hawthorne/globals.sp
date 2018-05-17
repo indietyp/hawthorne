@@ -21,7 +21,7 @@ HTTPClient httpClient;
 
 char SERVER[37] = "",
      CLIENTS[MAXPLAYERS + 1][37];
-
+     
 int mutegag_timeleft[MAXPLAYERS + 1],
     admin_timeleft[MAXPLAYERS + 1];
 
@@ -40,10 +40,13 @@ ConVar MANAGER,
        APITOKEN,
        MODULE_BAN,
        MODULE_ADMIN,
+       MODULE_ADMIN_MERGE,
        MODULE_PUNISH,
        MODULE_LOG,
        MODULE_MUTEGAG_GLOBAL,
-       MODULE_BAN_GLOBAL;
+       MODULE_AUTOBAN,
+       MODULE_BAN_GLOBAL,
+       MODULE_HEXTAGS;
 
 char endpoint[512];
 
@@ -53,3 +56,9 @@ char SERVER_HOSTNAME[512],
 
      SILENCE_REASONS[PLATFORM_MAX_PATH],
      PUNISHMENT_TIMES[PLATFORM_MAX_PATH];
+
+bool hextags;
+
+char tag[MAXPLAYERS + 1][128];
+
+bool MOTD_SEEN[MAXPLAYERS + 1] = false;
