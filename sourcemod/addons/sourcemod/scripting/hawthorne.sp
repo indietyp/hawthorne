@@ -30,7 +30,7 @@ Credits to ...
 #include "hawthorne/admin.sp"
 #include "hawthorne/punish.sp"
 #include "hawthorne/rcon.sp"
-#include "hawthorne/autoban.sp"
+// #include "hawthorne/autoban.sp"
 
 #include "hawthorne/natives.sp"
 #include "hawthorne/utils.sp"
@@ -53,7 +53,7 @@ public void OnPluginStart() {
 
   AddCommandListener(OnPlayerChatMessage, "say");
   AddCommandListener(OnPlayerChatMessage, "say_team");
-  
+
   AddCommandListener(OnAddBanCommand, "sm_addban");
 
   RegAdminCmd("sm_reloadadmins", OnClientReloadAdmins, ADMFLAG_CONFIG);

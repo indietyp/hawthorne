@@ -139,10 +139,11 @@ class Importer:
       b.user = user
       b.server = servers[raw['sid']] if raw['sid'] != 0 else None
       b.created_by = users[raw['aid']]
+      m.created_at = datetime.datetime.fromtimestamp(raw['created'])
       b.reason = raw['reason']
       b.length = datetime.timedelta(seconds=raw['length']) if raw['length'] != 0 else None
       b.resolved = False
-      if raw['created'] + raw['length'] < self.now.timestamp():
+      if raw['created'] + raw['length'] < self.now.timestamp() and raw['length'] != 0:
         b.resolved = True
 
       if raw['RemovedOn']:
@@ -179,6 +180,7 @@ class Importer:
       m.user = user
       m.server = servers[raw['sid']] if raw['sid'] != 0 else None
       m.created_by = users[raw['aid']]
+      m.created_at = datetime.datetime.fromtimestamp(raw['created'])
       m.reason = raw['reason']
       m.length = datetime.timedelta(seconds=raw['length']) if raw['length'] != 0 else None
       m.type = 'MU' if raw['type'] == 1 else 'GA'
@@ -273,10 +275,14 @@ class Importer:
     result = r.fetch_row(maxrows=0, how=1)
 
     for raw in result:
+      if raw['aid'] not in users or raw['pid'] not in users or raw['sid'] not in servers:
+        continue
+
       m = Mutegag()
       m.user = users[raw["pid"]]
       m.server = servers[raw['sid']] if raw['sid'] != 0 else None
       m.created_by = users[raw['aid']]
+      m.created_at = datetime.datetime.fromtimestamp(raw['time'])
       m.reason = raw['reason']
       m.length = datetime.timedelta(seconds=raw['length'] * 60) if raw['length'] != 0 else None
       m.type = 'MU' if raw['type'] == 1 else 'GA'
@@ -285,10 +291,31 @@ class Importer:
       if raw['time'] + raw['length'] < self.now.timestamp() and raw['length'] != 0:
         m.resolved = True
 
-      if raw['RemovedOn']:
+      if raw['unbanned'] == 1:
         m.resolved = True
       m.save()
 
     self.conn.query("""SELECT * FROM bp_bans""")
+    r = self.conn.store_result()
+    result = r.fetch_row(maxrows=0, how=1)
+
+    for raw in result:
+      if raw['aid'] not in users or raw['pid'] not in users or raw['sid'] not in servers:
+        continue
+
+      b = Ban()
+      b.user = users[raw["pid"]]
+      b.server = servers[raw['sid']] if raw['sid'] != 0 else None
+      b.created_by = users[raw['aid']]
+      m.created_at = datetime.datetime.fromtimestamp(raw['time'])
+      b.reason = raw['reason']
+      b.length = datetime.timedelta(seconds=raw['length']) if raw['length'] != 0 else None
+      b.resolved = False
+      if raw['time'] + raw['length'] < self.now.timestamp() and raw['length'] != 0:
+        b.resolved = True
+
+      if raw['unbanned'] == 1:
+        b.resolved = True
+      b.save()
 
     return True

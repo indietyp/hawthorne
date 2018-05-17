@@ -7,17 +7,17 @@ void AutoBan_OnMapStart() {
 
 void AutoBan_OnPlayerSpawn(client) {
   if(MODULE_AUTOBAN_DISABLE.BoolValue) return;
-  
+
   char AutoBan_URL[255];
   Format(AutoBan_URL, sizeof(AutoBan_URL), "API_URL"); // The steamid of the client has to the API here.
   AdvMOTD_ShowMOTDPanel(client, "Hawthorne", AutoBan_URL, MOTDPANEL_TYPE_URL, true, false, true, OnMOTDFailure);
-  
+
   MOTD_SEEN[client] = true;
 }
 
 void OnMOTDFailure(int client, MOTDFailureReason reason) {
   LogError("[HT] Failed to launch MOTD to verify authentication of alternate account for STEAM_ID");
-} 
+}
 
 void AutoBan_OnClientDisconnect(client) {
   MOTD_SEEN[client] = false;
@@ -31,7 +31,7 @@ void AutoBan_OnClientDisconnect(client) {
 
 public Action AutoBan_Timer(Handle timer)
 {
-	if(GetClientCount() > 0) 
+	if(GetClientCount() > 0)
 	{
 		for(int client = 1; client <= MaxClients; client++)
 		{
