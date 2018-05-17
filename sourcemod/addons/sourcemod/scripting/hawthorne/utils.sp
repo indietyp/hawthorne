@@ -4,6 +4,10 @@ void Hawthorne_OnPluginStart() {
   RConCommands_OnPluginStart();
 }
 
+public void OnMapStart() {
+  AutoBan_OnMapStart();
+}
+
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max) {
   RegPluginLibrary("hawthorne");
   CreateNatives();
@@ -27,9 +31,19 @@ public Action Event_Disconnect(Event event, const char[] name, bool dontBroadcas
   int client = GetClientOfUserId(event.GetInt("userid"));
   if (client > 0 && !IsFakeClient(client)) {
     Admins_OnClientDisconnect(client);
+	AutoBan_OnClientDisconnect(client);
   }
 
   return Plugin_Continue;
+}
+
+public Action Event_PlayerSpawn(Event event, const char[] name, bool dontBroadcast) {
+  int client = GetClientOfUserId(event.GetInt("userid"));
+  if(client > 0 && !IsFakeClient(client)) {
+    if(!MOTD_SEEN[client]) {
+      AutoBan_OnPlayerSpawn(client);
+	}
+  }
 }
 
 public void OnAllPluginsLoaded() {

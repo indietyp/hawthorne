@@ -65,6 +65,12 @@ void Hawthorne_InitConVars() {
                                          true, 0.0,
                                          true, 1.0);
 
+  MODULE_AUTOBAN_DISABLE	= CreateConVar("ht_autoban_disable",
+											"0",
+											"Disable automatic bans for suspected alternate accounts from already banned users.",
+											FCVAR_NONE,
+											true, 0.0,
+											true, 1.0);
 
   AutoExecConfig(true, "hawthorne");
 }

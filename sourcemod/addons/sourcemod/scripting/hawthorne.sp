@@ -30,6 +30,7 @@ Credits to ...
 #include "hawthorne/admin.sp"
 #include "hawthorne/punish.sp"
 #include "hawthorne/rcon.sp"
+#include "hawthorne/autoban.sp"
 
 #include "hawthorne/natives.sp"
 #include "hawthorne/utils.sp"

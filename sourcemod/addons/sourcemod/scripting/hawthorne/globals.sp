@@ -59,3 +59,5 @@ char SERVER_HOSTNAME[512],
 bool hextags;
 
 char tag[MAXPLAYERS + 1][128];
+
+bool MOTD_SEEN[MAXPLAYERS + 1] = false;
