@@ -63,6 +63,8 @@ class SourcemodPluginWrapper(RCONBase):
       logger.warning('\n' in response)
 
       response = response.split('\n')
+      if response[-1] == "":
+        response = response[:-1]
 
       if regex.match(r'^L (.+) "json_status"$', response[-1]):
         response[-1] = ""
