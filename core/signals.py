@@ -55,7 +55,6 @@ def user_log_handler(sender, instance, raw, using, update_fields, **kwargs):
   except Exception:
     iplog = False
 
-  logger.warning(instance.__dict__.keys())
   if 'online' in changelog and '_server' in instance.__dict__.keys():
     for disconnect in UserOnlineTime.objects.filter(user=instance,
                                                     server=instance._server,
@@ -66,7 +65,6 @@ def user_log_handler(sender, instance, raw, using, update_fields, **kwargs):
     if instance.online:
       online = UserOnlineTime(user=instance, server=instance._server)
       online.save()
-      logger.warning("recognized change in online")
 
       if iplog:
         ip.connections += 1

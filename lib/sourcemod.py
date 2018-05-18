@@ -61,7 +61,7 @@ class SourcemodPluginWrapper(RCONBase):
       response = self.run('json_status')[0]
       response = response.split('\n')
 
-      if regex.match(r'^L (.+) "json_status"$', regex[-1]):
+      if regex.match(r'^L (.+) "json_status"$', response[-1]):
         response[-1] = ""
 
       response = ''.join(response)
@@ -102,7 +102,8 @@ class SourcemodPluginWrapper(RCONBase):
       online = UserOnlineTime.objects.filter(user=user, disconnected=None)
       if online.count() > 1:
         user.usetime = timezone.now() - online[0].connected
-        users.append(user)
+
+      users.append(user)
 
     response['players'] = users
     return response

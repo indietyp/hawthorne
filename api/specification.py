@@ -189,7 +189,7 @@ validation = {
             'GET': {'parameters': {'offset': {'type': 'integer', 'min': 0, 'default': 0},
                                    'limit': {'type': 'integer', 'min': -1, 'default': -1},
                                    'match': {'type': 'string', 'default': ''}},
-                    'permission': ['log.view_serverchat']},
+                    'permission': ['log.view_chat']},
             'PUT': {'parameters': {'user': {'type': 'uuid', 'required': True},
                                    'server': {'type': 'uuid', 'required': True},
                                    'ip': {'type': 'ip', 'required': True},

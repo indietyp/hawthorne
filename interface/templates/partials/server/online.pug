@@ -1,4 +1,5 @@
 - load interface_utils
+- load staticfiles
 
 .row.pure-g
   input.uuid.hidden(type="hidden", value=data.id)
@@ -13,7 +14,8 @@
     div.namespace= data.namespace
   .column.icon.online.pure-u-10-24
     i(data-feather="clock")
-    span= data.usetime|duration
+    if data.usetime
+      span= data.usetime|duration
   .column.icon.username.pure-u-4-24
     .spacer
     .action

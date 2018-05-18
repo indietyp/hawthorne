@@ -6,8 +6,8 @@ from log.models import ServerChat
 
 
 @login_required(login_url='/login')
-@permission_required('core.view_chat')
+@permission_required('log.view_chat')
 @require_http_methods(['POST'])
 def log(request, page, *args, **kwargs):
-  obj = ServerChat.objects.filter(command=False).order_by('created_at')
+  obj = ServerChat.objects.filter(command=False).order_by('-updated_at')
   return renderer(request, 'partials/chat/entry.pug', obj, page)
