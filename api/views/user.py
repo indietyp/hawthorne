@@ -122,7 +122,7 @@ def list(request, validated=[], *args, **kwargs):
 
     if update:
       return {'info': 'updated user', 'id': user.id}
-    elif not update and validated['local']:
+    elif not update and 'local' in validated and validated['local']:
       return {'info': 'created panel accessible user', 'id': user.id}
     else:
       return {'info': 'created non panel accessible user', 'id': user.id}
@@ -416,10 +416,10 @@ def mutegag(request, u=None, validated={}, *args, **kwargs):
   if request.method == 'GET':
     mutegags = Mutegag.objects.filter(user=user)
     if validated['server'] is not None:
-      mutegags.filter(server=Server.objects.get(id=validated['server']))
+      mutegags = mutegags.filter(server=Server.objects.get(id=validated['server']))
 
     if validated['resolved'] is not None:
-      mutegags.filter(resolved=validated['resolved'])
+      mutegags = mutegags.filter(resolved=validated['resolved'])
 
     return [m for m in mutegags.values('user', 'created_by', 'created_at', 'reason', 'length', 'resolved', 'type',
                                        'updated_by', 'updated_at')]

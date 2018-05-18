@@ -5,10 +5,6 @@ public Action OnPlayerChatMessage(int client, const char[] command, int argc) {
   char message[256];
   GetCmdArgString(message, sizeof(message));
 
-  // cleanup quotes
-  strcopy(message, sizeof(message), message[1]);
-  message[strlen(message) - 1] = 0;
-
   if (!MODULE_LOG.BoolValue || StrEqual(SERVER, "")) return Plugin_Continue;
   if (StrEqual(CLIENTS[client], "")) {
     LogError("[HT] Failed to send message to the API of the MANAGER, the client UUID was not fetched.");

@@ -1,6 +1,7 @@
 from MySQLdb import connect
 import valve
 from valve.steam.id import SteamID
+from django.utils import timezone
 import socket
 import datetime
 from core.models import Server, ServerGroup, ServerPermission, User, Membership, Ban, Mutegag
@@ -39,6 +40,7 @@ class Importer:
               TimeoutError,
               socket.timeout) as e:
 
+        server.delete()
         print("Warning: Could not connect to server {}:{} ({})".format(raw['ip'], raw['port'], e))
         continue
 
@@ -50,9 +52,12 @@ class Importer:
     result = r.fetch_row(maxrows=0, how=1)
 
     for raw in result:
-      role, _ = ServerGroup.objects.get_or_create(name=raw['name'])
+      flags = ServerPermission().convert(raw['flags'])
+      flags.save()
+      role, _ = ServerGroup.objects.get_or_create(name=raw['name'], defaults={'flags': flags,
+                                                                              'immunity': raw['immunity']})
       role.immunity = raw['immunity']
-      role.flags = ServerPermission().convert(raw['flags'])
+      role.flags = flags
       role.save()
 
 
@@ -139,7 +144,7 @@ class Importer:
       b.user = user
       b.server = servers[raw['sid']] if raw['sid'] != 0 else None
       b.created_by = users[raw['aid']]
-      m.created_at = datetime.datetime.fromtimestamp(raw['created'])
+      m.created_at = timezone.make_aware(datetime.datetime.fromtimestamp(raw['created']))
       b.reason = raw['reason']
       b.length = datetime.timedelta(seconds=raw['length']) if raw['length'] != 0 else None
       b.resolved = False
@@ -180,7 +185,7 @@ class Importer:
       m.user = user
       m.server = servers[raw['sid']] if raw['sid'] != 0 else None
       m.created_by = users[raw['aid']]
-      m.created_at = datetime.datetime.fromtimestamp(raw['created'])
+      m.created_at = timezone.make_aware(datetime.datetime.fromtimestamp(raw['created']))
       m.reason = raw['reason']
       m.length = datetime.timedelta(seconds=raw['length']) if raw['length'] != 0 else None
       m.type = 'MU' if raw['type'] == 1 else 'GA'
@@ -282,7 +287,7 @@ class Importer:
       m.user = users[raw["pid"]]
       m.server = servers[raw['sid']] if raw['sid'] != 0 else None
       m.created_by = users[raw['aid']]
-      m.created_at = datetime.datetime.fromtimestamp(raw['time'])
+      m.created_at = timezone.make_aware(datetime.datetime.fromtimestamp(raw['time']))
       m.reason = raw['reason']
       m.length = datetime.timedelta(seconds=raw['length'] * 60) if raw['length'] != 0 else None
       m.type = 'MU' if raw['type'] == 1 else 'GA'
@@ -307,7 +312,7 @@ class Importer:
       b.user = users[raw["pid"]]
       b.server = servers[raw['sid']] if raw['sid'] != 0 else None
       b.created_by = users[raw['aid']]
-      m.created_at = datetime.datetime.fromtimestamp(raw['time'])
+      m.created_at = timezone.make_aware(datetime.datetime.fromtimestamp(raw['time']))
       b.reason = raw['reason']
       b.length = datetime.timedelta(seconds=raw['length']) if raw['length'] != 0 else None
       b.resolved = False

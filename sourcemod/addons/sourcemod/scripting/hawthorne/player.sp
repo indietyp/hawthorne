@@ -48,7 +48,7 @@ void OnClientIsInAPI(HTTPResponse response, any value) {
 
   JSONObject output = view_as<JSONObject>(response.Data);
   JSONObject result = view_as<JSONObject>(output.Get("result"));
-  result.GetString("id", CLIENTS[client], 37);
+  result.GetString("id", CLIENTS[client], sizeof(CLIENTS[]));
 
   OnClientIDReceived(client);
 

@@ -109,6 +109,6 @@
         }
         new Chartist.Line("#chart-{{data.id}}", data, options);
     .pure-u-1-2.pure-g
-      = data.executed.status.players
-      each i in data.executed.status.players
-        - include 'partials/server/online.pug' with data=i server=data
+      if data.executed.status.players
+        each i in data.executed.players
+          - include 'partials/server/online.pug' with data=i server=data

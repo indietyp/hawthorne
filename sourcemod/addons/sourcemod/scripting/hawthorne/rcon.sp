@@ -1,4 +1,5 @@
-// TODO: TESTING
+#pragma dynamic 524288
+
 void RConCommands_OnPluginStart() {
   RegAdminCmd("json_status",        RConStatus,       ADMFLAG_RCON);
   RegAdminCmd("rcon_init",          RConInit,         ADMFLAG_RCON);
@@ -132,7 +133,7 @@ public Action RConStatus(int client, int args) {
   output.Set("stats", stats);
   output.Set("players", AddToList());
 
-  char reply[1024];
+  char reply[12288];
   output.ToString(reply, sizeof(reply));
   ReplyToCommand(client, reply);
 

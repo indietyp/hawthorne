@@ -33,7 +33,6 @@ def chat(request, validated={}, *args, **kwargs):
 
     return [c for c in chats]
   elif request.method == 'PUT':
-    print(validated)
     chat = ServerChat()
     chat.user = User.objects.get(id=validated['user'])
     chat.server = Server.objects.get(id=validated['server'])

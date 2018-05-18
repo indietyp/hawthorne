@@ -41,7 +41,7 @@ void APIAdminCheck(HTTPResponse response, any value) {
 
   int immunity = role.GetInt("immunity");
   int timeleft = role.GetInt("timeleft");
-  if (timeleft == 0) timeleft = 604800;
+  if (timeleft == 0) timeleft = 2147483647;
 
   delete output;
   delete result;
@@ -99,6 +99,7 @@ void Admins_OnClientDisconnect(int client) {
   // reset the timer
   admin_timer[client].Close();
   admin_timer[client] = null;
+  tag[client] = "";
 }
 
 public void HexTags_OnTagsUpdated(int client)

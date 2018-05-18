@@ -38,8 +38,9 @@ def user_log_handler(sender, instance, raw, using, update_fields, **kwargs):
     l.is_active = False
     l.save()
 
-  if UserNamespace.objects.filter(user=instance, namespace=instance.namespace).count() > 1:
-    return
+  namespaces = UserNamespace.objects.filter(user=instance, namespace=instance.namespace)
+  if namespaces.count() > 1:
+    namespaces.delete()
 
   namespace, created = UserNamespace.objects.get_or_create(user=instance, namespace=instance.namespace)
 
@@ -50,7 +51,7 @@ def user_log_handler(sender, instance, raw, using, update_fields, **kwargs):
   except Exception:
     iplog = False
 
-  if 'online' in changelog and '_server' in instance.__dict__.keys():
+  if '_server' in instance.__dict__.keys():
     for disconnect in UserOnlineTime.objects.filter(user=state, server=instance._server, disconnected=None):
       disconnect.disconnected = timezone.now()
       disconnect.save()
