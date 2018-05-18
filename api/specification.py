@@ -189,13 +189,13 @@ validation = {
             'GET': {'parameters': {'offset': {'type': 'integer', 'min': 0, 'default': 0},
                                    'limit': {'type': 'integer', 'min': -1, 'default': -1},
                                    'match': {'type': 'string', 'default': ''}},
-                    'permission': ['log.view_chat']},
+                    'permission': ['log.view_serverchat']},
             'PUT': {'parameters': {'user': {'type': 'uuid', 'required': True},
                                    'server': {'type': 'uuid', 'required': True},
                                    'ip': {'type': 'ip', 'required': True},
                                    'message': {'type': 'string', 'required': True},
                                    'command': {'type': 'boolean', 'default': None, 'nullable': True}},
-                    'permission': ['log.add_chat']}
+                    'permission': ['log.add_serverchat']}
         },
         'token': {
             'GET': {'parameters': {'offset': {'type': 'integer', 'min': 0, 'default': 0},

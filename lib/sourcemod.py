@@ -1,6 +1,7 @@
 import datetime
 import json
 import logging
+import regex
 
 import valve.rcon
 from django.utils import timezone
@@ -58,8 +59,12 @@ class SourcemodPluginWrapper(RCONBase):
   def status(self, truncated=False, *args, **kwargs):
     try:
       response = self.run('json_status')[0]
-      response = response.replace('\n', '')
+      response = response.split('\n')
 
+      if regex.match(r'^L (.+) "json_status"$', regex[-1]):
+        response[-1] = ""
+
+      response = ''.join(response)
       logger.warning(response)
     except valve.rcon.RCONError as e:
       return {'error': e}
