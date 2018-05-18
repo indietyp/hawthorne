@@ -41,7 +41,7 @@ def jsonparse(content=None, code=200, encoder=None):
 
   if code != 200:
     logger = logging.getLogger(__name__)
-    logger.info(document)
+    logger.warning(document)
 
   if encoder is None:
     return JsonResponse(document, status=code, encoder=HawthorneJSONEncoder)

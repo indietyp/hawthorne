@@ -60,7 +60,7 @@ class SourcemodPluginWrapper(RCONBase):
       response = self.run('json_status')[0]
       response = response.replace('\n', '')
 
-      logger.info(response)
+      logger.warning(response)
     except valve.rcon.RCONError as e:
       return {'error': e}
 
