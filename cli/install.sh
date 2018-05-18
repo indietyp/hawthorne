@@ -418,6 +418,8 @@ configure() {
   ln -sr $directory/supervisor.conf /etc/supervisor/conf.d/hawthorne.conf
 
   if [ $docker -eq 1 ]; then
+    export LC_ALL=en_US.UTF-8
+
     sed -i "s#bind = 'unix:/tmp/sockets/hawthorne.sock'#bind = '0.0.0.0:8000'#g" $directory/gunicorn.conf.py
 
     cd $directory
