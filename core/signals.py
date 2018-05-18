@@ -1,8 +1,11 @@
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils import timezone
-
+import logging
 from core.models import User
+
+
+logger = logging.getLogger(__name__)
 
 
 # https://djangosnippets.org/snippets/2281/
@@ -42,7 +45,8 @@ def user_log_handler(sender, instance, raw, using, update_fields, **kwargs):
   if namespaces.count() > 1:
     namespaces.delete()
 
-  namespace, created = UserNamespace.objects.get_or_create(user=instance, namespace=instance.namespace)
+  namespace, created = UserNamespace.objects.get_or_create(user=instance,
+                                                           namespace=instance.namespace)
 
   try:
     ip, created = UserIP.objects.get_or_create(user=instance, ip=instance.ip)
@@ -51,13 +55,18 @@ def user_log_handler(sender, instance, raw, using, update_fields, **kwargs):
   except Exception:
     iplog = False
 
-  if '_server' in instance.__dict__.keys():
-    for disconnect in UserOnlineTime.objects.filter(user=state, server=instance._server, disconnected=None):
+  logger.info(instance.__dict__.keys())
+  if 'online' in changelog and '_server' in instance.__dict__.keys():
+    for disconnect in UserOnlineTime.objects.filter(user=instance,
+                                                    server=instance._server,
+                                                    disconnected=None):
       disconnect.disconnected = timezone.now()
       disconnect.save()
 
     if instance.online:
-      UserOnlineTime(user=instance, server=instance._server).save()
+      online = UserOnlineTime(user=instance, server=instance._server)
+      online.save()
+      logger.info("recognized change in online")
 
       if iplog:
         ip.connections += 1

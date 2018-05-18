@@ -1,6 +1,7 @@
 import io
 import re
 from functools import wraps
+import logging
 
 import ruamel.yaml as yaml
 import simplejson as json
@@ -38,8 +39,9 @@ def jsonparse(content=None, code=200, encoder=None):
       'error': 'FATAL ERROR. Validation Error occured. This should not happen ever. Contact the current maintainer ASAP.',
       'calm': v.errors}, status=500)
 
-  if code != 200 and settings.DEBUG:
-    print(document)
+  if code != 200:
+    logger = logging.getLogger(__name__)
+    logger.info(document)
 
   if encoder is None:
     return JsonResponse(document, status=code, encoder=HawthorneJSONEncoder)

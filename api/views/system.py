@@ -23,9 +23,9 @@ def chat(request, validated={}, *args, **kwargs):
   if request.method == 'GET':
     direction = '-created_at' if validated['descend'] else 'created_at'
     chats = ServerChat.objects.filter(message__contains=validated['match']) \
-      .values('ip', 'message', 'command', 'created_at') \
-      .order_by(direction) \
-      .annotate(user=F('user__id'), server=F('server__id'))
+                              .values('ip', 'message', 'command', 'created_at') \
+                              .order_by(direction) \
+                              .annotate(user=F('user__id'), server=F('server__id'))
 
     limit = validated['limit']
     offset = validated['offset']

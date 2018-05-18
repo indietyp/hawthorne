@@ -1,12 +1,17 @@
 import datetime
 import json
+import logging
 
 import valve.rcon
+from django.utils import timezone
 
 from core.lib.steam import populate
 from core.models import User
 from lib.base import RCONBase
 from log.models import UserOnlineTime
+
+
+logger = logging.getLogger(__name__)
 
 
 class SourcemodPluginWrapper(RCONBase):
@@ -53,8 +58,9 @@ class SourcemodPluginWrapper(RCONBase):
   def status(self, truncated=False, *args, **kwargs):
     try:
       response = self.run('json_status')[0]
-      print(response)
-      response = response.split('\n')[0]
+      response = response.replace('\n', '')
+
+      logger.info(response)
     except valve.rcon.RCONError as e:
       return {'error': e}
 
@@ -76,6 +82,9 @@ class SourcemodPluginWrapper(RCONBase):
 
     users = []
     for player in response['players']:
+      if not player['id']:
+        continue
+
       try:
         user = User.objects.get(id=player['id'])
       except User.DoesNotExist:
@@ -85,9 +94,10 @@ class SourcemodPluginWrapper(RCONBase):
 
         populate(user)
 
-      usetime = UserOnlineTime.objects.filter(user=user, disconnected=None)[0]
-      user.usetime = datetime.datetime.now() - usetime.connected
-      users.append(user)
+      online = UserOnlineTime.objects.filter(user=user, disconnected=None)
+      if online.count() > 1:
+        user.usetime = timezone.now() - online[0].connected
+        users.append(user)
 
     response['players'] = users
     return response

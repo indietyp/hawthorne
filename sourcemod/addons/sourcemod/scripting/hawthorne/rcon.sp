@@ -133,9 +133,21 @@ public Action RConStatus(int client, int args) {
   output.Set("stats", stats);
   output.Set("players", AddToList());
 
-  char reply[12288];
-  output.ToString(reply, sizeof(reply));
-  ReplyToCommand(client, reply);
+  char json[12288];
+  output.ToString(json, sizeof(json));
+
+  char reply[513];
+  for (int i = 0; i <= sizeof(json); i++) {
+    if (i % 512 == 0 && i != 0) {
+      PrintToServer(reply);
+      reply = "";
+    }
+    reply[i % 512] = json[i];
+    if (json[i] == 0) {
+      if (i % 512 != 0) PrintToServer(reply);
+      break;
+    }
+  }
 
   delete stats;
   delete scores;
@@ -167,12 +179,12 @@ JSONArray AddToList() {
 
       player.SetString("id", CLIENTS[i]);
       player.SetString("username", username);
-      player.SetString("steamid", steamid);
+      // player.SetString("steamid", steamid);
 
-      player.SetInt("team", GetClientTeam(i));
+      // player.SetInt("team", GetClientTeam(i));
       player.SetInt("kills", kills);
       player.SetInt("deaths", deaths);
-      player.SetFloat("online", online);
+      player.SetInt("online", RoundFloat(online));
 
       output.Push(player);
     }
