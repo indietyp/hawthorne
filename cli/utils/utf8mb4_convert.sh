@@ -1,1 +1,1 @@
-mysql --database=hawthorne -uroot -p<password> -B -N -e "SHOW TABLES" | awk '{print "SET foreign_key_checks = 0; ALTER TABLE", $1, "CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci; SET foreign_key_checks = 1; "}' | mysql --database=hawthorne -uroot -p<password>
+mysql --database=hawthorne -uroot -p<password> -B -N -e "SHOW TABLES" | awk '{print "SET foreign_key_checks = 0; ALTER TABLE", $1, "CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; SET foreign_key_checks = 1; "}' | mysql --database=hawthorne -uroot -p<password>

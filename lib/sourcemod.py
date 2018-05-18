@@ -59,6 +59,9 @@ class SourcemodPluginWrapper(RCONBase):
   def status(self, truncated=False, *args, **kwargs):
     try:
       response = self.run('json_status')[0]
+      logger.warning(response)
+      logger.warning('\n' in response)
+
       response = response.split('\n')
 
       if regex.match(r'^L (.+) "json_status"$', response[-1]):
