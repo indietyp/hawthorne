@@ -10,7 +10,7 @@ class Command(BaseCommand):
       '--mode',
       action='store',
       dest='mode',
-      help='Currently supported: sourcemod, boompanel',
+      help='Currently supported: sourceban, boompanel, sourcemod',
     )
 
     parser.add_argument(
@@ -44,7 +44,7 @@ class Command(BaseCommand):
 
   def handle(self, mode, host, user, pwd, db, *args, **options):
     mode = mode.lower()
-    if mode not in ['sourcemod', 'boompanel']:
+    if mode not in ['sourceban', 'boompanel', 'sourcemod']:
       self.stdout.write(self.style.WARNING('Currently your selected mode is not available'))
       return
 
@@ -52,9 +52,11 @@ class Command(BaseCommand):
     port = int(host.split(":")[1])
     importer = Importer(domain, port, user, pwd, db)
 
-    if mode == 'sourcemod':
-      importer.sourcemod()
+    if mode == 'sourceban':
+      importer.sourceban()
     elif mode == 'boompanel':
       importer.boompanel()
+    elif mode == 'sourcemod':
+      importer.sourcemod()
 
     self.stdout.write(self.style.SUCCESS('Successfully imported'))

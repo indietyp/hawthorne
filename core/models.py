@@ -57,6 +57,8 @@ class User(AbstractUser):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
+  tag = models.CharField(max_length=255, null=True)
+
   class Meta:
     permissions = [
         ('view_user', 'Can view user'),
@@ -109,25 +111,25 @@ class Token(BaseModel):
 
 class ServerPermission(BaseModel):
   can_reservation = models.BooleanField(default=False, help_text='A')
-  can_generic     = models.BooleanField(default=False, help_text='B')
-  can_kick        = models.BooleanField(default=False, help_text='C')
-  can_ban         = models.BooleanField(default=False, help_text='DE')
-  can_slay        = models.BooleanField(default=False, help_text='F')
-  can_map         = models.BooleanField(default=False, help_text='G')
-  can_config      = models.BooleanField(default=False, help_text='H')
-  can_cvar        = models.BooleanField(default=False, help_text='I')
-  can_chat        = models.BooleanField(default=False, help_text='J')
-  can_vote        = models.BooleanField(default=False, help_text='K')
-  can_password    = models.BooleanField(default=False, help_text='L')
-  can_rcon        = models.BooleanField(default=False, help_text='M')
-  can_cheat       = models.BooleanField(default=False, help_text='N')
+  can_generic = models.BooleanField(default=False, help_text='B')
+  can_kick = models.BooleanField(default=False, help_text='C')
+  can_ban = models.BooleanField(default=False, help_text='DE')
+  can_slay = models.BooleanField(default=False, help_text='F')
+  can_map = models.BooleanField(default=False, help_text='G')
+  can_config = models.BooleanField(default=False, help_text='H')
+  can_cvar = models.BooleanField(default=False, help_text='I')
+  can_chat = models.BooleanField(default=False, help_text='J')
+  can_vote = models.BooleanField(default=False, help_text='K')
+  can_password = models.BooleanField(default=False, help_text='L')
+  can_rcon = models.BooleanField(default=False, help_text='M')
+  can_cheat = models.BooleanField(default=False, help_text='N')
 
-  can_custom_1    = models.BooleanField(default=False, help_text='O')
-  can_custom_2    = models.BooleanField(default=False, help_text='P')
-  can_custom_3    = models.BooleanField(default=False, help_text='Q')
-  can_custom_4    = models.BooleanField(default=False, help_text='R')
-  can_custom_5    = models.BooleanField(default=False, help_text='S')
-  can_custom_6    = models.BooleanField(default=False, help_text='T')
+  can_custom_1 = models.BooleanField(default=False, help_text='O')
+  can_custom_2 = models.BooleanField(default=False, help_text='P')
+  can_custom_3 = models.BooleanField(default=False, help_text='Q')
+  can_custom_4 = models.BooleanField(default=False, help_text='R')
+  can_custom_5 = models.BooleanField(default=False, help_text='S')
+  can_custom_6 = models.BooleanField(default=False, help_text='T')
 
   class Meta:
     default_permissions = ()
@@ -165,10 +167,42 @@ class ServerPermission(BaseModel):
     return self.convert()
 
 
+class Tag(BaseModel):
+  name = models.CharField(max_length=255, null=True)
+
+  COLORS = (
+      ("default", "Default Color"),
+      ("teamcolor", "Current Team Color"),
+      ("red", "Red"),
+      ("lightred", "Lighter Red"),
+      ("darkred", "Darker Red"),
+      ("bluegrey", "Blueish Grey"),
+      ("blue", "Blue"),
+      ("darkblue", "Darker Blue"),
+      ("purple", "Purple"),
+      ("orchid", "Orchid"),
+      ("yellow", "Yellow"),
+      ("gold", "Gold"),
+      ("lightgreen", "Lighter Green"),
+      ("green", "Green"),
+      ("lime", "Lime"),
+      ("grey", "Grey"),
+      ("darkgrey", "Darker Grey"),
+  )
+
+  # colors
+  chat = models.CharField(max_length=10, choices=COLORS, default="default")
+  name = models.CharField(max_length=10, choices=COLORS, default="default")
+
+  # nametag
+  base = models.CharField(max_length=10, choices=COLORS, default="default")
+
+
 class ServerGroup(BaseModel):
   name = models.CharField(max_length=255)
   flags = models.OneToOneField(ServerPermission, on_delete=models.CASCADE)
   server = models.ForeignKey('Server', on_delete=models.CASCADE, null=True)
+  tag = models.ForeignKey(Tag, on_delete=models.CASCADE, null=True)
 
   immunity = models.PositiveSmallIntegerField()
   usetime = models.DurationField(null=True)
