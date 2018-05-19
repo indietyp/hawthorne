@@ -21,10 +21,13 @@ class Importer:
 
     roles = {}
     for raw in result:
-      role = ServerGroup()
+      flags = ServerPermission().convert(raw['flags'])
+      flags.save()
+
+      role = ServerGroup.objects.get_or_create(name=raw['name'], default={'flags': flags,
+                                                                          'immunity': raw['immunity_level']})
       role.name = raw['name']
-      role.flags = ServerPermission().convert(raw['flags'])
-      role.flags.save()
+      role.flags = flags
       role.immunity = raw['immunity_level']
       role.save()
 
@@ -61,12 +64,12 @@ class Importer:
       r = self.conn.store_result()
       groups = r.fetch_row(maxrows=0, how=1)
 
-
       if not groups and raw['flags']:
         if raw['flags'] in generated:
           role = generated[raw['flags']]
         else:
           role = ServerGroup()
+          role.name = raw['flags']
           role.flags = ServerPermission().convert(raw['flags'])
           role.flags.save()
           role.immunity = 0
