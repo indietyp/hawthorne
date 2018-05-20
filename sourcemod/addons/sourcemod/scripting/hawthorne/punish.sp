@@ -45,8 +45,11 @@ public void OnMutegagCheck(HTTPResponse response, any value) {
   InitiatePunishment(client, action, reason, timeleft);
 }
 
-public Action PunishCommandExecuted(int client, int args) {
+public Action PunishCommandExecuted(int client, const char[] command, int args) {
   if (MODULE_PUNISH.IntValue == 0 || StrEqual(SERVER, "")) return Plugin_Continue;
+
+  AdminId admin = GetUserAdmin(client)
+  if (!admin.HasFlag(Admin_Chat, Access_Real)) return Plugin_Stop;
 
   punish_selected_action[client] = 0;
   punish_selected_player[client] = -1;

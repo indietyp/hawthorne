@@ -55,18 +55,19 @@ public void OnPluginStart() {
   AddCommandListener(OnPlayerChatMessage, "say");
   AddCommandListener(OnPlayerChatMessage, "say_team");
 
+
   AddCommandListener(OnAddBanCommand, "sm_addban");
+  AddCommandListener(OnClientReloadAdmins, "sm_reloadadmins");
 
-  RegConsoleCmd("sm_reloadadmins", OnClientReloadAdmins, "", ADMFLAG_CONFIG);
 
-  RegConsoleCmd("sm_mute", PunishCommandExecuted, "Usage: !mute <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h", ADMFLAG_CHAT);
-  RegConsoleCmd("sm_unmute", PunishCommandExecuted, "Usage: !unmute <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h", ADMFLAG_CHAT);
+  AddCommandListener(PunishCommandExecuted, "sm_mute");
+  AddCommandListener(PunishCommandExecuted, "sm_unmute");
 
-  RegConsoleCmd("sm_gag", PunishCommandExecuted, "Usage: !gag <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h", ADMFLAG_CHAT);
-  RegConsoleCmd("sm_ungag", PunishCommandExecuted, "Usage: !ungag <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h", ADMFLAG_CHAT);
+  AddCommandListener(PunishCommandExecuted, "sm_gag");
+  AddCommandListener(PunishCommandExecuted, "sm_ungag");
 
-  RegConsoleCmd("sm_silence", PunishCommandExecuted, "Usage: !silence <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h", ADMFLAG_CHAT);
-  RegConsoleCmd("sm_unsilence", PunishCommandExecuted, "Usage: !unsilence <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h", ADMFLAG_CHAT);
+  AddCommandListener(PunishCommandExecuted, "sm_silence");
+  AddCommandListener(PunishCommandExecuted, "sm_unsilence");
 
   Hawthorne_OnPluginStart();
 }
