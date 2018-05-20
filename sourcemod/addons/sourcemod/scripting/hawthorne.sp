@@ -57,7 +57,7 @@ public void OnPluginStart() {
 
 
   AddCommandListener(OnAddBanCommand, "sm_addban");
-  AddCommandListener(OnClientReloadAdmins, "sm_reloadadmins");
+  RegConsoleCmd("sm_reloadadmins", OnClientReloadAdmins, "", ADMFLAG_CONFIG);
 
 
   AddCommandListener(PunishCommandExecuted, "sm_mute");
