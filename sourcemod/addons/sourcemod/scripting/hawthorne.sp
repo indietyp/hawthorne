@@ -15,6 +15,7 @@ Credits to ...
 #include <ripext>
 #include <regex>
 #include <geoip>
+#include <multicolors>
 
 #undef REQUIRE_PLUGIN
 #include <hextags>
