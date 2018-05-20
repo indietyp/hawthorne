@@ -121,7 +121,7 @@ public Action PunishCommandExecuted(int client, int args) {
 
     if (target == -1) {
       ReplyToCommand(client, "Could not find the user requested.");
-      return Plugin_Handled;
+      return Plugin_Stop;
     }
 
     punish_selected_player[client] = target;
@@ -132,7 +132,7 @@ public Action PunishCommandExecuted(int client, int args) {
     players.Display(client, 20);
   }
 
-  return Plugin_Handled;
+  return Plugin_Stop;
 }
 
 public int MenuHandlerPlayer(Menu menu, MenuAction action, int client, int param) {
