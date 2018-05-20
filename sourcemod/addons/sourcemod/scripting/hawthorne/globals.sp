@@ -1,5 +1,4 @@
-#define PREFIX          "\x3 \x4[hawthorne] \x1"
-#define PREFIX_BAD      "\x3 \x7[hawthorne] \x1"
+#define PREFIX "[{green}HT{default}]"
 
 #define ACTION_UNSILENCE  -3
 #define ACTION_UNGAG      -2
@@ -21,7 +20,7 @@ HTTPClient httpClient;
 
 char SERVER[37] = "",
      CLIENTS[MAXPLAYERS + 1][37];
-     
+
 int mutegag_timeleft[MAXPLAYERS + 1],
     admin_timeleft[MAXPLAYERS + 1];
 

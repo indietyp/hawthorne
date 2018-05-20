@@ -86,9 +86,9 @@ public Action AdminVerificationTimer(Handle timer, any userid) {
   if (admin_timeleft[client] <= 0) {
     AdminCheck(client);
 
-    CloseHandle(admin_timer[client]);
+    admin_timer[client].Close();
     admin_timer[client] = null;
-    PrintToChat(client, "[HT] Hey! Your role just got updated!");
+    CPrintToChat(client, "%s Hey! Your role just got updated!", PREFIX);
 
     return Plugin_Stop;
   }
@@ -96,7 +96,6 @@ public Action AdminVerificationTimer(Handle timer, any userid) {
 }
 
 void Admins_OnClientDisconnect(int client) {
-  // reset the timer
   admin_timer[client].Close();
   admin_timer[client] = null;
   tag[client] = "";

@@ -1,9 +1,9 @@
 fermata.registerPlugin 'hawpi', (transport, base) ->
-# I know the name is fcking clever
+  # I know the name is fcking clever
   @base = base
 
   (request, callback) ->
-# the rest is "borrowed" from the built-in JSON plugin
+    # the rest is "borrowed" from the built-in JSON plugin
     request.headers['Accept'] = 'application/json'
     request.headers['Content-Type'] = 'application/json'
     request.data = JSON.stringify(request.data)

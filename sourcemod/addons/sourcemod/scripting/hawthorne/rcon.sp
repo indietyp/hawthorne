@@ -6,10 +6,11 @@ void RConCommands_OnPluginStart() {
 
   RegAdminCmd("rcon_ban",           RConBanKick,      ADMFLAG_RCON);
   RegAdminCmd("rcon_mutegag",       RConMuteGag,      ADMFLAG_RCON);
-  RegAdminCmd("rcon_reload",        RConReload,       ADMFLAG_RCON);
+  RegAdminCmd("rcon_init",          RConInit,         ADMFLAG_RCON);
+  RegAdminCmd("rcon_sdonate",       RConInit,         ADMFLAG_RCON);
 }
 
-public Action RConReload(int client, int args) {
+public Action RConInit(int client, int args) {
   if(client != 0)
     return Plugin_Handled;
 

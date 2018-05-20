@@ -121,7 +121,7 @@ public Action PunishCommandExecuted(int client, int args) {
 
     if (target == -1) {
       ReplyToCommand(client, "Could not find the user requested.");
-      return Plugin_Stop;
+      return Plugin_Handled;
     }
 
     punish_selected_player[client] = target;
@@ -132,7 +132,7 @@ public Action PunishCommandExecuted(int client, int args) {
     players.Display(client, 20);
   }
 
-  return Plugin_Stop;
+  return Plugin_Handled;
 }
 
 public int MenuHandlerPlayer(Menu menu, MenuAction action, int client, int param) {
@@ -397,11 +397,11 @@ void PopulateMenuWithPeople(Menu menu, int action) {
     bool gagged = BaseComm_IsClientGagged(i);
 
     switch (action) {
-      case ACTION_UNSILENCE: if (!muted || !gagged) continue;
-      case ACTION_UNGAG:     if ( muted || !gagged) continue;
-      case ACTION_UNMUTE:    if (!muted ||  gagged) continue;
-      case ACTION_MUTE:      if (!muted ||  gagged) continue;
-      case ACTION_GAG:       if ( muted || !gagged) continue;
+      case ACTION_UNSILENCE: if (!muted && !gagged) continue;
+      case ACTION_UNGAG:     if (!muted &&  gagged) continue;
+      case ACTION_UNMUTE:    if ( muted && !gagged) continue;
+      case ACTION_MUTE:      if (!muted && !gagged) continue;
+      case ACTION_GAG:       if (!muted && !gagged) continue;
       case ACTION_SILENCE:   if (!muted && !gagged) continue;
     }
 
@@ -446,20 +446,21 @@ void InitiatePunishment(int client, int action, char[] reason, int timeleft) {
   }
 
   if (action < 0) {
-    CloseHandle(mutegag_timer[client]);
+    mutegag_timer[client].Close();
+    mutegag_timer[client] = null;
 
-    PrintToChat(client, "[HT] --------------------------");
-    PrintToChat(client, "[HT] Note:  You are now %s again.", name);
-    PrintToChat(client, "[HT] --------------------------");
+    CPrintToChat(client, "%s --------------------------", PREFIX);
+    CPrintToChat(client, "%s Note:  You are now {olive}%s{default} again.", PREFIX, name);
+    CPrintToChat(client, "%s --------------------------", PREFIX);
   } else {
     char humanized_time[200];
     HumanizeTime(timeleft, humanized_time);
 
-    PrintToChat(client, "[HT] --------------------------");
-    PrintToChat(client, "[HT] Note:  You are being %s.", name);
-    PrintToChat(client, "[HT] Reason: %s", reason);
-    PrintToChat(client, "[HT] Time left: %s", humanized_time);
-    PrintToChat(client, "[HT] --------------------------");
+    CPrintToChat(client, "%s --------------------------", PREFIX);
+    CPrintToChat(client, "%s Note: You are being {red}%s{default}.", PREFIX, name);
+    CPrintToChat(client, "%s Reason: %s", PREFIX, reason);
+    CPrintToChat(client, "%s Time left: %s", PREFIX, humanized_time);
+    CPrintToChat(client, "%s --------------------------", PREFIX);
 
     if (mutegag_timeleft[client] != -1) return;
     mutegag_timeleft[client] = timeleft;

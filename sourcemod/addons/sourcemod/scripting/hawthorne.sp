@@ -56,16 +56,16 @@ public void OnPluginStart() {
 
   AddCommandListener(OnAddBanCommand, "sm_addban");
 
-  RegAdminCmd("sm_reloadadmins", OnClientReloadAdmins, ADMFLAG_CONFIG);
+  RegConsoleCmd("sm_reloadadmins", OnClientReloadAdmins, ADMFLAG_CONFIG);
 
-  RegAdminCmd("sm_mute", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !mute <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
-  RegAdminCmd("sm_unmute", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !unmute <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
+  RegConsoleCmd("sm_mute", PunishCommandExecuted, "Usage: !mute <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h", ADMFLAG_CHAT);
+  RegConsoleCmd("sm_unmute", PunishCommandExecuted, "Usage: !unmute <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h", ADMFLAG_CHAT);
 
-  RegAdminCmd("sm_gag", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !gag <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
-  RegAdminCmd("sm_ungag", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !ungag <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
+  RegConsoleCmd("sm_gag", PunishCommandExecuted, "Usage: !gag <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h", ADMFLAG_CHAT);
+  RegConsoleCmd("sm_ungag", PunishCommandExecuted, "Usage: !ungag <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h", ADMFLAG_CHAT);
 
-  RegAdminCmd("sm_silence", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !silence <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
-  RegAdminCmd("sm_unsilence", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !unsilence <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
+  RegConsoleCmd("sm_silence", PunishCommandExecuted, "Usage: !silence <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h", ADMFLAG_CHAT);
+  RegConsoleCmd("sm_unsilence", PunishCommandExecuted, "Usage: !unsilence <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h", ADMFLAG_CHAT);
 
   Hawthorne_OnPluginStart();
 }
