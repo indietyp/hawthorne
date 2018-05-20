@@ -75,7 +75,7 @@ void Hawthorne_InitConVars() {
   MODULE_HEXTAGS_FORMAT   = CreateConVar("ht_hextags_format",
                                          "{R}",
                                          "How the hextag string is formatted | U for uppercase, L for lowercase, R for no change",
-                                         FCVAR_NONE)
+                                         FCVAR_NONE);
 
   AutoExecConfig(true, "hawthorne");
 }

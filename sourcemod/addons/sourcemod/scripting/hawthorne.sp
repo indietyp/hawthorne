@@ -57,7 +57,7 @@ public void OnPluginStart() {
 
   AddCommandListener(OnAddBanCommand, "sm_addban");
 
-  RegConsoleCmd("sm_reloadadmins", OnClientReloadAdmins, ADMFLAG_CONFIG);
+  RegConsoleCmd("sm_reloadadmins", OnClientReloadAdmins, "", ADMFLAG_CONFIG);
 
   RegConsoleCmd("sm_mute", PunishCommandExecuted, "Usage: !mute <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h", ADMFLAG_CHAT);
   RegConsoleCmd("sm_unmute", PunishCommandExecuted, "Usage: !unmute <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h", ADMFLAG_CHAT);

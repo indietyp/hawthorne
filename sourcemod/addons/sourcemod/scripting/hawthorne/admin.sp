@@ -37,7 +37,7 @@ void APIAdminCheck(HTTPResponse response, any value) {
 
   JSONObject role = view_as<JSONObject>(roles.Get(0));
   role.GetString("flags", flags, sizeof(flags));
-  role.GetString("name", tag[client], sizeof(tag[]));
+  role.GetString("name", ht_tag[client], sizeof(ht_tag[]));
 
   int immunity = role.GetInt("immunity");
   int timeleft = role.GetInt("timeleft");
@@ -68,8 +68,8 @@ void APIAdminCheck(HTTPResponse response, any value) {
   }
 
   if (MODULE_HEXTAGS.BoolValue && hextags) {
-    HexTags_SetClientTag(client, ScoreTag, tag[client]);
-    HexTags_SetClientTag(client, ChatTag, tag[client]);
+    HexTags_SetClientTag(client, ScoreTag, ht_tag[client]);
+    HexTags_SetClientTag(client, ChatTag, ht_tag[client]);
   }
 
   if(admin_timer[client] != null) return;
@@ -98,11 +98,11 @@ public Action AdminVerificationTimer(Handle timer, any userid) {
 void Admins_OnClientDisconnect(int client) {
   admin_timer[client].Close();
   admin_timer[client] = null;
-  tag[client] = "";
+  ht_tag[client] = "";
 }
 
 public void HexTags_OnTagsUpdated(int client)
 {
-  HexTags_SetClientTag(client, ScoreTag, tag[client]);
-  HexTags_SetClientTag(client, ChatTag, tag[client]);
+  HexTags_SetClientTag(client, ScoreTag, ht_tag[client]);
+  HexTags_SetClientTag(client, ChatTag, ht_tag[client]);
 }

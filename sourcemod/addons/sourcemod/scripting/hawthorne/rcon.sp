@@ -2,25 +2,11 @@
 
 void RConCommands_OnPluginStart() {
   RegAdminCmd("json_status",        RConStatus,       ADMFLAG_RCON);
-  RegAdminCmd("rcon_init",          RConInit,         ADMFLAG_RCON);
 
   RegAdminCmd("rcon_ban",           RConBanKick,      ADMFLAG_RCON);
   RegAdminCmd("rcon_mutegag",       RConMuteGag,      ADMFLAG_RCON);
   RegAdminCmd("rcon_init",          RConInit,         ADMFLAG_RCON);
   RegAdminCmd("rcon_sdonate",       RConInit,         ADMFLAG_RCON);
-}
-
-public Action RConInit(int client, int args) {
-  if(client != 0)
-    return Plugin_Handled;
-
-  char steamid[20];
-  GetCmdArg(1, steamid, sizeof(steamid));
-  int target = GetClientFromSteamID(steamid);
-
-  if (target != -1) AdminCheck(target);
-
-  return Plugin_Handled;
 }
 
 public Action RConMuteGag(int client, int args) {
