@@ -45,8 +45,11 @@ public void OnMutegagCheck(HTTPResponse response, any value) {
   InitiatePunishment(client, action, reason, timeleft);
 }
 
-public Action PunishCommandExecuted(int client, int args) {
+public Action PunishCommandExecuted(int client, const char[] cmd, int args) {
   if (MODULE_PUNISH.IntValue == 0 || StrEqual(SERVER, "")) return Plugin_Continue;
+
+  AdminId admin = GetUserAdmin(client);
+  if (!admin.HasFlag(Admin_Chat, Access_Real)) return Plugin_Stop;
 
   punish_selected_action[client] = 0;
   punish_selected_player[client] = -1;
@@ -60,7 +63,7 @@ public Action PunishCommandExecuted(int client, int args) {
   int action = 0;
   int target = -1;
   char reason[256];
-  char username[256];
+  char username[256] = "";
   char duration[256];
 
   if (StrContains(command, "unmute") != -1) action = ACTION_UNMUTE;
@@ -296,6 +299,7 @@ public int PunishExecution(int client) {
   JSONObject payload_del = new JSONObject();
   JSONObject payload_put = new JSONObject();
   payload_del.SetString("server", SERVER);
+  payload_put.SetBool("plugin", false);
 
   char url[512] = "users/";
   StrCat(url, sizeof(url), CLIENTS[punish_selected_player[client]]);
@@ -303,17 +307,17 @@ public int PunishExecution(int client) {
 
   if (punish_selected_conflict[client] == CONFLICT_NONE) {
 
-    if (MODULE_MUTEGAG_GLOBAL.BoolValue)
+    if (!MODULE_MUTEGAG_GLOBAL.BoolValue)
       payload_put.SetString("server", SERVER);
 
     payload_put.SetString("reason", punish_selected_reason[client]);
     payload_put.SetString("type", type);
     payload_put.SetInt("length", punish_selected_duration[client]);
-    payload_put.SetBool("plugin", false);
 
     if (punish_selected_action[client] < 0) {
       StrCat(url, sizeof(url), "?server=");
       StrCat(url, sizeof(url), SERVER);
+      StrCat(url, sizeof(url), "&plugin=false");
       httpClient.Delete(url, APINoResponseCall);
      } else
       httpClient.Put(url, payload_put, APINoResponseCall);
@@ -323,6 +327,7 @@ public int PunishExecution(int client) {
 
     StrCat(url, sizeof(url), "?server=");
     StrCat(url, sizeof(url), SERVER);
+    StrCat(url, sizeof(url), "&plugin=false");
     httpClient.Delete(url, APINoResponseCall);
   } else if (punish_selected_conflict[client] == CONFLICT_EXTEND) {
     StrCat(url, sizeof(url), "?resolved=true&server=");
@@ -397,11 +402,11 @@ void PopulateMenuWithPeople(Menu menu, int action) {
     bool gagged = BaseComm_IsClientGagged(i);
 
     switch (action) {
-      case ACTION_UNSILENCE: if (!muted || !gagged) continue;
-      case ACTION_UNGAG:     if ( muted || !gagged) continue;
-      case ACTION_UNMUTE:    if (!muted ||  gagged) continue;
-      case ACTION_MUTE:      if (!muted ||  gagged) continue;
-      case ACTION_GAG:       if ( muted || !gagged) continue;
+      case ACTION_UNSILENCE: if (!muted && !gagged) continue;
+      case ACTION_UNGAG:     if (!muted &&  gagged) continue;
+      case ACTION_UNMUTE:    if ( muted && !gagged) continue;
+      case ACTION_MUTE:      if (!muted && !gagged) continue;
+      case ACTION_GAG:       if (!muted && !gagged) continue;
       case ACTION_SILENCE:   if (!muted && !gagged) continue;
     }
 
@@ -446,20 +451,21 @@ void InitiatePunishment(int client, int action, char[] reason, int timeleft) {
   }
 
   if (action < 0) {
-    CloseHandle(mutegag_timer[client]);
+    mutegag_timer[client].Close();
+    mutegag_timer[client] = null;
 
-    PrintToChat(client, "[HT] --------------------------");
-    PrintToChat(client, "[HT] Note:  You are now %s again.", name);
-    PrintToChat(client, "[HT] --------------------------");
+    CPrintToChat(client, "%s --------------------------", PREFIX);
+    CPrintToChat(client, "%s Note:  You are now {olive}%s{default} again.", PREFIX, name);
+    CPrintToChat(client, "%s --------------------------", PREFIX);
   } else {
     char humanized_time[200];
     HumanizeTime(timeleft, humanized_time);
 
-    PrintToChat(client, "[HT] --------------------------");
-    PrintToChat(client, "[HT] Note:  You are being %s.", name);
-    PrintToChat(client, "[HT] Reason: %s", reason);
-    PrintToChat(client, "[HT] Time left: %s", humanized_time);
-    PrintToChat(client, "[HT] --------------------------");
+    CPrintToChat(client, "%s --------------------------", PREFIX);
+    CPrintToChat(client, "%s Note: You are being {red}%s{default}.", PREFIX, name);
+    CPrintToChat(client, "%s Reason: %s", PREFIX, reason);
+    CPrintToChat(client, "%s Time left: %s", PREFIX, humanized_time);
+    CPrintToChat(client, "%s --------------------------", PREFIX);
 
     if (mutegag_timeleft[client] != -1) return;
     mutegag_timeleft[client] = timeleft;

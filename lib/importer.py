@@ -15,6 +15,85 @@ class Importer:
     self.now = datetime.datetime.now()
 
   def sourcemod(self):
+    self.conn.query("""SELECT * FROM sm_groups""")
+    r = self.conn.store_result()
+    result = r.fetch_row(maxrows=0, how=1)
+
+    roles = {}
+    for raw in result:
+      flags = ServerPermission().convert(raw['flags'])
+      flags.save()
+
+      role = ServerGroup.objects.get_or_create(name=raw['name'], default={'flags': flags,
+                                                                          'immunity': raw['immunity_level']})
+      role.name = raw['name']
+      role.flags = flags
+      role.immunity = raw['immunity_level']
+      role.save()
+
+      roles[raw['id']] = role
+
+    self.conn.query("""SELECT * FROM sm_admins""")
+    r = self.conn.store_result()
+    result = r.fetch_row(maxrows=0, how=1)
+
+    generated = {}
+    for raw in result:
+      try:
+        steamid = SteamID.from_text(raw['identity']).as_64()
+      except:
+        print("Could not add admin {}".format(raw['name']))
+        continue
+
+      query = User.objects.filter(username=steamid)
+
+      if not query:
+        user = User.objects.create_user(username=steamid)
+        user.is_active = False
+        user.is_steam = True
+
+        populate(user)
+      else:
+        user = query[0]
+        user.namespace = raw['user']
+      user.save()
+
+      self.conn.query("""SELECT *
+                         FROM sm_admins_groups
+                         WHERE admin_id = {}""".format(raw['id']))
+      r = self.conn.store_result()
+      groups = r.fetch_row(maxrows=0, how=1)
+
+      if not groups and raw['flags']:
+        if raw['flags'] in generated:
+          role = generated[raw['flags']]
+        else:
+          role = ServerGroup()
+          role.name = raw['flags']
+          role.flags = ServerPermission().convert(raw['flags'])
+          role.flags.save()
+          role.immunity = 0
+          role.save()
+
+          generated[raw['flags']] = role
+
+        m = Membership()
+        m.user = user
+        m.role = role
+        m.save()
+
+      elif groups:
+        for group in groups:
+          role = roles[group["group_id"]]
+
+          m = Membership()
+          m.user = user
+          m.role = role
+          m.save()
+
+    return True
+
+  def sourceban(self):
     # get servers
     self.conn.query("""SELECT * FROM sb_servers""")
     r = self.conn.store_result()

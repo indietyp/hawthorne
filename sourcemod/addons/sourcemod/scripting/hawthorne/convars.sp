@@ -65,12 +65,17 @@ void Hawthorne_InitConVars() {
                                          true, 0.0,
                                          true, 1.0);
 
-  MODULE_AUTOBAN = CreateConVar("ht_autoban_disable",
-                      "1",
-                      "Enable automatic bans for suspected alternate accounts from already banned users.",
-                      FCVAR_NONE,
-                      true, 0.0,
-                      true, 1.0);
+  MODULE_AUTOBAN          = CreateConVar("ht_autoban",
+                                         "1",
+                                         "Enable automatic bans for suspected alternate accounts from already banned users.",
+                                         FCVAR_NONE,
+                                         true, 0.0,
+                                         true, 1.0);
+
+  MODULE_HEXTAGS_FORMAT   = CreateConVar("ht_hextags_format",
+                                         "{R}",
+                                         "How the hextag string is formatted | U for uppercase, L for lowercase, R for no change",
+                                         FCVAR_NONE);
 
   AutoExecConfig(true, "hawthorne");
 }

@@ -386,17 +386,25 @@ def ban(request, u=None, validated={}, *args, **kwargs):
     ban.save()
 
     if validated['plugin']:
-      SourcemodPluginWrapper(server).ban(ban)
+      server = [server] if server else Server.objects.all()
+      for s in server:
+        SourcemodPluginWrapper(s).ban(ban)
 
   elif request.method == 'DELETE':
     if validated['server']:
       server = Server.objects.get(id=validated['server'])
     else:
       server = None
-    for ban in Ban.objects.filter(user=user, server=server):
-      ban.resolved = True
 
+    for ban in Ban.objects.filter(user=user, server=server, resolved=False):
+      ban.resolved = True
       ban.save()
+
+      if validated['plugin']:
+        server = [server] if server else Server.objects.all()
+
+        for s in server:
+          SourcemodPluginWrapper(s).ban(ban)
 
   return 'successful, nothing to report'
 
@@ -492,12 +500,15 @@ def mutegag(request, u=None, validated={}, *args, **kwargs):
     else:
       server = None
 
-    for mutegag in Mutegag.objects.filter(user=user, server=server):
+    for mutegag in Mutegag.objects.filter(user=user, server=server, resolved=False):
       mutegag.resolved = True
       mutegag.save()
 
       if validated['plugin']:
-        SourcemodPluginWrapper(server).mutegag(mutegag)
+        server = [server] if server else Server.objects.all()
+
+        for s in server:
+          SourcemodPluginWrapper(s).mutegag(mutegag)
 
   return 'successful, nothing to report'
 

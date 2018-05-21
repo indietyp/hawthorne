@@ -1,5 +1,4 @@
-#define PREFIX          "\x3 \x4[hawthorne] \x1"
-#define PREFIX_BAD      "\x3 \x7[hawthorne] \x1"
+#define PREFIX "[{green}HT{default}]"
 
 #define ACTION_UNSILENCE  -3
 #define ACTION_UNGAG      -2
@@ -21,7 +20,7 @@ HTTPClient httpClient;
 
 char SERVER[37] = "",
      CLIENTS[MAXPLAYERS + 1][37];
-     
+
 int mutegag_timeleft[MAXPLAYERS + 1],
     admin_timeleft[MAXPLAYERS + 1];
 
@@ -46,7 +45,8 @@ ConVar MANAGER,
        MODULE_MUTEGAG_GLOBAL,
        MODULE_AUTOBAN,
        MODULE_BAN_GLOBAL,
-       MODULE_HEXTAGS;
+       MODULE_HEXTAGS,
+       MODULE_HEXTAGS_FORMAT;
 
 char endpoint[512];
 
@@ -59,6 +59,6 @@ char SERVER_HOSTNAME[512],
 
 bool hextags;
 
-char tag[MAXPLAYERS + 1][128];
+char ht_tag[MAXPLAYERS + 1][128];
 
 bool MOTD_SEEN[MAXPLAYERS + 1] = false;

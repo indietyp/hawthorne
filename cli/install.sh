@@ -306,6 +306,8 @@ configure() {
 
       if mysql -u $dbuser -e "CREATE DATABASE IF NOT EXISTS $dbname CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"; then
         printf "\n${GREEN}Successfully connected to database.${NORMAL}\n"
+        mysql -u $dbuser -e "SET GLOBAL innodb_default_row_format=DYNAMIC;"
+        mysql -u $dbuser -e "SET PERSIST innodb_default_row_format=DYNAMIC;"
         break;
       else
         printf "\n${RED}Could not connect${NORMAL} to database with provided credentials.\n"
@@ -329,6 +331,8 @@ configure() {
 
     if mysql -u $dbuser -e "CREATE DATABASE IF NOT EXISTS $dbname"; then
       printf "\n${GREEN}Successfully connected.${NORMAL}\n"
+      mysql -u $dbuser -e "SET GLOBAL innodb_default_row_format=DYNAMIC;"
+      mysql -u $dbuser -e "SET PERSIST innodb_default_row_format=DYNAMIC;"
     else
       printf "\n${RED}Could not connect${NORMAL} to database with provided credentials. Exiting configuration\n"
       exit 1

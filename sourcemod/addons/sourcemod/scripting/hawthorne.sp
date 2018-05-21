@@ -15,6 +15,7 @@ Credits to ...
 #include <ripext>
 #include <regex>
 #include <geoip>
+#include <multicolors>
 
 #undef REQUIRE_PLUGIN
 #include <hextags>
@@ -54,18 +55,19 @@ public void OnPluginStart() {
   AddCommandListener(OnPlayerChatMessage, "say");
   AddCommandListener(OnPlayerChatMessage, "say_team");
 
+
   AddCommandListener(OnAddBanCommand, "sm_addban");
+  RegConsoleCmd("sm_reloadadmins", OnClientReloadAdmins, "", ADMFLAG_CONFIG);
 
-  RegAdminCmd("sm_reloadadmins", OnClientReloadAdmins, ADMFLAG_CONFIG);
 
-  RegAdminCmd("sm_mute", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !mute <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
-  RegAdminCmd("sm_unmute", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !unmute <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
+  AddCommandListener(PunishCommandExecuted, "sm_mute");
+  AddCommandListener(PunishCommandExecuted, "sm_unmute");
 
-  RegAdminCmd("sm_gag", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !gag <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
-  RegAdminCmd("sm_ungag", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !ungag <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
+  AddCommandListener(PunishCommandExecuted, "sm_gag");
+  AddCommandListener(PunishCommandExecuted, "sm_ungag");
 
-  RegAdminCmd("sm_silence", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !silence <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
-  RegAdminCmd("sm_unsilence", PunishCommandExecuted, ADMFLAG_CHAT, "Usage: !unsilence <player*> <duration> <reason> | * = mandatory | duration format e.g. 12h");
+  AddCommandListener(PunishCommandExecuted, "sm_silence");
+  AddCommandListener(PunishCommandExecuted, "sm_unsilence");
 
   Hawthorne_OnPluginStart();
 }
