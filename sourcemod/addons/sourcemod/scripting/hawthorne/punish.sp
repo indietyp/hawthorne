@@ -63,7 +63,7 @@ public Action PunishCommandExecuted(int client, const char[] cmd, int args) {
   int action = 0;
   int target = -1;
   char reason[256];
-  char username[256];
+  char username[256] = "";
   char duration[256];
 
   if (StrContains(command, "unmute") != -1) action = ACTION_UNMUTE;
@@ -299,6 +299,7 @@ public int PunishExecution(int client) {
   JSONObject payload_del = new JSONObject();
   JSONObject payload_put = new JSONObject();
   payload_del.SetString("server", SERVER);
+  payload_put.SetBool("plugin", false);
 
   char url[512] = "users/";
   StrCat(url, sizeof(url), CLIENTS[punish_selected_player[client]]);
@@ -306,17 +307,17 @@ public int PunishExecution(int client) {
 
   if (punish_selected_conflict[client] == CONFLICT_NONE) {
 
-    if (MODULE_MUTEGAG_GLOBAL.BoolValue)
+    if (!MODULE_MUTEGAG_GLOBAL.BoolValue)
       payload_put.SetString("server", SERVER);
 
     payload_put.SetString("reason", punish_selected_reason[client]);
     payload_put.SetString("type", type);
     payload_put.SetInt("length", punish_selected_duration[client]);
-    payload_put.SetBool("plugin", false);
 
     if (punish_selected_action[client] < 0) {
       StrCat(url, sizeof(url), "?server=");
       StrCat(url, sizeof(url), SERVER);
+      StrCat(url, sizeof(url), "&plugin=false");
       httpClient.Delete(url, APINoResponseCall);
      } else
       httpClient.Put(url, payload_put, APINoResponseCall);
@@ -326,6 +327,7 @@ public int PunishExecution(int client) {
 
     StrCat(url, sizeof(url), "?server=");
     StrCat(url, sizeof(url), SERVER);
+    StrCat(url, sizeof(url), "&plugin=false");
     httpClient.Delete(url, APINoResponseCall);
   } else if (punish_selected_conflict[client] == CONFLICT_EXTEND) {
     StrCat(url, sizeof(url), "?resolved=true&server=");
