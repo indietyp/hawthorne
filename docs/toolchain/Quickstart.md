@@ -10,5 +10,5 @@ This toolchain may not have a constant conforming interface. _Breaking changes w
 !> **Note:** This is a /bin/sh script. The syntax may differ from certain shells, like fish - so be aware of that. (A [Hashbang] is included in ever shell file.)
 
 
-[1]:	toolchain/usage.md
-[2]:	toolchain/reference.md
+[1]:	toolchain/Usage
+[2]:	toolchain/Reference
