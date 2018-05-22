@@ -5,7 +5,7 @@
 ## Prerequisites
 Make sure you have the following items installed and configured on your Linux server, before you proceed with the installation.
 
-!> If running MariaDB it is important that you use version 10.2.2 or later, otherwise the installation will fail.
+!> Make sure you have the versions listed below, or the installation will fail. It is a very common issue made.
 
 * Web Server (_nginx recommended_)
 * MySQL 5.7+ or MariaDB 10.2.2+ instance (either _local_ or _remote_)
