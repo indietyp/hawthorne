@@ -40,7 +40,6 @@ public Action OnClientCommand(int client, int args) {
   if (!IsClientInGame(client) || IsFakeClient(client)) return Plugin_Continue;
   if (client < 1) return Plugin_Continue;
   if (!MODULE_LOG.BoolValue || StrEqual(SERVER, "")) return Plugin_Continue;
-  if (StrContains(command, "sm_") == -1 || !IsAdminCMD(command)) return Plugin_Continue;
 
   // formatting the command to include the argument used
   char arguments[512];
@@ -50,20 +49,4 @@ public Action OnClientCommand(int client, int args) {
   SendChatMessage(client, command, 1);
 
   return Plugin_Continue;
-}
-
-bool IsAdminCMD(char[] command) {
-  // we are excluding VIP privileges
-  AdminId admin = CreateAdmin();
-  admin.SetFlag(Admin_Custom1, true);
-  admin.SetFlag(Admin_Custom2, true);
-  admin.SetFlag(Admin_Custom3, true);
-  admin.SetFlag(Admin_Custom4, true);
-  admin.SetFlag(Admin_Custom5, true);
-  admin.SetFlag(Admin_Custom6, true);
-  admin.SetFlag(Admin_Reservation, true);
-  RemoveAdmin(admin);
-
-  if (CheckAccess(admin, command, 0, false)) return false;
-  return true;
 }

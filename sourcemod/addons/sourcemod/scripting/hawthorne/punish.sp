@@ -405,12 +405,12 @@ void PopulateMenuWithPeople(Menu menu, int action) {
     bool gagged = BaseComm_IsClientGagged(i);
 
     switch (action) {
-      case ACTION_UNSILENCE: if (!muted && !gagged) continue;
-      case ACTION_UNGAG:     if (!muted &&  gagged) continue;
-      case ACTION_UNMUTE:    if ( muted && !gagged) continue;
-      case ACTION_MUTE:      if (!muted && !gagged) continue;
-      case ACTION_GAG:       if (!muted && !gagged) continue;
-      case ACTION_SILENCE:   if (!muted && !gagged) continue;
+      case ACTION_UNSILENCE: if (!muted || !gagged) continue;
+      case ACTION_UNGAG:     if ( muted || !gagged) continue;
+      case ACTION_UNMUTE:    if (!muted ||  gagged) continue;
+      case ACTION_MUTE:      if ( muted ||  gagged) continue;
+      case ACTION_GAG:       if ( muted ||  gagged) continue;
+      case ACTION_SILENCE:   if ( muted ||  gagged) continue;
     }
 
     char username[128], id[8];
