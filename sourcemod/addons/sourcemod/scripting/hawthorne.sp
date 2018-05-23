@@ -32,9 +32,10 @@ Credits to ...
 #include "hawthorne/punish.sp"
 #include "hawthorne/rcon.sp"
 // #include "hawthorne/autoban.sp"
+// #include "hawthorne/misc.sp"
 
 #include "hawthorne/natives.sp"
-#include "hawthorne/utils.sp"
+#include "hawthorne/events.sp"
 #include "hawthorne/humanize.sp"
 #include "hawthorne/steam.sp"
 

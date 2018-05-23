@@ -1,4 +1,4 @@
-// TODO: TESTING
+// addban and unban command redo
 void ClientBanKick(int client, char[] cAdminName, char[] cReason, char[] cTotalTime, char[] cTime) {
   char time[256];
 

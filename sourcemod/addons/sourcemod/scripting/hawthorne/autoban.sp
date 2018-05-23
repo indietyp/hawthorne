@@ -1,3 +1,4 @@
+// implement
 #include <advanced_motd>
 
 void AutoBan_OnMapStart() {
