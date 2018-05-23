@@ -129,6 +129,7 @@ public Action RConStatus(int client, int args) {
       PrintToServer(reply);
       reply = "";
     }
+
     reply[i % 512] = json[i];
     if (json[i] == 0) {
       if (i % 512 != 0) PrintToServer(reply);

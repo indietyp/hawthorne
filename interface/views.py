@@ -6,15 +6,16 @@ from lib.mainframe import Mainframe
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import DateField, Count, Q
+from django.db.models import DateField, Count, Q, F, ExpressionWrapper, DateTimeField
 from django.db.models.functions import Cast
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate
 from django.http import JsonResponse
+from django.utils import timezone
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 
-from core.models import Server, ServerGroup, User
+from core.models import Server, ServerGroup, User, Ban, Mutegag
 from log.models import UserOnlineTime, ServerChat
 
 
@@ -114,11 +115,23 @@ def server(request):
 
 @login_required(login_url='/login')
 def ban(request):
+  Ban.objects.annotate(completion=ExpressionWrapper(F('created_at') + F('length'),
+                                                    output_field=DateTimeField()))\
+             .filter(completion__lte=timezone.now(),
+                     resolved=False,
+                     length__isnull=False).update(resolved=True)
+
   return render(request, 'components/ban.pug', {})
 
 
 @login_required(login_url='/login')
 def mutegag(request):
+  Mutegag.objects.annotate(completion=ExpressionWrapper(F('created_at') + F('length'),
+                                                        output_field=DateTimeField()))\
+                 .filter(completion__lte=timezone.now(),
+                         resolved=False,
+                         length__isnull=False).update(resolved=True)
+
   return render(request, 'components/mutegag.pug')
 
 

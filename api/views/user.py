@@ -4,7 +4,7 @@ import datetime
 import re
 
 from django.contrib.auth.models import Group, Permission
-from django.db.models import F, Q
+from django.db.models import F, Q, Value, DateTimeField, ExpressionWrapper
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
@@ -340,6 +340,12 @@ def ban(request, u=None, validated={}, *args, **kwargs):
   except Exception as e:
     return 'non existent user queried - {}'.format(e), 403
 
+  Ban.objects.annotate(completion=ExpressionWrapper(F('created_at') + F('length'),
+                                                    output_field=DateTimeField()))\
+             .filter(completion__lte=timezone.now(),
+                     resolved=False,
+                     length__isnull=False).update(resolved=True)
+
   if request.method == 'GET':
     bans = Ban.objects.filter(user=user)
     if validated['server'] is not None:
@@ -420,6 +426,12 @@ def mutegag(request, u=None, validated={}, *args, **kwargs):
     user = User.objects.get(id=u)
   except Exception as e:
     return 'non existent user queried - {}'.format(e), 403
+
+  Mutegag.objects.annotate(completion=ExpressionWrapper(F('created_at') + F('length'),
+                                                        output_field=DateTimeField()))\
+                 .filter(completion__lte=timezone.now(),
+                         resolved=False,
+                         length__isnull=False).update(resolved=True)
 
   if request.method == 'GET':
     mutegags = Mutegag.objects.filter(user=user)

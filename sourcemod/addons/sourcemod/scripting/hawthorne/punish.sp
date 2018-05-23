@@ -47,9 +47,7 @@ public void OnMutegagCheck(HTTPResponse response, any value) {
 
 public Action PunishCommandExecuted(int client, const char[] cmd, int args) {
   if (MODULE_PUNISH.IntValue == 0 || StrEqual(SERVER, "")) return Plugin_Continue;
-
-  AdminId admin = GetUserAdmin(client);
-  if (!admin.HasFlag(Admin_Chat, Access_Real)) return Plugin_Stop;
+  if (!CheckCommandAccess(client, cmd, ADMFLAG_CHAT)) return Plugin_Stop;
 
   punish_selected_action[client] = 0;
   punish_selected_player[client] = -1;
@@ -117,7 +115,7 @@ public Action PunishCommandExecuted(int client, const char[] cmd, int args) {
       GetClientAuthId(i, AuthId_SteamID64, steam64, sizeof(steam64));
 
       if (StrContains(name, username, false) != -1 || StrEqual(steam2, username) || StrEqual(steam64, username)) {
-        target = i;
+        target = GetClientUserId(i);
         break;
       }
     }
@@ -147,6 +145,11 @@ public int MenuHandlerPlayer(Menu menu, MenuAction action, int client, int param
     menu.GetItem(param, selected, sizeof(selected));
 
     punish_selected_player[client] = StringToInt(selected);
+  }
+
+  if (!punish_selected_player[client]) {
+    PrintToChat(client, "That player isn't online anymore!");
+    return -1;
   }
 
   int mode = punish_selected_action[client];
@@ -302,7 +305,7 @@ public int PunishExecution(int client) {
   payload_put.SetBool("plugin", false);
 
   char url[512] = "users/";
-  StrCat(url, sizeof(url), CLIENTS[punish_selected_player[client]]);
+  StrCat(url, sizeof(url), CLIENTS[GetClientOfUserId(punish_selected_player[client])]);
   StrCat(url, sizeof(url), "/mutegag");
 
   if (punish_selected_conflict[client] == CONFLICT_NONE) {
@@ -363,7 +366,7 @@ public void APIMutegagExtendResponseCall(HTTPResponse response, any value) {
   payload.SetInt("length", length);
 
   char url[512] = "users/";
-  StrCat(url, sizeof(url), CLIENTS[punish_selected_player[client]]);
+  StrCat(url, sizeof(url), CLIENTS[GetClientOfUserId(punish_selected_player[client])]);
   StrCat(url, sizeof(url), "/mutegag");
 
   httpClient.Post(url, payload, APINoResponseCall);
@@ -396,7 +399,7 @@ void PopulateMenuWithConfig(Menu menu, char[] path) {
 }
 
 void PopulateMenuWithPeople(Menu menu, int action) {
-  for (int i = 1; i < MaxClients; i++) {
+  for (int i = 1; i <= MaxClients; i++) {
     if (!IsClientInGame(i) || IsFakeClient(i)) continue;
     bool muted = BaseComm_IsClientMuted(i);
     bool gagged = BaseComm_IsClientGagged(i);
@@ -410,10 +413,10 @@ void PopulateMenuWithPeople(Menu menu, int action) {
       case ACTION_SILENCE:   if (!muted && !gagged) continue;
     }
 
-    char username[128], id[5];
+    char username[128], id[8];
     GetClientName(i, username, sizeof(username));
 
-    IntToString(i, id, sizeof(id));
+    IntToString(GetClientUserId(i), id, sizeof(id));
     menu.AddItem(id, username);
   }
 }
