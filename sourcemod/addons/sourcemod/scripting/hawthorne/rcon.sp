@@ -4,12 +4,12 @@ void RConCommands_OnPluginStart() {
   RegAdminCmd("json_status",        RConStatus,       ADMFLAG_RCON);
 
   RegAdminCmd("rcon_ban",           RConBanKick,      ADMFLAG_RCON);
-  RegAdminCmd("rcon_mutegag",       RConMuteGag,      ADMFLAG_RCON);
+  RegAdminCmd("rcon_mutegag",       RConPunishment,      ADMFLAG_RCON);
   RegAdminCmd("rcon_init",          RConInit,         ADMFLAG_RCON);
   RegAdminCmd("rcon_sdonate",       RConInit,         ADMFLAG_RCON);
 }
 
-public Action RConMuteGag(int client, int args) {
+public Action RConPunishment(int client, int args) {
   if(client != 0)
     return Plugin_Handled;
 

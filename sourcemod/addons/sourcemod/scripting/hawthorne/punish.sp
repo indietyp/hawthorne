@@ -1,11 +1,11 @@
-void MuteGag_OnPluginStart() {
+void Punishment_OnPluginStart() {
   BuildPath(Path_SM, PUNISHMENT_TIMES,  sizeof(PUNISHMENT_TIMES),  "configs/hawthorne/punishment.txt");
   BuildPath(Path_SM, GAG_REASONS,       sizeof(GAG_REASONS),       "configs/hawthorne/reasons/gag.txt");
   BuildPath(Path_SM, MUTE_REASONS,      sizeof(MUTE_REASONS),      "configs/hawthorne/reasons/mute.txt");
   BuildPath(Path_SM, SILENCE_REASONS,   sizeof(SILENCE_REASONS),   "configs/hawthorne/reasons/silence.txt");
 }
 
-public void MuteGag_OnClientPutInServer(int client) {
+public void Punishment_OnClientPutInServer(int client) {
   if (!MODULE_PUNISH.BoolValue || StrEqual(SERVER, "") || IsFakeClient(client)) return;
 
   char url[512] = "users/";
@@ -13,10 +13,10 @@ public void MuteGag_OnClientPutInServer(int client) {
   StrCat(url, sizeof(url), "/mutegag?resolved=false&server=");
   StrCat(url, sizeof(url), SERVER);
 
-  httpClient.Get(url, OnMutegagCheck, client);
+  httpClient.Get(url, OnPunishmentCheck, client);
 }
 
-public void OnMutegagCheck(HTTPResponse response, any value) {
+public void OnPunishmentCheck(HTTPResponse response, any value) {
   int client = value;
 
   if (client < 1) return;
@@ -310,7 +310,7 @@ public int PunishExecution(int client) {
 
   if (punish_selected_conflict[client] == CONFLICT_NONE) {
 
-    if (!MODULE_MUTEGAG_GLOBAL.BoolValue)
+    if (!MODULE_PUNISHMENT_GLOBAL.BoolValue)
       payload_put.SetString("server", SERVER);
 
     payload_put.SetString("reason", punish_selected_reason[client]);
@@ -336,7 +336,7 @@ public int PunishExecution(int client) {
     StrCat(url, sizeof(url), "?resolved=true&server=");
     StrCat(url, sizeof(url), SERVER);
 
-    httpClient.Get(url, APIMutegagExtendResponseCall, client);
+    httpClient.Get(url, APIPunishmentExtendResponseCall, client);
   } else if (punish_selected_conflict[client] == CONFLICT_CONVERT) {
     payload_del.SetString("type", "both");
     httpClient.Post(url, payload_del, APINoResponseCall);
@@ -349,7 +349,7 @@ public int PunishExecution(int client) {
   return 1;
 }
 
-public void APIMutegagExtendResponseCall(HTTPResponse response, any value) {
+public void APIPunishmentExtendResponseCall(HTTPResponse response, any value) {
   int client = value;
   if (!APIValidator(response)) return;
 
@@ -472,12 +472,12 @@ void InitiatePunishment(int client, int action, char[] reason, int timeleft) {
 
     if (mutegag_timeleft[client] != -1) return;
     mutegag_timeleft[client] = timeleft;
-    mutegag_timer[client] = CreateTimer(60.0, MutegagTimer, client, TIMER_REPEAT);
+    mutegag_timer[client] = CreateTimer(60.0, PunishmentTimer, client, TIMER_REPEAT);
   }
 }
 
 
-public Action MutegagTimer(Handle timer, int client) {
+public Action PunishmentTimer(Handle timer, int client) {
   if (client < 0) return Plugin_Stop;
 
   mutegag_timeleft[client] -= 60;
