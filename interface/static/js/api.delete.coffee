@@ -32,7 +32,7 @@ remove = (mode = '', that) ->
       payload =
         server: server
 
-      endpoint = window.endpoint.api.users[user].ban
+      endpoint = window.endpoint.api.users[user].punishment
     when 'mutegag'
       user = $('input.user', node)[0].value
       server = $('input.server', node)[0].value
@@ -41,7 +41,7 @@ remove = (mode = '', that) ->
         payload =
           server: server
 
-      endpoint = window.endpoint.api.users[user].mutegag
+      endpoint = window.endpoint.api.users[user].punishment
     when 'server'
       node = that.parentElement.parentElement.parentElement.parentElement
       server = $('input.uuid', node)[0].value

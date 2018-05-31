@@ -10,7 +10,7 @@ public void Punishment_OnClientPutInServer(int client) {
 
   char url[512] = "users/";
   StrCat(url, sizeof(url), CLIENTS[client]);
-  StrCat(url, sizeof(url), "/mutegag?resolved=false&server=");
+  StrCat(url, sizeof(url), "/punishment?banned=false&kicked=false&resolved=false&server=");
   StrCat(url, sizeof(url), SERVER);
 
   httpClient.Get(url, OnPunishmentCheck, client);
@@ -294,9 +294,14 @@ public int PunishExecution(int client) {
   char type[32] = "";
 
   switch (punish_selected_action[client]) {
-    case ACTION_MUTE: type = "mute";
-    case ACTION_GAG: type = "gag";
-    case ACTION_SILENCE: type = "both";
+    bool mute = false;
+    bool gag = false;
+    case ACTION_MUTE: mute = true;
+    case ACTION_GAG: gag = true;
+    case ACTION_SILENCE: {
+      mute = true;
+      gag = true;
+    };
   }
 
   JSONObject payload_del = new JSONObject();
@@ -306,7 +311,7 @@ public int PunishExecution(int client) {
 
   char url[512] = "users/";
   StrCat(url, sizeof(url), CLIENTS[GetClientOfUserId(punish_selected_player[client])]);
-  StrCat(url, sizeof(url), "/mutegag");
+  StrCat(url, sizeof(url), "/punishment");
 
   if (punish_selected_conflict[client] == CONFLICT_NONE) {
 
@@ -314,7 +319,8 @@ public int PunishExecution(int client) {
       payload_put.SetString("server", SERVER);
 
     payload_put.SetString("reason", punish_selected_reason[client]);
-    payload_put.SetString("type", type);
+    payload_put.SetBool("muted", mute);
+    payload_put.SetBool("gagged", gag);
     payload_put.SetInt("length", punish_selected_duration[client]);
 
     if (punish_selected_action[client] < 0) {
@@ -338,7 +344,8 @@ public int PunishExecution(int client) {
 
     httpClient.Get(url, APIPunishmentExtendResponseCall, client);
   } else if (punish_selected_conflict[client] == CONFLICT_CONVERT) {
-    payload_del.SetString("type", "both");
+    payload_del.SetBool("muted", true);
+    payload_del.SetBool("gagged", true);
     httpClient.Post(url, payload_del, APINoResponseCall);
   }
 
