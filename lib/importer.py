@@ -226,9 +226,9 @@ class Importer:
       b.created_by = users[raw['aid']]
       m.created_at = timezone.make_aware(datetime.datetime.fromtimestamp(raw['created']))
       b.reason = raw['reason']
-      b.length = datetime.timedelta(seconds=raw['length']) if raw['length'] != 0 else None
+      b.length = datetime.timedelta(seconds=raw['length']) if raw['length'] > 0 else None
       b.resolved = False
-      if raw['created'] + raw['length'] < self.now.timestamp() and raw['length'] != 0:
+      if raw['created'] + raw['length'] < self.now.timestamp() and raw['length'] > 0:
         b.resolved = True
 
       if raw['RemovedOn']:
@@ -267,12 +267,12 @@ class Importer:
       m.created_by = users[raw['aid']]
       m.created_at = timezone.make_aware(datetime.datetime.fromtimestamp(raw['created']))
       m.reason = raw['reason']
-      m.length = datetime.timedelta(seconds=raw['length']) if raw['length'] != 0 else None
+      m.length = datetime.timedelta(seconds=raw['length']) if raw['length'] > 0 else None
       m.is_muted = True if raw['type'] == 1 else False
       m.is_gagged = True if raw['type'] == 2 else False
 
       m.resolved = False
-      if raw['created'] + raw['length'] < self.now.timestamp() and raw['length'] != 0:
+      if raw['created'] + raw['length'] < self.now.timestamp() and raw['length'] > 0:
         m.resolved = True
 
       if raw['RemovedOn']:
@@ -370,12 +370,12 @@ class Importer:
       m.created_by = users[raw['aid']]
       m.created_at = timezone.make_aware(datetime.datetime.fromtimestamp(raw['time']))
       m.reason = raw['reason']
-      m.length = datetime.timedelta(seconds=raw['length'] * 60) if raw['length'] != 0 else None
+      m.length = datetime.timedelta(seconds=raw['length'] * 60) if raw['length'] > 0 else None
       m.is_muted = True if raw['type'] == 1 else False
       m.is_gagged = True if raw['type'] == 2 else False
 
       m.resolved = False
-      if raw['time'] + raw['length'] < self.now.timestamp() and raw['length'] != 0:
+      if raw['time'] + raw['length'] < self.now.timestamp() and raw['length'] > 0:
         m.resolved = True
 
       if raw['unbanned'] == 1:
@@ -397,9 +397,9 @@ class Importer:
       b.created_by = users[raw['aid']]
       m.created_at = timezone.make_aware(datetime.datetime.fromtimestamp(raw['time']))
       b.reason = raw['reason']
-      b.length = datetime.timedelta(seconds=raw['length']) if raw['length'] != 0 else None
+      b.length = datetime.timedelta(seconds=raw['length']) if raw['length'] > 0 else None
       b.resolved = False
-      if raw['time'] + raw['length'] < self.now.timestamp() and raw['length'] != 0:
+      if raw['time'] + raw['length'] < self.now.timestamp() and raw['length'] > 0:
         b.resolved = True
 
       if raw['unbanned'] == 1:

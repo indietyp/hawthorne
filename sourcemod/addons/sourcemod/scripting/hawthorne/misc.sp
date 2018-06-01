@@ -1,1 +1,7 @@
-// tag command
+void StatusCommand() {
+
+}
+
+void TagCommand() {
+
+}
