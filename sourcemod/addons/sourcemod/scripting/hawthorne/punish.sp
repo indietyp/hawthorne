@@ -1,22 +1,22 @@
-void MuteGag_OnPluginStart() {
+void Punishment_OnPluginStart() {
   BuildPath(Path_SM, PUNISHMENT_TIMES,  sizeof(PUNISHMENT_TIMES),  "configs/hawthorne/punishment.txt");
   BuildPath(Path_SM, GAG_REASONS,       sizeof(GAG_REASONS),       "configs/hawthorne/reasons/gag.txt");
   BuildPath(Path_SM, MUTE_REASONS,      sizeof(MUTE_REASONS),      "configs/hawthorne/reasons/mute.txt");
   BuildPath(Path_SM, SILENCE_REASONS,   sizeof(SILENCE_REASONS),   "configs/hawthorne/reasons/silence.txt");
 }
 
-public void MuteGag_OnClientPutInServer(int client) {
+public void Punishment_OnClientPutInServer(int client) {
   if (!MODULE_PUNISH.BoolValue || StrEqual(SERVER, "") || IsFakeClient(client)) return;
 
   char url[512] = "users/";
   StrCat(url, sizeof(url), CLIENTS[client]);
-  StrCat(url, sizeof(url), "/mutegag?resolved=false&server=");
+  StrCat(url, sizeof(url), "/punishment?banned=false&kicked=false&resolved=false&server=");
   StrCat(url, sizeof(url), SERVER);
 
-  httpClient.Get(url, OnMutegagCheck, client);
+  httpClient.Get(url, OnPunishmentCheck, client);
 }
 
-public void OnMutegagCheck(HTTPResponse response, any value) {
+public void OnPunishmentCheck(HTTPResponse response, any value) {
   int client = value;
 
   if (client < 1) return;
@@ -28,32 +28,32 @@ public void OnMutegagCheck(HTTPResponse response, any value) {
   if (results.Length < 1) return;
   JSONObject result = view_as<JSONObject>(results.Get(0));
 
-  char reason[256], type[3];
+  char reason[256];
   int action;
   int length = RoundToZero(result.GetFloat("length"));
   int created_at = RoundToZero(result.GetFloat("created_at"));
   int now = GetTime();
   int timeleft = (created_at + length) - now;
+  if (timeleft < 0) timeleft = 0;
 
-  result.GetString("type", type, sizeof(type));
   result.GetString("reason", reason, sizeof(reason));
+  bool muted = result.GetBool("is_muted");
+  bool gagged = result.GetBool("is_gagged");
 
-  if (StrEqual(type, "MU")) action = ACTION_MUTE;
-  else if (StrEqual(type, "BO")) action = ACTION_GAG;
-  else if (StrEqual(type, "GA")) action = ACTION_SILENCE;
+  if (muted && gagged) action = ACTION_SILENCE;
+  else if (gagged) action = ACTION_GAG;
+  else action = ACTION_MUTE;
 
   InitiatePunishment(client, action, reason, timeleft);
 }
 
 public Action PunishCommandExecuted(int client, const char[] cmd, int args) {
   if (MODULE_PUNISH.IntValue == 0 || StrEqual(SERVER, "")) return Plugin_Continue;
-  if (!CheckCommandAccess(client, cmd, ADMFLAG_CHAT)) return Plugin_Stop;
-
-  punish_selected_action[client] = 0;
-  punish_selected_player[client] = -1;
-  punish_selected_conflict[client] = -1;
-  punish_selected_duration[client] = -1;
-  punish_selected_reason[client] = "";
+  selected_action[client] = 0;
+  selected_player[client] = -1;
+  selected_conflict[client] = -1;
+  selected_duration[client] = -1;
+  selected_reason[client] = "";
 
   char command[64];
   GetCmdArg(0, command, sizeof(command));
@@ -67,11 +67,17 @@ public Action PunishCommandExecuted(int client, const char[] cmd, int args) {
   if (StrContains(command, "unmute") != -1) action = ACTION_UNMUTE;
   else if (StrContains(command, "ungag") != -1) action = ACTION_UNGAG;
   else if (StrContains(command, "unsilence") != -1) action = ACTION_UNSILENCE;
+  else if (StrContains(command, "unban") != -1) action = ACTION_UNBAN;
   else if (StrContains(command, "mute") != -1) action = ACTION_MUTE;
   else if (StrContains(command, "gag") != -1) action = ACTION_GAG;
   else if (StrContains(command, "silence") != -1) action = ACTION_SILENCE;
+  else if (StrContains(command, "ban") != -1) action = ACTION_BAN;
 
-  punish_selected_action[client] = action;
+  if (action == ACTION_BAN && !CheckCommandAccess(client, cmd, ADMFLAG_BAN)) return Plugin_Stop;
+  else if (action == ACTION_UNBAN && !CheckCommandAccess(client, cmd, ADMFLAG_UNBAN)) return Plugin_Stop;
+  else if (action != ACTION_BAN && action != ACTION_UNBAN && !CheckCommandAccess(client, cmd, ADMFLAG_CHAT)) return Plugin_Stop;
+
+  selected_action[client] = action;
 
   Menu players = new Menu(MenuHandlerPlayer);
   if (args >= 1) {
@@ -101,7 +107,7 @@ public Action PunishCommandExecuted(int client, const char[] cmd, int args) {
     }
   }
 
-  if (!StrEqual(duration, "")) punish_selected_duration[client] = DehumanizeTime(duration, sizeof(duration));
+  if (!StrEqual(duration, "")) selected_duration[client] = DehumanizeTime(duration, sizeof(duration));
 
   if (!StrEqual(username, "")) {
     for (int i = 1; i < MaxClients; i++) {
@@ -125,10 +131,10 @@ public Action PunishCommandExecuted(int client, const char[] cmd, int args) {
       return Plugin_Stop;
     }
 
-    punish_selected_player[client] = target;
+    selected_player[client] = target;
     MenuHandlerPlayer(players, MenuAction_Select, client, -1);
   } else {
-    PopulateMenuWithPeople(players, action);
+    PopulateMenuWithPeople(players, action, client);
     players.ExitButton = true;
     players.Display(client, 20);
   }
@@ -140,34 +146,42 @@ public int MenuHandlerPlayer(Menu menu, MenuAction action, int client, int param
   if (action != MenuAction_Select) return -1;
 
   Menu conflict = new Menu(MenuHandlerConflict);
-  if (punish_selected_player[client] == -1) {
+  if (selected_player[client] == -1) {
     char selected[16];
     menu.GetItem(param, selected, sizeof(selected));
 
-    punish_selected_player[client] = StringToInt(selected);
+    selected_player[client] = StringToInt(selected);
   }
 
-  if (!punish_selected_player[client]) {
+  if (!selected_player[client]) {
     PrintToChat(client, "That player isn't online anymore!");
     return -1;
   }
 
-  int mode = punish_selected_action[client];
-  bool muted = BaseComm_IsClientMuted(punish_selected_player[client]);
-  bool gagged = BaseComm_IsClientGagged(punish_selected_player[client]);
+  int mode = selected_action[client];
+  int target = GetClientOfUserId(selected_player[client]);
+  bool muted = BaseComm_IsClientMuted(target);
+  bool gagged = BaseComm_IsClientGagged(target);
+
+  AdminId target_admin = GetUserAdmin(target);
+  AdminId client_admin = GetUserAdmin(client);
+  if (!CanAdminTarget(client_admin, target_admin)) {
+    CReplyToCommand(client, "The target has a higher immunity level than yours.");
+    return -1;
+  }
 
   if (mode == ACTION_UNMUTE && !muted) {
-    ReplyToCommand(client, "The client is not even muted.");
+    CReplyToCommand(client, "The target is already unmuted.");
     return -1;
   }
 
   if (mode == ACTION_UNGAG && !gagged) {
-    ReplyToCommand(client, "The client is not even gagged.");
+    CReplyToCommand(client, "The target is already ungagged.");
     return -1;
   }
 
   if (mode == ACTION_UNSILENCE && !gagged && !muted) {
-    ReplyToCommand(client, "The client is not even silenced.");
+    CReplyToCommand(client, "The target is already unsilenced.");
     return -1;
   }
 
@@ -235,10 +249,10 @@ public int MenuHandlerConflict(Menu menu, MenuAction action, int client, int par
     char selected[16];
     menu.GetItem(param, selected, sizeof(selected));
 
-    punish_selected_conflict[client] = StringToInt(selected);
+    selected_conflict[client] = StringToInt(selected);
   }
 
-  if (punish_selected_duration[client] == -1 && punish_selected_action[client] > 0) {
+  if (selected_duration[client] == -1 && selected_action[client] > 0) {
     PopulateMenuWithConfig(duration, PUNISHMENT_TIMES);
     duration.ExitButton = true;
     duration.Display(client, 20);
@@ -257,11 +271,11 @@ public int MenuHandlerDuration(Menu menu, MenuAction action, int client, int par
     char selected[16];
     menu.GetItem(param, selected, sizeof(selected));
 
-    punish_selected_duration[client] = StringToInt(selected);
+    selected_duration[client] = StringToInt(selected);
   }
 
-  if (StrEqual(punish_selected_reason[client], "") && punish_selected_action[client] > 0) {
-    int mode = punish_selected_action[client];
+  if (StrEqual(selected_reason[client], "") && selected_action[client] > 0) {
+    int mode = selected_action[client];
 
     if (mode == ACTION_UNSILENCE || mode == ACTION_SILENCE) PopulateMenuWithConfig(reason, SILENCE_REASONS);
     if (mode == ACTION_UNMUTE || mode == ACTION_MUTE) PopulateMenuWithConfig(reason, MUTE_REASONS);
@@ -283,7 +297,7 @@ public int MenuHandlerReason(Menu menu, MenuAction action, int client, int param
     char selected[256];
     menu.GetItem(param, selected, sizeof(selected));
 
-    strcopy(punish_selected_reason[client], sizeof(punish_selected_reason[]), selected);
+    strcopy(selected_reason[client], sizeof(selected_reason[]), selected);
   }
 
   PunishExecution(client);
@@ -291,12 +305,18 @@ public int MenuHandlerReason(Menu menu, MenuAction action, int client, int param
 }
 
 public int PunishExecution(int client) {
-  char type[32] = "";
+  bool mute = false;
+  bool gag = false;
+  bool ban = false;
 
-  switch (punish_selected_action[client]) {
-    case ACTION_MUTE: type = "mute";
-    case ACTION_GAG: type = "gag";
-    case ACTION_SILENCE: type = "both";
+  switch (selected_action[client]) {
+    case ACTION_MUTE: mute = true;
+    case ACTION_GAG: gag = true;
+    case ACTION_SILENCE: {
+      mute = true;
+      gag = true;
+    }
+    case ACTION_BAN: ban = true;
   }
 
   JSONObject payload_del = new JSONObject();
@@ -305,19 +325,21 @@ public int PunishExecution(int client) {
   payload_put.SetBool("plugin", false);
 
   char url[512] = "users/";
-  StrCat(url, sizeof(url), CLIENTS[GetClientOfUserId(punish_selected_player[client])]);
-  StrCat(url, sizeof(url), "/mutegag");
+  StrCat(url, sizeof(url), CLIENTS[GetClientOfUserId(selected_player[client])]);
+  StrCat(url, sizeof(url), "/punishment");
 
-  if (punish_selected_conflict[client] == CONFLICT_NONE) {
+  if (selected_conflict[client] == CONFLICT_NONE) {
 
-    if (!MODULE_MUTEGAG_GLOBAL.BoolValue)
+    if (!MODULE_PUNISHMENT_GLOBAL.BoolValue)
       payload_put.SetString("server", SERVER);
 
-    payload_put.SetString("reason", punish_selected_reason[client]);
-    payload_put.SetString("type", type);
-    payload_put.SetInt("length", punish_selected_duration[client]);
+    payload_put.SetString("reason", selected_reason[client]);
+    payload_put.SetBool("muted", mute);
+    payload_put.SetBool("gagged", gag);
+    payload_put.SetBool("banned", ban);
+    payload_put.SetInt("length", selected_duration[client]);
 
-    if (punish_selected_action[client] < 0) {
+    if (selected_action[client] < 0) {
       StrCat(url, sizeof(url), "?server=");
       StrCat(url, sizeof(url), SERVER);
       StrCat(url, sizeof(url), "&plugin=false");
@@ -325,31 +347,32 @@ public int PunishExecution(int client) {
      } else
       httpClient.Put(url, payload_put, APINoResponseCall);
 
-  } else if (punish_selected_conflict[client] == CONFLICT_OVERWRITE) {
+  } else if (selected_conflict[client] == CONFLICT_OVERWRITE) {
     httpClient.Put(url, payload_put, APINoResponseCall);
 
     StrCat(url, sizeof(url), "?server=");
     StrCat(url, sizeof(url), SERVER);
     StrCat(url, sizeof(url), "&plugin=false");
     httpClient.Delete(url, APINoResponseCall);
-  } else if (punish_selected_conflict[client] == CONFLICT_EXTEND) {
+  } else if (selected_conflict[client] == CONFLICT_EXTEND) {
     StrCat(url, sizeof(url), "?resolved=true&server=");
     StrCat(url, sizeof(url), SERVER);
 
-    httpClient.Get(url, APIMutegagExtendResponseCall, client);
-  } else if (punish_selected_conflict[client] == CONFLICT_CONVERT) {
-    payload_del.SetString("type", "both");
+    httpClient.Get(url, APIPunishmentExtendResponseCall, client);
+  } else if (selected_conflict[client] == CONFLICT_CONVERT) {
+    payload_del.SetBool("muted", true);
+    payload_del.SetBool("gagged", true);
     httpClient.Post(url, payload_del, APINoResponseCall);
   }
 
-  InitiatePunishment(punish_selected_player[client], punish_selected_action[client], punish_selected_reason[client], punish_selected_duration[client]);
+  InitiatePunishment(GetClientOfUserId(selected_player[client]), selected_action[client], selected_reason[client], selected_duration[client], client);
   delete payload_put;
   delete payload_del;
 
   return 1;
 }
 
-public void APIMutegagExtendResponseCall(HTTPResponse response, any value) {
+public void APIPunishmentExtendResponseCall(HTTPResponse response, any value) {
   int client = value;
   if (!APIValidator(response)) return;
 
@@ -359,15 +382,15 @@ public void APIMutegagExtendResponseCall(HTTPResponse response, any value) {
   if (results.Length < 1) return;
   JSONObject result = view_as<JSONObject>(results.Get(0));
   int length = RoundFloat(result.GetFloat("length"));
-  length += punish_selected_duration[client];
+  length += selected_duration[client];
 
   JSONObject payload = new JSONObject();
   payload.SetString("server", SERVER);
   payload.SetInt("length", length);
 
   char url[512] = "users/";
-  StrCat(url, sizeof(url), CLIENTS[GetClientOfUserId(punish_selected_player[client])]);
-  StrCat(url, sizeof(url), "/mutegag");
+  StrCat(url, sizeof(url), CLIENTS[GetClientOfUserId(selected_player[client])]);
+  StrCat(url, sizeof(url), "/punishment");
 
   httpClient.Post(url, payload, APINoResponseCall);
 
@@ -398,20 +421,24 @@ void PopulateMenuWithConfig(Menu menu, char[] path) {
   }
 }
 
-void PopulateMenuWithPeople(Menu menu, int action) {
+void PopulateMenuWithPeople(Menu menu, int action, int client) {
   for (int i = 1; i <= MaxClients; i++) {
     if (!IsClientInGame(i) || IsFakeClient(i)) continue;
     bool muted = BaseComm_IsClientMuted(i);
     bool gagged = BaseComm_IsClientGagged(i);
 
     switch (action) {
-      case ACTION_UNSILENCE: if (!muted && !gagged) continue;
-      case ACTION_UNGAG:     if (!muted &&  gagged) continue;
-      case ACTION_UNMUTE:    if ( muted && !gagged) continue;
-      case ACTION_MUTE:      if (!muted && !gagged) continue;
-      case ACTION_GAG:       if (!muted && !gagged) continue;
-      case ACTION_SILENCE:   if (!muted && !gagged) continue;
+      case ACTION_UNSILENCE: if (!muted || !gagged) continue;
+      case ACTION_UNGAG:     if ( muted || !gagged) continue;
+      case ACTION_UNMUTE:    if (!muted ||  gagged) continue;
+      case ACTION_MUTE:      if ( muted ||  gagged) continue;
+      case ACTION_GAG:       if ( muted ||  gagged) continue;
+      case ACTION_SILENCE:   if ( muted ||  gagged) continue;
     }
+
+    AdminId target = GetUserAdmin(i);
+    AdminId admin = GetUserAdmin(client);
+    if (!CanAdminTarget(admin, target)) continue;
 
     char username[128], id[8];
     GetClientName(i, username, sizeof(username));
@@ -421,7 +448,7 @@ void PopulateMenuWithPeople(Menu menu, int action) {
   }
 }
 
-void InitiatePunishment(int client, int action, char[] reason, int timeleft) {
+void InitiatePunishment(int client, int action, char[] reason, int timeleft, int admin = 0) {
   char name[256];
 
   switch (action) {
@@ -457,27 +484,41 @@ void InitiatePunishment(int client, int action, char[] reason, int timeleft) {
     mutegag_timer[client].Close();
     mutegag_timer[client] = null;
 
-    CPrintToChat(client, "%s --------------------------", PREFIX);
-    CPrintToChat(client, "%s Note:  You are now {olive}%s{default} again.", PREFIX, name);
-    CPrintToChat(client, "%s --------------------------", PREFIX);
+    CPrintToChat(client, "--------------------------");
+    CPrintToChat(client, "Note: You are now {olive}%s{default} again.", name);
+    CPrintToChat(client, "--------------------------");
   } else {
     char humanized_time[200];
     HumanizeTime(timeleft, humanized_time);
+    if (timeleft <= 0) humanized_time = "eternity";
 
-    CPrintToChat(client, "%s --------------------------", PREFIX);
-    CPrintToChat(client, "%s Note: You are being {red}%s{default}.", PREFIX, name);
-    CPrintToChat(client, "%s Reason: %s", PREFIX, reason);
-    CPrintToChat(client, "%s Time left: %s", PREFIX, humanized_time);
-    CPrintToChat(client, "%s --------------------------", PREFIX);
+    if (action == ACTION_BAN) {
+      char username[MAX_NAME_LENGTH];
+
+      GetClientName(admin, username, sizeof(username));
+      ReplaceString(username, sizeof(username), "\\", "");
+      ReplaceString(username, sizeof(username), "\"", "''");
+
+      ClientBanKick(client, username, reason, humanized_time, humanized_time);
+      return;
+    }
+
+    CPrintToChat(client, "--------------------------");
+    CPrintToChat(client, "Note: You are being {red}%s{default}.", name);
+    CPrintToChat(client, "Reason: %s", reason);
+    CPrintToChat(client, "Time left: %s", humanized_time);
+    CPrintToChat(client, "--------------------------");
 
     if (mutegag_timeleft[client] != -1) return;
     mutegag_timeleft[client] = timeleft;
-    mutegag_timer[client] = CreateTimer(60.0, MutegagTimer, client, TIMER_REPEAT);
+
+    if (timeleft <= 0) return;
+    mutegag_timer[client] = CreateTimer(60.0, PunishmentTimer, client, TIMER_REPEAT);
   }
 }
 
 
-public Action MutegagTimer(Handle timer, int client) {
+public Action PunishmentTimer(Handle timer, int client) {
   if (client < 0) return Plugin_Stop;
 
   mutegag_timeleft[client] -= 60;

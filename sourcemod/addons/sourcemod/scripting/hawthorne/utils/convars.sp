@@ -44,7 +44,7 @@ void Hawthorne_InitConVars() {
                                    true, 1.0);
 
 
-  MODULE_MUTEGAG_GLOBAL   = CreateConVar("ht_global_mutegag",
+  MODULE_PUNISHMENT_GLOBAL= CreateConVar("ht_global_mutegag",
                                          "0",
                                          "Toggle of serverwide mute & gags",
                                          FCVAR_NONE,

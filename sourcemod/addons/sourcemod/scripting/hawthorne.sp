@@ -22,8 +22,8 @@ Credits to ...
 #define REQUIRE_PLUGIN
 
 
-#include "hawthorne/globals.sp"
-#include "hawthorne/convars.sp"
+#include "hawthorne/utils/globals.sp"
+#include "hawthorne/utils/convars.sp"
 #include "hawthorne/server.sp"
 #include "hawthorne/player.sp"
 #include "hawthorne/chat.sp"
@@ -31,12 +31,13 @@ Credits to ...
 #include "hawthorne/admin.sp"
 #include "hawthorne/punish.sp"
 #include "hawthorne/rcon.sp"
+#include "hawthorne/misc.sp"
 // #include "hawthorne/autoban.sp"
 
-#include "hawthorne/natives.sp"
-#include "hawthorne/utils.sp"
-#include "hawthorne/humanize.sp"
-#include "hawthorne/steam.sp"
+#include "hawthorne/utils/natives.sp"
+#include "hawthorne/utils/events.sp"
+#include "hawthorne/utils/humanize.sp"
+#include "hawthorne/utils/steam.sp"
 
 #pragma newdecls required
 
@@ -56,9 +57,11 @@ public void OnPluginStart() {
   AddCommandListener(OnPlayerChatMessage, "say_team");
 
 
-  AddCommandListener(OnAddBanCommand, "sm_addban");
   RegConsoleCmd("sm_reloadadmins", OnClientReloadAdmins, "", ADMFLAG_CONFIG);
 
+  RegAdminCmd("sm_status", StatusCommand, 0);
+
+  AddCommandListener(PunishCommandExecuted, "sm_ban");
 
   AddCommandListener(PunishCommandExecuted, "sm_mute");
   AddCommandListener(PunishCommandExecuted, "sm_unmute");
@@ -68,6 +71,8 @@ public void OnPluginStart() {
 
   AddCommandListener(PunishCommandExecuted, "sm_silence");
   AddCommandListener(PunishCommandExecuted, "sm_unsilence");
+
+  CSetPrefix("%s ", PREFIX);
 
   Hawthorne_OnPluginStart();
 }

@@ -53,7 +53,6 @@ def json_response(f):
   def wrapper(request, *args, **kwargs):
     try:
       response = f(request, *args, **kwargs)
-
       if response is None:
         response = []
     except Exception as e:
@@ -79,10 +78,10 @@ def validation(a):
         validation = validation[t]
 
       data = {}
-      if request.method == 'GET':
-        document = dict(request.GET)
-        schema = validation['GET']
-      else:
+      document = dict(request.GET)
+      schema = validation[request.method]
+
+      if not document:
         if isinstance(request._stream.stream, io.BufferedReader):
           data = request._stream.stream.peek()
         else:
@@ -108,11 +107,9 @@ def validation(a):
           parser = lambda x: xmltodict.parse(x)['root']
 
         try:
-          document = parser(data) if data else {}
+          document.update(parser(data) if data else {})
         except Exception as e:
           'Failed parsing payload ({})'.format(e), 512
-
-        schema = validation[request.method]
 
       converted = {}
       for k, v in schema['parameters'].items():

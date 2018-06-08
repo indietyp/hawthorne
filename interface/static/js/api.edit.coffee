@@ -88,19 +88,30 @@ save = (mode = '', that) ->
         payload.server = server
 
       if mode == 'mutegag'
-        payload.type = ''
+        payload.banned = true
+
+      if mode == 'mutegag'
         $('.icon.modes .red', node).forEach((e) ->
           payload.type += e.getAttribute 'data-type'
-          console.log payload.type
         )
 
+        payload.muted = false
+        payloud.gagged = false
         if payload.type.match(/mute/) and payload.type.match(/gag/)
-          payload.type = 'both'
+          payload.muted = true
+          payloud.gagged = true
 
         if payload.type == ''
-          payload.type = 'both'
+          payload.muted = true
+          payloud.gagged = true
 
-      window.endpoint.api.users[user][mode].post(o, {}, payload, (err, data) ->)
+        if type.match /mute/
+          payload.muted = true
+
+        if type.match /gag/
+          payloud.gagged = true
+
+      window.endpoint.api.users[user].punishment.post(o, {}, payload, (err, data) ->)
 
     when 'server'
       node = node.parentElement

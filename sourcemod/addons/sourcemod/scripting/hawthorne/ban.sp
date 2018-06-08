@@ -1,16 +1,15 @@
-// TODO: TESTING
-void ClientBanKick(int client, char[] cAdminName, char[] cReason, char[] cTotalTime, char[] cTime) {
+void ClientBanKick(int client, char[] admin, char[] reason, char[] total, char[] current) {
   char time[256];
 
-  if (StrEqual(cTotalTime, "permanent"))
+  if (StrEqual(total, "eternity"))
     Format(time, sizeof(time), "This action is permanent");
   else
-    Format(time, sizeof(time), "You have been banned for a total of %s, of those %s are left", cTotalTime, cTime);
+    Format(time, sizeof(time), "You have been banned for a total of %s, of those %s are left", total, current);
 
   KickClient(client,
   "You have been banned from this server %s\n "...
   "\nThis was caused by %s with the reason: '%s'."...
-  "\n\n%s", SERVER_HOSTNAME, cAdminName, cReason, time);
+  "\n\n%s", SERVER_HOSTNAME, admin, reason, time);
 }
 
 void Bans_OnClientIDReceived(int client) {
@@ -18,7 +17,7 @@ void Bans_OnClientIDReceived(int client) {
 
   char url[512] = "users/";
   StrCat(url, sizeof(url), CLIENTS[client]);
-  StrCat(url, sizeof(url), "/ban?resolved=false&server=");
+  StrCat(url, sizeof(url), "/punishment?banned=true&muted=false&gagged=false&resolved=false&kicked=false&server=");
   StrCat(url, sizeof(url), SERVER);
 
   httpClient.Get(url, OnBanCheck, client);
@@ -61,74 +60,6 @@ public void OnBanCheck(HTTPResponse response, any value) {
   delete output;
 }
 
-
-public Action OnAddBanCommand(int client, const char[] command, int args) {
-  if (MODULE_BAN.IntValue == 0 || StrEqual(SERVER, "")) return Plugin_Continue;
-
-  char cMessage[256];
-  GetCmdArgString(cMessage, sizeof(cMessage));
-
-  Format(cMessage, sizeof(cMessage), "%s %s", command, cMessage);
-  SendChatMessage(client, cMessage, 1);
-
-  if (args < 2) {
-    ReplyToCommand(client, "\nUsage:\n%s!addban <steamid> <time> [reason]", PREFIX);
-    return Plugin_Stop;
-  }
-
-  char steamid32[20], steamid64[20];
-  GetCmdArg(1, steamid32, sizeof(steamid32));
-
-  ConvertSteamID32ToSteamID64(steamid32, steamid64, sizeof(steamid64));
-  if (StrEqual(steamid64, "")) {
-    ReplyToCommand(client, "%sWrong SteamID format", PREFIX);
-    return Plugin_Stop;
-  }
-
-  char reason[100], raw_length[10];
-  GetCmdArg(2, raw_length, sizeof(raw_length));
-  GetCmdArg(3, reason, sizeof(reason));
-  int length = StringToInt(raw_length);
-
-  for (int i = 1; i < MaxClients; i++) {
-    if (!IsClientInGame(i) || IsFakeClient(i)) continue;
-
-    char steamid_target[20];
-    GetClientAuthId(i, AuthId_SteamID64, steamid_target, sizeof(steamid_target));
-
-    if (!StrEqual(steamid_target, steamid64)) continue;
-
-    char admin_username[128], formatted_time[200];
-    if (length > 0) HumanizeTime((length * 60), formatted_time); else formatted_time = "permanent";
-
-    GetClientName(client, admin_username, sizeof(admin_username));
-    ClientBanKick(i, admin_username, reason, formatted_time, formatted_time);
-  }
-
-  char adminID[37], global_ban[37];
-
-  StrCat(adminID, sizeof(adminID),  (client == 0) ? "" : CLIENTS[client]);
-  StrCat(global_ban, sizeof(global_ban), (MODULE_BAN_GLOBAL.IntValue == 0) ? SERVER : "");
-
-  JSONObject payload = new JSONObject();
-
-  if (!StrEqual(global_ban, ""))
-    payload.SetString("server", SERVER);
-
-  payload.SetString("reason", reason);
-  payload.SetString("issuer", adminID);
-  payload.SetInt("length", length * 60);
-
-  char url[512] = "users/";
-  StrCat(url, sizeof(url), steamid64);
-  StrCat(url, sizeof(url), "/ban");
-
-  httpClient.Put(url, payload, APINoResponseCall);
-  delete payload;
-
-  return Plugin_Stop;
-}
-
 public Action OnBanClient(int client, int time, int flags, const char[] reason, const char[] kick_message, const char[] command, any admin) {
   if (StrEqual(SERVER, "")) {
     ReplyToCommand(admin, "Connection to API was not successfull. Cannot ban right now.", PREFIX);
@@ -148,11 +79,11 @@ public Action OnBanClient(int client, int time, int flags, const char[] reason, 
   payload.SetString("reason", reason);
   payload.SetString("issuer", adminID);
   payload.SetInt("length", time * 60);
-
+  payload.SetBool("banned", true);
 
   char url[512] = "users/";
   StrCat(url, sizeof(url), CLIENTS[client]);
-  StrCat(url, sizeof(url), "/ban");
+  StrCat(url, sizeof(url), "/punishment");
 
   httpClient.Put(url, payload, APINoResponseCall);
   delete payload;

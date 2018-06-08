@@ -1,6 +1,6 @@
 void Hawthorne_OnPluginStart() {
   Hawthorne_InitConVars();
-  MuteGag_OnPluginStart();
+  Punishment_OnPluginStart();
   RConCommands_OnPluginStart();
 }
 
@@ -24,7 +24,7 @@ void OnClientIDReceived(int client) {
 }
 
 public void OnClientPutInServer(int client) {
-  MuteGag_OnClientPutInServer(client);
+  Punishment_OnClientPutInServer(client);
 }
 
 public Action Event_Disconnect(Event event, const char[] name, bool dontBroadcast) {

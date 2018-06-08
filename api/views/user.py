@@ -4,7 +4,7 @@ import datetime
 import re
 
 from django.contrib.auth.models import Group, Permission
-from django.db.models import F, Q, Value, DateTimeField, ExpressionWrapper
+from django.db.models import F, Q, DateTimeField, ExpressionWrapper
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
@@ -12,7 +12,7 @@ from django.views.decorators.http import require_http_methods
 from core.decorators.api import json_response, validation
 from core.decorators.auth import authentication_required, permission_required
 from core.lib.steam import populate as steam_populate
-from core.models import User, Country, Server, ServerGroup, Ban, Mutegag, Membership
+from core.models import User, Country, Server, ServerGroup, Punishment, Membership
 from lib.mainframe import Mainframe
 from lib.sourcemod import SourcemodPluginWrapper
 
@@ -331,32 +331,55 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
 @csrf_exempt
 @json_response
 @authentication_required
-@permission_required('user.ban')
-@validation('user.ban')
+@permission_required('user.punishment')
+@validation('user.punishment')
 @require_http_methods(['GET', 'POST', 'PUT', 'DELETE'])
-def ban(request, u=None, validated={}, *args, **kwargs):
+def punishment(request, u=None, validated={}, *args, **kwargs):
   try:
     user = User.objects.get(id=u)
   except Exception as e:
     return 'non existent user queried - {}'.format(e), 403
 
-  Ban.objects.annotate(completion=ExpressionWrapper(F('created_at') + F('length'),
+  Punishment.objects.annotate(completion=ExpressionWrapper(F('created_at') + F('length'),
                                                     output_field=DateTimeField()))\
-             .filter(completion__lte=timezone.now(),
-                     resolved=False,
-                     length__isnull=False).update(resolved=True)
+                     .filter(completion__lte=timezone.now(),
+                             resolved=False,
+                             length__isnull=False).update(resolved=True)
 
   if request.method == 'GET':
-    bans = Ban.objects.filter(user=user)
+    punishments = Punishment.objects.filter(user=user)
     if validated['server'] is not None:
       server = Server.objects.get(id=validated['server'])
-      bans = bans.filter(Q(server=server) | Q(server=None))
+      punishments = punishments.filter(Q(server=server) | Q(server=None))
 
     if validated['resolved'] is not None:
-      bans = bans.filter(resolved=validated['resolved'])
+      punishments = punishments.filter(resolved=validated['resolved'])
 
-    return [b for b in bans.annotate(admin=F('created_by__namespace'))
-      .values('user', 'server', 'created_at', 'reason', 'resolved', 'created_by', 'length', 'admin')], 200
+    if validated['muted'] is not None:
+      punishments = punishments.filter(is_muted=validated['muted'])
+
+    if validated['banned'] is not None:
+      punishments = punishments.filter(is_banned=validated['banned'])
+
+    if validated['gagged'] is not None:
+      punishments = punishments.filter(is_gagged=validated['gagged'])
+
+    if validated['kicked'] is not None:
+      punishments = punishments.filter(is_kicked=validated['kicked'])
+
+    return [p for p in punishments.annotate(admin=F('created_by__namespace'))
+                                  .values('user',
+                                          'server',
+                                          'created_at',
+                                          'reason',
+                                          'resolved',
+                                          'created_by',
+                                          'length',
+                                          'is_banned',
+                                          'is_kicked',
+                                          'is_muted',
+                                          'is_gagged',
+                                          'admin')], 200
 
   elif request.method == 'POST':
     try:
@@ -364,18 +387,30 @@ def ban(request, u=None, validated={}, *args, **kwargs):
     except Exception:
       return 'server not found', 500
 
-    ban = Ban.objects.get(user=user, server=server)
+    punishment = Punishment.objects.get(user=user, server=server)
     if validated['resolved'] is not None:
-      ban.resolved = validated['resolved']
+      punishment.resolved = validated['resolved']
 
     if validated['reason'] is not None:
-      ban.reason = validated['reason']
+      punishment.reason = validated['reason']
 
     if validated['length'] is not None:
-      ban.length = datetime.timedelta(seconds=validated['length'])
+      punishment.length = datetime.timedelta(seconds=validated['length'])
 
-    ban.updated_by = request.user
-    ban.save()
+    if validated['banned'] is not None:
+      punishment.is_banned = validated['banned']
+
+    if validated['kicked'] is not None:
+      punishment.is_kicked = validated['kicked']
+
+    if validated['muted'] is not None:
+      punishment.is_muted = validated['muted']
+
+    if validated['gagged'] is not None:
+      punishment.is_gagged = validated['gagged']
+
+    punishment.updated_by = request.user
+    punishment.save()
 
   elif request.method == 'PUT':
     if 'server' in validated:
@@ -388,13 +423,28 @@ def ban(request, u=None, validated={}, *args, **kwargs):
     else:
       length = None
 
-    ban = Ban(user=user, server=server, reason=validated['reason'], length=length, created_by=request.user)
-    ban.save()
+    punishment = Punishment(user=user,
+                            server=server,
+                            reason=validated['reason'],
+                            is_muted=validated['muted'],
+                            is_gagged=validated['gagged'],
+                            is_kicked=validated['kicked'],
+                            is_banned=validated['banned'],
+                            length=length,
+                            created_by=request.user)
+    punishment.save()
 
     if validated['plugin']:
       server = [server] if server else Server.objects.all()
       for s in server:
-        SourcemodPluginWrapper(s).ban(ban)
+        if punishment.is_gagged or punishment.is_muted:
+          SourcemodPluginWrapper(s).mutegag(punishment)
+        if punishment.is_banned:
+          SourcemodPluginWrapper(s).ban(punishment)
+        if punishment.is_kicked:
+          punishment.resolved = True
+          punishment.save()
+          SourcemodPluginWrapper(s).kick(punishment)
 
   elif request.method == 'DELETE':
     if validated['server']:
@@ -402,159 +452,32 @@ def ban(request, u=None, validated={}, *args, **kwargs):
     else:
       server = None
 
-    for ban in Ban.objects.filter(user=user, server=server, resolved=False):
-      ban.resolved = True
-      ban.save()
+    punishments = Punishment.objects.filter(user=user, server=server, resolved=False)
+    if validated['muted'] is not None:
+      punishments = punishments.filter(is_muted=validated['muted'])
+
+    if validated['banned'] is not None:
+      punishments = punishments.filter(is_banned=validated['banned'])
+
+    if validated['gagged'] is not None:
+      punishments = punishments.filter(is_gagged=validated['gagged'])
+
+    if validated['kicked'] is not None:
+      punishments = punishments.filter(is_kicked=validated['kicked'])
+
+    for punishment in punishments:
+      punishment.resolved = True
+      punishment.save()
 
       if validated['plugin']:
         server = [server] if server else Server.objects.all()
 
         for s in server:
-          SourcemodPluginWrapper(s).ban(ban)
+          if punishment.is_gagged or punishment.is_muted:
+            SourcemodPluginWrapper(s).mutegag(punishment)
+          if punishment.is_banned:
+            SourcemodPluginWrapper(s).ban(punishment)
+          if punishment.is_kicked:
+            SourcemodPluginWrapper(s).kick(punishment)
 
-  return 'successful, nothing to report'
-
-
-@csrf_exempt
-@json_response
-@authentication_required
-@permission_required('user.mutegag')
-@validation('user.mutegag')
-@require_http_methods(['GET', 'PUT', 'DELETE', 'POST'])
-def mutegag(request, u=None, validated={}, *args, **kwargs):
-  try:
-    user = User.objects.get(id=u)
-  except Exception as e:
-    return 'non existent user queried - {}'.format(e), 403
-
-  Mutegag.objects.annotate(completion=ExpressionWrapper(F('created_at') + F('length'),
-                                                        output_field=DateTimeField()))\
-                 .filter(completion__lte=timezone.now(),
-                         resolved=False,
-                         length__isnull=False).update(resolved=True)
-
-  if request.method == 'GET':
-    mutegags = Mutegag.objects.filter(user=user)
-    if validated['server'] is not None:
-      mutegags = mutegags.filter(server=Server.objects.get(id=validated['server']))
-
-    if validated['resolved'] is not None:
-      mutegags = mutegags.filter(resolved=validated['resolved'])
-
-    return [m for m in mutegags.values('user', 'created_by', 'created_at', 'reason', 'length', 'resolved', 'type',
-                                       'updated_by', 'updated_at')]
-
-  elif request.method == 'POST':
-    if 'server' in validated:
-      try:
-        server = Server.objects.get(id=validated['server'])
-      except Exception:
-        return 'server not found', 500
-    else:
-      server = None
-
-    try:
-      mutegag = Mutegag.objects.get(user=user, server=server)
-    except Exception:
-      return 'mute/gag not found', 500
-
-    if validated['type'] is not None:
-      if validated['type'] == 'mute':
-        mutegag.type = 'MU'
-      if validated['type'] == 'gag':
-        mutegag.type = 'GA'
-      if validated['type'] == 'both':
-        mutegag.type = 'BO'
-
-    if validated['resolved'] is not None:
-      mutegag.resolved = validated['resolved']
-
-    if validated['reason'] is not None:
-      mutegag.reason = validated['reason']
-
-    if validated['length'] is not None:
-      mutegag.length = datetime.timedelta(seconds=validated['length'])
-
-    mutegag.updated_by = request.user
-    mutegag.save()
-
-  elif request.method == 'PUT':
-    if 'server' in validated:
-      server = Server.objects.get(id=validated['server'])
-    else:
-      server = None
-
-    if validated['length'] > 0:
-      length = datetime.timedelta(seconds=validated['length'])
-    else:
-      length = None
-
-    if validated['type'] == 'mute':
-      mutegag_type = 'MU'
-    if validated['type'] == 'gag':
-      mutegag_type = 'GA'
-    if validated['type'] == 'both':
-      mutegag_type = 'BO'
-
-    mutegag = Mutegag(user=user, server=server, reason=validated['reason'], length=length,
-                      type=mutegag_type, created_by=request.user)
-    mutegag.save()
-
-    if validated['plugin']:
-      server = [server] if server else Server.objects.all()
-
-      for s in server:
-        SourcemodPluginWrapper(s).mutegag(mutegag)
-
-  elif request.method == 'DELETE':
-    if validated['server']:
-      server = Server.objects.get(id=validated['server'])
-    else:
-      server = None
-
-    for mutegag in Mutegag.objects.filter(user=user, server=server, resolved=False):
-      mutegag.resolved = True
-      mutegag.save()
-
-      if validated['plugin']:
-        server = [server] if server else Server.objects.all()
-
-        for s in server:
-          SourcemodPluginWrapper(s).mutegag(mutegag)
-
-  return 'successful, nothing to report'
-
-
-@csrf_exempt
-@json_response
-@authentication_required
-@permission_required('user.kick')
-@validation('user.kick')
-@require_http_methods(['PUT'])
-def kick(request, u=None, validated={}, *args, **kwargs):
-  try:
-    user = User.objects.get(id=u)
-  except Exception:
-    return 'user not found', 403
-
-  try:
-    server = Server.objects.get(id=validated['server'])
-  except Exception:
-    return 'server not found', 403
-
-  return SourcemodPluginWrapper(server).kick(target=user)
-
-
-@csrf_exempt
-@json_response
-@authentication_required
-@permission_required('user.auth')
-@validation('user.auth')
-@require_http_methods(['GET'])
-def auth(request, u=None, validated={}, *args, **kwargs):
-  user = User.objects.filter(id=u)
-
-  if user and user[0].check_password(validated['password']):
-    return 'credentials are correct', 200
-
-  return 'credentials not correct', 401
+  return []

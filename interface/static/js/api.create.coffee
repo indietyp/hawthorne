@@ -58,12 +58,13 @@ submit = (mode = '', that) ->
       data =
         reason: $("#inputdescription")[0].value
         length: parseInt(time - now)
+        banned: true
 
       server = window.serverinput.getValue(true)
       if server != 'all'
         data.server = server
 
-      window.endpoint.api.users[user].ban.put(o, {}, data, (err, data) ->
+      window.endpoint.api.users[user].punishment.put(o, {}, data, (err, data) ->
         window.ajax.ban.user(1)
       )
 
@@ -86,22 +87,34 @@ submit = (mode = '', that) ->
         type += e.id
       )
 
+      mute = false
+      gag = false
       if type.match(/mute/) and type.match(/gag/)
-        type = 'both'
+        mute = true
+        gag = true
 
       if type == ''
-        type = 'both'
+        mute = true
+        gag = true
+
+      if type.match /mute/
+        mute = true
+
+      if type.match /gag/
+        gag = true
 
       data =
         reason: $("#inputdescription")[0].value
         length: parseInt(time - now)
         type: type
+        muted: mute
+        gagged: gag
 
       server = window.serverinput.getValue(true)
       if server != 'all'
         data.server = server
 
-      window.endpoint.api.users[user].mutegag.put(o, {}, data, (err, data) ->
+      window.endpoint.api.users[user].punishment.put(o, {}, data, (err, data) ->
         window.ajax.mutegag.user(1)
         return data
       )
@@ -110,8 +123,9 @@ submit = (mode = '', that) ->
       user = $('input.uuid', node)[0].value
       data =
         server: $('input.server', node)[0].value
+        kicked: true
 
-      window.endpoint.api.users[user].kick.put(o, {}, data, (err, data) ->
+      window.endpoint.api.users[user].punishment.put(o, {}, data, (err, data) ->
         window.ajax.player.user(1)
         return data
       )

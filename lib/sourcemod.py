@@ -19,11 +19,11 @@ class SourcemodPluginWrapper(RCONBase):
   def __init__(self, server):
     super(SourcemodPluginWrapper, self).__init__(server)
 
-  def ban(self, ban, *args, **kwargs):
-    command = 'rcon_ban "{}" "{}" "{}" "{}"'.format(ban.user.username,
-                                                    ban.created_by.namespace,
-                                                    ban.reason,
-                                                    ban.length.total_seconds() if ban.length else 0)
+  def ban(self, punishment, *args, **kwargs):
+    command = 'rcon_ban "{}" "{}" "{}" "{}"'.format(punishment.user.username,
+                                                    punishment.created_by.namespace,
+                                                    punishment.reason,
+                                                    punishment.length.total_seconds() if punishment.length else 0)
 
     try:
       response = self.run(command)[0]
@@ -32,22 +32,31 @@ class SourcemodPluginWrapper(RCONBase):
 
     return response
 
-  def kick(self, target, reason='powered by hawthorne', *args, **kwargs):
+  def kick(self, punishment, *args, **kwargs):
     try:
-      response = self.run('sm_kick {} {}'.format(target.namespace, reason))[0]
+      response = self.run('sm_kick {} {}'.format(punishment.user.namespace,
+                                                 punishment.reason))[0]
     except valve.rcon.RCONError as e:
       return {'error': e}
 
     return response
 
-  def mutegag(self, mutegag, *args, **kwargs):
-    mode = mutegag.get_type_display()
-    mode = 'un' + mode if mutegag.resolved else mode
+  def mutegag(self, punishment, *args, **kwargs):
+    if punishment.is_gagged and punishment.is_muted:
+      mode = 'silence'
+    elif punishment.is_muted:
+      mode = 'mute'
+    elif punishment.is_gagged:
+      mode = 'gag'
+    else:
+      return {'error': 'operation not supported'}
 
-    command = 'rcon_mutegag "{}" "{}" "{}" "{}"'.format(mutegag.user.username,
+    mode = 'un' + mode if punishment.resolved else mode
+
+    command = 'rcon_mutegag "{}" "{}" "{}" "{}"'.format(punishment.user.username,
                                                         mode,
-                                                        mutegag.length.total_seconds() if mutegag.length else 0,
-                                                        mutegag.reason)
+                                                        punishment.length.total_seconds() if punishment.length else 0,
+                                                        punishment.reason)
 
     try:
       response = self.run(command)[0]

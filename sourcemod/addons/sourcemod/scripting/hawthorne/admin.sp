@@ -1,3 +1,4 @@
+// add custom tag & formatting
 public void OnClientPostAdminFilter(int client) {
   	AdminCheck(client);
 }
@@ -41,7 +42,6 @@ void APIAdminCheck(HTTPResponse response, any value) {
 
   int immunity = role.GetInt("immunity");
   int timeleft = role.GetInt("timeleft");
-  if (timeleft == 0) timeleft = 2147483647;
 
   delete output;
   delete result;
@@ -52,8 +52,8 @@ void APIAdminCheck(HTTPResponse response, any value) {
   if (MODULE_ADMIN_MERGE.BoolValue) {
     SetUserFlagBits(client, GetUserFlagBits(client) | ReadFlagString(flags));
     admin = GetUserAdmin(client);
-    if (admin != INVALID_ADMIN_ID){
-  	 admin.ImmunityLevel = immunity;
+    if (admin != INVALID_ADMIN_ID) {
+      admin.ImmunityLevel = immunity;
     }
   } else {
     admin = CreateAdmin();
@@ -68,12 +68,35 @@ void APIAdminCheck(HTTPResponse response, any value) {
   }
 
   if (MODULE_HEXTAGS.BoolValue && hextags) {
+    char formatting[128];
+    MODULE_HEXTAGS_FORMAT.GetString(formatting, sizeof(formatting));
+
+    if (StrContains(formatting, "{R}"))
+      ReplaceString(formatting, sizeof(formatting), "{R}", ht_tag[client]);
+
+    if (StrContains(formatting, "{L}")) {
+      for (int n = 0; n < strlen(endpoint); n++) {
+        formatting[n] = CharToLower(formatting[n]);
+      }
+      ReplaceString(formatting, sizeof(formatting), "{L}", ht_tag[client]);
+    }
+
+    if (StrContains(formatting, "{U}")) {
+      for (int n = 0; n < strlen(endpoint); n++) {
+        formatting[n] = CharToUpper(formatting[n]);
+      }
+      ReplaceString(formatting, sizeof(formatting), "{U}", ht_tag[client]);
+    }
+
+    strcopy(ht_tag[client], sizeof(ht_tag[]), formatting);
     HexTags_SetClientTag(client, ScoreTag, ht_tag[client]);
     HexTags_SetClientTag(client, ChatTag, ht_tag[client]);
   }
 
-  if(admin_timer[client] != null) return;
+  if (admin_timer[client] != null) return;
   admin_timeleft[client] = timeleft;
+
+  if (timeleft == 0) return;
   admin_timer[client] = CreateTimer(60.0, AdminVerificationTimer, GetClientUserId(client), TIMER_REPEAT);
 }
 
@@ -101,8 +124,7 @@ void Admins_OnClientDisconnect(int client) {
   ht_tag[client] = "";
 }
 
-public void HexTags_OnTagsUpdated(int client)
-{
+public void HexTags_OnTagsUpdated(int client) {
   HexTags_SetClientTag(client, ScoreTag, ht_tag[client]);
   HexTags_SetClientTag(client, ChatTag, ht_tag[client]);
 }

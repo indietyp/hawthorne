@@ -244,58 +244,26 @@ class Server(BaseModel):
     return self.name
 
 
-class Ban(BaseModel):
+class Punishment(BaseModel):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   server = models.ForeignKey(Server, on_delete=models.CASCADE, null=True)
-
-  created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ban_issuer')
-  updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ban_updated_by', null=True)
 
   reason = models.CharField(max_length=255)
   length = models.DurationField(null=True)
   resolved = models.BooleanField(default=False)
 
-  class Meta:
-    permissions = [
-      ('view_ban', 'Can view ban'),
-    ]
+  is_banned = models.BooleanField(default=False)
+  is_kicked = models.BooleanField(default=False)
+  is_muted = models.BooleanField(default=False)
+  is_gagged = models.BooleanField(default=False)
 
-    # unique_together = ('user', 'server')
-
-  def __str__(self):
-    return "{} - {}".format(self.user, self.server)
-
-
-class Mutegag(BaseModel):
-  user = models.ForeignKey(User, on_delete=models.CASCADE)
-  server = models.ForeignKey(Server, on_delete=models.CASCADE, null=True)
-
-  created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='mutegag_issuer')
-  updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='mutegag_updated_by', null=True)
-
-  MUTEGAG_CHOICES = (
-    ('MU', 'mute'),
-    ('GA', 'gag'),
-    ('BO', 'both')
-  )
-  type = models.CharField(max_length=2, choices=MUTEGAG_CHOICES, default='MU')
-
-  reason = models.CharField(max_length=255)
-  length = models.DurationField(null=True)
-  resolved = models.BooleanField(default=False)
+  created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='punishment_created_by')
+  updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='punishment_updated_by', null=True)
 
   class Meta:
-    verbose_name = 'mute & gag'
-    verbose_name_plural = 'mutes & gags'
-
     permissions = [
-      ('view_mutegag', 'Can view mute & gag'),
-
-      ('add_mutegag_mute', 'Can add mute'),
-      ('add_mutegag_gag', 'Can add gag'),
+      ('view_punishment', 'Can view punishments'),
     ]
-
-    # unique_together = ('user', 'server')
 
   def __str__(self):
     return "{} - {}".format(self.user, self.server)

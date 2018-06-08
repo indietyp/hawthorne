@@ -134,3 +134,18 @@ def token_detailed(request, t=None, validated={}, *args, **kwargs):
     }
   else:
     token.delete()
+
+
+@csrf_exempt
+@json_response
+@authentication_required
+@permission_required('system.authentication')
+@validation('system.authentication')
+@require_http_methods(['POST'])
+def authentication(request, validated={}, *args, **kwargs):
+  from django.contrib.auth import authenticate
+  user = authenticate(username=validated['username'], password=validated['password'])
+  if user is not None:
+      return [], 200
+  else:
+      return [], 401
