@@ -114,7 +114,7 @@ submit = (mode = '', that) ->
       if server != 'all'
         data.server = server
 
-      window.endpoint.api.users[user].mutegag.put(o, {}, data, (err, data) ->
+      window.endpoint.api.users[user].punishment.put(o, {}, data, (err, data) ->
         window.ajax.mutegag.user(1)
         return data
       )

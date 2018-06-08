@@ -365,7 +365,7 @@ def punishment(request, u=None, validated={}, *args, **kwargs):
       punishments = punishments.filter(is_gagged=validated['gagged'])
 
     if validated['kicked'] is not None:
-      punishments = punishments.filter(is_gagged=validated['kicked'])
+      punishments = punishments.filter(is_kicked=validated['kicked'])
 
     return [p for p in punishments.annotate(admin=F('created_by__namespace'))
                                   .values('user',
@@ -463,7 +463,7 @@ def punishment(request, u=None, validated={}, *args, **kwargs):
       punishments = punishments.filter(is_gagged=validated['gagged'])
 
     if validated['kicked'] is not None:
-      punishments = punishments.filter(is_gagged=validated['kicked'])
+      punishments = punishments.filter(is_kicked=validated['kicked'])
 
     for punishment in punishments:
       punishment.resolved = True
@@ -479,3 +479,5 @@ def punishment(request, u=None, validated={}, *args, **kwargs):
             SourcemodPluginWrapper(s).ban(punishment)
           if punishment.is_kicked:
             SourcemodPluginWrapper(s).kick(punishment)
+
+  return []

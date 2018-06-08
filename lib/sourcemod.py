@@ -23,7 +23,7 @@ class SourcemodPluginWrapper(RCONBase):
     command = 'rcon_ban "{}" "{}" "{}" "{}"'.format(punishment.user.username,
                                                     punishment.created_by.namespace,
                                                     punishment.reason,
-                                                    punishment.length.total_seconds() if ban.length else 0)
+                                                    punishment.length.total_seconds() if punishment.length else 0)
 
     try:
       response = self.run(command)[0]
@@ -55,7 +55,7 @@ class SourcemodPluginWrapper(RCONBase):
 
     command = 'rcon_mutegag "{}" "{}" "{}" "{}"'.format(punishment.user.username,
                                                         mode,
-                                                        punishment.length.total_seconds() if mutegag.length else 0,
+                                                        punishment.length.total_seconds() if punishment.length else 0,
                                                         punishment.reason)
 
     try:

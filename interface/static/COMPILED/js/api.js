@@ -33,7 +33,7 @@
         payload = {
           server: server
         };
-        endpoint = window.endpoint.api.users[user].ban;
+        endpoint = window.endpoint.api.users[user].punishment;
         break;
       case 'mutegag':
         user = $('input.user', node)[0].value;
@@ -43,7 +43,7 @@
             server: server
           };
         }
-        endpoint = window.endpoint.api.users[user].mutegag;
+        endpoint = window.endpoint.api.users[user].punishment;
         break;
       case 'server':
         node = that.parentElement.parentElement.parentElement.parentElement;
@@ -170,19 +170,30 @@
           payload.server = server;
         }
         if (mode === 'mutegag') {
-          payload.type = '';
+          payload.banned = true;
+        }
+        if (mode === 'mutegag') {
           $('.icon.modes .red', node).forEach(function(e) {
-            payload.type += e.getAttribute('data-type');
-            return console.log(payload.type);
+            return payload.type += e.getAttribute('data-type');
           });
+          payload.muted = false;
+          payloud.gagged = false;
           if (payload.type.match(/mute/) && payload.type.match(/gag/)) {
-            payload.type = 'both';
+            payload.muted = true;
+            payloud.gagged = true;
           }
           if (payload.type === '') {
-            payload.type = 'both';
+            payload.muted = true;
+            payloud.gagged = true;
+          }
+          if (type.match(/mute/)) {
+            payload.muted = true;
+          }
+          if (type.match(/gag/)) {
+            payloud.gagged = true;
           }
         }
-        window.endpoint.api.users[user][mode].post(o, {}, payload, function(err, data) {});
+        window.endpoint.api.users[user].punishment.post(o, {}, payload, function(err, data) {});
         break;
       case 'server':
         node = node.parentElement;
@@ -420,7 +431,7 @@
   var submit;
 
   submit = function(mode = '', that) {
-    var data, local, node, now, o, output, payload, perms, server, time, type, user, uuid, value;
+    var data, gag, local, mute, node, now, o, output, payload, perms, server, time, type, user, uuid, value;
     o = {
       target: that,
       skip_animation: false
@@ -472,13 +483,14 @@
         user = window.usernameinput.getValue(true);
         data = {
           reason: $("#inputdescription")[0].value,
-          length: parseInt(time - now)
+          length: parseInt(time - now),
+          banned: true
         };
         server = window.serverinput.getValue(true);
         if (server !== 'all') {
           data.server = server;
         }
-        return window.endpoint.api.users[user].ban.put(o, {}, data, function(err, data) {
+        return window.endpoint.api.users[user].punishment.put(o, {}, data, function(err, data) {
           return window.ajax.ban.user(1);
         });
       case 'mutegag':
@@ -496,31 +508,44 @@
         $('.row.add .action .selected').forEach(function(e) {
           return type += e.id;
         });
+        mute = false;
+        gag = false;
         if (type.match(/mute/) && type.match(/gag/)) {
-          type = 'both';
+          mute = true;
+          gag = true;
         }
         if (type === '') {
-          type = 'both';
+          mute = true;
+          gag = true;
+        }
+        if (type.match(/mute/)) {
+          mute = true;
+        }
+        if (type.match(/gag/)) {
+          gag = true;
         }
         data = {
           reason: $("#inputdescription")[0].value,
           length: parseInt(time - now),
-          type: type
+          type: type,
+          muted: mute,
+          gagged: gag
         };
         server = window.serverinput.getValue(true);
         if (server !== 'all') {
           data.server = server;
         }
-        return window.endpoint.api.users[user].mutegag.put(o, {}, data, function(err, data) {
+        return window.endpoint.api.users[user].punishment.put(o, {}, data, function(err, data) {
           window.ajax.mutegag.user(1);
           return data;
         });
       case 'kick':
         user = $('input.uuid', node)[0].value;
         data = {
-          server: $('input.server', node)[0].value
+          server: $('input.server', node)[0].value,
+          kicked: true
         };
-        return window.endpoint.api.users[user].kick.put(o, {}, data, function(err, data) {
+        return window.endpoint.api.users[user].punishment.put(o, {}, data, function(err, data) {
           window.ajax.player.user(1);
           return data;
         });

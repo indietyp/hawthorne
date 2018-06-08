@@ -4,7 +4,7 @@ void RConCommands_OnPluginStart() {
   RegAdminCmd("json_status",        RConStatus,       ADMFLAG_RCON);
 
   RegAdminCmd("rcon_ban",           RConBanKick,      ADMFLAG_RCON);
-  RegAdminCmd("rcon_mutegag",       RConPunishment,      ADMFLAG_RCON);
+  RegAdminCmd("rcon_mutegag",       RConPunishment,   ADMFLAG_RCON);
   RegAdminCmd("rcon_init",          RConInit,         ADMFLAG_RCON);
   RegAdminCmd("rcon_sdonate",       RConInit,         ADMFLAG_RCON);
 }

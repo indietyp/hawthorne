@@ -1,11 +1,13 @@
 #define PREFIX "[{green}HT{default}]"
 
+#define ACTION_UNBAN      -4
 #define ACTION_UNSILENCE  -3
 #define ACTION_UNGAG      -2
 #define ACTION_UNMUTE     -1
 #define ACTION_MUTE        1
 #define ACTION_GAG         2
 #define ACTION_SILENCE     3
+#define ACTION_BAN         4
 
 #define CONFLICT_NONE     -1
 #define CONFLICT_OVERWRITE 1
@@ -24,12 +26,12 @@ char SERVER[37] = "",
 int mutegag_timeleft[MAXPLAYERS + 1],
     admin_timeleft[MAXPLAYERS + 1];
 
-int punish_selected_action[MAXPLAYERS + 1],
-    punish_selected_player[MAXPLAYERS + 1],
-    punish_selected_conflict[MAXPLAYERS + 1],
-    punish_selected_duration[MAXPLAYERS + 1];
+int selected_action[MAXPLAYERS + 1],
+    selected_player[MAXPLAYERS + 1],
+    selected_conflict[MAXPLAYERS + 1],
+    selected_duration[MAXPLAYERS + 1];
 
-char punish_selected_reason[MAXPLAYERS + 1][128];
+char selected_reason[MAXPLAYERS + 1][128];
 
 Handle forward_client,
        admin_timer[MAXPLAYERS + 1],

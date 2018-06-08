@@ -76,7 +76,8 @@ validation = {
                                       'banned': {'type': 'boolean', 'nullable': True, 'default': None},
                                       'kicked': {'type': 'boolean', 'nullable': True, 'default': None},
                                       'muted': {'type': 'boolean', 'nullable': True, 'default': None},
-                                      'gagged': {'type': 'boolean', 'nullable': True, 'default': None}},
+                                      'gagged': {'type': 'boolean', 'nullable': True, 'default': None},
+                                      'plugin': {'type': 'boolean', 'default': True}},
                        'permission': ['core.delete_punishment']},
         },
         'kick': {
