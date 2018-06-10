@@ -75,15 +75,15 @@ void APIAdminCheck(HTTPResponse response, any value) {
       ReplaceString(formatting, sizeof(formatting), "{R}", ht_tag[client]);
 
     if (StrContains(formatting, "{L}")) {
-      for (int n = 0; n < strlen(endpoint); n++) {
-        formatting[n] = CharToLower(formatting[n]);
+      for (int n = 0; n < strlen(ht_tag[client]); n++) {
+        ht_tag[client][n] = CharToLower(ht_tag[client][n]);
       }
       ReplaceString(formatting, sizeof(formatting), "{L}", ht_tag[client]);
     }
 
     if (StrContains(formatting, "{U}")) {
-      for (int n = 0; n < strlen(endpoint); n++) {
-        formatting[n] = CharToUpper(formatting[n]);
+      for (int n = 0; n < strlen(ht_tag[client]); n++) {
+        ht_tag[client][n] = CharToUpper(ht_tag[client][n]);
       }
       ReplaceString(formatting, sizeof(formatting), "{U}", ht_tag[client]);
     }
