@@ -1,0 +1,89 @@
+- extends ajax|yesno:'skeleton/ajax.pug,skeleton/main.pug'
+
+- load i18n
+- load staticfiles
+
+
+- block content
+  .section.group.overview
+    .col.span_1_of_4
+      .c100
+        span 17
+        .slice
+          .bar
+          .fill
+      .title Servers
+      .info The total amount of servers connected to this panel.
+    .col.span_1_of_4
+      .c100
+        span 143
+        .slice
+          .bar
+          .fill
+      .title Punishments
+      .info The total amount of punishments handed out by your admins.
+    .col.span_1_of_4
+      .c100
+        span 8065
+        .slice
+          .bar
+          .fill
+      .title Unique Players
+      .info The total amount of players that have joined your servers.
+    .col.span_1_of_4
+      .c100
+        span 13659
+        .slice
+          .bar
+          .fill
+      .title Actions
+      .info The total amount of administrative actions executed.
+  h1 Player Activity
+  .chartContainer
+    canvas.overviewChart
+  script.
+    var ctx = document.getElementsByClassName("overviewChart")[0].getContext('2d');
+    var gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, 'rgba(0,169,255,0.2)');
+    gradient.addColorStop(1, 'rgba(0,169,255,0)');
+    var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    datasets: [{
+    label: 'Players',
+    data: [10, 15, 18, 20, 32, 30, 29, 25, 13, 17, 16, 24],
+    backgroundColor: gradient,
+    borderColor: [
+    'rgb(0,169,255)'
+    ],
+    borderWidth: 4
+    }]
+    },
+    options: {
+    legend: {
+    display: false
+    },
+    maintainAspectRatio: false,
+    scales: {
+    yAxes: [{
+    gridLines: {
+    color: "rgba(0, 0, 0, 0)",
+    },
+    ticks: {
+    beginAtZero:true,
+    fontColor: 'white'
+    }
+    }],
+    xAxes: [{
+    gridLines: {
+    color: "rgba(0, 0, 0, 0)",
+    },
+    ticks: {
+    fontColor: 'white'
+    }
+    }]
+    }
+    }
+    });
+    myChart.canvas.parentNode.style.height = '400px';

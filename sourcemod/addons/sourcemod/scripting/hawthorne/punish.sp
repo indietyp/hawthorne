@@ -1,5 +1,6 @@
 void Punishment_OnPluginStart() {
   BuildPath(Path_SM, PUNISHMENT_TIMES,  sizeof(PUNISHMENT_TIMES),  "configs/hawthorne/punishment.txt");
+  BuildPath(Path_SM, BAN_REASONS,       sizeof(BAN_REASONS),   "configs/hawthorne/reasons/ban.txt");
   BuildPath(Path_SM, GAG_REASONS,       sizeof(GAG_REASONS),       "configs/hawthorne/reasons/gag.txt");
   BuildPath(Path_SM, MUTE_REASONS,      sizeof(MUTE_REASONS),      "configs/hawthorne/reasons/mute.txt");
   BuildPath(Path_SM, SILENCE_REASONS,   sizeof(SILENCE_REASONS),   "configs/hawthorne/reasons/silence.txt");
@@ -280,6 +281,7 @@ public int MenuHandlerDuration(Menu menu, MenuAction action, int client, int par
     if (mode == ACTION_UNSILENCE || mode == ACTION_SILENCE) PopulateMenuWithConfig(reason, SILENCE_REASONS);
     if (mode == ACTION_UNMUTE || mode == ACTION_MUTE) PopulateMenuWithConfig(reason, MUTE_REASONS);
     if (mode == ACTION_UNGAG || mode == ACTION_GAG) PopulateMenuWithConfig(reason, GAG_REASONS);
+    if (mode == ACTION_UNBAN || mode == ACTION_BAN) PopulateMenuWithConfig(reason, BAN_REASONS);
 
     reason.ExitButton = true;
     reason.Display(client, 20);

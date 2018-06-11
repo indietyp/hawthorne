@@ -10,4 +10,4 @@ from core.models import Punishment
 @require_http_methods(['POST'])
 def user(request, page, *args, **kwargs):
   obj = Punishment.objects.filter(resolved=False, is_banned=True).order_by('created_at')
-  return renderer(request, 'partials/ban/user.pug', obj, page)
+  return renderer(request, 'components/ban/user.pug', obj, page)

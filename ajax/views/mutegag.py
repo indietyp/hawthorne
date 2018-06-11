@@ -13,4 +13,4 @@ def user(request, page, *args, **kwargs):
   obj = Punishment.objects.filter(resolved=False)\
                           .filter(Q(is_muted=True) | Q(is_gagged=True))\
                           .order_by('created_at')
-  return renderer(request, 'partials/mutegag/user.pug', obj, page)
+  return renderer(request, 'components/mutegag/user.pug', obj, page)

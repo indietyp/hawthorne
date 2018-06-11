@@ -27,7 +27,7 @@ def user(request, page, *args, **kwargs):
   obj = User.objects.filter(is_active=True)\
                     .annotate(perms=(Count('user_permissions') / perms) * 100)\
                     .order_by('perms')
-  return renderer(request, 'partials/setting/user.pug', obj, page, execute=get_perms)
+  return renderer(request, 'components/setting/user.pug', obj, page, execute=get_perms)
 
 
 @login_required(login_url='/login')
@@ -38,7 +38,7 @@ def group(request, page, *args, **kwargs):
   obj = Group.objects.all()\
                      .annotate(perms=(Count('permissions') / perms) * 100)\
                      .order_by('perms')
-  return renderer(request, 'partials/setting/group.pug', obj, page, execute=get_perms)
+  return renderer(request, 'components/setting/group.pug', obj, page, execute=get_perms)
 
 
 @login_required(login_url='/login')
@@ -50,4 +50,4 @@ def token(request, page, *args, **kwargs):
                      .annotate(perms=(Count('permissions') / perms) * 100)\
                      .order_by('perms')
 
-  return renderer(request, 'partials/setting/token.pug', obj, page)
+  return renderer(request, 'components/setting/token.pug', obj, page)

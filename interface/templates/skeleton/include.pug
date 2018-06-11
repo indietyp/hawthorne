@@ -1,27 +1,15 @@
 - load staticfiles
 - load compile_static
 
-// ========================= CSS =========================
-// link(rel="stylesheet", href='{% static "css/flag-icon.min.css" %}')
-link(rel="stylesheet", href='{% static "css/bp-font.css" %}')
-link(href="https://fonts.googleapis.com/css?family=Lato:300,400,700|Source+Code+Pro" rel="stylesheet")
+link(href='https://fonts.googleapis.com/css?family=IBM+Plex+Sans:300,400,600', rel='stylesheet')
 
-// We need those for the universal grids - that do not only work in modern browsers
-link(rel="stylesheet", href="https://unpkg.com/purecss@1.0.0/build/base-min.css")
-link(rel="stylesheet", href="https://unpkg.com/purecss@1.0.0/build/grids-min.css")
-link(rel="stylesheet", href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css")
-
-// Chart
-link(rel="stylesheet", href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css")
-
-// Dropdown - we partially overwrite them - but not fully
-link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/choices.js/3.0.2/styles/css/choices.min.css")
-
-// Own Templates
-link(rel="stylesheet", href='{% static "css/template.sass"|compile %}')
+link(href='https://unpkg.com/ionicons@4.0.0/dist/css/ionicons.min.css', rel='stylesheet')
+script(src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js')
 
 
-// FAVICONS YAY
+link(rel='stylesheet', type='text/css', href='{% static "css/master.css" %}')
+link(rel='stylesheet', type='text/css', href='{% static "css/color.css" %}')
+
 
 link(rel="apple-touch-icon-precomposed", type="image/png", href='{% static "favicons/152.png" %}')
 link(rel="shortcut icon", type="image/png", href='{% static "favicons/16.png" %}')
@@ -30,23 +18,9 @@ for i in favicon_sizes
   - with 'favicons/'|add:i|add:'.png' as url
     link(rel="shortcut icon", type="image/png", sizes="{{i}}x{{i}}", href="{% static url %}")
 
-
-meta(name="theme-color", content="#2E363F")
-
-// ========================= JavaScript =========================
-// Charts
-script(src="//cdn.jsdelivr.net/npm/chartist@0.11.0/dist/chartist.min.js")
-
-// Icons
-script(src="//cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js")
-
-// Dropdown
-script(src="//cdn.jsdelivr.net/npm/choices.js@3.0.2/assets/scripts/dist/choices.min.js")
-
-// JQuery replacement - we can replace those partially
-script(src="//unpkg.com/lodash.debounce@4.0.8/index.js")
 script(src="//unpkg.com/fermata@0.11.0-beta1/fermata.js")
 script(src="//unpkg.com/balalaika@1.0.1/balalaika.min.js")
+// script(src='https://code.jquery.com/jquery-3.1.1.min.js')
 
 // Custom JavaScript - uses these libraries
 script(src="{% static 'js/globals.coffee'|compile %}")
@@ -55,3 +29,5 @@ script(src="{% static 'js/steam.coffee'|compile %}")
 script(src="{% static 'js/api.coffee'|compile %}")
 script(src="{% static 'js/ajax.coffee'|compile %}")
 script(src="{% static 'js/vc.coffee'|compile %}")
+script(src="{% static 'js/tooltip.coffee'|compile %}")
+script(src="{% static 'js/plugin.coffee'|compile %}")

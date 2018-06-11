@@ -18,4 +18,4 @@ def user(request, page, *args, **kwargs):
                     .annotate(sname=F('useronlinetime__server__name')) \
                     .order_by('updated_at')
 
-  return renderer(request, 'partials/player/online.pug', obj, page)
+  return renderer(request, 'components/player/online.pug', obj, page)

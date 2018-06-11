@@ -1,51 +1,76 @@
 - load staticfiles
 - load i18n
 
-.placeholder
-  .spacer
-  include assets/logo.svg
-  .heading
-    span.white hawthorne
-  .spacer
-.item.action(onclick="window.vc.change('home')")
-  i(data-feather="home")
-  span {% trans "Home" %}
+.logoContainer
+  .logo
+    include assets/logo.svg
+  .hawthorne
+    | Haw
+    span.thorne thorne
+.user
+  img(src='https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/53/537d8ecfe6c73edb75ab688748e1a2f6c87d0d24_full.jpg')
+  .username Akke
+  .role root
+  button.btnLogout Logout
+ul
+  .t MENU
+  li.title
+    a(href='')
+      i.icon.ion-md-globe
+      |  Home
+  li.title
+    a(href='#', data-trigger='[dropdown/toggle]')
+      i.icon.ion-ios-warning
+      |  Punishments
+      i.icon.ion-ios-arrow-down.more
+    .expand
+      ul
+        li
+          a(href='')  How
+        li
+          a(href='')  To
+        li
+          a(href='')  Slaughter
+        li
+          a(href='')  A puppy
+  li.title
+    a(href='#', data-trigger='[dropdown/toggle]')
+      i.icon.ion-ios-people
+      |  Players
+      i.icon.ion-ios-arrow-down.more
+    .expand
+      ul
+        li
+          a(href='')  How
+        li
+          a(href='')  To
+        li
+          a(href='')  Slaughter
+        li
+          a(href='')  A puppy
+  li.title
+    a(href='')
+      i.icon.ion-ios-flash
+      |  Admins
+  li.title
+    a(href='')
+      i.icon.ion-logo-buffer
+      |  Instances
+  li.title
+    a(href='')
+      i.icon.ion-ios-close-circle
+      |  Bans
+  li.title
+    a(href='')
+      i.icon.ion-ios-megaphone
+      |  Announcements
+  li.title
+    a(href='')
+      i.icon.ion-ios-chatbubbles
+      |  Chat
+  li.title
+    a(href='')
+      i.icon.ion-ios-settings
+      |  Settings
 
-- if perms.core.view_user
-  .item.action(onclick="window.vc.change('player')")
-    i(data-feather="users")
-    span {% trans "Players" %}
-
-- if perms.core.view_user or perms.core.view_servergroup or perms.core.view_chat
-  .item.action(onclick="window.vc.change('admin')")
-    i(data-feather="zap")
-    span {% trans "Admins" %}
-
-- if perms.core.view_server
-  .item.action(onclick="window.vc.change('server')")
-    i(data-feather="server")
-    span {% trans "Servers" %}
-
-- if perms.core.view_ban
-  .item.action(onclick="window.vc.change('ban')")
-    i(data-feather="slash")
-    span {% trans "Bans" %}
-
-- if perms.core.view_mutegag
-  .item.action(onclick="window.vc.change('mutegag')")
-    i(data-feather="volume-x")
-    span {% trans "Mute/Gag" %}
-
-.item.action(onclick="window.vc.change('announcements')")
-  i(data-feather="phone-outgoing")
-  span {% trans "Announcements" %}
-
-- if perms.log.view_chat
-  .item.action(onclick="window.vc.change('chat')")
-    i(data-feather="message-circle")
-    span {% trans "Chat" %}
-
-- if request.user.is_superuser
-  .item.action(onclick="window.vc.change('settings')")
-    i(data-feather="sliders")
-    span {% trans "Settings" %}
+// window.vc.change('settings')

@@ -94,22 +94,22 @@ def home(request):
                                 .filter(date__gte=datetime.date.today() - datetime.timedelta(days=30))
                                 .count()
              }
-  return render(request, 'components/home.pug', payload)
+  return render(request, 'pages/home.pug', payload)
 
 
 @login_required(login_url='/login')
 def player(request):
-  return render(request, 'components/player.pug', {})
+  return render(request, 'pages/player.pug', {})
 
 
 @login_required(login_url='/login')
 def admin(request):
-  return render(request, 'components/admin.pug', {})
+  return render(request, 'pages/admin.pug', {})
 
 
 @login_required(login_url='/login')
 def server(request):
-  return render(request, 'components/server.pug',
+  return render(request, 'pages/server.pug',
                 {'supported': [{'label': x[1], 'value': x[0]} for x in Server.SUPPORTED]})
 
 
@@ -122,7 +122,7 @@ def ban(request):
                      length__isnull=False)\
              .filter(Q(is_gagged=True) | Q(is_muted=True)).update(resolved=True)
 
-  return render(request, 'components/ban.pug', {})
+  return render(request, 'pages/ban.pug', {})
 
 
 @login_required(login_url='/login')
@@ -134,17 +134,17 @@ def mutegag(request):
                             length__isnull=False)\
                     .filter(Q(is_gagged=True) | Q(is_muted=True)).update(resolved=True)
 
-  return render(request, 'components/mutegag.pug')
+  return render(request, 'pages/mutegag.pug')
 
 
 @login_required(login_url='/login')
 def announcement(request):
-  return render(request, 'components/home.pug', {})
+  return render(request, 'pages/home.pug', {})
 
 
 @login_required(login_url='/login')
 def chat(request):
-  return render(request, 'components/chat.pug', {})
+  return render(request, 'pages/chat.pug', {})
 
 
 @login_required(login_url='/login')
@@ -161,7 +161,7 @@ def settings(request):
   if mainframe.check():
     mf = mainframe.populate().current.id
 
-  return render(request, 'components/settings.pug', {'simple': modules, 'advanced': perms, 'mainframe': mf, 'discord': None})
+  return render(request, 'pages/settings.pug', {'simple': modules, 'advanced': perms, 'mainframe': mf, 'discord': None})
 
 
 def dummy(request):

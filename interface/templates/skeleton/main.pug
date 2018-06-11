@@ -5,39 +5,24 @@
 !!!5
 html(lang='en')
   head
-    title hawthorne
-    meta(charset="UTF-8")
-    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title Hawthorne
+    meta(charset='utf-8')
+    meta(name='viewport', content='initial-scale=1.0, user-scalable=no')
+    meta(name='ROBOTS', content='NOODP')
 
     include skeleton/include.pug
   body
     include skeleton/csrf.pug
-    #header
-      .spacer
-      .information.action.default-cursor
-        i(data-feather="user")
-        - if not request.user.is_steam
-          span= request.user.username
-        - else
-          span= request.user.namespace
-      .offline.action(onclick="window.location='{% url 'logout' %}';")
-        i(data-feather="power")
 
-    #content-wrapper
-      #sidebar
-        include skeleton/sidebar.pug
+    .overlay
+    .searchOverlay
+    include skeleton/servers.pug
 
-      #content.pure-g
-        include components/announcement.pug
-        - block content
-        - endblock
+    .menu
+      include skeleton/sidebar.pug
 
-    include skeleton/footer.pug
-
-    script.
-      feather.replace()
-
-    // .modal
-    //   .spacer
-    //   .wrapper
-    //   .spacer
+    .main
+      include skeleton/topbar.pug
+      include skeleton/announcement.pug
+      - block content
+      - endblock

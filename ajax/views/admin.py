@@ -24,7 +24,7 @@ def user(request, page, *args, **kwargs):
     .annotate(role=Value('root', CharField())) \
     .annotate(role_id=Value(0, IntegerField())) \
     .annotate(location=F('country__code'))
-  return renderer(request, 'partials/admin/user.pug', obj, page, extra=ext)
+  return renderer(request, 'components/admin/user.pug', obj, page, extra=ext)
 
 
 @login_required(login_url='/login')
@@ -32,7 +32,7 @@ def user(request, page, *args, **kwargs):
 @require_http_methods(['POST'])
 def log(request, page, *args, **kwargs):
   obj = ServerChat.objects.filter(command=True)
-  return renderer(request, 'partials/admin/log.pug', obj, page)
+  return renderer(request, 'components/admin/log.pug', obj, page)
 
 
 @login_required(login_url='/login')
@@ -40,4 +40,4 @@ def log(request, page, *args, **kwargs):
 @require_http_methods(['POST'])
 def group(request, page, *args, **kwargs):
   obj = ServerGroup.objects.all().order_by('immunity')
-  return renderer(request, 'partials/admin/group.pug', obj, page)
+  return renderer(request, 'components/admin/group.pug', obj, page)
