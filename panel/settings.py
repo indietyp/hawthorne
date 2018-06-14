@@ -145,5 +145,5 @@ STATIC_URL = '/static/'
 PAGE_SIZE = 16
 
 AUTOMATED_LOGGING = {
-    'exclude': ['automated_logging', 'Session', 'basehttp', 'django.server']
+    'exclude': {'model': ['automated_logging', 'Session', 'basehttp', 'django.server']}
 }
