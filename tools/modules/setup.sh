@@ -30,7 +30,7 @@ setup () {
 
   # we need that total path boi
   printf "${BOLD}Cloning the project...${NORMAL}\n"
-  env git clone -b pages https://github.com/indietyp/hawthorne /hawthorne || {
+  env git clone -b mainframe https://github.com/indietyp/hawthorne /hawthorne || {
     printf "${RED}Error:${NORMAL} git clone of hawthorne repo failed\n"
     exit 1
   }
