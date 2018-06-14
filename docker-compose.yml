@@ -47,8 +47,8 @@ services:
       MYSQL_TCP_PORT: 3306
       MYSQL_USER: root
       MYSQL_DATABASE: hawthorne_landing
-      SENDGRID_USER: indietyp
-      SENDGRID_PWD: "k^Wqw(+PWs9C?V3V/n)v/B=>PY+d49"
+      SENDGRID_USER: user
+      SENDGRID_PWD: pwd
 
     networks:
       nhtldb:
