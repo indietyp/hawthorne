@@ -29,7 +29,6 @@ class Command(BaseCommand):
 
   def handle(self, *args, **options):
     uname = platform.uname()
-    print(settings.LOGGING['handlers']['file']['filename'])
     with open(settings.LOGGING['handlers']['file']['filename'], 'r') as log:
       traceback = self.tail(log, 100)
 

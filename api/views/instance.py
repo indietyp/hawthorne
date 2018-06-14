@@ -28,7 +28,6 @@ from django.views.decorators.http import require_http_methods
 def list(request, validated={}, *args, **kwargs):
   if request.method == 'PUT':
     ip = request.META['REMOTE_ADDR']
-    print(ip)
 
     try:
       domain = socket.gethostbyaddr(ip)[0]
