@@ -28,8 +28,6 @@ configure () {
 
 
     python3 /hawthorne/manage.py migrate
-    python3 /hawthorne/manage.py compilestatic
-    python3 /hawthorne/manage.py collectstatic --noinput -v 0
 
     printf "${BOLD}Linking to supervisor...${NORMAL}\n"
     rm -rf /etc/supervisor/conf.d/hawthorne.conf
