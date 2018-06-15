@@ -24,7 +24,7 @@
       span= data.server|truncatechars:18
   .column.icon.username.pure-u-3-24
     .spacer
-    - if data.role != 'root'
+    - if not data.is_superuser
       - if perms.core.change_user
         .action
           i.animate.opacity.animated(data-feather="edit-2", onclick="window.api.edit('admin__administrator', this)")

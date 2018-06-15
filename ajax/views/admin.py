@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import F, Count, Value, CharField, IntegerField
 from django.views.decorators.http import require_http_methods
+from django.conf import settings
 
 from ajax.views import renderer
 from core.models import User, ServerGroup
@@ -21,7 +22,7 @@ def user(request, page, *args, **kwargs):
 
   ext = User.objects.filter(is_superuser=True) \
     .annotate(server=Value(None, CharField(null=True))) \
-    .annotate(role=Value('root', CharField())) \
+    .annotate(role=Value(settings.ROOT, CharField())) \
     .annotate(role_id=Value(0, IntegerField())) \
     .annotate(location=F('country__code'))
   return renderer(request, 'partials/admin/user.pug', obj, page, extra=ext)

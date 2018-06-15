@@ -68,3 +68,4 @@ STATIC_PRECOMPILER_COMPILERS = (
 )
 
 DEMO = False
+ROOT = "root"
