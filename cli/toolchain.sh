@@ -49,7 +49,7 @@ update () {
     git pull
 
     printf "${GREEN}Checking dependencies and updating components.\n${NORMAL}"
-    pip3 install -r requirements.txt
+    pip3 install -U -r requirements.txt
     python3 manage.py migrate
     python3 manage.py collectstatic --noinput
 

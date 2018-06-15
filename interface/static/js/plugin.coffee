@@ -1,14 +1,14 @@
 $( ->
   #$(".menu").height($(document).outerHeight());
   $('[data-trigger=\'[dropdown/toggle]\']').on 'click', ->
-    $('.expand').not($(this).parent().find('.expand')).slideUp()
+    $('.expand').not($('.expand', this.parentElement)).slideUp()
     $('.menu > ul > li > a').not($(this)).removeClass 'navActive'
     $(this).toggleClass 'navActive'
-    $(this).parent().find('.expand').slideToggle()
+    $('.expand', this.parentElement).slideToggle()
     return
   $('[data-trigger=\'[modal/open]\']').on 'click', ->
     $('.overlay').fadeIn 'fast'
-    $('[data-component=\'' + $(this).attr('data-trigger-target') + '\']').fadeIn 'fast'
+    $('[data-component=\'' + this.getAttribute('data-trigger-target') + '\']').fadeIn 'fast'
     return
   $('[data-trigger=\'[server/item]\']').on 'click', ->
     $(this).toggleClass 'toggableListActive'
@@ -16,7 +16,7 @@ $( ->
     return
   $('[data-trigger=\'[modal/close]\']').on 'click', ->
     $('.overlay').fadeOut 'fast'
-    $(this).parent().fadeOut 'fast'
+    $(this.parentElement).fadeOut 'fast'
     return
   $('.overlay').on 'click', ->
     $('.overlay').fadeOut 'fast'

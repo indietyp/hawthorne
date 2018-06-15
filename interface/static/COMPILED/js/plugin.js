@@ -3,14 +3,14 @@
   $(function() {
     //$(".menu").height($(document).outerHeight());
     $('[data-trigger=\'[dropdown/toggle]\']').on('click', function() {
-      $('.expand').not($(this).parent().find('.expand')).slideUp();
+      $('.expand').not($('.expand', this.parentElement)).slideUp();
       $('.menu > ul > li > a').not($(this)).removeClass('navActive');
       $(this).toggleClass('navActive');
-      $(this).parent().find('.expand').slideToggle();
+      $('.expand', this.parentElement).slideToggle();
     });
     $('[data-trigger=\'[modal/open]\']').on('click', function() {
       $('.overlay').fadeIn('fast');
-      $('[data-component=\'' + $(this).attr('data-trigger-target') + '\']').fadeIn('fast');
+      $('[data-component=\'' + this.getAttribute('data-trigger-target') + '\']').fadeIn('fast');
     });
     $('[data-trigger=\'[server/item]\']').on('click', function() {
       $(this).toggleClass('toggableListActive');
@@ -18,7 +18,7 @@
     });
     $('[data-trigger=\'[modal/close]\']').on('click', function() {
       $('.overlay').fadeOut('fast');
-      $(this).parent().fadeOut('fast');
+      $(this.parentElement).fadeOut('fast');
     });
     $('.overlay').on('click', function() {
       $('.overlay').fadeOut('fast');

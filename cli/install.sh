@@ -379,7 +379,7 @@ configure() {
       read -p "Is your webserver ${BOLD}(A)${NORMAL}pache, ${BOLD}(N)${NORMAL}ginx or ${BOLD}(D)${NORMAL}ifferent? " yn
       case $yn in
           [Aa]* ) web="apache"
-                  sed -i "s#bind = 'unix:/tmp/sockets/hawthorne.sock'#bind = '127.0.0.1:8000'#g" $directory/gunicorn.conf.py
+                  sed -i "s#bind = 'unix:/tmp/sockets/hawthorne.sock'#bind = '127\.0\.0\.1:8000'#g" $directory/gunicorn.conf.py
                   break;;
           [Nn]* ) break;;
           [Dd]* ) web="unspecified"
