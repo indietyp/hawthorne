@@ -26,8 +26,8 @@ remove = (mode = '', that) ->
       user = $('input.user', node)[0].value
       server = $('input.server', node)[0].value
 
-      console.log $('input.user', node)[0]
-      console.log user
+      if server == ""
+        server = null
 
       payload =
         server: server

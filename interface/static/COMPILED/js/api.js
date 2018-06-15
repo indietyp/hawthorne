@@ -28,8 +28,9 @@
       case 'ban':
         user = $('input.user', node)[0].value;
         server = $('input.server', node)[0].value;
-        console.log($('input.user', node)[0]);
-        console.log(user);
+        if (server === "") {
+          server = null;
+        }
         payload = {
           server: server
         };
@@ -151,10 +152,9 @@
         break;
       case 'mutegag':
       case 'ban':
-        user = $('input.user')[0].value;
-        server = $('input.server')[0].value;
-        now = new Date();
-        now = now.getTime() / 1000;
+        user = $('input.user', node)[0].value;
+        server = $('input.server', node)[0].value;
+        now = parseInt($(".icon.time", node)[0].getAttribute("data-created"));
         time = $(".icon.time input", node)[0].value;
         if (time !== '') {
           time = new Date(time);

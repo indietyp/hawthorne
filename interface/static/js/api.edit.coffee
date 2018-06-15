@@ -66,12 +66,10 @@ save = (mode = '', that) ->
       window.endpoint.api.roles[uuid].post(o, {}, data, (err, data) ->)
 
     when 'mutegag', 'ban'
-      user = $('input.user')[0].value
-      server = $('input.server')[0].value
+      user = $('input.user', node)[0].value
+      server = $('input.server', node)[0].value
 
-      now = new Date()
-      now = now.getTime() / 1000
-
+      now = parseInt($(".icon.time", node)[0].getAttribute("data-created"))
       time = $(".icon.time input", node)[0].value
 
       if time != ''

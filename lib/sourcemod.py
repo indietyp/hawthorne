@@ -27,7 +27,7 @@ class SourcemodPluginWrapper(RCONBase):
 
     try:
       response = self.run(command)[0]
-    except valve.rcon.RCONError as e:
+    except (valve.rcon.RCONError, IndexError) as e:
       return {'error': e}
 
     return response
@@ -36,7 +36,7 @@ class SourcemodPluginWrapper(RCONBase):
     try:
       response = self.run('sm_kick {} {}'.format(punishment.user.namespace,
                                                  punishment.reason))[0]
-    except valve.rcon.RCONError as e:
+    except (valve.rcon.RCONError, IndexError) as e:
       return {'error': e}
 
     return response
@@ -60,7 +60,7 @@ class SourcemodPluginWrapper(RCONBase):
 
     try:
       response = self.run(command)[0]
-    except valve.rcon.RCONError as e:
+    except (valve.rcon.RCONError, IndexError) as e:
       return {'error': e}
 
     return response
@@ -80,7 +80,7 @@ class SourcemodPluginWrapper(RCONBase):
 
       response = ''.join(response)
       logger.warning(response)
-    except valve.rcon.RCONError as e:
+    except (valve.rcon.RCONError, IndexError) as e:
       return {'error': e}
 
     response = response.split('\n')[0]
@@ -125,5 +125,5 @@ class SourcemodPluginWrapper(RCONBase):
   def execute(self, command, *args, **kwargs):
     try:
       return self.run(command)[0]
-    except valve.rcon.RCONError as e:
+    except (valve.rcon.RCONError, IndexError) as e:
       return {'error': e}

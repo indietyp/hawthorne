@@ -45,7 +45,7 @@
       span {% trans "all" %}
   .column.icon.time.pure-u-7-24
     i.adjusted(data-feather="clock")
-    span(data-timestamp='{{data.created_at|add:data.length|date:"U"}}')
+    span(data-timestamp='{{data.created_at|add:data.length|date:"U"}}', data-created='{{data.created_at|date:"U"}}')
       if data.length is not None
         {% blocktrans with until=data.created_at|add:data.length|date:"SHORT_DATETIME_FORMAT" %}until {{until}}{% endblocktrans %}
       else
