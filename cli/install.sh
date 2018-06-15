@@ -221,6 +221,7 @@ install() {
 
     hash git >/dev/null 2>&1 || {
       printf "${YELLOW}Git not preinstalled. Reinstalling...${NORMAL}\n"
+      yum install http://opensource.wandisco.com/centos/7/git/x86_64/wandisco-git-release-7-2.noarch.rpm
       yum -y install git
     }
 
