@@ -165,4 +165,4 @@ AUTOMATED_LOGGING = {
     'exclude': {'model': ['automated_logging', 'Session', 'basehttp', 'django.server']}
 }
 
-MAINFRAME = "hawthorne.in"
+MAINFRAME = "hawthornepanel.org"

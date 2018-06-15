@@ -26,7 +26,7 @@
       span {% trans "all" %}
     - else
       span= data.server.name
-  .column.icon.time.pure-u-7-24
+  .column.icon.time.pure-u-7-24(data-created='{{data.created_at|date:"U"}}')
     i.adjusted(data-feather="clock")
     span(data-timestamp='{{data.created_at|add:data.length|date:"U"}}')
       if data.length is not None

@@ -291,9 +291,6 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
       except Exception as e:
         return 'not existent steamid provided - {}'.format(e), 403
 
-    if not user.is_active:
-      return 'user not using panel'
-
     if validated['purge']:
       if user.is_superuser:
         return 'superuser cannot be removed', 403
@@ -309,6 +306,9 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
       m = Membership.objects.get(user=user, role=validated['role'])
       m.delete()
     else:
+      if not user.is_active:
+        return 'user not using panel', 403
+
       if user.is_superuser:
         return 'superuser cannot be deactivated', 403
 

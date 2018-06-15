@@ -49,14 +49,14 @@ update () {
     git pull
 
     printf "${GREEN}Checking dependencies and updating components.\n${NORMAL}"
-    pip3 install -r requirements.txt
+    pip3 install -U -r requirements.txt
     python3 manage.py migrate
     python3 manage.py collectstatic --noinput
 
-    printf "${GREEN}Recreating permissions.\n${NORMAL}"
-    cat $dir/cli/utils/permission_delete.py | python3 manage.py shell
-    echo "ALTER TABLE auth_permission AUTO_INCREMENT = 1;" | python3 manage.py dbshell
-    python3 manage.py migrate --run-syncdb
+    # printf "${GREEN}Recreating permissions.\n${NORMAL}"
+    # cat $dir/cli/utils/permission_delete.py | python3 manage.py shell
+    # echo "ALTER TABLE auth_permission AUTO_INCREMENT = 1;" | python3 manage.py dbshell
+    # python3 manage.py migrate --run-syncdb
 
     hash supervisorctl >/dev/null 2>&1 || {
       printf "${YELLOW}Was unable to detect supervisor - not attempting to restart wsgi\n${NORMAL}"
