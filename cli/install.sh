@@ -379,8 +379,7 @@ configure() {
     while true; do
       read -p "Is your webserver ${BOLD}(A)${NORMAL}pache, ${BOLD}(N)${NORMAL}ginx or ${BOLD}(D)${NORMAL}ifferent? " yn
       case $yn in
-          [Aa]* ) sed -i "s#bind = 'unix:/tmp/sockets/hawthorne.sock'#bind = '127.0.0.1:8000'#g" $directory/gunicorn.conf.py
-                  web="apache"
+          [Aa]* ) web="apache"
                   break;;
           [Nn]* ) break;;
           [Dd]* ) web="unspecified"
@@ -452,6 +451,7 @@ configure() {
       if [ "$web" = "nginx" ]; then
         sed "s/server_name example.com;/server_name '$domain';/g" $directory/cli/configs/nginx.example.conf
       elif [ "$web" = "apache" ]; then
+        sed -i "s#bind = 'unix:/tmp/sockets/hawthorne.sock'#bind = '127.0.0.1:8000'#g" $directory/gunicorn.conf.py
         sed "s/ServerName example.com/ServerName '$domain'/g" $directory/cli/configs/apache.example.conf
       fi
     fi
