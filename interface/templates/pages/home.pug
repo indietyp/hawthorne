@@ -2,13 +2,14 @@
 
 - load i18n
 - load staticfiles
+- load interface_utils
 
 
 - block content
   .section.group.overview
     .col.span_1_of_4
       .c100
-        span 17
+        span=servers
         .slice
           .bar
           .fill
@@ -16,7 +17,7 @@
       .info The total amount of servers connected to this panel.
     .col.span_1_of_4
       .c100
-        span 143
+        span=punishments
         .slice
           .bar
           .fill
@@ -24,7 +25,7 @@
       .info The total amount of punishments handed out by your admins.
     .col.span_1_of_4
       .c100
-        span 8065
+        span=users
         .slice
           .bar
           .fill
@@ -32,7 +33,7 @@
       .info The total amount of players that have joined your servers.
     .col.span_1_of_4
       .c100
-        span 13659
+        span=actions
         .slice
           .bar
           .fill
@@ -49,10 +50,10 @@
     var myChart = new Chart(ctx, {
     type: 'line',
     data: {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    labels: {{population|flatten:"0"|safe}},
     datasets: [{
     label: 'Players',
-    data: [10, 15, 18, 20, 32, 30, 29, 25, 13, 17, 16, 24],
+    data: {{population|flatten:"1"|safe}},
     backgroundColor: gradient,
     borderColor: [
     'rgb(0,169,255)'

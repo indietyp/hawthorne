@@ -49,3 +49,8 @@ def mask(value, percentage="0.6"):
     output.append(value[pointer] if pointer < characters else '•')
 
   return ''.join(output)
+
+
+@register.filter
+def flatten(value, location):
+  return list(map(lambda x: x[int(location)], value))

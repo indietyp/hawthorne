@@ -1,5 +1,6 @@
 import json
 import datetime
+import calendar
 
 from automated_logging.models import Model as LogModel
 from django.db.models.functions import Extract
@@ -7,8 +8,7 @@ from lib.mainframe import Mainframe
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import DateField, Count, Q, F, ExpressionWrapper, DateTimeField
-from django.db.models.functions import Cast
+from django.db.models import Count, Q, F, ExpressionWrapper, DateTimeField
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate
 from django.http import JsonResponse
@@ -16,8 +16,8 @@ from django.utils import timezone
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 
-from core.models import Server, ServerGroup, User, Punishment
-from log.models import UserOnlineTime, ServerChat
+from core.models import Server, User, Punishment
+from log.models import UserOnlineTime
 
 
 def login(request):
@@ -65,26 +65,22 @@ def setup(request, u=None):
 @login_required(login_url='/login')
 def home(request):
   current = datetime.datetime.now().month
-  query = UserOnlineTime.objects.annotate(m=Extract('created_at', 'month'))
-                                # .values('user', 'month')
-                                # .annotate(active=Count('user', distinct=True))
+  query = UserOnlineTime.objects.annotate(mo=Extract('disconnected', 'month'))\
+                                .values('user', 'mo')\
+                                .annotate(active=Count('user', distinct=True))
 
-  print(query.query)
-  print(query[0].m)
+  population = []
+  for month in range(current, current - 12, -1):
+    if month < 1:
+      month += 12
 
-  # last30 = query.filter(date__gte=datetime.date.today() - datetime.timedelta(days=30))
-  # prev30 = query.filter(date__gte=datetime.date.today() - datetime.timedelta(days=60)) \
-  #               .filter(date__lte=datetime.date.today() - datetime.timedelta(days=30))
+    population.append((calendar.month_abbr[month], query.filter(mo=month).count()))
 
-  # recent = last30.count()
-  # alltime = query.count()
-
-  # try:
-  #   change = int((recent / prev30.count()) - 1) * 100
-  # except ZeroDivisionError:
-  #   change = 100
-
-  payload = {}
+  payload = {'population': population[::-1],
+             'punishments': Punishment.objects.all().count(),
+             'users': User.objects.all().count(),
+             'servers': Server.objects.all().count(),
+             'actions': LogModel.objects.all().count()}
   return render(request, 'pages/home.pug', payload)
 
 

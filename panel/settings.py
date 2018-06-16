@@ -74,6 +74,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'core.context_processors.ajax.ajax_processor',
                 'core.context_processors.utils.favicons',
+                'core.context_processors.utils.role',
                 'core.context_processors.utils.announcement',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',

@@ -8,9 +8,9 @@
     | Haw
     span.thorne thorne
 .user
-  img(src='https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/53/537d8ecfe6c73edb75ab688748e1a2f6c87d0d24_full.jpg')
+  img(src=request.user.avatar)
   .username= request.user.namespace
-  .role root
+  .role= role
   button.btnLogout Logout
 ul
   .t MENU
