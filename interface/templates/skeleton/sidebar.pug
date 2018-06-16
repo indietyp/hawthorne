@@ -9,7 +9,7 @@
     span.thorne thorne
 .user
   img(src='https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/53/537d8ecfe6c73edb75ab688748e1a2f6c87d0d24_full.jpg')
-  .username Akke
+  .username= request.user.namespace
   .role root
   button.btnLogout Logout
 ul
@@ -17,11 +17,11 @@ ul
   li.title
     a(href='')
       i.icon.ion-md-globe
-      |  Home
+      | Home
   li.title
     a(href='#', data-trigger='[dropdown/toggle]')
       i.icon.ion-ios-warning
-      |  Punishments
+      | Punishments
       i.icon.ion-ios-arrow-down.more
     .expand
       ul

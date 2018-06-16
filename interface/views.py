@@ -2,6 +2,7 @@ import json
 import datetime
 
 from automated_logging.models import Model as LogModel
+from django.db.models.functions import Extract
 from lib.mainframe import Mainframe
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Permission
@@ -63,37 +64,27 @@ def setup(request, u=None):
 
 @login_required(login_url='/login')
 def home(request):
-  query = UserOnlineTime.objects.annotate(date=Cast('disconnected', DateField())) \
-                                .values('user') \
-                                .annotate(active=Count('user', distinct=True))
+  current = datetime.datetime.now().month
+  query = UserOnlineTime.objects.annotate(m=Extract('created_at', 'month'))
+                                # .values('user', 'month')
+                                # .annotate(active=Count('user', distinct=True))
 
-  last30 = query.filter(date__gte=datetime.date.today() - datetime.timedelta(days=30))
-  prev30 = query.filter(date__gte=datetime.date.today() - datetime.timedelta(days=60)) \
-                .filter(date__lte=datetime.date.today() - datetime.timedelta(days=30))
+  print(query.query)
+  print(query[0].m)
 
-  recent = last30.count()
-  alltime = query.count()
+  # last30 = query.filter(date__gte=datetime.date.today() - datetime.timedelta(days=30))
+  # prev30 = query.filter(date__gte=datetime.date.today() - datetime.timedelta(days=60)) \
+  #               .filter(date__lte=datetime.date.today() - datetime.timedelta(days=30))
 
-  try:
-    change = int((recent / prev30.count()) - 1) * 100
-  except ZeroDivisionError:
-    change = 100
+  # recent = last30.count()
+  # alltime = query.count()
 
-  payload = {'instances': Server.objects.all().count(),
-             'counts': {'all': alltime,
-                        'month': recent,
-                        'change': change},
-             'roles': ServerGroup.objects.all().count(),
-             'mem_roles': User.objects.filter(Q(roles__isnull=False) | Q(is_superuser=True)).count(),
-             'messages': ServerChat.objects.filter(command=False)
-                                           .annotate(date=Cast('created_at', DateField()))
-                                           .filter(date__gte=datetime.date.today() - datetime.timedelta(days=30))
-                                           .count(),
-             'actions': LogModel.objects.filter(user__isnull=False)
-                                .annotate(date=Cast('created_at', DateField()))
-                                .filter(date__gte=datetime.date.today() - datetime.timedelta(days=30))
-                                .count()
-             }
+  # try:
+  #   change = int((recent / prev30.count()) - 1) * 100
+  # except ZeroDivisionError:
+  #   change = 100
+
+  payload = {}
   return render(request, 'pages/home.pug', payload)
 
 
