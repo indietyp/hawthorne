@@ -335,6 +335,7 @@ configure() {
       exit 1
     fi
   fi
+  mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u $dbuser mysql
 
   if [ "$stapi" = "" ]; then
     printf "\n\n${GREEN}SteamAPI configuration:${NORMAL}\n"

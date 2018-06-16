@@ -58,6 +58,12 @@ update () {
     # echo "ALTER TABLE auth_permission AUTO_INCREMENT = 1;" | python3 manage.py dbshell
     # python3 manage.py migrate --run-syncdb
 
+    dbuser=$(cat panel/local.py | grep -oP "(?<='USER': ')[a-zA-Z0-9\.-]*(?=',)")
+    export MYSQL_PWD=$(cat panel/local.py | grep -oP "(?<='PASSWORD': ')[a-zA-Z0-9\.-]*(?=',)")
+    export MYSQL_HOST=$(cat panel/local.py | grep -oP "(?<='HOST': ')[a-zA-Z0-9\.-]*(?=',)")
+    export MYSQL_TCP_PORT=$(cat panel/local.py | grep -oP "(?<='PORT': ')[a-zA-Z0-9\.-]*(?=',)")
+    mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u $dbuser mysql
+
     hash supervisorctl >/dev/null 2>&1 || {
       printf "${YELLOW}Was unable to detect supervisor - not attempting to restart wsgi\n${NORMAL}"
       exit 1
