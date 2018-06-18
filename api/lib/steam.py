@@ -33,7 +33,7 @@ def search(query=''):
       files={
       },
     )
-    response = json.loads(response.content)
+    response = json.loads(response.content.decode())
 
     html = etree.HTML(response['html'])
     results = CSSSelector('div.search_row')

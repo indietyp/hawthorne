@@ -226,6 +226,7 @@ install() {
     }
 
     ln -s /usr/local/bin/python3 /usr/bin/python3
+    ln -s /usr/local/bin/pip3 /usr/bin/pip3
     /usr/sbin/setsebool -P httpd_can_network_connect 1
   else
     printf "Your package manager is currently not supported. Please contact the maintainer\n"
