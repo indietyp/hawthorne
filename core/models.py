@@ -13,6 +13,37 @@ class BaseModel(models.Model):
     abstract = True
 
 
+class Tag(BaseModel):
+  name = models.CharField(max_length=255, null=True)
+
+  COLORS = (
+      ("default", "Default Color"),
+      ("teamcolor", "Current Team Color"),
+      ("red", "Red"),
+      ("lightred", "Lighter Red"),
+      ("darkred", "Darker Red"),
+      ("bluegrey", "Blueish Grey"),
+      ("blue", "Blue"),
+      ("darkblue", "Darker Blue"),
+      ("purple", "Purple"),
+      ("orchid", "Orchid"),
+      ("yellow", "Yellow"),
+      ("gold", "Gold"),
+      ("lightgreen", "Lighter Green"),
+      ("green", "Green"),
+      ("lime", "Lime"),
+      ("grey", "Grey"),
+      ("darkgrey", "Darker Grey"),
+  )
+
+  # colors
+  chat = models.CharField(max_length=10, choices=COLORS, default="default")
+  name = models.CharField(max_length=10, choices=COLORS, default="default")
+
+  # nametag
+  base = models.CharField(max_length=10, choices=COLORS, default="default")
+
+
 class Mainframe(BaseModel):
   assigned = models.UUIDField(null=True)
   token = models.UUIDField(null=True)
@@ -57,7 +88,7 @@ class User(AbstractUser):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
-  tag = models.CharField(max_length=255, null=True)
+  tag = models.ForeignKey(Tag, on_delete=models.CASCADE, null=True)
 
   class Meta:
     permissions = [
@@ -165,37 +196,6 @@ class ServerPermission(BaseModel):
 
   def __str__(self):
     return self.convert()
-
-
-class Tag(BaseModel):
-  name = models.CharField(max_length=255, null=True)
-
-  COLORS = (
-      ("default", "Default Color"),
-      ("teamcolor", "Current Team Color"),
-      ("red", "Red"),
-      ("lightred", "Lighter Red"),
-      ("darkred", "Darker Red"),
-      ("bluegrey", "Blueish Grey"),
-      ("blue", "Blue"),
-      ("darkblue", "Darker Blue"),
-      ("purple", "Purple"),
-      ("orchid", "Orchid"),
-      ("yellow", "Yellow"),
-      ("gold", "Gold"),
-      ("lightgreen", "Lighter Green"),
-      ("green", "Green"),
-      ("lime", "Lime"),
-      ("grey", "Grey"),
-      ("darkgrey", "Darker Grey"),
-  )
-
-  # colors
-  chat = models.CharField(max_length=10, choices=COLORS, default="default")
-  name = models.CharField(max_length=10, choices=COLORS, default="default")
-
-  # nametag
-  base = models.CharField(max_length=10, choices=COLORS, default="default")
 
 
 class ServerGroup(BaseModel):

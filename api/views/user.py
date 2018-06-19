@@ -6,6 +6,7 @@ import re
 from django.contrib.auth.models import Group, Permission
 from django.db.models import F, Q, DateTimeField, ExpressionWrapper
 from django.utils import timezone
+from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
@@ -173,7 +174,7 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
 
     if user.is_superuser:
       # fake root role
-      output['roles'].append({'name': 'root',
+      output['roles'].append({'name': settings.ROOT,
                               'server': None,
                               'flags': 'ABCDEFGHIJKLNMNOPQRSTUVXYZ'.lower(),
                               'immunity': 100,

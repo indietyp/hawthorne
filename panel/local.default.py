@@ -26,6 +26,7 @@ SOCIAL_AUTH_STEAM_API_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 STATIC_ROOT = '/local/static'
 
 ALLOWED_HOSTS = [gethostname(), gethostbyname(gethostname())]
+ROOT = 'root'
 
 # generate me baby
 SECRET_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'

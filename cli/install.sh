@@ -154,7 +154,7 @@ install() {
       case $yn in
           [Yy]* ) read -p "Where should hawthorne be installed? " directory; break;;
           [Nn]* ) break;;
-          * ) echo "Please answer with the answers provided.";;
+          * ) echo "Please answer with the choices provided.";;
       esac
     done
   fi
@@ -226,6 +226,7 @@ install() {
     }
 
     ln -s /usr/local/bin/python3 /usr/bin/python3
+    ln -s /usr/local/bin/pip3 /usr/bin/pip3
     /usr/sbin/setsebool -P httpd_can_network_connect 1
   else
     printf "Your package manager is currently not supported. Please contact the maintainer\n"
@@ -335,6 +336,7 @@ configure() {
       exit 1
     fi
   fi
+  mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u $dbuser mysql
 
   if [ "$stapi" = "" ]; then
     printf "\n\n${GREEN}SteamAPI configuration:${NORMAL}\n"
@@ -379,13 +381,12 @@ configure() {
     while true; do
       read -p "Is your webserver ${BOLD}(A)${NORMAL}pache, ${BOLD}(N)${NORMAL}ginx or ${BOLD}(D)${NORMAL}ifferent? " yn
       case $yn in
-          [Aa]* ) sed -i "s#bind = 'unix:/tmp/sockets/hawthorne.sock'#bind = '127.0.0.1:8000'#g" $directory/gunicorn.conf.py
-                  web="apache"
+          [Aa]* ) web="apache"
                   break;;
           [Nn]* ) break;;
           [Dd]* ) web="unspecified"
                   break;;
-          * ) echo "Please answer with the answers provided.";;
+          * ) echo "Please answer with the choices provided.";;
       esac
     done
   fi
@@ -396,7 +397,7 @@ configure() {
       case $yn in
           [Ii]* ) domain=$(curl -sSSL "https://api.ipify.org/?format=text"); break;;
           [Dd]* ) read -p "Which (sub-)domain will hawthorne be hosted? " domain; break;;
-          * ) echo "Please answer with the answers provided.";;
+          * ) echo "Please answer with the choices provided.";;
       esac
     done
   fi
@@ -422,6 +423,7 @@ configure() {
     export LC_ALL=en_US.UTF-8
 
     sed -i "s#bind = 'unix:/tmp/sockets/hawthorne.sock'#bind = '0.0.0.0:8000'#g" $directory/gunicorn.conf.py
+    sed -i "s#ROOT = 'root'#ROOT = '$ROOT'#g" $directory/panel/local.py
 
     cd $directory
     python3 -m gunicorn.app.wsgiapp panel.wsgi:application
@@ -448,10 +450,12 @@ configure() {
     printf "For additional information about the configuration please refer to ${YELLOW}https://docs.hawthorne.in/#/getting-started?id=web-server-configuration${NORMAL}\n\n\n"
 
     if [ $nginx -ne 2 ]; then
+      echo "$web"
       printf "${GREEN}These example configurations have been specificially generated for your system, they might need some tweaking: ${NORMAL}\n\n\n"
       if [ "$web" = "nginx" ]; then
         sed "s/server_name example.com;/server_name '$domain';/g" $directory/cli/configs/nginx.example.conf
       elif [ "$web" = "apache" ]; then
+        sed -i "s#bind = 'unix:/tmp/sockets/hawthorne.sock'#bind = '127.0.0.1:8000'#g" $directory/gunicorn.conf.py
         sed "s/ServerName example.com/ServerName '$domain'/g" $directory/cli/configs/apache.example.conf
       fi
     fi
