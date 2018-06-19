@@ -5,6 +5,7 @@ DB_PORT=$(echo $DB | sed -nE 's#.*[\:]([0-9]+)\/.*#\1#p')
 DB_PORT=${DB_PORT:-3306}
 
 DEMO=${DEMO:-0}
+ROOT=${ROOT:-root}
 
 edis-server --daemonize yes
 /hawthorne/cli/utils/wait.sh ${DB_HOST}:${DB_PORT}

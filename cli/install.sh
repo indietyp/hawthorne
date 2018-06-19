@@ -154,7 +154,7 @@ install() {
       case $yn in
           [Yy]* ) read -p "Where should hawthorne be installed? " directory; break;;
           [Nn]* ) break;;
-          * ) echo "Please answer with the answers provided.";;
+          * ) echo "Please answer with the choices provided.";;
       esac
     done
   fi
@@ -386,7 +386,7 @@ configure() {
           [Nn]* ) break;;
           [Dd]* ) web="unspecified"
                   break;;
-          * ) echo "Please answer with the answers provided.";;
+          * ) echo "Please answer with the choices provided.";;
       esac
     done
   fi
@@ -397,7 +397,7 @@ configure() {
       case $yn in
           [Ii]* ) domain=$(curl -sSSL "https://api.ipify.org/?format=text"); break;;
           [Dd]* ) read -p "Which (sub-)domain will hawthorne be hosted? " domain; break;;
-          * ) echo "Please answer with the answers provided.";;
+          * ) echo "Please answer with the choices provided.";;
       esac
     done
   fi
@@ -423,6 +423,7 @@ configure() {
     export LC_ALL=en_US.UTF-8
 
     sed -i "s#bind = 'unix:/tmp/sockets/hawthorne.sock'#bind = '0.0.0.0:8000'#g" $directory/gunicorn.conf.py
+    sed -i "s#ROOT = 'root'#ROOT = '$ROOT'#g" $directory/panel/local.py
 
     cd $directory
     python3 -m gunicorn.app.wsgiapp panel.wsgi:application
@@ -449,6 +450,7 @@ configure() {
     printf "For additional information about the configuration please refer to ${YELLOW}https://docs.hawthorne.in/#/getting-started?id=web-server-configuration${NORMAL}\n\n\n"
 
     if [ $nginx -ne 2 ]; then
+      echo "$web"
       printf "${GREEN}These example configurations have been specificially generated for your system, they might need some tweaking: ${NORMAL}\n\n\n"
       if [ "$web" = "nginx" ]; then
         sed "s/server_name example.com;/server_name '$domain';/g" $directory/cli/configs/nginx.example.conf
