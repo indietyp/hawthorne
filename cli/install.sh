@@ -254,6 +254,7 @@ install() {
   fi
 
   printf "${BOLD}Installing dependencies...${NORMAL}\n"
+  pip3 install -U setuptools
   pip3 install cryptography || {
     printf "${BOLD}Too old pip3 version... upgrading${NORMAL}\n"
     apt install -y wget
