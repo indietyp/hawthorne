@@ -8,7 +8,7 @@ from core.models import User
 
 
 @json_response
-@validation('steam.search')
+@validation
 @require_http_methods(['GET'])
 def search(request, i=False, validated={}, *args, **kwargs):
   if i:

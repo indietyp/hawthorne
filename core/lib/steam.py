@@ -6,7 +6,7 @@ from django.conf import settings
 from core.models import Country
 
 
-def populate(user):
+def populate(user, save=True):
   if user.is_steam:
     steamapi.core.APIConnection(api_key=settings.SOCIAL_AUTH_STEAM_API_KEY, validate_key=True)
     fetched = steamapi.user.SteamUser(userid=user.username)
@@ -37,4 +37,5 @@ def populate(user):
       if len(realname) > 1:
         user.last_name = realname[-1]
 
-    user.save()
+    if save:
+      user.save()

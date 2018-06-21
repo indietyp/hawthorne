@@ -1,6 +1,7 @@
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils import timezone
+from core.lib.steam import populate
 import logging
 from core.models import User
 
@@ -29,6 +30,12 @@ def compare(state1, state2):
 
 @receiver(pre_save, sender=User, weak=False)
 def user_log_handler(sender, instance, raw, using, update_fields, **kwargs):
+  if not instance.namespace:
+    if instance.is_steam:
+      populate(instance, False)
+    else:
+      instance.namespace = instance.username
+
   from log.models import UserNamespace, UserOnlineTime, UserIP
   try:
     state = User.objects.get(id=instance.id)

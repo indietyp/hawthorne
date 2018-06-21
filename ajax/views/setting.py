@@ -20,7 +20,7 @@ def get_perms(o, request, *args, **kwargs):
 
 
 @login_required(login_url='/login')
-@permission_required('core.view_user')
+@permission_required
 @require_http_methods(['POST'])
 def user(request, page, *args, **kwargs):
   perms = Permission.objects.all().count()
@@ -31,7 +31,7 @@ def user(request, page, *args, **kwargs):
 
 
 @login_required(login_url='/login')
-@permission_required('core.view_group')
+@permission_required
 @require_http_methods(['POST'])
 def group(request, page, *args, **kwargs):
   perms = Permission.objects.all().count()
@@ -42,7 +42,7 @@ def group(request, page, *args, **kwargs):
 
 
 @login_required(login_url='/login')
-@permission_required('core.view_token')
+@permission_required
 @require_http_methods(['POST'])
 def token(request, page, *args, **kwargs):
   perms = Permission.objects.all().count()

@@ -11,8 +11,8 @@ from core.decorators.auth import authentication_required, permission_required
 @csrf_exempt
 @json_response
 @authentication_required
-@permission_required('mainframe.connect')
-@validation('mainframe.connect')
+@permission_required
+@validation
 @require_http_methods(['GET', 'PUT'])
 def connect(request, validated={}, *args, **kwargs):
   if request.method == 'GET':

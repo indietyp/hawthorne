@@ -80,7 +80,7 @@ validation = {
                                       'plugin': {'type': 'boolean', 'default': True}},
                        'permission': ['core.delete_punishment']},
         },
-        'kick': {
+        'punishment[detailed]': {
             'PUT': {'parameters': {'server': {'type': 'uuid', 'required': True}},
                     'permission': ['core.kick_user']},
         },

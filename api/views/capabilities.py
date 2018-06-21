@@ -11,8 +11,8 @@ from core.models import Server
 @csrf_exempt
 @json_response
 @authentication_required
-@permission_required('capabilities.games')
-@validation('capabilities.games')
+@permission_required
+@validation
 @require_http_methods(['GET'])
 def games(request, validated={}, *args, **kwargs):
   return [{'value': g[0], 'label': g[1]} for g in Server.SUPPORTED]

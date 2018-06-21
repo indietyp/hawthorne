@@ -6,7 +6,7 @@ from log.models import ServerChat
 
 
 @login_required(login_url='/login')
-@permission_required('log.view_chat')
+@permission_required
 @require_http_methods(['POST'])
 def log(request, page, *args, **kwargs):
   obj = ServerChat.objects.filter(command=False).order_by('-updated_at')

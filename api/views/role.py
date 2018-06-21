@@ -14,8 +14,8 @@ from core.models import User, Server, Role, ServerPermission, Membership
 @csrf_exempt
 @json_response
 @authentication_required
-@permission_required('role.list')
-@validation('role.list')
+@permission_required
+@validation
 @require_http_methods(['GET', 'PUT'])
 def list(request, validated={}, *args, **kwargs):
   if request.method == 'GET':
@@ -64,8 +64,8 @@ def list(request, validated={}, *args, **kwargs):
 @csrf_exempt
 @json_response
 @authentication_required
-@permission_required('role.detailed')
-@validation('role.detailed')
+@permission_required
+@validation
 @require_http_methods(['GET', 'POST', 'DELETE'])
 def detailed(request, r=None, validated={}, *args, **kwargs):
   role = Role.objects.get(id=r)

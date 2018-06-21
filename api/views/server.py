@@ -17,8 +17,8 @@ from lib.sourcemod import SourcemodPluginWrapper
 @csrf_exempt
 @json_response
 @authentication_required
-@permission_required('server.list')
-@validation('server.list')
+@permission_required
+@validation
 @require_http_methods(['GET', 'PUT'])
 def list(request, validated={}, *args, **kwargs):
   if request.method == 'GET':
@@ -76,8 +76,8 @@ def list(request, validated={}, *args, **kwargs):
 @csrf_exempt
 @json_response
 @authentication_required
-@permission_required('server.detailed')
-@validation('server.detailed')
+@permission_required
+@validation
 @require_http_methods(['POST', 'GET', 'DELETE'])
 def detailed(request, validated={}, s=None, *args, **kwargs):
   server = Server.objects.get(id=s)
@@ -137,8 +137,8 @@ def detailed(request, validated={}, s=None, *args, **kwargs):
 @csrf_exempt
 @json_response
 @authentication_required
-@permission_required('server.action')
-@validation('server.action')
+@permission_required
+@validation
 @require_http_methods(['PUT'])
 def action(request, validated={}, s=None, *args, **kwargs):
   server = Server.objects.get(id=s)

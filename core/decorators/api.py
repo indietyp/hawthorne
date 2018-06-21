@@ -67,13 +67,16 @@ def json_response(f):
 
 
 def validation(a):
-  def argument_decorator(f):
+  def argument_decorator(f, resolve=False):
 
     @wraps(f)
     def wrapper(request, *args, **kwargs):
       validation = valid_dict
 
-      target = a.split('.')
+      if resolve:
+        target = request.resolver_match.url_name.split('.')
+      else:
+        target = a.split('.')
       for t in target:
         validation = validation[t]
 
@@ -132,4 +135,7 @@ def validation(a):
 
     return wrapper
 
-  return argument_decorator
+  if callable(a):
+    return argument_decorator(a, True)
+  else:
+    return argument_decorator

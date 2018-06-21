@@ -52,7 +52,7 @@ def status(server, *args, **kwargs):
 
 
 @login_required(login_url='/login')
-@permission_required('core.view_server')
+@permission_required
 @require_http_methods(['POST'])
 def server(request, page, *args, **kwargs):
   obj = Server.objects.all()
@@ -60,7 +60,7 @@ def server(request, page, *args, **kwargs):
 
 
 @login_required(login_url='/login')
-@permission_required('core.view_server')
+@permission_required
 @require_http_methods(['POST'])
 def list(request, page, *args, **kwargs):
   obj = Server.objects.all()

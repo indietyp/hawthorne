@@ -44,6 +44,7 @@ def token_retrieve(request):
 def authentication_required(f):
   def wrapper(request, *args, **kwargs):
     token = token_retrieve(request)
+    request.token = token
 
     if not request.user.is_authenticated and token is None:
       return 'Authentication of User failed', 401
@@ -54,14 +55,18 @@ def authentication_required(f):
 
 
 def permission_required(a):
-  def argument_decorator(f):
+  def argument_decorator(f, resolve=True):
     @wraps(f)
     def wrapper(request, *args, **kwargs):
       token = token_retrieve(request)
       perm = False
       validation = valid_dict
 
-      target = a.split('.')
+      if resolve:
+        target = request.resolver_match.url_name.split('.')
+      else:
+        target = a.split('.')
+
       for t in target:
         validation = validation[t]
 
@@ -83,4 +88,7 @@ def permission_required(a):
 
     return wrapper
 
-  return argument_decorator
+  if callable(a):
+    return argument_decorator(a, True)
+  else:
+    return argument_decorator

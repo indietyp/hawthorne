@@ -21,8 +21,8 @@ from lib.sourcemod import SourcemodPluginWrapper
 @csrf_exempt
 @json_response
 @authentication_required
-@permission_required('user.list')
-@validation('user.list')
+@permission_required
+@validation
 @require_http_methods(['GET', 'PUT'])
 def list(request, validated=[], *args, **kwargs):
   if request.method == 'GET':
@@ -134,8 +134,8 @@ def list(request, validated=[], *args, **kwargs):
 @csrf_exempt
 @json_response
 @authentication_required
-@permission_required('user.detailed')
-@validation('user.detailed')
+@permission_required
+@validation
 @require_http_methods(['GET', 'POST', 'DELETE'])
 def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
   if request.method == 'GET':
@@ -332,9 +332,9 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
 @csrf_exempt
 @json_response
 @authentication_required
-@permission_required('user.punishment')
-@validation('user.punishment')
-@require_http_methods(['GET', 'POST', 'PUT', 'DELETE'])
+@permission_required
+@validation
+@require_http_methods(['GET', 'PUT'])
 def punishment(request, u=None, validated={}, *args, **kwargs):
   try:
     user = User.objects.get(id=u)
@@ -382,37 +382,6 @@ def punishment(request, u=None, validated={}, *args, **kwargs):
                                           'is_gagged',
                                           'admin')], 200
 
-  elif request.method == 'POST':
-    try:
-      server = Server.objects.get(id=validated['server'])
-    except Exception:
-      return 'server not found', 500
-
-    punishment = Punishment.objects.get(user=user, server=server)
-    if validated['resolved'] is not None:
-      punishment.resolved = validated['resolved']
-
-    if validated['reason'] is not None:
-      punishment.reason = validated['reason']
-
-    if validated['length'] is not None:
-      punishment.length = datetime.timedelta(seconds=validated['length'])
-
-    if validated['banned'] is not None:
-      punishment.is_banned = validated['banned']
-
-    if validated['kicked'] is not None:
-      punishment.is_kicked = validated['kicked']
-
-    if validated['muted'] is not None:
-      punishment.is_muted = validated['muted']
-
-    if validated['gagged'] is not None:
-      punishment.is_gagged = validated['gagged']
-
-    punishment.updated_by = request.user
-    punishment.save()
-
   elif request.method == 'PUT':
     if 'server' in validated:
       server = Server.objects.get(id=validated['server'])
@@ -447,38 +416,70 @@ def punishment(request, u=None, validated={}, *args, **kwargs):
           punishment.save()
           SourcemodPluginWrapper(s).kick(punishment)
 
-  elif request.method == 'DELETE':
-    if validated['server']:
-      server = Server.objects.get(id=validated['server'])
-    else:
-      server = None
+@csrf_exempt
+@json_response
+@authentication_required
+@permission_required
+@validation
+@require_http_methods(['GET', 'POST', 'DELETE'])
+def punishment_detailed(request, u=None, p=None, validated={}, *args, **kwargs):
+  punishment = Punishment.objects.filter(id=p, user=u)
 
-    punishments = Punishment.objects.filter(user=user, server=server, resolved=False)
-    if validated['muted'] is not None:
-      punishments = punishments.filter(is_muted=validated['muted'])
+  if not punishment:
+    return 'Punishment not found', 404
+
+  punishment = punishment[0]
+
+  if request.method == 'GET':
+    return punishment.values('user',
+                             'server',
+                             'reason',
+                             'length',
+                             'is_banned',
+                             'is_kicked',
+                             'is_muted',
+                             'is_gagged',
+                             'resolved',
+                             'updated_at',
+                             'updated_by',
+                             'created_at',
+                             'created_by',)
+  elif request.method == 'POST':
+    if validated['resolved'] is not None:
+      punishment.resolved = validated['resolved']
+
+    if validated['reason'] is not None:
+      punishment.reason = validated['reason']
+
+    if validated['length'] is not None:
+      punishment.length = datetime.timedelta(seconds=validated['length'])
 
     if validated['banned'] is not None:
-      punishments = punishments.filter(is_banned=validated['banned'])
-
-    if validated['gagged'] is not None:
-      punishments = punishments.filter(is_gagged=validated['gagged'])
+      punishment.is_banned = validated['banned']
 
     if validated['kicked'] is not None:
-      punishments = punishments.filter(is_kicked=validated['kicked'])
+      punishment.is_kicked = validated['kicked']
 
-    for punishment in punishments:
-      punishment.resolved = True
-      punishment.save()
+    if validated['muted'] is not None:
+      punishment.is_muted = validated['muted']
 
-      if validated['plugin']:
-        server = [server] if server else Server.objects.all()
+    if validated['gagged'] is not None:
+      punishment.is_gagged = validated['gagged']
 
-        for s in server:
-          if punishment.is_gagged or punishment.is_muted:
-            SourcemodPluginWrapper(s).mutegag(punishment)
-          if punishment.is_banned:
-            SourcemodPluginWrapper(s).ban(punishment)
-          if punishment.is_kicked:
-            SourcemodPluginWrapper(s).kick(punishment)
+    punishment.updated_by = validated[''] if validated[''] else request.user
 
-  return []
+  elif request.method == 'DELETE':
+    punishment.resolved = True
+
+  if request.method in ['POST', 'DELETE']:
+    punishment.save()
+    if validated['plugin']:
+      server = [punishment.server] if punishment.server else Server.objects.all()
+
+      for s in server:
+        if punishment.is_gagged or punishment.is_muted:
+          SourcemodPluginWrapper(s).mutegag(punishment)
+        if punishment.is_banned:
+          SourcemodPluginWrapper(s).ban(punishment)
+        if punishment.is_kicked:
+          SourcemodPluginWrapper(s).kick(punishment)
