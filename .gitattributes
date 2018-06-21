@@ -1,9 +1,12 @@
 interface/static/**     linguist-vendored
 *.inc                   linguist-vendored
+hawthorne.inc           linguist-vendored=false
+
 core/migrations/**      linguist-generated
 log/migrations/*        linguist-generated
+
 docs/**                 linguist-documentation
 api/reference/**        linguist-documentation
+
 include/**              linguist-language=SourcePawn
 *.inc                   linguist-language=SourcePawn
-hawthorne.inc           linguist-vendored=false
