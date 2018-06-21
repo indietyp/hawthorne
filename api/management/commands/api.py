@@ -106,13 +106,13 @@ class Command(BaseCommand):
     base['openapi'] = '3.0.0'
     base['info'] = {
         'description': 'The hawthorne API is the main way to interact with the management server.',
-        'version': '1.0.0a2',
+        'version': '0.8.7',
         'title': 'hawthorne',
         'contact': {'email': 'opensource@indietyp.com'},
     }
     base['servers'] = [
-        {'url': 'demo.hawthorne.in/api/v1', 'description': 'Demo production server'},
-        {'url': 'dev.hawthorne.in/api/v1', 'description': 'Bleeding edge test machine for public use'},
+        {'url': 'demo.hawthornepanel.org/api/v1', 'description': 'Demo production server'},
+        {'url': 'dev.hawthornepanel.org/api/v1', 'description': 'Bleeding edge test machine for public use'},
         {'url': '{host}:{port}/api/v1', 'description': 'Your own server'}
     ]
     base['components'] = {}

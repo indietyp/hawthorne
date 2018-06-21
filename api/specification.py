@@ -113,18 +113,18 @@ validation = {
             'GET': {'parameters': {'offset': {'type': 'integer', 'min': 0, 'default': 0},
                                    'limit': {'type': 'integer', 'min': -1, 'default': -1},
                                    'match': {'type': 'string', 'default': ''}},
-                    'permission': ['core.view_servergroup']},
+                    'permission': ['core.view_role']},
             'PUT': {'parameters': {'name': {'type': 'string', 'required': True},
                                    'immunity': {'type': 'integer', 'required': True, 'min': 0, 'max': 100},
                                    'server': {'type': 'uuid', 'default': None, 'nullable': True},
                                    'usetime': {'type': 'integer', 'default': None, 'nullable': True, 'min': 0},
                                    'flags': {'type': 'string', 'default': None, 'nullable': True, 'regex': r'[A-N]+'},
                                    'members': {'type': 'list', 'default': [], 'schema': {'type': 'uuid'}}},
-                    'permission': ['core.add_servergroup']}
+                    'permission': ['core.add_role']}
         },
         'detailed': {
             'GET': {'parameters': {},
-                    'permission': ['core.view_servergroup']},
+                    'permission': ['core.view_role']},
             'POST': {'parameters': {'name': {'type': 'string', 'default': None, 'nullable': True},
                                     'immunity': {'type': 'integer', 'default': None, 'nullable': True, 'min': 0,
                                                  'max': 100},
@@ -132,9 +132,9 @@ validation = {
                                     'server': {'type': 'uuid', 'default': None, 'nullable': True},
                                     'flags': {'type': 'string', 'default': None, 'nullable': True, 'regex': r'[A-N]+'},
                                     'members': {'type': 'list', 'default': [], 'schema': {'type': 'uuid'}}},
-                     'permission': ['core.change_servergroup']},
+                     'permission': ['core.change_role']},
             'DELETE': {'parameters': {},
-                       'permission': ['core.delete_servergroup']}
+                       'permission': ['core.delete_role']}
         }
     },
     'server': {

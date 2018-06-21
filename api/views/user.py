@@ -13,7 +13,7 @@ from django.views.decorators.http import require_http_methods
 from core.decorators.api import json_response, validation
 from core.decorators.auth import authentication_required, permission_required
 from core.lib.steam import populate as steam_populate
-from core.models import User, Country, Server, ServerGroup, Punishment, Membership
+from core.models import User, Country, Server, Role, Punishment, Membership
 from lib.mainframe import Mainframe
 from lib.sourcemod import SourcemodPluginWrapper
 
@@ -225,7 +225,7 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
           return 'not existent steamid provided - {}'.format(e), 403
 
     if validated['role'] is not None:
-      group = ServerGroup.objects.get(id=validated['role'])
+      group = Role.objects.get(id=validated['role'])
 
       if validated['promotion']:
         m = Membership()
@@ -248,7 +248,7 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
       Membership.objects.filter(user=user).delete()
 
       for role in validated['roles']:
-        group = ServerGroup.objects.get(id=role)
+        group = Role.objects.get(id=role)
         m = Membership()
         m.user = user
         m.role = group

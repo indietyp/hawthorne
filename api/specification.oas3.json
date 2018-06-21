@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "description": "The hawthorne API is the main way to interact with the management server.",
-    "version": "1.0.0a2",
+    "version": "0.8.7",
     "title": "hawthorne",
     "contact": {
       "email": "opensource@indietyp.com"
@@ -10,11 +10,11 @@
   },
   "servers": [
     {
-      "url": "demo.hawthorne.in/api/v1",
+      "url": "demo.hawthornepanel.org/api/v1",
       "description": "Demo production server"
     },
     {
-      "url": "dev.hawthorne.in/api/v1",
+      "url": "dev.hawthornepanel.org/api/v1",
       "description": "Bleeding edge test machine for public use"
     },
     {
@@ -35,7 +35,8 @@
         "type": "object",
         "properties": {
           "success": {
-            "type": "boolean"
+            "type": "boolean",
+            "example": true
           },
           "result": {
             "type": "object"
@@ -46,26 +47,26 @@
         "type": "object",
         "properties": {
           "success": {
-            "type": "boolean"
+            "type": "boolean",
+            "example": false
           },
           "reason": {
             "type": "object"
           }
         }
       },
-      "a3fca05e-3eb6-4109-8052-0c485ee951a1": {
+      "4bca0470-18f2-4357-9875-263c7c9f90fa": {
         "type": "object",
         "properties": {
           "steamid": {
             "type": "integer",
-            "default": null,
             "maximum": 76561202255233023,
             "minimum": 76561197960265729
           },
           "id": {
             "type": "string",
             "format": "uuid",
-            "default": null
+            "example": "721c4f6c-51a8-48d2-8b8a-3b8bffdf83ed"
           },
           "username": {
             "type": "string"
@@ -73,7 +74,8 @@
           "ip": {
             "type": "string",
             "format": "ip",
-            "default": null
+            "default": null,
+            "example": "151.43.14.151"
           },
           "country": {
             "type": "string",
@@ -81,11 +83,11 @@
           },
           "server": {
             "type": "string",
-            "format": "uuid"
+            "format": "uuid",
+            "example": "e5ac2dc8-a806-4048-be48-5c8a1f46e31a"
           },
           "connected": {
-            "type": "boolean",
-            "default": null
+            "type": "boolean"
           },
           "internal": {
             "type": "boolean",
@@ -94,9 +96,13 @@
           "permissions": {
             "type": "array",
             "items": {
-              "type": "string",
-              "pattern": "\\w+\\.\\w+\\_\\w+"
-            }
+              "type": "string"
+            },
+            "example": [
+              "automated_logging.add_modelchangelog",
+              "core.delete_mainframe",
+              "automated_logging.add_unspecified"
+            ]
           },
           "groups": {
             "type": "array",
@@ -109,14 +115,15 @@
           },
           "email": {
             "type": "string",
-            "format": "email"
+            "format": "email",
+            "example": "walkerzoe@shelton-guzman.com"
           }
         },
         "xml": {
           "name": "root"
         }
       },
-      "901c6883-7b43-43e2-9fe1-07db0c0bbcfc": {
+      "4dd4941b-afc1-4adb-9eb9-a994d769d958": {
         "type": "object",
         "properties": {
           "promotion": {
@@ -130,11 +137,46 @@
           "role": {
             "type": "string",
             "format": "uuid",
-            "default": null
+            "default": null,
+            "example": "1f53d64b-6c0c-43b4-ba79-a9ea34513348"
           },
           "group": {
-            "type": "string",
-            "format": "uuid",
+            "type": "integer",
+            "default": null
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "example": [
+              "2b57d5cd-b1b4-48dd-acfd-76fd8ef99b19",
+              "a53e45cb-b246-4726-a47a-1313f00d6d0b",
+              "11e4f6de-ca30-487b-849b-38659b427c61",
+              "dfd3cb5c-6a94-47c5-833a-de500385e544"
+            ],
+            "default": null
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "default": null
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "sessions.change_session",
+              "core.view_ban",
+              "auth.delete_group",
+              "core.view_token",
+              "core.view_capabilities"
+            ],
             "default": null
           }
         },
@@ -142,7 +184,7 @@
           "name": "root"
         }
       },
-      "808dbdd0-3cf6-49a2-9212-9f11b6a31e89": {
+      "35eba6ff-a20d-44d3-a7e4-27e44d79cc25": {
         "type": "object",
         "properties": {
           "promotion": {
@@ -156,24 +198,57 @@
           "role": {
             "type": "string",
             "format": "uuid",
-            "default": null
+            "default": null,
+            "example": "1ce5b7dc-8e21-48ba-8d13-fa3e1ab7e163"
           },
           "group": {
+            "type": "integer",
+            "default": null
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "example": [
+              "11f537cd-f1cd-4cb4-ac59-967ffaa851fb",
+              "c3a48a18-197c-4780-af37-66b1e33a1935",
+              "5f5eefc7-8d78-4d80-b4f4-9205652de723"
+            ],
+            "default": null
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "default": null
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "automated_logging.add_field",
+              "core.delete_punishment",
+              "core.add_role"
+            ],
+            "default": null
+          }
+        },
+        "xml": {
+          "name": "root"
+        }
+      },
+      "9070ee19-ea47-4863-8c57-b50f09038919": {
+        "type": "object",
+        "properties": {
+          "server": {
             "type": "string",
             "format": "uuid",
-            "default": null
-          }
-        },
-        "xml": {
-          "name": "root"
-        }
-      },
-      "2a8e5cae-7db2-49cd-a4ca-1b0806472c62": {
-        "type": "object",
-        "properties": {
-          "server": {
-            "type": "string",
-            "format": "uuid"
+            "example": "d8deae8e-20ee-4ab2-8dfe-f1f4c8f16aee"
           },
           "resolved": {
             "type": "boolean",
@@ -186,118 +261,65 @@
           "length": {
             "type": "integer",
             "default": null
-          }
-        },
-        "xml": {
-          "name": "root"
-        },
-        "required": [
-          "server"
-        ]
-      },
-      "a3f171fd-ddc6-446c-8832-6bba868c1029": {
-        "type": "object",
-        "properties": {
-          "server": {
-            "type": "string",
-            "format": "uuid"
           },
-          "reason": {
-            "type": "string"
-          },
-          "length": {
-            "type": "integer"
-          },
-          "issuer": {
-            "type": "integer",
-            "default": null
-          }
-        },
-        "xml": {
-          "name": "root"
-        },
-        "required": [
-          "reason",
-          "length"
-        ]
-      },
-      "498acb01-4a1c-4c6c-9835-303453368426": {
-        "type": "object",
-        "properties": {
-          "server": {
-            "type": "string",
-            "format": "uuid"
-          }
-        },
-        "xml": {
-          "name": "root"
-        },
-        "required": [
-          "server"
-        ]
-      },
-      "65996e49-128e-43ef-bc24-eee2bc187727": {
-        "type": "object",
-        "properties": {
-          "server": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "resolved": {
+          "banned": {
             "type": "boolean",
             "default": null
           },
-          "type": {
-            "type": "string",
-            "default": "both",
-            "anyOf": [
-              {
-                "enum": [
-                  "mute",
-                  "gag",
-                  "both"
-                ]
-              }
-            ]
-          },
-          "reason": {
-            "type": "string",
+          "kicked": {
+            "type": "boolean",
             "default": null
           },
-          "length": {
-            "type": "integer",
+          "muted": {
+            "type": "boolean",
+            "default": null
+          },
+          "gagged": {
+            "type": "boolean",
             "default": null
           }
         },
         "xml": {
           "name": "root"
-        }
+        },
+        "required": [
+          "server"
+        ]
       },
-      "d6d87bac-b4d1-4a8e-9105-4a424f7a65ff": {
+      "c3cc1e44-ca28-4dde-a1bf-bdaec6573a17": {
         "type": "object",
         "properties": {
           "server": {
             "type": "string",
-            "format": "uuid"
+            "format": "uuid",
+            "example": "b6b41b3d-dd07-4458-81e0-301a39362009"
           },
           "reason": {
-            "type": "string"
-          },
-          "type": {
             "type": "string",
-            "default": "both",
-            "anyOf": [
-              {
-                "enum": [
-                  "mute",
-                  "gag",
-                  "both"
-                ]
-              }
-            ]
+            "default": "Powered by Hawthorne"
           },
           "length": {
             "type": "integer"
+          },
+          "plugin": {
+            "type": "boolean",
+            "default": true
+          },
+          "muted": {
+            "type": "boolean",
+            "default": false
+          },
+          "banned": {
+            "type": "boolean",
+            "default": false
+          },
+          "kicked": {
+            "type": "boolean",
+            "default": false
+          },
+          "gagged": {
+            "type": "boolean",
+            "default": false
           }
         },
         "xml": {
@@ -308,7 +330,7 @@
           "length"
         ]
       },
-      "ad496d9b-edfd-4c39-b13a-9d44d63c1dad": {
+      "9a702d6d-5d55-4db0-93e4-012425c109fa": {
         "type": "object",
         "properties": {
           "name": {
@@ -317,9 +339,13 @@
           "permissions": {
             "type": "array",
             "items": {
-              "type": "string",
-              "pattern": "\\w+\\.\\w+\\_\\w+"
+              "type": "string"
             },
+            "example": [
+              "automated_logging.delete_modelchangelog",
+              "core.change_ban",
+              "core.add_mainframe"
+            ],
             "default": []
           },
           "members": {
@@ -328,6 +354,13 @@
               "type": "string",
               "format": "uuid"
             },
+            "example": [
+              "a1eae99f-ad93-49e6-992e-5d66276d0978",
+              "8ce3bc5e-9e40-43f8-9e54-3ec39869b4ad",
+              "ea03f32b-1883-4847-8fdc-dac4ab8f7def",
+              "8e3b3559-c848-4cc5-a5ff-d3909de389c4",
+              "9b5624f0-4088-4bb5-bf00-7067f6fe51aa"
+            ],
             "default": []
           }
         },
@@ -338,7 +371,7 @@
           "name"
         ]
       },
-      "eed08f78-b67b-4c67-9af6-e01c25307f51": {
+      "12803342-d5cd-4752-8ed0-4c0439a41236": {
         "type": "object",
         "properties": {
           "name": {
@@ -348,9 +381,14 @@
           "permissions": {
             "type": "array",
             "items": {
-              "type": "string",
-              "pattern": "\\w+\\.\\w+\\_\\w+"
+              "type": "string"
             },
+            "example": [
+              "admin.add_logentry",
+              "sessions.add_session",
+              "automated_logging.delete_unspecified",
+              "automated_logging.add_modelmodification"
+            ],
             "default": []
           },
           "members": {
@@ -359,6 +397,13 @@
               "type": "string",
               "format": "uuid"
             },
+            "example": [
+              "49f63d62-dfa9-46c8-ac2f-f10170f54836",
+              "ead7adbe-e096-411c-905c-4c594e907003",
+              "6b912795-531d-4777-85c0-d4cef0e3d438",
+              "b8b350df-b12c-4065-ac6f-da71eb9a8c55",
+              "b7128f9b-94f1-4a65-becd-48e15d9fd7ed"
+            ],
             "default": []
           }
         },
@@ -366,7 +411,7 @@
           "name": "root"
         }
       },
-      "e1e504ec-06c5-4f1d-9fce-72fef2962501": {
+      "d5e42a50-98f2-4706-87e2-ffa852815055": {
         "type": "object",
         "properties": {
           "name": {
@@ -380,7 +425,8 @@
           "server": {
             "type": "string",
             "format": "uuid",
-            "default": null
+            "default": null,
+            "example": "ab8bd450-30b1-4b6b-8ff0-61e62d766da7"
           },
           "usetime": {
             "type": "integer",
@@ -397,6 +443,12 @@
               "type": "string",
               "format": "uuid"
             },
+            "example": [
+              "0081cb0e-ba90-4099-9ccf-0252b3e3a0bc",
+              "c47fd629-6fd3-479f-a069-31b2cb6184d1",
+              "c9e035b7-a3dc-415f-8168-b20ac5c29fe6",
+              "2dc1e40f-018f-49e0-8e9d-ff189c3879cc"
+            ],
             "default": []
           }
         },
@@ -408,7 +460,7 @@
           "immunity"
         ]
       },
-      "f7f70d43-17fe-4617-adf1-602429d3be85": {
+      "bf836761-9bd6-41d8-9cf6-63259ef1a89e": {
         "type": "object",
         "properties": {
           "name": {
@@ -429,7 +481,8 @@
           "server": {
             "type": "string",
             "format": "uuid",
-            "default": null
+            "default": null,
+            "example": "c4aeb31b-4f4c-4927-a534-c94fb528c3ce"
           },
           "flags": {
             "type": "string",
@@ -441,6 +494,13 @@
               "type": "string",
               "format": "uuid"
             },
+            "example": [
+              "50b3815a-b747-4c7e-bff0-bab14ecebb3c",
+              "01ddd8dc-56e9-4a6a-bd15-6a6f58dc42ca",
+              "0cd55a00-e78a-43c2-93ab-07b6d10ba6d8",
+              "20b165ad-35d1-476c-959b-1ee774b4953a",
+              "fd5f89b8-7d45-4ea1-be45-0e5497498d29"
+            ],
             "default": []
           }
         },
@@ -448,7 +508,7 @@
           "name": "root"
         }
       },
-      "203cd9b5-2627-44d3-b2d4-a3a70a7dfcfb": {
+      "2cf0cda4-f38d-48a6-b2c2-335934665522": {
         "type": "object",
         "properties": {
           "name": {
@@ -456,7 +516,8 @@
           },
           "ip": {
             "type": "string",
-            "format": "ip"
+            "format": "ip",
+            "example": "146.177.150.191"
           },
           "verify": {
             "type": "boolean",
@@ -488,7 +549,7 @@
           "game"
         ]
       },
-      "9a9e52d9-5782-4abf-8b2e-ba1473155b9f": {
+      "65283515-03fe-4321-a365-75b2a7288b34": {
         "type": "object",
         "properties": {
           "name": {
@@ -502,7 +563,8 @@
           "ip": {
             "type": "string",
             "format": "ip",
-            "default": null
+            "default": null,
+            "example": "229.209.172.57"
           },
           "port": {
             "type": "integer",
@@ -527,7 +589,7 @@
           "name": "root"
         }
       },
-      "32cff551-5963-43da-ab35-6903614f89bc": {
+      "d2c53b17-ca67-40bb-bccb-129643f7fe23": {
         "type": "object",
         "properties": {
           "command": {
@@ -541,20 +603,23 @@
           "command"
         ]
       },
-      "a85af753-2497-4f57-b364-dd8928c30eed": {
+      "a2a9ab07-ae29-4151-9b90-a487064703e7": {
         "type": "object",
         "properties": {
           "user": {
             "type": "string",
-            "format": "uuid"
+            "format": "uuid",
+            "example": "dd9f9f3e-3dd3-4562-8d17-7d44923d3907"
           },
           "server": {
             "type": "string",
-            "format": "uuid"
+            "format": "uuid",
+            "example": "dbe2fba6-efcf-49a0-8366-ace5c5393811"
           },
           "ip": {
             "type": "string",
-            "format": "ip"
+            "format": "ip",
+            "example": "169.82.163.204"
           },
           "message": {
             "type": "string"
@@ -574,26 +639,133 @@
           "message"
         ]
       },
-      "17b6427b-235d-4456-b568-c8a787e927a6": {
+      "93acee99-5ce2-4585-a0d8-fec15af13c0f": {
         "type": "object",
         "properties": {
           "permissions": {
             "type": "array",
             "items": {
-              "type": "string",
-              "pattern": "\\w+\\.\\w+\\_\\w+"
-            }
+              "type": "string"
+            },
+            "example": [
+              "automated_logging.add_modelmodification",
+              "social_django.change_association",
+              "core.view_mutegag",
+              "core.add_user"
+            ]
           },
           "due": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "pattern": "\\w+\\.\\w+\\_\\w+"
-            }
+            "type": "integer",
+            "default": null
           },
           "active": {
             "type": "boolean",
             "default": true
+          }
+        },
+        "xml": {
+          "name": "root"
+        },
+        "required": [
+          "permissions"
+        ]
+      },
+      "df7a92ef-4cee-486a-8ff8-b2bae80c8cd1": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "root"
+        },
+        "required": [
+          "username",
+          "password"
+        ]
+      },
+      "9c0e8256-25b0-431f-af8a-9d6859e308b7": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "string",
+            "format": "uuid",
+            "example": "c1f85851-6281-4886-9dcd-ea591cf0e5fa"
+          },
+          "server": {
+            "type": "string",
+            "format": "uuid",
+            "example": "be76a864-4aee-406e-9e98-37a49bdf84c0"
+          },
+          "ip": {
+            "type": "string",
+            "format": "ip",
+            "example": "89.216.71.209"
+          },
+          "message": {
+            "type": "string"
+          },
+          "command": {
+            "type": "boolean",
+            "default": null
+          }
+        },
+        "xml": {
+          "name": "root"
+        },
+        "required": [
+          "user",
+          "server",
+          "ip",
+          "message"
+        ]
+      },
+      "ae57890a-993d-428b-85ec-42d50d146902": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "string",
+            "format": "uuid",
+            "example": "e97186bc-e2d7-4785-9945-f8136e5c6efd"
+          },
+          "server": {
+            "type": "string",
+            "format": "uuid",
+            "example": "6d34f2cb-552d-4cc8-8758-be3fdc9cb92b"
+          },
+          "ip": {
+            "type": "string",
+            "format": "ip",
+            "example": "210.159.124.17"
+          },
+          "message": {
+            "type": "string"
+          },
+          "command": {
+            "type": "boolean",
+            "default": null
+          }
+        },
+        "xml": {
+          "name": "root"
+        },
+        "required": [
+          "user",
+          "server",
+          "ip",
+          "message"
+        ]
+      },
+      "81be1ebd-c7cf-4ab8-b209-fc5030e968ad": {
+        "type": "object",
+        "properties": {
+          "mainframe": {
+            "type": "string",
+            "default": null
           }
         },
         "xml": {
@@ -630,6 +802,10 @@
     {
       "name": "Steam",
       "description": "API interface for the (unofficial) steam api"
+    },
+    {
+      "name": "Mainframe",
+      "description": "API interface interactions to the mainframe"
     }
   ],
   "paths": {
@@ -689,7 +865,8 @@
             "schema": {
               "type": "string",
               "format": "uuid",
-              "default": null
+              "default": null,
+              "example": "b50859de-f148-43f9-97d0-b3b9aededa9a"
             },
             "required": false,
             "description": ""
@@ -827,17 +1004,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/a3fca05e-3eb6-4109-8052-0c485ee951a1"
+                "$ref": "#/components/schemas/4bca0470-18f2-4357-9875-263c7c9f90fa"
               }
             },
             "application/xml": {
               "schema": {
-                "$ref": "#/components/schemas/a3fca05e-3eb6-4109-8052-0c485ee951a1"
+                "$ref": "#/components/schemas/4bca0470-18f2-4357-9875-263c7c9f90fa"
               }
             },
             "text/vnd.yaml": {
               "schema": {
-                "$ref": "#/components/schemas/a3fca05e-3eb6-4109-8052-0c485ee951a1"
+                "$ref": "#/components/schemas/4bca0470-18f2-4357-9875-263c7c9f90fa"
               }
             }
           }
@@ -858,7 +1035,8 @@
             "schema": {
               "type": "string",
               "format": "uuid",
-              "default": null
+              "default": null,
+              "example": "25e51860-cf9b-480b-bd71-8f8bca3b3f71"
             },
             "required": false,
             "description": ""
@@ -1017,17 +1195,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/901c6883-7b43-43e2-9fe1-07db0c0bbcfc"
+                "$ref": "#/components/schemas/4dd4941b-afc1-4adb-9eb9-a994d769d958"
               }
             },
             "application/xml": {
               "schema": {
-                "$ref": "#/components/schemas/901c6883-7b43-43e2-9fe1-07db0c0bbcfc"
+                "$ref": "#/components/schemas/4dd4941b-afc1-4adb-9eb9-a994d769d958"
               }
             },
             "text/vnd.yaml": {
               "schema": {
-                "$ref": "#/components/schemas/901c6883-7b43-43e2-9fe1-07db0c0bbcfc"
+                "$ref": "#/components/schemas/4dd4941b-afc1-4adb-9eb9-a994d769d958"
               }
             }
           }
@@ -1066,7 +1244,8 @@
             "schema": {
               "type": "string",
               "format": "uuid",
-              "default": null
+              "default": null,
+              "example": "7ca4634e-7bf5-42b3-a2a9-30e8e81e8c58"
             },
             "required": false,
             "description": ""
@@ -1157,7 +1336,8 @@
             "schema": {
               "type": "string",
               "format": "uuid",
-              "default": null
+              "default": null,
+              "example": "3cc96b56-9c01-498a-9100-f3ef8f829a11"
             },
             "required": false,
             "description": ""
@@ -1316,17 +1496,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/808dbdd0-3cf6-49a2-9212-9f11b6a31e89"
+                "$ref": "#/components/schemas/35eba6ff-a20d-44d3-a7e4-27e44d79cc25"
               }
             },
             "application/xml": {
               "schema": {
-                "$ref": "#/components/schemas/808dbdd0-3cf6-49a2-9212-9f11b6a31e89"
+                "$ref": "#/components/schemas/35eba6ff-a20d-44d3-a7e4-27e44d79cc25"
               }
             },
             "text/vnd.yaml": {
               "schema": {
-                "$ref": "#/components/schemas/808dbdd0-3cf6-49a2-9212-9f11b6a31e89"
+                "$ref": "#/components/schemas/35eba6ff-a20d-44d3-a7e4-27e44d79cc25"
               }
             }
           }
@@ -1365,7 +1545,8 @@
             "schema": {
               "type": "string",
               "format": "uuid",
-              "default": null
+              "default": null,
+              "example": "a4abc5f0-7674-49d9-b3ae-276ee904c5d5"
             },
             "required": false,
             "description": ""
@@ -1442,7 +1623,7 @@
         ]
       }
     },
-    "/users/{uuid}/ban": {
+    "/users/{uuid}/punishment": {
       "get": {
         "tags": [
           "User"
@@ -1456,7 +1637,8 @@
             "schema": {
               "type": "string",
               "format": "uuid",
-              "default": null
+              "default": null,
+              "example": "e5f801bb-fdf7-41e5-a884-a68d3a7edf05"
             },
             "required": false,
             "description": ""
@@ -1464,6 +1646,46 @@
           {
             "in": "query",
             "name": "resolved",
+            "schema": {
+              "type": "boolean",
+              "default": null
+            },
+            "required": false,
+            "description": ""
+          },
+          {
+            "in": "query",
+            "name": "banned",
+            "schema": {
+              "type": "boolean",
+              "default": null
+            },
+            "required": false,
+            "description": ""
+          },
+          {
+            "in": "query",
+            "name": "kicked",
+            "schema": {
+              "type": "boolean",
+              "default": null
+            },
+            "required": false,
+            "description": ""
+          },
+          {
+            "in": "query",
+            "name": "muted",
+            "schema": {
+              "type": "boolean",
+              "default": null
+            },
+            "required": false,
+            "description": ""
+          },
+          {
+            "in": "query",
+            "name": "gagged",
             "schema": {
               "type": "boolean",
               "default": null
@@ -1537,7 +1759,7 @@
         "security": [
           {
             "api_key": [
-              "core.view_ban"
+              "core.view_punishment"
             ]
           }
         ]
@@ -1615,7 +1837,7 @@
         "security": [
           {
             "api_key": [
-              "core.change_ban"
+              "core.change_punishment"
             ]
           }
         ],
@@ -1625,17 +1847,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/2a8e5cae-7db2-49cd-a4ca-1b0806472c62"
+                "$ref": "#/components/schemas/9070ee19-ea47-4863-8c57-b50f09038919"
               }
             },
             "application/xml": {
               "schema": {
-                "$ref": "#/components/schemas/2a8e5cae-7db2-49cd-a4ca-1b0806472c62"
+                "$ref": "#/components/schemas/9070ee19-ea47-4863-8c57-b50f09038919"
               }
             },
             "text/vnd.yaml": {
               "schema": {
-                "$ref": "#/components/schemas/2a8e5cae-7db2-49cd-a4ca-1b0806472c62"
+                "$ref": "#/components/schemas/9070ee19-ea47-4863-8c57-b50f09038919"
               }
             }
           }
@@ -1714,7 +1936,7 @@
         "security": [
           {
             "api_key": [
-              "core.add_ban"
+              "core.add_punishment"
             ]
           }
         ],
@@ -1724,214 +1946,23 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/a3f171fd-ddc6-446c-8832-6bba868c1029"
+                "$ref": "#/components/schemas/c3cc1e44-ca28-4dde-a1bf-bdaec6573a17"
               }
             },
             "application/xml": {
               "schema": {
-                "$ref": "#/components/schemas/a3f171fd-ddc6-446c-8832-6bba868c1029"
+                "$ref": "#/components/schemas/c3cc1e44-ca28-4dde-a1bf-bdaec6573a17"
               }
             },
             "text/vnd.yaml": {
               "schema": {
-                "$ref": "#/components/schemas/a3f171fd-ddc6-446c-8832-6bba868c1029"
+                "$ref": "#/components/schemas/c3cc1e44-ca28-4dde-a1bf-bdaec6573a17"
               }
             }
           }
         }
       },
       "delete": {
-        "tags": [
-          "User"
-        ],
-        "summary": "",
-        "description": "",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "server",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "required": true,
-            "description": ""
-          },
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Successful"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "No Query Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Failed"
-                }
-              }
-            }
-          },
-          "428": {
-            "description": "Invalid Parameters",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Failed"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Fatal Internal Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Failed"
-                }
-              }
-            }
-          },
-          "512": {
-            "description": "Failed Parsing Payload",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Failed"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "api_key": [
-              "core.delete_ban"
-            ]
-          }
-        ]
-      }
-    },
-    "/users/{uuid}/kick": {
-      "put": {
-        "tags": [
-          "User"
-        ],
-        "summary": "",
-        "description": "",
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Successful"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "No Query Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Failed"
-                }
-              }
-            }
-          },
-          "428": {
-            "description": "Invalid Parameters",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Failed"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Fatal Internal Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Failed"
-                }
-              }
-            }
-          },
-          "512": {
-            "description": "Failed Parsing Payload",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Failed"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "api_key": [
-              "core.kick_user"
-            ]
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "description": "",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/498acb01-4a1c-4c6c-9835-303453368426"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/498acb01-4a1c-4c6c-9835-303453368426"
-              }
-            },
-            "text/vnd.yaml": {
-              "schema": {
-                "$ref": "#/components/schemas/498acb01-4a1c-4c6c-9835-303453368426"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/users/{uuid}/mutegag": {
-      "get": {
         "tags": [
           "User"
         ],
@@ -1944,6 +1975,17 @@
             "schema": {
               "type": "string",
               "format": "uuid",
+              "default": null,
+              "example": "e6748376-615b-4019-9313-6e9a0acc9e82"
+            },
+            "required": false,
+            "description": ""
+          },
+          {
+            "in": "query",
+            "name": "length",
+            "schema": {
+              "type": "integer",
               "default": null
             },
             "required": false,
@@ -1951,7 +1993,7 @@
           },
           {
             "in": "query",
-            "name": "resolved",
+            "name": "banned",
             "schema": {
               "type": "boolean",
               "default": null
@@ -1960,289 +2002,43 @@
             "description": ""
           },
           {
-            "name": "uuid",
-            "in": "path",
-            "description": "",
-            "required": true,
+            "in": "query",
+            "name": "kicked",
             "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Successful"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "No Query Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Failed"
-                }
-              }
-            }
-          },
-          "428": {
-            "description": "Invalid Parameters",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Failed"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Fatal Internal Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Failed"
-                }
-              }
-            }
-          },
-          "512": {
-            "description": "Failed Parsing Payload",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Failed"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "api_key": [
-              "core.view_mutegag"
-            ]
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "User"
-        ],
-        "summary": "",
-        "description": "",
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Successful"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "No Query Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Failed"
-                }
-              }
-            }
-          },
-          "428": {
-            "description": "Invalid Parameters",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Failed"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Fatal Internal Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Failed"
-                }
-              }
-            }
-          },
-          "512": {
-            "description": "Failed Parsing Payload",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Failed"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "api_key": [
-              "core.change_mutegag"
-            ]
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "description": "",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/65996e49-128e-43ef-bc24-eee2bc187727"
-              }
+              "type": "boolean",
+              "default": null
             },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/65996e49-128e-43ef-bc24-eee2bc187727"
-              }
-            },
-            "text/vnd.yaml": {
-              "schema": {
-                "$ref": "#/components/schemas/65996e49-128e-43ef-bc24-eee2bc187727"
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "User"
-        ],
-        "summary": "",
-        "description": "",
-        "parameters": [
-          {
-            "name": "uuid",
-            "in": "path",
-            "description": "",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Successful"
-                }
-              }
-            }
+            "required": false,
+            "description": ""
           },
-          "403": {
-            "description": "No Query Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Failed"
-                }
-              }
-            }
-          },
-          "428": {
-            "description": "Invalid Parameters",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Failed"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Fatal Internal Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Failed"
-                }
-              }
-            }
-          },
-          "512": {
-            "description": "Failed Parsing Payload",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Failed"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "api_key": [
-              "core.add_mutegag"
-            ]
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "description": "",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/d6d87bac-b4d1-4a8e-9105-4a424f7a65ff"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/d6d87bac-b4d1-4a8e-9105-4a424f7a65ff"
-              }
-            },
-            "text/vnd.yaml": {
-              "schema": {
-                "$ref": "#/components/schemas/d6d87bac-b4d1-4a8e-9105-4a424f7a65ff"
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "User"
-        ],
-        "summary": "",
-        "description": "",
-        "parameters": [
           {
             "in": "query",
-            "name": "server",
+            "name": "muted",
             "schema": {
-              "type": "string",
-              "format": "uuid"
+              "type": "boolean",
+              "default": null
             },
-            "required": true,
+            "required": false,
+            "description": ""
+          },
+          {
+            "in": "query",
+            "name": "gagged",
+            "schema": {
+              "type": "boolean",
+              "default": null
+            },
+            "required": false,
+            "description": ""
+          },
+          {
+            "in": "query",
+            "name": "plugin",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            },
+            "required": false,
             "description": ""
           },
           {
@@ -2311,7 +2107,7 @@
         "security": [
           {
             "api_key": [
-              "core.delete_mutegag"
+              "core.delete_punishment"
             ]
           }
         ]
@@ -2490,17 +2286,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ad496d9b-edfd-4c39-b13a-9d44d63c1dad"
+                "$ref": "#/components/schemas/9a702d6d-5d55-4db0-93e4-012425c109fa"
               }
             },
             "application/xml": {
               "schema": {
-                "$ref": "#/components/schemas/ad496d9b-edfd-4c39-b13a-9d44d63c1dad"
+                "$ref": "#/components/schemas/9a702d6d-5d55-4db0-93e4-012425c109fa"
               }
             },
             "text/vnd.yaml": {
               "schema": {
-                "$ref": "#/components/schemas/ad496d9b-edfd-4c39-b13a-9d44d63c1dad"
+                "$ref": "#/components/schemas/9a702d6d-5d55-4db0-93e4-012425c109fa"
               }
             }
           }
@@ -2669,17 +2465,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/eed08f78-b67b-4c67-9af6-e01c25307f51"
+                "$ref": "#/components/schemas/12803342-d5cd-4752-8ed0-4c0439a41236"
               }
             },
             "application/xml": {
               "schema": {
-                "$ref": "#/components/schemas/eed08f78-b67b-4c67-9af6-e01c25307f51"
+                "$ref": "#/components/schemas/12803342-d5cd-4752-8ed0-4c0439a41236"
               }
             },
             "text/vnd.yaml": {
               "schema": {
-                "$ref": "#/components/schemas/eed08f78-b67b-4c67-9af6-e01c25307f51"
+                "$ref": "#/components/schemas/12803342-d5cd-4752-8ed0-4c0439a41236"
               }
             }
           }
@@ -2860,7 +2656,7 @@
         "security": [
           {
             "api_key": [
-              "core.view_servergroup"
+              "core.view_role"
             ]
           }
         ]
@@ -2927,7 +2723,7 @@
         "security": [
           {
             "api_key": [
-              "core.add_servergroup"
+              "core.add_role"
             ]
           }
         ],
@@ -2937,17 +2733,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/e1e504ec-06c5-4f1d-9fce-72fef2962501"
+                "$ref": "#/components/schemas/d5e42a50-98f2-4706-87e2-ffa852815055"
               }
             },
             "application/xml": {
               "schema": {
-                "$ref": "#/components/schemas/e1e504ec-06c5-4f1d-9fce-72fef2962501"
+                "$ref": "#/components/schemas/d5e42a50-98f2-4706-87e2-ffa852815055"
               }
             },
             "text/vnd.yaml": {
               "schema": {
-                "$ref": "#/components/schemas/e1e504ec-06c5-4f1d-9fce-72fef2962501"
+                "$ref": "#/components/schemas/d5e42a50-98f2-4706-87e2-ffa852815055"
               }
             }
           }
@@ -3028,7 +2824,7 @@
         "security": [
           {
             "api_key": [
-              "core.view_servergroup"
+              "core.view_role"
             ]
           }
         ]
@@ -3106,7 +2902,7 @@
         "security": [
           {
             "api_key": [
-              "core.change_servergroup"
+              "core.change_role"
             ]
           }
         ],
@@ -3116,17 +2912,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/f7f70d43-17fe-4617-adf1-602429d3be85"
+                "$ref": "#/components/schemas/bf836761-9bd6-41d8-9cf6-63259ef1a89e"
               }
             },
             "application/xml": {
               "schema": {
-                "$ref": "#/components/schemas/f7f70d43-17fe-4617-adf1-602429d3be85"
+                "$ref": "#/components/schemas/bf836761-9bd6-41d8-9cf6-63259ef1a89e"
               }
             },
             "text/vnd.yaml": {
               "schema": {
-                "$ref": "#/components/schemas/f7f70d43-17fe-4617-adf1-602429d3be85"
+                "$ref": "#/components/schemas/bf836761-9bd6-41d8-9cf6-63259ef1a89e"
               }
             }
           }
@@ -3205,7 +3001,7 @@
         "security": [
           {
             "api_key": [
-              "core.delete_servergroup"
+              "core.delete_role"
             ]
           }
         ]
@@ -3257,7 +3053,8 @@
             "schema": {
               "type": "string",
               "format": "ip",
-              "default": null
+              "default": null,
+              "example": "122.156.131.14"
             },
             "required": false,
             "description": ""
@@ -3407,17 +3204,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/203cd9b5-2627-44d3-b2d4-a3a70a7dfcfb"
+                "$ref": "#/components/schemas/2cf0cda4-f38d-48a6-b2c2-335934665522"
               }
             },
             "application/xml": {
               "schema": {
-                "$ref": "#/components/schemas/203cd9b5-2627-44d3-b2d4-a3a70a7dfcfb"
+                "$ref": "#/components/schemas/2cf0cda4-f38d-48a6-b2c2-335934665522"
               }
             },
             "text/vnd.yaml": {
               "schema": {
-                "$ref": "#/components/schemas/203cd9b5-2627-44d3-b2d4-a3a70a7dfcfb"
+                "$ref": "#/components/schemas/2cf0cda4-f38d-48a6-b2c2-335934665522"
               }
             }
           }
@@ -3586,17 +3383,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/9a9e52d9-5782-4abf-8b2e-ba1473155b9f"
+                "$ref": "#/components/schemas/65283515-03fe-4321-a365-75b2a7288b34"
               }
             },
             "application/xml": {
               "schema": {
-                "$ref": "#/components/schemas/9a9e52d9-5782-4abf-8b2e-ba1473155b9f"
+                "$ref": "#/components/schemas/65283515-03fe-4321-a365-75b2a7288b34"
               }
             },
             "text/vnd.yaml": {
               "schema": {
-                "$ref": "#/components/schemas/9a9e52d9-5782-4abf-8b2e-ba1473155b9f"
+                "$ref": "#/components/schemas/65283515-03fe-4321-a365-75b2a7288b34"
               }
             }
           }
@@ -3765,17 +3562,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/32cff551-5963-43da-ab35-6903614f89bc"
+                "$ref": "#/components/schemas/d2c53b17-ca67-40bb-bccb-129643f7fe23"
               }
             },
             "application/xml": {
               "schema": {
-                "$ref": "#/components/schemas/32cff551-5963-43da-ab35-6903614f89bc"
+                "$ref": "#/components/schemas/d2c53b17-ca67-40bb-bccb-129643f7fe23"
               }
             },
             "text/vnd.yaml": {
               "schema": {
-                "$ref": "#/components/schemas/32cff551-5963-43da-ab35-6903614f89bc"
+                "$ref": "#/components/schemas/d2c53b17-ca67-40bb-bccb-129643f7fe23"
               }
             }
           }
@@ -3945,7 +3742,7 @@
         "security": [
           {
             "api_key": [
-              "log.add_chat"
+              "log.add_serverchat"
             ]
           }
         ],
@@ -3955,17 +3752,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/a85af753-2497-4f57-b364-dd8928c30eed"
+                "$ref": "#/components/schemas/a2a9ab07-ae29-4151-9b90-a487064703e7"
               }
             },
             "application/xml": {
               "schema": {
-                "$ref": "#/components/schemas/a85af753-2497-4f57-b364-dd8928c30eed"
+                "$ref": "#/components/schemas/a2a9ab07-ae29-4151-9b90-a487064703e7"
               }
             },
             "text/vnd.yaml": {
               "schema": {
-                "$ref": "#/components/schemas/a85af753-2497-4f57-b364-dd8928c30eed"
+                "$ref": "#/components/schemas/a2a9ab07-ae29-4151-9b90-a487064703e7"
               }
             }
           }
@@ -4145,17 +3942,645 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/17b6427b-235d-4456-b568-c8a787e927a6"
+                "$ref": "#/components/schemas/93acee99-5ce2-4585-a0d8-fec15af13c0f"
               }
             },
             "application/xml": {
               "schema": {
-                "$ref": "#/components/schemas/17b6427b-235d-4456-b568-c8a787e927a6"
+                "$ref": "#/components/schemas/93acee99-5ce2-4585-a0d8-fec15af13c0f"
               }
             },
             "text/vnd.yaml": {
               "schema": {
-                "$ref": "#/components/schemas/17b6427b-235d-4456-b568-c8a787e927a6"
+                "$ref": "#/components/schemas/93acee99-5ce2-4585-a0d8-fec15af13c0f"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/tokens/{uuid}": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "",
+        "description": "",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Successful"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No Query Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "Invalid Parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Fatal Internal Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          },
+          "512": {
+            "description": "Failed Parsing Payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": [
+              "core.view_token"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "System"
+        ],
+        "summary": "",
+        "description": "",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Successful"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No Query Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "Invalid Parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Fatal Internal Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          },
+          "512": {
+            "description": "Failed Parsing Payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": [
+              "core.delete_token"
+            ]
+          }
+        ]
+      }
+    },
+    "/system/authentication": {
+      "post": {
+        "tags": [
+          "System"
+        ],
+        "summary": "",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Successful"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No Query Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "Invalid Parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Fatal Internal Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          },
+          "512": {
+            "description": "Failed Parsing Payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": [
+              "core.view_user"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/df7a92ef-4cee-486a-8ff8-b2bae80c8cd1"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/df7a92ef-4cee-486a-8ff8-b2bae80c8cd1"
+              }
+            },
+            "text/vnd.yaml": {
+              "schema": {
+                "$ref": "#/components/schemas/df7a92ef-4cee-486a-8ff8-b2bae80c8cd1"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/messages": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "",
+        "description": "",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "minimum": 0
+            },
+            "required": false,
+            "description": ""
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": -1,
+              "minimum": -1
+            },
+            "required": false,
+            "description": ""
+          },
+          {
+            "in": "query",
+            "name": "match",
+            "schema": {
+              "type": "string",
+              "default": ""
+            },
+            "required": false,
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Successful"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No Query Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "Invalid Parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Fatal Internal Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          },
+          "512": {
+            "description": "Failed Parsing Payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": [
+              "log.view_chat"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "System"
+        ],
+        "summary": "",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Successful"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No Query Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "Invalid Parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Fatal Internal Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          },
+          "512": {
+            "description": "Failed Parsing Payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": [
+              "log.add_serverchat"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/9c0e8256-25b0-431f-af8a-9d6859e308b7"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/9c0e8256-25b0-431f-af8a-9d6859e308b7"
+              }
+            },
+            "text/vnd.yaml": {
+              "schema": {
+                "$ref": "#/components/schemas/9c0e8256-25b0-431f-af8a-9d6859e308b7"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/logs": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "",
+        "description": "",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "minimum": 0
+            },
+            "required": false,
+            "description": ""
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": -1,
+              "minimum": -1
+            },
+            "required": false,
+            "description": ""
+          },
+          {
+            "in": "query",
+            "name": "match",
+            "schema": {
+              "type": "string",
+              "default": ""
+            },
+            "required": false,
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Successful"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No Query Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "Invalid Parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Fatal Internal Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          },
+          "512": {
+            "description": "Failed Parsing Payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": [
+              "log.view_chat"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "System"
+        ],
+        "summary": "",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Successful"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No Query Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "Invalid Parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Fatal Internal Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          },
+          "512": {
+            "description": "Failed Parsing Payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": [
+              "log.add_serverchat"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ae57890a-993d-428b-85ec-42d50d146902"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/ae57890a-993d-428b-85ec-42d50d146902"
+              }
+            },
+            "text/vnd.yaml": {
+              "schema": {
+                "$ref": "#/components/schemas/ae57890a-993d-428b-85ec-42d50d146902"
               }
             }
           }
@@ -4484,7 +4909,107 @@
     "/mainframe/connect": {
       "get": {
         "tags": [
-          "Capabilities"
+          "Mainframe"
+        ],
+        "summary": "",
+        "description": "",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "minimum": 0
+            },
+            "required": false,
+            "description": ""
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": -1,
+              "minimum": -1
+            },
+            "required": false,
+            "description": ""
+          },
+          {
+            "in": "query",
+            "name": "match",
+            "schema": {
+              "type": "string",
+              "default": ""
+            },
+            "required": false,
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Successful"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No Query Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          },
+          "428": {
+            "description": "Invalid Parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Fatal Internal Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          },
+          "512": {
+            "description": "Failed Parsing Payload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Failed"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_key": [
+              "core.view_mainframe"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Mainframe"
         ],
         "summary": "",
         "description": "",
@@ -4544,10 +5069,31 @@
         "security": [
           {
             "api_key": [
-              "core.view_capabilities"
+              "core.add_mainframe"
             ]
           }
-        ]
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/81be1ebd-c7cf-4ab8-b209-fc5030e968ad"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/81be1ebd-c7cf-4ab8-b209-fc5030e968ad"
+              }
+            },
+            "text/vnd.yaml": {
+              "schema": {
+                "$ref": "#/components/schemas/81be1ebd-c7cf-4ab8-b209-fc5030e968ad"
+              }
+            }
+          }
+        }
       }
     }
   }
