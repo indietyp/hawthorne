@@ -369,7 +369,8 @@ def punishment(request, u=None, validated={}, *args, **kwargs):
       punishments = punishments.filter(is_kicked=validated['kicked'])
 
     return [p for p in punishments.annotate(admin=F('created_by__namespace'))
-                                  .values('user',
+                                  .values('id',
+                                          'user',
                                           'server',
                                           'created_at',
                                           'reason',
@@ -416,6 +417,7 @@ def punishment(request, u=None, validated={}, *args, **kwargs):
           punishment.save()
           SourcemodPluginWrapper(s).kick(punishment)
 
+
 @csrf_exempt
 @json_response
 @authentication_required
@@ -431,7 +433,8 @@ def punishment_detailed(request, u=None, p=None, validated={}, *args, **kwargs):
   punishment = punishment[0]
 
   if request.method == 'GET':
-    return punishment.values('user',
+    return punishment.values('id',
+                             'user',
                              'server',
                              'reason',
                              'length',
@@ -445,6 +448,17 @@ def punishment_detailed(request, u=None, p=None, validated={}, *args, **kwargs):
                              'created_at',
                              'created_by',)
   elif request.method == 'POST':
+    if 'server' in validated:
+      if validated['server']:
+        server = Server.objects.filter(id=validated['server'])
+
+        if server:
+          validated.server = server[0]
+        else:
+          return 'This UUID is not a server', 428
+      else:
+        validated.server = None
+
     if validated['resolved'] is not None:
       punishment.resolved = validated['resolved']
 

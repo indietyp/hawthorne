@@ -227,6 +227,7 @@ class Server(BaseModel):
 
   SUPPORTED = (
     ('csgo', 'Counter-Strike: Global Offensive'),
+    ('tf2', 'Team Fortress 2'),
   )
   game = models.CharField(max_length=255, choices=SUPPORTED)
   mode = models.CharField(max_length=255, null=True)

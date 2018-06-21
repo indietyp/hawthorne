@@ -21,7 +21,8 @@
 HTTPClient httpClient;
 
 char SERVER[37] = "",
-     CLIENTS[MAXPLAYERS + 1][37];
+     CLIENTS[MAXPLAYERS + 1][37],
+     PUNISHMENTS[MAXPLAYERS + 1][37];
 
 int mutegag_timeleft[MAXPLAYERS + 1],
     admin_timeleft[MAXPLAYERS + 1];
