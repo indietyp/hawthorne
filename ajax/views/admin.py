@@ -9,7 +9,7 @@ from log.models import ServerChat
 
 
 @login_required(login_url='/login')
-@permission_required
+@permission_required('core.view_user')
 @require_http_methods(['POST'])
 def user(request, page, *args, **kwargs):
   # superuser = root
@@ -29,7 +29,7 @@ def user(request, page, *args, **kwargs):
 
 
 @login_required(login_url='/login')
-@permission_required
+@permission_required('core.view_chat')
 @require_http_methods(['POST'])
 def log(request, page, *args, **kwargs):
   obj = ServerChat.objects.filter(command=True)
@@ -37,7 +37,7 @@ def log(request, page, *args, **kwargs):
 
 
 @login_required(login_url='/login')
-@permission_required
+@permission_required('core.view_role')
 @require_http_methods(['POST'])
 def group(request, page, *args, **kwargs):
   obj = Role.objects.all().order_by('immunity')

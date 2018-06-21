@@ -3,7 +3,7 @@
   var remove;
 
   remove = function(mode = '', that) {
-    var endpoint, node, options, payload, role, server, token, trans, user, uuid;
+    var endpoint, node, options, payload, punishment, role, server, token, trans, user, uuid;
     trans = $(that);
     if (!trans.hasClass('confirmation')) {
       trans.addClass('explicit red confirmation');
@@ -28,23 +28,13 @@
       case 'ban':
         user = $('input.user', node)[0].value;
         server = $('input.server', node)[0].value;
-        if (server === "") {
-          server = null;
-        }
-        payload = {
-          server: server
-        };
-        endpoint = window.endpoint.api.users[user].punishment;
+        punishment = $('input.punishment', node)[0].value;
+        endpoint = window.endpoint.api.users[user].punishment[punishment];
         break;
       case 'mutegag':
         user = $('input.user', node)[0].value;
-        server = $('input.server', node)[0].value;
-        if (server !== '') {
-          payload = {
-            server: server
-          };
-        }
-        endpoint = window.endpoint.api.users[user].punishment;
+        punishment = $('input.punishment', node)[0].value;
+        endpoint = window.endpoint.api.users[user].punishment[punishment];
         break;
       case 'server':
         node = that.parentElement.parentElement.parentElement.parentElement;
@@ -86,7 +76,7 @@
   var edit, save;
 
   save = function(mode = '', that) {
-    var data, j, len, node, now, o, password, payload, payloads, perms, replacement, role, selector, server, success, target, time, user, uuid;
+    var data, j, len, node, now, o, password, payload, payloads, perms, punishment, replacement, role, selector, server, success, target, time, user, uuid;
     o = {
       target: that,
       skip_animation: false
@@ -154,6 +144,7 @@
       case 'ban':
         user = $('input.user', node)[0].value;
         server = $('input.server', node)[0].value;
+        punishment = $('input.punishment', node)[0].value;
         now = parseInt($(".icon.time", node)[0].getAttribute("data-created"));
         time = $(".icon.time input", node)[0].value;
         if (time !== '') {
@@ -169,7 +160,7 @@
         if (server !== '') {
           payload.server = server;
         }
-        if (mode === 'mutegag') {
+        if (mode === 'ban') {
           payload.banned = true;
         }
         if (mode === 'mutegag') {
@@ -193,7 +184,7 @@
             payloud.gagged = true;
           }
         }
-        window.endpoint.api.users[user].punishment.post(o, {}, payload, function(err, data) {});
+        window.endpoint.api.users[user].punishment[punishment].post(o, {}, payload, function(err, data) {});
         break;
       case 'server':
         node = node.parentElement;
