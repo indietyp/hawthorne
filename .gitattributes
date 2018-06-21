@@ -1,7 +1,7 @@
 interface/static/**     linguist-vendored
 *.inc                   linguist-vendored
-migrations/*            linguist-vendored
-# log/migrations/*        linguist-generated
+core/migrations/**      linguist-generated
+log/migrations/*        linguist-generated
 docs/**                 linguist-documentation
 api/reference/**        linguist-documentation
 include/**              linguist-language=SourcePawn
