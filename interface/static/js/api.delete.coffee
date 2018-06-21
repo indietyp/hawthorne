@@ -25,23 +25,14 @@ remove = (mode = '', that) ->
     when 'ban'
       user = $('input.user', node)[0].value
       server = $('input.server', node)[0].value
+      punishment = $('input.punishment', node)[0].value
 
-      if server == ""
-        server = null
-
-      payload =
-        server: server
-
-      endpoint = window.endpoint.api.users[user].punishment
+      endpoint = window.endpoint.api.users[user].punishment[punishment]
     when 'mutegag'
       user = $('input.user', node)[0].value
-      server = $('input.server', node)[0].value
+      punishment = $('input.punishment', node)[0].value
 
-      if server != ''
-        payload =
-          server: server
-
-      endpoint = window.endpoint.api.users[user].punishment
+      endpoint = window.endpoint.api.users[user].punishment[punishment]
     when 'server'
       node = that.parentElement.parentElement.parentElement.parentElement
       server = $('input.uuid', node)[0].value

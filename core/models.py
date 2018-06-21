@@ -78,7 +78,7 @@ class User(AbstractUser):
   online = models.BooleanField(default=False)
   ip = models.GenericIPAddressField(null=True)
 
-  roles = models.ManyToManyField('ServerGroup', through='Membership')
+  roles = models.ManyToManyField('Role', through='Membership')
   country = models.ForeignKey(Country, on_delete=models.CASCADE, null=True)
   avatar = models.URLField(null=True)
   profile = models.URLField(null=True)
@@ -173,7 +173,7 @@ class ServerPermission(BaseModel):
       fields[field.name] = field
 
     if not conv:
-      if 'servergroup' in self.__dict__.keys() and self.servergroup.is_supergroup:
+      if 'role' in self.__dict__.keys() and self.role.is_supergroup:
         return 'Z'
       flags = []
 
@@ -184,7 +184,7 @@ class ServerPermission(BaseModel):
       return ''.join(flags)
     else:
       conv = ''.join(sorted(set(conv.upper())))
-      if 'servergroup' in self.__dict__.keys() and self.servergroup.is_supergroup:
+      if 'role' in self.__dict__.keys() and self.role.is_supergroup:
         conv = 'ABCDEFGHIJKLMNOPQRST'
 
       for field in [x for x in self._meta.get_fields() if x.name.startswith('can')]:
@@ -198,7 +198,7 @@ class ServerPermission(BaseModel):
     return self.convert()
 
 
-class ServerGroup(BaseModel):
+class Role(BaseModel):
   name = models.CharField(max_length=255)
   flags = models.OneToOneField(ServerPermission, on_delete=models.CASCADE)
   server = models.ForeignKey('Server', on_delete=models.CASCADE, null=True)
@@ -212,7 +212,7 @@ class ServerGroup(BaseModel):
     verbose_name = 'server role'
     verbose_name_plural = 'server roles'
     permissions = [
-      ('view_servergroup', 'Can view server role'),
+      ('view_role', 'Can view server role'),
     ]
 
   def __str__(self):
@@ -227,6 +227,7 @@ class Server(BaseModel):
 
   SUPPORTED = (
     ('csgo', 'Counter-Strike: Global Offensive'),
+    ('tf2', 'Team Fortress 2'),
   )
   game = models.CharField(max_length=255, choices=SUPPORTED)
   mode = models.CharField(max_length=255, null=True)
@@ -271,7 +272,7 @@ class Punishment(BaseModel):
 
 class Membership(BaseModel):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
-  role = models.ForeignKey(ServerGroup, on_delete=models.CASCADE)
+  role = models.ForeignKey(Role, on_delete=models.CASCADE)
 
   class Meta:
     permissions = ()

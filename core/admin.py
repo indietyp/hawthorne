@@ -97,7 +97,7 @@ class ServerPermissionAdmin(admin.ModelAdmin):
   date_hierarchy = 'created_at'
 
 
-class ServerGroupAdmin(admin.ModelAdmin):
+class RoleAdmin(admin.ModelAdmin):
   list_display = (
     'name',
     'flags',
@@ -184,7 +184,7 @@ _register(models.Country, CountryAdmin)
 _register(models.User, UserAdmin)
 _register(models.Token, TokenAdmin)
 _register(models.ServerPermission, ServerPermissionAdmin)
-_register(models.ServerGroup, ServerGroupAdmin)
+_register(models.Role, RoleAdmin)
 _register(models.Server, ServerAdmin)
 # _register(models.Ban, BanAdmin)
 # _register(models.Mutegag, MutegagAdmin)

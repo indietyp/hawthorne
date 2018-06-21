@@ -254,6 +254,7 @@ install() {
   fi
 
   printf "${BOLD}Installing dependencies...${NORMAL}\n"
+  pip3 install -U setuptools
   pip3 install cryptography || {
     printf "${BOLD}Too old pip3 version... upgrading${NORMAL}\n"
     apt install -y wget
@@ -447,7 +448,7 @@ configure() {
 
     printf "\n\n${GREEN}The installation tool has finished the configuration process${NORMAL}\n"
     printf "Please look over the $directory/${RED}panel/local.py${NORMAL} for additional configuration options. You can restart hawthorne with ${YELLOW}supervisorctl restart hawthorne${NORMAL}\n"
-    printf "For additional information about the configuration please refer to ${YELLOW}https://docs.hawthorne.in/#/getting-started?id=web-server-configuration${NORMAL}\n\n\n"
+    printf "For additional information about the configuration please refer to ${YELLOW}https://docs.hawthorne.in/#/getting-started?id=web-server-configuration${NORMAL}\n"
 
     if [ $nginx -ne 2 ]; then
       echo "$web"
@@ -460,6 +461,8 @@ configure() {
       fi
     fi
   fi
+
+  print "Without the help of our platinum patreons this wouldn't have been possible. Thank you ${RED}Xypherium${DEFAULT}\n"
 }
 
 main() {

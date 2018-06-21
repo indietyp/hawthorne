@@ -16,8 +16,8 @@ from log.models import ServerChat
 @csrf_exempt
 @json_response
 @authentication_required
-@permission_required('system.chat')
-@validation('system.chat')
+@permission_required
+@validation
 @require_http_methods(['GET', 'PUT'])
 def chat(request, validated={}, *args, **kwargs):
   if request.method == 'GET':
@@ -54,8 +54,8 @@ def chat(request, validated={}, *args, **kwargs):
 @csrf_exempt
 @json_response
 @authentication_required
-@permission_required('system.token')
-@validation('system.token')
+@permission_required
+@validation
 @require_http_methods(['GET', 'PUT'])
 def token(request, validated={}, *args, **kwargs):
   if request.method == 'GET':
@@ -110,8 +110,8 @@ def token(request, validated={}, *args, **kwargs):
 @csrf_exempt
 @json_response
 @authentication_required
-@permission_required('system.token[detailed]')
-@validation('system.token[detailed]')
+@permission_required
+@validation
 @require_http_methods(['GET', 'DELETE'])
 def token_detailed(request, t=None, validated={}, *args, **kwargs):
   token = Token.objects.filter(id=t)
@@ -139,8 +139,8 @@ def token_detailed(request, t=None, validated={}, *args, **kwargs):
 @csrf_exempt
 @json_response
 @authentication_required
-@permission_required('system.authentication')
-@validation('system.authentication')
+@permission_required
+@validation
 @require_http_methods(['POST'])
 def authentication(request, validated={}, *args, **kwargs):
   from django.contrib.auth import authenticate

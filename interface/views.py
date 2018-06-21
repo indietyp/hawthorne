@@ -15,7 +15,7 @@ from django.utils import timezone
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 
-from core.models import Server, ServerGroup, User, Punishment
+from core.models import Server, Role, User, Punishment
 from log.models import UserOnlineTime, ServerChat
 
 
@@ -83,7 +83,7 @@ def home(request):
              'counts': {'all': alltime,
                         'month': recent,
                         'change': change},
-             'roles': ServerGroup.objects.all().count(),
+             'roles': Role.objects.all().count(),
              'mem_roles': User.objects.filter(Q(roles__isnull=False) | Q(is_superuser=True)).count(),
              'messages': ServerChat.objects.filter(command=False)
                                            .annotate(date=Cast('created_at', DateField()))

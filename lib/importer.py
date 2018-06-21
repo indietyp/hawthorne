@@ -4,7 +4,7 @@ from valve.steam.id import SteamID
 from django.utils import timezone
 import socket
 import datetime
-from core.models import Server, ServerGroup, ServerPermission, User, Membership, Punishment
+from core.models import Server, Role, ServerPermission, User, Membership, Punishment
 from core.lib.steam import populate
 from lib.base import RCONBase
 
@@ -24,7 +24,7 @@ class Importer:
       flags = ServerPermission().convert(raw['flags'])
       flags.save()
 
-      role = ServerGroup.objects.get_or_create(name=raw['name'], default={'flags': flags,
+      role = Role.objects.get_or_create(name=raw['name'], default={'flags': flags,
                                                                           'immunity': raw['immunity_level']})
       role.name = raw['name']
       role.flags = flags
@@ -68,7 +68,7 @@ class Importer:
         if raw['flags'] in generated:
           role = generated[raw['flags']]
         else:
-          role = ServerGroup()
+          role = Role()
           role.name = raw['flags']
           role.flags = ServerPermission().convert(raw['flags'])
           role.flags.save()
@@ -133,7 +133,7 @@ class Importer:
     for raw in result:
       flags = ServerPermission().convert(raw['flags'])
       flags.save()
-      role, _ = ServerGroup.objects.get_or_create(name=raw['name'], defaults={'flags': flags,
+      role, _ = Role.objects.get_or_create(name=raw['name'], defaults={'flags': flags,
                                                                               'immunity': raw['immunity']})
       role.immunity = raw['immunity']
       role.flags = flags
@@ -174,7 +174,7 @@ class Importer:
         if raw['srv_flags'] in generated:
           m.role = generated[raw['srv_flags']]
         else:
-          m.role = ServerGroup()
+          m.role = Role()
           m.role.immunity = 0
           m.role.name = raw['srv_flags']
           m.role.flags = ServerPermission().convert(raw['srv_flags'])
@@ -186,7 +186,7 @@ class Importer:
 
       elif raw['srv_group']:
         m = Membership()
-        m.role = ServerGroup.objects.get(name=raw['srv_group'])
+        m.role = Role.objects.get(name=raw['srv_group'])
         m.user = user
         m.save()
 
@@ -335,7 +335,7 @@ class Importer:
 
     roles = {}
     for raw in result:
-      role, _ = ServerGroup.objects.get_or_create(name=raw['name'])
+      role, _ = Role.objects.get_or_create(name=raw['name'])
       role.immunity = raw['immunity']
       role.flags = ServerPermission().convert(raw['flags'])
       role.usetime = None if raw['usetime'] == 0 else raw['usetime']

@@ -4,7 +4,7 @@ from django.views.decorators.http import require_http_methods
 from django.conf import settings
 
 from ajax.views import renderer
-from core.models import User, ServerGroup
+from core.models import User, Role
 from log.models import ServerChat
 
 
@@ -37,8 +37,8 @@ def log(request, page, *args, **kwargs):
 
 
 @login_required(login_url='/login')
-@permission_required('core.view_servergroup')
+@permission_required('core.view_role')
 @require_http_methods(['POST'])
 def group(request, page, *args, **kwargs):
-  obj = ServerGroup.objects.all().order_by('immunity')
+  obj = Role.objects.all().order_by('immunity')
   return renderer(request, 'partials/admin/group.pug', obj, page)

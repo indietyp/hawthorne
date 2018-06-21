@@ -38,14 +38,16 @@ public void OnPunishmentCheck(HTTPResponse response, any value) {
   if (timeleft < 0) timeleft = 0;
 
   result.GetString("reason", reason, sizeof(reason));
+  result.GetString("id", PUNISHMENTS[client], sizeof(PUNISHMENTS[]));
   bool muted = result.GetBool("is_muted");
   bool gagged = result.GetBool("is_gagged");
 
   if (muted && gagged) action = ACTION_SILENCE;
   else if (gagged) action = ACTION_GAG;
   else action = ACTION_MUTE;
-
   InitiatePunishment(client, action, reason, timeleft);
+
+  delete result;
 }
 
 public Action PunishCommandExecuted(int client, const char[] cmd, int args) {
@@ -342,8 +344,8 @@ public int PunishExecution(int client) {
     payload_put.SetInt("length", selected_duration[client]);
 
     if (selected_action[client] < 0) {
-      StrCat(url, sizeof(url), "?server=");
-      StrCat(url, sizeof(url), SERVER);
+      StrCat(url, sizeof(url), "/");
+      StrCat(url, sizeof(url), PUNISHMENTS[GetClientOfUserId(selected_player[client])]);
       StrCat(url, sizeof(url), "&plugin=false");
       httpClient.Delete(url, APINoResponseCall);
      } else
@@ -352,8 +354,8 @@ public int PunishExecution(int client) {
   } else if (selected_conflict[client] == CONFLICT_OVERWRITE) {
     httpClient.Put(url, payload_put, APINoResponseCall);
 
-    StrCat(url, sizeof(url), "?server=");
-    StrCat(url, sizeof(url), SERVER);
+    StrCat(url, sizeof(url), "/");
+    StrCat(url, sizeof(url), PUNISHMENTS[GetClientOfUserId(selected_player[client])]);
     StrCat(url, sizeof(url), "&plugin=false");
     httpClient.Delete(url, APINoResponseCall);
   } else if (selected_conflict[client] == CONFLICT_EXTEND) {
@@ -362,6 +364,10 @@ public int PunishExecution(int client) {
 
     httpClient.Get(url, APIPunishmentExtendResponseCall, client);
   } else if (selected_conflict[client] == CONFLICT_CONVERT) {
+    StrCat(url, sizeof(url), "/");
+    StrCat(url, sizeof(url), PUNISHMENTS[GetClientOfUserId(selected_player[client])]);
+    StrCat(url, sizeof(url), "&plugin=false");
+
     payload_del.SetBool("muted", true);
     payload_del.SetBool("gagged", true);
     httpClient.Post(url, payload_del, APINoResponseCall);
@@ -383,16 +389,20 @@ public void APIPunishmentExtendResponseCall(HTTPResponse response, any value) {
 
   if (results.Length < 1) return;
   JSONObject result = view_as<JSONObject>(results.Get(0));
+
   int length = RoundFloat(result.GetFloat("length"));
   length += selected_duration[client];
+  char uuid[37];
+  result.GetString("length", uuid, sizeof(uuid));
+
 
   JSONObject payload = new JSONObject();
-  payload.SetString("server", SERVER);
-  payload.SetInt("length", length);
 
   char url[512] = "users/";
   StrCat(url, sizeof(url), CLIENTS[GetClientOfUserId(selected_player[client])]);
-  StrCat(url, sizeof(url), "/punishment");
+  StrCat(url, sizeof(url), "/punishment/");
+  StrCat(url, sizeof(url), uuid);
+  StrCat(url, sizeof(url), "&plugin=false");
 
   httpClient.Post(url, payload, APINoResponseCall);
 

@@ -13,8 +13,8 @@ from core.models import User
 @csrf_exempt
 @json_response
 @authentication_required
-@permission_required('group.list')
-@validation('group.list')
+@permission_required
+@validation
 @require_http_methods(['GET', 'PUT'])
 def list(request, validated={}, *args, **kwargs):
   if request.method == 'GET':
@@ -58,8 +58,8 @@ def list(request, validated={}, *args, **kwargs):
 @csrf_exempt
 @json_response
 @authentication_required
-@permission_required('group.detailed')
-@validation('group.detailed')
+@permission_required
+@validation
 @require_http_methods(['GET', 'POST', 'DELETE'])
 def detailed(request, g=None, validated={}, *args, **kwargs):
   group = Group.objects.get(id=g)

@@ -2,7 +2,6 @@
 #= require api.edit.coffee
 #= require api.create.coffee
 
-
 game = (that = null, selected = '') ->
   window.endpoint.api.capabilities.games.get((err, data) ->
     data = data.result

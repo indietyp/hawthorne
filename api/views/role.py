@@ -8,18 +8,18 @@ from django.views.decorators.http import require_http_methods
 
 from core.decorators.api import json_response, validation
 from core.decorators.auth import authentication_required, permission_required
-from core.models import User, Server, ServerGroup, ServerPermission, Membership
+from core.models import User, Server, Role, ServerPermission, Membership
 
 
 @csrf_exempt
 @json_response
 @authentication_required
-@permission_required('role.list')
-@validation('role.list')
+@permission_required
+@validation
 @require_http_methods(['GET', 'PUT'])
 def list(request, validated={}, *args, **kwargs):
   if request.method == 'GET':
-    roles = ServerGroup.objects.filter(name__icontains=validated['match']).values('id', 'name', 'server')
+    roles = Role.objects.filter(name__icontains=validated['match']).values('id', 'name', 'server')
 
     limit = validated['limit']
     offset = validated['offset']
@@ -32,7 +32,7 @@ def list(request, validated={}, *args, **kwargs):
       for u in User.objects.filter(id=user):
         users.append(u)
 
-    role = ServerGroup(name=validated['name'])
+    role = Role(name=validated['name'])
 
     if validated['flags'] is not None:
       flags = validated['flags']
@@ -64,11 +64,11 @@ def list(request, validated={}, *args, **kwargs):
 @csrf_exempt
 @json_response
 @authentication_required
-@permission_required('role.detailed')
-@validation('role.detailed')
+@permission_required
+@validation
 @require_http_methods(['GET', 'POST', 'DELETE'])
 def detailed(request, r=None, validated={}, *args, **kwargs):
-  role = ServerGroup.objects.get(id=r)
+  role = Role.objects.get(id=r)
 
   if request.method == 'GET':
     r = model_to_dict(role)
