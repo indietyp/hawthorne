@@ -25,27 +25,23 @@ set -e
 
 printf "Welcome to the ${RED}purge${DEFAULT}. \n"
 printf "${YELLOW}PLEASE BE CAUTIOUS THIS CAN HARM YOUR MACHINE PERMANENTLY${DEFAULT}. \n\n"
-if [ $path -eq 0 ]; then
-  while true; do
-    read -p "Are you sure you want to delete everything? ${GREEN}(y)${NORMAL}es or ${RED}(n)${NORMAL}o: " yn
-    case $yn in
-        [Yy]* ) break;;
-        [Nn]* ) exit 1;;
-        * ) echo "Please answer with the choices provided.";;
-    esac
-  done
-fi
+while true; do
+  read -p "Are you sure you want to delete everything? ${GREEN}(y)${NORMAL}es or ${RED}(n)${NORMAL}o: " yn
+  case $yn in
+      [Yy]* ) break;;
+      [Nn]* ) exit 1;;
+      * ) echo "Please answer with the choices provided.";;
+  esac
+done
 
-if [ $path -eq 0 ]; then
-  while true; do
-    read -p "Was HT installed on a custom path?? ${GREEN}(y)${NORMAL}es or ${RED}(n)${NORMAL}o: " yn
-    case $yn in
-        [Yy]* ) read -p "Where was HT installed? " directory; break;;
-        [Nn]* ) break;;
-        * ) echo "Please answer with the choices provided.";;
-    esac
-  done
-fi
+while true; do
+  read -p "Was HT installed on a custom path?? ${GREEN}(y)${NORMAL}es or ${RED}(n)${NORMAL}o: " yn
+  case $yn in
+      [Yy]* ) read -p "Where was HT installed? " directory; break;;
+      [Nn]* ) break;;
+      * ) echo "Please answer with the choices provided.";;
+  esac
+done
 
 rm -r /static/local
 rm -r /var/log/hawthorne
