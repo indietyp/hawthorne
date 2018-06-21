@@ -68,6 +68,7 @@ save = (mode = '', that) ->
     when 'mutegag', 'ban'
       user = $('input.user', node)[0].value
       server = $('input.server', node)[0].value
+      punishment = $('input.punishment', node)[0].value
 
       now = parseInt($(".icon.time", node)[0].getAttribute("data-created"))
       time = $(".icon.time input", node)[0].value
@@ -85,7 +86,7 @@ save = (mode = '', that) ->
       if server != ''
         payload.server = server
 
-      if mode == 'mutegag'
+      if mode == 'ban'
         payload.banned = true
 
       if mode == 'mutegag'
@@ -109,7 +110,7 @@ save = (mode = '', that) ->
         if type.match /gag/
           payloud.gagged = true
 
-      window.endpoint.api.users[user].punishment.post(o, {}, payload, (err, data) ->)
+      window.endpoint.api.users[user].punishment[punishment].post(o, {}, payload, (err, data) ->)
 
     when 'server'
       node = node.parentElement

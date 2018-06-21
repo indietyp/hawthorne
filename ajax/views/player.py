@@ -7,7 +7,7 @@ from core.models import User
 
 
 @login_required(login_url='/login')
-@permission_required
+@permission_required('core.view_user')
 @require_http_methods(['POST'])
 def user(request, page, *args, **kwargs):
   obj = User.objects.filter(online=True) \

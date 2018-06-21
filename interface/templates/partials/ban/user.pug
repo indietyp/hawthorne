@@ -4,6 +4,8 @@
 .row.pure-g
   input.hidden.user(type='hidden', value=data.user.id)
   input.hidden.server(type='hidden', value="{{data.server.id|default_if_none:''}}")
+  input.hidden.punishment(type='hidden', value=data.id)
+
   .column.icon.username.pure-u-7-24
     .icon-container.flex.center
       .img__circle__container

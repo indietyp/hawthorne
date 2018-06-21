@@ -1,6 +1,7 @@
 from base64 import b85decode
 from binascii import hexlify
 from functools import wraps
+from inspect import isfunction, getsource
 from uuid import UUID
 
 from django.conf import settings
@@ -55,7 +56,8 @@ def authentication_required(f):
 
 
 def permission_required(a):
-  def argument_decorator(f, resolve=True):
+  def argument_decorator(f, resolve=False):
+
     @wraps(f)
     def wrapper(request, *args, **kwargs):
       token = token_retrieve(request)
@@ -88,7 +90,7 @@ def permission_required(a):
 
     return wrapper
 
-  if callable(a):
+  if isfunction(a):
     return argument_decorator(a, True)
   else:
     return argument_decorator
