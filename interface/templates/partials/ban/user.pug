@@ -9,8 +9,9 @@
   .column.icon.username.pure-u-7-24
     .icon-container.flex.center
       .img__circle__container
-        - with 'flags/'|add:data.user.country.code|lower|add:'.svg' as url
-          img(src='{% static url %}')
+        - if data.user.country
+          - with 'flags/'|add:data.user.country.code|lower|add:'.svg' as url
+            img(src='{% static url %}')
       .img__circle__container
         img(src="{{ data.avatar }}")
     div.namespace= data.user.namespace
