@@ -54,9 +54,9 @@
         i.bpi-unlimited.px24
   .column.icon.pure-u-3-24
     .spacer
-    - if perms.core.change_mutegag
+    - if perms.core.change_punishment
       .action
         i(data-feather="edit-2", onclick="window.api.edit('mutegag', this)")
-    - if perms.core.delete_mutegag
+    - if perms.core.delete_punishment
       .action
         i(data-feather="trash-2", onclick="window.api.remove('mutegag', this)")

@@ -39,9 +39,9 @@
 
   .column.icon.pure-u-3-24
     .spacer
-    - if perms.core.change_ban
+    - if perms.core.change_punishment
       .action
         i(data-feather="edit-2", onclick="window.api.edit('ban', this)")
-    - if perms.core.delete_ban
+    - if perms.core.delete_punishment
       .action
         i(data-feather="trash-2", onclick="window.api.remove('ban', this)")
