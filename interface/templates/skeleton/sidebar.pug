@@ -26,12 +26,12 @@
     i(data-feather="server")
     span {% trans "Servers" %}
 
-- if perms.core.view_ban
+- if perms.core.view_punishment
   .item.action(onclick="window.vc.change('ban')")
     i(data-feather="slash")
     span {% trans "Bans" %}
 
-- if perms.core.view_mutegag
+- if perms.core.view_punishment
   .item.action(onclick="window.vc.change('mutegag')")
     i(data-feather="volume-x")
     span {% trans "Mute/Gag" %}

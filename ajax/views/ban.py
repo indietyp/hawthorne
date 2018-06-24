@@ -6,7 +6,7 @@ from core.models import Punishment
 
 
 @login_required(login_url='/login')
-@permission_required('core.view_ban')
+@permission_required('core.view_punishment')
 @require_http_methods(['POST'])
 def user(request, page, *args, **kwargs):
   obj = Punishment.objects.filter(resolved=False, is_banned=True).order_by('created_at')
