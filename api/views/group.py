@@ -26,7 +26,10 @@ def list(request, validated={}, *args, **kwargs):
 
     return [g for g in groups]
   else:
-    base = Permission.objects if request.user.is_superuser else request.user.user_permissions
+    base = Permission.objects.all()\
+                             .annotate(encoded=F('content_type__model') + '.' + F('codename'))\
+                             .filter(encoded__in=request.user.get_all_permissions())\
+                             .order_by('content_type__model')
     exceptions = []
     perms = []
     for perm in validated['permissions']:
