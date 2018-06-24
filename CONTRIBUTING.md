@@ -1,12 +1,19 @@
 # Contributing to Hawthorne
 First of, thank you for taking out time on you busy schedule to help this project out. In this document you can find all the important information to have a meaningful and easy time contributing to the project.
 
+This CONTRIBUTING.md is adapted from the atom project.
+
 #### Table Of Contents
 
 [Styleguides](#styleguides)
   * [Git Commit Messages](#git-commit-messages)
   * [Python Styleguide](#python-styleguide)
   * [SourcePawn Styleguide](#sourcepawn-styleguide)
+
+[How Can I Contribute?](#how-can-i-contribute)
+  * [Reporting Bugs](#reporting-bugs)
+  * [Suggesting Enhancements](#suggesting-enhancements)
+  * [Pull Requests](#pull-requests)
 
 
 ## How Can I Contribute?
