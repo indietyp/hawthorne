@@ -28,6 +28,8 @@ sh -c "$(curl -fsSL raw.githubusercontent.com/laevis/hawthorne/master/cli/instal
 !> hawthorne also offers a [Docker][6] image for a more easy and managed installation.
 
 ## Web server configuration
+!> Due to technical errors that have not yet found a solution, it is **highly discouraged** to use Apache 2. Please use NGINX instead.
+
 Currently hawthorne has been tested with _nginx_ and _Apache 2_, every server that is able to redirect traffic through a proxy should be able to serve hawthorne.
 
 > Hawthorne makes use of the [WSGI][4] standard.
