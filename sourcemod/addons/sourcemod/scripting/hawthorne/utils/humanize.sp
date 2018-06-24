@@ -7,9 +7,9 @@ stock void HumanizeTime(int seconds, char time[200], bool short=true) {
   }
 
   if(days == 1)
-    StrCat(time, sizeof(time), " day ");
+    StrCat(time, sizeof(time), " day");
   else if (days > 0)
-    StrCat(time, sizeof(time), " days ");
+    StrCat(time, sizeof(time), " days");
 
   if (short && days > 0)
     return;
@@ -25,9 +25,9 @@ stock void HumanizeTime(int seconds, char time[200], bool short=true) {
   }
 
   if(hours == 1)
-    StrCat(time, sizeof(time), " hour ");
+    StrCat(time, sizeof(time), " hour");
   else if(hours > 0)
-    StrCat(time, sizeof(time), " hours ");
+    StrCat(time, sizeof(time), " hours");
 
   if (short && hours > 0)
     return;
@@ -44,9 +44,9 @@ stock void HumanizeTime(int seconds, char time[200], bool short=true) {
   }
 
   if (minutes == 1)
-    StrCat(time, sizeof(time), " minute ");
+    StrCat(time, sizeof(time), " minute");
   else if (minutes > 0)
-    StrCat(time, sizeof(time), " minutes ");
+    StrCat(time, sizeof(time), " minutes");
 
   if (short && minutes > 0)
     return;

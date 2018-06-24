@@ -1,7 +1,7 @@
 void ClientBanKick(int client, char[] admin, char[] reason, char[] total, char[] current) {
   char time[256];
 
-  if (StrEqual(total, "eternity"))
+  if (StrEqual(total, "permanent"))
     Format(time, sizeof(time), "This action is permanent");
   else
     Format(time, sizeof(time), "You have been banned for a total of %s, of those %s are left", total, current);
