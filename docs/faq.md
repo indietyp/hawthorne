@@ -23,7 +23,9 @@ Try to execute the following commands and then _restart your machine:_
 * `chcon --user system_u --type httpd_sys_content_t -Rv /local/static`
 
 ## After logging in with Steam, I am redirected back to the login page!
-This usually happens if you're trying to use your Steam API key for more than one project. Try using an unused API key from another Steam account. If the problem persists, please contact the developers.
+This usually happens if you're trying to use your Steam API key for more than one project (Steam is caching this, API keys for multiple project will stop working eventually, which is why you should only use the API key for 1 project). Try using an unused API key from another Steam account. 
+
+If the problem persists, please contact the developers.
 
 ## 
 
