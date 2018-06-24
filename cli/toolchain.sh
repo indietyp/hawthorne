@@ -24,6 +24,7 @@ set -e
 
 dir=$(cd $(dirname $(readlink $([ $(uname | tr '[:upper:]' '[:lower:]') = linux* ] && echo "-f") $0)); pwd -P)
 dir=$(dirname "$dir")
+cd $dir
 
 update () {
     if ! [ $(id -u) = 0 ];
@@ -121,7 +122,7 @@ version () {
   local=$(git describe --abbrev=0 --tags --match="v*")
 
   if [ "$upstream" != "$local" ]; then
-    printf "\n\nYou really should ${GREEN}update${NORMAL}! Your current version is ${BLUE}$local${NORMAL}, the lastest version is ${BLUE}$upstream${NORMAL}.\n"
+    printf "\n\nYou really should ${GREEN}update${NORMAL}! Your current version is ${BLUE}$local${NORMAL}, the latest version is ${BLUE}$upstream${NORMAL}.\n"
   else
     printf "\n\nYou are ${GREEN}up-to-date${NORMAL}!\n(btw you are on version ${BLUE}$local${NORMAL} right now.)\n"
   fi
