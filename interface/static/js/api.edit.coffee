@@ -95,20 +95,20 @@ save = (mode = '', that) ->
         )
 
         payload.muted = false
-        payloud.gagged = false
+        payload.gagged = false
         if payload.type.match(/mute/) and payload.type.match(/gag/)
           payload.muted = true
-          payloud.gagged = true
+          payload.gagged = true
 
         if payload.type == ''
           payload.muted = true
-          payloud.gagged = true
+          payload.gagged = true
 
         if type.match /mute/
           payload.muted = true
 
         if type.match /gag/
-          payloud.gagged = true
+          payload.gagged = true
 
       window.endpoint.api.users[user].punishment[punishment].post(o, {}, payload, (err, data) ->)
 

@@ -1,4 +1,5 @@
 - load i18n
+- load interface_utils
 
 .row.pure-g
   input.hidden.uuid(value=data.id)
@@ -20,7 +21,7 @@
     if data.is_superuser
       span {% blocktrans with permission_percentage=100%}{{permission_percentage}}% granted{% endblocktrans %}
     else
-      span {% blocktrans with permission_percentage=data.perms %}{{permission_percentage}}% granted{% endblocktrans %}
+      span {% blocktrans with permission_percentage=data|permission_total_converter %}{{permission_percentage}}% granted{% endblocktrans %}
   .column.icon.pure-u-3-24
     .spacer
     - with 'mailto:'|add:data.email as email

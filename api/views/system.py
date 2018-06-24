@@ -87,7 +87,10 @@ def token(request, validated={}, *args, **kwargs):
     token.due = None if not validated['due'] else datetime.datetime.fromtimestamp(validated['due'])
     token.owner = request.user
 
-    base = Permission.objects if request.user.is_superuser else request.user.user_permissions
+    base = Permission.objects.all()\
+                             .annotate(encoded=F('content_type__model') + '.' + F('codename'))\
+                             .filter(encoded__in=request.user.get_all_permissions())\
+                             .order_by('content_type__model')
     exceptions = []
     perms = []
     for perm in validated['permissions']:

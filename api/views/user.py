@@ -74,7 +74,10 @@ def list(request, validated=[], *args, **kwargs):
       user.is_active = True
       user.is_staff = False
 
-      base = Permission.objects if request.user.is_superuser else request.user.user_permissions
+      base = Permission.objects.all()\
+                               .annotate(encoded=F('content_type__model') + '.' + F('codename'))\
+                               .filter(encoded__in=request.user.get_all_permissions())\
+                               .order_by('content_type__model')
       exceptions = []
       perms = []
       for perm in validated['permissions']:
@@ -259,7 +262,10 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
       user.groups.set(groups)
 
     if validated['permissions'] is not None:
-      base = Permission.objects if request.user.is_superuser else request.user.user_permissions
+      base = Permission.objects.all()\
+                               .annotate(encoded=F('content_type__model') + '.' + F('codename'))\
+                               .filter(encoded__in=request.user.get_all_permissions())\
+                               .order_by('content_type__model')
       exceptions = []
       perms = []
       for perm in validated['permissions']:

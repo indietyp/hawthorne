@@ -4,6 +4,7 @@ from binascii import unhexlify
 
 import natural.date
 from django.conf import settings
+from django.contrib.auth.models import Permission
 from django.template.defaultfilters import date
 from django.template.defaulttags import register
 
@@ -49,3 +50,9 @@ def mask(value, percentage="0.6"):
     output.append(value[pointer] if pointer < characters else '•')
 
   return ''.join(output)
+
+
+@register.filter
+def permission_total_converter(value):
+  m = Permission.objects.all().count()
+  return round(len(value.get_all_permissions()) / m * 100)

@@ -109,12 +109,15 @@ class SourcemodPluginWrapper(RCONBase):
       except User.DoesNotExist:
         user = User.object.create_user(username=player['steamid'])
         user.is_active = False
+        user.is_steam = True
         user.save()
 
         populate(user)
 
-      online = UserOnlineTime.objects.filter(user=user, disconnected=None)
-      if online.count() > 1:
+      online = UserOnlineTime.objects.filter(user=user, disconnected=None)\
+                                     .order_by('-created_at')
+
+      if online.count() > 0:
         user.usetime = timezone.now() - online[0].connected
 
       users.append(user)
