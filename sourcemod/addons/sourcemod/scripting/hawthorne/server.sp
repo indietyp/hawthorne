@@ -14,13 +14,11 @@ void GetServerUUID() {
   GetConVarString(net_public_address, public_ip, sizeof(public_ip));
   char ip[20];
 
-  if(strlen(public_ip) == 0)
-  {
+  if (strlen(public_ip) == 0) {
     int raw_ip = GetConVarInt(host_ip);
     Format(ip, sizeof(ip), "%d.%d.%d.%d", raw_ip >>> 24 & 255, raw_ip >>> 16 & 255, raw_ip >>> 8 & 255, raw_ip & 255);
   }
-  else
-  {
+  else {
     Format(ip, sizeof(ip), public_ip);
   }
 
