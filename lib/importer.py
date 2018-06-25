@@ -94,6 +94,9 @@ class Importer:
     return True
 
   def sourceban(self):
+    superuser = User.objects.filter(is_superuser=True)
+    superuser = superuser[0] if superuser else None
+
     # get servers
     self.conn.query("""SELECT * FROM sb_servers""")
     r = self.conn.store_result()
@@ -199,9 +202,6 @@ class Importer:
     result = r.fetch_row(maxrows=0, how=1)
 
     for raw in result:
-      if raw['aid'] not in users or raw['sid'] not in servers:
-        continue
-
       try:
         steamid = SteamID.from_text(raw['authid']).as_64()
       except:
@@ -222,8 +222,19 @@ class Importer:
       b = Punishment()
       b.is_banned = True
       b.user = user
-      b.server = servers[raw['sid']] if raw['sid'] != 0 else None
-      b.created_by = users[raw['aid']]
+
+      if raw['sid'] in servers:
+        b.server = servers[raw['sid']] if raw['sid'] != 0 else None
+      else:
+        b.server = None
+
+      if raw['aid'] in users:
+        b.created_by = users[raw['aid']]
+      elif superuser:
+        b.created_by = superuser
+      else:
+        continue
+
       m.created_at = timezone.make_aware(datetime.datetime.fromtimestamp(raw['created']))
       b.reason = raw['reason']
       b.length = datetime.timedelta(seconds=raw['length']) if raw['length'] > 0 else None
@@ -241,9 +252,6 @@ class Importer:
     result = r.fetch_row(maxrows=0, how=1)
 
     for raw in result:
-      if raw['aid'] not in users or raw['sid'] not in servers:
-        continue
-
       try:
         steamid = SteamID.from_text(raw['authid']).as_64()
       except:
@@ -263,8 +271,19 @@ class Importer:
 
       m = Punishment()
       m.user = user
-      m.server = servers[raw['sid']] if raw['sid'] != 0 else None
-      m.created_by = users[raw['aid']]
+
+      if raw['sid'] in servers:
+        b.server = servers[raw['sid']] if raw['sid'] != 0 else None
+      else:
+        b.server = None
+
+      if raw['aid'] in users:
+        b.created_by = users[raw['aid']]
+      elif superuser:
+        b.created_by = superuser
+      else:
+        continue
+
       m.created_at = timezone.make_aware(datetime.datetime.fromtimestamp(raw['created']))
       m.reason = raw['reason']
       m.length = datetime.timedelta(seconds=raw['length']) if raw['length'] > 0 else None
