@@ -273,14 +273,14 @@ class Importer:
       m.user = user
 
       if raw['sid'] in servers:
-        b.server = servers[raw['sid']] if raw['sid'] != 0 else None
+        m.server = servers[raw['sid']] if raw['sid'] != 0 else None
       else:
-        b.server = None
+        m.server = None
 
       if raw['aid'] in users:
-        b.created_by = users[raw['aid']]
+        m.created_by = users[raw['aid']]
       elif superuser:
-        b.created_by = superuser
+        m.created_by = superuser
       else:
         continue
 
