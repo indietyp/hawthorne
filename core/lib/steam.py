@@ -1,9 +1,9 @@
-import re
+import logging
 import steamapi
 from django.conf import settings
 from core.models import Country
 
-
+logger = logging.getLogger(__name__)
 def populate(user, save=True):
   if user.is_steam:
     steamapi.core.APIConnection(api_key=settings.SOCIAL_AUTH_STEAM_API_KEY, validate_key=True)
@@ -29,7 +29,8 @@ def populate(user, save=True):
         user.first_name = realname[0]
         if len(realname) > 1:
           user.last_name = realname[-1]
-    except:
+    except Exception as e:
+      logger.warning("Could not populate user ({})", e)
       return
 
     if save:
