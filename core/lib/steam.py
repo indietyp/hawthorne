@@ -26,9 +26,9 @@ def populate(user, save=True):
 
       if realname is not None:
         realname = realname.split(' ')
-        user.first_name = realname[0]
+        user.first_name = realname[0][:30]
         if len(realname) > 1:
-          user.last_name = realname[-1]
+          user.last_name = realname[-1][:150]
     except Exception as e:
       logger.warning("Could not populate user ({})", e)
       return
