@@ -1,5 +1,5 @@
 # Contributing to Hawthorne
-First of, thank you for taking out time on you busy schedule to help this project out. In this document you can find all the important information to have a meaningful and easy time contributing to the project.
+First of, thank you for taking the time out of your busy schedule to help this project out. In this document, you will find all the information necessary to successfully contribute to the project.
 
 This CONTRIBUTING.md is adapted from the atom project.
 
@@ -17,10 +17,10 @@ This CONTRIBUTING.md is adapted from the atom project.
 
 
 ## How Can I Contribute?
-You can contribute in several ways, even for non tech savy people there's a lot to do.
+You can contribute in several ways. Even for non tech savy people, there's a lot to do.
 
 ### Reporting Bugs
-When you discovered have discovered a bug, please don't just write that something is wrong - but rather give the developer information to reproduce the problem. This can be done by providing:
+When you have discovered a bug, please do not simply complain - but rather give the developer information to reproduce the problem. This can be done by providing:
 * Screenshots
 * `hawthorne report`
 * Retrieving the last 100 lines of `/var/log/hawthorne/debug.log`
@@ -28,7 +28,7 @@ When you discovered have discovered a bug, please don't just write that somethin
 You can submit the bug either as an issue in the GitHub (I will probably not forget about it then - or post it in the Discord.)
 
 ### Suggesting Enhancements
-Enhancements are one of the most important things for this project, so please let them come. To get a good idea of what you want, please let us know a detailed description of what you want to suggest and also see if it is either not already on the roadmap or already suggested.
+Enhancements are one of the most important things for this project. To get a good idea of what you want, please write a detailed description of your suggestion. Please make sure your idea is not already on the project roadmap or has not already been suggested by another user.
 
 You can submit the suggestion either as an issue in the GitHub (I will probably not forget about it then - or post it in the Discord.)
 
