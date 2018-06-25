@@ -21,7 +21,7 @@ def token_retrieve(request):
 
   if token is not None:
     if len(token) == 20:
-      token = UUID(hexlify(b85decode(token.encode())))
+      token = UUID(hexlify(b85decode(token.encode())).decode())
 
     if len(token) == 25:
       hasher = Hasher(salt=settings.SECRET_KEY)
