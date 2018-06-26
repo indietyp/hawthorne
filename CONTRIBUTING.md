@@ -59,6 +59,7 @@ SourcePawn has no global styleguide so these are the one in the project used - t
 * 2 tabspace intend
 * 90-ish characters per line or less
 * `{` and `}` **never** on a line alone
+
     Valid:
     ```
         if () {
@@ -81,4 +82,5 @@ SourcePawn has no global styleguide so these are the one in the project used - t
     ```
 * Functions are in _CamelCase_
 * Variables are in _snake_case_
+* Variable and function names need to be short **and** expressive. Variablename `a` is **not valid**, `state` is **valid**
 * Global variables that permanent for a server or user lifetime are _UPPERCASE_
