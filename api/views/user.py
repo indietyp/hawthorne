@@ -105,7 +105,7 @@ def list(request, validated=[], *args, **kwargs):
     if validated['ip'] is not None:
       user.ip = validated['ip']
 
-    if 'connected' in validated['connected']:
+    if 'connected' in validated:
       user.online = validated['connected']
 
       server = Server.objects.get(id=validated['server'])
