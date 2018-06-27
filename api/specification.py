@@ -21,7 +21,7 @@ validation = {
                                    'country': {'type': 'string', 'nullable': True, 'default': None},
 
                                    'server': {'type': 'uuid'},
-                                   'connected': {'type': 'boolean', 'dependencies': ['server'], 'nullable': True, 'default': None},
+                                   'connected': {'type': 'boolean', 'dependencies': ['server']},
 
                                    'internal': {'type': 'boolean', 'default': False},
                                    'permissions': {'type': 'list', 'schema': {'regex': '\w+\.\w+\_\w+'},
