@@ -14,8 +14,8 @@ urlpatterns = [
     path('users', user.list, name='user.list'),
     path('users/<uuid:u>', user.detailed, name='user.detailed'),
     path('users/<steamid:s>', user.detailed, name='user.detailed'),
-    path('users/<uuid:u>/punishment', user.punishment, name='user.punishment'),
-    path('users/<uuid:u>/punishment/<uuid:p>', user.punishment_detailed, name='user.punishment[detailed]'),
+    path('users/<uuid:u>/punishments', user.punishment, name='user.punishment'),
+    path('users/<uuid:u>/punishments/<uuid:p>', user.punishment_detailed, name='user.punishment[detailed]'),
 
     # groups
     path('groups', group.list, name='group.list'),

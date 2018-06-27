@@ -46,6 +46,26 @@ public void OnPunishmentCheck(HTTPResponse response, any value) {
   else if (gagged) action = ACTION_GAG;
   else action = ACTION_MUTE;
   InitiatePunishment(client, action, reason, timeleft);
+  
+  char name[512];
+  char humanized_time[200];
+  char verbose[256];
+
+  switch (action) {
+    case ACTION_MUTE: verbose = "muted";
+    case ACTION_GAG: verbose = "gagged";
+    case ACTION_SILENCE: verbose = "silenced";
+  }
+  
+  HumanizeTime(timeleft, humanized_time);
+  GetClientName(client, name, sizeof(name));
+  
+  for (int i = 0; i <= MaxClients; i++) {
+    if (GetUserFlagBits(i) & ADMFLAG_GENERIC) {
+      CPrintToChat(i, "{red}%s{default} just connected.");
+      CPrintToChat(i, "They are %s for {blue}%s{default}.", verbose, humanized_time);
+    } 
+  }
 
   delete result;
 }

@@ -30,9 +30,8 @@ void AutoBan_OnClientDisconnect(client) {
 	Notice the notes I left.
 */
 
-public Action AutoBan_Timer(Handle timer)
-{
-	if(GetClientCount() > 0)
+public Action AutoBan_Timer(Handle timer) {
+  if(GetClientCount() > 0)
 	{
 		for(int client = 1; client <= MaxClients; client++)
 		{

@@ -58,7 +58,6 @@ public void OnPluginStart() {
 
 
   RegConsoleCmd("sm_reloadadmins", OnClientReloadAdmins, "", ADMFLAG_CONFIG);
-
   RegAdminCmd("sm_status", StatusCommand, 0);
 
   AddCommandListener(PunishCommandExecuted, "sm_ban");

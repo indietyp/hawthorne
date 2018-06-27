@@ -51,12 +51,12 @@ def jsonparse(content=None, code=200, encoder=None):
 
 def json_response(f):
   def wrapper(request, *args, **kwargs):
-    #try:
-    response = f(request, *args, **kwargs)
-    if response is None:
-      response = []
-    #except Exception as e:
-    #response = (e.__str__(), 500)
+    try:
+      response = f(request, *args, **kwargs)
+      if response is None:
+        response = []
+    except Exception as e:
+      response = (e.__str__(), 500)
 
     if not isinstance(response, tuple) or len(response) > 3:
       response = (response,)
@@ -84,7 +84,7 @@ def validation(a):
       document = dict(request.GET)
       schema = validation[request.method]
 
-      if not document:
+      if not document and request.method not in ['GET']:
         if isinstance(request._stream.stream, io.BufferedReader):
           data = request._stream.stream.peek()
         else:
