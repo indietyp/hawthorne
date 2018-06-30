@@ -44,6 +44,7 @@ urlpatterns = [
 
     # different current capabilities of the system
     path('capabilities/games', capabilities.games, name='capabilities.games'),
+    path('capabilities/permissions', capabilities.permissions, name='capabilities.permissions'),
 
     # mainframe connection
     path('mainframe/connect', mainframe.connect, name='mainframe.connect'),

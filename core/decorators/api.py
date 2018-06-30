@@ -119,7 +119,7 @@ def validation(a):
         converted[k] = v
 
         if 'coerce' not in converted[k]:
-          converted[k]['coerce'] = Normalize(converted[k]['type']).convert
+          converted[k]['coerce'] = Normalize(converted[k]['type'], converted[k]).convert
 
       v = BaseValidator(converted, update=True, purge_unknown=True)
       document = v.normalized(document)
