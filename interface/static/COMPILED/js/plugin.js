@@ -49,6 +49,29 @@
         width: '30%'
       }, 250);
     });
+    $('.timeTable tbody tr td .checkmarkContainer').on('mousedown', function() {
+      $(this).closest('tr').toggleClass('logSelected');
+      $('.checkboxDialogue').not($(this).parent().find('.checkboxDialogue')).fadeOut('fast');
+      if (!$(this).find('input').prop('checked')) {
+        $(this).parent().find('.checkboxDialogue').fadeIn('fast');
+      } else {
+        $(this).parent().find('.checkboxDialogue').fadeOut('fast');
+      }
+    });
+    $('[data-trigger=\'[modal/system/log/import/input/add]\']').on('click', function() {
+      $(this).parent().find('.appendInput').append('<input type=\'text\' placeholder=\'/home/server/addons/sourcemod/logs/error.log\' class=\'mbotSmall\'>');
+    });
+    $('[data-trigger=\'[composer/select/open]\']').on('click', function() {
+      $(this).parent('._Dynamic_Select').toggleClass('_Dynamic_Select_Activated');
+      $(this).parent('._Dynamic_Select').find('._Select').toggle();
+      $(this).parent('._Dynamic_Select').find('._Select').find('._Select_Search').find('input').focus();
+    });
+    $('[data-trigger=\'[composer/select/choose]\']').on('click', function() {
+      $(this).closest('._Dynamic_Select').find('._Title').text($(this).find('b').text());
+      $(this).closest('._Dynamic_Select').toggleClass('_Dynamic_Select_Activated');
+      $(this).closest('._Select').hide();
+    });
+    new ClipboardJS('[data-trigger="[clip/copy]"]');
   });
 
 }).call(this);

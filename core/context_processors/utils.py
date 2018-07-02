@@ -12,6 +12,9 @@ def announcement(request):
 
 
 def role(request):
+  if request.user.is_anonymous:
+    return {'role': ''}
+
   if request.user.is_superuser:
     return {'role': 'root'}
 
