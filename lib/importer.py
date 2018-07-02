@@ -25,7 +25,7 @@ class Importer:
       flags.save()
 
       role = Role.objects.get_or_create(name=raw['name'], default={'flags': flags,
-                                                                          'immunity': raw['immunity_level']})
+                                                                   'immunity': raw['immunity_level']})
       role.name = raw['name']
       role.flags = flags
       role.immunity = raw['immunity_level']
