@@ -208,7 +208,7 @@
   $.fn.fadeToggle = function(value) {
     this.forEach(function(item) {
       item.style.transition = "0.2s opacity ease";
-      if (item.style.display === "none") {
+      if (window.getComputedStyle(item).display === "none") {
         item.style.display = "block";
         return setTimeout(function() {
           return item.style.opacity = null;
@@ -282,12 +282,18 @@
   };
 
   $.fn.slideUp = function() {
+    if (this.length === 0) {
+      return;
+    }
     if (this[0].style.display === "block") {
       return this.slideToggle();
     }
   };
 
   $.fn.slideDown = function() {
+    if (this.length === 0) {
+      return;
+    }
     if (this[0].style.display === "none") {
       return this.slideToggle();
     }

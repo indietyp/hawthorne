@@ -28,8 +28,8 @@ $( ->
     return
 
   $('[data-trigger=\'[system/messages/open]\']').on 'click', ->
-    $(this).find('.notificationsArea').fadeToggle 'fast'
-    $(this).find('a').first().toggleClass 'userMenuActive'
+    $('.notificationsArea', this).fadeToggle 'fast'
+    $($('a', this)[0]).toggleClass 'userMenuActive'
     return
 
   $('.searchOverlay').on 'click', ->

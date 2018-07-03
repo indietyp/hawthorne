@@ -2,7 +2,6 @@
 #= require style.ext.coffee
 #= require style.time.coffee
 
-
 copyTextToClipboard = (text) ->
   textArea = document.createElement('textarea')
   # https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript

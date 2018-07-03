@@ -37,7 +37,7 @@ $.fn.toggleClass = (className, b) ->
   @forEach (item) ->
     classList = item.classList
     if typeof b != 'boolean'
-      b = !classList.contains(className)
+      b = not classList.contains(className)
 
     classList[if b then 'add' else 'remove'].apply classList, className.split(/\s/)
     return
@@ -124,7 +124,7 @@ $.fn.fadeToggle = (value) ->
   @forEach((item) ->
     item.style.transition = "0.2s opacity ease"
 
-    if item.style.display == "none"
+    if window.getComputedStyle(item).display == "none"
       item.style.display = "block"
       setTimeout(->
         item.style.opacity = null
@@ -187,10 +187,16 @@ $.fn.slideToggle = ->
   this
 
 $.fn.slideUp = ->
+  if this.length == 0
+    return
+
   if this[0].style.display == "block"
     @slideToggle()
 
 $.fn.slideDown = ->
+  if this.length == 0
+    return
+
   if this[0].style.display == "none"
     @slideToggle()
 

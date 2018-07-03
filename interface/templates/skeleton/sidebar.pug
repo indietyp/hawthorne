@@ -11,7 +11,7 @@
   img(src=request.user.avatar)
   .username= request.user.namespace
   .role= role
-  button.btnLogout Logout
+  button.btnLogout(onclick="window.location='{% url 'logout' %}';") Logout
 
 ul
   .t MENU

@@ -25,8 +25,8 @@
       $('.modal').fadeOut('fast');
     });
     $('[data-trigger=\'[system/messages/open]\']').on('click', function() {
-      $(this).find('.notificationsArea').fadeToggle('fast');
-      $(this).find('a').first().toggleClass('userMenuActive');
+      $('.notificationsArea', this).fadeToggle('fast');
+      $($('a', this)[0]).toggleClass('userMenuActive');
     });
     $('.searchOverlay').on('click', function() {
       $('.searchOverlay').fadeOut('fast');
