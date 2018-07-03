@@ -12,12 +12,13 @@
   .username= request.user.namespace
   .role= role
   button.btnLogout Logout
+
 ul
   .t MENU
   li.title
     a(href='')
       i.icon.ion-md-globe
-      | Home
+      | Dashboard
   li.title
     a(href='#', data-trigger='[dropdown/toggle]')
       i.icon.ion-ios-warning
@@ -26,51 +27,27 @@ ul
     .expand
       ul
         li
-          a(href='')  How
+          a(href='') Mutes
         li
-          a(href='')  To
+          a(href='') Gags
         li
-          a(href='')  Slaughter
-        li
-          a(href='')  A puppy
+          a(href='') Bans
   li.title
     a(href='#', data-trigger='[dropdown/toggle]')
       i.icon.ion-ios-people
-      |  Players
-      i.icon.ion-ios-arrow-down.more
-    .expand
-      ul
-        li
-          a(href='')  How
-        li
-          a(href='')  To
-        li
-          a(href='')  Slaughter
-        li
-          a(href='')  A puppy
+      | Players
   li.title
     a(href='')
       i.icon.ion-ios-flash
-      |  Admins
+      | Accounts
   li.title
     a(href='')
       i.icon.ion-logo-buffer
-      |  Instances
-  li.title
-    a(href='')
-      i.icon.ion-ios-close-circle
-      |  Bans
+      | Servers
   li.title
     a(href='')
       i.icon.ion-ios-megaphone
-      |  Announcements
-  li.title
-    a(href='')
-      i.icon.ion-ios-chatbubbles
-      |  Chat
-  li.title
-    a(href='')
-      i.icon.ion-ios-settings
-      |  Settings
+      | Announcements
+
 
 // window.vc.change('settings')

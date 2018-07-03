@@ -77,5 +77,5 @@ html(lang='en')
           button(type='text') Login
       .divider
         hr
-        button(type='text') Login with Steam
+        button(type='text', onclick="window.location.href='{% url 'social:begin' 'steam' %}?{{ request.GET.urlencode }}'") Login with Steam
 
