@@ -1,5 +1,8 @@
-$( ->
-  #$(".menu").height($(document).outerHeight());
+$(->
+  init()
+)
+
+init = ->
   $('[data-trigger=\'[dropdown/toggle]\']').on 'click', ->
     $('.expand').not($('.expand', this.parentElement)).slideUp()
     $('.menu > ul > li > a').not($(this)).removeClass 'navActive'
@@ -80,4 +83,6 @@ $( ->
 
   new ClipboardJS('[data-trigger="[clip/copy]"]')
   return
-)
+
+window._ =
+  init: init
