@@ -48,4 +48,22 @@ public Action Event_PlayerSpawn(Event event, const char[] name, bool dontBroadca
 
 public void OnAllPluginsLoaded() {
   hextags = LibraryExists("hextags");
+  smac = LibraryExists("smac");
+}
+
+public Action SMAC_OnCheatDetected(int client, const char[] module, DetectionType type, Handle info) {
+  if (!smac || !MODULE_SMAC.BoolValue) return Plugin_Continue;
+  char reason[512];
+  Format(reason, sizeof(reason), "[SMAC] %s has detected a cheat.", module);
+  
+  selected_action[client] = ACTION_BAN;
+  selected_player[client] = client;
+  selected_conflict[client] = -1;
+  selected_duration[client] = -1;
+  
+  strcopy(selected_reason[client], sizeof(selected_reason[]), reason);
+  
+  PunishExecution(client);
+  
+  return Plugin_Continue;
 }

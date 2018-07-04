@@ -167,9 +167,9 @@ JSONArray AddToList() {
 
       player.SetString("id", CLIENTS[i]);
       player.SetString("username", username);
-      // player.SetString("steamid", steamid);
-
-      // player.SetInt("team", GetClientTeam(i));
+      player.SetString("steamid", steamid);
+      
+      player.SetInt("team", GetClientTeam(i));
       player.SetInt("kills", kills);
       player.SetInt("deaths", deaths);
       player.SetInt("online", RoundFloat(online));

@@ -16,9 +16,11 @@ Credits to ...
 #include <regex>
 #include <geoip>
 #include <multicolors>
+#include <advanced_motd>
 
 #undef REQUIRE_PLUGIN
 #include <hextags>
+#include <smac>
 #define REQUIRE_PLUGIN
 
 
@@ -32,7 +34,7 @@ Credits to ...
 #include "hawthorne/punish.sp"
 #include "hawthorne/rcon.sp"
 #include "hawthorne/misc.sp"
-// #include "hawthorne/autoban.sp"
+#include "hawthorne/duplicate.sp"
 
 #include "hawthorne/utils/natives.sp"
 #include "hawthorne/utils/events.sp"
@@ -91,7 +93,7 @@ public void OnConfigsExecuted() {
 
   for (n = strlen(endpoint) - 1; n >= 0; n--) {
     if (endpoint[n] == '/') {
-      endpoint[n] = ' ';
+      endpoint[n] = '\0';
     } else {
       break;
     }

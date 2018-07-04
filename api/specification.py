@@ -1,5 +1,3 @@
-from api import utils
-
 validation = {
     'user': {
         'list': {
@@ -212,6 +210,10 @@ validation = {
                                     'password': {'type': 'string', 'required': True}},
                      'permission': ['core.view_user']},
         },
+        'sourcemod[verification]': {
+            'GET': {'parameters': {'target': {'type': 'uuid', 'required': True}},
+                    'permission': ['core.verify_user']}
+        }
     },
     'steam': {
         'search': {
@@ -241,5 +243,5 @@ validation = {
             'PUT': {'parameters': {'mainframe': {'type': 'string', 'default': None, 'nullable': True}},
                     'permission': ['core.add_mainframe']},
         }
-    }
+    },
 }

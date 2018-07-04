@@ -37,6 +37,7 @@ urlpatterns = [
     path('system/authentication', system.authentication, name='system.authentication'),
     path('system/messages', system.chat, name='system.chat'),
     path('system/logs', system.chat, name='system.chat'),
+    path('system/sourcemod/verification', system.sourcemod_verification, name='system.sourcemod[verification]'),
 
     # steam
     path('steam/search', steam.search, name='steam.search'),

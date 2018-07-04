@@ -58,6 +58,8 @@ void OnClientIsInAPI(HTTPResponse response, any value) {
   
   delete result;
   delete output;
+  
+  Duplicate_OnPlayerAuthorized(client);
 }
 
 void AdminPunishmentNotify(HTTPResponse response, any value) {

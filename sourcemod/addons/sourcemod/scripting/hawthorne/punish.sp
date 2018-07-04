@@ -1,5 +1,5 @@
 void Punishment_OnPluginStart() {
-  BuildPath(Path_SM, PUNISHMENT_TIMES,  sizeof(PUNISHMENT_TIMES),  "configs/hawthorne/punishment.txt");
+  BuildPath(Path_SM, PUNISHMENT_TIMES,  sizeof(PUNISHMENT_TIMES),  "configs/hawthorne/punishments.txt");
   BuildPath(Path_SM, BAN_REASONS,       sizeof(BAN_REASONS),       "configs/hawthorne/reasons/ban.txt");
   BuildPath(Path_SM, GAG_REASONS,       sizeof(GAG_REASONS),       "configs/hawthorne/reasons/gag.txt");
   BuildPath(Path_SM, MUTE_REASONS,      sizeof(MUTE_REASONS),      "configs/hawthorne/reasons/mute.txt");
@@ -11,7 +11,7 @@ public void Punishment_OnClientPutInServer(int client) {
 
   char url[512] = "users/";
   StrCat(url, sizeof(url), CLIENTS[client]);
-  StrCat(url, sizeof(url), "/punishment?banned=false&kicked=false&resolved=false&server=");
+  StrCat(url, sizeof(url), "/punishments?banned=false&kicked=false&resolved=false&server=");
   StrCat(url, sizeof(url), SERVER);
 
   httpClient.Get(url, OnPunishmentCheck, client);
@@ -46,7 +46,7 @@ public void OnPunishmentCheck(HTTPResponse response, any value) {
   else if (gagged) action = ACTION_GAG;
   else action = ACTION_MUTE;
   InitiatePunishment(client, action, reason, timeleft);
-  
+
   char name[512];
   char humanized_time[200];
   char verbose[256];
@@ -56,15 +56,15 @@ public void OnPunishmentCheck(HTTPResponse response, any value) {
     case ACTION_GAG: verbose = "gagged";
     case ACTION_SILENCE: verbose = "silenced";
   }
-  
+
   HumanizeTime(timeleft, humanized_time);
   GetClientName(client, name, sizeof(name));
-  
+
   for (int i = 0; i <= MaxClients; i++) {
     if (GetUserFlagBits(i) & ADMFLAG_GENERIC) {
       CPrintToChat(i, "{red}%s{default} just connected.");
       CPrintToChat(i, "They are %s for {blue}%s{default}.", verbose, humanized_time);
-    } 
+    }
   }
 
   delete result;
@@ -350,7 +350,7 @@ public int PunishExecution(int client) {
 
   char url[512] = "users/";
   StrCat(url, sizeof(url), CLIENTS[GetClientOfUserId(selected_player[client])]);
-  StrCat(url, sizeof(url), "/punishment");
+  StrCat(url, sizeof(url), "/punishments");
 
   if (selected_conflict[client] == CONFLICT_NONE) {
 
@@ -420,7 +420,7 @@ public void APIPunishmentExtendResponseCall(HTTPResponse response, any value) {
 
   char url[512] = "users/";
   StrCat(url, sizeof(url), CLIENTS[GetClientOfUserId(selected_player[client])]);
-  StrCat(url, sizeof(url), "/punishment/");
+  StrCat(url, sizeof(url), "/punishments/");
   StrCat(url, sizeof(url), uuid);
   StrCat(url, sizeof(url), "&plugin=false");
 

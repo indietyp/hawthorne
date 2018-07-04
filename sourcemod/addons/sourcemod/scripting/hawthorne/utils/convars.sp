@@ -42,6 +42,13 @@ void Hawthorne_InitConVars() {
                                    FCVAR_NONE,
                                    true, 0.0,
                                    true, 1.0);
+  
+  MODULE_SMAC       = CreateConVar("ht_smac",
+                                   "1",
+                                   "Enables hextag support",
+                                   FCVAR_NONE,
+                                   true, 0.0,
+                                   true, 1.0);
 
 
   MODULE_PUNISHMENT_GLOBAL= CreateConVar("ht_global_mutegag",
@@ -65,7 +72,7 @@ void Hawthorne_InitConVars() {
                                          true, 0.0,
                                          true, 1.0);
 
-  MODULE_AUTOBAN          = CreateConVar("ht_autoban",
+  MODULE_DUPLICATE        = CreateConVar("ht_duplicate",
                                          "1",
                                          "Enable automatic bans for suspected alternate accounts from already banned users.",
                                          FCVAR_NONE,
