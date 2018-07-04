@@ -60,7 +60,9 @@ stock void AdvMOTD_ShowMOTDPanel(int client, const char[] title, const char[] ms
 			pack.WriteCell(0);
 		}
 
-		QueryClientConVar(client, "cl_disablehtmlmotd", AdvMOTD_OnQueryFinished, pack);
+		if(IsClientInGame(client)) {
+			QueryClientConVar(client, "cl_disablehtmlmotd", AdvMOTD_OnQueryFinished, pack);
+		}
 	} else {
 		ShowVGUIPanel(client, "info", kv, visible);
 		CloseHandle(kv);
