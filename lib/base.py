@@ -49,7 +49,7 @@ class RCONBase(RCON):
       self.authenticate()
       for cmd in command:
         response = self.execute(cmd)
-        output.append(response.text)
+        output.append(response.body.decode('utf-8'))
 
     except RCONAuthenticationError:
       pass
