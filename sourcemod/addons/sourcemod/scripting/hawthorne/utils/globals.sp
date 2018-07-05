@@ -46,10 +46,11 @@ ConVar MANAGER,
        MODULE_PUNISH,
        MODULE_LOG,
        MODULE_PUNISHMENT_GLOBAL,
-       MODULE_AUTOBAN,
+       MODULE_DUPLICATE,
        MODULE_BAN_GLOBAL,
        MODULE_HEXTAGS,
-       MODULE_HEXTAGS_FORMAT;
+       MODULE_HEXTAGS_FORMAT,
+       MODULE_SMAC;
 
 char endpoint[512];
 
@@ -60,7 +61,8 @@ char SERVER_HOSTNAME[512],
      SILENCE_REASONS[PLATFORM_MAX_PATH],
      PUNISHMENT_TIMES[PLATFORM_MAX_PATH];
 
-bool hextags;
+bool hextags,
+     smac;
 
 char ht_tag[MAXPLAYERS + 1][128];
 

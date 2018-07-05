@@ -14,8 +14,8 @@ urlpatterns = [
     path('users', user.list, name='user.list'),
     path('users/<uuid:u>', user.detailed, name='user.detailed'),
     path('users/<steamid:s>', user.detailed, name='user.detailed'),
-    path('users/<uuid:u>/punishment', user.punishment, name='user.punishment'),
-    path('users/<uuid:u>/punishment/<uuid:p>', user.punishment_detailed, name='user.punishment[detailed]'),
+    path('users/<uuid:u>/punishments', user.punishment, name='user.punishment'),
+    path('users/<uuid:u>/punishments/<uuid:p>', user.punishment_detailed, name='user.punishment[detailed]'),
 
     # groups
     path('groups', group.list, name='group.list'),
@@ -37,6 +37,7 @@ urlpatterns = [
     path('system/authentication', system.authentication, name='system.authentication'),
     path('system/messages', system.chat, name='system.chat'),
     path('system/logs', system.chat, name='system.chat'),
+    path('system/sourcemod/verification', system.sourcemod_verification, name='system.sourcemod[verification]'),
 
     # steam
     path('steam/search', steam.search, name='steam.search'),
@@ -44,6 +45,7 @@ urlpatterns = [
 
     # different current capabilities of the system
     path('capabilities/games', capabilities.games, name='capabilities.games'),
+    path('capabilities/permissions', capabilities.permissions, name='capabilities.permissions'),
 
     # mainframe connection
     path('mainframe/connect', mainframe.connect, name='mainframe.connect'),

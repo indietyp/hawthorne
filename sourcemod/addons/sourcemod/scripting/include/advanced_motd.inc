@@ -14,7 +14,7 @@ typedef MOTDFailure = function void (int client, MOTDFailureReason reason);
 
 /**
  * Displays an MOTD panel to a client with advanced options
- * 
+ *
  * @param client		Client index the panel should be shown to
  * @param title			Title of the MOTD panel (not displayed on all games)
  * @param msg			Content of the MOTD panel; could be a URL, plain text, or a stringtable index
@@ -38,7 +38,7 @@ stock void AdvMOTD_ShowMOTDPanel(int client, const char[] title, const char[] ms
 			return;
 		}
 	}
-	
+
 	KeyValues kv = new KeyValues("data");
 	kv.SetString("title", title);
 	kv.SetNum("type", type);
@@ -46,12 +46,12 @@ stock void AdvMOTD_ShowMOTDPanel(int client, const char[] title, const char[] ms
 	if(big) {
 		kv.SetNum("customsvr", 1);
 	}
-	
+
 	if(verify) {
 		DataPack pack = new DataPack();
 		pack.WriteCell(kv);
 		pack.WriteCell(visible);
-		
+
 		if(callback != INVALID_FUNCTION) {
 			Handle fwd = CreateForward(ET_Ignore, Param_Cell, Param_Cell);
 			AddToForward(fwd, null, callback);
@@ -59,8 +59,10 @@ stock void AdvMOTD_ShowMOTDPanel(int client, const char[] title, const char[] ms
 		} else {
 			pack.WriteCell(0);
 		}
-		
-		QueryClientConVar(client, "cl_disablehtmlmotd", AdvMOTD_OnQueryFinished, pack);
+
+		if(IsClientInGame(client)) {
+			QueryClientConVar(client, "cl_disablehtmlmotd", AdvMOTD_OnQueryFinished, pack);
+		}
 	} else {
 		ShowVGUIPanel(client, "info", kv, visible);
 		CloseHandle(kv);
@@ -73,10 +75,10 @@ public void AdvMOTD_OnQueryFinished(QueryCookie cookie, int client, ConVarQueryR
 	bool visible = pack.ReadCell();
 	Handle fwd = pack.ReadCell();
 	delete pack;
-	
+
 	if(result != ConVarQuery_Okay || StringToInt(cvarValue)) {
 		delete kv;
-		
+
 		if(fwd) {
 			Call_StartForward(fwd);
 			Call_PushCell(client);
@@ -85,7 +87,7 @@ public void AdvMOTD_OnQueryFinished(QueryCookie cookie, int client, ConVarQueryR
 		}
 		return;
 	}
-	
+
 	ShowVGUIPanel(client, "info", kv, visible);
 	delete kv;
 }

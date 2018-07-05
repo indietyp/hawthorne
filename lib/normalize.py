@@ -1,6 +1,7 @@
 class Normalize:
-  def __init__(self, t):
+  def __init__(self, t, r=None):
     self.type = t
+    self.reference = r
 
   def __2i(self, v):
     if isinstance(v, list):
@@ -40,6 +41,11 @@ class Normalize:
 
     if self.type == 'list':
       if isinstance(v, list):
+        if 'schema' in self.reference and 'type' in self.reference['schema']:
+          normalizer = Normalize(self.reference['schema']['type'], self.reference)
+          for i in range(len(v)):
+            v[i] = normalizer.convert(v[i])
+
         return v
       else:
         return self.__2l(v)

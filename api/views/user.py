@@ -4,7 +4,7 @@ import datetime
 import re
 
 from django.contrib.auth.models import Group, Permission
-from django.db.models import F, Q, DateTimeField, ExpressionWrapper
+from django.db.models import F, Q, DateTimeField, ExpressionWrapper, Case, When, CharField, BooleanField
 from django.utils import timezone
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
@@ -26,18 +26,46 @@ from lib.sourcemod import SourcemodPluginWrapper
 @require_http_methods(['GET', 'PUT'])
 def list(request, validated=[], *args, **kwargs):
   if request.method == 'GET':
-    # role query
     limit = validated['limit']
     offset = validated['offset']
 
-    selected = User.objects.annotate(steamid=F('username'), name=F('namespace'), has_panel_access=F('is_active')) \
-      .values('id', 'name', 'steamid', 'profile', 'has_panel_access') \
-      .filter(username__contains=validated['match'])
+    selected = User.objects.annotate(steamid=Case(When(is_steam=True, then=F('username')),
+                                                  default=None,
+                                                  output_field=CharField()),
+                                     is_banned=Case(When(punishment=None, then=False),
+                                                    default=F('punishment__is_banned'),
+                                                    output_field=BooleanField()),
+                                     is_muted=Case(When(punishment=None, then=False),
+                                                   default=F('punishment__is_muted'),
+                                                   output_field=BooleanField()),
+                                     is_gagged=Case(When(punishment=None, then=False),
+                                                    default=F('punishment__is_gagged'),
+                                                    output_field=BooleanField()),
+                                     name=F('namespace'), is_internal=F('is_active'))\
+                           .filter(username__contains=validated['match'])
 
-    if validated['has_panel_access'] is not None:
-      selected = selected.filter(has_panel_access=validated['has_panel_access'])
+    if validated['internal']:
+      selected = selected.filter(is_internal=validated['internal'])
+
+    if validated['banned']:
+      selected = selected.exclude(punishment=None)\
+                         .filter(punishment__is_banned=validated['banned'],
+                                 punishment__resolved=False)
+
+    if validated['muted']:
+      selected = selected.exclude(punishment=None)\
+                         .filter(punishment__is_muted=True, punishment__resolved=False)
+
+    if validated['gagged']:
+      selected = selected.exclude(punishment=None)\
+                         .filter(punishment__is_gagged=True, punishment__resolved=False)
+
+    if validated['role']:
+      selected = selected.filter(role__id=validated['role'])
 
     output = []
+    selected = selected.values('id', 'name', 'steamid', 'profile', 'is_internal',
+                               'is_banned', 'is_gagged', 'is_muted')
     selected = selected[offset:] if limit < 0 else selected[offset:limit]
 
     for user in selected:
@@ -105,7 +133,7 @@ def list(request, validated=[], *args, **kwargs):
     if validated['ip'] is not None:
       user.ip = validated['ip']
 
-    if validated['connected'] is not None:
+    if 'connected' in validated:
       user.online = validated['connected']
 
       server = Server.objects.get(id=validated['server'])
@@ -308,11 +336,7 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
       user.delete()
 
       return 'CASCADE DELETE', 200
-
-    elif validated['role'] is not None:
-      m = Membership.objects.get(user=user, role=validated['role'])
-      m.delete()
-    else:
+    elif validated['reset']:
       if not user.is_active:
         return 'user not using panel', 403
 
@@ -326,13 +350,21 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
       user.is_staff = False
       user.is_superuser = False
 
-      if validated['reset']:
-        user.user_permissions.clear()
-        user.groups.clear()
+      user.user_permissions.clear()
+      user.groups.clear()
+    else:
+      if validated['role']:
+        m = Membership.objects.get(user=user, role=validated['role'])
+        m.delete()
+
+      for role in validated['role']:
+        m = Membership.objects.get(user=user, role=role)
+        m.delete()
+
+      for group in validated['groups']:
+        user.groups.remove(Group.objects.get(id=group))
 
     user.save()
-
-    return '+1'
 
 
 @csrf_exempt

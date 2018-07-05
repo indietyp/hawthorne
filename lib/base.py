@@ -45,14 +45,17 @@ class RCONBase(RCON):
       if isinstance(command, str):
         command = [command]
 
-      with RCON(self.addr, self.pwd, self._timeout) as rcon:
-        for cmd in command:
-          response = rcon.execute(cmd)
-          output.append(response.body.decode("utf-8"))
+      self.connect()
+      self.authenticate()
+      for cmd in command:
+        response = self.execute(cmd)
+        output.append(response.text)
 
     except RCONAuthenticationError:
       pass
     except RCONTimeoutError:
       pass
+    finally:
+      self.close()
 
     return output

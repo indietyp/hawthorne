@@ -94,6 +94,7 @@ class User(AbstractUser):
     permissions = [
         ('view_user', 'Can view user'),
         ('kick_user', 'Can kick user'),
+        ('verify_user', 'Can verify user'),
         ('view_group', 'Can view user group'),
 
         ('view_settings', 'Can view settings'),
@@ -258,7 +259,7 @@ class Punishment(BaseModel):
   is_muted = models.BooleanField(default=False)
   is_gagged = models.BooleanField(default=False)
 
-  created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='punishment_created_by')
+  created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='punishment_created_by', null=True)
   updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='punishment_updated_by', null=True)
 
   class Meta:

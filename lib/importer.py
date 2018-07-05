@@ -25,7 +25,7 @@ class Importer:
       flags.save()
 
       role = Role.objects.get_or_create(name=raw['name'], default={'flags': flags,
-                                                                          'immunity': raw['immunity_level']})
+                                                                   'immunity': raw['immunity_level']})
       role.name = raw['name']
       role.flags = flags
       role.immunity = raw['immunity_level']
@@ -308,9 +308,9 @@ class Importer:
 
     users = {}
     for raw in result:
-      query = User.objects.filter(username=result['steamid'])
+      query = User.objects.filter(username=raw['steamid'])
       if not query:
-        user = User.objects.create_user(username=result['steamid'])
+        user = User.objects.create_user(username=raw['steamid'])
         user.is_active = False
         user.is_steam = True
 
@@ -319,7 +319,7 @@ class Importer:
         user = query[0]
       user.save()
 
-      users[result["id"]] = user
+      users[raw["id"]] = user
 
     self.conn.query("""SELECT * FROM bp_servers""")
     r = self.conn.store_result()

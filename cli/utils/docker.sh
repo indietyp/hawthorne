@@ -7,7 +7,7 @@ DB_PORT=${DB_PORT:-3306}
 DEMO=${DEMO:-0}
 ROOT=${ROOT:-root}
 
-edis-server --daemonize yes
+redis-server --daemonize yes
 /hawthorne/cli/utils/wait.sh ${DB_HOST}:${DB_PORT}
 
 if [ $DEMO -ne 1 ]; then

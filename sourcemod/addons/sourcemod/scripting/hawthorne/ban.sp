@@ -17,7 +17,7 @@ void Bans_OnClientIDReceived(int client) {
 
   char url[512] = "users/";
   StrCat(url, sizeof(url), CLIENTS[client]);
-  StrCat(url, sizeof(url), "/punishment?banned=true&muted=false&gagged=false&resolved=false&kicked=false&server=");
+  StrCat(url, sizeof(url), "/punishments?banned=true&muted=false&gagged=false&resolved=false&kicked=false&server=");
   StrCat(url, sizeof(url), SERVER);
 
   httpClient.Get(url, OnBanCheck, client);
@@ -83,7 +83,7 @@ public Action OnBanClient(int client, int time, int flags, const char[] reason, 
 
   char url[512] = "users/";
   StrCat(url, sizeof(url), CLIENTS[client]);
-  StrCat(url, sizeof(url), "/punishment");
+  StrCat(url, sizeof(url), "/punishments");
 
   httpClient.Put(url, payload, APINoResponseCall);
   delete payload;

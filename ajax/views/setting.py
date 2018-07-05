@@ -8,13 +8,13 @@ from ajax.views import renderer
 from core.models import User, Token
 
 
-def get_perms(o, request, *args, **kwargs):
+def get_perms(o, user, *args, **kwargs):
   modules = [c for c in ContentType.objects.filter(app_label__in=['core', 'log']) if
              Permission.objects.filter(content_type=c).count() > 0]
 
   perms = Permission.objects.all()\
                             .annotate(encoded=F('content_type__model') + '.' + F('codename'))\
-                            .filter(encoded__in=request.user.get_all_permissions())\
+                            .filter(encoded__in=user.get_all_permissions())\
                             .order_by('content_type__model')
 
   used = o.permissions if 'permissions' in [f.name for f in o._meta.get_fields()] else o.user_permissions

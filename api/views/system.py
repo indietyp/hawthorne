@@ -6,11 +6,13 @@ from django.db.models import F
 from django.contrib.auth.models import Permission
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.http import HttpResponse
 
 from core.decorators.api import json_response, validation
 from core.decorators.auth import authentication_required, permission_required
-from core.models import User, Server, Token
+from core.models import User, Server, Token, Punishment
 from log.models import ServerChat
+from lib.sourcemod import SourcemodPluginWrapper
 
 
 @csrf_exempt
@@ -152,3 +154,25 @@ def authentication(request, validated={}, *args, **kwargs):
       return [], 200
   else:
       return [], 401
+
+
+@csrf_exempt
+@authentication_required
+@permission_required
+@validation
+@require_http_methods(['GET'])
+def sourcemod_verification(request, validated={}, *args, **kwargs):
+  target = request.COOKIES.get('id')
+  if target and Punishment.objects.filter(is_banned=True, user__id=target, resolved=False):
+    punishment = Punishment()
+    punishment.user = User.objects.get(id=target)
+    punishment.is_banned = True
+    punishment.reason = "[Duplicate] This account has been detected as duplicate account."
+    punishment.save()
+
+    for s in Server.objects.all():
+      SourcemodPluginWrapper(s).ban(punishment)
+
+  response = HttpResponse("You are reading this?", content_type="text/plain")
+  response.set_cookie(key='id', value=validated['target'])
+  return response

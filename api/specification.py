@@ -1,17 +1,17 @@
-from api import utils
-
 validation = {
     'user': {
         'list': {
             'GET': {'parameters': {'offset': {'type': 'integer', 'min': 0, 'default': 0},
                                    'limit': {'type': 'integer', 'min': -1, 'default': -1},
                                    'match': {'type': 'string', 'default': ''},
-                                   'has_panel_access': {'type': 'boolean', 'default': None, 'nullable': True},
+                                   'internal': {'type': 'boolean', 'default': None, 'nullable': True},
                                    'role': {'type': 'uuid', 'default': None, 'nullable': True},
+
                                    'banned': {'type': 'boolean', 'nullable': True, 'default': None},
                                    'kicked': {'type': 'boolean', 'nullable': True, 'default': None},
                                    'muted': {'type': 'boolean', 'nullable': True, 'default': None},
-                                   'gagged': {'type': 'boolean', 'nullable': True, 'default': None}},
+                                   'gagged': {'type': 'boolean', 'nullable': True, 'default': None},
+                                   'ip': {'type': 'boolean', 'nullable': True, 'default': None}},
                     'permission': ['core.view_user']},
             'PUT': {'parameters': {'steamid': {'type': 'integer', 'min': 76561197960265729, 'max': 76561202255233023, 'excludes': ['id']},
                                    'id': {'type': 'uuid', 'excludes': ['steamid']},
@@ -21,7 +21,7 @@ validation = {
                                    'country': {'type': 'string', 'nullable': True, 'default': None},
 
                                    'server': {'type': 'uuid'},
-                                   'connected': {'type': 'boolean', 'dependencies': ['server'], 'nullable': True},
+                                   'connected': {'type': 'boolean', 'dependencies': ['server']},
 
                                    'internal': {'type': 'boolean', 'default': False},
                                    'permissions': {'type': 'list', 'schema': {'regex': '\w+\.\w+\_\w+'},
@@ -40,13 +40,16 @@ validation = {
                                     'role': {'type': 'uuid', 'default': None, 'nullable': True, 'required': False},
                                     'group': {'type': 'integer', 'default': None, 'nullable': True, 'required': False},
 
-                                    'roles': {'type': 'list', 'default': None, 'nullable': True, 'schema': {'type': 'uuid'}},
-                                    'groups': {'type': 'list', 'default': None, 'nullable': True, 'schema': {'type': 'integer'}},
-                                    'permissions': {'type': 'list', 'schema': {'regex': '\w+\.\w+\_\w+'}, 'nullable': True, 'default': None}},
+                                    'roles': {'type': 'list', 'default': [], 'schema': {'type': 'uuid'}},
+                                    'groups': {'type': 'list', 'default': [], 'schema': {'type': 'integer'}},
+                                    'permissions': {'type': 'list', 'schema': {'regex': '\w+\.\w+\_\w+'}, 'default': []}},
                      'permission': ['core.change_user']},
             'DELETE': {'parameters': {'purge': {'type': 'boolean', 'default': False, 'required': False},
                                       'reset': {'type': 'boolean', 'default': True, 'required': False},
-                                      'role': {'type': 'uuid', 'default': None, 'nullable': True, 'required': False}},
+                                      'role': {'type': 'uuid', 'default': None, 'nullable': True, 'required': False},
+
+                                      'roles': {'type': 'list', 'default': [], 'schema': {'type': 'uuid'}},
+                                      'groups': {'type': 'list', 'default': [], 'schema': {'type': 'integer'}},},
                        'permission': ['core.delete_user']}
         },
         'punishment': {
@@ -207,6 +210,10 @@ validation = {
                                     'password': {'type': 'string', 'required': True}},
                      'permission': ['core.view_user']},
         },
+        'sourcemod[verification]': {
+            'GET': {'parameters': {'target': {'type': 'uuid', 'required': True}},
+                    'permission': ['core.verify_user']}
+        }
     },
     'steam': {
         'search': {
@@ -221,6 +228,10 @@ validation = {
         'games': {
             'GET': {'parameters': {},
                     'permission': ['core.view_capabilities']}
+        },
+        'permissions': {
+            'GET': {'parameters': {},
+                    'permission': ['core.view_capabilities']}
         }
     },
     'mainframe': {
@@ -232,5 +243,5 @@ validation = {
             'PUT': {'parameters': {'mainframe': {'type': 'string', 'default': None, 'nullable': True}},
                     'permission': ['core.add_mainframe']},
         }
-    }
+    },
 }

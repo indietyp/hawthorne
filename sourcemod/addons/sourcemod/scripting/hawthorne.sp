@@ -16,9 +16,11 @@ Credits to ...
 #include <regex>
 #include <geoip>
 #include <multicolors>
+#include <advanced_motd>
 
 #undef REQUIRE_PLUGIN
 #include <hextags>
+#include <smac>
 #define REQUIRE_PLUGIN
 
 
@@ -32,7 +34,7 @@ Credits to ...
 #include "hawthorne/punish.sp"
 #include "hawthorne/rcon.sp"
 #include "hawthorne/misc.sp"
-// #include "hawthorne/autoban.sp"
+#include "hawthorne/duplicate.sp"
 
 #include "hawthorne/utils/natives.sp"
 #include "hawthorne/utils/events.sp"
@@ -46,7 +48,7 @@ public Plugin myinfo = {
   author = "indietyp",
   description = "Admin plugin for the integration into the hawthorne gameserver panel, for managing multiple servers from an web interface.",
   version = "0.8.3",
-  url = "hawthorne.in"
+  url = "hawthornepanel.org"
 };
 
 
@@ -58,7 +60,6 @@ public void OnPluginStart() {
 
 
   RegConsoleCmd("sm_reloadadmins", OnClientReloadAdmins, "", ADMFLAG_CONFIG);
-
   RegAdminCmd("sm_status", StatusCommand, 0);
 
   AddCommandListener(PunishCommandExecuted, "sm_ban");
@@ -92,7 +93,7 @@ public void OnConfigsExecuted() {
 
   for (n = strlen(endpoint) - 1; n >= 0; n--) {
     if (endpoint[n] == '/') {
-      endpoint[n] = ' ';
+      endpoint[n] = '\0';
     } else {
       break;
     }
