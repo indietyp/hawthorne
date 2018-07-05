@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 class SourcemodPluginWrapper(RCONBase):
   def __init__(self, server):
-    super(SourcemodPluginWrapper, self).__init__(server)
+    super(SourcemodPluginWrapper, self).__init__(server, timeout=0.5)
 
   def ban(self, punishment, *args, **kwargs):
     command = 'rcon_ban "{}" "{}" "{}" "{}"'.format(punishment.user.username,
@@ -68,8 +68,8 @@ class SourcemodPluginWrapper(RCONBase):
   def status(self, truncated=False, *args, **kwargs):
     try:
       response = self.run('json_status')[0]
-      logger.warning(response)
-      logger.warning('\n' in response)
+      # logger.warning(response)
+      # logger.warning('\n' in response)
 
       response = response.split('\n')
       if response[-1] == "":
@@ -79,7 +79,7 @@ class SourcemodPluginWrapper(RCONBase):
         response[-1] = ""
 
       response = ''.join(response)
-      logger.warning(response)
+      # logger.warning(response)
     except (valve.rcon.RCONError, IndexError) as e:
       return {'error': e}
 
@@ -107,7 +107,7 @@ class SourcemodPluginWrapper(RCONBase):
       try:
         user = User.objects.get(id=player['id'])
       except User.DoesNotExist:
-        user = User.object.create_user(username=player['steamid'])
+        user = User.objects.create_user(username=player['steamid'])
         user.is_active = False
         user.is_steam = True
         user.save()
@@ -125,7 +125,7 @@ class SourcemodPluginWrapper(RCONBase):
     response['players'] = users
     return response
 
-  def execute(self, command, *args, **kwargs):
+  def raw(self, command, *args, **kwargs):
     try:
       return self.run(command)[0]
     except (valve.rcon.RCONError, IndexError) as e:

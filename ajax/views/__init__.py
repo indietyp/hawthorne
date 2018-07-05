@@ -2,6 +2,8 @@ import os
 
 from django.http import HttpResponse
 from django.shortcuts import render
+from multiprocessing import Pool, cpu_count
+from functools import partial
 
 from panel.settings import PAGE_SIZE
 
@@ -37,20 +39,25 @@ for file in os.listdir(os.path.dirname(os.path.realpath(__file__))):
     __all__.append(file[:-3])
 
 
+def wrapper(target, func=None, *args, **kwargs):
+  try:
+    target.executed = func(target, *args, **kwargs)
+  except Exception as e:
+    print(e)
+    target.executed = []
+    target.exception = e
+
+  return target
+
+
 def renderer(request, template, obj, page, extra=[], execute=None):
-  if execute is None:
-    data = [o for o in obj[(page - 1) * PAGE_SIZE:page * PAGE_SIZE]]
-  else:
-    data = []
+  data = obj[(page - 1) * PAGE_SIZE:page * PAGE_SIZE]
+  data = list(data)
 
-    for o in obj[(page - 1) * PAGE_SIZE:page * PAGE_SIZE]:
-      try:
-        o.executed = execute(o, request=request)
-      except Exception as e:
-        o.executed = []
-        o.exception = e
-
-      data.append(o)
+  if execute and callable(execute):
+    with Pool(cpu_count()) as p:
+      target = partial(wrapper, func=execute, user=request.user)
+      data = p.map(target, data)
 
   if page == 1:
     data.extend(extra)
