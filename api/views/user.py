@@ -192,7 +192,7 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
               'permissions': [a.content_type.app_label + '.' + a.codename for a in user.user_permissions.all()],
               'groups': [str(a) for a in user.groups.all()],
               'roles': [],
-              'has_panel_access': user.is_active,
+              'is_internal': user.is_active,
               'country': None if user.country is None else user.country.code
               }
 
