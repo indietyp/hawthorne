@@ -16,7 +16,6 @@
         user = $('input.uuid', node)[0].value;
         role = $('input.role', node)[0].value;
         payload = {
-          reset: true,
           role: role
         };
         endpoint = window.endpoint.api.users[user];
@@ -168,20 +167,20 @@
             return payload.type += e.getAttribute('data-type');
           });
           payload.muted = false;
-          payloud.gagged = false;
+          payload.gagged = false;
           if (payload.type.match(/mute/) && payload.type.match(/gag/)) {
             payload.muted = true;
-            payloud.gagged = true;
+            payload.gagged = true;
           }
           if (payload.type === '') {
             payload.muted = true;
-            payloud.gagged = true;
+            payload.gagged = true;
           }
           if (type.match(/mute/)) {
             payload.muted = true;
           }
           if (type.match(/gag/)) {
-            payloud.gagged = true;
+            payload.gagged = true;
           }
         }
         window.endpoint.api.users[user].punishment[punishment].post(o, {}, payload, function(err, data) {});

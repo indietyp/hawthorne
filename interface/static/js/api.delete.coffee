@@ -14,7 +14,6 @@ remove = (mode = '', that) ->
       role = $('input.role', node)[0].value
 
       payload =
-        reset: true
         role: role
 
       endpoint = window.endpoint.api.users[user]

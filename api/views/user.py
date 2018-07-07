@@ -42,7 +42,7 @@ def list(request, validated=[], *args, **kwargs):
                                                     default=F('punishment__is_gagged'),
                                                     output_field=BooleanField()),
                                      name=F('namespace'), is_internal=F('is_active'))\
-                           .filter(username__contains=validated['match'])
+                           .filter(username__contains=validated['match']).distinct()
 
     if validated['internal']:
       selected = selected.filter(is_internal=validated['internal'])
@@ -357,7 +357,7 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
         m = Membership.objects.get(user=user, role=validated['role'])
         m.delete()
 
-      for role in validated['role']:
+      for role in validated['roles']:
         m = Membership.objects.get(user=user, role=role)
         m.delete()
 
