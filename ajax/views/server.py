@@ -56,7 +56,7 @@ def status(server, *args, **kwargs):
 @require_http_methods(['POST'])
 def server(request, page, *args, **kwargs):
   obj = Server.objects.all()
-  return renderer(request, 'components/server/server.pug', obj, page, execute=status)
+  return renderer(request, 'components/servers/overview.pug', obj, page, execute=status)
 
 
 @login_required(login_url='/login')
@@ -64,4 +64,4 @@ def server(request, page, *args, **kwargs):
 @require_http_methods(['POST'])
 def list(request, page, *args, **kwargs):
   obj = Server.objects.all()
-  return renderer(request, 'components/home/instance.pug', obj, page, execute=status)
+  return renderer(request, 'components/servers/overview.pug', obj, page, execute=status, size=4, overwrite=True)

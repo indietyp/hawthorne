@@ -96,7 +96,7 @@ def admin(request):
 
 @login_required(login_url='/login')
 def server(request):
-  return render(request, 'pages/server.pug',
+  return render(request, 'pages/servers/list.pug',
                 {'supported': [{'label': x[1], 'value': x[0]} for x in Server.SUPPORTED]})
 
 

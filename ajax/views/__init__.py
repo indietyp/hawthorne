@@ -37,13 +37,13 @@ for file in os.listdir(os.path.dirname(os.path.realpath(__file__))):
     __all__.append(file[:-3])
 
 
-def renderer(request, template, obj, page, extra=[], execute=None):
+def renderer(request, template, obj, page, extra=[], execute=None, size=PAGE_SIZE, overwrite=False):
   if execute is None:
-    data = [o for o in obj[(page - 1) * PAGE_SIZE:page * PAGE_SIZE]]
+    data = [o for o in obj[(page - 1) * size:page * size]]
   else:
     data = []
 
-    for o in obj[(page - 1) * PAGE_SIZE:page * PAGE_SIZE]:
+    for o in obj[(page - 1) * size:page * size]:
       try:
         o.executed = execute(o, request=request)
       except Exception as e:
@@ -56,6 +56,9 @@ def renderer(request, template, obj, page, extra=[], execute=None):
     data.extend(extra)
 
   if len(data) > 0:
+    if overwrite:
+      return render(request, template, {'data': data})
+
     return render(request, 'skeleton/pagination.pug', {'data': data, 'template': template})
   else:
     return HttpResponse('', status=416)
