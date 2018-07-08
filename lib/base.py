@@ -55,6 +55,8 @@ class RCONBase(RCON):
       pass
     except RCONTimeoutError:
       pass
+    except Exception:
+      pass
     finally:
       self.close()
 

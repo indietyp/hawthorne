@@ -64,7 +64,7 @@ submit = (mode = '', that) ->
       if server != 'all'
         data.server = server
 
-      window.endpoint.api.users[user].punishment.put(o, {}, data, (err, data) ->
+      window.endpoint.api.users[user].punishments.put(o, {}, data, (err, data) ->
         window.ajax.ban.user(1)
       )
 
@@ -114,7 +114,7 @@ submit = (mode = '', that) ->
       if server != 'all'
         data.server = server
 
-      window.endpoint.api.users[user].punishment.put(o, {}, data, (err, data) ->
+      window.endpoint.api.users[user].punishments.put(o, {}, data, (err, data) ->
         window.ajax.mutegag.user(1)
         return data
       )
@@ -125,7 +125,7 @@ submit = (mode = '', that) ->
         server: $('input.server', node)[0].value
         kicked: true
 
-      window.endpoint.api.users[user].punishment.put(o, {}, data, (err, data) ->
+      window.endpoint.api.users[user].punishments.put(o, {}, data, (err, data) ->
         window.ajax.player.user(1)
         return data
       )

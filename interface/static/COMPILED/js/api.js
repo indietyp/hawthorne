@@ -28,12 +28,12 @@
         user = $('input.user', node)[0].value;
         server = $('input.server', node)[0].value;
         punishment = $('input.punishment', node)[0].value;
-        endpoint = window.endpoint.api.users[user].punishment[punishment];
+        endpoint = window.endpoint.api.users[user].punishments[punishment];
         break;
       case 'mutegag':
         user = $('input.user', node)[0].value;
         punishment = $('input.punishment', node)[0].value;
-        endpoint = window.endpoint.api.users[user].punishment[punishment];
+        endpoint = window.endpoint.api.users[user].punishments[punishment];
         break;
       case 'server':
         node = that.parentElement.parentElement.parentElement.parentElement;
@@ -183,7 +183,7 @@
             payload.gagged = true;
           }
         }
-        window.endpoint.api.users[user].punishment[punishment].post(o, {}, payload, function(err, data) {});
+        window.endpoint.api.users[user].punishments[punishment].post(o, {}, payload, function(err, data) {});
         break;
       case 'server':
         node = node.parentElement;
@@ -480,7 +480,7 @@
         if (server !== 'all') {
           data.server = server;
         }
-        return window.endpoint.api.users[user].punishment.put(o, {}, data, function(err, data) {
+        return window.endpoint.api.users[user].punishments.put(o, {}, data, function(err, data) {
           return window.ajax.ban.user(1);
         });
       case 'mutegag':
@@ -525,7 +525,7 @@
         if (server !== 'all') {
           data.server = server;
         }
-        return window.endpoint.api.users[user].punishment.put(o, {}, data, function(err, data) {
+        return window.endpoint.api.users[user].punishments.put(o, {}, data, function(err, data) {
           window.ajax.mutegag.user(1);
           return data;
         });
@@ -535,7 +535,7 @@
           server: $('input.server', node)[0].value,
           kicked: true
         };
-        return window.endpoint.api.users[user].punishment.put(o, {}, data, function(err, data) {
+        return window.endpoint.api.users[user].punishments.put(o, {}, data, function(err, data) {
           window.ajax.player.user(1);
           return data;
         });

@@ -26,12 +26,12 @@ remove = (mode = '', that) ->
       server = $('input.server', node)[0].value
       punishment = $('input.punishment', node)[0].value
 
-      endpoint = window.endpoint.api.users[user].punishment[punishment]
+      endpoint = window.endpoint.api.users[user].punishments[punishment]
     when 'mutegag'
       user = $('input.user', node)[0].value
       punishment = $('input.punishment', node)[0].value
 
-      endpoint = window.endpoint.api.users[user].punishment[punishment]
+      endpoint = window.endpoint.api.users[user].punishments[punishment]
     when 'server'
       node = that.parentElement.parentElement.parentElement.parentElement
       server = $('input.uuid', node)[0].value

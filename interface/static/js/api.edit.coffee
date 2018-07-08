@@ -110,7 +110,7 @@ save = (mode = '', that) ->
         if type.match /gag/
           payload.gagged = true
 
-      window.endpoint.api.users[user].punishment[punishment].post(o, {}, payload, (err, data) ->)
+      window.endpoint.api.users[user].punishments[punishment].post(o, {}, payload, (err, data) ->)
 
     when 'server'
       node = node.parentElement
