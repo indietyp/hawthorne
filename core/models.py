@@ -222,6 +222,8 @@ class Role(BaseModel):
 
 class Server(BaseModel):
   name = models.CharField(max_length=255)
+  slug = models.SlugField()
+
   ip = models.GenericIPAddressField()
   port = models.IntegerField()
   password = models.CharField(max_length=255)

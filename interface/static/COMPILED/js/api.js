@@ -16,7 +16,6 @@
         user = $('input.uuid', node)[0].value;
         role = $('input.role', node)[0].value;
         payload = {
-          reset: true,
           role: role
         };
         endpoint = window.endpoint.api.users[user];
@@ -29,12 +28,12 @@
         user = $('input.user', node)[0].value;
         server = $('input.server', node)[0].value;
         punishment = $('input.punishment', node)[0].value;
-        endpoint = window.endpoint.api.users[user].punishment[punishment];
+        endpoint = window.endpoint.api.users[user].punishments[punishment];
         break;
       case 'mutegag':
         user = $('input.user', node)[0].value;
         punishment = $('input.punishment', node)[0].value;
-        endpoint = window.endpoint.api.users[user].punishment[punishment];
+        endpoint = window.endpoint.api.users[user].punishments[punishment];
         break;
       case 'server':
         node = that.parentElement.parentElement.parentElement.parentElement;
@@ -168,23 +167,23 @@
             return payload.type += e.getAttribute('data-type');
           });
           payload.muted = false;
-          payloud.gagged = false;
+          payload.gagged = false;
           if (payload.type.match(/mute/) && payload.type.match(/gag/)) {
             payload.muted = true;
-            payloud.gagged = true;
+            payload.gagged = true;
           }
           if (payload.type === '') {
             payload.muted = true;
-            payloud.gagged = true;
+            payload.gagged = true;
           }
           if (type.match(/mute/)) {
             payload.muted = true;
           }
           if (type.match(/gag/)) {
-            payloud.gagged = true;
+            payload.gagged = true;
           }
         }
-        window.endpoint.api.users[user].punishment[punishment].post(o, {}, payload, function(err, data) {});
+        window.endpoint.api.users[user].punishments[punishment].post(o, {}, payload, function(err, data) {});
         break;
       case 'server':
         node = node.parentElement;
@@ -481,7 +480,7 @@
         if (server !== 'all') {
           data.server = server;
         }
-        return window.endpoint.api.users[user].punishment.put(o, {}, data, function(err, data) {
+        return window.endpoint.api.users[user].punishments.put(o, {}, data, function(err, data) {
           return window.ajax.ban.user(1);
         });
       case 'mutegag':
@@ -526,7 +525,7 @@
         if (server !== 'all') {
           data.server = server;
         }
-        return window.endpoint.api.users[user].punishment.put(o, {}, data, function(err, data) {
+        return window.endpoint.api.users[user].punishments.put(o, {}, data, function(err, data) {
           window.ajax.mutegag.user(1);
           return data;
         });
@@ -536,7 +535,7 @@
           server: $('input.server', node)[0].value,
           kicked: true
         };
-        return window.endpoint.api.users[user].punishment.put(o, {}, data, function(err, data) {
+        return window.endpoint.api.users[user].punishments.put(o, {}, data, function(err, data) {
           window.ajax.player.user(1);
           return data;
         });

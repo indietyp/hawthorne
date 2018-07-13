@@ -3,7 +3,8 @@ from django.dispatch import receiver
 from django.utils import timezone
 from core.lib.steam import populate
 import logging
-from core.models import User
+from core.models import User, Server
+from django.template.defaultfilters import slugify
 
 
 logger = logging.getLogger(__name__)
@@ -81,3 +82,16 @@ def user_log_handler(sender, instance, raw, using, update_fields, **kwargs):
 
   if iplog:
     ip.save()
+
+
+@receiver(pre_save, sender=Server, weak=False)
+def server_slug_handler(sender, instance, raw, using, update_fields, **kwargs):
+  try:
+    state = Server.objects.get(id=instance.id)
+  except Server.DoesNotExist:
+    state = None
+
+  if state and state.name == instance.name:
+    return
+
+  instance.slug = slugify(instance.name)[:50]
