@@ -16,6 +16,9 @@ urlpatterns = [
   path('player/user/<int:page>', player.user),
 
   path('servers/<int:page>', server.list),
+  path('servers/<slug:s>/overview', server.overview),
+  path('servers/<slug:s>/log', server.log),
+  path('servers/<slug:s>/rcon', server.rcon),
 
   path('setting/user/<int:page>', setting.user),
   path('setting/group/<int:page>', setting.group),

@@ -1,7 +1,7 @@
 //- h1 Europe #1
 .section.group
   each item in data
-    .serverGridItem.col.span_1_of_4(class='{{item.executed|yesno:",itemFaded"}}')
+    .serverGridItem.col.span_1_of_4(class='{{item.executed|yesno:",itemFaded"}}', onclick="window.vc('servers[detailed]', '{{item.id}}')")
       b(style="color:rgb(0,169,255)")
         if item.name
           = item.name

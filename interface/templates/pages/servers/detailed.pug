@@ -3,317 +3,74 @@
 - load staticfiles
 
 - block content
-  ul.paginationTabs
-    li.paginationTabSelected(data-trigger="[ct/switch]", data="ct1") Overview
-    |
-    li(data-trigger="[ct/switch]", data="ct2") Chat Log
-    |
-    li(data-trigger="[ct/switch]", data="ct3") RCon
-    |
+  .modal(data-component="[modal/players]")
+    h1 Hawthornepanel.org – Players
+    .close(data-trigger="[modal/close]")
+      i.icon.ion-ios-close
+    table
+      thead
+        tr
+          th(style="width:auto")
+          th Player
+          th Connection Time
+          th.fRight Actions
+      tbody
+        tr
+          td(style="width:1px")
+            img.country(src="https://demo.hawthornepanel.org/static/flags/de.svg")
+          td Akke
+          td 10 minutes, 30 seconds
+          td
+            button(title="Kick")
+              i.fa.fa-ban
+            button(title="Message", data-trigger="[modal/open]", data-trigger-target="[modal/players/message]")
+              i.fa.fa-comment
+  .modal(data-component="[modal/players/message]")
+    h1 Hawthornepanel.org – Players – Akke – Compose A Message
+    .close(data-trigger="[modal/close]")
+      i.icon.ion-ios-close
+    .modalContent You can send in-game messages to players through this modal. The message will appear in their chat box with you as the sender, unless specified otherwise in the options.
+    textarea(placeholder="Send them a message...", style="margin-top:20px")
+    .section.group(style="margin: 10px 0")
+      .col.span_1_of_4
+        label.switch
+          input(type="checkbox")
+          span.slider.round
+        .switchText Send as CONSOLE
+      .col.span_1_of_4
+        label.switch
+          input(type="checkbox")
+          span.slider.round
+        .switchText Kick player
+      .col.span_1_of_4
+        label.switch
+          input(type="checkbox")
+          span.slider.round
+        .switchText Send as a warning
+      .col.span_1_of_4
+        label.switch
+          input(type="checkbox")
+          span.slider.round
+        .switchText Send to entire server
+    button
+      i.fa.fa-paper-plane(style="margin-right:10px;")
+      | Send
+
+  ul.paginationTabs(data-target='servers[detailed]')
+    li(data-trigger="[ct/switch]", data="overview") Overview
+    li(data-trigger="[ct/switch]", data="log") Chat Log
+    li(data-trigger="[ct/switch]", data="rcon") RCon
     li(data-trigger="[ct/switch]", data="ct4")
       i.fa.fa-cog(style="margin-right:5px")
-      |  Edit
-    |
+      | Edit
     li(data-trigger="[ct/switch]", data="ct4")
       i.fa.fa-id-card(style="margin-right:5px")
-      |  Roles
-    |
+      | Roles
     li.fRight.paginationTabsDanger(data-trigger="[ct/switch]", data="ct4")
       i.icon.ion-ios-trash(style="margin-right:5px")
-      |  Delete Server
-  |
-  .paginationContent.ct1
-    .section.group
-      .col.span_1_of_2
-        .CBox.nomargin
-          h3 Activity in May (Days)
-          |
-          .chartContainer.nomargin
-            canvas.serverChartMonthly
-          |
-          script.
-            var ctx = document.getElementsByClassName("serverChartMonthly")[0].getContext('2d');
-            var gradient = ctx.createLinearGradient(0, 0, 0, 400);
-            gradient.addColorStop(0, 'rgba(0,169,255,0.2)');
-            gradient.addColorStop(1, 'rgba(0,169,255,0)');
-            var myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-            labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"],
-            datasets: [{
-            pointHoverBorderColor: '#0075b1',
-            pointHoverBackgroundColor: '#fff',
-            label: 'Players',
-            data: [10, 15, 18, 20, 32, 30, 29, 25, 13, 17, 16, 24, 10, 15, 18, 20, 32, 30, 29, 25, 13, 17, 16, 24, 10, 15, 18, 20, 32, 30, 29],
-            backgroundColor: gradient,
-            borderColor: [
-            'rgb(0,169,255)'
-            ],
-            borderWidth: 4
-            }]
-            },
-            options: {
-            legend: {
-            display: false
-            },
-            maintainAspectRatio: false,
-            scales: {
-            yAxes: [{
-            display:false,
-            gridLines: {
-            color: 'transparent',
-            },
-            ticks: {
-            beginAtZero:false,
-            fontColor: 'white'
-            }
-            }],
-            xAxes: [{
-            display:false,
-            gridLines: {
-            color: 'transparent',
-            },
-            ticks: {
-            fontColor: 'white',
-            }
-            }]
-            }
-            }
-            });
-            myChart.canvas.parentNode.style.height = '200px';
-      |
-      .col.span_1_of_2
-        .CBox.nomargin
-          h3 Activity throughout time (Years)
-          |
-          .chartContainer.nomargin
-            canvas.serverChartAllTime
-          |
-          script.
-            var ctx = document.getElementsByClassName("serverChartAllTime")[0].getContext('2d');
-            var gradient = ctx.createLinearGradient(0, 0, 0, 400);
-            gradient.addColorStop(0, 'rgba(0,169,255,0.2)');
-            gradient.addColorStop(1, 'rgba(0,169,255,0)');
-            var myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-            labels: ["2015", "2016", "2017"],
-            datasets: [{
-            pointHoverBorderColor: '#0075b1',
-            pointHoverBackgroundColor: '#fff',
-            label: 'Players',
-            data: [574, 1034, 827],
-            backgroundColor: gradient,
-            borderColor: [
-            'rgb(0,169,255)'
-            ],
-            borderWidth: 4
-            }]
-            },
-            options: {
-            legend: {
-            display: false
-            },
-            maintainAspectRatio: false,
-            scales: {
-            yAxes: [{
-            display: false,
-            gridLines: {
-            color: "rgba(0, 0, 0, 0)",
-            },
-            ticks: {
-            beginAtZero:false,
-            fontColor: 'white'
-            }
-            }],
-            xAxes: [{
-            display: false,
-            gridLines: {
-            display: false,
-            color: "rgba(0, 0, 0, 0)",
-            },
-            ticks: {
-            fontColor: 'white',
-            }
-            }]
-            }
-            }
-            });
-            myChart.canvas.parentNode.style.height = '200px';
-    |
-    .server.CBox
-      .section.group.nomargin.serverOverview
-        .col.span_1_of_2.nomargin
-          .section.group.nomargin.serverOverview
-            .col.span_1_of_2.nomargin
-              img.thumbnail(src="img/csgothumb.jpg")
-              |
-              button.serverActionButton(disabled="")
-                i.fa.fa-stop
-                |  Stop
-              |
-              button.serverActionButton.nomargin(disabled="")
-                i.fas.fa-sync
-                |  Restart
-            |
-            .col.span_1_of_2.nomargin
-              h2
-                | Hawthornepanel.org
-                .CTag Europe #1
-              |
-              p
-                i.fa.fa-gamepad(style="margin: 0 5px 0 0")
-                |  Counter-Strike: Global Offensive
-        |
-        .col.span_1_of_2.nomargin
-          ul.list
-            li
-              b IP:
-              |
-              a(href="#", data-trigger="[clip/copy]", data-clipboard-text="0.0.0.0:27015")
-                | 0.0.0.0:27015
-                i.fa.fa-copy(style="margin-left:5px")
-            |
-            li
-              b Location:
-              |  Hamburg
-            |
-            li
-              b VAC:
-              |
-              i.fa.fa-check.green
-            |
-            li
-              b Password:
-              |
-              i.fa.fa-times.red
-            |
-            li
-              b Uptime:
-              |  21 Years
-    |
-    .CBox.nomargin
-      .section.group.nomargin.serverOverview
-        .col.span_1_of_2.nomargin
-          h2 Server Data
-          |
-          p
-            | Data is constantly collected from the server and sent to your Hawthorne panel. We display things such as a list of players, what the current map is, how much time of the map that is remaining, how many admins are on, etc.
-        |
-        .col.span_1_of_2.nomargin
-          ul.list
-            li
-              b Map:
-              |  de_dust
-            |
-            li
-              b Time Left:
-              |  10 minutes, 20 seconds –
-              b Map change scheduled for 18:05
-            |
-            li
-              b Gamemode:
-              |  Casual
-            |
-            li
-              b Players:
-              |
-              .playerCount.fullPlayers 24 of 24
-              |
-              a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/players]") View Players
-              |
-              a(href="javascript:void(0)", style="margin-left:10px", data-trigger="[modal/open]", data-trigger-target="[modal/players]") View Admins
-  |
-  .paginationContent.ct2
-    .CBox.nomargin
-      h3
-        | Chat Log
-        input(type="text", placeholder="Search by SteamID, message or player...")
-      |
-      .section.group
-        .col.span_1_of_4.orderChatLog
-          select
-            option(default="", selected="") Order by timestamp
-            |
-            option Newest First
-            |
-            option Oldest First
-        |
-        .col.span_1_of_4.orderChatLog
-          select
-            option(default="", selected="") Filter by role
-            |
-            option Root
-            |
-            option User
-        |
-        .col.span_1_of_4.orderChatLog
-          select
-            option(default="", selected="") Filter by status
-            |
-            option Online
-            |
-            option Offline
-        |
-        .col.span_1_of_4.orderChatLog
-          select
-            option(default="", selected="") Filter by team
-            |
-            option S.W.A.T
-            |
-            option Terrorists
-      |
-      table
-        thead
-          tr
-            th(style="width:auto")
-            |
-            th Player
-            |
-            th Message
-            |
-            th.fRight Time
-        |
-        tbody
-          tr
-            td(style="width:1px")
-              img.country(src="https://demo.hawthornepanel.org/static/flags/de.svg")
-            |
-            td
-              a(href="") Akke
-            |
-            td(style="width:50%") Hello world.
-            |
-            td.fRight Today, 15:25
-          |
-          tr
-            td(style="width:1px")
-              img.country(src="https://demo.hawthornepanel.org/static/flags/de.svg")
-            |
-            td
-              a(href="") Akke
-            |
-            td(style="width:50%") Hello world.
-            |
-            td.fRight June 18th, 05:45
-  |
-  .paginationContent.ct3
-    .CBox.nomargin
-      .section.group.nomargin.serverOverview
-        .col.span_1_of_2.nomargin
-          h2 Remote Control Access
-          |
-          p
-            | You can communicate with the server in real-time using a secure connection. Simply enter the command you wish to send and the response will be shown above the input box.
-            br
-            br
-            | Keep in mind that actions can not be undone.
-        |
-        .col.span_1_of_2.nomargin
-          .RCONwindow(contenteditable="true", autocorrect="off", autocapitalize="off", spellcheck="false")
-            | > 10:15:21 # [SM] Successfully kicked indietyp
-            input(type="text", placeholder="Enter your command...")
-            |
-            button
-              i.fa.fa-paper-plane(style="margin-right:10px;")
-              |  Send
+      | Delete Server
+
+  script.execute.
+    window.slug = "{{data.id}}"
+    window.lazy('servers[detailed]', 'overview')
+    window._.menu()

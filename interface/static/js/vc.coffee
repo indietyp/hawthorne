@@ -1,29 +1,17 @@
 # view controller
 
-change = (destination = 'home') ->
-  method = 'POST'
+load = (destination='home', scope='') ->
+  endpoint = window.endpoint.bare
 
   switch destination
     when 'home'
-      url = ''
-    when 'player'
-      url = 'players'
-    when 'admin'
-      url = 'admins'
-    when 'server'
-      url = 'servers'
-    when 'ban'
-      url = 'bans'
-    when 'mutegag'
-      url = 'mutegags'
-    when 'announcements'
-      url = 'announcements'
-    when 'chat'
-      url = 'chat'
-    when 'settings'
-      url = 'settings'
+      url = ""
+    when 'servers'
+      url = "servers"
+    when 'servers[detailed]'
+      url = "servers/#{scope}"
     else
-      return false
+      return
 
   header =
     'X-CSRFTOKEN': window.csrftoken
@@ -33,29 +21,13 @@ change = (destination = 'home') ->
     data = response.data
 
     if status == 200
-      $("#content").css('opacity', '0')
+      $(".main")[0].innerHTML = data
+      $(".main script.execute").forEach((scr) ->
+        eval(scr.innerHTML)
+      )
 
-      setTimeout(->
-        $("#content")[0].innerHTML = data
-        $("#content script.execution").forEach((scr) ->
-          eval(scr.innerHTML)
-        )
-        feather.replace()
-        $("#content").css('opacity', '')
-      , 300)
-    else
-      return false
-
-    url = if not url then '/' else url
-    window.history.pushState "", "", url
-    return true
+      url = if not url then '/' else url
+      window.history.pushState "", "", url
   )
 
-  return true
-
-
-ajax = (destination, module) ->
-  return true
-
-window.vc =
-  change: change
+window.vc = load

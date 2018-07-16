@@ -30,6 +30,9 @@ a {
   color: inherit;
   text-decoration: inherit;
 }
+.ion {
+  font-size: 24px;
+}
 code {
     background: rgba(0, 0, 0, 0.2);
     padding: 2px 5px;
@@ -1211,7 +1214,7 @@ table thead .icon {
     border-radius:2px;
     margin: 0 20px 0 0;
     width: 95%;
-    height: 125px;
+    /*height: 125px;*/
 }
 .logoContainer {
     display: flow-root;
@@ -2472,11 +2475,11 @@ button[disabled] {
     color:#FFF !important;
 }
 .paginationContent {
-    display:none;
-}
-.ct1 {
     display:block;
 }
+/*.ct1 {
+    display:block;
+}*/
 .timeTable .modalSelect:after {
     top: 22px;
     right: 22px;

@@ -27,4 +27,37 @@ ajax = (mode, target='.main', page=1) ->
 
   return
 
+lazy = (mode, fallback) ->
+  endpoint = window.endpoint.ajax
+  header =
+    "X-CSRFToken": window.csrftoken
+
+  if window.location.hash
+    hash = window.location.hash.substring(1)
+  else
+    hash = fallback
+    history.pushState(null, null, "##{fallback}");
+
+  switch mode
+    when "servers[detailed]"
+      endpoint = window.endpoint.ajax.servers[window.slug][hash]
+
+  endpoint.post(header, {}, (dummy, response) ->
+    status = response.status
+    data = response.data
+    target = $('.main')
+
+    if status == 200
+
+      $('.paginationContent', target).remove()
+      target.htmlAppend(data)
+      $('script.execute', '.paginationContent').forEach((src) ->
+        eval(src.innerHTML)
+      )
+    return
+  )
+
+  return
+
 window.ajax = ajax
+window.lazy = lazy

@@ -1,0 +1,178 @@
+- load i18n
+- load staticfiles
+
+.paginationContent.ct1
+  .section.group
+    .col.span_1_of_2
+      .CBox.nomargin
+        h3 Activity in May (Days)
+        .chartContainer.nomargin
+          canvas.serverChartMonthly
+        script.execute.
+          var ctx = document.getElementsByClassName("serverChartMonthly")[0].getContext('2d');
+          var gradient = ctx.createLinearGradient(0, 0, 0, 400);
+          gradient.addColorStop(0, 'rgba(0,169,255,0.2)');
+          gradient.addColorStop(1, 'rgba(0,169,255,0)');
+          var myChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+          labels: {{months|flatten:"0"|safe}},
+          datasets: [{
+          pointHoverBorderColor: '#0075b1',
+          pointHoverBackgroundColor: '#fff',
+          label: 'Players',
+          data: {{months|flatten:"1"|safe}},
+          backgroundColor: gradient,
+          borderColor: [
+          'rgb(0,169,255)'
+          ],
+          borderWidth: 4
+          }]
+          },
+          options: {
+          legend: {
+          display: false
+          },
+          maintainAspectRatio: false,
+          scales: {
+          yAxes: [{
+          display:false,
+          gridLines: {
+          color: 'transparent',
+          },
+          ticks: {
+          beginAtZero:false,
+          fontColor: 'white'
+          }
+          }],
+          xAxes: [{
+          display:false,
+          gridLines: {
+          color: 'transparent',
+          },
+          ticks: {
+          fontColor: 'white',
+          }
+          }]
+          }
+          }
+          });
+          myChart.canvas.parentNode.style.height = '200px';
+    .col.span_1_of_2
+      .CBox.nomargin
+        h3 Activity throughout time (Years)
+        .chartContainer.nomargin
+          canvas.serverChartAllTime
+        script.execute.
+          var ctx = document.getElementsByClassName("serverChartAllTime")[0].getContext('2d');
+          var gradient = ctx.createLinearGradient(0, 0, 0, 400);
+          gradient.addColorStop(0, 'rgba(0,169,255,0.2)');
+          gradient.addColorStop(1, 'rgba(0,169,255,0)');
+          var myChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+          labels: {{years|flatten:"0"|safe}},
+          datasets: [{
+          pointHoverBorderColor: '#0075b1',
+          pointHoverBackgroundColor: '#fff',
+          label: 'Players',
+          data: {{years|flatten:"1"|safe}},
+          backgroundColor: gradient,
+          borderColor: [
+          'rgb(0,169,255)'
+          ],
+          borderWidth: 4
+          }]
+          },
+          options: {
+          legend: {
+          display: false
+          },
+          maintainAspectRatio: false,
+          scales: {
+          yAxes: [{
+          display: false,
+          gridLines: {
+          color: "rgba(0, 0, 0, 0)",
+          },
+          ticks: {
+          beginAtZero:false,
+          fontColor: 'white'
+          }
+          }],
+          xAxes: [{
+          display: false,
+          gridLines: {
+          display: false,
+          color: "rgba(0, 0, 0, 0)",
+          },
+          ticks: {
+          fontColor: 'white',
+          }
+          }]
+          }
+          }
+          });
+          myChart.canvas.parentNode.style.height = '200px';
+  .server.CBox
+    .section.group.nomargin.serverOverview
+      .col.span_1_of_2.nomargin
+        .section.group.nomargin.serverOverview
+          .col.span_1_of_2.nomargin
+            if data.game == 'csgo'
+              img.thumbnail(src="{% static 'img/games/csgo.png' %}")
+            button.serverActionButton(disabled="")
+              i.fa.fa-stop
+              |  Stop
+            button.serverActionButton.nomargin(disabled="")
+              i.fa.fa-sync
+              |  Restart
+          .col.span_1_of_2.nomargin
+            h2
+              = data.name
+              // .CTag Europe #1
+            p
+              i.fa.fa-gamepad(style="margin: 0 5px 0 0")
+              = data.get_game_display
+      .col.span_1_of_2.nomargin
+        ul.list
+          li
+            b IP:
+            a(href="#", data-trigger="[clip/copy]", data-clipboard-text="0.0.0.0:27015")
+              = data.ip|add:":"
+              =data.port
+              i.fa.fa-copy(style="margin-left:5px")
+          li
+            b Location:
+            | Hamburg
+          li
+            b VAC:
+            i.ion.ion-ios-checkmark.green
+          li
+            b Password:
+            i.ion.ion-ios-close.red
+          li
+            b Uptime:
+            |  21 Years
+  .CBox.nomargin
+    .section.group.nomargin.serverOverview
+      .col.span_1_of_2.nomargin
+        h2 Server Data
+        p Data is constantly collected from the server and sent to your Hawthorne panel. We display things such as a list of players, what the current map is, how much time of the map that is remaining, how many admins are on, etc.
+      .col.span_1_of_2.nomargin
+        ul.list
+          li
+            b Map:
+            | de_dust
+          li
+            b Time Left:
+            |  10 minutes, 20 seconds –
+            b Map change scheduled for 18:05
+          li
+            b Gamemode:
+            = data.mode
+          li
+            b Players:
+            .playerCount.fullPlayers 24 of 24
+            a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/players]") View Players
+            a(href="javascript:void(0)", style="margin-left:10px", data-trigger="[modal/open]", data-trigger-target="[modal/players]") View Admins

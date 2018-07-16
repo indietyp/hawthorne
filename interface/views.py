@@ -96,8 +96,18 @@ def admin(request):
 
 @login_required(login_url='/login')
 def server(request):
-  return render(request, 'pages/servers/list.pug',
-                {'supported': [{'label': x[1], 'value': x[0]} for x in Server.SUPPORTED]})
+  return render(request, 'pages/servers/list.pug')
+
+
+@login_required(login_url='/login')
+def server_detailed(request, s):
+  server = Server.objects.filter(id=s)
+
+  if not server:
+    return render(request, 'skeleton/404.pug')
+
+  server = server[0]
+  return render(request, 'pages/servers/detailed.pug', {'data': server})
 
 
 @login_required(login_url='/login')
@@ -130,11 +140,6 @@ def announcement(request):
 
 
 @login_required(login_url='/login')
-def chat(request):
-  return render(request, 'pages/chat.pug', {})
-
-
-@login_required(login_url='/login')
 def settings(request):
   modules = [c for c in ContentType.objects.filter(app_label__in=['core', 'log']) if
              Permission.objects.filter(content_type=c).count() > 0]
@@ -149,7 +154,3 @@ def settings(request):
     mf = mainframe.populate().current.id
 
   return render(request, 'pages/settings.pug', {'simple': modules, 'advanced': perms, 'mainframe': mf, 'discord': None})
-
-
-def dummy(request):
-  return render(request, 'skeleton/main.pug', {})
