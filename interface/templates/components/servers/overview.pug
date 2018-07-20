@@ -7,10 +7,10 @@
           = item.name
         else
           | --
-      .playerCount(class='{{item.executed|yesno:",noPlayers"}}')
+      .playerCount(class='{{item.executed|yesno:",noPlayers"}} {%if item.executed.clients|length == item.executed.limitations.clients%}fullPlayers{%endif%}"')
         i.icon.ion-md-person(style="margin-right:5px")
         if item.executed
-          | {{item.executed.players.current}} of {{item.executed.players.maximum}}
+          | {{item.executed.clients|length}} of {{item.executed.limitations.clients}}
         else
           | 0 of 0
       .mapName

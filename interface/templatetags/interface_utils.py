@@ -20,37 +20,11 @@ def duration(delta):
 
 
 @register.filter
-def dict_to_list(dic, key):
-  output = [d[key] for d in dic]
-
-  if len(output) > 0 and isinstance(output[0], datetime.date):
-    output = [date(d, settings.SHORT_DATE_FORMAT) for d in output]
-
-  return output
-
-
-@register.filter
-def base85(value):
-  return b85encode(unhexlify(value.hex)).decode()
-
-
-@register.filter
-def mask(value, percentage="0.6"):
-  percentage = float(percentage)
-
-  if percentage < 1:
-    characters = len(value) * percentage
-  else:
-    characters = int(percentage)
-
-  output = []
-  characters = len(value) - characters
-  for pointer in range(len(value)):
-    output.append(value[pointer] if pointer < characters else '•')
-
-  return ''.join(output)
-
-
-@register.filter
 def flatten(value, location):
   return list(map(lambda x: x[int(location)], value))
+
+
+@register.filter
+def warp(duration):
+  now = datetime.datetime.now()
+  return now + duration

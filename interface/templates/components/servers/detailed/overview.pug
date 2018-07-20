@@ -1,5 +1,6 @@
 - load i18n
 - load staticfiles
+- load interface_utils
 
 .paginationContent.ct1
   .section.group
@@ -144,7 +145,7 @@
               i.fa.fa-copy(style="margin-left:5px")
           li
             b Location:
-            | Hamburg
+            = location
           li
             b VAC:
             i.ion.ion-ios-checkmark.green
@@ -153,7 +154,7 @@
             i.ion.ion-ios-close.red
           li
             b Uptime:
-            |  21 Years
+            = status.time.up|duration
   .CBox.nomargin
     .section.group.nomargin.serverOverview
       .col.span_1_of_2.nomargin
@@ -166,13 +167,21 @@
             | de_dust
           li
             b Time Left:
-            |  10 minutes, 20 seconds –
-            b Map change scheduled for 18:05
+            if status.time.left
+              = status.time.left|duration
+              | -
+              b Map change scheduled for
+                = status.time.left|warp|time
+            else
+              | indefinetly
           li
             b Gamemode:
             = data.mode
           li
             b Players:
-            .playerCount.fullPlayers 24 of 24
+            .playerCount(class="{%if status.clients|length == status.limitations.clients%}fullPlayers{%endif%}")
+              = status.clients|length
+              |  of
+              = status.limitations.clients
             a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/players]") View Players
             a(href="javascript:void(0)", style="margin-left:10px", data-trigger="[modal/open]", data-trigger-target="[modal/players]") View Admins

@@ -22,8 +22,9 @@
           target.html('');
         }
         target.htmlAppend(data);
-        $('script.execute', target).forEach(function(src) {
-          return eval(src.innerHTML);
+        $('script.execute:not(.evaluated)', target).forEach(function(src) {
+          eval(src.innerHTML);
+          return $(src).addClass("evaluated");
         });
         window.ajax(mode, target, page + 1);
       }
@@ -54,8 +55,9 @@
       if (status === 200) {
         $('.paginationContent', target).remove();
         target.htmlAppend(data);
-        $('script.execute', '.paginationContent').forEach(function(src) {
-          return eval(src.innerHTML);
+        $('script.execute:not(.evaluated)', target).forEach(function(src) {
+          eval(src.innerHTML);
+          return $(src).addClass("evaluated");
         });
       }
     });

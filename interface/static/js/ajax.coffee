@@ -17,8 +17,9 @@ ajax = (mode, target='.main', page=1) ->
         target.html('')
 
       target.htmlAppend(data)
-      $('script.execute', target).forEach((src) ->
+      $('script.execute:not(.evaluated)', target).forEach((src) ->
         eval(src.innerHTML)
+        $(src).addClass("evaluated")
       )
 
       window.ajax(mode, target, page + 1)
@@ -51,8 +52,9 @@ lazy = (mode, fallback) ->
 
       $('.paginationContent', target).remove()
       target.htmlAppend(data)
-      $('script.execute', '.paginationContent').forEach((src) ->
+      $('script.execute:not(.evaluated)', target).forEach((src) ->
         eval(src.innerHTML)
+        $(src).addClass("evaluated")
       )
     return
   )

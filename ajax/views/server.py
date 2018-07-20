@@ -1,4 +1,6 @@
 import datetime
+import json
+import urllib.request
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import DateField, Count
@@ -13,43 +15,7 @@ from log.models import UserOnlineTime
 
 
 def status(server, *args, **kwargs):
-  query = UserOnlineTime.objects.filter(server=server) \
-                                .annotate(date=Cast('disconnected', DateField()))
-
-  last30 = query.filter(date__gte=datetime.date.today() - datetime.timedelta(days=30))
-  online = last30.values('date') \
-                 .annotate(active=Count('user', distinct=True)) \
-                 .order_by('date')
-
-  recent = last30.values('server').annotate(active=Count('user', distinct=True))
-  alltime = query.values('server').annotate(active=Count('user', distinct=True))
-
-  if len(online) > 1:
-    online = [o for o in online]
-
-    dpoint = online[0]['date']
-    dbreak = datetime.date.today()
-    included = [x['date'] for x in online]
-
-    while dpoint < dbreak:
-      dpoint += datetime.timedelta(days=1)
-
-      if dpoint not in included:
-        online.append({'date': dpoint, 'active': 0})
-
-  else:
-    online = [{'date': datetime.date.today(), 'active': 0}]
-
-  online = sorted(online, key=lambda x: x['date'])
-
-  if not recent:
-    recent = [{'active': 0}]
-  if not alltime:
-    alltime = [{'active': 0}]
-
-  return {'status': SourcemodPluginWrapper(server).status(truncated=True),
-          'online': online,
-          'count': {'last30': recent[0], 'ever': alltime[0]}}
+  return SourcemodPluginWrapper(server).status(truncated=True)
 
 
 @login_required(login_url='/login')
@@ -93,9 +59,18 @@ def overview(request, s, *args, **kwargs):
   for year in range(now.year - 2, now.year + 1):
     ever.append((year, subquery.filter(year=year).count()))
 
+  loc = None
+
+  with urllib.request.urlopen("https://geoip-db.com/jsonp/{}".format(server.ip)) as url:
+    data = json.loads(url.read().decode().split("(")[1].strip(")"))
+
+  loc = data['city']
+
   return render(request, 'components/servers/detailed/overview.pug', {'data': server,
                                                                       'months': month,
-                                                                      'years': ever})
+                                                                      'years': ever,
+                                                                      'location': loc,
+                                                                      'status': status(server)})
 
 
 @login_required(login_url='/login')
