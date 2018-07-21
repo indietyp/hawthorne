@@ -90,11 +90,6 @@ def player(request):
 
 
 @login_required(login_url='/login')
-def admin(request):
-  return render(request, 'pages/admin.pug', {})
-
-
-@login_required(login_url='/login')
 def server(request):
   return render(request, 'pages/servers/list.pug')
 
@@ -111,13 +106,18 @@ def server_detailed(request, s):
 
 
 @login_required(login_url='/login')
+def admins_servers(request):
+  return render(request, 'pages/admins/servers.pug')
+
+
+@login_required(login_url='/login')
 def ban(request):
   Punishment.objects.annotate(completion=ExpressionWrapper(F('created_at') + F('length'),
                                                            output_field=DateTimeField()))\
-             .filter(completion__lte=timezone.now(),
-                     resolved=False,
-                     length__isnull=False)\
-             .filter(Q(is_gagged=True) | Q(is_muted=True)).update(resolved=True)
+                    .filter(completion__lte=timezone.now(),
+                            resolved=False,
+                            length__isnull=False)\
+                    .filter(Q(is_gagged=True) | Q(is_muted=True)).update(resolved=True)
 
   return render(request, 'pages/ban.pug', {})
 

@@ -6,10 +6,11 @@ from . import views
 urlpatterns = [
     path('', views.home),
     path('bans', views.ban),
-    path('admins', views.admin),
 
     path('servers', views.server),
     path('servers/<slug:s>', views.server_detailed),
+
+    path('admins/servers', views.admins_servers),
 
     path('players', views.player),
     path('mutegags', views.mutegag),

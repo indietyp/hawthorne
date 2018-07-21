@@ -76,6 +76,7 @@ TEMPLATES = [
                 'core.context_processors.utils.favicons',
                 'core.context_processors.utils.role',
                 'core.context_processors.utils.announcement',
+                'core.context_processors.utils.globals',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
             ],

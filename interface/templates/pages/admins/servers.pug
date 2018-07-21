@@ -1,0 +1,19 @@
+- extends ajax|yesno:'skeleton/ajax.pug,skeleton/main.pug'
+- load i18n
+- load staticfiles
+
+- block content
+  ul.paginationTabs(data-target='admins[servers]')
+    li(data-trigger="[ct/switch]", data="admins") Admins
+    li(data-trigger="[ct/switch]", data="log") Roles
+    li.fRight(data-trigger='[modal/open]', data-trigger-target='[modal/admins/add]')
+      i.icon.ion-ios-add(style='margin-right:5px')
+      | New Admin
+    li.fRight(data-trigger='[modal/open]', data-trigger-target='[modal/group/add]', style="margin-right:6px")
+      i.icon.ion-ios-add(style='margin-right:5px')
+      | New Role
+
+  script.execute.
+    window.lazy('admins[servers]', 'admins')
+    window._.menu()
+    window._.init()

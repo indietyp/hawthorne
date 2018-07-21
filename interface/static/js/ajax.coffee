@@ -1,4 +1,4 @@
-ajax = (mode, target='.main', page=1) ->
+ajax = (mode, target='.main', page=1, manual=false) ->
   endpoint = window.endpoint.ajax
   header =
     "X-CSRFToken": window.csrftoken
@@ -6,6 +6,9 @@ ajax = (mode, target='.main', page=1) ->
   switch mode
     when "servers[overview]"
       endpoint = window.endpoint.ajax.servers[page]
+    when "admins[servers][admins]"
+      endpoint = window.endpoint.ajax.admins.servers.admins[page]
+
 
   endpoint.post(header, {}, (dummy, response) ->
     status = response.status
@@ -13,7 +16,7 @@ ajax = (mode, target='.main', page=1) ->
     target = $(target)
 
     if status == 200
-      if page == 1
+      if page == 1 or manual
         target.html('')
 
       target.htmlAppend(data)
@@ -22,7 +25,8 @@ ajax = (mode, target='.main', page=1) ->
         $(src).addClass("evaluated")
       )
 
-      window.ajax(mode, target, page + 1)
+      if not manual
+        window.ajax(mode, target, page + 1)
     return
   )
 
@@ -42,6 +46,8 @@ lazy = (mode, fallback) ->
   switch mode
     when "servers[detailed]"
       endpoint = window.endpoint.ajax.servers[window.slug][hash]
+    when 'admins[servers]'
+      endpoint = window.endpoint.ajax.admins.servers[hash]
 
   endpoint.post(header, {}, (dummy, response) ->
     status = response.status
@@ -52,7 +58,7 @@ lazy = (mode, fallback) ->
 
       $('.paginationContent', target).remove()
       target.htmlAppend(data)
-      $('script.execute:not(.evaluated)', target).forEach((src) ->
+      $('.paginationContent script.execute:not(.evaluated)', target).forEach((src) ->
         eval(src.innerHTML)
         $(src).addClass("evaluated")
       )

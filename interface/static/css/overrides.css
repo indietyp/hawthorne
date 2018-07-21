@@ -1,0 +1,7 @@
+.innerMain h3.center span.current:before {
+  content: " ";
+}
+
+.hidden {
+  display: none;
+}

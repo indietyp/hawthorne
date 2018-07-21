@@ -36,10 +36,21 @@ ul
     a(href='#', data-trigger='[dropdown/toggle]')
       i.icon.ion-ios-people
       | Players
+  // li.title
+  //   a(href='')
+  //     i.icon.ion-ios-flash
+  //     | Accounts
   li.title
-    a(href='')
+    a(href='#', data-trigger='[dropdown/toggle]')
       i.icon.ion-ios-flash
-      | Accounts
+      | Admins
+      i.icon.ion-ios-arrow-down.more
+    .expand
+      ul
+        li
+          a(href='') Servers
+        li
+          a(href='') Web
   li.title(onclick="window.vc('servers')")
     a(href="javascript:void(0)")
       i.icon.ion-logo-buffer

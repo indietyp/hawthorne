@@ -1,10 +1,30 @@
+import math
+
 from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import F, Count, Value, CharField, IntegerField
+from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 
 from ajax.views import renderer
-from core.models import User, ServerGroup
+from django.conf import settings
+from core.models import User, ServerGroup, Membership
 from log.models import ServerChat
+
+
+@login_required(login_url='/login')
+@permission_required('core.view_user')
+@require_http_methods(['POST'])
+def servers_admins(request):
+  pages = math.ceil(User.objects.filter(is_active=True).count() / settings.PAGE_SIZE)
+  return render(request, 'components/admins/servers/admins/wrapper.pug', {'pages': pages})
+
+
+@login_required(login_url='/login')
+@permission_required('core.view_user')
+@require_http_methods(['POST'])
+def servers_admins_entries(request, page):
+  memberships = Membership.objects.all().union(User.objects.filter(is_superuser=True, is_steam=True))
+  return renderer(request, 'components/admins/servers/admins/wrapper.pug', memberships, page)
 
 
 @login_required(login_url='/login')

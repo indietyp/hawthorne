@@ -1,0 +1,29 @@
+tr
+  td
+    label.checkmarkContainer
+      input(type='checkbox')
+      span.checkmark
+    .checkboxDialogue.modalSelect
+      select
+        option Delete
+      button
+        i.icon.ion-ios-checkmark
+        |  Confirm
+      button.paginationTabsDanger
+        i.icon.ion-ios-close
+        |  Cancel
+  td(style='width:1px')
+    - with url as "flags/"|add:data.user.country.code|add:".svg"
+    img.country(src='{% static url %}')
+  td= data.user.username
+  td
+    if data.user.is_superuser
+      = root
+    else
+      = data.role.name
+  td
+    if data.role.server
+      = data.role.server.name
+    else
+      | All
+
