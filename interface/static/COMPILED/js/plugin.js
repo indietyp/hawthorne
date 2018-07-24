@@ -7,7 +7,7 @@
   });
 
   init = function(scope = "body") {
-    var announcement_expand, checkmark_toggle, composer_select_choose, composer_select_open, ct_switch, dropdown_toggle, modal_close, modal_open, overlay, search_input, search_overlay, server_item, system_messages_open, user_toggle;
+    var announcement_expand, checkmark_toggle, clipboard, composer_select_choose, composer_select_open, ct_switch, dropdown_toggle, modal_close, modal_open, overlay, search_input, search_overlay, server_item, system_messages_open, user_toggle;
     dropdown_toggle = function() {
       $('.expand').not($('.expand', this.parentElement)).slideUp();
       $('.menu > ul > li > a').not($(this)).removeClass('navActive');
@@ -66,12 +66,12 @@
     };
     $('.search input', scope).on('click', search_input);
     checkmark_toggle = function() {
-      $(this).closest('tr').toggleClass('logSelected');
-      $('.checkboxDialogue').not($(this).parent().find('.checkboxDialogue')).fadeOut('fast');
-      if (!$(this).find('input').prop('checked')) {
-        $(this).parent().find('.checkboxDialogue').fadeIn('fast');
+      $(this.parentElement.parentElement).toggleClass('logSelected');
+      $('.checkboxDialogue').not($('.checkboxDialogue', this.parentElement)).fadeOut('fast');
+      if (!$('input', this)[0].checked) {
+        $('.checkboxDialogue', this.parentElement).fadeIn('fast');
       } else {
-        $(this).parent().find('.checkboxDialogue').fadeOut('fast');
+        $('.checkboxDialogue', this.parentElement).fadeOut('fast');
       }
     };
     $('.timeTable tbody tr td .checkmarkContainer', scope).on('mousedown', checkmark_toggle);
@@ -100,7 +100,10 @@
       window.lazy(this.parentElement.getAttribute('data-target'), '');
     };
     $('[data-trigger=\'[ct/switch]\']', scope).on('click', ct_switch);
-    new ClipboardJS('[data-trigger="[clip/copy]"]');
+    clipboard = function(event) {
+      return window.style.copy(event.target.textContent);
+    };
+    $('[data-trigger="[clip/copy]"]', scope).on('click', clipboard);
   };
 
   menu = function() {

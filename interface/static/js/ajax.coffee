@@ -24,8 +24,30 @@ ajax = (mode, target='.main', page=1, manual=false) ->
         eval(src.innerHTML)
         $(src).addClass("evaluated")
       )
+      window._.init(target)
 
-      if not manual
+      if manual
+        if page == 1
+          $(".timeTableGo.fLeft").addClass("hidden")
+        else
+          $(".timeTableGo.fLeft").removeClass("hidden")
+
+        if window.pagination.limitation == page
+            $(".timeTableGo.fRight").addClass("hidden")
+          else
+            $(".timeTableGo.fRight").removeClass("hidden")
+
+        $(".paginationContent h3 .current")[0].innerHTML = page
+        window.pagination.current = page
+
+        url = new URL(document.location.href)
+        params = new URLSearchParams(url.search.substring(1))
+        params.set("page", page)
+        url.search = "?" + params.toString()
+
+        history.pushState(null, null, url.href);
+
+      else
         window.ajax(mode, target, page + 1)
     return
   )
@@ -49,7 +71,8 @@ lazy = (mode, fallback) ->
     when 'admins[servers]'
       endpoint = window.endpoint.ajax.admins.servers[hash]
 
-  endpoint.post(header, {}, (dummy, response) ->
+  a = new URLSearchParams(window.location.search.substring(1))
+  endpoint.post(header, a, (dummy, response) ->
     status = response.status
     data = response.data
     target = $('.main')

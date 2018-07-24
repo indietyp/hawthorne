@@ -2427,7 +2427,7 @@ table thead .icon {
 }
 table .country {
     border-radius: 2px;
-    height: 20px;
+    /*height: 20px;*/
     width: 30px;
 }
 .serverActionButton {

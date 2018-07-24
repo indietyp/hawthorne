@@ -75,12 +75,14 @@ init = (scope="body") ->
 
 
   checkmark_toggle = ->
-    $(this).closest('tr').toggleClass 'logSelected'
-    $('.checkboxDialogue').not($(this).parent().find('.checkboxDialogue')).fadeOut 'fast'
-    if !$(this).find('input').prop('checked')
-      $(this).parent().find('.checkboxDialogue').fadeIn 'fast'
+    $(this.parentElement.parentElement).toggleClass 'logSelected'
+    $('.checkboxDialogue').not($('.checkboxDialogue', this.parentElement)).fadeOut 'fast'
+
+    if not $('input', this)[0].checked
+      $('.checkboxDialogue', this.parentElement).fadeIn 'fast'
     else
-      $(this).parent().find('.checkboxDialogue').fadeOut 'fast'
+      $('.checkboxDialogue', this.parentElement).fadeOut 'fast'
+
     return
   $('.timeTable tbody tr td .checkmarkContainer', scope).on 'mousedown', checkmark_toggle
 
@@ -117,7 +119,11 @@ init = (scope="body") ->
     return
   $('[data-trigger=\'[ct/switch]\']', scope).on 'click', ct_switch
 
-  new ClipboardJS('[data-trigger="[clip/copy]"]')
+
+  clipboard = (event) ->
+    window.style.copy(event.target.textContent)
+  $('[data-trigger="[clip/copy]"]', scope).on 'click', clipboard
+
   return
 
 menu = ->

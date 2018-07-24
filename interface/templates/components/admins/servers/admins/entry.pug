@@ -1,3 +1,5 @@
+- load static
+
 tr
   td
     label.checkmarkContainer
@@ -13,9 +15,9 @@ tr
         i.icon.ion-ios-close
         |  Cancel
   td(style='width:1px')
-    - with url as "flags/"|add:data.user.country.code|add:".svg"
-    img.country(src='{% static url %}')
-  td= data.user.username
+    - with "flags/"|add:data.user.country.code|add:".svg" as url
+      img.country(src='{% static url %}')
+  td= data.user.namespace
   td
     if data.user.is_superuser
       = root

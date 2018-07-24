@@ -16,7 +16,7 @@
         endpoint = window.endpoint.ajax.admins.servers.admins[page];
     }
     endpoint.post(header, {}, function(dummy, response) {
-      var data, status;
+      var data, params, status, url;
       status = response.status;
       data = response.data;
       target = $(target);
@@ -29,7 +29,26 @@
           eval(src.innerHTML);
           return $(src).addClass("evaluated");
         });
-        if (!manual) {
+        window._.init(target);
+        if (manual) {
+          if (page === 1) {
+            $(".timeTableGo.fLeft").addClass("hidden");
+          } else {
+            $(".timeTableGo.fLeft").removeClass("hidden");
+          }
+          if (window.pagination.limitation === page) {
+            $(".timeTableGo.fRight").addClass("hidden");
+          } else {
+            $(".timeTableGo.fRight").removeClass("hidden");
+          }
+          $(".paginationContent h3 .current")[0].innerHTML = page;
+          window.pagination.current = page;
+          url = new URL(document.location.href);
+          params = new URLSearchParams(url.search.substring(1));
+          params.set("page", page);
+          url.search = "?" + params.toString();
+          history.pushState(null, null, url.href);
+        } else {
           window.ajax(mode, target, page + 1);
         }
       }
@@ -37,7 +56,7 @@
   };
 
   lazy = function(mode, fallback) {
-    var endpoint, hash, header;
+    var a, endpoint, hash, header;
     endpoint = window.endpoint.ajax;
     header = {
       "X-CSRFToken": window.csrftoken
@@ -55,7 +74,8 @@
       case 'admins[servers]':
         endpoint = window.endpoint.ajax.admins.servers[hash];
     }
-    endpoint.post(header, {}, function(dummy, response) {
+    a = new URLSearchParams(window.location.search.substring(1));
+    endpoint.post(header, a, function(dummy, response) {
       var data, status, target;
       status = response.status;
       data = response.data;

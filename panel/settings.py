@@ -161,7 +161,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 STATIC_URL = '/static/'
-PAGE_SIZE = 16
+PAGE_SIZE = 1
 
 AUTOMATED_LOGGING = {
     'exclude': {'model': ['automated_logging', 'Session', 'basehttp', 'django.server']}

@@ -1,7 +1,11 @@
 insertHtml = (value, position, nodes) ->
   nodes.forEach((item) ->
-    tmpnodes = document.createElement('div')
+    if value.includes "<td>"
+      tmpnodes = document.createElement('tbody')
+    else
+      tmpnodes = document.createElement('div')
     tmpnodes.innerHTML = value
+
     while (tmpnode = tmpnodes.lastChild) != null
       try
         if position == 'before'

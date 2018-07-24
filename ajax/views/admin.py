@@ -15,16 +15,25 @@ from log.models import ServerChat
 @permission_required('core.view_user')
 @require_http_methods(['POST'])
 def servers_admins(request):
-  pages = math.ceil(User.objects.filter(is_active=True).count() / settings.PAGE_SIZE)
-  return render(request, 'components/admins/servers/admins/wrapper.pug', {'pages': pages})
+  current = request.POST.get("page", 1)
+
+  pages = math.ceil(Membership.objects.all().count() / settings.PAGE_SIZE)
+  return render(request, 'components/admins/servers/admins/wrapper.pug', {'pages': pages,
+                                                                          'current': current})
 
 
 @login_required(login_url='/login')
 @permission_required('core.view_user')
 @require_http_methods(['POST'])
 def servers_admins_entries(request, page):
-  memberships = Membership.objects.all().union(User.objects.filter(is_superuser=True, is_steam=True))
-  return renderer(request, 'components/admins/servers/admins/wrapper.pug', memberships, page)
+  superusers = []
+  for superuser in User.objects.filter(is_superuser=True, is_steam=True):
+    m = Membership()
+    m.user = superuser
+    superusers.append(m)
+
+  memberships = Membership.objects.all()
+  return renderer(request, 'components/admins/servers/admins/entry.pug', memberships, page, extra=superusers)
 
 
 @login_required(login_url='/login')
