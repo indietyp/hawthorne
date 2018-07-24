@@ -86,7 +86,8 @@ public Action RConInit(int client, int args) {
 }
 
 public Action RconStatus(int client, int args) {
-  char json[12288], reply[513], map[64];
+  char json[12288], reply[513], map[64], password[128];
+  ConVar cv_password = FindConVar("sv_password");
   int timeleft;
 
   if (client != 0) return Plugin_Handled;
@@ -98,10 +99,12 @@ public Action RconStatus(int client, int args) {
   // -- get data --
   GetCurrentMap(map, sizeof(map));
   GetMapTimeLeft(timeleft);
+  GetConVarString(cv_password, password, sizeof(password));
 
   // -- insert misc --
   output.SetString("id", SERVER);
   output.SetString("map", map);
+  output.SetBool("password", !StrEqual(password, ""));
 
   // -- insert clients --
   JSONObject players = AddToList();

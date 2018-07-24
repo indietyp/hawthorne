@@ -29,3 +29,8 @@ public void __pl_Hawthorne__SetNTVOptional() {
 	MarkNativeAsOptional("Hawthorne_GetServerID");
 	MarkNativeAsOptional("Hawthorne_GetClientID");
 }
+
+// ADD: Hawthorne_AddPunishment
+// ADD: Hawthorne_ModifyPunishment
+// ADD: Hawthorne_DeletePunishment
+// ADD: Hawthorne_GetPunishments
