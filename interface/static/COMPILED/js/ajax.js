@@ -14,6 +14,9 @@
         break;
       case "admins[servers][admins]":
         endpoint = window.endpoint.ajax.admins.servers.admins[page];
+        break;
+      case "punishments[bans]":
+        endpoint = window.endpoint.ajax.punishments.bans[page];
     }
     endpoint.post(header, {}, function(dummy, response) {
       var data, params, status, url;
@@ -73,6 +76,9 @@
         break;
       case 'admins[servers]':
         endpoint = window.endpoint.ajax.admins.servers[hash];
+        break;
+      case 'punishments[bans]':
+        endpoint = window.endpoint.ajax.punishments.bans;
     }
     a = new URLSearchParams(window.location.search.substring(1));
     endpoint.post(header, a, function(dummy, response) {

@@ -1,0 +1,63 @@
+.paginationContent
+  .innerMain
+    h1 Bans
+    .CBox.nomargin
+      .timeTableGo.fRight(onclick="window.ajax('punishments[bans]', '.paginationContent table tbody', window.pagination.current + 1, true)")
+        i.icon.ion-ios-arrow-forward
+      .timeTableGo.fLeft(onclick="window.ajax('punishments[bans]', '.paginationContent table tbody', window.pagination.current - 1, true)")
+        i.icon.ion-ios-arrow-back
+      h3.center
+        span Page
+        span.current 1
+        span /{{pages}}
+      table.timeTable
+        thead
+          tr
+            th
+            th
+            th Username
+            th Server
+            th Length
+            th Reason
+            th Created By
+        tbody
+  .innerSide
+    h1 Options
+    .CBox.nomargin
+      h3
+        i.icon.ion-ios-funnel(style='margin-right:10px')
+        |  Search Filters
+        button(style="margin-top: -13px;float: right;width: auto;") Edit
+      p Displaying active search filters:
+      ul.searchTags
+        li
+          b User
+          |  – indietyp
+          i.icon.ion-ios-close
+        li
+          b Length
+          |  – max. 2 weeks
+          i.icon.ion-ios-close
+        li
+          b Resolved
+          |  – Yes
+          i.icon.ion-ios-close
+        li
+          b Servers
+          |  – Surf
+          i.icon.ion-ios-close
+        li
+          b Created By
+          |  – indietyp
+          i.icon.ion-ios-close
+        li
+          b Updated By
+          |  – indietyp
+          i.icon.ion-ios-close
+
+  script.execute.
+    window.ajax("punishments[bans]", ".paginationContent table tbody", {{current}}, true)
+    window.pagination = {
+      'current': {{current}},
+      'limitation': {{pages}}
+    }

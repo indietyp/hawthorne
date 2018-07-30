@@ -23,15 +23,12 @@ body {
   box-sizing: border-box;
   outline:none;
 }
-*:first-letter {
+/**:first-letter {
   text-transform: uppercase;
-}
+}*/
 a {
   color: inherit;
   text-decoration: inherit;
-}
-.ion {
-  font-size: 24px;
 }
 code {
     background: rgba(0, 0, 0, 0.2);
@@ -445,7 +442,7 @@ h3 {
 .overview .info {
   margin: 0;
   display: block;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgb(208, 234, 247);
   margin-top: 10px;
 }
 .span_1_of_2 {
@@ -592,7 +589,7 @@ table .red {
   margin: 0 0 0 5px;
 }
 .paginationTabsDanger {
-    background:#D24D57 !important;
+    background: #bd5b63 !important;
     color:rgba(255,255,255,0.8) !important;
 }
 table .green {
@@ -725,16 +722,17 @@ tbody td {
   float: left;
   width: 250px;
   z-index: 7;
-  margin: 0 20px 0 0;
+  margin: 3px 20px 0 0;
   padding: 15px;
   border-radius: 2px;
 }
 .topbar .search .icon {
-  font-size: 18px;
+  font-size: 19px;
   position: absolute;
   right: 20px;
   cursor: text;
-  top: 14px;
+  top: 12px;
+  color: rgb(186, 213, 255);
 }
 .topbar .search input {
   border: none;
@@ -756,7 +754,7 @@ input[type="text"], input[type="password"], select, textarea {
   border: none;
   outline: none;
   border-radius: 2px;
-  padding: 20px;
+  padding: 15px;
   width: 100%;
   color: inherit;
   font-family: inherit;
@@ -828,10 +826,10 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 ::moz-placeholder {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgb(186, 213, 255);
 }
 ::placeholder {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgb(186, 213, 255);
 }
 form {
     margin:0;
@@ -924,6 +922,7 @@ form {
   position: absolute;
   top: 53px;
   left: 0px;
+  color: rgb(208, 234, 247);
   width: 100%;
   display: none;
   max-height: 500px;
@@ -2182,7 +2181,7 @@ table thead .icon {
     transition: .3s all ease-in-out;
     position: relative;
     display:flow-root;
-    color:rgba(255, 255, 255, 0.8);
+    color: rgb(208, 234, 247);
 }
 
 .CBox {
@@ -2455,9 +2454,7 @@ button[disabled] {
 
 .paginationTabs > li {
     border-radius: 4px;
-    background: #263b6f;
-    background: -moz-linear-gradient(to bottom left, #263b6f, #23345f);
-    background: linear-gradient(to bottom left, #263b6f, #23345f);
+    background: #265195;
     padding: 12px 20px;
     display: inline-block;
     margin: 0 10px 0 0;
@@ -2474,15 +2471,9 @@ button[disabled] {
 .paginationTabs > li:hover, .paginationTabSelected {
     color:#FFF !important;
 }
-.paginationContent {
-    display:block;
-}
-/*.ct1 {
-    display:block;
-}*/
 .timeTable .modalSelect:after {
-    top: 22px;
-    right: 22px;
+    top: 17px;
+    right: 17px;
 }
 .orderChatLog, .modalSelect {
     margin-bottom:10px !important;
@@ -2705,7 +2696,7 @@ h3 input {
     border-radius:4px;
     margin-bottom: 10px;
     display:inline-block;
-    color:rgba(255,255,255,0.8);
+    color: rgb(208, 234, 247);
     cursor:pointer;
     transition:.3s all;
     width: 100%;
@@ -2770,7 +2761,7 @@ h3 input {
     top: 14px;
     left: 60px;
     width:300px;
-    padding:15px;
+    padding:10px;
     display:none;
     z-index:2;
     border-radius:4px;
@@ -2826,7 +2817,7 @@ h3 input {
   padding: 10px;
   width: 100%;
   left: 0;
-  top: 60px;
+  top: 50px;
   background: #2c3370;
   background: -moz-linear-gradient(to bottom left, #265296, #2c3370);
   background: linear-gradient(to bottom left, #265296, #2c3370);
@@ -2836,10 +2827,10 @@ h3 input {
   padding: 15px 15px 15px 10px;
   text-transform: uppercase;
   font-weight: 900;
-  color: rgb(172, 227, 255, 0.5);
+  color: rgb(172, 227, 255, 1);
   cursor: default;
   font-size: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
 }
 ._Dynamic_Select > ._Select > ._Container {
   max-height: 150px;
@@ -2851,6 +2842,11 @@ h3 input {
   cursor: pointer;
   border-radius: 4px;
   padding: 10px 15px;
+}
+._Dynamic_Select > ._Select li > .checkmarkContainer > .checkmark {
+    top: -6px;
+    left: -23px;
+    z-index:-1;
 }
 ._Dynamic_Select > ._Select li:hover {
   background: rgba(0, 0, 0, 0.2);
@@ -2867,7 +2863,7 @@ h3 input {
   font-weight: 900;
 }
 ._Dynamic_Select > ._Select li p {
-  margin: -1px 23px;
+  margin: -1px 0;
 }
 ._Dynamic_Select > ._Select li ._Counter {
   float: right;
@@ -2878,7 +2874,8 @@ h3 input {
   float: left;
   width: 20px;
   margin-right: 10px;
-  border-radius: 50%;
+  border-radius: 4px;
+  margin-left:-5px;
   margin-top: -3px;
 }
 .modalDynamic {

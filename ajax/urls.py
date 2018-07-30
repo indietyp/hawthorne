@@ -7,11 +7,12 @@ urlpatterns = [
   path('admins/servers/admins/<int:page>', admin.servers_admins_entries),
   path('chat/log/<int:page>', chat.log),
 
-  path('ban/user/<int:page>', ban.user),
-
   path('mutegag/user/<int:page>', mutegag.user),
 
   path('player/user/<int:page>', player.user),
+
+  path('punishments/bans', punishment.ban),
+  path('punishments/bans/<int:page>', punishment.ban_entries),
 
   path('servers/<int:page>', server.list),
   path('servers/<slug:s>/overview', server.overview),

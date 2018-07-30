@@ -20,7 +20,7 @@ def role(request):
     return {'role': ''}
 
   if request.user.is_superuser:
-    return {'role': 'root'}
+    return {'role': settings.ROOT}
 
   memberships = Membership.objects.filter(user=request.user).order_by('-role__immunity')
 

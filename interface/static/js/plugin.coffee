@@ -2,12 +2,15 @@ $(->
   init()
 )
 
-init = (scope="body") ->
-  dropdown_toggle = ->
+init = (scope=document) ->
+  dropdown_toggle = (event) ->
+    event.stopImmediatePropagation()
+
     $('.expand').not($('.expand', this.parentElement)).slideUp()
     $('.menu > ul > li > a').not($(this)).removeClass 'navActive'
     $(this).toggleClass 'navActive'
     $('.expand', this.parentElement).slideToggle()
+
     return
   $('[data-trigger=\'[dropdown/toggle]\']', scope).on 'click', dropdown_toggle
 
@@ -101,13 +104,29 @@ init = (scope="body") ->
   $('[data-trigger=\'[composer/select/open]\']', scope).on 'click', composer_select_open
 
 
+  selectionData = []
   composer_select_choose = ->
+    if $(this).parent().closest('._Dynamic_Select').find('._Title').attr('data-select-multiple') == 'true'
+      text = $(this).find('p').text()
+      checkBox = $(this).find('.checkmarkContainer input')
+      if !checkBox.is(':checked')
+        checkBox.prop 'checked', true
+        selectionData.push text
+      else
+        checkBox.prop 'checked', false
+        i = 0
+        while i < selectionData.length
+          if selectionData[i] == text
+            selectionData.splice i, 1
+            break
+          i++
+      $(this).closest('._Dynamic_Select').find('._Title').text '(' + selectionData.length + ') selections'
+      return
     $(this).closest('._Dynamic_Select').find('._Title').text $(this).find('b').text()
     $(this).closest('._Dynamic_Select').toggleClass '_Dynamic_Select_Activated'
     $(this).closest('._Select').hide()
     return
   $('[data-trigger=\'[composer/select/choose]\']', scope).on 'click', composer_select_choose
-
 
   ct_switch = ->
     $('.paginationTabSelected', this.parentElement).removeClass('paginationTabSelected')

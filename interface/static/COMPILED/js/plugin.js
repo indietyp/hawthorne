@@ -6,9 +6,11 @@
     return init();
   });
 
-  init = function(scope = "body") {
-    var announcement_expand, checkmark_toggle, clipboard, composer_select_choose, composer_select_open, ct_switch, dropdown_toggle, modal_close, modal_open, overlay, search_input, search_overlay, server_item, system_messages_open, user_toggle;
-    dropdown_toggle = function() {
+  init = function(scope = document) {
+    var announcement_expand, checkmark_toggle, clipboard, composer_select_choose, composer_select_open, ct_switch, dropdown_toggle, modal_close, modal_open, overlay, search_input, search_overlay, selectionData, server_item, system_messages_open, user_toggle;
+    dropdown_toggle = function(event) {
+      event.stopImmediatePropagation();
+      console.log(event);
       $('.expand').not($('.expand', this.parentElement)).slideUp();
       $('.menu > ul > li > a').not($(this)).removeClass('navActive');
       $(this).toggleClass('navActive');
@@ -85,7 +87,29 @@
       $(this).parent('._Dynamic_Select').find('._Select').find('._Select_Search').find('input').focus();
     };
     $('[data-trigger=\'[composer/select/open]\']', scope).on('click', composer_select_open);
+    selectionData = [];
     composer_select_choose = function() {
+      var checkBox, i, text;
+      if ($(this).parent().closest('._Dynamic_Select').find('._Title').attr('data-select-multiple') === 'true') {
+        text = $(this).find('p').text();
+        checkBox = $(this).find('.checkmarkContainer input');
+        if (!checkBox.is(':checked')) {
+          checkBox.prop('checked', true);
+          selectionData.push(text);
+        } else {
+          checkBox.prop('checked', false);
+          i = 0;
+          while (i < selectionData.length) {
+            if (selectionData[i] === text) {
+              selectionData.splice(i, 1);
+              break;
+            }
+            i++;
+          }
+        }
+        $(this).closest('._Dynamic_Select').find('._Title').text('(' + selectionData.length + ') selections');
+        return;
+      }
       $(this).closest('._Dynamic_Select').find('._Title').text($(this).find('b').text());
       $(this).closest('._Dynamic_Select').toggleClass('_Dynamic_Select_Activated');
       $(this).closest('._Select').hide();

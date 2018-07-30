@@ -111,7 +111,7 @@ def admins_servers(request):
 
 
 @login_required(login_url='/login')
-def ban(request):
+def punishments_bans(request):
   Punishment.objects.annotate(completion=ExpressionWrapper(F('created_at') + F('length'),
                                                            output_field=DateTimeField()))\
                     .filter(completion__lte=timezone.now(),
@@ -119,7 +119,7 @@ def ban(request):
                             length__isnull=False)\
                     .filter(Q(is_gagged=True) | Q(is_muted=True)).update(resolved=True)
 
-  return render(request, 'pages/ban.pug', {})
+  return render(request, 'pages/punishments/bans.pug', {})
 
 
 @login_required(login_url='/login')

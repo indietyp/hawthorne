@@ -5,14 +5,16 @@ from . import views
 
 urlpatterns = [
     path('', views.home),
-    path('bans', views.ban),
 
     path('servers', views.server),
     path('servers/<slug:s>', views.server_detailed),
 
     path('admins/servers', views.admins_servers),
 
+    path('punishments/bans', views.punishments_bans),
+
     path('players', views.player),
+    # path('bans', views.ban),
     path('mutegags', views.mutegag),
     path('settings', views.settings),
     path('announcements', views.announcement),

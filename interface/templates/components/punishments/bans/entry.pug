@@ -1,0 +1,37 @@
+- load interface_utils
+- load static
+
+tr
+  td
+    label.checkmarkContainer
+      input(type='checkbox')
+      span.checkmark
+    .checkboxDialogue.modalSelect
+      select
+        option Resolve
+      button
+        i.icon.ion-ios-checkmark
+        |  Confirm
+      button.paginationTabsDanger
+        i.icon.ion-ios-close
+        |  Cancel
+  td(style='width:1px')
+    - with "flags/"|add:data.user.country.code|add:".svg" as url
+      img.country(src='{% static url %}')
+  td= data.user.namespace
+  td
+    if data.server
+      = data.server.name
+    else
+      | All
+  td
+    if data.length
+      = data.length|duration
+    else
+      | Eternal
+  td= data.reason
+  td
+    = data.created_by.namespace
+    if data.updated_by
+      | /{{data.updated_by.namespace}}
+

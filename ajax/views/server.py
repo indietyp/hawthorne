@@ -82,7 +82,6 @@ def log(request, s, *args, **kwargs):
   return render(request, 'components/servers/detailed/log.pug', {'data': server})
 
 
-
 @login_required(login_url='/login')
 @permission_required('core.view_server')
 @require_http_methods(['POST'])

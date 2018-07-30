@@ -8,6 +8,8 @@ ajax = (mode, target='.main', page=1, manual=false) ->
       endpoint = window.endpoint.ajax.servers[page]
     when "admins[servers][admins]"
       endpoint = window.endpoint.ajax.admins.servers.admins[page]
+    when "punishments[bans]"
+      endpoint = window.endpoint.ajax.punishments.bans[page]
 
 
   endpoint.post(header, {}, (dummy, response) ->
@@ -70,6 +72,8 @@ lazy = (mode, fallback) ->
       endpoint = window.endpoint.ajax.servers[window.slug][hash]
     when 'admins[servers]'
       endpoint = window.endpoint.ajax.admins.servers[hash]
+    when 'punishments[bans]'
+      endpoint = window.endpoint.ajax.punishments.bans
 
   a = new URLSearchParams(window.location.search.substring(1))
   endpoint.post(header, a, (dummy, response) ->
