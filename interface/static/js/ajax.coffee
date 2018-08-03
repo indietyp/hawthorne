@@ -8,6 +8,8 @@ ajax = (mode, target='.main', page=1, manual=false) ->
       endpoint = window.endpoint.ajax.servers[page]
     when "admins[servers][admins]"
       endpoint = window.endpoint.ajax.admins.servers.admins[page]
+    when "admins[web][admins]"
+      endpoint = window.endpoint.ajax.admins.web.admins[page]
     when "punishments[bans]"
       endpoint = window.endpoint.ajax.punishments.bans[page]
     when "punishments[mutes]"
@@ -76,6 +78,8 @@ lazy = (mode, fallback) ->
       endpoint = window.endpoint.ajax.servers[window.slug][hash]
     when 'admins[servers]'
       endpoint = window.endpoint.ajax.admins.servers[hash]
+    when 'admins[web]'
+      endpoint = window.endpoint.ajax.admins.web[hash]
     when 'punishments[bans]'
       endpoint = window.endpoint.ajax.punishments.bans
     when 'punishments[mutes]'

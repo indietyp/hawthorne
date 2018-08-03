@@ -109,6 +109,10 @@ def server_detailed(request, s):
 def admins_servers(request):
   return render(request, 'pages/admins/servers.pug')
 
+@login_required(login_url='/login')
+def admins_web(request):
+  return render(request, 'pages/admins/web.pug')
+
 
 @login_required(login_url='/login')
 def punishments(request):

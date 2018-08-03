@@ -10,6 +10,7 @@ urlpatterns = [
     path('servers/<slug:s>', views.server_detailed),
 
     path('admins/servers', views.admins_servers),
+    path('admins/web', views.admins_web),
 
     path('punishments/bans', views.punishments, name="interface[punishments][ban]"),
     path('punishments/mutes', views.punishments, name="interface[punishments][mutes]"),

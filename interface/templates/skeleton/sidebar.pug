@@ -36,10 +36,6 @@ ul
     a(href='#', data-trigger='[dropdown/toggle]')
       i.icon.ion-ios-people
       | Players
-  // li.title
-  //   a(href='')
-  //     i.icon.ion-ios-flash
-  //     | Accounts
   li.title
     a(href='#', data-trigger='[dropdown/toggle]')
       i.icon.ion-ios-flash
@@ -49,8 +45,8 @@ ul
       ul
         li(onclick="window.vc('admins[servers]')")
           a(href="javascript:void(0)") Servers
-        li
-          a(href='') Web
+        li(onclick="window.vc('admins[web]')")
+          a(href="javascript:void(0)") Web
   li.title(onclick="window.vc('servers')")
     a(href="javascript:void(0)")
       i.icon.ion-logo-buffer
@@ -59,6 +55,14 @@ ul
     a(href='')
       i.icon.ion-ios-megaphone
       | Announcements
+  li.title
+    a(href='')
+      i.icon.ion-ios-megaphone
+      | System Messages
+  li.title
+    a(href='')
+      i.icon.ion-ios-megaphone
+      | Settings
 
 
 // window.vc.change('settings')

@@ -5,6 +5,10 @@ from ajax.views import *
 urlpatterns = [
   path('admins/servers/admins', admin.servers_admins),
   path('admins/servers/admins/<int:page>', admin.servers_admins_entries),
+
+  path('admins/web/admins', admin.web_admins),
+  path('admins/web/admins/<int:page>', admin.web_admins_entries),
+
   path('chat/log/<int:page>', chat.log),
 
   path('mutegag/user/<int:page>', mutegag.user),

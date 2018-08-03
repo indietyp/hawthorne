@@ -39,6 +39,26 @@ def servers_admins_entries(request, page):
 @login_required(login_url='/login')
 @permission_required('core.view_user')
 @require_http_methods(['POST'])
+def web_admins(request):
+  current = request.POST.get("page", 1)
+
+  pages = math.ceil(Membership.objects.all().count() / settings.PAGE_SIZE)
+  return render(request, 'components/admins/web/admins/wrapper.pug', {'pages': pages,
+                                                                          'current': current})
+
+
+@login_required(login_url='/login')
+@permission_required('core.view_user')
+@require_http_methods(['POST'])
+def web_admins_entries(request, page):
+  users = User.objects.filter(is_active=True)
+
+  return renderer(request, 'components/admins/web/admins/entry.pug', users, page)
+
+
+@login_required(login_url='/login')
+@permission_required('core.view_user')
+@require_http_methods(['POST'])
 def user(request, page, *args, **kwargs):
   # superuser = root
   obj = User.objects.annotate(rct=Count('roles')) \

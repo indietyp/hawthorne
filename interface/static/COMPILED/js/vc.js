@@ -19,6 +19,9 @@
       case 'admins[servers]':
         url = 'admins/servers';
         break;
+      case 'admins[web]':
+        url = 'admins/web';
+        break;
       case 'punishments':
         url = "[[PLACEHOLDER]]";
         break;

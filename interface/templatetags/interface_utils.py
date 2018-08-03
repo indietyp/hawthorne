@@ -6,6 +6,7 @@ import natural.date
 from django.conf import settings
 from django.template.defaultfilters import date
 from django.template.defaulttags import register
+from django.contrib.auth.models import Permission
 
 
 @register.filter
@@ -28,3 +29,8 @@ def flatten(value, location):
 def warp(duration):
   now = datetime.datetime.now()
   return now + duration
+
+
+@register.filter
+def permission_percentage(value):
+  return str(int(round(Permission.objects.all().count() / value.get_all_permissions() * 100)))
