@@ -1,0 +1,35 @@
+- load static
+
+tr
+  td
+    label.checkmarkContainer
+      input(type='checkbox')
+      span.checkmark
+    .checkboxDialogue.modalSelect
+      select
+        option Delete
+      button
+        i.icon.ion-ios-checkmark
+        |  Confirm
+      button.paginationTabsDanger
+        i.icon.ion-ios-close
+        |  Cancel
+  td(style='width:1px')
+    - with "flags/"|add:data.user.country.code|add:".svg" as url
+      img.country(src='{% static url %}')
+  td
+    if data.is_steam
+      = data.namespace
+    else
+      = data.username
+  td
+    if data.is_superuser
+      = root
+    else
+      = data.role.name
+  td
+    if data.is_superuser
+      | 100%
+    else
+      = data.executed
+

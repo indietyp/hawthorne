@@ -16,6 +16,9 @@
       case 'servers[detailed]':
         url = `servers/${scope}`;
         break;
+      case 'admins[servers]':
+        url = 'admins/servers';
+        break;
       case 'punishments':
         url = "[[PLACEHOLDER]]";
         break;
@@ -39,12 +42,11 @@
       status = response.status;
       data = response.data;
       if (status === 200) {
+        window.history.pushState("", "", "/" + url);
         $(".main")[0].innerHTML = data;
-        $(".main script.execute").forEach(function(scr) {
+        return $(".main script.execute:not(.evaluated)").forEach(function(scr) {
           return eval(scr.innerHTML);
         });
-        url = "/" + url;
-        return window.history.pushState("", "", url);
       }
     });
   };

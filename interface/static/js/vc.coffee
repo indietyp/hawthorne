@@ -10,6 +10,8 @@ load = (destination='home', scope='') ->
       url = "servers"
     when 'servers[detailed]'
       url = "servers/#{scope}"
+    when 'admins[servers]'
+      url = 'admins/servers'
     when 'punishments'
       url = "[[PLACEHOLDER]]"
     when 'punishments[bans]'
@@ -29,13 +31,13 @@ load = (destination='home', scope='') ->
     data = response.data
 
     if status == 200
+      window.history.pushState "", "", "/" + url
+
       $(".main")[0].innerHTML = data
-      $(".main script.execute").forEach((scr) ->
-        eval(scr.innerHTML)
+      $(".main script.execute:not(.evaluated)").forEach((scr) ->
+        eval scr.innerHTML
       )
 
-      url = "/" + url
-      window.history.pushState "", "", url
   )
 
 window.vc = load
