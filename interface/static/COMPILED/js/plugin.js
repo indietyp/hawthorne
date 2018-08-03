@@ -10,7 +10,6 @@
     var announcement_expand, checkmark_toggle, clipboard, composer_select_choose, composer_select_open, ct_switch, dropdown_toggle, modal_close, modal_open, overlay, search_input, search_overlay, selectionData, server_item, system_messages_open, user_toggle;
     dropdown_toggle = function(event) {
       event.stopImmediatePropagation();
-      console.log(event);
       $('.expand').not($('.expand', this.parentElement)).slideUp();
       $('.menu > ul > li > a').not($(this)).removeClass('navActive');
       $(this).toggleClass('navActive');

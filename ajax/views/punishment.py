@@ -12,17 +12,39 @@ from core.models import Punishment
 @login_required(login_url='/login')
 @permission_required('core.view_user')
 @require_http_methods(['POST'])
-def ban(request):
+def list(request):
   current = request.POST.get("page", 1)
+  name = request.resolver_match.url_name
+  punishments = Punishment.objects.all()
 
-  pages = math.ceil(Punishment.objects.all().count() / settings.PAGE_SIZE)
-  return render(request, 'components/punishments/bans/wrapper.pug', {'pages': pages,
-                                                                     'current': current})
+  if "ban" in name:
+    punishments = punishments.filter(is_banned=True)
+    mode = "ban"
+  elif "mute" in name:
+    punishments = punishments.filter(is_muted=True)
+    mode = "mute"
+  elif "gag" in name:
+    punishments = punishments.filter(is_gagged=True)
+    mode = "gag"
+
+  pages = math.ceil(punishments.count() / settings.PAGE_SIZE)
+  return render(request, 'components/punishments/wrapper.pug', {'pages': pages,
+                                                                'current': current,
+                                                                'mode': mode})
 
 
 @login_required(login_url='/login')
 @permission_required('core.view_user')
 @require_http_methods(['POST'])
-def ban_entries(request, page):
-  memberships = Punishment.objects.filter(is_banned=True)
-  return renderer(request, 'components/punishments/bans/entry.pug', memberships, page)
+def entries(request, page):
+  name = request.resolver_match.url_name
+  punishments = Punishment.objects.all()
+
+  if "ban" in name:
+    punishments = punishments.filter(is_banned=True)
+  elif "mute" in name:
+    punishments = punishments.filter(is_muted=True)
+  elif "gag" in name:
+    punishments = punishments.filter(is_gagged=True)
+
+  return renderer(request, 'components/punishments/entry.pug', punishments, page)

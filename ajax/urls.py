@@ -11,8 +11,14 @@ urlpatterns = [
 
   path('player/user/<int:page>', player.user),
 
-  path('punishments/bans', punishment.ban),
-  path('punishments/bans/<int:page>', punishment.ban_entries),
+  path('punishments/bans', punishment.list, name="ajax[punishment][ban]"),
+  path('punishments/bans/<int:page>', punishment.entries, name="ajax[punishment][ban]"),
+
+  path('punishments/mutes', punishment.list, name="ajax[punishment][mute]"),
+  path('punishments/mutes/<int:page>', punishment.entries, name="ajax[punishment][mute]"),
+
+  path('punishments/gags', punishment.list, name="ajax[punishment][gag]"),
+  path('punishments/gags/<int:page>', punishment.entries, name="ajax[punishment][gag]"),
 
   path('servers/<int:page>', server.list),
   path('servers/<slug:s>/overview', server.overview),

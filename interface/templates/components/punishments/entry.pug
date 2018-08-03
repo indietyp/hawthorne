@@ -1,8 +1,8 @@
 - load interface_utils
 - load static
 
-tr
-  td
+tr(style="{%if data.resolved%}opacity:0.5;{%endif%}")
+  td(style='width:48px')
     label.checkmarkContainer
       input(type='checkbox')
       span.checkmark
@@ -19,17 +19,17 @@ tr
     - with "flags/"|add:data.user.country.code|add:".svg" as url
       img.country(src='{% static url %}')
   td= data.user.namespace
-  td
-    if data.server
-      = data.server.name
-    else
-      | All
+  td= data.reason
   td
     if data.length
       = data.length|duration
     else
       | Eternal
-  td= data.reason
+  td
+    if data.server
+      = data.server.name
+    else
+      | All
   td
     = data.created_by.namespace
     if data.updated_by

@@ -1,0 +1,33 @@
+output-format: json
+
+strictness: medium
+test-warnings: false
+doc-warnings: false
+
+ignore-paths:
+  - docs
+  - api/reference
+
+pep257:
+  disable:
+    - D105
+    - D203
+
+frosted:
+  disable:
+    - D203
+
+pep8:
+  disable:
+    - D203
+
+  enable:
+    - W601
+    - W391
+    - W191
+
+  options:
+    max-line-length: 95
+
+uses:
+  - django

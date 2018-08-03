@@ -111,32 +111,23 @@ def admins_servers(request):
 
 
 @login_required(login_url='/login')
-def punishments_bans(request):
+def punishments(request):
+  name = request.resolver_match.url_name
+
+  if "ban" in name:
+    mode = "ban"
+  elif "mute" in name:
+    mode = "mute"
+  elif "gag" in name:
+    mode = "gag"
+
   Punishment.objects.annotate(completion=ExpressionWrapper(F('created_at') + F('length'),
                                                            output_field=DateTimeField()))\
                     .filter(completion__lte=timezone.now(),
                             resolved=False,
-                            length__isnull=False)\
-                    .filter(Q(is_gagged=True) | Q(is_muted=True)).update(resolved=True)
+                            length__isnull=False).update(resolved=True)
 
-  return render(request, 'pages/punishments/bans.pug', {})
-
-
-@login_required(login_url='/login')
-def mutegag(request):
-  Punishment.objects.annotate(completion=ExpressionWrapper(F('created_at') + F('length'),
-                                                           output_field=DateTimeField()))\
-                    .filter(completion__lte=timezone.now(),
-                            resolved=False,
-                            length__isnull=False)\
-                    .filter(Q(is_gagged=True) | Q(is_muted=True)).update(resolved=True)
-
-  return render(request, 'pages/mutegag.pug')
-
-
-@login_required(login_url='/login')
-def announcement(request):
-  return render(request, 'pages/home.pug', {})
+  return render(request, 'pages/punishments/general.pug', {'mode': mode})
 
 
 @login_required(login_url='/login')

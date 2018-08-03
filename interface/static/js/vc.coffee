@@ -10,6 +10,14 @@ load = (destination='home', scope='') ->
       url = "servers"
     when 'servers[detailed]'
       url = "servers/#{scope}"
+    when 'punishments'
+      url = "[[PLACEHOLDER]]"
+    when 'punishments[bans]'
+      url = "punishments/bans"
+    when 'punishments[mutes]'
+      url = "punishments/mutes"
+    when 'punishments[gags]'
+      url = "punishments/gags"
     else
       return
 
@@ -26,7 +34,7 @@ load = (destination='home', scope='') ->
         eval(scr.innerHTML)
       )
 
-      url = if not url then '/' else url
+      url = "/" + url
       window.history.pushState "", "", url
   )
 

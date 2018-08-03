@@ -16,6 +16,18 @@
       case 'servers[detailed]':
         url = `servers/${scope}`;
         break;
+      case 'punishments':
+        url = "[[PLACEHOLDER]]";
+        break;
+      case 'punishments[bans]':
+        url = "punishments/bans";
+        break;
+      case 'punishments[mutes]':
+        url = "punishments/mutes";
+        break;
+      case 'punishments[gags]':
+        url = "punishments/gags";
+        break;
       default:
         return;
     }
@@ -31,7 +43,7 @@
         $(".main script.execute").forEach(function(scr) {
           return eval(scr.innerHTML);
         });
-        url = !url ? '/' : url;
+        url = "/" + url;
         return window.history.pushState("", "", url);
       }
     });

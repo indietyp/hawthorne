@@ -17,6 +17,12 @@
         break;
       case "punishments[bans]":
         endpoint = window.endpoint.ajax.punishments.bans[page];
+        break;
+      case "punishments[mutes]":
+        endpoint = window.endpoint.ajax.punishments.mutes[page];
+        break;
+      case "punishments[gags]":
+        endpoint = window.endpoint.ajax.punishments.gags[page];
     }
     endpoint.post(header, {}, function(dummy, response) {
       var data, params, status, url;
@@ -79,6 +85,12 @@
         break;
       case 'punishments[bans]':
         endpoint = window.endpoint.ajax.punishments.bans;
+        break;
+      case 'punishments[mutes]':
+        endpoint = window.endpoint.ajax.punishments.mutes;
+        break;
+      case 'punishments[gags]':
+        endpoint = window.endpoint.ajax.punishments.gags;
     }
     a = new URLSearchParams(window.location.search.substring(1));
     endpoint.post(header, a, function(dummy, response) {
