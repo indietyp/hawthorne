@@ -23,6 +23,7 @@ frosted:
 pep8:
   disable:
     - E114
+    - E111
     - D203
 
   enable:
