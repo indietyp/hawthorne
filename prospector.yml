@@ -1,12 +1,15 @@
 output-format: json
 
-strictness: medium
+inherits:
+  - strictness_veryhigh
+
 test-warnings: false
 doc-warnings: false
 
 ignore-paths:
   - docs
   - api/reference
+  - migrations
 
 pep257:
   disable:
@@ -19,6 +22,7 @@ frosted:
 
 pep8:
   disable:
+    - E114
     - D203
 
   enable:
@@ -28,6 +32,30 @@ pep8:
 
   options:
     max-line-length: 95
+
+vulture:
+  run: true
+
+pylint:
+  disable:
+    - fixme
+    - bad-continuation
+    - W5103
+
+  options:
+    max-locals: 15
+    max-returns: 6
+    max-branches: 15
+    max-statements: 60
+    min-public-methods: 1
+    max-public-methods: 20
+    max-line-length: 95
+
+pyroma:
+  disable:
+    - PYR15
+    - PYR18
+    - PYR17
 
 uses:
   - django
