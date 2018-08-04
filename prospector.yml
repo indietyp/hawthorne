@@ -24,6 +24,7 @@ pep8:
   disable:
     - E114
     - E111
+    - E121
     - D203
 
   enable:
