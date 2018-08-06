@@ -15,6 +15,9 @@
       case "admins[servers][admins]":
         endpoint = window.endpoint.ajax.admins.servers.admins[page];
         break;
+      case "servers[servers][roles]":
+        endpoint = window.endpoint.ajax.admins.servers.roles[page];
+        break;
       case "admins[web][admins]":
         endpoint = window.endpoint.ajax.admins.web.admins[page];
         break;

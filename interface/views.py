@@ -1,4 +1,5 @@
 import json
+import random
 import datetime
 import calendar
 
@@ -149,3 +150,8 @@ def settings(request):
     mf = mainframe.populate().current.id
 
   return render(request, 'pages/settings.pug', {'simple': modules, 'advanced': perms, 'mainframe': mf, 'discord': None})
+
+
+def page_not_found(request, exception=None, template_name='404.pug'):
+  creatures = ['retarded', 'hot', 'crazed', 'embarrassed', 'worried', 'annoyed']
+  return render(request, 'skeleton/404.pug', {'creature': random.choice(creatures)})

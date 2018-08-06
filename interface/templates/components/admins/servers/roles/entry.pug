@@ -1,0 +1,24 @@
+.section.group
+  each item in data
+    .serverGridItem.col.span_1_of_4(onclick="window.vc('servers[detailed]', '{{item.id}}')")
+      b(style="color:rgb(0,169,255)")= item.name
+      .playerCount
+        //- (class='{{item.executed|yesno:",noPlayers"}} {%if item.executed.clients|length == item.executed.limitations.clients%}fullPlayers{%endif%}"')
+        i.icon.ion-md-flash(style="margin-right:5px")
+        = item.immunity
+        | %
+      .mapName
+        = item.flags
+      .fLeft
+        i.icon.ion-md-time(style="margin-right:5px")
+        if item.usetime
+          = item.usetime|duration
+        else
+          | Indefinetly
+      .fRight
+        i.icon.ion-md-filing(style="margin-right:5px")
+        if item.server
+          = item.server.name
+        else
+          | All
+

@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from interface.views import page_not_found
 
 urlpatterns = [
   path('admin/', admin.site.urls),
@@ -22,4 +23,7 @@ urlpatterns = [
   path('ajax/v1/', include('ajax.urls')),
   path('', include('interface.urls')),
   path('external/', include('social_django.urls', namespace='social')),
+  path('404', page_not_found)
 ]
+
+handler404 = 'interface.views.page_not_found'

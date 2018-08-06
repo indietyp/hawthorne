@@ -37,6 +37,21 @@ def servers_admins_entries(request, page):
 
 
 @login_required(login_url='/login')
+@permission_required('core.view_servergroup')
+@require_http_methods(['POST'])
+def servers_roles(request):
+  return render(request, 'components/admins/servers/roles/wrapper.pug')
+
+
+@login_required(login_url='/login')
+@permission_required('core.view_servergroup')
+@require_http_methods(['POST'])
+def servers_roles_entries(request, page):
+  obj = ServerGroup.objects.all()
+  return renderer(request, 'components/admins/servers/roles/entry.pug', obj, page, size=4, overwrite=True)
+
+
+@login_required(login_url='/login')
 @permission_required('core.view_user')
 @require_http_methods(['POST'])
 def web_admins(request):

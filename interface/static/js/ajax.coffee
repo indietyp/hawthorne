@@ -8,6 +8,8 @@ ajax = (mode, target='.main', page=1, manual=false) ->
       endpoint = window.endpoint.ajax.servers[page]
     when "admins[servers][admins]"
       endpoint = window.endpoint.ajax.admins.servers.admins[page]
+    when "servers[servers][roles]"
+      endpoint = window.endpoint.ajax.admins.servers.roles[page]
     when "admins[web][admins]"
       endpoint = window.endpoint.ajax.admins.web.admins[page]
     when "punishments[bans]"
@@ -94,7 +96,6 @@ lazy = (mode, fallback) ->
     target = $('.main')
 
     if status == 200
-
       $('.paginationContent', target).remove()
       target.htmlAppend(data)
       $('.paginationContent script.execute:not(.evaluated)', target).forEach((src) ->

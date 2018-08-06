@@ -966,6 +966,44 @@ form {
   max-width: 100%;
   overflow-y: none;
 }
+
+.errorContainer {
+  display: flex;
+  align-items: center;
+
+  width: 33%;
+  height: 304px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  max-width: 100%;
+  overflow-y: none;
+}
+.errorContainer .section {
+  /*width: 50%;*/
+}
+.errorContainer .section svg{
+  height: 75%;
+  fill: white !important;
+}
+.errorContainer h1 {
+  text-align: center;
+  font-size: 8em;
+}
+.errorContainer h2 {
+  text-align: center;
+  font-size: 2em;
+  margin-top: -1em;
+  padding-bottom: 1em;
+  border-bottom: 1px rgba(0, 0, 0, 0.3) solid;
+}
+.errorContainer p {
+  text-align: justify;
+}
+
 .login {
   border-radius: 2px;
   margin-top: 20px;
