@@ -1,12 +1,8 @@
 import datetime
-from base64 import b85encode
-from binascii import unhexlify
 
 import natural.date
-from django.conf import settings
-from django.template.defaultfilters import date
 from django.template.defaulttags import register
-from django.contrib.auth.models import Permission
+from django.contrib.auth.models import Group, Permission
 
 
 @register.filter
@@ -33,4 +29,5 @@ def warp(duration):
 
 @register.filter
 def permission_percentage(value):
-  return str(int(round(Permission.objects.all().count() / value.get_all_permissions() * 100)))
+  data = value.permissions.all().count() if isinstance(value, Group) else value.get_all_permissions()
+  return str(int(round(Permission.objects.all().count() / data * 100)))

@@ -3,15 +3,18 @@ ajax = (mode, target='.main', page=1, manual=false) ->
   header =
     "X-CSRFToken": window.csrftoken
 
+  console.log mode
   switch mode
     when "servers[overview]"
       endpoint = window.endpoint.ajax.servers[page]
     when "admins[servers][admins]"
       endpoint = window.endpoint.ajax.admins.servers.admins[page]
-    when "servers[servers][roles]"
+    when "admins[servers][roles]"
       endpoint = window.endpoint.ajax.admins.servers.roles[page]
     when "admins[web][admins]"
       endpoint = window.endpoint.ajax.admins.web.admins[page]
+    when "admins[web][groups]"
+      endpoint = window.endpoint.ajax.admins.web.groups[page]
     when "punishments[bans]"
       endpoint = window.endpoint.ajax.punishments.bans[page]
     when "punishments[mutes]"

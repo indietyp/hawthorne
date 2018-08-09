@@ -10,10 +10,10 @@ urlpatterns = [
 
   path('admins/web/admins', admin.web_admins),
   path('admins/web/admins/<int:page>', admin.web_admins_entries),
+  path('admins/web/groups', admin.web_groups),
+  path('admins/web/groups/<int:page>', admin.web_groups_entries),
 
   path('chat/log/<int:page>', chat.log),
-
-  path('mutegag/user/<int:page>', mutegag.user),
 
   path('player/user/<int:page>', player.user),
 
