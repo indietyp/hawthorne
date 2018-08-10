@@ -1,22 +1,15 @@
 .section.group
   each item in data
-    .serverGridItem.col.span_1_of_4(onclick="window.vc('servers[detailed]', '{{item.id}}')")
+    .serverGridItem.col.span_1_of_4(onclick="window.vc('servers[detailed]', '{{item.id}}')" style="padding-bottom:6px")
       b(style="color:rgb(0,169,255)")= item.name
       .playerCount
         i.icon.ion-md-person(style="margin-right:5px")
         = item.user_set|length
-      .mapName
+      .mapName(style="margin-bottom:6px")
         = item|permission_percentage|add:"% granted"
-      //- .fLeft
-      //-   i.icon.ion-md-time(style="margin-right:5px")
-      //-   if item.usetime
-      //-     = item.usetime|duration
-      //-   else
-      //-     | Indefinetly
-      //- .fRight
-      //-   i.icon.ion-md-filing(style="margin-right:5px")
-      //-   if item.server
-      //-     = item.server.name
-      //-   else
-      //-     | All
+      .fRight
+        button.round
+          i.icon.ion-md-create
+        button.round.red
+          i.icon.ion-md-trash
 

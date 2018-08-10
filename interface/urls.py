@@ -11,7 +11,6 @@ urlpatterns = [
 
     path('admins/servers', views.admins_servers),
     path('admins/web', views.admins_web),
-    path('admins/web/groups/<int:i>', views.admins_web_group),
 
     path('punishments/bans', views.punishments, name="interface[punishments][ban]"),
     path('punishments/mutes', views.punishments, name="interface[punishments][mutes]"),

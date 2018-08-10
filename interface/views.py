@@ -117,12 +117,6 @@ def admins_web(request):
 
 
 @login_required(login_url='/login')
-def admins_web_group(request, i):
-  group = Group.objects.get(id=i)
-  return render(request, 'pages/admins/groups.pug', {'group': group})
-
-
-@login_required(login_url='/login')
 def punishments(request):
   name = request.resolver_match.url_name
 

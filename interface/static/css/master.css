@@ -611,6 +611,20 @@ button .icon {
   font-size: 15px;
 }
 
+button.round .icon {
+  margin: 0px;
+  height: 16px;
+  width: 16px;
+  font-size: 16px;
+}
+
+button.round {
+  height: 42px;
+  width: 42px;
+  padding: 14px;
+  border-radius: 21px;
+}
+
 .overlay {
   position: fixed;
   display: none;
@@ -2746,6 +2760,10 @@ table thead .icon {
   -moz-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
 }
 
+.serverGridItem.noHover {
+  cursor: default;
+}
+
 .CBox {
   position: relative;
   display: flow-root;
@@ -2812,7 +2830,7 @@ table thead .icon {
   margin-bottom: 40px;
 }
 
-.toggableList > ul > li:hover, .toggableListActive, .serverGridItem:hover {
+.toggableList > ul > li:hover, .toggableListActive, .serverGridItem:not(.noHover):hover {
   opacity: 1;
   background: rgba(0, 0, 0, 0.15) !important;
 }

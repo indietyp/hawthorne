@@ -96,9 +96,6 @@
       case 'admins[web]':
         endpoint = window.endpoint.ajax.admins.web[hash];
         break;
-      case 'admins[web][groups]':
-        endpoint = window.endpoint.ajax.admins.web.groups["_"][window.slug][hash];
-        break;
       case 'punishments[bans]':
         endpoint = window.endpoint.ajax.punishments.bans;
         break;

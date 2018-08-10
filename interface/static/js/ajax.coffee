@@ -85,8 +85,6 @@ lazy = (mode, fallback) ->
       endpoint = window.endpoint.ajax.admins.servers[hash]
     when 'admins[web]'
       endpoint = window.endpoint.ajax.admins.web[hash]
-    when 'admins[web][groups]'
-      endpoint = window.endpoint.ajax.admins.web.groups["_"][window.slug][hash]
     when 'punishments[bans]'
       endpoint = window.endpoint.ajax.punishments.bans
     when 'punishments[mutes]'
