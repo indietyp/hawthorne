@@ -3,7 +3,6 @@
     .serverGridItem.col.span_1_of_4(onclick="window.vc('servers[detailed]', '{{item.id}}')")
       b(style="color:rgb(0,169,255)")= item.name
       .playerCount
-        //- (class='{{item.executed|yesno:",noPlayers"}} {%if item.executed.clients|length == item.executed.limitations.clients%}fullPlayers{%endif%}"')
         i.icon.ion-md-person(style="margin-right:5px")
         = item.user_set|length
       .mapName

@@ -11,14 +11,13 @@ urlpatterns = [
 
     path('admins/servers', views.admins_servers),
     path('admins/web', views.admins_web),
+    path('admins/web/groups/<int:i>', views.admins_web_group),
 
     path('punishments/bans', views.punishments, name="interface[punishments][ban]"),
     path('punishments/mutes', views.punishments, name="interface[punishments][mutes]"),
     path('punishments/gags', views.punishments, name="interface[punishments][gags]"),
 
     path('players', views.player),
-    # path('bans', views.ban),
-    # path('mutegags', views.mutegag),
     # path('announcements', views.announcement),
     path('settings', views.settings),
 

@@ -7,9 +7,9 @@ from automated_logging.models import Model as LogModel
 from django.db.models.functions import Extract
 from lib.mainframe import Mainframe
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import Permission
+from django.contrib.auth.models import Permission, Group
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import Count, Q, F, ExpressionWrapper, DateTimeField
+from django.db.models import Count, F, ExpressionWrapper, DateTimeField
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate
 from django.http import JsonResponse
@@ -110,9 +110,16 @@ def server_detailed(request, s):
 def admins_servers(request):
   return render(request, 'pages/admins/servers.pug')
 
+
 @login_required(login_url='/login')
 def admins_web(request):
   return render(request, 'pages/admins/web.pug')
+
+
+@login_required(login_url='/login')
+def admins_web_group(request, i):
+  group = Group.objects.get(id=i)
+  return render(request, 'pages/admins/groups.pug', {'group': group})
 
 
 @login_required(login_url='/login')

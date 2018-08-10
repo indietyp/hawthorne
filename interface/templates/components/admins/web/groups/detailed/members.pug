@@ -1,0 +1,32 @@
+.innerMain(style="margin-top:48px")
+  h1 Members
+  .CBox.nomargin
+    .timeTableGo.fRight(onclick="window.ajax('admins[web][admins]', '.paginationContent table tbody', window.pagination.current + 1, true)")
+      i.icon.ion-ios-arrow-forward
+    .timeTableGo.fLeft(onclick="window.ajax('admins[web][admins]', '.paginationContent table tbody', window.pagination.current - 1, true)")
+      i.icon.ion-ios-arrow-back
+    h3.center
+      span Page
+      span.current 1
+      span /{{pages}}
+    table.timeTable
+      thead
+        tr
+          th
+          th
+          th Username
+      tbody
+
+.innerSide(style="margin-top:48px")
+  h1 Options
+  .CBox.nomargin
+    h3
+      i.icon.ion-ios-funnel(style='margin-right:10px')
+      |  Search Filters
+      button(style="margin-top: -13px;float: right;width: auto;") Edit
+    p Displaying active search filters:
+    ul.searchTags
+      li
+        b Username
+        |  – indietyp
+        i.icon.ion-ios-close

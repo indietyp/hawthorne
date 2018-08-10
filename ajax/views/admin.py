@@ -71,6 +71,14 @@ def web_admins_entries(request, page):
 
 
 @login_required(login_url='/login')
+@permission_required('core.view_user')
+@require_http_methods(['POST'])
+def web_admins_overview(request, i):
+  group = Group.objects.get(id=i)
+  return render(request, 'components/admins/web/groups/detailed/overview.pug', {'group': group})
+
+
+@login_required(login_url='/login')
 @permission_required('core.view_servergroup')
 @require_http_methods(['POST'])
 def web_groups(request):
