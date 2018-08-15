@@ -1,32 +1,56 @@
 - load humanizer
 
 .breadcrumbs
-  if path|get:0 == 'servers'
-    h3 Servers
+  if path|get:0 == ''
+    h3 Dashboard
   if path|get:0 == 'admins'
     h3 Admins
+  if path|get:0 == 'servers'
+    h3 Servers
+  if path|get:0 == 'punishments'
+    h3 Punishments
+
   ul
     li
+      if path|get:0 == ''
+        i.icon.ion-md-globe
+        | Dashboard
+      if path|get:0 == 'admins'
+        i.icon.ion-ios-flash
+        | Admins
       if path|get:0 == 'servers'
         a(href='javascript:void(0)', onclick="window.vc('servers')")
           i.icon.ion-logo-buffer
           | Servers
-      if path|get:0 == 'admins'
-        //- a(href='javascript:void(0)', onclick="window.vc('admins')")
-        i.icon.ion-ios-flash
-        | Admins
+      if path|get:0 == 'punishments'
+        i.icon.ion-ios-warning
+        | Punishments
 
     if path|length == 2
       li
-        if path|get:0 == 'servers'
-          a(href="window.vc('servers[detailed]', '{{path|get:1}})'")
-            = path|get:1|get_server_name
+        //- Admins
         if path|get:0 == 'admins' and path|get:1 == 'web'
-          a(href="window.vc('admins[web]', '{{path|get:1}})'")
+          a(href="window.vc('admins[web]')")
             | Web
         if path|get:0 == 'admins' and path|get:1 == 'servers'
-          a(href="window.vc('admins[servers]', '{{path|get:1}})'")
+          a(href="window.vc('admins[servers]')")
             | Servers
+
+        //- Servers
+        if path|get:0 == 'servers'
+          a(href="window.vc('servers[detailed]', '{{path|get:1}}')")
+            = path|get:1|get_server_name
+
+        //- Punishments
+        if path|get:0 == 'punishments' and path|get:1 == 'bans'
+          a(href="window.vc('punishments[bans]')")
+            | Bans
+        if path|get:0 == 'punishments' and path|get:1 == 'mutes'
+          a(href="window.vc('punishments[mutes]')")
+            | Mutes
+        if path|get:0 == 'punishments' and path|get:1 == 'gags'
+          a(href="window.vc('punishments[gags]')")
+            | Gags
 
     if path|length == 3
       li Critical system failure
