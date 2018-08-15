@@ -3,21 +3,30 @@
 .breadcrumbs
   if path|get:0 == 'servers'
     h3 Servers
+  if path|get:0 == 'admins'
+    h3 Admins
   ul
     li
       if path|get:0 == 'servers'
         a(href='javascript:void(0)', onclick="window.vc('servers')")
           i.icon.ion-logo-buffer
           | Servers
-      //- a(href='')
-      //-   i.icon.ion-ios-megaphone
-      //-   |  System Messages
+      if path|get:0 == 'admins'
+        //- a(href='javascript:void(0)', onclick="window.vc('admins')")
+        i.icon.ion-ios-flash
+        | Admins
 
     if path|length == 2
       li
         if path|get:0 == 'servers'
           a(href="window.vc('servers[detailed]', '{{path|get:1}})'")
             = path|get:1|get_server_name
+        if path|get:0 == 'admins' and path|get:1 == 'web'
+          a(href="window.vc('admins[web]', '{{path|get:1}})'")
+            | Web
+        if path|get:0 == 'admins' and path|get:1 == 'servers'
+          a(href="window.vc('admins[servers]', '{{path|get:1}})'")
+            | Servers
 
     if path|length == 3
       li Critical system failure
