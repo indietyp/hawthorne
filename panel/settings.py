@@ -77,6 +77,7 @@ TEMPLATES = [
                 'core.context_processors.utils.role',
                 'core.context_processors.utils.announcement',
                 'core.context_processors.utils.globals',
+                'core.context_processors.utils.path',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
             ],

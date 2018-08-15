@@ -6,8 +6,11 @@ from django.contrib.auth.models import Group, Permission
 
 
 @register.filter
-def get_item(dictionary, key):
-  return dictionary.get(key)
+def get(value, key):
+  if isinstance(value, dict):
+    return value.get(key)
+  else:
+    return value[int(key)]
 
 
 @register.filter

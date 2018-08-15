@@ -1,0 +1,23 @@
+- load humanizer
+
+.breadcrumbs
+  if path|get:0 == 'servers'
+    h3 Servers
+  ul
+    li
+      if path|get:0 == 'servers'
+        a(href='javascript:void(0)', onclick="window.vc('servers')")
+          i.icon.ion-logo-buffer
+          | Servers
+      //- a(href='')
+      //-   i.icon.ion-ios-megaphone
+      //-   |  System Messages
+
+    if path|length == 2
+      li
+        if path|get:0 == 'servers'
+          a(href="window.vc('servers[detailed]', '{{path|get:1}})'")
+            = path|get:1|get_server_name
+
+    if path|length == 3
+      li Critical system failure

@@ -28,3 +28,7 @@ def role(request):
     return {'role': memberships[0].name}
 
   return {'role': '-'}
+
+
+def path(request):
+  return {'path': request.path_info.split("/")[1:]}
