@@ -34,4 +34,6 @@ urlpatterns = [
   path('setting/user/<int:page>', setting.user),
   path('setting/group/<int:page>', setting.group),
   path('setting/token/<int:page>', setting.token),
+
+  path('system/update', system.update),
 ]

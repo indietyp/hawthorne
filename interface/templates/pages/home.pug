@@ -6,8 +6,6 @@
 
 
 - block content
-  - include "skeleton/update.pug"
-
   .section.group.overview
     .col.span_1_of_4
       .c100
@@ -90,3 +88,4 @@
     }
     });
     myChart.canvas.parentNode.style.height = '400px';
+    window.ajax("home[update]", '.main > .overview', 0, NaN, 'before');
