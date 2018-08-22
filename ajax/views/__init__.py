@@ -59,6 +59,7 @@ def renderer(request, template, obj, page, extra=[], execute=None, size=PAGE_SIZ
     if overwrite:
       return render(request, template, {'data': data})
 
-    return render(request, 'skeleton/pagination.pug', {'data': data, 'template': template})
+    return render(request, 'skeleton/wrappers/pagination.pug', {'data': data,
+                                                                'template': template})
   else:
     return HttpResponse('', status=416)

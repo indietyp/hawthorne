@@ -1,27 +1,29 @@
 # view controller
 
-load = (destination='home', scope='') ->
+load = (destination = 'home', scope = '') ->
   endpoint = window.endpoint.bare
 
   switch destination
     when 'home'
-      url = ""
+      url = ''
     when 'servers'
-      url = "servers"
+      url = 'servers'
     when 'servers[detailed]'
       url = "servers/#{scope}"
     when 'admins[servers]'
       url = 'admins/servers'
     when 'admins[web]'
       url = 'admins/web'
+    when 'players'
+      url = 'players'
     when 'punishments'
-      url = "[[PLACEHOLDER]]"
+      url = '[[PLACEHOLDER]]'
     when 'punishments[bans]'
-      url = "punishments/bans"
+      url = 'punishments/bans'
     when 'punishments[mutes]'
-      url = "punishments/mutes"
+      url = 'punishments/mutes'
     when 'punishments[gags]'
-      url = "punishments/gags"
+      url = 'punishments/gags'
     else
       return
 
@@ -32,11 +34,11 @@ load = (destination='home', scope='') ->
     status = response.status
     data = response.data
 
-    if status == 200
-      window.history.pushState "", "", "/" + url
+    if status is 200
+      window.history.pushState null, null, "/#{url}"
 
-      $(".main")[0].innerHTML = data
-      $(".main script.execute:not(.evaluated)").forEach((scr) ->
+      $('.main')[0].innerHTML = data
+      $('.main script.execute:not(.evaluated)').forEach((scr) ->
         eval scr.innerHTML
       )
 

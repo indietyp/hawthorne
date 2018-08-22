@@ -2,7 +2,6 @@
 - load staticfiles
 - load compile_static
 
-// !!!5
 html(lang='en')
   head
     title Hawthorne
@@ -10,19 +9,19 @@ html(lang='en')
     meta(name='viewport', content='initial-scale=1.0, user-scalable=no')
     meta(name='ROBOTS', content='NOODP')
 
-    include skeleton/include.pug
+    include skeleton/meta/include.pug
   body
-    include skeleton/csrf.pug
+    include skeleton/meta/csrf.pug
 
     .overlay
     .searchOverlay
-    include skeleton/servers.pug
+    include skeleton/globals/servers.pug
 
     .menu
       include skeleton/sidebar.pug
 
     .main
-      include skeleton/topbar.pug
-      include skeleton/breadcrumb.pug
+      include skeleton/globals/header.pug
+      include skeleton/globals/breadcrumb.pug
       - block content
       - endblock
