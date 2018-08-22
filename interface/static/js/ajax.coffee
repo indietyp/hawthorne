@@ -1,37 +1,36 @@
-ajax = (mode, target='.main', page=1, manual=false, action='append') ->
+ajax = (mode, target = '.main', page = 1, manual = false, action = 'append') ->
   endpoint = window.endpoint.ajax
   header =
-    "X-CSRFToken": window.csrftoken
+    'X-CSRFToken': window.csrftoken
 
   switch mode
-    when "home[update]"
+    when 'home[update]'
       endpoint = window.endpoint.ajax.system.update
-    when "servers[overview]"
+    when 'servers[overview]'
       endpoint = window.endpoint.ajax.servers[page]
-    when "admins[servers][admins]"
+    when 'admins[servers][admins]'
       endpoint = window.endpoint.ajax.admins.servers.admins[page]
-    when "admins[servers][roles]"
+    when 'admins[servers][roles]'
       endpoint = window.endpoint.ajax.admins.servers.roles[page]
-    when "admins[web][admins]"
+    when 'admins[web][admins]'
       endpoint = window.endpoint.ajax.admins.web.admins[page]
-    when "admins[web][groups]"
+    when 'admins[web][groups]'
       endpoint = window.endpoint.ajax.admins.web.groups[page]
-    when "punishments[bans]"
+    when 'punishments[bans]'
       endpoint = window.endpoint.ajax.punishments.bans[page]
-    when "punishments[mutes]"
+    when 'punishments[mutes]'
       endpoint = window.endpoint.ajax.punishments.mutes[page]
-    when "punishments[gags]"
+    when 'punishments[gags]'
       endpoint = window.endpoint.ajax.punishments.gags[page]
 
 
   endpoint.post(header, {}, (dummy, response) ->
-    status = response.status
     data = response.data
 
     target = $(target)
 
-    if status == 200
-      if page == 1 or manual
+    if response.status is 200
+      if page is 1 or manual
         target.html('')
 
       switch action
@@ -46,31 +45,31 @@ ajax = (mode, target='.main', page=1, manual=false, action='append') ->
 
       $('script.execute:not(.evaluated)', target).forEach((src) ->
         eval(src.innerHTML)
-        $(src).addClass("evaluated")
+        $(src).addClass 'evaluated'
       )
       window._.init(target)
 
       switch manual
         when true
-          if page == 1
-            $(".timeTableGo.fLeft").addClass("hidden")
+          if page is 1
+            $('.timeTableGo.fLeft').addClass 'hidden'
           else
-            $(".timeTableGo.fLeft").removeClass("hidden")
+            $('.timeTableGo.fLeft').removeClass 'hidden'
 
-          if window.pagination.limitation == page
-              $(".timeTableGo.fRight").addClass("hidden")
-            else
-              $(".timeTableGo.fRight").removeClass("hidden")
+          if window.pagination.limitation is page
+            $('.timeTableGo.fRight').addClass 'hidden'
+          else
+            $('.timeTableGo.fRight').removeClass 'hidden'
 
-          $(".paginationContent h3 .current")[0].innerHTML = page
+          $('.paginationContent h3 .current')[0].innerHTML = page
           window.pagination.current = page
 
           url = new URL(document.location.href)
           params = new URLSearchParams(url.search.substring(1))
-          params.set("page", page)
-          url.search = "?" + params.toString()
+          params.set('page', page)
+          url.search = "?#{params.toString()}"
 
-          history.pushState(null, null, url.href);
+          history.pushState(null, null, url.href)
         when false
           window.ajax(mode, target, page + 1)
 
@@ -82,16 +81,16 @@ ajax = (mode, target='.main', page=1, manual=false, action='append') ->
 lazy = (mode, fallback) ->
   endpoint = window.endpoint.ajax
   header =
-    "X-CSRFToken": window.csrftoken
+    'X-CSRFToken': window.csrftoken
 
   if window.location.hash
     hash = window.location.hash.substring(1)
   else
     hash = fallback
-    history.pushState(null, null, "##{fallback}");
+    history.pushState(null, null, "##{fallback}")
 
   switch mode
-    when "servers[detailed]"
+    when 'servers[detailed]'
       endpoint = window.endpoint.ajax.servers[window.slug][hash]
     when 'admins[servers]'
       endpoint = window.endpoint.ajax.admins.servers[hash]
@@ -110,12 +109,12 @@ lazy = (mode, fallback) ->
     data = response.data
     target = $('.main')
 
-    if status == 200
+    if status is 200
       $('.paginationContent', target).remove()
       target.htmlAppend(data)
       $('.paginationContent script.execute:not(.evaluated)', target).forEach((src) ->
         eval(src.innerHTML)
-        $(src).addClass("evaluated")
+        $(src).addClass 'evaluated'
       )
     return
   )

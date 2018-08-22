@@ -43,49 +43,50 @@
   .chartContainer
     canvas.overviewChart
   script.execute.
-    var ctx = document.getElementsByClassName("overviewChart")[0].getContext('2d');
+    var ctx = $(".overviewChart")[0].getContext('2d');
     var gradient = ctx.createLinearGradient(0, 0, 0, 400);
     gradient.addColorStop(0, 'rgba(0,169,255,0.2)');
     gradient.addColorStop(1, 'rgba(0,169,255,0)');
-    var myChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-    labels: {{population|flatten:"0"|safe}},
-    datasets: [{
-    label: 'Players',
-    data: {{population|flatten:"1"|safe}},
-    backgroundColor: gradient,
-    borderColor: [
-    'rgb(0,169,255)'
-    ],
-    borderWidth: 4
-    }]
-    },
-    options: {
-    legend: {
-    display: false
-    },
-    maintainAspectRatio: false,
-    scales: {
-    yAxes: [{
-    gridLines: {
-    color: "rgba(0, 0, 0, 0)",
-    },
-    ticks: {
-    beginAtZero:true,
-    fontColor: 'white'
-    }
-    }],
-    xAxes: [{
-    gridLines: {
-    color: "rgba(0, 0, 0, 0)",
-    },
-    ticks: {
-    fontColor: 'white'
-    }
-    }]
-    }
-    }
+
+    var dataChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: {{population|flatten:"0"|safe}},
+        datasets: [{
+          label: 'Players',
+          data: {{population|flatten:"1"|safe}},
+          backgroundColor: gradient,
+          borderColor: [
+            'rgb(0,169,255)'
+          ],
+          borderWidth: 4
+        }]
+      },
+      options: {
+        legend: {
+          display: false
+        },
+        maintainAspectRatio: false,
+        scales: {
+          yAxes: [{
+            gridLines: {
+              color: "rgba(0, 0, 0, 0)",
+            },
+            ticks: {
+              beginAtZero: true,
+              fontColor: 'white'
+            }
+          }],
+          xAxes: [{
+            gridLines: {
+              color: "rgba(0, 0, 0, 0)",
+            },
+            ticks: {
+              fontColor: 'white'
+            }
+          }]
+        }
+      }
     });
-    myChart.canvas.parentNode.style.height = '400px';
+    dataChart.canvas.parentNode.style.height = '400px';
     window.ajax("home[update]", '.main > .overview', 0, NaN, 'before');

@@ -6,42 +6,41 @@
     var endpoint, header;
     endpoint = window.endpoint.ajax;
     header = {
-      "X-CSRFToken": window.csrftoken
+      'X-CSRFToken': window.csrftoken
     };
     switch (mode) {
-      case "home[update]":
+      case 'home[update]':
         endpoint = window.endpoint.ajax.system.update;
         break;
-      case "servers[overview]":
+      case 'servers[overview]':
         endpoint = window.endpoint.ajax.servers[page];
         break;
-      case "admins[servers][admins]":
+      case 'admins[servers][admins]':
         endpoint = window.endpoint.ajax.admins.servers.admins[page];
         break;
-      case "admins[servers][roles]":
+      case 'admins[servers][roles]':
         endpoint = window.endpoint.ajax.admins.servers.roles[page];
         break;
-      case "admins[web][admins]":
+      case 'admins[web][admins]':
         endpoint = window.endpoint.ajax.admins.web.admins[page];
         break;
-      case "admins[web][groups]":
+      case 'admins[web][groups]':
         endpoint = window.endpoint.ajax.admins.web.groups[page];
         break;
-      case "punishments[bans]":
+      case 'punishments[bans]':
         endpoint = window.endpoint.ajax.punishments.bans[page];
         break;
-      case "punishments[mutes]":
+      case 'punishments[mutes]':
         endpoint = window.endpoint.ajax.punishments.mutes[page];
         break;
-      case "punishments[gags]":
+      case 'punishments[gags]':
         endpoint = window.endpoint.ajax.punishments.gags[page];
     }
     endpoint.post(header, {}, function(dummy, response) {
-      var data, params, status, url;
-      status = response.status;
+      var data, params, url;
       data = response.data;
       target = $(target);
-      if (status === 200) {
+      if (response.status === 200) {
         if (page === 1 || manual) {
           target.html('');
         }
@@ -60,27 +59,27 @@
         }
         $('script.execute:not(.evaluated)', target).forEach(function(src) {
           eval(src.innerHTML);
-          return $(src).addClass("evaluated");
+          return $(src).addClass('evaluated');
         });
         window._.init(target);
         switch (manual) {
           case true:
             if (page === 1) {
-              $(".timeTableGo.fLeft").addClass("hidden");
+              $('.timeTableGo.fLeft').addClass('hidden');
             } else {
-              $(".timeTableGo.fLeft").removeClass("hidden");
+              $('.timeTableGo.fLeft').removeClass('hidden');
             }
             if (window.pagination.limitation === page) {
-              $(".timeTableGo.fRight").addClass("hidden");
+              $('.timeTableGo.fRight').addClass('hidden');
             } else {
-              $(".timeTableGo.fRight").removeClass("hidden");
+              $('.timeTableGo.fRight').removeClass('hidden');
             }
-            $(".paginationContent h3 .current")[0].innerHTML = page;
+            $('.paginationContent h3 .current')[0].innerHTML = page;
             window.pagination.current = page;
             url = new URL(document.location.href);
             params = new URLSearchParams(url.search.substring(1));
-            params.set("page", page);
-            url.search = "?" + params.toString();
+            params.set('page', page);
+            url.search = `?${params.toString()}`;
             history.pushState(null, null, url.href);
             break;
           case false:
@@ -94,7 +93,7 @@
     var a, endpoint, hash, header;
     endpoint = window.endpoint.ajax;
     header = {
-      "X-CSRFToken": window.csrftoken
+      'X-CSRFToken': window.csrftoken
     };
     if (window.location.hash) {
       hash = window.location.hash.substring(1);
@@ -103,7 +102,7 @@
       history.pushState(null, null, `#${fallback}`);
     }
     switch (mode) {
-      case "servers[detailed]":
+      case 'servers[detailed]':
         endpoint = window.endpoint.ajax.servers[window.slug][hash];
         break;
       case 'admins[servers]':
@@ -132,7 +131,7 @@
         target.htmlAppend(data);
         $('.paginationContent script.execute:not(.evaluated)', target).forEach(function(src) {
           eval(src.innerHTML);
-          return $(src).addClass("evaluated");
+          return $(src).addClass('evaluated');
         });
       }
     });
