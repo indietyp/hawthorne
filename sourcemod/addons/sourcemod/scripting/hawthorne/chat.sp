@@ -1,4 +1,4 @@
-public Action OnPlayerChatMessage(int client, const char[] command, int argc) {
+public Action OnPlayerChatMessage(int client, const char[] command, int args) {
   // check if the client is an actual person
   if (client < 1) return Plugin_Continue;
 

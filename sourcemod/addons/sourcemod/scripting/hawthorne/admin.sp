@@ -98,6 +98,8 @@ void APIAdminCheck(HTTPResponse response, any value) {
 
   if (timeleft == 0) return;
   admin_timer[client] = CreateTimer(60.0, AdminVerificationTimer, GetClientUserId(client), TIMER_REPEAT);
+
+  NotifyPostAdminCheck(client);
 }
 
 public Action AdminVerificationTimer(Handle timer, any userid) {

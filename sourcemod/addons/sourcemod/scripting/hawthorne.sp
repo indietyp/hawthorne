@@ -47,7 +47,7 @@ public Plugin myinfo = {
   name = "hawthorne",
   author = "indietyp",
   description = "Admin plugin for the integration into the hawthorne gameserver panel, for managing multiple servers from an web interface.",
-  version = "0.8.3",
+  version = "0.8.14",
   url = "hawthornepanel.org"
 };
 
@@ -141,4 +141,8 @@ bool APIValidator(HTTPResponse response) {
   }
 
   return true;
+}
+
+Action CLINoActionCommand(int client, int args) {
+  return Plugin_Continue;
 }
