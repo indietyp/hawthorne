@@ -1,0 +1,9 @@
+- load static
+- load utils
+
+tr
+  td(style='width:1px')
+    - with "flags/"|add:data.country.code|add:".svg" as url
+      img.country(src='{% static url %}')
+  td.unset= data.namespace
+  td= data.useronlinetime_set|m2m_duration|duration

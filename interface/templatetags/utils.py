@@ -2,6 +2,7 @@ import datetime
 
 import natural.date
 from django.template.defaulttags import register
+from django.db.models import F
 from django.contrib.auth.models import Group, Permission
 
 
@@ -34,3 +35,12 @@ def warp(duration):
 def permission_percentage(value):
   data = value.permissions.all().count() if isinstance(value, Group) else value.get_all_permissions()
   return str(int(round(Permission.objects.all().count() / data * 100)))
+
+
+@register.filter
+def m2m_duration(m2m):
+  total = datetime.timedelta()
+  for delta in m2m.all():
+    total += delta.disconnected - delta.connected
+
+  return total

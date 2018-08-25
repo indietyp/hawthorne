@@ -15,6 +15,9 @@
       case 'servers[overview]':
         endpoint = window.endpoint.ajax.servers[page];
         break;
+      case 'players[overview]':
+        endpoint = window.endpoint.ajax.players[page];
+        break;
       case 'admins[servers][admins]':
         endpoint = window.endpoint.ajax.admins.servers.admins[page];
         break;
@@ -110,6 +113,9 @@
         break;
       case 'admins[web]':
         endpoint = window.endpoint.ajax.admins.web[hash];
+        break;
+      case 'players[overview]':
+        endpoint = window.endpoint.ajax.players;
         break;
       case 'punishments[bans]':
         endpoint = window.endpoint.ajax.punishments.bans;

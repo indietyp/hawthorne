@@ -3284,7 +3284,7 @@ h3 input {
   box-shadow: none;
 }
 
-.timeTable tbody tr td:nth-of-type(2) {
+.timeTable tbody tr td:nth-of-type(2):not(.unset) {
   text-align: center;
 }
 

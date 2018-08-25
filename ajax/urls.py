@@ -15,7 +15,8 @@ urlpatterns = [
 
   path('chat/log/<int:page>', chat.log),
 
-  path('player/user/<int:page>', player.user),
+  path('players', player.list),
+  path('players/<int:page>', player.list_entries),
 
   path('punishments/bans', punishment.list, name="ajax[punishment][ban]"),
   path('punishments/bans/<int:page>', punishment.entries, name="ajax[punishment][ban]"),

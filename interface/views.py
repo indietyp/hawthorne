@@ -1,23 +1,22 @@
+import calendar
+import datetime
 import json
 import random
-import datetime
-import calendar
 
 from automated_logging.models import Model as LogModel
-from django.db.models.functions import Extract
-from lib.mainframe import Mainframe
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import Permission, Group
-from django.contrib.contenttypes.models import ContentType
-from django.db.models import Count, F, ExpressionWrapper, DateTimeField
-from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate
-from django.http import JsonResponse
-from django.utils import timezone
-from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
+from django.db.models import Count, DateTimeField, ExpressionWrapper, F
+from django.db.models.functions import Extract
+from django.http import JsonResponse
+from django.shortcuts import redirect, render
+from django.utils import timezone
+from lib.mainframe import Mainframe
 
-from core.models import Server, User, Punishment
+from core.models import Punishment, Server, User
 from log.models import UserOnlineTime
 
 
@@ -87,7 +86,7 @@ def home(request):
 
 @login_required(login_url='/login')
 def player(request):
-  return render(request, 'pages/player.pug', {})
+  return render(request, 'pages/players/list.pug', {})
 
 
 @login_required(login_url='/login')
@@ -137,6 +136,11 @@ def punishments(request):
 
 
 @login_required(login_url='/login')
+def players(request):
+  return render(request, 'pages/players/list.pug')
+
+
+@login_required(login_url='/login')
 def settings(request):
   modules = [c for c in ContentType.objects.filter(app_label__in=['core', 'log']) if
              Permission.objects.filter(content_type=c).count() > 0]
@@ -150,7 +154,10 @@ def settings(request):
   if mainframe.check():
     mf = mainframe.populate().current.id
 
-  return render(request, 'pages/settings.pug', {'simple': modules, 'advanced': perms, 'mainframe': mf, 'discord': None})
+  return render(request, 'pages/settings.pug', {'simple': modules,
+                                                'advanced': perms,
+                                                'mainframe': mf,
+                                                'discord': None})
 
 
 def page_not_found(request, exception=None, template_name='404.pug'):

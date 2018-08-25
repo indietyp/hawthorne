@@ -8,6 +8,8 @@ ajax = (mode, target = '.main', page = 1, manual = false, action = 'append') ->
       endpoint = window.endpoint.ajax.system.update
     when 'servers[overview]'
       endpoint = window.endpoint.ajax.servers[page]
+    when 'players[overview]'
+      endpoint = window.endpoint.ajax.players[page]
     when 'admins[servers][admins]'
       endpoint = window.endpoint.ajax.admins.servers.admins[page]
     when 'admins[servers][roles]'
@@ -96,6 +98,8 @@ lazy = (mode, fallback) ->
       endpoint = window.endpoint.ajax.admins.servers[hash]
     when 'admins[web]'
       endpoint = window.endpoint.ajax.admins.web[hash]
+    when 'players[overview]'
+      endpoint = window.endpoint.ajax.players
     when 'punishments[bans]'
       endpoint = window.endpoint.ajax.punishments.bans
     when 'punishments[mutes]'

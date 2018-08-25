@@ -9,6 +9,8 @@
     h3 Servers
   if path|get:0 == 'punishments'
     h3 Punishments
+  if path|get:0 == 'players'
+    h3 Players
 
   ul
     li
@@ -25,6 +27,9 @@
       if path|get:0 == 'punishments'
         i.icon.ion-ios-warning
         | Punishments
+      if path|get:0 == 'players'
+        i.icon.ion-ios-people
+        | Players
 
     if path|length == 2
       li
