@@ -17,6 +17,8 @@ urlpatterns = [
     path('punishments/gags', views.punishments, name="interface[punishments][gags]"),
 
     path('players', views.player),
+    path('players/<uuid:u>', views.player_detailed),
+
     # path('announcements', views.announcement),
     path('settings', views.settings),
 

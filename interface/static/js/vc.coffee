@@ -16,6 +16,8 @@ load = (destination = 'home', scope = '') ->
       url = 'admins/web'
     when 'players'
       url = 'players'
+    when 'players[detailed]'
+      url = "players/#{scope}"
     when 'punishments'
       url = '[[PLACEHOLDER]]'
     when 'punishments[bans]'

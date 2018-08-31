@@ -41,7 +41,7 @@ InputVerification = (mode, event, that) ->
   character = String.fromCharCode(event.keyCode)
   switch mode
     when 'single'
-      if keycode == 13
+      if keycode is 13
         return false
 
   return true
@@ -51,15 +51,15 @@ InformationCard = (show = true, reason) ->
   if show
     output = ''
     reason.forEach((i) ->
-      if typeof i == 'string'
+      if typeof i is 'string'
         output += "<div class='content'>#{i}</div>"
-      else if typeof i == 'object'
+      else if typeof i is 'object'
         Object.keys(i).forEach((k) ->
           i[k].forEach((state) ->
             state = state.replace /of uuid type/g, 'present'
             state = state.replace /value/g, i[k]
 
-            if state.search k == -1
+            if state.search k is -1
               state = "#{k} #{state}"
 
             output += "<div class='content'>#{state}</div>"
@@ -77,6 +77,6 @@ window.style.card = InformationCard
 window.style.copy = copyTextToClipboard
 
 window.endpoint =
-  api: fermata.hawpi "/api/v1"
-  ajax: fermata.raw {base: window.location.origin + "/ajax/v1"}
+  api: fermata.hawpi '/api/v1'
+  ajax: fermata.raw {base: window.location.origin + '/ajax/v1'}
   bare: fermata.raw {base: window.location.origin}

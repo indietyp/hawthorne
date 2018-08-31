@@ -44,3 +44,8 @@ def m2m_duration(m2m):
     total += delta.disconnected - delta.connected
 
   return total
+
+
+@register.filter
+def count(obj):
+  return obj.count()

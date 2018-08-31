@@ -117,6 +117,9 @@
       case 'players[overview]':
         endpoint = window.endpoint.ajax.players;
         break;
+      case 'players[detailed]':
+        endpoint = window.endpoint.ajax.players[window.slug][hash];
+        break;
       case 'punishments[bans]':
         endpoint = window.endpoint.ajax.punishments.bans;
         break;

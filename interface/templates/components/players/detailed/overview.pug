@@ -119,69 +119,55 @@
     .section.group.nomargin.serverOverview
       .col.span_1_of_2.nomargin
         .section.group.nomargin.serverOverview
-          .col.span_1_of_2.nomargin
-            if data.game == 'csgo'
-              img.thumbnail(src="{% static 'img/games/csgo.png' %}")
-            button.serverActionButton(disabled="")
-              i.fa.fa-stop
-              |  Stop
-            button.serverActionButton.nomargin(disabled="")
-              i.fa.fa-sync
-              |  Restart
+          .col.span_1_of_2.nomargin.avatar
+            img.thumbnail(src="{{data.avatar}}")
           .col.span_1_of_2.nomargin
             h2
-              = data.name
-              // .CTag Europe #1
+              = data.namespace
             p
               i.fa.fa-gamepad(style="margin: 0 5px 0 0")
-              = data.get_game_display
+              | favorite game to play?
+              //- = data.get_game_display
       .col.span_1_of_2.nomargin
         ul.list
           li
-            b IP:
+            b SteamID:
             a(href="#", data-trigger="[clip/copy]", data-clipboard-text="0.0.0.0:27015")
               = data.ip|add:":"
               =data.port
               i.fa.fa-copy(style="margin-left:5px")
           li
-            b Location:
+            b SteamID3:
             = location
           li
+            b SteamID64:
+          li
+            b Steam Level:
+            //- = status.time.up|duration
+          li
             b VAC:
-            i.ion.ion-ios-checkmark.green
+            | no recorded ban
           li
-            b Password:
-            i.ion.ion-ios-close.red
-          li
-            b Uptime:
-            = status.time.up|duration
+            b Created At:
+            //- = status.time.up|duration
   .CBox.nomargin
     .section.group.nomargin.serverOverview
       .col.span_1_of_2.nomargin
-        h2 Server Data
-        p Data is constantly collected from the server and sent to your Hawthorne panel. We display things such as a list of players, what the current map is, how much time of the map that is remaining, how many admins are on, etc.
+        h2 Personal Data
+        p Data is constantly collected from servers and sent to your Hawthorne panel. We display specific user data - like profiles, activity, logs and recorded actions, etc.
       .col.span_1_of_2.nomargin
         ul.list
           li
-            b Map:
-            | de_dust
+            b Punishments:
+            |  12
           li
-            b Time Left:
-            if status.time.left
-              = status.time.left|duration
-              | -
-              b Map change scheduled for
-                = status.time.left|warp|time
-            else
-              | indefinetly
+            b Messages:
+            |  2014
           li
-            b Gamemode:
-            = data.mode
+            b Most Active Server:
+            |  Hawthorne Test #1
           li
-            b Players:
-            .playerCount(class="{%if status.clients|length == status.limitations.clients%}fullPlayers{%endif%}")
-              = status.clients|length
-              |  of
-              = status.limitations.clients
-            a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/players]") View Players
-            a(href="javascript:void(0)", style="margin-left:10px", data-trigger="[modal/open]", data-trigger-target="[modal/players]") View Admins
+            a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/players]") View Roles
+            a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/players]", style="margin-left: 6px") View Activity
+            a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/players]", style="margin-left: 6px") View Usernames
+            a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/players]", style="margin-left: 6px") View IPs

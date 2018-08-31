@@ -100,6 +100,8 @@ lazy = (mode, fallback) ->
       endpoint = window.endpoint.ajax.admins.web[hash]
     when 'players[overview]'
       endpoint = window.endpoint.ajax.players
+    when 'players[detailed]'
+      endpoint = window.endpoint.ajax.players[window.slug][hash]
     when 'punishments[bans]'
       endpoint = window.endpoint.ajax.punishments.bans
     when 'punishments[mutes]'

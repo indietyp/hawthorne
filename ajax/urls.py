@@ -17,6 +17,7 @@ urlpatterns = [
 
   path('players', player.list),
   path('players/<int:page>', player.list_entries),
+  path('players/<uuid:u>/overview', player.detailed_overview),
 
   path('punishments/bans', punishment.list, name="ajax[punishment][ban]"),
   path('punishments/bans/<int:page>', punishment.entries, name="ajax[punishment][ban]"),

@@ -11,7 +11,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db.models import Count, DateTimeField, ExpressionWrapper, F
 from django.db.models.functions import Extract
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from lib.mainframe import Mainframe
@@ -90,6 +90,16 @@ def player(request):
 
 
 @login_required(login_url='/login')
+def player_detailed(request, u):
+  try:
+    user = User.objects.get(id=u)
+  except User.DoesNotExist:
+    raise Http404('This user is nowhere to be found!')
+
+  return render(request, 'pages/players/detailed.pug', {'data': user})
+
+
+@login_required(login_url='/login')
 def server(request):
   return render(request, 'pages/servers/list.pug')
 
@@ -133,11 +143,6 @@ def punishments(request):
                             length__isnull=False).update(resolved=True)
 
   return render(request, 'pages/punishments/general.pug', {'mode': mode})
-
-
-@login_required(login_url='/login')
-def players(request):
-  return render(request, 'pages/players/list.pug')
 
 
 @login_required(login_url='/login')

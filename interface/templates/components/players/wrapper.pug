@@ -16,6 +16,8 @@
             th
             th Username
             th Connection Time
+            th Punishments
+            th Messages
         tbody
   .innerSide
     h1 Options
@@ -23,7 +25,7 @@
       h3
         i.icon.ion-ios-funnel(style='margin-right:10px')
         |  Search Filters
-        button(style="margin-top: -13px;float: right;width: auto;") Edit
+        button(style="margin-top: -13px;float: right;width: auto;margin-right: -13px;") Edit
       p Displaying active search filters:
       ul.searchTags
         li
@@ -37,6 +39,14 @@
         li
           b Connection Time
           |  – more than 24 hours
+          i.icon.ion-ios-close
+        li
+          b Punishments
+          |  – more 12
+          i.icon.ion-ios-close
+        li
+          b Messages
+          |  – more 24
           i.icon.ion-ios-close
 
   script.execute.

@@ -25,6 +25,9 @@
       case 'players':
         url = 'players';
         break;
+      case 'players[detailed]':
+        url = `players/${scope}`;
+        break;
       case 'punishments':
         url = '[[PLACEHOLDER]]';
         break;

@@ -7,3 +7,5 @@ tr
       img.country(src='{% static url %}')
   td.unset= data.namespace
   td= data.useronlinetime_set|m2m_duration|duration
+  td= data.punishment_set|count
+  td= data.serverchat_set|count

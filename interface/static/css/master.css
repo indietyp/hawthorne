@@ -496,6 +496,19 @@ h3 {
   margin-left: 0;
 }
 
+.col.avatar {
+  border-radius: 12px;
+  overflow: hidden;
+  width: calc(50% - 20px);
+  border-radius: calc(50%);
+  margin: 0 20px 0 0 !important;
+}
+
+.col.avatar img {
+  margin: 0px !important;
+  width: 100% !important;
+}
+
 .group {
   zoom: 1;
 }
@@ -782,6 +795,11 @@ table .red {
 
 .paginationTabsDanger {
   background: #bd5b63 !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.paginationTabsHarmless {
+  background: #2ECC71 !important;
   color: rgba(255, 255, 255, 0.8) !important;
 }
 
@@ -3647,6 +3665,10 @@ h3 input {
 
 .modalFlags {
   margin-bottom: 10px;
+}
+
+.monospace {
+  font-family: Monaco, monospace;
 }
 
 /* Safari */
