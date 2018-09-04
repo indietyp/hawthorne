@@ -1,6 +1,7 @@
 - load i18n
 - load staticfiles
 - load utils
+- load steam
 
 .paginationContent.ct1
   .section.group
@@ -131,25 +132,24 @@
       .col.span_1_of_2.nomargin
         ul.list
           li
-            b SteamID:
-            a(href="#", data-trigger="[clip/copy]", data-clipboard-text="0.0.0.0:27015")
-              = data.ip|add:":"
-              =data.port
+            b SteamID32:
+            a.space-before(href="javascript:void(0)", data-trigger="[clip/copy]", data-clipboard-text="{{data.username|as3}}")
+              = data.username|as2
               i.fa.fa-copy(style="margin-left:5px")
           li
-            b SteamID3:
-            = location
-          li
             b SteamID64:
+            a.space-before(href="javascript:void(0)", data-trigger="[clip/copy]", data-clipboard-text="{{data.username}}")
+              = data.username
+              i.fa.fa-copy(style="margin-left:5px")
           li
-            b Steam Level:
-            //- = status.time.up|duration
+            b.space-after Steam Level:
+            =  data.username|level
           li
             b VAC:
-            | no recorded ban
+            =  data.username|vac
           li
             b Created At:
-            //- = status.time.up|duration
+            =  data.username|created
   .CBox.nomargin
     .section.group.nomargin.serverOverview
       .col.span_1_of_2.nomargin
@@ -159,10 +159,10 @@
         ul.list
           li
             b Punishments:
-            |  12
+            =  data.punishment_set|count
           li
             b Messages:
-            |  2014
+            =  data.serverchat_set|count
           li
             b Most Active Server:
             |  Hawthorne Test #1

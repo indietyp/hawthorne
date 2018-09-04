@@ -51,10 +51,8 @@ class TokenMiddleware:
       self.get_response = get_response
 
     def __retrieve__(self, request):
-      token = None
-      user = None
+      token, user = None, None
 
-      # optional user
       if 'HTTP_X_MODIFIED_BY' in request.META:
         user = request.META['HTTP_X_MODIFIED_BY']
       if 'HTTP_X_TOKEN' in request.META:

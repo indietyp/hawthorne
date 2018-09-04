@@ -5,3 +5,11 @@
 .hidden {
   display: none;
 }
+
+.space-before:before {
+  content: " ";
+}
+
+.space-after:after {
+  content: " ";
+}

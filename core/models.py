@@ -99,8 +99,7 @@ class Token(BaseModel):
 
     try:
       self.permissions.get(codename=perm[-1], content_type__app_label=perm[0])
-    except Exception as e:
-      print(e)
+    except Exception:
       return False
 
     return True

@@ -2,7 +2,6 @@ import datetime
 
 import natural.date
 from django.template.defaulttags import register
-from django.db.models import F
 from django.contrib.auth.models import Group, Permission
 
 
