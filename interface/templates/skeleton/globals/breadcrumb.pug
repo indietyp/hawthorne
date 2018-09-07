@@ -57,5 +57,10 @@
           a(href="window.vc('punishments[gags]')")
             | Gags
 
+        //- Players
+        if path|get:0 == 'players'
+          a(href="window.vc('players[detailed]', '{{data.namespace}}')")
+            = data.namespace
+
     if path|length == 3
       li Critical system failure

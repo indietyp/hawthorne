@@ -10,6 +10,8 @@ ajax = (mode, target = '.main', page = 1, manual = false, action = 'append') ->
       endpoint = window.endpoint.ajax.servers[page]
     when 'players[overview]'
       endpoint = window.endpoint.ajax.players[page]
+    when 'players[detailed][log]'
+      endpoint = window.endpoint.ajax.players[window.slug].log[page]
     when 'admins[servers][admins]'
       endpoint = window.endpoint.ajax.admins.servers.admins[page]
     when 'admins[servers][roles]'
@@ -49,7 +51,7 @@ ajax = (mode, target = '.main', page = 1, manual = false, action = 'append') ->
         eval(src.innerHTML)
         $(src).addClass 'evaluated'
       )
-      window._.init(target)
+      window._.init()
 
       switch manual
         when true
@@ -122,6 +124,7 @@ lazy = (mode, fallback) ->
         eval(src.innerHTML)
         $(src).addClass 'evaluated'
       )
+      window._.init()
     return
   )
 

@@ -21,7 +21,7 @@ class Mainframe(BaseModel):
 
   class Meta:
     permissions = [
-        ('view_mainframe', 'Can check mainframe'),
+        # ('view_mainframe', 'Can check mainframe'),
     ]
 
 
@@ -61,9 +61,9 @@ class User(AbstractUser):
 
   class Meta:
     permissions = [
-        ('view_user', 'Can view user'),
+        # ('view_user', 'Can view user'),
         ('kick_user', 'Can kick user'),
-        ('view_group', 'Can view user group'),
+        # ('view_group', 'Can view user group'),
 
         ('view_settings', 'Can view settings'),
         ('view_capabilities', 'Can check capabilities'),
@@ -88,7 +88,7 @@ class Token(BaseModel):
     verbose_name_plural = 'tokens'
 
     permissions = [
-        ('view_token', 'Can view token'),
+        # ('view_token', 'Can view token'),
     ]
 
   def has_perm(self, perm, obj=None):
@@ -211,7 +211,7 @@ class ServerGroup(BaseModel):
     verbose_name = 'server role'
     verbose_name_plural = 'server roles'
     permissions = [
-      ('view_servergroup', 'Can view server role'),
+      # ('view_servergroup', 'Can view server role'),
     ]
 
   def __str__(self):
@@ -235,7 +235,7 @@ class Server(BaseModel):
     unique_together = (('ip', 'port'),)
 
     permissions = [
-      ('view_server', 'Can view server'),
+      # ('view_server', 'Can view server'),
       ('execute_server', 'Can execute command'),
     ]
 
@@ -261,7 +261,7 @@ class Punishment(BaseModel):
 
   class Meta:
     permissions = [
-      ('view_punishment', 'Can view punishments'),
+      # ('view_punishment', 'Can view punishments'),
     ]
 
   def __str__(self):

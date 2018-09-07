@@ -18,6 +18,9 @@
       case 'players[overview]':
         endpoint = window.endpoint.ajax.players[page];
         break;
+      case 'players[detailed][log]':
+        endpoint = window.endpoint.ajax.players[window.slug].log[page];
+        break;
       case 'admins[servers][admins]':
         endpoint = window.endpoint.ajax.admins.servers.admins[page];
         break;
@@ -64,7 +67,7 @@
           eval(src.innerHTML);
           return $(src).addClass('evaluated');
         });
-        window._.init(target);
+        window._.init();
         switch (manual) {
           case true:
             if (page === 1) {
@@ -142,6 +145,7 @@
           eval(src.innerHTML);
           return $(src).addClass('evaluated');
         });
+        window._.init();
       }
     });
   };

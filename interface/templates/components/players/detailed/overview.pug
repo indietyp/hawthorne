@@ -16,48 +16,59 @@
           gradient.addColorStop(0, 'rgba(0,169,255,0.2)');
           gradient.addColorStop(1, 'rgba(0,169,255,0)');
           var myChart = new Chart(ctx, {
-          type: 'line',
-          data: {
-          labels: {{months|flatten:"0"|safe}},
-          datasets: [{
-          pointHoverBorderColor: '#0075b1',
-          pointHoverBackgroundColor: '#fff',
-          label: 'Players',
-          data: {{months|flatten:"1"|safe}},
-          backgroundColor: gradient,
-          borderColor: [
-          'rgb(0,169,255)'
-          ],
-          borderWidth: 4
-          }]
-          },
-          options: {
-          legend: {
-          display: false
-          },
-          maintainAspectRatio: false,
-          scales: {
-          yAxes: [{
-          display:false,
-          gridLines: {
-          color: 'transparent',
-          },
-          ticks: {
-          beginAtZero:false,
-          fontColor: 'white'
-          }
-          }],
-          xAxes: [{
-          display:false,
-          gridLines: {
-          color: 'transparent',
-          },
-          ticks: {
-          fontColor: 'white',
-          }
-          }]
-          }
-          }
+            type: 'line',
+            data: {
+              labels: {{months|flatten:"0"|safe}},
+              datasets: [{
+                pointHoverBorderColor: '#0075b1',
+                pointHoverBackgroundColor: '#fff',
+                label: 'Playtime',
+                data: {{months|flatten:"1"|safe}},
+                backgroundColor: gradient,
+                borderColor: [
+                  'rgb(0,169,255)'
+                ],
+                borderWidth: 4
+              }]
+            },
+            options: {
+              hover: {
+                intersect: false
+              },
+              tooltips: {
+                intersect: false,
+                displayColors: false
+              },
+              legend: {
+                display: false
+              },
+              maintainAspectRatio: false,
+              scales: {
+                yAxes: [{
+                  display: true,
+                  gridLines: {
+                    color: "rgba(0, 0, 0, 0)",
+                  },
+                  ticks: {
+                    beginAtZero: false,
+                    fontColor: 'white',
+                    callback: function (value, index, values) {
+                      return value + 'h';
+                    }
+                  }
+                }],
+                xAxes: [{
+                  display: true,
+                  gridLines: {
+                    display: false,
+                    color: "rgba(0, 0, 0, 0)",
+                  },
+                  ticks: {
+                    fontColor: 'white',
+                  }
+                }]
+              }
+            }
           });
           myChart.canvas.parentNode.style.height = '200px';
     .col.span_1_of_2
@@ -71,49 +82,59 @@
           gradient.addColorStop(0, 'rgba(0,169,255,0.2)');
           gradient.addColorStop(1, 'rgba(0,169,255,0)');
           var myChart = new Chart(ctx, {
-          type: 'line',
-          data: {
-          labels: {{years|flatten:"0"|safe}},
-          datasets: [{
-          pointHoverBorderColor: '#0075b1',
-          pointHoverBackgroundColor: '#fff',
-          label: 'Players',
-          data: {{years|flatten:"1"|safe}},
-          backgroundColor: gradient,
-          borderColor: [
-          'rgb(0,169,255)'
-          ],
-          borderWidth: 4
-          }]
-          },
-          options: {
-          legend: {
-          display: false
-          },
-          maintainAspectRatio: false,
-          scales: {
-          yAxes: [{
-          display: false,
-          gridLines: {
-          color: "rgba(0, 0, 0, 0)",
-          },
-          ticks: {
-          beginAtZero:false,
-          fontColor: 'white'
-          }
-          }],
-          xAxes: [{
-          display: false,
-          gridLines: {
-          display: false,
-          color: "rgba(0, 0, 0, 0)",
-          },
-          ticks: {
-          fontColor: 'white',
-          }
-          }]
-          }
-          }
+            type: 'line',
+            data: {
+              labels: {{years|flatten:"0"|safe}},
+              datasets: [{
+                pointHoverBorderColor: '#0075b1',
+                pointHoverBackgroundColor: '#fff',
+                label: 'Playtime',
+                data: {{years|flatten:"1"|safe}},
+                backgroundColor: gradient,
+                borderColor: [
+                  'rgb(0,169,255)'
+                ],
+                borderWidth: 4
+              }]
+            },
+            options: {
+              hover: {
+                intersect: false
+              },
+              tooltips: {
+                intersect: false,
+                displayColors: false
+              },
+              legend: {
+                display: false
+              },
+              maintainAspectRatio: false,
+              scales: {
+                yAxes: [{
+                  display: true,
+                  gridLines: {
+                    color: "rgba(0, 0, 0, 0)",
+                  },
+                  ticks: {
+                    beginAtZero: false,
+                    fontColor: 'white',
+                    callback: function (value, index, values) {
+                      return value + 'h';
+                    }
+                  }
+                }],
+                xAxes: [{
+                  display: true,
+                  gridLines: {
+                    display: false,
+                    color: "rgba(0, 0, 0, 0)",
+                  },
+                  ticks: {
+                    fontColor: 'white',
+                  }
+                }]
+              }
+            }
           });
           myChart.canvas.parentNode.style.height = '200px';
   .server.CBox
@@ -127,13 +148,12 @@
               = data.namespace
             p
               i.fa.fa-gamepad(style="margin: 0 5px 0 0")
-              | favorite game to play?
-              //- = data.get_game_display
+              = games
       .col.span_1_of_2.nomargin
         ul.list
           li
             b SteamID32:
-            a.space-before(href="javascript:void(0)", data-trigger="[clip/copy]", data-clipboard-text="{{data.username|as3}}")
+            a.space-before(href="javascript:void(0)", data-trigger="[clip/copy]", data-clipboard-text="{{data.username|as2}}")
               = data.username|as2
               i.fa.fa-copy(style="margin-left:5px")
           li
@@ -165,9 +185,8 @@
             =  data.serverchat_set|count
           li
             b Most Active Server:
-            |  Hawthorne Test #1
+            = activity
           li
             a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/players]") View Roles
-            a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/players]", style="margin-left: 6px") View Activity
             a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/players]", style="margin-left: 6px") View Usernames
             a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/players]", style="margin-left: 6px") View IPs

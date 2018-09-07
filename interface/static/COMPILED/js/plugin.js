@@ -103,7 +103,7 @@
               selectionData.splice(i, 1);
               break;
             }
-            i++;
+            i += 1;
           }
         }
         $(this).closest('._Dynamic_Select').find('._Title').text('(' + selectionData.length + ') selections');
@@ -124,7 +124,7 @@
     };
     $('[data-trigger=\'[ct/switch]\']', scope).on('click', ct_switch);
     clipboard = function(event) {
-      return window.style.copy(event.target.textContent);
+      return window.style.copy(this.getAttribute('data-clipboard-text'));
     };
     $('[data-trigger="[clip/copy]"]', scope).on('click', clipboard);
   };
