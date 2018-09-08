@@ -2,11 +2,11 @@
   .innerMain
     h1 Chat Log
     .CBox.nomargin
-      .timeTableGo.fRight
+      .timeTableGo.fRight(onclick="window.ajax_wrapper('players[detailed][log]', '.innerMain .CBox h3.center', true)")
         i.icon.ion-ios-arrow-forward
-      .timeTableGo.fLeft
+      .timeTableGo.fLeft(onclick="window.ajax_wrapper('players[detailed][log]', '.innerMain .CBox h3.center', false)")
         i.icon.ion-ios-arrow-back
-      h3.center 22nd of June
+      h3.center
       table.timeTable
         thead
           tr
@@ -45,8 +45,8 @@
           i.icon.ion-ios-close
 
   script.execute.
-    window.ajax("players[detailed][log]", ".paginationContent table tbody", {{current}}, true)
     window.pagination = {
-      'current': {{current}},
+      'current': {{current}} - 1,
       'limitation': {{pages}}
     }
+    window.ajax_wrapper("players[detailed][log]", '.innerMain .CBox h3.center')

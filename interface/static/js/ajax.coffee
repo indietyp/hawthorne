@@ -11,7 +11,7 @@ ajax = (mode, target = '.main', page = 1, manual = false, action = 'append') ->
     when 'players[overview]'
       endpoint = window.endpoint.ajax.players[page]
     when 'players[detailed][log]'
-      endpoint = window.endpoint.ajax.players[window.slug].log[page]
+      endpoint = window.endpoint.ajax.players[window.slug].log[window.pagination.current][page]
     when 'admins[servers][admins]'
       endpoint = window.endpoint.ajax.admins.servers.admins[page]
     when 'admins[servers][roles]'
@@ -82,6 +82,41 @@ ajax = (mode, target = '.main', page = 1, manual = false, action = 'append') ->
 
   return
 
+date = (mode, target = '.innerMain .CBox h3.center', forward = true) ->
+  endpoint = window.endpoint.ajax
+  header =
+    'X-CSRFToken': window.csrftoken
+
+  if forward
+    window.pagination.current += 1
+  else
+    window.pagination.current -= 1
+
+  switch mode
+    when 'players[detailed][log]'
+      endpoint = window.endpoint.ajax.players[window.slug].log[window.pagination.current]
+
+
+  endpoint.post(header, {}, (dummy, response) ->
+    target = $(target)
+
+    if window.pagination.current <= 1
+      $('.timeTableGo.fLeft').addClass 'invisible'
+    else
+      $('.timeTableGo.fLeft').removeClass 'invisible'
+
+    if window.pagination.limitation <= window.pagination.current
+      $('.timeTableGo.fRight').addClass 'invisible'
+    else
+      $('.timeTableGo.fRight').removeClass 'invisible'
+
+    target.html response.data
+    window.ajax(mode, '.paginationContent table tbody', 1)
+    return
+  )
+
+  return
+
 lazy = (mode, fallback) ->
   endpoint = window.endpoint.ajax
   header =
@@ -91,7 +126,7 @@ lazy = (mode, fallback) ->
     hash = window.location.hash.substring(1)
   else
     hash = fallback
-    history.pushState(null, null, "##{fallback}")
+    history.replaceState({'location': window._.location, 'scope': window._.scope}, null, "##{fallback}")
 
   switch mode
     when 'servers[detailed]'
@@ -132,3 +167,4 @@ lazy = (mode, fallback) ->
 
 window.ajax = ajax
 window.lazy = lazy
+window.ajax_wrapper = date

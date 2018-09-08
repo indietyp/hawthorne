@@ -1,6 +1,8 @@
 tr
   td.center= data.created_at|date:"SHORT_DATETIME_FORMAT"
-  td.unset= data.server
+  td.unset
+    a(href="javascript:void(0)", onclick="window.vc('servers[detailed]', '{{data.server.id}}')")
+      = data.server
   td(style='width:50%')
     b= data.message
   td

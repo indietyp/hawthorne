@@ -32,12 +32,14 @@ load = (destination = 'home', scope = '') ->
   header =
     'X-CSRFTOKEN': window.csrftoken
 
+  window._.location = destination
+  window._.scope = scope
   window.endpoint.bare[url].post(header, {}, (dummy, response) ->
     status = response.status
     data = response.data
 
     if status is 200
-      window.history.pushState null, null, "/#{url}"
+      window.history.pushState {location: destination, scope: scope}, null, "/#{url}"
 
       $('.main')[0].innerHTML = data
       $('.main script.execute:not(.evaluated)').forEach((scr) ->
@@ -45,5 +47,16 @@ load = (destination = 'home', scope = '') ->
       )
 
   )
+
+
+$(window).on('popstate', (event) ->
+  # this is like super janked with the even state and I have no clue why
+  # --> so we just gonna reload that bitch
+  # console.log event
+  # window.vc event.state.location, event.state.scope
+  console.log event
+  # window.location.href = location.href
+  return
+)
 
 window.vc = load
