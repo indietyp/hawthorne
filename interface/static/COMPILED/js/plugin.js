@@ -119,7 +119,10 @@
       $('.paginationTabSelected', this.parentElement).removeClass('paginationTabSelected');
       hash = this.getAttribute('data');
       $(this).addClass('paginationTabSelected');
-      history.pushState(null, null, `#${hash}`);
+      history.replaceState({
+        'location': window._.location,
+        'scope': window._.scope
+      }, null, `#${hash}`);
       window.lazy(this.parentElement.getAttribute('data-target'), '');
     };
     $('[data-trigger=\'[ct/switch]\']', scope).on('click', ct_switch);

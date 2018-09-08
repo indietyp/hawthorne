@@ -49,14 +49,11 @@ load = (destination = 'home', scope = '') ->
   )
 
 
-$(window).on('popstate', (event) ->
-  # this is like super janked with the even state and I have no clue why
-  # --> so we just gonna reload that bitch
-  # console.log event
-  # window.vc event.state.location, event.state.scope
-  console.log event
-  # window.location.href = location.href
+window.onpopstate = (event) ->
+  if not event.state or event.state.skip
+    window.history.back()
+  else
+    window.vc event.state.location, event.state.scope
   return
-)
 
 window.vc = load

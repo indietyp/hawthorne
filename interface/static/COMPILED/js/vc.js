@@ -65,15 +65,15 @@
     });
   };
 
-  $(window).on('popstate', function(event) {
-    // this is like super janked with the even state and I have no clue why
-    // --> so we just gonna reload that bitch
-    // console.log event
-    // window.vc event.state.location, event.state.scope
+  window.onpopstate = function(event) {
     console.log(event);
-  });
+    if (!event.state || event.state.skip) {
+      window.history.back();
+    } else {
+      window.vc(event.state.location, event.state.scope);
+    }
+  };
 
-  // window.location.href = location.href
   window.vc = load;
 
 }).call(this);

@@ -73,7 +73,9 @@ ajax = (mode, target = '.main', page = 1, manual = false, action = 'append') ->
           params.set('page', page)
           url.search = "?#{params.toString()}"
 
-          history.pushState(null, null, url.href)
+          history.replaceState({'location': window._.location, 'scope': window._.scope},
+                                null,
+                                url.href)
         when false
           window.ajax(mode, target, page + 1)
 
