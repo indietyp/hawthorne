@@ -1,6 +1,7 @@
 import datetime
 import math
 
+from automated_logging.models import Application as DALApplication, Model as DALModel
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import DurationField, ExpressionWrapper, F
@@ -76,12 +77,34 @@ def detailed_log_entries(request, u, date, page, *args, **kwargs):
                             .distinct()\
                             .order_by('-created_date')
 
-
   date = pages[date - 1]['created_date']
   logs = ServerChat.objects.annotate(created_date=Cast('created_at', DateField()))\
                            .filter(user=u, created_date=date).order_by('created_at')
 
   return renderer(request, 'components/players/detailed/logs/entry.pug', logs, page)
+
+
+@login_required(login_url='/login')
+@permission_required('core.view_user')
+@require_http_methods(['POST'])
+def detailed_actions(request, u, *args, **kwargs):
+  c = request.POST.get("page", 1)
+
+  application = DALApplication.objects.get(name='core')
+  pages = math.ceil(DALModel.objects.filter(user=u, application=application).count() / settings.PAGE_SIZE)
+
+  return render(request, 'components/players/detailed/actions/wrapper.pug', {'pages': pages,
+                                                                             'current': c})
+
+
+@login_required(login_url='/login')
+@permission_required('core.view_user')
+@require_http_methods(['POST'])
+def detailed_actions_entries(request, u, page, *args, **kwargs):
+  application = DALApplication.objects.get(name='core')
+  logs = DALModel.objects.filter(user=u, application=application).order_by('created_at')
+
+  return renderer(request, 'components/players/detailed/actions/entry.pug', logs, page)
 
 
 @login_required(login_url='/login')

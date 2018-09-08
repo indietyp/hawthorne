@@ -56,7 +56,7 @@
   insertHtml = function(value, position, nodes) {
     return nodes.forEach(function(item) {
       var e, results, tmpnode, tmpnodes;
-      if (value.includes("<td>")) {
+      if (value.includes("<td")) {
         tmpnodes = document.createElement('tbody');
       } else {
         tmpnodes = document.createElement('div');

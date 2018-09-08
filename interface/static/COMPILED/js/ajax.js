@@ -18,8 +18,11 @@
       case 'players[overview]':
         endpoint = window.endpoint.ajax.players[page];
         break;
-      case 'players[detailed][log]':
-        endpoint = window.endpoint.ajax.players[window.slug].log[window.pagination.current][page];
+      case 'players[detailed][actions]':
+        endpoint = window.endpoint.ajax.players[window.slug].actions[page];
+        break;
+      case 'players[detailed][logs]':
+        endpoint = window.endpoint.ajax.players[window.slug].logs[window.pagination.current][page];
         break;
       case 'admins[servers][admins]':
         endpoint = window.endpoint.ajax.admins.servers.admins[page];
@@ -86,7 +89,7 @@
             params = new URLSearchParams(url.search.substring(1));
             params.set('page', page);
             url.search = `?${params.toString()}`;
-            history.replaceState({
+            window.history.replaceState({
               'location': window._.location,
               'scope': window._.scope
             }, null, url.href);
@@ -111,7 +114,7 @@
     }
     switch (mode) {
       case 'players[detailed][log]':
-        endpoint = window.endpoint.ajax.players[window.slug].log[window.pagination.current];
+        endpoint = window.endpoint.ajax.players[window.slug].logs[window.pagination.current];
     }
     endpoint.post(header, {}, function(dummy, response) {
       target = $(target);
@@ -140,9 +143,9 @@
       hash = window.location.hash.substring(1);
     } else {
       hash = fallback;
-      history.replaceState({
-        'location': window._.location,
-        'scope': window._.scope
+      window.history.replaceState({
+        location: window._.location,
+        scope: window._.scope
       }, null, `#${fallback}`);
     }
     switch (mode) {
@@ -192,6 +195,6 @@
 
   window.lazy = lazy;
 
-  window.ajax_wrapper = date;
+  window.date = date;
 
 }).call(this);

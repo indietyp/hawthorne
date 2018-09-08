@@ -4,6 +4,8 @@ tr
     a(href="javascript:void(0)", onclick="window.vc('servers[detailed]', '{{data.server.id}}')")
       = data.server
   td(style='width:50%')
-    b= data.message
+    //- b
+    //- we don't want to be too bold :wink:
+    = data.message
   td
-    i.icon.ion-ios-warning(title='Critical Error')
+    //- i.icon.ion-ios-warning(title='Critical Error')

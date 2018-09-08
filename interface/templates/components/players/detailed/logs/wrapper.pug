@@ -2,9 +2,9 @@
   .innerMain
     h1 Chat Log
     .CBox.nomargin
-      .timeTableGo.fRight(onclick="window.ajax_wrapper('players[detailed][log]', '.innerMain .CBox h3.center', true)")
+      .timeTableGo.fRight(onclick="window.date('players[detailed][logs]', '.innerMain .CBox h3.center', true)")
         i.icon.ion-ios-arrow-forward
-      .timeTableGo.fLeft(onclick="window.ajax_wrapper('players[detailed][log]', '.innerMain .CBox h3.center', false)")
+      .timeTableGo.fLeft(onclick="window.date('players[detailed][logs]', '.innerMain .CBox h3.center', false)")
         i.icon.ion-ios-arrow-back
       h3.center
       table.timeTable
@@ -49,4 +49,4 @@
       'current': {{current}} - 1,
       'limitation': {{pages}}
     }
-    window.ajax_wrapper("players[detailed][log]", '.innerMain .CBox h3.center')
+    window.date("players[detailed][logs]", '.innerMain .CBox h3.center')

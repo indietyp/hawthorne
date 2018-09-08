@@ -10,8 +10,10 @@ ajax = (mode, target = '.main', page = 1, manual = false, action = 'append') ->
       endpoint = window.endpoint.ajax.servers[page]
     when 'players[overview]'
       endpoint = window.endpoint.ajax.players[page]
-    when 'players[detailed][log]'
-      endpoint = window.endpoint.ajax.players[window.slug].log[window.pagination.current][page]
+    when 'players[detailed][actions]'
+      endpoint = window.endpoint.ajax.players[window.slug].actions[page]
+    when 'players[detailed][logs]'
+      endpoint = window.endpoint.ajax.players[window.slug].logs[window.pagination.current][page]
     when 'admins[servers][admins]'
       endpoint = window.endpoint.ajax.admins.servers.admins[page]
     when 'admins[servers][roles]'
@@ -73,9 +75,9 @@ ajax = (mode, target = '.main', page = 1, manual = false, action = 'append') ->
           params.set('page', page)
           url.search = "?#{params.toString()}"
 
-          history.replaceState({'location': window._.location, 'scope': window._.scope},
-                                null,
-                                url.href)
+          window.history.replaceState({'location': window._.location, 'scope': window._.scope},
+                                      null,
+                                      url.href)
         when false
           window.ajax(mode, target, page + 1)
 
@@ -96,7 +98,7 @@ date = (mode, target = '.innerMain .CBox h3.center', forward = true) ->
 
   switch mode
     when 'players[detailed][log]'
-      endpoint = window.endpoint.ajax.players[window.slug].log[window.pagination.current]
+      endpoint = window.endpoint.ajax.players[window.slug].logs[window.pagination.current]
 
 
   endpoint.post(header, {}, (dummy, response) ->
@@ -128,7 +130,9 @@ lazy = (mode, fallback) ->
     hash = window.location.hash.substring(1)
   else
     hash = fallback
-    history.replaceState({'location': window._.location, 'scope': window._.scope}, null, "##{fallback}")
+    window.history.replaceState({location: window._.location, scope: window._.scope},
+                                null,
+                                "##{fallback}")
 
   switch mode
     when 'servers[detailed]'
@@ -169,4 +173,4 @@ lazy = (mode, fallback) ->
 
 window.ajax = ajax
 window.lazy = lazy
-window.ajax_wrapper = date
+window.date = date

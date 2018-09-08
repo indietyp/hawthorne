@@ -66,7 +66,7 @@
   };
 
   window.onpopstate = function(event) {
-    console.log(event);
+    // console.log event
     if (!event.state || event.state.skip) {
       window.history.back();
     } else {

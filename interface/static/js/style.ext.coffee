@@ -1,54 +1,55 @@
 insertHtml = (value, position, nodes) ->
   nodes.forEach((item) ->
-    if value.includes "<td>"
+    if value.includes '<td'
       tmpnodes = document.createElement('tbody')
     else
       tmpnodes = document.createElement('div')
     tmpnodes.innerHTML = value
 
-    while (tmpnode = tmpnodes.lastChild) != null
+    while (tmpnode = tmpnodes.lastChild) isnt null
       try
-        if position == 'before'
+        if position is 'before'
           item.parentNode.insertBefore tmpnode, item
-        else if position == 'after'
+        else if position is 'after'
           item.parentNode.insertBefore tmpnode, item.nextSibling
-        else if position == 'append'
+        else if position is 'append'
           item.appendChild tmpnode
-        else if position == 'prepend'
+        else if position is 'prepend'
           item.insertBefore tmpnode, item.firstChild
       catch e
         break
   )
 
 $.fn.hasClass = (className) ->
-  return !!this[0] && this[0].classList.contains(className)
+  # might need !! i dunno
+  return not not @[0] and @[0].classList.contains(className)
 
 $.fn.addClass = (className) ->
   @forEach((item) ->
     classList = item.classList
     classList.add.apply(classList, className.split(/\s/))
   )
-  this
+  @
 
 $.fn.removeClass = (className) ->
   @forEach((item) ->
     classList = item.classList
     classList.remove.apply(classList, className.split(/\s/))
   )
-  this
+  @
 
 $.fn.toggleClass = (className, b) ->
   @forEach (item) ->
     classList = item.classList
-    if typeof b != 'boolean'
+    if typeof b isnt 'boolean'
       b = not classList.contains(className)
 
     classList[if b then 'add' else 'remove'].apply classList, className.split(/\s/)
     return
-  this
+  @
 
 $.fn.css = (property, value = null) ->
-  if value == null
+  if value is null
     console.log 'this is not yet implemented'
   else
     @forEach((item) ->
@@ -57,13 +58,13 @@ $.fn.css = (property, value = null) ->
       catch e
         console.error 'Could not set css style property "' + property + '".'
     )
-  this
+  @
 
-$.fn.remove = () ->
+$.fn.remove = ->
   @forEach((item) ->
     item.parentNode.removeChild item
   )
-  this
+  @
 
 $.fn.val = (value = '') ->
   if value != ''
