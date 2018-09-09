@@ -73,9 +73,39 @@ InformationCard = (show = true, reason) ->
   else
     $('.status-card').removeClass 'active'
 
+executeServer = (that) ->
+  parent = $(that.parentElement)
+  id = $('.hidden', parent)[0].value
+
+  removed = []
+  parent[0].childNodes.forEach((element) ->
+    if element.nodeName is '#text' or element.nodeName is 'BR'
+      removed.push element
+  )
+
+  removed.forEach((element) ->
+    parent[0].removeChild element
+  )
+
+  data =
+    command: $('.command', parent)[0].value
+
+  window.endpoint.api.servers[id].execute.put({}, {}, data, (err, response) ->
+    output = response.result.response.split('\n')
+
+    output.forEach((element, index) ->
+      output[index] = "> #{element}"
+    )
+
+    output = output.join('<br />')
+    parent.htmlPrepend(output)
+  )
+  return
+
 window.style.getOrCreate('utils').getOrCreate('verify').input = InputVerification
 window.style.card = InformationCard
 window.style.copy = copyTextToClipboard
+window.style.rcon = executeServer
 
 window.endpoint =
   api: fermata.hawpi '/api/v1'

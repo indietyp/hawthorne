@@ -9,9 +9,9 @@
       request.headers['Content-Type'] = 'application/json';
       request.data = JSON.stringify(request.data);
       return transport(request, function(err, response) {
-        var e, skip, target;
+        var e;
         if (!err) {
-          if (response.status.toFixed()[0] !== '2') {
+          if (response.status.toFixed()[0] === !'2') {
             err = Error('Bad status code from server: ' + response.status);
           }
           try {
@@ -21,28 +21,7 @@
             err = e;
           }
         }
-        target = request.options.target;
-        skip = request.options.skip_animation;
-        if (target) {
-          if (!err && !skip) {
-            window.style.submit.state(target, true);
-          }
-          if (err && !skip) {
-            window.style.submit.state(target, false);
-          }
-          if (err || !response.success) {
-            window.style.card(true, response.reason);
-          }
-        }
         callback(err, response);
-        if (request.options.target) {
-          setTimeout(function() {
-            window.style.submit.clear(target);
-            if (err) {
-              return window.style.card(false);
-            }
-          }, 2400);
-        }
       });
     };
   });
@@ -56,7 +35,7 @@
   insertHtml = function(value, position, nodes) {
     return nodes.forEach(function(item) {
       var e, results, tmpnode, tmpnodes;
-      if (value.includes("<td")) {
+      if (value.includes('<td')) {
         tmpnodes = document.createElement('tbody');
       } else {
         tmpnodes = document.createElement('div');
@@ -86,6 +65,7 @@
   };
 
   $.fn.hasClass = function(className) {
+    // might need !! i dunno
     return !!this[0] && this[0].classList.contains(className);
   };
 
@@ -188,9 +168,9 @@
 
   $.fn.fadeIn = function(value) {
     this.forEach(function(item) {
-      item.style.display = "block";
-      item.style.opacity = "0";
-      item.style.transition = "0.2s opacity ease";
+      item.style.display = 'block';
+      item.style.opacity = '0';
+      item.style.transition = '0.2s opacity ease';
       return setTimeout(function() {
         return item.style.opacity = null;
       }, 10);
@@ -200,10 +180,10 @@
 
   $.fn.fadeOut = function(value) {
     this.forEach(function(item) {
-      item.style.transition = "0.2s opacity ease";
-      item.style.opacity = "0";
+      item.style.transition = '0.2s opacity ease';
+      item.style.opacity = '0';
       return setTimeout(function() {
-        return item.style.display = "none";
+        return item.style.display = 'none';
       }, 200);
     });
     return this;
@@ -211,16 +191,16 @@
 
   $.fn.fadeToggle = function(value) {
     this.forEach(function(item) {
-      item.style.transition = "0.2s opacity ease";
-      if (window.getComputedStyle(item).display === "none") {
-        item.style.display = "block";
+      item.style.transition = '0.2s opacity ease';
+      if (window.getComputedStyle(item).display === 'none') {
+        item.style.display = 'block';
         return setTimeout(function() {
           return item.style.opacity = null;
         }, 10);
       } else {
-        item.style.opacity = "0";
+        item.style.opacity = '0';
         return setTimeout(function() {
-          return item.style.display = "none";
+          return item.style.display = 'none';
         }, 200);
       }
     });
@@ -228,7 +208,7 @@
   };
 
   $.fn.not = function(value) {
-    return $(this.filter((item) => {
+    return $(this.filter(function(item) {
       return indexOf.call(value, item) < 0;
     }));
   };
@@ -263,7 +243,7 @@
       var el_max_height;
       el_max_height = 0;
       if (el.getAttribute('data-max-height')) {
-        // we've already used this before, so everything is setup
+        // we've already used @ before, so everything is setup
         if (el.style.maxHeight.replace('px', '').replace('%', '') === '0') {
           return el.style.maxHeight = el.getAttribute('data-max-height');
         } else {
@@ -276,7 +256,8 @@
         el.style.maxHeight = '0';
         el.setAttribute('data-max-height', el_max_height);
         el.style.display = 'block';
-        // we use setTimeout to modify maxHeight later than display (to we have the transition effect)
+        // we use setTimeout to modify maxHeight later than display
+        // (to we have the transition effect)
         return setTimeout((function() {
           el.style.maxHeight = el_max_height;
         }), 10);
@@ -289,7 +270,7 @@
     if (this.length === 0) {
       return;
     }
-    if (this[0].style.display === "block") {
+    if (this[0].style.display === 'block') {
       return this.slideToggle();
     }
   };
@@ -298,27 +279,27 @@
     if (this.length === 0) {
       return;
     }
-    if (this[0].style.display === "none") {
+    if (this[0].style.display === 'none') {
       return this.slideToggle();
     }
   };
 
   $.fn.animate = function(values, timing) {
     var animation, current, i, len, property, ref, that;
-    animation = "";
+    animation = '';
     ref = Object.entries(values);
     for (i = 0, len = ref.length; i < len; i++) {
       property = ref[i];
-      property[0] = property[0] === "width" ? "max-width" : property[0];
+      property[0] = property[0] === 'width' ? 'max-width' : property[0];
       animation += `${property[0]} `;
     }
     animation += `${timing / 1000}s ease`;
     current = 0;
     this.forEach(function(item) {
       item.style.transition = animation;
-      if (Object.keys(values).includes("width")) {
+      if (Object.keys(values).includes('width')) {
         current = parseInt(item.style['max-width']);
-        return item.style["max-width"] = window.getComputedStyle(item).width;
+        return item.style['max-width'] = window.getComputedStyle(item).width;
       }
     });
     that = this;
@@ -329,7 +310,7 @@
         results = [];
         for (j = 0, len1 = ref1.length; j < len1; j++) {
           property = ref1[j];
-          if (property[0] === "width") {
+          if (property[0] === 'width') {
             item.style['max-width'] = property[1];
             if (parseInt(property[1]) < current) {
               results.push(setTimeout(function() {
@@ -467,7 +448,7 @@
   //= require style.fermata.coffee
   //= require style.ext.coffee
   //= require style.time.coffee
-  var InformationCard, InputVerification, copyTextToClipboard;
+  var InformationCard, InputVerification, copyTextToClipboard, executeServer;
 
   copyTextToClipboard = function(text) {
     var err, msg, successful, textArea;
@@ -542,11 +523,40 @@
     }
   };
 
+  executeServer = function(that) {
+    var data, id, parent, removed;
+    parent = $(that.parentElement);
+    id = $('.hidden', parent)[0].value;
+    removed = [];
+    parent[0].childNodes.forEach(function(element) {
+      if (element.nodeName === '#text' || element.nodeName === 'BR') {
+        return removed.push(element);
+      }
+    });
+    removed.forEach(function(element) {
+      return parent[0].removeChild(element);
+    });
+    data = {
+      command: $('.command', parent)[0].value
+    };
+    window.endpoint.api.servers[id].execute.put({}, {}, data, function(err, response) {
+      var output;
+      output = response.result.response.split('\n');
+      output.forEach(function(element, index) {
+        return output[index] = `> ${element}`;
+      });
+      output = output.join('<br />');
+      return parent.htmlPrepend(output);
+    });
+  };
+
   window.style.getOrCreate('utils').getOrCreate('verify').input = InputVerification;
 
   window.style.card = InformationCard;
 
   window.style.copy = copyTextToClipboard;
+
+  window.style.rcon = executeServer;
 
   window.endpoint = {
     api: fermata.hawpi('/api/v1'),

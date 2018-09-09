@@ -9,8 +9,8 @@
           | Keep in mind that actions can not be undone.
       .col.span_1_of_2.nomargin
         .RCONwindow(contenteditable="true", autocorrect="off", autocapitalize="off", spellcheck="false")
-          | > 10:15:21 # [SM] Successfully kicked indietyp
-          input(type="text", placeholder="Enter your command...")
-          button
+          input.command(type="text", placeholder="Enter your command...", onkeypress="(function(e){if(e.key == 'Enter'){window.style.rcon(e.currentTarget)}})(event)")
+          input.hidden(type="text" value="{{data.id}}")
+          button(onclick="window.style.rcon(this)")
             i.fa.fa-paper-plane(style="margin-right:10px;")
             |  Send

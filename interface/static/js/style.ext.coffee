@@ -67,83 +67,83 @@ $.fn.remove = ->
   @
 
 $.fn.val = (value = '') ->
-  if value != ''
+  if value isnt ''
     @forEach((item) ->
       item.value = value
     )
 
-  else if this[0]
-    return this[0].value
-  this
+  else if @[0]
+    return @[0].value
+  @
 
 $.fn.html = (value = null) ->
-  if value != null
+  if value isnt null
     @forEach((item) ->
       item.innerHTML = value
     )
 
-  if this[0]
-    return this[0].innerHTML
-  this
+  if @[0]
+    return @[0].innerHTML
+  @
 
 $.fn.htmlBefore = (value) ->
-  insertHtml value, 'before', this
-  this
+  insertHtml value, 'before', @
+  @
 
 $.fn.htmlAfter = (value) ->
-  insertHtml value, 'after', this
-  this
+  insertHtml value, 'after', @
+  @
 
 $.fn.htmlAppend = (value) ->
-  insertHtml value, 'append', this
-  this
+  insertHtml value, 'append', @
+  @
 
 $.fn.htmlPrepend = (value) ->
-  insertHtml value, 'prepend', this
-  this
+  insertHtml value, 'prepend', @
+  @
 
 $.fn.fadeIn = (value) ->
   @forEach((item) ->
-    item.style.display = "block"
-    item.style.opacity = "0"
-    item.style.transition = "0.2s opacity ease"
+    item.style.display = 'block'
+    item.style.opacity = '0'
+    item.style.transition = '0.2s opacity ease'
 
     setTimeout(->
       item.style.opacity = null
     , 10)
   )
-  this
+  @
 
 $.fn.fadeOut = (value) ->
   @forEach((item) ->
-    item.style.transition = "0.2s opacity ease"
-    item.style.opacity = "0"
+    item.style.transition = '0.2s opacity ease'
+    item.style.opacity = '0'
     setTimeout(->
-      item.style.display = "none"
+      item.style.display = 'none'
     , 200)
   )
-  this
+  @
 
 
 $.fn.fadeToggle = (value) ->
   @forEach((item) ->
-    item.style.transition = "0.2s opacity ease"
+    item.style.transition = '0.2s opacity ease'
 
-    if window.getComputedStyle(item).display == "none"
-      item.style.display = "block"
+    if window.getComputedStyle(item).display is 'none'
+      item.style.display = 'block'
       setTimeout(->
         item.style.opacity = null
       , 10)
     else
-      item.style.opacity = "0"
+      item.style.opacity = '0'
       setTimeout(->
-        item.style.display = "none"
+        item.style.display = 'none'
       , 200)
   )
-  this
+  @
 
 $.fn.not = (value) ->
-  $(@filter((item) => item not in value))
+  $(@filter((item) -> item not in value))
 
 getHeight = (el) ->
   el_style = window.getComputedStyle(el)
@@ -153,7 +153,7 @@ getHeight = (el) ->
   el_max_height = el_style.maxHeight.replace('px', '').replace('%', '')
   wanted_height = 0
   # if its not hidden we just return normal height
-  if el_display != 'none' and el_max_height != '0'
+  if el_display isnt 'none' and el_max_height isnt '0'
     return el.offsetHeight
   # the element is hidden so:
   # making the el block so we can meassure its height but still be hidden
@@ -171,8 +171,8 @@ $.fn.slideToggle = ->
   @forEach((el) ->
     el_max_height = 0
     if el.getAttribute('data-max-height')
-      # we've already used this before, so everything is setup
-      if el.style.maxHeight.replace('px', '').replace('%', '') == '0'
+      # we've already used @ before, so everything is setup
+      if el.style.maxHeight.replace('px', '').replace('%', '') is '0'
         el.style.maxHeight = el.getAttribute('data-max-height')
       else
         el.style.maxHeight = '0'
@@ -183,49 +183,50 @@ $.fn.slideToggle = ->
       el.style.maxHeight = '0'
       el.setAttribute 'data-max-height', el_max_height
       el.style.display = 'block'
-      # we use setTimeout to modify maxHeight later than display (to we have the transition effect)
+      # we use setTimeout to modify maxHeight later than display
+      # (to we have the transition effect)
       setTimeout (->
         el.style.maxHeight = el_max_height
         return
       ), 10
   )
-  this
+  @
 
 $.fn.slideUp = ->
-  if this.length == 0
+  if @.length is 0
     return
 
-  if this[0].style.display == "block"
+  if @[0].style.display is 'block'
     @slideToggle()
 
 $.fn.slideDown = ->
-  if this.length == 0
+  if @.length is 0
     return
 
-  if this[0].style.display == "none"
+  if @[0].style.display is 'none'
     @slideToggle()
 
 $.fn.animate = (values, timing) ->
-  animation = ""
+  animation = ''
 
   for property in Object.entries(values)
-    property[0] = if property[0] == "width" then "max-width" else property[0]
+    property[0] = if property[0] is 'width' then 'max-width' else property[0]
     animation += "#{property[0]} "
-  animation += "#{timing/1000}s ease"
+  animation += "#{timing / 1000}s ease"
 
   current = 0
   @forEach((item) ->
     item.style.transition = animation
-    if Object.keys(values).includes("width")
+    if Object.keys(values).includes('width')
       current = parseInt(item.style['max-width'])
-      item.style["max-width"] = window.getComputedStyle(item).width
+      item.style['max-width'] = window.getComputedStyle(item).width
   )
 
   that = @
   setTimeout(->
     that.forEach((item) ->
       for property in Object.entries(values)
-        if property[0] == "width"
+        if property[0] is 'width'
           item.style['max-width'] = property[1]
 
           if parseInt(property[1]) < current
@@ -240,4 +241,4 @@ $.fn.animate = (values, timing) ->
     )
   , 10)
 
-  this
+  @
