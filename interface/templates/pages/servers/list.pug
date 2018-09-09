@@ -3,4 +3,10 @@
 - load staticfiles
 
 - block content
-  script.execute window.ajax('servers[overview]')
+  ul.paginationTabs
+    li.invisible Servers
+    li.fRight
+      i.icon.ion-ios-add(style="margin-right:5px")
+      | New Server
+  .paginationContent
+  script.execute window.ajax('servers[overview]', '.paginationContent')
