@@ -11,7 +11,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db.models import Count, DateTimeField, ExpressionWrapper, F
 from django.db.models.functions import Extract
-from django.http import JsonResponse, Http404
+from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from lib.mainframe import Mainframe
@@ -29,37 +29,6 @@ def login(request):
       return JsonResponse({"success": True})
 
     return JsonResponse({"success": False, "reason": "credentials incorrect or unkown"})
-
-
-def setup(request, u=None):
-  try:
-    user = User.objects.get(id=u)
-  except User.DoesNotExist:
-    return redirect('/login')
-
-  if user.username != user.email:
-    return redirect('/login')
-
-  if request.method == 'PUT':
-    data = json.loads(request.body)
-
-    if not data['username']:
-      return JsonResponse({'setup': False, 'username': 'cannot be nothing'})
-
-    user.namespace = data['username']
-    user.username = data['username']
-
-    try:
-      validate_password(data['password'])
-    except ValidationError as e:
-      return JsonResponse({'setup': False, 'password': str(e)})
-
-    user.set_password(data['password'])
-    user.save()
-
-    return JsonResponse({'setup': True})
-  else:
-    return render(request, 'skeleton/setup.pug', {'user': user})
 
 
 @login_required(login_url='/login')
@@ -147,22 +116,19 @@ def punishments(request):
 
 @login_required(login_url='/login')
 def settings(request):
-  modules = [c for c in ContentType.objects.filter(app_label__in=['core', 'log']) if
-             Permission.objects.filter(content_type=c).count() > 0]
+  # modules = [c for c in ContentType.objects.filter(app_label__in=['core', 'log']) if
+  #            Permission.objects.filter(content_type=c).count() > 0]
 
-  base = request.user.user_permissions if not request.user.is_superuser else Permission.objects
-  perms = base.all().order_by('content_type__model')
+  # base = request.user.user_permissions if not request.user.is_superuser else Permission.objects
+  # perms = base.all().order_by('content_type__model')
 
-  mainframe = Mainframe()
-  mf = None
+  # mainframe = Mainframe()
+  # mf = None
 
-  if mainframe.check():
-    mf = mainframe.populate().current.id
+  # if mainframe.check():
+  #   mf = mainframe.populate().current.id
 
-  return render(request, 'pages/settings.pug', {'simple': modules,
-                                                'advanced': perms,
-                                                'mainframe': mf,
-                                                'discord': None})
+  return render(request, 'pages/settings.pug', {})
 
 
 def page_not_found(request, exception=None, template_name='404.pug'):

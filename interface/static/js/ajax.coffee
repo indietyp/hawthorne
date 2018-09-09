@@ -6,6 +6,8 @@ ajax = (mode, target = '.main', page = 1, manual = false, action = 'append') ->
   switch mode
     when 'home[update]'
       endpoint = window.endpoint.ajax.system.update
+    when 'settings[tokens]'
+      endpoint = window.endpoint.ajax.settings.tokens[page]
     when 'servers[overview]'
       endpoint = window.endpoint.ajax.servers[page]
     when 'servers[detailed][logs]'
@@ -139,6 +141,8 @@ lazy = (mode, fallback) ->
                                 "##{fallback}")
 
   switch mode
+    when 'settings[overview]'
+      endpoint = window.endpoint.ajax.settings[hash]
     when 'servers[detailed]'
       endpoint = window.endpoint.ajax.servers[window.slug][hash]
     when 'admins[servers]'

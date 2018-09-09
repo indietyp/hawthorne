@@ -41,9 +41,10 @@ urlpatterns = [
   path('servers/<slug:s>/logs/<int:page>', server.log_entries),
   path('servers/<slug:s>/rcon', server.rcon),
 
-  path('setting/user/<int:page>', setting.user),
-  path('setting/group/<int:page>', setting.group),
-  path('setting/token/<int:page>', setting.token),
+  path('settings/tokens', setting.tokens),
+  path('settings/tokens/<int:page>', setting.tokens_entries),
+  # path('setting/group/<int:page>', setting.group),
+  # path('setting/token/<int:page>', setting.token),
 
   path('system/update', system.update),
 ]

@@ -22,7 +22,6 @@ urlpatterns = [
     # path('announcements', views.announcement),
     path('settings', views.settings),
 
-    path('setup/<uuid:u>', views.setup),
     path('login', views.login),
     path('logout', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
 ]

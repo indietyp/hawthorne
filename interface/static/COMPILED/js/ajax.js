@@ -12,6 +12,9 @@
       case 'home[update]':
         endpoint = window.endpoint.ajax.system.update;
         break;
+      case 'settings[tokens]':
+        endpoint = window.endpoint.ajax.settings.tokens[page];
+        break;
       case 'servers[overview]':
         endpoint = window.endpoint.ajax.servers[page];
         break;
@@ -155,6 +158,9 @@
       }, null, `#${fallback}`);
     }
     switch (mode) {
+      case 'settings[overview]':
+        endpoint = window.endpoint.ajax.settings[hash];
+        break;
       case 'servers[detailed]':
         endpoint = window.endpoint.ajax.servers[window.slug][hash];
         break;
