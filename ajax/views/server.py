@@ -3,15 +3,15 @@ import json
 import urllib.request
 
 from django.contrib.auth.decorators import login_required, permission_required
-from django.db.models import DateField, Count
+from django.db.models import Count, DateField
 from django.db.models.functions import Cast, Extract
 from django.views.decorators.http import require_http_methods
 
 from ajax.views import renderer
-from django.shortcuts import render
 from core.models import Server
+from django.shortcuts import render
 from lib.sourcemod import SourcemodPluginWrapper
-from log.models import UserOnlineTime
+from log.models import ServerChat, UserOnlineTime
 
 
 def status(server, *args, **kwargs):
@@ -78,8 +78,17 @@ def overview(request, s, *args, **kwargs):
 @require_http_methods(['POST'])
 def log(request, s, *args, **kwargs):
   server = Server.objects.get(id=s)
+  return render(request, 'components/servers/detailed/logs/wrapper.pug', {'data': server})
 
-  return render(request, 'components/servers/detailed/log.pug', {'data': server})
+
+@login_required(login_url='/login')
+@permission_required('core.view_server')
+@require_http_methods(['POST'])
+def log_entries(request, s, page, *args, **kwargs):
+  server = Server.objects.get(id=s)
+  logs = ServerChat.objects.filter(server=server).order_by('created_at')
+
+  return renderer(request, 'components/servers/detailed/logs/entry.pug', logs, page)
 
 
 @login_required(login_url='/login')

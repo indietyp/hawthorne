@@ -1,4 +1,4 @@
-.paginationContent.ct2
+.paginationContent
   .CBox.nomargin
     h3
       | Chat Log
@@ -22,7 +22,7 @@
       .col.span_1_of_4.orderChatLog
         select
           option(default="", selected="") Filter by team
-          option S.W.A.T
+          option Counter-Terrorists
           option Terrorists
     table
       thead
@@ -32,17 +32,7 @@
           th Message
           th.fRight Time
       tbody
-        tr
-          td(style="width:1px")
-            img.country(src="https://demo.hawthornepanel.org/static/flags/de.svg")
-          td
-            a(href="") Akke
-          td(style="width:50%") Hello world.
-          td.fRight Today, 15:25
-        tr
-          td(style="width:1px")
-            img.country(src="https://demo.hawthornepanel.org/static/flags/de.svg")
-          td
-            a(href="") Akke
-          td(style="width:50%") Hello world.
-          td.fRight June 18th, 05:45
+
+  script.execute.
+    window.slug = "{{data.id}}"
+    window.ajax("servers[detailed][logs]", ".paginationContent table tbody")

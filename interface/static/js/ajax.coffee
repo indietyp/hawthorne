@@ -8,6 +8,8 @@ ajax = (mode, target = '.main', page = 1, manual = false, action = 'append') ->
       endpoint = window.endpoint.ajax.system.update
     when 'servers[overview]'
       endpoint = window.endpoint.ajax.servers[page]
+    when 'servers[detailed][logs]'
+      endpoint = window.endpoint.ajax.servers[window.slug].logs[page]
     when 'players[overview]'
       endpoint = window.endpoint.ajax.players[page]
     when 'players[detailed][actions]'

@@ -15,6 +15,9 @@
       case 'servers[overview]':
         endpoint = window.endpoint.ajax.servers[page];
         break;
+      case 'servers[detailed][logs]':
+        endpoint = window.endpoint.ajax.servers[window.slug].logs[page];
+        break;
       case 'players[overview]':
         endpoint = window.endpoint.ajax.players[page];
         break;

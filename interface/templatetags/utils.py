@@ -1,8 +1,9 @@
 import datetime
 
 import natural.date
-from django.template.defaulttags import register
+
 from django.contrib.auth.models import Group, Permission
+from django.template.defaulttags import register
 
 
 @register.filter
@@ -17,6 +18,11 @@ def get(value, key):
 def duration(delta):
   now = datetime.datetime.now()
   return natural.date.delta(now, now + delta, words=False)[0]
+
+
+@register.filter
+def day(day):
+  return natural.date.day(day)
 
 
 @register.filter

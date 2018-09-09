@@ -37,7 +37,8 @@ urlpatterns = [
 
   path('servers/<int:page>', server.list),
   path('servers/<slug:s>/overview', server.overview),
-  path('servers/<slug:s>/log', server.log),
+  path('servers/<slug:s>/logs', server.log),
+  path('servers/<slug:s>/logs/<int:page>', server.log_entries),
   path('servers/<slug:s>/rcon', server.rcon),
 
   path('setting/user/<int:page>', setting.user),

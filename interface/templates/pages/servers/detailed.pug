@@ -58,17 +58,17 @@
 
   ul.paginationTabs(data-target='servers[detailed]')
     li(data-trigger="[ct/switch]", data="overview") Overview
-    li(data-trigger="[ct/switch]", data="log") Chat Log
+    li(data-trigger="[ct/switch]", data="logs") Chat Log
     li(data-trigger="[ct/switch]", data="rcon") RCon
-    li(data-trigger="[ct/switch]", data="ct4")
-      i.fa.fa-cog(style="margin-right:5px")
-      | Edit
-    li(data-trigger="[ct/switch]", data="ct4")
+    li(data-trigger="[ct/switch]", data="roles")
       i.fa.fa-id-card(style="margin-right:5px")
       | Roles
-    li.fRight.paginationTabsDanger(data-trigger="[ct/switch]", data="ct4")
+    li.fRight.paginationTabsDanger
       i.icon.ion-ios-trash(style="margin-right:5px")
       | Delete Server
+    li.fRight.paginationTabsHarmless(style="margin-right:6px")
+      i.fa.fa-cog(style="margin-right:5px")
+      | Edit
 
   script.execute.
     window.slug = "{{data.id}}"
