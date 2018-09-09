@@ -145,6 +145,8 @@
             img.thumbnail(src="{{data.avatar}}")
           .col.span_1_of_2.nomargin
             h2
+              - with "flags/"|add:data.country.code|add:".svg" as url
+                img.country(src='{% static url %}')
               = data.namespace
             p
               i.fa.fa-gamepad(style="margin: 0 5px 0 0")

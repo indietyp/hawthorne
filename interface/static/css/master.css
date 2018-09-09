@@ -3087,6 +3087,13 @@ table .country {
     width: 30px;
 }
 
+.serverOverview .country {
+    vertical-align: text-top;
+    margin-right: 6px;
+    border-radius: 2px;
+    width: 30px;
+}
+
 .serverActionButton {
     width: 95%;
 }

@@ -12,6 +12,8 @@ ajax = (mode, target = '.main', page = 1, manual = false, action = 'append') ->
       endpoint = window.endpoint.ajax.players[page]
     when 'players[detailed][actions]'
       endpoint = window.endpoint.ajax.players[window.slug].actions[page]
+    when 'players[detailed][punishments]'
+      endpoint = window.endpoint.ajax.players[window.slug].punishments[page]
     when 'players[detailed][logs]'
       endpoint = window.endpoint.ajax.players[window.slug].logs[window.pagination.current][page]
     when 'admins[servers][admins]'
@@ -97,7 +99,7 @@ date = (mode, target = '.innerMain .CBox h3.center', forward = true) ->
     window.pagination.current -= 1
 
   switch mode
-    when 'players[detailed][log]'
+    when 'players[detailed][logs]'
       endpoint = window.endpoint.ajax.players[window.slug].logs[window.pagination.current]
 
 

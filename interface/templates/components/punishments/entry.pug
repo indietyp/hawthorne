@@ -18,7 +18,9 @@ tr(style="{%if data.resolved%}opacity:0.5;{%endif%}")
   td(style='width:1px')
     - with "flags/"|add:data.user.country.code|add:".svg" as url
       img.country(src='{% static url %}')
-  td= data.user.namespace
+  td
+    a(href="javascript:void(0)", onclick="window.vc('players[detailed]', '{{data.user.id}}')")
+      = data.user.namespace
   td= data.reason
   td
     if data.length
@@ -27,11 +29,17 @@ tr(style="{%if data.resolved%}opacity:0.5;{%endif%}")
       | Eternal
   td
     if data.server
-      = data.server.name
+      a(href="javascript:void(0)", onclick="window.vc('servers[detailed]', '{{data.server.id}}')")
+        = data.server.name
     else
       | All
   td
-    = data.created_by.namespace
+    a(href="javascript:void(0)", onclick="window.vc('players[detailed]', '{{data.created_by.id}}')")
+      = data.created_by.namespace
+  td
     if data.updated_by
-      | /{{data.updated_by.namespace}}
+      a(href="javascript:void(0)", onclick="window.vc('players[detailed]', '{{data.updated_by.id}}')")
+        = data.updated_by.namespace
+    else
+      | N/A
 

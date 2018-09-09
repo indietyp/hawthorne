@@ -21,6 +21,9 @@
       case 'players[detailed][actions]':
         endpoint = window.endpoint.ajax.players[window.slug].actions[page];
         break;
+      case 'players[detailed][punishments]':
+        endpoint = window.endpoint.ajax.players[window.slug].punishments[page];
+        break;
       case 'players[detailed][logs]':
         endpoint = window.endpoint.ajax.players[window.slug].logs[window.pagination.current][page];
         break;
@@ -113,7 +116,7 @@
       window.pagination.current -= 1;
     }
     switch (mode) {
-      case 'players[detailed][log]':
+      case 'players[detailed][logs]':
         endpoint = window.endpoint.ajax.players[window.slug].logs[window.pagination.current];
     }
     endpoint.post(header, {}, function(dummy, response) {

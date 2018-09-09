@@ -13,7 +13,7 @@ from django.utils.formats import date_format
 from django.views.decorators.http import require_http_methods
 
 from ajax.views import renderer
-from core.models import Server, User
+from core.models import Punishment, Server, User
 from log.models import ServerChat, UserOnlineTime
 
 
@@ -105,6 +105,26 @@ def detailed_actions_entries(request, u, page, *args, **kwargs):
   logs = DALModel.objects.filter(user=u, application=application).order_by('created_at')
 
   return renderer(request, 'components/players/detailed/actions/entry.pug', logs, page)
+
+
+@login_required(login_url='/login')
+@permission_required('core.view_user')
+@require_http_methods(['POST'])
+def detailed_punishments(request, u, *args, **kwargs):
+  c = request.POST.get("page", 1)
+  pages = math.ceil(Punishment.objects.filter(user=u).count() / settings.PAGE_SIZE)
+
+  return render(request, 'components/players/detailed/punishments/wrapper.pug', {'pages': pages,
+                                                                                 'current': c})
+
+
+@login_required(login_url='/login')
+@permission_required('core.view_user')
+@require_http_methods(['POST'])
+def detailed_punishments_entries(request, u, page, *args, **kwargs):
+  punishments = Punishment.objects.filter(user=u).order_by('created_at')
+
+  return renderer(request, 'components/players/detailed/punishments/entry.pug', punishments, page)
 
 
 @login_required(login_url='/login')

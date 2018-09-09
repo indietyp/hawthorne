@@ -23,6 +23,8 @@ urlpatterns = [
   path('players/<uuid:u>/logs/<int:date>/<int:page>', player.detailed_log_entries),
   path('players/<uuid:u>/actions', player.detailed_actions),
   path('players/<uuid:u>/actions/<int:page>', player.detailed_actions_entries),
+  path('players/<uuid:u>/punishments', player.detailed_punishments),
+  path('players/<uuid:u>/punishments/<int:page>', player.detailed_punishments_entries),
 
   path('punishments/bans', punishment.list, name="ajax[punishment][ban]"),
   path('punishments/bans/<int:page>', punishment.entries, name="ajax[punishment][ban]"),
