@@ -10,6 +10,7 @@ from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db.models import Count, DateTimeField, ExpressionWrapper, F
+from django.db.models.deletion import Collector
 from django.db.models.functions import Extract
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
@@ -81,7 +82,14 @@ def server_detailed(request, s):
     return render(request, 'skeleton/404.pug')
 
   server = server[0]
-  return render(request, 'pages/servers/detailed.pug', {'data': server})
+
+  collector = Collector(using='default')
+  collector.collect([server])
+  estimate = sum(len(x) for x in collector.data.values())
+  breakdown = {k._meta.verbose_name_plural if len(v) != 1 else k._meta.verbose_name: len(v) for k, v in collector.data.items()}
+  return render(request, 'pages/servers/detailed.pug', {'data': server,
+                                                        'estimate': estimate,
+                                                        'breakdown': breakdown})
 
 
 @login_required(login_url='/login')

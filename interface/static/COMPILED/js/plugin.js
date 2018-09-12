@@ -27,8 +27,13 @@
     };
     $('[data-trigger=\'[server/item]\']', scope).on('click', server_item);
     modal_close = function() {
+      var parent;
       $('.overlay').fadeOut('fast');
-      $(this.parentElement).fadeOut('fast');
+      parent = this.parentElement;
+      while (!$(parent).hasClass('modal')) {
+        parent = parent.parentElement;
+      }
+      $(parent).fadeOut('fast');
     };
     $('[data-trigger=\'[modal/close]\']', scope).on('click', modal_close);
     overlay = function() {

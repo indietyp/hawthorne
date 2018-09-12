@@ -1,19 +1,29 @@
 .innerMain h3.center span.current:before {
-  content: " ";
+    content: " ";
 }
 
 .hidden {
-  display: none;
+    display: none;
 }
 
 .invisible {
-  visibility: hidden;
+    visibility: hidden;
 }
 
 .space-before:before {
-  content: " ";
+    content: " ";
 }
 
 .space-after:after {
-  content: " ";
+    content: " ";
+}
+
+.modal .actions {
+    margin-top: 16px;
+}
+
+.modal .actions button {
+    float: right;
+    width: auto;
+    margin-left: 6px;
 }
