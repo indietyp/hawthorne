@@ -23,7 +23,7 @@ We're currently in an unstable beta release cycle.
 
 ## Partners & Tools
 ### [![](https://avatars1.githubusercontent.com/u/4094939?s=50&v=4)](https://crossbrowsertesting.com) CrossBrowserTesting
-CrossBrowserTesting gives us the ability to cross-test our webpages over multiple devices and services. Without it, we would not be able to ensure that our webpage works in every scenario. CBT is therefore an essential tool for our UI development and testing. Testing without such a tool just isn't possible. This is due to the huge number of possible configurations and the time consuming nature which CBT fully resolves. Thank you CBT for providing this project with the necessary tools.
+[CrossBrowserTesting](https://crossbrowsertesting.com) gives us the ability to cross-test our webpages over multiple devices and services. Without it, we would not be able to ensure that our webpage works in every scenario. CBT is therefore an essential tool for our UI development and testing. Testing without such a tool just isn't possible. This is due to the huge number of possible configurations and the time consuming nature which CBT fully resolves. Thank you CBT for providing this project with the necessary tools.
 
 ## Showcase
 ![][image-1]
