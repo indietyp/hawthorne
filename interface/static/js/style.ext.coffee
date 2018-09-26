@@ -171,20 +171,32 @@ $.fn.slideToggle = ->
   @forEach((el) ->
     el_max_height = 0
     if el.getAttribute('data-max-height')
-      # we've already used @ before, so everything is setup
-      if el.style.maxHeight.replace('px', '').replace('%', '') is '0'
-        el.style.maxHeight = el.getAttribute('data-max-height')
-      else
-        el.style.maxHeight = '0'
+      # we've already used this before, so everything is setup
+      setTimeout (->
+        if el.style.maxHeight.replace('px', '').replace('%', '') is '0'
+          el.style.display = 'block'
+
+          setTimeout (->
+            el.style.maxHeight = el.getAttribute('data-max-height')
+          ), 10
+        else
+          el.style.maxHeight = '0'
+
+          setTimeout (->
+            el.style.display = 'none'
+          ), 500
+
+        return
+      ), 10
     else
       el_max_height = getHeight(el) + 'px'
-      el.style['transition'] = 'max-height 0.5s ease-in-out'
+      el.style.transition = 'max-height 0.5s ease-in-out'
       el.style.overflowY = 'hidden'
-      el.style.maxHeight = '0'
       el.setAttribute 'data-max-height', el_max_height
       el.style.display = 'block'
+      el.style.maxHeight = '0'
+
       # we use setTimeout to modify maxHeight later than display
-      # (to we have the transition effect)
       setTimeout (->
         el.style.maxHeight = el_max_height
         return
@@ -196,14 +208,21 @@ $.fn.slideUp = ->
   if @.length is 0
     return
 
-  if @[0].style.display is 'block'
+  style = window.getComputedStyle(@[0])
+  if style.display isnt 'none'
+    if not @[0].getAttribute('data-max-height')
+      @[0].style.overflowY = 'hidden'
+      @[0].style.maxHeight = style.height
+      @[0].style.transition = 'max-height 0.5s ease-in-out'
+      @[0].setAttribute 'data-max-height', style.height
+
     @slideToggle()
 
 $.fn.slideDown = ->
   if @.length is 0
     return
 
-  if @[0].style.display is 'none'
+  if window.getComputedStyle(@[0]).display is 'none'
     @slideToggle()
 
 $.fn.animate = (values, timing) ->

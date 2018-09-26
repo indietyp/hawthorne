@@ -2,7 +2,6 @@
 #= require style.ext.coffee
 #= require style.time.coffee
 
-
 copyTextToClipboard = (text) ->
   textArea = document.createElement('textarea')
   # https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript
@@ -102,10 +101,18 @@ executeServer = (that) ->
   )
   return
 
+
+loginUsername = (event) ->
+  if event.target.value.length isnt 0
+    $('.transition').slideDown()
+  else
+    $('.transition').slideUp()
+
 window.style.getOrCreate('utils').getOrCreate('verify').input = InputVerification
 window.style.card = InformationCard
 window.style.copy = copyTextToClipboard
 window.style.rcon = executeServer
+window.style.login = loginUsername
 
 window.endpoint =
   api: fermata.hawpi '/api/v1'

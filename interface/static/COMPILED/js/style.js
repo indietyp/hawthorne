@@ -243,21 +243,28 @@
       var el_max_height;
       el_max_height = 0;
       if (el.getAttribute('data-max-height')) {
-        // we've already used @ before, so everything is setup
-        if (el.style.maxHeight.replace('px', '').replace('%', '') === '0') {
-          return el.style.maxHeight = el.getAttribute('data-max-height');
-        } else {
-          return el.style.maxHeight = '0';
-        }
+        // we've already used this before, so everything is setup
+        return setTimeout((function() {
+          if (el.style.maxHeight.replace('px', '').replace('%', '') === '0') {
+            el.style.display = 'block';
+            setTimeout((function() {
+              return el.style.maxHeight = el.getAttribute('data-max-height');
+            }), 10);
+          } else {
+            el.style.maxHeight = '0';
+            setTimeout((function() {
+              return el.style.display = 'none';
+            }), 500);
+          }
+        }), 10);
       } else {
         el_max_height = getHeight(el) + 'px';
-        el.style['transition'] = 'max-height 0.5s ease-in-out';
+        el.style.transition = 'max-height 0.5s ease-in-out';
         el.style.overflowY = 'hidden';
-        el.style.maxHeight = '0';
         el.setAttribute('data-max-height', el_max_height);
         el.style.display = 'block';
+        el.style.maxHeight = '0';
         // we use setTimeout to modify maxHeight later than display
-        // (to we have the transition effect)
         return setTimeout((function() {
           el.style.maxHeight = el_max_height;
         }), 10);
@@ -267,10 +274,18 @@
   };
 
   $.fn.slideUp = function() {
+    var style;
     if (this.length === 0) {
       return;
     }
-    if (this[0].style.display === 'block') {
+    style = window.getComputedStyle(this[0]);
+    if (style.display !== 'none') {
+      if (!this[0].getAttribute('data-max-height')) {
+        this[0].style.overflowY = 'hidden';
+        this[0].style.maxHeight = style.height;
+        this[0].style.transition = 'max-height 0.5s ease-in-out';
+        this[0].setAttribute('data-max-height', style.height);
+      }
       return this.slideToggle();
     }
   };
@@ -279,7 +294,7 @@
     if (this.length === 0) {
       return;
     }
-    if (this[0].style.display === 'none') {
+    if (window.getComputedStyle(this[0]).display === 'none') {
       return this.slideToggle();
     }
   };
@@ -448,7 +463,7 @@
   //= require style.fermata.coffee
   //= require style.ext.coffee
   //= require style.time.coffee
-  var InformationCard, InputVerification, copyTextToClipboard, executeServer;
+  var InformationCard, InputVerification, copyTextToClipboard, executeServer, loginUsername;
 
   copyTextToClipboard = function(text) {
     var err, msg, successful, textArea;
@@ -550,6 +565,14 @@
     });
   };
 
+  loginUsername = function(event) {
+    if (event.target.value.length !== 0) {
+      return $('.transition').slideDown();
+    } else {
+      return $('.transition').slideUp();
+    }
+  };
+
   window.style.getOrCreate('utils').getOrCreate('verify').input = InputVerification;
 
   window.style.card = InformationCard;
@@ -557,6 +580,8 @@
   window.style.copy = copyTextToClipboard;
 
   window.style.rcon = executeServer;
+
+  window.style.login = loginUsername;
 
   window.endpoint = {
     api: fermata.hawpi('/api/v1'),

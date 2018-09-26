@@ -69,12 +69,17 @@ html(lang='en')
             .animate-in .box{animation-name:animate-box;animation-timing-function:ease;animation-delay:.2s;}
             svg#ht-logo{background:transparent;}
       .login
-        input.uuid.hidden(type='hidden')
-        input.username(type='text', placeholder='Username')
-        .transition
-          input.password(type='password', placeholder='Password')
-          hr
-          button(type='text') Login
+        form(method="post", action="{% url 'login' %}")
+          {% csrf_token %}
+          {% if form.errors %}
+          p.red.center Your username and password didn't match. Please try again.
+          {% endif %}
+          input.username(type='text', placeholder='Username', onkeyup='window.style.login(event)', name="username", id="id_username", required, autofocus)
+          .transition
+            input.password(type='password', placeholder='Password', name='password', id='id_password', required)
+            hr
+            input(type='submit' value='Login') Login
+            input(type="hidden", name="next", value="{{next}}")
       .divider
         hr
         button(type='text', onclick="window.location.href='{% url 'social:begin' 'steam' %}?{{ request.GET.urlencode }}'") Login with Steam

@@ -596,7 +596,7 @@ h3 {
     width: 49.2%;
 }
 
-button {
+button, input[type='submit'] {
     padding: 13px;
 
     cursor: pointer;
