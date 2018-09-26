@@ -3,18 +3,19 @@
 
 tr(style="{%if data.resolved%}opacity:0.5;{%endif%}")
   td(style='width:48px')
-    label.checkmarkContainer
-      input(type='checkbox')
-      span.checkmark
-    .checkboxDialogue.modalSelect
-      select
-        option Resolve
-      button
-        i.icon.ion-ios-checkmark
-        |  Confirm
-      button.paginationTabsDanger
-        i.icon.ion-ios-close
-        |  Cancel
+    if not data.resolved
+      label.checkmarkContainer
+        input(type='checkbox')
+        span.checkmark
+      .checkboxDialogue.modalSelect
+        select
+          option Resolve
+        button
+          i.icon.ion-ios-checkmark
+          |  Confirm
+        button.paginationTabsDanger
+          i.icon.ion-ios-close
+          |  Cancel
   td(style='width:1px')
     - with "flags/"|add:data.user.country.code|add:".svg" as url
       img.country(src='{% static url %}')
