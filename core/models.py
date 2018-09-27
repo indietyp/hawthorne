@@ -211,7 +211,7 @@ class Role(BaseModel):
     verbose_name = 'server role'
     verbose_name_plural = 'server roles'
     permissions = [
-      ('view_role', 'Can view server role'),
+      # ('view_role', 'Can view server role'),
     ]
 
   def __str__(self):

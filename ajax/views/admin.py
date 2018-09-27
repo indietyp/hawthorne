@@ -1,13 +1,13 @@
 import math
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
-from django.conf import settings
 
 from ajax.views import renderer
+from core.models import Membership, Role, User
 from django.conf import settings
-from core.models import User, ServerGroup, Membership
 from django.contrib.auth.models import Group
 
 
@@ -47,7 +47,7 @@ def servers_roles(request):
 @permission_required('core.view_servergroup')
 @require_http_methods(['POST'])
 def servers_roles_entries(request, page):
-  obj = ServerGroup.objects.all()
+  obj = Role.objects.all()
   return renderer(request, 'components/admins/servers/roles/entry.pug', obj, page, size=4, overwrite=True)
 
 
