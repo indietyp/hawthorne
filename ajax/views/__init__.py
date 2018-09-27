@@ -2,8 +2,8 @@ import os
 
 from django.http import HttpResponse
 from django.shortcuts import render
-from multiprocessing import Pool, cpu_count
 from functools import partial
+from multiprocessing import Pool, cpu_count
 
 from panel.settings import PAGE_SIZE
 
@@ -50,7 +50,7 @@ def wrapper(target, func=None, *args, **kwargs):
   return target
 
 
-def renderer(request, template, obj, page, extra=[], execute=None):
+def renderer(request, template, obj, page, extra=[], execute=None, overwrite=False):
   data = obj[(page - 1) * PAGE_SIZE:page * PAGE_SIZE]
   data = list(data)
 
