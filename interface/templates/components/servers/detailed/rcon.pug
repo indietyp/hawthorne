@@ -1,0 +1,16 @@
+.paginationContent.ct3
+  .CBox.nomargin
+    .section.group.nomargin.serverOverview
+      .col.span_1_of_2.nomargin
+        h2 Remote Control Access
+        p You can communicate with the server in real-time using a secure connection. Simply enter the command you wish to send and the response will be shown above the input box.
+          br
+          br
+          | Keep in mind that actions can not be undone.
+      .col.span_1_of_2.nomargin
+        .RCONwindow(contenteditable="true", autocorrect="off", autocapitalize="off", spellcheck="false")
+          input.command(type="text", placeholder="Enter your command...", onkeypress="(function(e){if(e.key == 'Enter'){window.style.rcon(e.currentTarget)}})(event)")
+          input.hidden(type="text" value="{{data.id}}")
+          button(onclick="window.style.rcon(this)")
+            i.fa.fa-paper-plane(style="margin-right:10px;")
+            |  Send

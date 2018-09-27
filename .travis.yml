@@ -3,6 +3,7 @@ sudo: required
 branches:
   except:
   - dev
+  - interface
 
 language: python
 

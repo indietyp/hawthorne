@@ -9,36 +9,78 @@ html(lang='en')
     meta(charset="UTF-8")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
 
-    include skeleton/include.pug
+    include skeleton/meta/include.pug
   body
-    include skeleton/csrf.pug
+    include skeleton/meta/csrf.pug
 
-    #login-wrapper
-      .spacer
-      .action-container
-        .logo
-          .spacer
-          include assets/logo.svg
-          .heading
-            span.white haw
-            span.primary thorne
-          .spacer
-        .login-container.selector
-          .spacer
-          a(onclick="$('.selector').toggleClass('collapsed');$('.login').toggleClass('collapsed')")
-            i(data-feather='database')
-          .spacer
-          a(href="{% url 'social:begin' 'steam' %}?{{ request.GET.urlencode }}")
-            - include 'assets/steam.svg'
-          .spacer
-        .login-container.column.login.collapsed
-          input.uuid.hidden(type='hidden', value=user.id)
-          input.username(placeholder="Username")
-          input.password(placeholder="Password", type='password')
-          button(type='submit', onclick='window.api.login(this)')
-            .spacer
-            i(data-feather='log-in')
-      .spacer
+    .loginContainer
+      .loginLogo
+        svg#ht-logo.animate-in(xmlns='http://www.w3.org/2000/svg', width='100', height='100', viewbox='-1 -1 49 49', fill='none', stroke='#FFF', stroke-width='2', stroke-linecap='square', stroke-linejoin='square')
+          polyline(o='0', points='0 4 0 0 8 0')
+          polyline(o='1', points='4 4 12 4 12 0')
+          polyline(o='2', points='8 8 8 16')
+          polyline(o='2', points='6 12 4 12')
+          polyline(o='3', points='4 8 0 8 0 16')
+          polyline(o='4', points='0 20 8 20')
+          polyline(o='4', points='4 18 4 16')
+          polyline(o='5', points='0 24 8 24 8 28')
+          polyline(o='6', points='0 28 4 28 4 32 8 32')
+          polyline(o='7', points='0 32 0 36 8 36')
+          polyline(o='8', points='0 40 0 44 8 44')
+          polyline(o='9', points='4 40 12 40 12 36')
+          polyline(o='10', points='12 44 16 44 16 40 20 40')
+          polyline(o='11', points='16 36 28 36')
+          polyline(o='12', points='20 44 28 44')
+          polyline(o='12', points='24 42 24 40')
+          polyline(o='13', points='32 36 32 44')
+          polyline(o='13', points='30 40 28 40')
+          polyline(o='14', points='36 40 36 44 44 44')
+          polyline(o='15', points='40 40 44 40 44 32')
+          polyline(o='16', points='40 36 36 36 36 28')
+          polyline(o='17', points='40 32 40 28 44 28 44 24')
+          polyline(o='18', points='36 24 40 24 40 20 44 20')
+          polyline(o='19', points='36 20 36 16 44 16')
+          polyline(o='20', points='36 12 44 12')
+          polyline(o='20', points='40 10 40 8')
+          polyline(o='21', points='44 0 44 8')
+          polyline(o='21', points='40 4 42 4')
+          polyline(o='22', points='40 0 36 0 36 8')
+          polyline(o='23', points='32 4 32 8 24 8')
+          polyline(o='24', points='32 0 28 0 28 4 24 4')
+          polyline(o='25', points='24 0 20 0 20 8')
+          polyline(o='26', points='16 0 16 8 12 8')
+          polyline.box(points='12 12 32 12 32 32 12 32 12 12')
+          polyline.inside(o='1', points='16 20 16 16 24 16')
+          polyline.inside(o='3', points='20 20 20 24 16 24 16 28')
+          polyline.inside(o='4', points='28 16 28 24')
+          polyline.inside(o='4', points='26 20 24 20')
+          polyline.inside(o='2', points='20 28 28 28')
+          polyline.inside(o='2', points='24 24 24 26')
+          style(scoped='scoped').
+            #ht-logo>polyline{opacity:.4;}.box{opacity:1;}.inside{opacity:.8;}
+            @keyframes animate-in{0%{opacity:0}1%{opacity:.2}20%{opacity:1}40%{opacity:.6}to{opacity:.4}}@keyframes animate-box{from{opacity:0}to{opacity:1}}@keyframes animate-inside{from{opacity:0}to{opacity:.8}}
+            .animate-in *{opacity:.2;animation:animate-in linear 2.2s;animation-fill-mode:both;}
+            .animate-in *[o="0"]{animation-delay:0.03s;}.animate-in *[o="1"]{animation-delay:0.06s;}.animate-in *[o="2"]{animation-delay:0.09s;}.animate-in *[o="3"]{animation-delay:0.12s;}.animate-in *[o="4"]{animation-delay:0.15s;}.animate-in *[o="5"]{animation-delay:0.18s;}.animate-in *[o="6"]{animation-delay:0.21s;}.animate-in *[o="7"]{animation-delay:0.24s;}.animate-in *[o="8"]{animation-delay:0.27s;}.animate-in *[o="9"]{animation-delay:0.30s;}.animate-in *[o="10"]{animation-delay:0.33s;}.animate-in *[o="11"]{animation-delay:0.36s;}.animate-in *[o="12"]{animation-delay:0.39s;}.animate-in *[o="13"]{animation-delay:0.42s;}.animate-in *[o="14"]{animation-delay:0.45s;}.animate-in *[o="15"]{animation-delay:0.48s;}.animate-in *[o="16"]{animation-delay:0.51s;}.animate-in *[o="17"]{animation-delay:0.54s;}.animate-in *[o="18"]{animation-delay:0.57s;}.animate-in *[o="19"]{animation-delay:0.60s;}.animate-in *[o="20"]{animation-delay:0.63s;}.animate-in *[o="21"]{animation-delay:0.66s;}.animate-in *[o="22"]{animation-delay:0.69s;}.animate-in *[o="23"]{animation-delay:0.72s;}.animate-in *[o="24"]{animation-delay:0.75s;}.animate-in *[o="25"]{animation-delay:0.78s;}.animate-in *[o="26"]{animation-delay:0.81s;}
+            .animate-in .inside{animation-name:animate-inside;animation-duration:.4s;animation-timing-function:ease;animation-delay:.7s;}
+            .animate-in .inside[o="1"]{animation-delay:.2s;}
+            .animate-in .inside[o="2"]{animation-delay:.3s;}
+            .animate-in .inside[o="3"]{animation-delay:.4s;}
+            .animate-in .inside[o="4"]{animation-delay:.5s;}
+            .animate-in .box{animation-name:animate-box;animation-timing-function:ease;animation-delay:.2s;}
+            svg#ht-logo{background:transparent;}
+      .login
+        form(method="post", action="{% url 'login' %}")
+          {% csrf_token %}
+          {% if form.errors %}
+          p.red.center Your username and password didn't match. Please try again.
+          {% endif %}
+          input.username(type='text', placeholder='Username', onkeyup='window.style.login(event)', name="username", id="id_username", required, autofocus)
+          .transition
+            input.password(type='password', placeholder='Password', name='password', id='id_password', required)
+            hr
+            input(type='submit' value='Login') Login
+            input(type="hidden", name="next", value="{{next}}")
+      .divider
+        hr
+        button(type='text', onclick="window.location.href='{% url 'social:begin' 'steam' %}?{{ request.GET.urlencode }}'") Login with Steam
 
-    script.
-      feather.replace()

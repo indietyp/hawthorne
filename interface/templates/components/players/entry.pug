@@ -1,0 +1,13 @@
+- load static
+- load utils
+
+tr
+  td(style='width:1px')
+    - with "flags/"|add:data.country.code|add:".svg" as url
+      img.country(src='{% static url %}')
+  td.unset
+    a(href="javascript:void(0)" onclick="window.vc('players[detailed]', '{{data.id}}')")
+      = data.namespace
+  td= data.useronlinetime_set|m2m_duration|duration
+  td= data.punishment_set|count
+  td= data.serverchat_set|count

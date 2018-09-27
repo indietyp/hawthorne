@@ -75,7 +75,7 @@ class SourcemodPluginWrapper(RCONBase):
       if response[-1] == "":
         response = response[:-1]
 
-      if regex.match(r'^L (.+) "json_status"$', response[-1]):
+      if regex.match(r'^L (.+) "rcon_status"$', response[-1]):
         response[-1] = ""
 
       response = ''.join(response)
@@ -89,18 +89,18 @@ class SourcemodPluginWrapper(RCONBase):
     except Exception:
       return {'error': 'could not load information', 'raw': response}
 
-    if response['stats']['timeleft'] == -1:
-      response['stats']['timeleft'] = None
+    if response['time']['left'] == -1:
+      response['time']['left'] = None
     else:
-      response['stats']['timeleft'] = datetime.timedelta(seconds=response['stats']['timeleft'])
+      response['time']['left'] = datetime.timedelta(seconds=response['time']['left'])
 
-    response['stats']['uptime'] = datetime.timedelta(seconds=response['stats']['uptime'])
+    response['time']['up'] = datetime.timedelta(seconds=response['time']['up'])
 
     if truncated:
-      response['stats']['map'] = response['stats']['map'].split('/')[-1]
+      response['map'] = response['map'].split('/')[-1]
 
     users = []
-    for player in response['players']:
+    for player in response['clients']:
       if not player['id']:
         continue
 
@@ -122,7 +122,7 @@ class SourcemodPluginWrapper(RCONBase):
 
       users.append(user)
 
-    response['players'] = users
+    response['clients'] = users
     return response
 
   def raw(self, command, *args, **kwargs):

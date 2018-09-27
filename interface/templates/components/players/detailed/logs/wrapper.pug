@@ -1,0 +1,52 @@
+.paginationContent
+  .innerMain
+    h1 Chat Log
+    .CBox.nomargin
+      .timeTableGo.fRight(onclick="window.date('players[detailed][logs]', '.innerMain .CBox h3.center', true)")
+        i.icon.ion-ios-arrow-forward
+      .timeTableGo.fLeft(onclick="window.date('players[detailed][logs]', '.innerMain .CBox h3.center', false)")
+        i.icon.ion-ios-arrow-back
+      h3.center
+      table.timeTable
+        thead
+          tr
+            th.center Time
+            th Server
+            th Message
+            th
+        tbody
+  .innerSide
+    h1 Options
+    .CBox.nomargin
+      h3
+        i.icon.ion-ios-funnel(style='margin-right:10px')
+        |  Search Filters
+      p Displaying active search filters:
+      ul.searchTags
+        li
+          b Keywords
+          |  – MySQL, Database
+          i.icon.ion-ios-close
+        li
+          b Error Codes
+          |  – 10061, 400
+          i.icon.ion-ios-close
+        li
+          b Servers
+          |  – Surf
+          i.icon.ion-ios-close
+        li
+          b Type
+          |  – Critical Error
+          i.icon.ion-ios-close
+        li
+          b Files
+          |  – sourcemod.log, error.log
+          i.icon.ion-ios-close
+
+  script.execute.
+    window.pagination = {
+      'current': {{current}} - 1,
+      'limitation': {{pages}}
+    }
+    window.date("players[detailed][logs]", '.innerMain .CBox h3.center')

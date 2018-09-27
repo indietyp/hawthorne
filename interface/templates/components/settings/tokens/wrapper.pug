@@ -1,0 +1,27 @@
+.paginationContent
+  h1 Tokens
+  .CBox.nomargin
+    .timeTableGo.fRight(onclick="window.ajax('settings[tokens]', '.paginationContent table tbody', window.pagination.current + 1, true)")
+      i.icon.ion-ios-arrow-forward
+    .timeTableGo.fLeft(onclick="window.ajax('settings[tokens]', '.paginationContent table tbody', window.pagination.current - 1, true)")
+      i.icon.ion-ios-arrow-back
+    h3.center
+      span.space-after Page
+      span.current 1
+      span /{{pages}}
+    table.timeTable
+      thead
+        tr
+          th
+          th Token
+          th Owner
+          th Expires
+          th Granted
+      tbody
+
+  script.execute.
+    window.ajax("settings[tokens]", ".paginationContent table tbody", {{current}}, true)
+    window.pagination = {
+      'current': {{current}},
+      'limitation': {{pages}}
+    }

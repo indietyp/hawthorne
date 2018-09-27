@@ -10,4 +10,4 @@ from log.models import ServerChat
 @require_http_methods(['POST'])
 def log(request, page, *args, **kwargs):
   obj = ServerChat.objects.filter(command=False).order_by('-updated_at')
-  return renderer(request, 'partials/chat/entry.pug', obj, page)
+  return renderer(request, 'components/chat/entry.pug', obj, page)

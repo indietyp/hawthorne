@@ -1,0 +1,38 @@
+.paginationContent
+  .CBox.nomargin
+    h3
+      | Chat Log
+      input(type="text", placeholder="Search by SteamID, message or player...")
+    .section.group
+      .col.span_1_of_4.orderChatLog
+        select
+          option(default="", selected="") Order by timestamp
+          option Newest First
+          option Oldest First
+      .col.span_1_of_4.orderChatLog
+        select
+          option(default="", selected="") Filter by role
+          option Root
+          option User
+      .col.span_1_of_4.orderChatLog
+        select
+          option(default="", selected="") Filter by status
+          option Online
+          option Offline
+      .col.span_1_of_4.orderChatLog
+        select
+          option(default="", selected="") Filter by team
+          option Counter-Terrorists
+          option Terrorists
+    table
+      thead
+        tr
+          th(style="width:auto")
+          th Player
+          th Message
+          th.fRight Time
+      tbody
+
+  script.execute.
+    window.slug = "{{data.id}}"
+    window.ajax("servers[detailed][logs]", ".paginationContent table tbody")

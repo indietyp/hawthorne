@@ -1,0 +1,96 @@
+- extends ajax|yesno:'skeleton/wrappers/ajax.pug,skeleton/main.pug'
+- load i18n
+- load staticfiles
+
+- block content
+  .modal(data-component="[modal/players]")
+    h1 Hawthornepanel.org – Players
+    .close(data-trigger="[modal/close]")
+      i.icon.ion-ios-close
+    table
+      thead
+        tr
+          th(style="width:auto")
+          th Player
+          th Connection Time
+          th.fRight Actions
+      tbody
+        tr
+          td(style="width:1px")
+            img.country(src="https://demo.hawthornepanel.org/static/flags/de.svg")
+          td Akke
+          td 10 minutes, 30 seconds
+          td
+            button(title="Kick")
+              i.fa.fa-ban
+            button(title="Message", data-trigger="[modal/open]", data-trigger-target="[modal/players/message]")
+              i.fa.fa-comment
+  .modal(data-component="[modal/delete]")
+    h1 Are you sure you want to continue?
+    .close(data-trigger="[modal/close]")
+      i.icon.ion-ios-close
+    .modalContent
+      | Continuing will cause irreversible data loss of <b>{{estimate}}</b> associated objects. These include:
+      ul(style="font-family:monospace")
+        for k, v in breakdown.items
+          li
+            = v
+            | x
+            = k|title
+    .actions
+      button.paginationTabsDanger
+        i.icon.ion-ios-trash(style="margin-right:10px;")
+        | Delete Server
+      button(data-trigger="[modal/close]")
+        | Cancel
+
+  .modal(data-component="[modal/players/message]")
+    h1 Hawthornepanel.org – Players – Akke – Compose A Message
+    .close(data-trigger="[modal/close]")
+      i.icon.ion-ios-close
+    .modalContent You can send in-game messages to players through this modal. The message will appear in their chat box with you as the sender, unless specified otherwise in the options.
+    textarea(placeholder="Send them a message...", style="margin-top:20px")
+    .section.group(style="margin: 10px 0")
+      .col.span_1_of_4
+        label.switch
+          input(type="checkbox")
+          span.slider.round
+        .switchText Send as CONSOLE
+      .col.span_1_of_4
+        label.switch
+          input(type="checkbox")
+          span.slider.round
+        .switchText Kick player
+      .col.span_1_of_4
+        label.switch
+          input(type="checkbox")
+          span.slider.round
+        .switchText Send as a warning
+      .col.span_1_of_4
+        label.switch
+          input(type="checkbox")
+          span.slider.round
+        .switchText Send to entire server
+    button
+      i.fa.fa-paper-plane(style="margin-right:10px;")
+      | Send
+
+  ul.paginationTabs(data-target='servers[detailed]')
+    li(data-trigger="[ct/switch]", data="overview") Overview
+    li(data-trigger="[ct/switch]", data="logs") Chat Log
+    li(data-trigger="[ct/switch]", data="rcon") RCon
+    li(data-trigger="[ct/switch]", data="roles")
+      i.fa.fa-id-card(style="margin-right:5px")
+      | Roles
+    li.fRight.paginationTabsDanger(data-trigger="[modal/open]", data-trigger-target="[modal/delete]")
+      i.icon.ion-ios-trash(style="margin-right:5px")
+      | Delete Server
+    li.fRight.paginationTabsHarmless(style="margin-right:6px")
+      i.fa.fa-cog(style="margin-right:5px")
+      | Edit
+
+  script.execute.
+    window.slug = "{{data.id}}"
+    window.lazy('servers[detailed]', 'overview')
+    window._.menu()
+    window._.init()

@@ -1,261 +1,184 @@
-admin__admin = (page = 1) ->
+ajax = (mode, target = '.main', page = 1, manual = false, action = 'append') ->
+  endpoint = window.endpoint.ajax
   header =
-    "X-CSRFToken": window.csrftoken
+    'X-CSRFToken': window.csrftoken
 
-  window.endpoint.ajax.admin.user[page].post(header, {}, (dummy, response) ->
-    status = response.status
+  switch mode
+    when 'home[update]'
+      endpoint = window.endpoint.ajax.system.update
+    when 'settings[tokens]'
+      endpoint = window.endpoint.ajax.settings.tokens[page]
+    when 'servers[overview]'
+      endpoint = window.endpoint.ajax.servers[page]
+    when 'servers[detailed][logs]'
+      endpoint = window.endpoint.ajax.servers[window.slug].logs[page]
+    when 'players[overview]'
+      endpoint = window.endpoint.ajax.players[page]
+    when 'players[detailed][actions]'
+      endpoint = window.endpoint.ajax.players[window.slug].actions[page]
+    when 'players[detailed][punishments]'
+      endpoint = window.endpoint.ajax.players[window.slug].punishments[page]
+    when 'players[detailed][logs]'
+      endpoint = window.endpoint.ajax.players[window.slug].logs[window.pagination.current][page]
+    when 'admins[servers][admins]'
+      endpoint = window.endpoint.ajax.admins.servers.admins[page]
+    when 'admins[servers][roles]'
+      endpoint = window.endpoint.ajax.admins.servers.roles[page]
+    when 'admins[web][admins]'
+      endpoint = window.endpoint.ajax.admins.web.admins[page]
+    when 'admins[web][groups]'
+      endpoint = window.endpoint.ajax.admins.web.groups[page]
+    when 'punishments[bans]'
+      endpoint = window.endpoint.ajax.punishments.bans[page]
+    when 'punishments[mutes]'
+      endpoint = window.endpoint.ajax.punishments.mutes[page]
+    when 'punishments[gags]'
+      endpoint = window.endpoint.ajax.punishments.gags[page]
+
+
+  endpoint.post(header, {}, (dummy, response) ->
     data = response.data
-    if status == 200
-      if page == 1
-        $("#admin__admin").html('')
 
-      $("#admin__admin").htmlAppend(data)
-      feather.replace()
+    target = $(target)
 
-      return window.ajax.admin.admins(page + 1)
+    if response.status is 200
+      if page is 1 or manual
+        target.html('')
 
-    else
-      return false
-  )
+      switch action
+        when 'append'
+          target.htmlAppend(data)
+        when 'prepend'
+          target.htmlPrepend(data)
+        when 'before'
+          target.htmlBefore(data)
+        when 'after'
+          target.htmlAfter(data)
 
-admin__log = (page = 1) ->
-  header =
-    "X-CSRFToken": window.csrftoken
-
-  window.endpoint.ajax.admin.log[page].post(header, {}, (dummy, response) ->
-    status = response.status
-    data = response.data
-    if status == 200
-      $("#admin__log").htmlAppend(data)
-      feather.replace()
-
-      return window.ajax.admin.logs(page + 1)
-    else
-      return false
-  )
-
-admin__group = (page = 1) ->
-  header =
-    "X-CSRFToken": window.csrftoken
-
-  window.endpoint.ajax.admin.group[page].post(header, {}, (dummy, response) ->
-    status = response.status
-    data = response.data
-    if status == 200
-      if page == 1
-        i = 0
-        for item in $("#admin__group .row")
-          if i != 0
-            $(item).remove()
-          i++
-
-      $("#admin__group").htmlAppend(data)
-      feather.replace()
-
-      return window.ajax.admin.groups(page + 1)
-    else
-      return false
-  )
-
-ban__user = (page = 1) ->
-  header =
-    "X-CSRFToken": window.csrftoken
-
-  window.endpoint.ajax.ban.user[page].post(header, {}, (dummy, response) ->
-    status = response.status
-    data = response.data
-    if status == 200
-      if page == 1
-        $("#ban__user").html('')
-      $("#ban__user").htmlAppend(data)
-      feather.replace()
-
-      return window.ajax.ban.user(page + 1)
-    else
-      return false
-  )
-
-chat__log = (page = 1) ->
-  header =
-    "X-CSRFToken": window.csrftoken
-
-  window.endpoint.ajax.chat.log[page].post(header, {}, (dummy, response) ->
-    status = response.status
-    data = response.data
-    if status == 200
-      $("#chat__log").htmlAppend(data)
-      feather.replace()
-
-      return window.ajax.chat.logs(page + 1)
-    else
-      return false
-  )
-
-mutegag__user = (page = 1) ->
-  header =
-    "X-CSRFToken": window.csrftoken
-
-  window.endpoint.ajax.mutegag.user[page].post(header, {}, (dummy, response) ->
-    status = response.status
-    data = response.data
-    if status == 200
-      if page == 1
-        $("#mutegag__user").html('')
-
-      $("#mutegag__user").htmlAppend(data)
-      feather.replace()
-
-      return window.ajax.mutegag.user(page + 1)
-    else
-      return false
-  )
-
-player__user = (page = 1) ->
-  header =
-    "X-CSRFToken": window.csrftoken
-
-  window.endpoint.ajax.player.user[page].post(header, {}, (dummy, response) ->
-    status = response.status
-    data = response.data
-    if status == 200
-      if page == 1
-        $("#player__user").html('')
-
-      $("#player__user").htmlAppend(data)
-      feather.replace()
-
-      return window.ajax.mutegag.user(page + 1)
-    else
-      return false
-  )
-
-
-server__server = (page = 1) ->
-  header =
-    "X-CSRFToken": window.csrftoken
-
-  window.endpoint.ajax.server.server[page].post(header, {}, (dummy, response) ->
-    status = response.status
-    data = response.data
-    if status == 200
-      if page == 1
-        i = 0
-        for item in $("#server__server .row")
-          if i != 0
-            $(item).remove()
-          i++
-
-      $("#server__server").htmlAfter(data)
-
-      $("script.server.execution").forEach((src) ->
+      $('script.execute:not(.evaluated)', target).forEach((src) ->
         eval(src.innerHTML)
+        $(src).addClass 'evaluated'
       )
+      window._.init()
 
-      feather.replace()
+      switch manual
+        when true
+          if page is 1
+            $('.timeTableGo.fLeft').addClass 'hidden'
+          else
+            $('.timeTableGo.fLeft').removeClass 'hidden'
 
-      return window.ajax.server.server(page + 1)
-    else
-      return false
+          if window.pagination.limitation is page
+            $('.timeTableGo.fRight').addClass 'hidden'
+          else
+            $('.timeTableGo.fRight').removeClass 'hidden'
+
+          $('.paginationContent h3 .current')[0].innerHTML = page
+          window.pagination.current = page
+
+          url = new URL(document.location.href)
+          params = new URLSearchParams(url.search.substring(1))
+          params.set('page', page)
+          url.search = "?#{params.toString()}"
+
+          window.history.replaceState({'location': window._.location, 'scope': window._.scope},
+                                      null,
+                                      url.href)
+        when false
+          window.ajax(mode, target, page + 1)
+
+    return
   )
 
-home__instance = (page = 1) ->
+  return
+
+date = (mode, target = '.innerMain .CBox h3.center', forward = true) ->
+  endpoint = window.endpoint.ajax
   header =
-    "X-CSRFToken": window.csrftoken
+    'X-CSRFToken': window.csrftoken
 
-  window.endpoint.ajax.home.server[page].post(header, {}, (dummy, response) ->
-    status = response.status
-    data = response.data
-    if status == 200
-      $("#home__instance").htmlAppend data
-      feather.replace()
+  if forward
+    window.pagination.current += 1
+  else
+    window.pagination.current -= 1
 
-      return window.ajax.home.instance(page + 1)
+  switch mode
+    when 'players[detailed][logs]'
+      endpoint = window.endpoint.ajax.players[window.slug].logs[window.pagination.current]
+
+
+  endpoint.post(header, {}, (dummy, response) ->
+    target = $(target)
+
+    if window.pagination.current <= 1
+      $('.timeTableGo.fLeft').addClass 'invisible'
     else
-      return false
+      $('.timeTableGo.fLeft').removeClass 'invisible'
+
+    if window.pagination.limitation <= window.pagination.current
+      $('.timeTableGo.fRight').addClass 'invisible'
+    else
+      $('.timeTableGo.fRight').removeClass 'invisible'
+
+    target.html response.data
+    window.ajax(mode, '.paginationContent table tbody', 1)
+    return
   )
 
-setting__user = (page = 1) ->
-  header =
-    "X-CSRFToken": window.csrftoken
+  return
 
-  window.endpoint.ajax.setting.user[page].post(header, {}, (dummy, response) ->
+lazy = (mode, fallback) ->
+  endpoint = window.endpoint.ajax
+  header =
+    'X-CSRFToken': window.csrftoken
+
+  if window.location.hash
+    hash = window.location.hash.substring(1)
+  else
+    hash = fallback
+    window.history.replaceState({location: window._.location, scope: window._.scope},
+                                null,
+                                "##{fallback}")
+
+  switch mode
+    when 'settings[overview]'
+      endpoint = window.endpoint.ajax.settings[hash]
+    when 'servers[detailed]'
+      endpoint = window.endpoint.ajax.servers[window.slug][hash]
+    when 'admins[servers]'
+      endpoint = window.endpoint.ajax.admins.servers[hash]
+    when 'admins[web]'
+      endpoint = window.endpoint.ajax.admins.web[hash]
+    when 'players[overview]'
+      endpoint = window.endpoint.ajax.players
+    when 'players[detailed]'
+      endpoint = window.endpoint.ajax.players[window.slug][hash]
+    when 'punishments[bans]'
+      endpoint = window.endpoint.ajax.punishments.bans
+    when 'punishments[mutes]'
+      endpoint = window.endpoint.ajax.punishments.mutes
+    when 'punishments[gags]'
+      endpoint = window.endpoint.ajax.punishments.gags
+
+  a = new URLSearchParams(window.location.search.substring(1))
+  endpoint.post(header, a, (dummy, response) ->
     status = response.status
     data = response.data
-    if status == 200
-      if page == 1
-        $("#setting__user").html('')
+    target = $('.main')
 
-      $("#setting__user").htmlAppend data
-
-      $("script.afterload.execution").forEach((src) ->
+    if status is 200
+      $('.paginationContent', target).remove()
+      target.htmlAppend(data)
+      $('.paginationContent script.execute:not(.evaluated)', target).forEach((src) ->
         eval(src.innerHTML)
+        $(src).addClass 'evaluated'
       )
-
-      feather.replace()
-
-      return window.ajax.setting.user(page + 1)
-    else
-      return false
+      window._.init()
+    return
   )
 
+  return
 
-setting__group = (page = 1) ->
-  header =
-    "X-CSRFToken": window.csrftoken
-
-  window.endpoint.ajax.setting.group[page].post(header, {}, (dummy, response) ->
-    status = response.status
-    data = response.data
-    if status == 200
-      if page == 1
-        $("#setting__group").html('')
-
-      $("#setting__group").htmlAppend data
-      feather.replace()
-
-      return window.ajax.setting.group(page + 1)
-    else
-      return false
-  )
-
-setting__token = (page = 1) ->
-  header =
-    "X-CSRFToken": window.csrftoken
-
-  window.endpoint.ajax.setting.token[page].post(header, {}, (dummy, response) ->
-    status = response.status
-    data = response.data
-    if status == 200
-      if page == 1
-        $("#setting__token").html('')
-
-      $("#setting__token").htmlAppend data
-      feather.replace()
-
-      return window.ajax.setting.token(page + 1)
-    else
-      return false
-  )
-
-
-window.ajax =
-  admin:
-    admins: admin__admin
-    logs: admin__log
-    groups: admin__group
-  ban:
-    user: ban__user
-  chat:
-    logs: chat__log
-  mutegag:
-    user: mutegag__user
-  player:
-    user: player__user
-  server:
-    server: server__server
-  home:
-    instance: home__instance
-  setting:
-    user: setting__user
-    group: setting__group
-    token: setting__token
+window.ajax = ajax
+window.lazy = lazy
+window.date = date

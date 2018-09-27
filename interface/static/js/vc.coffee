@@ -1,61 +1,61 @@
 # view controller
 
-change = (destination = 'home') ->
-  method = 'POST'
+load = (destination = 'home', scope = '') ->
+  endpoint = window.endpoint.bare
 
   switch destination
     when 'home'
       url = ''
-    when 'player'
-      url = 'players'
-    when 'admin'
-      url = 'admins'
-    when 'server'
+    when 'servers'
       url = 'servers'
-    when 'ban'
-      url = 'bans'
-    when 'mutegag'
-      url = 'mutegags'
-    when 'announcements'
-      url = 'announcements'
-    when 'chat'
-      url = 'chat'
-    when 'settings'
-      url = 'settings'
+    when 'servers[detailed]'
+      url = "servers/#{scope}"
+    when 'admins[servers]'
+      url = 'admins/servers'
+    when 'admins[web]'
+      url = 'admins/web'
+    when 'players'
+      url = 'players'
+    when 'players[detailed]'
+      url = "players/#{scope}"
+    when 'punishments'
+      url = '[[PLACEHOLDER]]'
+    when 'punishments[bans]'
+      url = 'punishments/bans'
+    when 'punishments[mutes]'
+      url = 'punishments/mutes'
+    when 'punishments[gags]'
+      url = 'punishments/gags'
     else
-      return false
+      return
 
   header =
     'X-CSRFTOKEN': window.csrftoken
 
+  window._.location = destination
+  window._.scope = scope
   window.endpoint.bare[url].post(header, {}, (dummy, response) ->
     status = response.status
     data = response.data
 
-    if status == 200
-      $("#content").css('opacity', '0')
+    if status is 200
+      window.history.pushState {location: destination, scope: scope}, null, "/#{url}"
 
-      setTimeout(->
-        $("#content")[0].innerHTML = data
-        $("#content script.execution").forEach((scr) ->
-          eval(scr.innerHTML)
-        )
-        feather.replace()
-        $("#content").css('opacity', '')
-      , 300)
-    else
-      return false
+      $('.main')[0].innerHTML = data
+      $('.main script.execute:not(.evaluated)').forEach((scr) ->
+        eval scr.innerHTML
+      )
 
-    url = if not url then '/' else url
-    window.history.pushState "", "", url
-    return true
   )
 
-  return true
 
+window.onpopstate = (event) ->
+  # console.log event
 
-ajax = (destination, module) ->
-  return true
+  if not event.state or event.state.skip
+    window.history.back()
+  else
+    window.vc event.state.location, event.state.scope
+  return
 
-window.vc =
-  change: change
+window.vc = load

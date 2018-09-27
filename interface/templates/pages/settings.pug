@@ -1,0 +1,22 @@
+- extends ajax|yesno:'skeleton/wrappers/ajax.pug,skeleton/main.pug'
+
+- load i18n
+- load staticfiles
+
+
+- block content
+  ul.paginationTabs(data-target='settings[overview]')
+    li(data-trigger="[ct/switch]", data="overview") Overview
+    li(data-trigger="[ct/switch]", data="tokens") Tokens
+    li(data-trigger="[ct/switch]", data="webhooks") Webhooks
+    li.fRight
+      i.icon.ion-ios-add(style="margin-right:5px")
+      | New Webhook
+    li.fRight(style="margin-right:6px")
+      i.icon.ion-ios-add(style="margin-right:5px")
+      | New Token
+
+  script.execute.
+    window.lazy('settings[overview]', 'overview')
+    window._.menu()
+    window._.init()

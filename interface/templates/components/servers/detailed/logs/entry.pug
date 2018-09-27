@@ -1,0 +1,13 @@
+- load static
+
+tr
+  td(style='width:1px')
+    - with "flags/"|add:data.user.country.code|add:".svg" as url
+      img.country(src='{% static url %}')
+  td
+    a(href="javascript:void(0)" onclick="window.vc('players[detailed]', '{{data.user.id}}')")= data.user.namespace
+  td(style="width:50%")= data.message
+  td.fRight
+    = data.created_at|day
+    | ,
+    =  data.created_at|date:"TIME_FORMAT"

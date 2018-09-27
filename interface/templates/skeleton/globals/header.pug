@@ -1,0 +1,51 @@
+.topbar
+  .topwrap
+    ul.usermenu
+      li
+        a(href='#', data-trigger='[modal/open]', data-trigger-target='[modal/servers]')
+          i.icon.ion-logo-buffer
+      li
+        a(href='#')
+          i.icon.ion-ios-settings
+      li(data-trigger='[system/messages/open]')
+        a(href='#')
+          i.icon.ion-ios-notifications
+          .flag 10
+        ul.notificationsArea
+          li
+            i.icon.ion-ios-warning
+            .text
+              a(href='') Unexpected server crash
+              small 10 minutes ago
+          li
+            i.icon.ion-ios-warning
+            .text
+              a(href='') Unexpected server crash or some other shit
+              small 10 minutes ago
+          li
+            a(href='')
+              button View All
+      .search
+        i.icon.ion-ios-search
+        input(type='text', placeholder='Enter a keyword to search...')
+        .searchArea
+          .section.group
+            .col.span_1_of_2
+              h3 Pages
+              ul
+                li
+                  a(href='') Hello
+                li
+                  a(href='') Hello
+                li
+                  a(href='') Hello
+            .col.span_1_of_2
+              h3 Admins
+              | Hello world.
+          .section.group(style='margin-top:20px')
+            .col.span_1_of_2
+              h3 Settings
+              | Hello world.
+            .col.span_1_of_2
+              h3 Servers
+              | Hello world.

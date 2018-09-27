@@ -1,0 +1,63 @@
+output-format: json
+
+inherits:
+  - strictness_veryhigh
+
+test-warnings: false
+doc-warnings: false
+
+ignore-paths:
+  - docs
+  - api/reference
+  - migrations
+
+pep257:
+  disable:
+    - D105
+    - D203
+
+frosted:
+  disable:
+    - D203
+
+pep8:
+  disable:
+    - E114
+    - E111
+    - E121
+    - D203
+
+  enable:
+    - W601
+    - W391
+    - W191
+
+  options:
+    max-line-length: 95
+
+vulture:
+  run: true
+
+pylint:
+  disable:
+    - fixme
+    - bad-continuation
+    - W5103
+
+  options:
+    max-locals: 15
+    max-returns: 6
+    max-branches: 15
+    max-statements: 60
+    min-public-methods: 1
+    max-public-methods: 20
+    max-line-length: 95
+
+pyroma:
+  disable:
+    - PYR15
+    - PYR18
+    - PYR17
+
+uses:
+  - django

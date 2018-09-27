@@ -1,0 +1,190 @@
+- extends ajax|yesno:'skeleton/wrappers/ajax.pug,skeleton/main.pug'
+- load i18n
+- load staticfiles
+
+- block content
+  .modal.modalDynamic(data-component='[modal/admins/add]')
+    h1 Admins – New
+    .close(data-trigger='[modal/close]')
+      i.icon.ion-ios-close
+    .modalContent
+      b.mtop.mbotSmall
+        i.icon.ion-ios-person(style='margin-right:10px')
+        |  User Details
+      .section.group
+        .col.span_1_of_2.modalSelect
+          ._Dynamic_Select
+            ._Title(data-trigger='[composer/select/open]') Username
+            ._Select
+              ._Select_Search
+                input(type='text', placeholder='Type to search in Steam...')
+              ._STitle Results
+              ._Container
+                li(data-trigger='[composer/select/choose]')
+                  img.composerAvatar(src='https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/63/634ac38fd17b1b9527af0639f2295ac26e62c0b7_medium.jpg')
+                  p
+                    b Akke
+        .col.span_1_of_2.modalSelect
+          select
+            option(default='') Select a Group
+            option All
+      button
+        i.fa.fa-save(style='margin-right:10px;')
+        |  Save
+  .modal.modalDynamic(data-component='[modal/group/add]')
+    h1 Group – New
+    .close(data-trigger='[modal/close]')
+      i.icon.ion-ios-close
+    .modalContent
+      b.mtop.mbotSmall
+        i.icon.ion-ios-person(style='margin-right:10px')
+        |  Group Details
+      .section.group
+        .col.span_1_of_2
+          input.smallInput(type='text', placeholder='Group name')
+        .col.span_1_of_2
+          input.smallInput(type='text', placeholder='Group immunity (0-99)')
+      .section.group
+        .col.span_1_of_2
+          input.smallInput(type='text', placeholder='Expires in (11h 6m)')
+        .col.span_1_of_2.modalSelect
+          ._Dynamic_Select
+            ._Title(data-trigger='[composer/select/open]') Choose a server
+            ._Select
+              ._Select_Search
+                input(type='text', placeholder='Type to search in Steam...')
+              ._STitle Results
+              ._Container
+                li(data-trigger='[composer/select/choose]')
+                  img.composerAvatar(src='https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/63/634ac38fd17b1b9527af0639f2295ac26e62c0b7_medium.jpg')
+                  p
+                    b Some random server
+      b.mbotSmall
+        i.icon.ion-ios-flag(style='margin-right:10px')
+        |  Flags
+      .section.group
+        .col.span_1_of_4
+          .modalFlags
+            label.switch
+              input(type='checkbox')
+              span.slider.round
+            .switchText Reserved Slots
+          .modalFlags
+            label.switch
+              input(type='checkbox')
+              span.slider.round
+            .switchText Generic
+        .col.span_1_of_4
+          .modalFlags
+            label.switch
+              input(type='checkbox')
+              span.slider.round
+            .switchText Kick
+          .modalFlags
+            label.switch
+              input(type='checkbox')
+              span.slider.round
+            .switchText Ban
+        .col.span_1_of_4
+          .modalFlags
+            label.switch
+              input(type='checkbox')
+              span.slider.round
+            .switchText Slap
+          .modalFlags
+            label.switch
+              input(type='checkbox')
+              span.slider.round
+            .switchText Map
+        .col.span_1_of_4
+          .modalFlags
+            label.switch
+              input(type='checkbox')
+              span.slider.round
+            .switchText Cvar
+          .modalFlags
+            label.switch
+              input(type='checkbox')
+              span.slider.round
+            .switchText Config
+      .section.group
+        .col.span_1_of_4
+          .modalFlags
+            label.switch
+              input(type='checkbox')
+              span.slider.round
+            .switchText Chat
+          .modalFlags
+            label.switch
+              input(type='checkbox')
+              span.slider.round
+            .switchText Vote
+        .col.span_1_of_4
+          .modalFlags
+            label.switch
+              input(type='checkbox')
+              span.slider.round
+            .switchText Password
+          .modalFlags
+            label.switch
+              input(type='checkbox')
+              span.slider.round
+            .switchText Remote Control
+        .col.span_1_of_4
+          .modalFlags
+            label.switch
+              input(type='checkbox')
+              span.slider.round
+            .switchText Cheats
+          .modalFlags
+            label.switch
+              input(type='checkbox')
+              span.slider.round
+            .switchText Custom 1
+        .col.span_1_of_4
+          .modalFlags
+            label.switch
+              input(type='checkbox')
+              span.slider.round
+            .switchText Custom 2
+          .modalFlags
+            label.switch
+              input(type='checkbox')
+              span.slider.round
+            .switchText Custom 3
+      .section.group
+        .col.span_1_of_4
+          .modalFlags
+            label.switch
+              input(type='checkbox')
+              span.slider.round
+            .switchText Custom 4
+          .modalFlags
+            label.switch
+              input(type='checkbox')
+              span.slider.round
+            .switchText Custom 5
+        .col.span_1_of_4
+          .modalFlags
+            label.switch
+              input(type='checkbox')
+              span.slider.round
+            .switchText Custom 6
+      button
+        i.fa.fa-save(style='margin-right:10px;')
+        |  Save
+
+  ul.paginationTabs(data-target='admins[servers]')
+    li(data-trigger="[ct/switch]", data="admins") Admins
+    li(data-trigger="[ct/switch]", data="roles") Roles
+    li.fRight(data-trigger='[modal/open]', data-trigger-target='[modal/admins/add]')
+      i.icon.ion-ios-add(style='margin-right:5px')
+      | New Admin
+    li.fRight(data-trigger='[modal/open]', data-trigger-target='[modal/group/add]', style="margin-right:6px")
+      i.icon.ion-ios-add(style='margin-right:5px')
+      | New Role
+
+  script.execute.
+    window.lazy('admins[servers]', 'admins')
+    window._.menu()
+    window._.init()

@@ -1,0 +1,31 @@
+/*.menu > ul > li > a:hover {
+  border-color:#E9D460 !important;
+}
+
+.menu > ul > li > a:hover .icon {
+  color: #E9D460 !important;
+}
+.menu > ul > li > .expand {
+  border-left: 3px solid #E9D460 !important;
+}
+
+svg#ht-logo {
+  stroke: #E9D460 !important;
+}
+
+.navActive {
+  border-left: 3px solid #E9D460 !important;
+}
+
+.navActive .icon {
+  color: #E9D460 !important;
+}
+
+.thorne {
+  color: #E9D460 !important;
+}
+
+.usermenu > li > a:hover {
+    color: #E9D460 !important;
+}
+*/

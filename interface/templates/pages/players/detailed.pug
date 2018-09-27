@@ -1,0 +1,22 @@
+- extends ajax|yesno:'skeleton/wrappers/ajax.pug,skeleton/main.pug'
+- load i18n
+- load staticfiles
+
+- block content
+  ul.paginationTabs(data-target='players[detailed]')
+    li(data-trigger="[ct/switch]", data="overview") Overview
+    li(data-trigger="[ct/switch]", data="punishments") Punishments
+    li(data-trigger="[ct/switch]", data="actions") Actions
+    li(data-trigger="[ct/switch]", data="logs") Chat Log
+    li.fRight.paginationTabsDanger(data-trigger="[ct/switch]", data="ct4", style="margin-left: 12px")
+      i.icon.ion-ios-warning(style="margin-right:5px")
+      | Punish User
+    li.fRight.paginationTabsHarmless(data-trigger="[ct/switch]", data="ct4")
+      i.icon.ion-ios-archive(style="margin-right:5px")
+      | Export for GDPR
+
+  script.execute.
+    window.slug = "{{data.id}}"
+    window.lazy('players[detailed]', 'overview')
+    window._.menu()
+    window._.init()

@@ -19,10 +19,10 @@ def compare(state1, state2):
   for k, v in d1.items():
     if k not in included_keys:
       continue
+
     try:
       if v != d2[k]:
         changeset.append(k)
-
     except KeyError:
       changeset.append(k)
 
@@ -38,6 +38,7 @@ def user_log_handler(sender, instance, raw, using, update_fields, **kwargs):
       instance.namespace = instance.username
 
   from log.models import UserNamespace, UserOnlineTime, UserIP
+
   try:
     state = User.objects.get(id=instance.id)
   except User.DoesNotExist:

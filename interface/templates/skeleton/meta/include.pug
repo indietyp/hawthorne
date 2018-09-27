@@ -1,0 +1,35 @@
+- load staticfiles
+- load compile_static
+
+link(href='https://fonts.googleapis.com/css?family=Rubik:300,400,700', rel='stylesheet')
+
+link(href='https://unpkg.com/ionicons@4.0.0/dist/css/ionicons.min.css', rel='stylesheet')
+link(rel="stylesheet", href="https://use.fontawesome.com/releases/v5.0.13/css/all.css", integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp", crossorigin="anonymous")
+script(src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js')
+
+
+link(rel='stylesheet', type='text/css', href='{% static "css/master.css" %}')
+link(rel='stylesheet', type='text/css', href='{% static "css/overrides.css" %}')
+link(rel='stylesheet', type='text/css', href='{% static "css/color.css" %}')
+
+
+link(rel="apple-touch-icon-precomposed", type="image/png", href='{% static "favicons/152.png" %}')
+link(rel="shortcut icon", type="image/png", href='{% static "favicons/16.png" %}')
+
+for i in favicon_sizes
+  - with 'favicons/'|add:i|add:'.png' as url
+    link(rel="shortcut icon", type="image/png", sizes="{{i}}x{{i}}", href="{% static url %}")
+
+script(src="//unpkg.com/fermata@0.11.0-beta1/fermata.js")
+script(src="//unpkg.com/balalaika@1.0.1/balalaika.min.js")
+// script(src='https://code.jquery.com/jquery-3.1.1.min.js')
+
+// Custom JavaScript - uses these libraries
+script(src="{% static 'js/globals.coffee'|compile %}")
+script(src="{% static 'js/style.coffee'|compile %}")
+script(src="{% static 'js/steam.coffee'|compile %}")
+script(src="{% static 'js/api.coffee'|compile %}")
+script(src="{% static 'js/ajax.coffee'|compile %}")
+script(src="{% static 'js/vc.coffee'|compile %}")
+script(src="{% static 'js/tooltip.coffee'|compile %}")
+script(src="{% static 'js/plugin.coffee'|compile %}")
