@@ -4,7 +4,9 @@ branches:
   except:
   - dev
 
-language: python3
+language: python
+python:
+  - "3.7"
 
 services:
   - docker
