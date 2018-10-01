@@ -338,7 +338,7 @@ configure() {
     fi
   fi
 
-  hash mysql_tzinfo_to_sql >/dev/null && {
+  hash mysql_tzinfo_to_sql >/dev/null 2>&1 && {
     mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u $dbuser mysql
   }
 
