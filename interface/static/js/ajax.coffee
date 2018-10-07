@@ -73,6 +73,26 @@ ajax = (mode, target = '.main', page = 1, manual = false, action = 'append') ->
           else
             $('.timeTableGo.fRight').removeClass 'hidden'
 
+          window.batch.forEach((e) ->
+            append = true
+            Array.from(target[0].children).forEach((i) ->
+              if i.getAttribute('data-id') is e.getAttribute('data-id')
+                $('input[type="checkbox"]', i)[0].checked = true
+                $(i).addClass('logSelected')
+                append = false
+            )
+
+            if append
+              target[0].appendChild e
+          )
+
+          selected = $('.logSelected', target)
+          if selected.length isnt 0
+            selected.slice(1).forEach((e) ->
+              $('.checkboxDialogue', e).fadeOut 'fast'
+            )
+            $('.checkboxDialogue', selected[0]).fadeIn 'fast'
+
           $('.paginationContent h3 .current')[0].innerHTML = page
           window.pagination.current = page
 
@@ -128,6 +148,7 @@ date = (mode, target = '.innerMain .CBox h3.center', forward = true) ->
   return
 
 lazy = (mode, fallback) ->
+  window.batch = []
   endpoint = window.endpoint.ajax
   header =
     'X-CSRFToken': window.csrftoken

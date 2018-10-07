@@ -1,9 +1,9 @@
 - load static
 
 tr
-  td
+  td(data-id='{{data.id}}')
     label.checkmarkContainer
-      input(type='checkbox')
+      input(type='checkbox', data-trigger='[ct/toggle]')
       span.checkmark
     .checkboxDialogue.modalSelect
       select

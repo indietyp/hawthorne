@@ -1,11 +1,11 @@
 - load utils
 - load static
 
-tr(style="{%if data.resolved%}opacity:0.5;{%endif%}", data-uuid='{{data.uuid}}')
+tr(style="{%if data.resolved%}opacity:0.5;{%endif%}", data-id='{{data.id}}')
   td(style='width:48px')
     if data.resolved
-      input.hidden(type='checkbox', data-trigger='[ct/toggle]', id='{{data.uuid}}-checkbox"')
-      label.checkmarkContainer(for='{{data.uuid}}-checkbox')
+      label.checkmarkContainer
+        input(type='checkbox', data-trigger='[ct/toggle]')
         span.checkmark
       .checkboxDialogue.modalSelect
         select

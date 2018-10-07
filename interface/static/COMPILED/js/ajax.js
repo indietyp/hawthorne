@@ -55,7 +55,7 @@
         endpoint = window.endpoint.ajax.punishments.gags[page];
     }
     endpoint.post(header, {}, function(dummy, response) {
-      var data, params, url;
+      var data, params, selected, url;
       data = response.data;
       target = $(target);
       if (response.status === 200) {
@@ -91,6 +91,27 @@
               $('.timeTableGo.fRight').addClass('hidden');
             } else {
               $('.timeTableGo.fRight').removeClass('hidden');
+            }
+            window.batch.forEach(function(e) {
+              var append;
+              append = true;
+              Array.from(target[0].children).forEach(function(i) {
+                if (i.getAttribute('data-id') === e.getAttribute('data-id')) {
+                  $('input[type="checkbox"]', i)[0].checked = true;
+                  $(i).addClass('logSelected');
+                  return append = false;
+                }
+              });
+              if (append) {
+                return target[0].appendChild(e);
+              }
+            });
+            selected = $('.logSelected', target);
+            if (selected.length !== 0) {
+              selected.slice(1).forEach(function(e) {
+                return $('.checkboxDialogue', e).fadeOut('fast');
+              });
+              $('.checkboxDialogue', selected[0]).fadeIn('fast');
             }
             $('.paginationContent h3 .current')[0].innerHTML = page;
             window.pagination.current = page;
@@ -144,6 +165,7 @@
 
   lazy = function(mode, fallback) {
     var a, endpoint, hash, header;
+    window.batch = [];
     endpoint = window.endpoint.ajax;
     header = {
       'X-CSRFToken': window.csrftoken

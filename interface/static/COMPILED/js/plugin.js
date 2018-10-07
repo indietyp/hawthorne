@@ -7,7 +7,7 @@
   });
 
   init = function(scope = document) {
-    var announcement_expand, checkmark_toggle, clipboard, composer_select_choose, composer_select_open, ct_switch, ct_toggle, dropdown_toggle, modal_close, modal_open, overlay, search_input, search_overlay, selectionData, server_item, system_messages_open, user_toggle;
+    var announcement_expand, checkmark_toggle, clipboard, composer_select_choose, composer_select_open, ct_switch, ct_toggle, dropdown_toggle, modal_close, modal_open, overlay, overlay_toggle, search_input, search_overlay, selectionData, server_item, system_messages_open, user_toggle;
     dropdown_toggle = function(event) {
       event.stopImmediatePropagation();
       $('.expand').not($('.expand', this.parentElement)).slideUp();
@@ -81,6 +81,10 @@
       }
     };
     $('.timeTable tbody tr td .checkmarkContainer', scope).on('mousedown', checkmark_toggle);
+    overlay_toggle = function() {
+      $(this.parentElement).fadeOut('fast');
+    };
+    $('.timeTable tbody tr td .checkboxDialogue .paginationTabsDanger', scope).on('click', overlay_toggle);
     // retired
     $('[data-trigger=\'[modal/system/log/import/input/add]\']', scope).on('click', function() {
       $(this).parent().find('.appendInput').append('<input type=\'text\' placeholder=\'/home/server/addons/sourcemod/logs/error.log\' class=\'mbotSmall\'>');
@@ -132,13 +136,22 @@
     };
     $('[data-trigger=\'[ct/switch]\']', scope).on('click', ct_switch);
     ct_toggle = function() {
-      var index;
-      index = window.batch.indexOf(this);
+      var index, parent;
+      parent = this.parentElement;
+      while (parent.nodeName.toLowerCase() !== 'tr') {
+        parent = parent.parentElement;
+      }
+      index = -1;
+      window.batch.forEach(function(e) {
+        if (e.getAttribute('data-id') === parent.getAttribute('data-id')) {
+          return index = window.batch.indexOf(e);
+        }
+      });
       if (index !== -1) {
         window.batch.splice(index, 1);
       }
       if (this.checked) {
-        window.batch.push(this);
+        window.batch.push(parent);
       }
       return console.log(window.batch);
     };

@@ -1,6 +1,7 @@
 # view controller
 
 load = (destination = 'home', scope = '') ->
+  window.batch = []
   endpoint = window.endpoint.bare
 
   switch destination

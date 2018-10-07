@@ -1,10 +1,10 @@
 - load utils
 - load static
 
-tr(style="{%if not data.is_active%}opacity:0.5;{%endif%}")
+tr(style="{%if not data.is_active%}opacity:0.5;{%endif%}", data-id='{{data.id}}')
   td(style='width:48px')
     label.checkmarkContainer
-      input(type='checkbox')
+      input(type='checkbox', data-trigger='[ct/toggle]')
       span.checkmark
     .checkboxDialogue.modalSelect
       select

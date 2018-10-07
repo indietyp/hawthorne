@@ -5,6 +5,7 @@
 
   load = function(destination = 'home', scope = '') {
     var endpoint, header, url;
+    window.batch = [];
     endpoint = window.endpoint.bare;
     switch (destination) {
       case 'home':

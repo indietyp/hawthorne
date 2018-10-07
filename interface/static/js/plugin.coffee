@@ -95,6 +95,13 @@ init = (scope = document) ->
   $('.timeTable tbody tr td .checkmarkContainer', scope).on 'mousedown', checkmark_toggle
 
 
+  overlay_toggle = ->
+    $(@.parentElement).fadeOut 'fast'
+    return
+
+  $('.timeTable tbody tr td .checkboxDialogue .paginationTabsDanger', scope).on 'click', overlay_toggle
+
+
   # retired
   $('[data-trigger=\'[modal/system/log/import/input/add]\']', scope).on 'click', ->
     $(@).parent().find('.appendInput').append '<input type=\'text\' placeholder=\'/home/server/addons/sourcemod/logs/error.log\' class=\'mbotSmall\'>'
@@ -145,12 +152,20 @@ init = (scope = document) ->
 
 
   ct_toggle = ->
-    index = window.batch.indexOf(@)
+    parent = @.parentElement
+    until parent.nodeName.toLowerCase() is 'tr'
+      parent = parent.parentElement
+
+    index = -1
+    window.batch.forEach((e) ->
+      if e.getAttribute('data-id') is parent.getAttribute('data-id')
+        index = window.batch.indexOf(e)
+    )
     if index isnt -1
       window.batch.splice(index, 1)
 
     if @.checked
-      window.batch.push(@)
+      window.batch.push(parent)
 
     console.log window.batch
   $("[data-trigger='[ct/toggle]']", scope).on 'change', ct_toggle
