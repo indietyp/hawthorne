@@ -7,7 +7,7 @@
   });
 
   init = function(scope = document) {
-    var announcement_expand, checkmark_toggle, clipboard, composer_select_choose, composer_select_open, ct_switch, dropdown_toggle, modal_close, modal_open, overlay, search_input, search_overlay, selectionData, server_item, system_messages_open, user_toggle;
+    var announcement_expand, checkmark_toggle, clipboard, composer_select_choose, composer_select_open, ct_switch, ct_toggle, dropdown_toggle, modal_close, modal_open, overlay, search_input, search_overlay, selectionData, server_item, system_messages_open, user_toggle;
     dropdown_toggle = function(event) {
       event.stopImmediatePropagation();
       $('.expand').not($('.expand', this.parentElement)).slideUp();
@@ -131,6 +131,18 @@
       window.lazy(this.parentElement.getAttribute('data-target'), '');
     };
     $('[data-trigger=\'[ct/switch]\']', scope).on('click', ct_switch);
+    ct_toggle = function() {
+      var index;
+      index = window.batch.indexOf(this);
+      if (index !== -1) {
+        window.batch.splice(index, 1);
+      }
+      if (this.checked) {
+        window.batch.push(this);
+      }
+      return console.log(window.batch);
+    };
+    $("[data-trigger='[ct/toggle]']", scope).on('change', ct_toggle);
     clipboard = function(event) {
       return window.style.copy(this.getAttribute('data-clipboard-text'));
     };
@@ -158,5 +170,7 @@
     init: init,
     menu: menu
   };
+
+  window.batch = [];
 
 }).call(this);

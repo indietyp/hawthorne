@@ -4,8 +4,8 @@
 tr(style="{%if data.resolved%}opacity:0.5;{%endif%}", data-uuid='{{data.uuid}}')
   td(style='width:48px')
     if data.resolved
-      label.checkmarkContainer
-        input(type='checkbox')
+      input.hidden(type='checkbox', data-trigger='[ct/toggle]', id='{{data.uuid}}-checkbox"')
+      label.checkmarkContainer(for='{{data.uuid}}-checkbox')
         span.checkmark
       .checkboxDialogue.modalSelect
         select

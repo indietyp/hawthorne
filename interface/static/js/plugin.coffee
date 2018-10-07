@@ -144,6 +144,18 @@ init = (scope = document) ->
   $('[data-trigger=\'[ct/switch]\']', scope).on 'click', ct_switch
 
 
+  ct_toggle = ->
+    index = window.batch.indexOf(@)
+    if index isnt -1
+      window.batch.splice(index, 1)
+
+    if @.checked
+      window.batch.push(@)
+
+    console.log window.batch
+  $("[data-trigger='[ct/toggle]']", scope).on 'change', ct_toggle
+
+
   clipboard = (event) ->
     window.style.copy(@.getAttribute('data-clipboard-text'))
   $('[data-trigger="[clip/copy]"]', scope).on 'click', clipboard
@@ -161,3 +173,5 @@ menu = ->
 window._ =
   init: init
   menu: menu
+
+window.batch = []

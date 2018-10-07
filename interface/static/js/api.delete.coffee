@@ -19,9 +19,10 @@ remove = (mode = '', target, batch = false) ->
   else
     targets = [target]
 
-  window.target.forEach((element) ->
+  targets.forEach((element) ->
     single(mode, element)
   )
+  window.batch = []
   return
 
 window.api.remove = remove

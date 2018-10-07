@@ -5,7 +5,7 @@ tr(style="{%if data.resolved%}opacity:0.5;{%endif%}")
   td(style='width:48px')
     if not data.resolved
       label.checkmarkContainer
-        input(type='checkbox')
+        input(type='checkbox', data-trigger='[ct/toggle]', data-id='{{data.id}}')
         span.checkmark
       .checkboxDialogue.modalSelect
         select
