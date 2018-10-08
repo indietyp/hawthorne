@@ -97,6 +97,13 @@ init = (scope = document) ->
 
   overlay_toggle = ->
     $(@.parentElement).fadeOut 'fast'
+
+    table = $(@).parent('tbody')[0]
+
+    $('tr.logSelected', table).removeClass('logSelected')
+    $('input:checked', table).forEach((e) ->
+      e.checked = false
+    )
     return
 
   $('.timeTable tbody tr td .checkboxDialogue .paginationTabsDanger', scope).on 'click', overlay_toggle
@@ -166,9 +173,21 @@ init = (scope = document) ->
 
     if @.checked
       window.batch.push(parent)
-
-    console.log window.batch
   $("[data-trigger='[ct/toggle]']", scope).on 'change', ct_toggle
+
+
+  table_choice = ->
+    parent = $(@).parent '.modalSelect'
+
+    mode = @.getAttribute('data-mode')
+    opacity = @.hasAttribute('data-opacity')
+    operation = $('select', parent)[0].value
+
+    switch operation
+      when 'delete'
+        window.api.remove(mode, window.batch, true)
+
+  $("[data-trigger='[table/choice]']", scope).on 'click', table_choice
 
 
   clipboard = (event) ->

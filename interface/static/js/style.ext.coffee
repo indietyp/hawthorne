@@ -145,6 +145,17 @@ $.fn.fadeToggle = (value) ->
 $.fn.not = (value) ->
   $(@filter((item) -> item not in value))
 
+$.fn.parent = (selector = undefined) ->
+  if selector is undefined
+    return $(@[0].parentElement)
+
+
+  parent = @[0].parentElement
+  until parent.matches(selector)
+    parent = parent.parentElement
+
+  return $(parent)
+
 getHeight = (el) ->
   el_style = window.getComputedStyle(el)
   el_display = el_style.display

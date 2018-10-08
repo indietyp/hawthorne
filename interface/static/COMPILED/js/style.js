@@ -213,6 +213,18 @@
     }));
   };
 
+  $.fn.parent = function(selector = void 0) {
+    var parent;
+    if (selector === void 0) {
+      return $(this[0].parentElement);
+    }
+    parent = this[0].parentElement;
+    while (!parent.matches(selector)) {
+      parent = parent.parentElement;
+    }
+    return $(parent);
+  };
+
   getHeight = function(el) {
     var el_display, el_max_height, el_position, el_style, el_visibility, wanted_height;
     el_style = window.getComputedStyle(el);

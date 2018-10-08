@@ -3,17 +3,17 @@
 import datetime
 import re
 
-from django.contrib.auth.models import Group, Permission
-from django.db.models import F, Q, DateTimeField, ExpressionWrapper, Case, When, CharField, BooleanField
-from django.utils import timezone
 from django.conf import settings
+from django.contrib.auth.models import Group, Permission
+from django.db.models import BooleanField, Case, CharField, DateTimeField, ExpressionWrapper, F, Q, When
+from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 from core.decorators.api import json_response, validation
 from core.decorators.auth import authentication_required, permission_required
 from core.lib.steam import populate as steam_populate
-from core.models import User, Country, Server, Role, Punishment, Membership
+from core.models import Country, Membership, Punishment, Role, Server, User
 from lib.mainframe import Mainframe
 from lib.sourcemod import SourcemodPluginWrapper
 
@@ -314,13 +314,13 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
     return ':+1:'
 
   elif request.method == 'DELETE':
-    if u is not None:
+    if u:
       try:
         user = User.objects.get(id=u)
       except Exception as e:
         return 'not existent user queried - {}'.format(e), 403
 
-    if s is not None:
+    if s:
       try:
         user = User.objects.get(username=s)
       except Exception as e:

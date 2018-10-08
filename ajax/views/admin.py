@@ -7,7 +7,6 @@ from django.views.decorators.http import require_http_methods
 
 from ajax.views import renderer
 from core.models import Membership, Role, User
-from django.conf import settings
 from django.contrib.auth.models import Group
 
 
@@ -18,6 +17,9 @@ def servers_admins(request):
   current = request.POST.get("page", 1)
 
   pages = math.ceil(Membership.objects.all().count() / settings.PAGE_SIZE)
+  if pages == 0 and User.objects.filter(is_superuser=True).count() != 0:
+    pages = 1
+
   return render(request, 'components/admins/servers/admins/wrapper.pug', {'pages': pages,
                                                                           'current': current})
 
@@ -30,6 +32,7 @@ def servers_admins_entries(request, page):
   for superuser in User.objects.filter(is_superuser=True, is_steam=True):
     m = Membership()
     m.user = superuser
+    m.is_superuser = True
     superusers.append(m)
 
   memberships = Membership.objects.all()

@@ -1,25 +1,26 @@
 - load static
 
-tr
-  td(data-id='{{data.id}}')
-    label.checkmarkContainer
-      input(type='checkbox', data-trigger='[ct/toggle]')
-      span.checkmark
-    .checkboxDialogue.modalSelect
-      select
-        option Delete
-      button
-        i.icon.ion-ios-checkmark
-        |  Confirm
-      button.paginationTabsDanger
-        i.icon.ion-ios-close
-        |  Cancel
+tr(data-id='{{data.id}}', data-user='{{data.user.id}}', data-delete)
+  td
+    if not data.is_superuser
+      label.checkmarkContainer
+        input(type='checkbox', data-trigger='[ct/toggle]')
+        span.checkmark
+      .checkboxDialogue.modalSelect
+        select
+          option(value='delete') Delete
+        button(data-trigger='[table/choice]', data-mode='admins[web][admins]')
+          i.icon.ion-ios-checkmark
+          |  Confirm
+        button.paginationTabsDanger
+          i.icon.ion-ios-close
+          |  Cancel
   td(style='width:1px')
     - with "flags/"|add:data.user.country.code|add:".svg" as url
       img.country(src='{% static url %}')
   td= data.user.namespace
   td
-    if data.user.is_superuser
+    if data.is_superuser
       = root
     else
       = data.role.name
