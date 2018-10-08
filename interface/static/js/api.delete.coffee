@@ -15,6 +15,7 @@ single = (mode = '', target) ->
 
       payload =
         roles: [uuid]
+        reset: false
 
   endpoint.delete(options, {}, payload, (err, data) ->
     if data.success

@@ -17,7 +17,8 @@
         user = target.getAttribute('data-user');
         endpoint = window.endpoint.api.users[user];
         payload = {
-          roles: [uuid]
+          roles: [uuid],
+          reset: false
         };
     }
     return endpoint.delete(options, {}, payload, function(err, data) {

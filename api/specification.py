@@ -45,7 +45,7 @@ validation = {
                                     'permissions': {'type': 'list', 'schema': {'regex': '\w+\.\w+\_\w+'}, 'default': []}},
                      'permission': ['core.change_user']},
             'DELETE': {'parameters': {'purge': {'type': 'boolean', 'default': False, 'required': False},
-                                      'reset': {'type': 'boolean', 'default': True, 'required': False},
+                                      'reset': {'type': 'boolean', 'default': False, 'required': False},
                                       'role': {'type': 'uuid', 'default': None, 'nullable': True, 'required': False},
 
                                       'roles': {'type': 'list', 'default': [], 'schema': {'type': 'uuid'}},

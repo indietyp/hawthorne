@@ -1,6 +1,6 @@
 - load static
 
-tr(data-id='{{data.id}}', data-user='{{data.user.id}}', data-delete)
+tr(data-id='{{data.role.id}}', data-user='{{data.user.id}}', data-remove)
   td
     if not data.is_superuser
       label.checkmarkContainer
@@ -26,7 +26,8 @@ tr(data-id='{{data.id}}', data-user='{{data.user.id}}', data-delete)
       = data.role.name
   td
     if data.role.server
-      = data.role.server.name
+      a(href='javascript:void(0)', onclick="window.vc('servers[detailed]', '{{data.role.server.id}}')")
+        = data.role.server.name
     else
       | All
 

@@ -50,8 +50,8 @@ def wrapper(target, func=None, *args, **kwargs):
   return target
 
 
-def renderer(request, template, obj, page, extra=[], execute=None, overwrite=False):
-  data = obj[(page - 1) * PAGE_SIZE:page * PAGE_SIZE]
+def renderer(request, template, obj, page, extra=[], size=PAGE_SIZE, execute=None, overwrite=False):
+  data = obj[(page - 1) * size:page * size]
   data = list(data)
 
   if execute and callable(execute):
