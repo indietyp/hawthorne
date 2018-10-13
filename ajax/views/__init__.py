@@ -43,7 +43,6 @@ def wrapper(target, func=None, *args, **kwargs):
   try:
     target.executed = func(target, *args, **kwargs)
   except Exception as e:
-    print(e)
     target.executed = []
     target.exception = e
 

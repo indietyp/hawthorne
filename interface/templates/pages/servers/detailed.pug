@@ -4,7 +4,9 @@
 
 - block content
   .modal(data-component="[modal/players]")
-    h1 Hawthornepanel.org – Players
+    h1
+      = data.name
+      | – Players
     .close(data-trigger="[modal/close]")
       i.icon.ion-ios-close
     table
@@ -25,7 +27,7 @@
               i.fa.fa-ban
             button(title="Message", data-trigger="[modal/open]", data-trigger-target="[modal/players/message]")
               i.fa.fa-comment
-  .modal(data-component="[modal/delete]")
+  .modal(data-component="[modal/delete]", data-redirect, data-id="{{data.id}}")
     h1 Are you sure you want to continue?
     .close(data-trigger="[modal/close]")
       i.icon.ion-ios-close
@@ -38,7 +40,7 @@
             | x
             = k|title
     .actions
-      button.paginationTabsDanger
+      button.paginationTabsDanger(data-trigger='[modal/action]', data-action='delete', data-mode='servers[detailed]')
         i.icon.ion-ios-trash(style="margin-right:10px;")
         | Delete Server
       button(data-trigger="[modal/close]")

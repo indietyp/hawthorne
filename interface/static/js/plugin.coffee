@@ -187,6 +187,17 @@ init = (scope = document) ->
         window.api.remove(mode, window.batch, true)
   $("[data-trigger='[table/choice]']", scope).on 'click', table_choice
 
+  modal_action = ->
+    parent = $(@).parent '.modal'
+
+    mode = @.getAttribute('data-mode')
+    action = @.getAttribute('data-mode')
+
+    switch action
+      when 'delete'
+        window.api.remove(mode, parent[0], false)
+  $("[data-trigger='[modal/action]']", scope).on 'click', modal_action
+
   grid_delete = ->
     parent = $(@).parent '.serverGridItem'
 

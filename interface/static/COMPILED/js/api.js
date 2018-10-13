@@ -21,6 +21,10 @@
           reset: false
         };
         break;
+      case 'admins[server][roles]':
+        uuid = target.getAttribute('data-id');
+        endpoint = window.endpoint.api.roles[uuid];
+        break;
       case 'admins[web][admins]':
         id = target.getAttribute('data-id');
         user = target.getAttribute('data-user');
@@ -47,7 +51,7 @@
           $(target).remove();
         }
         if (target.hasAttribute('data-visibility')) {
-          return $(target).css('visibility', 'hidden');
+          $(target).css('visibility', 'hidden');
         }
       }
     });

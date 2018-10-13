@@ -4,6 +4,7 @@ import logging
 import regex
 
 import valve.rcon
+
 from django.utils import timezone
 
 from core.lib.steam import populate
@@ -67,9 +68,7 @@ class SourcemodPluginWrapper(RCONBase):
 
   def status(self, truncated=False, *args, **kwargs):
     try:
-      response = self.run('json_status')[0]
-      # logger.warning(response)
-      # logger.warning('\n' in response)
+      response = self.run('rcon_status')[0]
 
       response = response.split('\n')
       if response[-1] == "":
@@ -79,7 +78,6 @@ class SourcemodPluginWrapper(RCONBase):
         response[-1] = ""
 
       response = ''.join(response)
-      # logger.warning(response)
     except (valve.rcon.RCONError, IndexError) as e:
       return {'error': e}
 

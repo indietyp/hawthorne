@@ -32,8 +32,11 @@ single = (mode = '', target) ->
 
     when 'admins[web][groups]'
       id = target.getAttribute('data-id')
-
       endpoint = window.endpoint.api.groups[id]
+
+    when 'servers[detailed]'
+      uuid = target.getAttribute('data-id')
+      endpoint = window.endpoint.api.servers[uuid]
 
   endpoint.delete(options, {}, payload, (err, data) ->
     if data.success
@@ -49,6 +52,10 @@ single = (mode = '', target) ->
       if target.hasAttribute('data-visibility')
         $(target).css('visibility', 'hidden')
 
+      if target.hasAttribute('data-redirect')
+        window.vc()
+
+    return
   )
 
 remove = (mode = '', target, batch = false) ->
