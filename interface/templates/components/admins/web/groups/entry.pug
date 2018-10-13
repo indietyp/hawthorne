@@ -1,15 +1,15 @@
 .section.group
   each item in data
-    .serverGridItem.col.span_1_of_4(onclick="window.vc('servers[detailed]', '{{item.id}}')" style="padding-bottom:6px")
+    .serverGridItem.col.span_1_of_4(style="padding-bottom:6px", data-id="{{item.id}}", data-visibility)
       b(style="color:rgb(0,169,255)")= item.name
       .playerCount
         i.icon.ion-md-person(style="margin-right:5px")
-        = item.user_set|length
+        = item.user_set.all|length
       .mapName(style="margin-bottom:6px")
         = item|permission_percentage|add:"% granted"
       .fRight
         button.round
           i.icon.ion-md-create
-        button.round.red
+        button.round.red(data-trigger="[grid/delete]", data-mode='admins[web][groups]')
           i.icon.ion-md-trash
 

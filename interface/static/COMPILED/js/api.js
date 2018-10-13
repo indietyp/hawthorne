@@ -3,7 +3,7 @@
   var remove, single;
 
   single = function(mode = '', target) {
-    var endpoint, options, payload, user, uuid;
+    var endpoint, id, options, payload, user, uuid;
     payload = {};
     options = {};
     switch (mode) {
@@ -12,7 +12,7 @@
         user = target.getAttribute('data-user');
         endpoint = window.endpoint.api.users[user].punishments[uuid];
         break;
-      case 'admins[web][admins]':
+      case 'admins[server][admins]':
         uuid = target.getAttribute('data-id');
         user = target.getAttribute('data-user');
         endpoint = window.endpoint.api.users[user];
@@ -20,6 +20,19 @@
           roles: [uuid],
           reset: false
         };
+        break;
+      case 'admins[web][admins]':
+        id = target.getAttribute('data-id');
+        user = target.getAttribute('data-user');
+        endpoint = window.endpoint.api.users[user];
+        payload = {
+          groups: [id],
+          reset: false
+        };
+        break;
+      case 'admins[web][groups]':
+        id = target.getAttribute('data-id');
+        endpoint = window.endpoint.api.groups[id];
     }
     return endpoint.delete(options, {}, payload, function(err, data) {
       var parent;
@@ -31,7 +44,10 @@
           $('.checkmarkContainer', parent).css('visibility', 'hidden');
         }
         if (target.hasAttribute('data-remove')) {
-          return $(target).remove();
+          $(target).remove();
+        }
+        if (target.hasAttribute('data-visibility')) {
+          return $(target).css('visibility', 'hidden');
         }
       }
     });
@@ -48,7 +64,6 @@
     targets.forEach(function(element) {
       return single(mode, element);
     });
-    window.batch = [];
   };
 
   window.api.remove = remove;

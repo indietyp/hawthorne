@@ -1,9 +1,8 @@
 .section.group
   each item in data
-    .serverGridItem.noHover.col.span_1_of_4(onclick="window.vc('servers[detailed]', '{{item.id}}')" style="padding-bottom:6px")
+    .serverGridItem.noHover.col.span_1_of_4(style="padding-bottom:6px", data-id="{{item.id}}", data-visibility)
       b(style="color:rgb(0,169,255)")= item.name
       .playerCount
-        //- (class='{{item.executed|yesno:",noPlayers"}} {%if item.executed.clients|length == item.executed.limitations.clients%}fullPlayers{%endif%}"')
         i.icon.ion-md-flash(style="margin-right:5px")
         = item.immunity
         | %
@@ -18,5 +17,5 @@
       .fRight
         button.round
           i.icon.ion-md-create
-        button.round.red
+        button.round.red(data-trigger="[grid/delete]", data-mode='admins[server][roles]')
           i.icon.ion-md-trash

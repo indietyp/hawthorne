@@ -1,20 +1,22 @@
 - load static
 - load utils
+- load humanizer
 
-tr
-  td(data-id='{{data.id}}')
-    label.checkmarkContainer
-      input(type='checkbox', data-trigger='[ct/toggle]')
-      span.checkmark
-    .checkboxDialogue.modalSelect
-      select
-        option Delete
-      button
-        i.icon.ion-ios-checkmark
-        |  Confirm
-      button.paginationTabsDanger
-        i.icon.ion-ios-close
-        |  Cancel
+tr(data-id="{{data|get_groups_id}}", data-user="{{data.id}}", data-remove)
+  td(style="width: 48px;")
+    if not data.is_superuser
+      label.checkmarkContainer
+        input(type='checkbox', data-trigger='[ct/toggle]')
+        span.checkmark
+      .checkboxDialogue.modalSelect
+        select
+          option(value='delete') Delete
+        button(data-trigger='[table/choice]', data-mode='admins[web][admins]')
+          i.icon.ion-ios-checkmark
+          |  Confirm
+        button.paginationTabsDanger
+          i.icon.ion-ios-close
+          |  Cancel
   td(style='width:1px')
     if data.is_steam
       - include "assets/steam.svg"
@@ -29,7 +31,7 @@ tr
     if data.is_superuser
       = root
     else
-      = data.role.name
+      = data|get_groups_name
   td
     if data.is_superuser
       | 100%

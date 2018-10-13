@@ -8,7 +8,7 @@ single = (mode = '', target) ->
       user = target.getAttribute('data-user')
       endpoint = window.endpoint.api.users[user].punishments[uuid]
 
-    when 'admins[web][admins]'
+    when 'admins[server][admins]'
       uuid = target.getAttribute('data-id')
       user = target.getAttribute('data-user')
       endpoint = window.endpoint.api.users[user]
@@ -16,6 +16,24 @@ single = (mode = '', target) ->
       payload =
         roles: [uuid]
         reset: false
+
+    when 'admins[server][roles]'
+      uuid = target.getAttribute('data-id')
+      endpoint = window.endpoint.api.roles[uuid]
+
+    when 'admins[web][admins]'
+      id = target.getAttribute('data-id')
+      user = target.getAttribute('data-user')
+      endpoint = window.endpoint.api.users[user]
+
+      payload =
+        groups: [id]
+        reset: false
+
+    when 'admins[web][groups]'
+      id = target.getAttribute('data-id')
+
+      endpoint = window.endpoint.api.groups[id]
 
   endpoint.delete(options, {}, payload, (err, data) ->
     if data.success
@@ -27,6 +45,9 @@ single = (mode = '', target) ->
 
       if target.hasAttribute('data-remove')
         $(target).remove()
+
+      if target.hasAttribute('data-visibility')
+        $(target).css('visibility', 'hidden')
 
   )
 
@@ -40,7 +61,6 @@ remove = (mode = '', target, batch = false) ->
   targets.forEach((element) ->
     single(mode, element)
   )
-  window.batch = []
   return
 
 window.api.remove = remove

@@ -180,14 +180,19 @@ init = (scope = document) ->
     parent = $(@).parent '.modalSelect'
 
     mode = @.getAttribute('data-mode')
-    opacity = @.hasAttribute('data-opacity')
     operation = $('select', parent)[0].value
 
     switch operation
       when 'delete'
         window.api.remove(mode, window.batch, true)
-
   $("[data-trigger='[table/choice]']", scope).on 'click', table_choice
+
+  grid_delete = ->
+    parent = $(@).parent '.serverGridItem'
+
+    mode = @.getAttribute('data-mode')
+    window.api.remove(mode, parent[0], false)
+  $("[data-trigger='[grid/delete]']", scope).on 'click', grid_delete
 
 
   clipboard = (event) ->

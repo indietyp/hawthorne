@@ -7,7 +7,7 @@
   });
 
   init = function(scope = document) {
-    var announcement_expand, checkmark_toggle, clipboard, composer_select_choose, composer_select_open, ct_switch, ct_toggle, dropdown_toggle, modal_close, modal_open, overlay, overlay_toggle, search_input, search_overlay, selectionData, server_item, system_messages_open, table_choice, user_toggle;
+    var announcement_expand, checkmark_toggle, clipboard, composer_select_choose, composer_select_open, ct_switch, ct_toggle, dropdown_toggle, grid_delete, modal_close, modal_open, overlay, overlay_toggle, search_input, search_overlay, selectionData, server_item, system_messages_open, table_choice, user_toggle;
     dropdown_toggle = function(event) {
       event.stopImmediatePropagation();
       $('.expand').not($('.expand', this.parentElement)).slideUp();
@@ -162,10 +162,9 @@
     };
     $("[data-trigger='[ct/toggle]']", scope).on('change', ct_toggle);
     table_choice = function() {
-      var mode, opacity, operation, parent;
+      var mode, operation, parent;
       parent = $(this).parent('.modalSelect');
       mode = this.getAttribute('data-mode');
-      opacity = this.hasAttribute('data-opacity');
       operation = $('select', parent)[0].value;
       switch (operation) {
         case 'delete':
@@ -173,6 +172,13 @@
       }
     };
     $("[data-trigger='[table/choice]']", scope).on('click', table_choice);
+    grid_delete = function() {
+      var mode, parent;
+      parent = $(this).parent('.serverGridItem');
+      mode = this.getAttribute('data-mode');
+      return window.api.remove(mode, parent[0], false);
+    };
+    $("[data-trigger='[grid/delete]']", scope).on('click', grid_delete);
     clipboard = function(event) {
       return window.style.copy(this.getAttribute('data-clipboard-text'));
     };

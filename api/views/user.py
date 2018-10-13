@@ -289,6 +289,8 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
       groups = Group.objects.filter(id__in=validated['groups'])
       user.groups.set(groups)
 
+      user.is_active = True
+
     if validated['permissions'] is not None:
       base = Permission.objects.all()\
                                .annotate(encoded=F('content_type__model') + '.' + F('codename'))\
@@ -363,6 +365,9 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
 
       for group in validated['groups']:
         user.groups.remove(Group.objects.get(id=group))
+
+      if user.groups.count() == 0:
+        user.is_active = False
 
     user.save()
 
