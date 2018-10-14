@@ -200,6 +200,38 @@ lazy = (mode, fallback) ->
 
   return
 
+
+modal = (mode, component) ->
+  endpoint = window.endpoint.ajax
+  header =
+    'X-CSRFToken': window.csrftoken
+
+  switch mode
+    when 'servers[detailed][players]'
+      endpoint = window.endpoint.ajax.servers[window.slug].modals.players
+    when 'servers[detailed][admins]'
+      endpoint = window.endpoint.ajax.servers[window.slug].modals.admins
+    when 'players[detailed][roles]'
+      endpoint = window.endpoint.ajax.players[window.slug].modals.roles
+    when 'players[detailed][usernames]'
+      endpoint = window.endpoint.ajax.players[window.slug].modals.usernames
+    when 'players[detailed][ips]'
+      endpoint = window.endpoint.ajax.players[window.slug].modals.ips
+
+  endpoint.post(header, {}, (dummy, response) ->
+    status = response.status
+    data = response.data
+    target = $("[data-component='#{component}']")
+
+    if status is 200
+      $('tbody', target)[0].innerHTML = data
+
+    return
+  )
+
+  return
+
 window.ajax = ajax
 window.lazy = lazy
 window.date = date
+window.modal = modal

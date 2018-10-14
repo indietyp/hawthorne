@@ -40,6 +40,8 @@ urlpatterns = [
   path('servers/<slug:s>/logs', server.log),
   path('servers/<slug:s>/logs/<int:page>', server.log_entries),
   path('servers/<slug:s>/rcon', server.rcon),
+  path('servers/<slug:s>/modals/players', server.modal_players),
+  path('servers/<slug:s>/modals/admins', server.modal_admins),
 
   path('settings/tokens', setting.tokens),
   path('settings/tokens/<int:page>', setting.tokens_entries),

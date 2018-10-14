@@ -7,7 +7,7 @@
   });
 
   init = function(scope = document) {
-    var announcement_expand, checkmark_toggle, clipboard, composer_select_choose, composer_select_open, ct_switch, ct_toggle, dropdown_toggle, grid_delete, modal_close, modal_open, overlay, overlay_toggle, search_input, search_overlay, selectionData, server_item, system_messages_open, table_choice, user_toggle;
+    var announcement_expand, checkmark_toggle, clipboard, composer_select_choose, composer_select_open, ct_switch, ct_toggle, dropdown_toggle, grid_delete, modal_action, modal_close, modal_open, overlay, overlay_toggle, search_input, search_overlay, selectionData, server_item, system_messages_open, table_choice, user_toggle;
     dropdown_toggle = function(event) {
       event.stopImmediatePropagation();
       $('.expand').not($('.expand', this.parentElement)).slideUp();
@@ -172,6 +172,17 @@
       }
     };
     $("[data-trigger='[table/choice]']", scope).on('click', table_choice);
+    modal_action = function() {
+      var action, mode, parent;
+      parent = $(this).parent('.modal');
+      mode = this.getAttribute('data-mode');
+      action = this.getAttribute('data-mode');
+      switch (action) {
+        case 'delete':
+          return window.api.remove(mode, parent[0], false);
+      }
+    };
+    $("[data-trigger='[modal/action]']", scope).on('click', modal_action);
     grid_delete = function() {
       var mode, parent;
       parent = $(this).parent('.serverGridItem');

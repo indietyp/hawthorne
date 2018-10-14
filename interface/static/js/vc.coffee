@@ -42,6 +42,9 @@ load = (destination = 'home', scope = '') ->
     if status is 200
       window.history.pushState {location: destination, scope: scope}, null, "/#{url}"
 
+      $('.overlay').fadeOut 'fast'
+      $('.modal').fadeOut 'fast'
+
       $('.main')[0].innerHTML = data
       $('.main script.execute:not(.evaluated)').forEach((scr) ->
         eval scr.innerHTML

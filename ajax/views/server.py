@@ -3,12 +3,12 @@ import json
 import urllib.request
 
 from django.contrib.auth.decorators import login_required, permission_required
-from django.db.models import Count, DateField
-from django.db.models.functions import Cast, Extract
+from django.db.models import Count, Q
+from django.db.models.functions import Extract
 from django.views.decorators.http import require_http_methods
 
 from ajax.views import renderer
-from core.models import Server
+from core.models import Membership, Server
 from django.shortcuts import render
 from lib.sourcemod import SourcemodPluginWrapper
 from log.models import ServerChat, UserOnlineTime
@@ -96,5 +96,25 @@ def log_entries(request, s, page, *args, **kwargs):
 @require_http_methods(['POST'])
 def rcon(request, s, *args, **kwargs):
   server = Server.objects.get(id=s)
-
   return render(request, 'components/servers/detailed/rcon.pug', {'data': server})
+
+
+@login_required(login_url='/login')
+@permission_required('core.view_server')
+@require_http_methods(['POST'])
+def modal_players(request, s, *args, **kwargs):
+  server = Server.objects.get(id=s)
+  clients = SourcemodPluginWrapper(server).status(truncated=True)['clients']
+
+  return render(request, 'components/servers/detailed/modals/players.pug', {'data': clients})
+
+
+@login_required(login_url='/login')
+@permission_required('core.view_server')
+@require_http_methods(['POST'])
+def modal_admins(request, s, *args, **kwargs):
+  server = Server.objects.get(id=s)
+  memberships = Membership.objects.filter(Q(role__server=server) | Q(role__server=None))
+  print(memberships)
+
+  return render(request, 'components/servers/detailed/modals/admins.pug', {'data': memberships})

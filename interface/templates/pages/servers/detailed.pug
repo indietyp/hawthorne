@@ -6,7 +6,7 @@
   .modal(data-component="[modal/players]")
     h1
       = data.name
-      | – Players
+      |  – Players
     .close(data-trigger="[modal/close]")
       i.icon.ion-ios-close
     table
@@ -17,16 +17,19 @@
           th Connection Time
           th.fRight Actions
       tbody
+  .modal(data-component="[modal/admins]")
+    h1
+      = data.name
+      |  – Admins
+    .close(data-trigger="[modal/close]")
+      i.icon.ion-ios-close
+    table
+      thead
         tr
-          td(style="width:1px")
-            img.country(src="https://demo.hawthornepanel.org/static/flags/de.svg")
-          td Akke
-          td 10 minutes, 30 seconds
-          td
-            button(title="Kick")
-              i.fa.fa-ban
-            button(title="Message", data-trigger="[modal/open]", data-trigger-target="[modal/players/message]")
-              i.fa.fa-comment
+          th(style="width:auto")
+          th Username
+          th Role
+      tbody
   .modal(data-component="[modal/delete]", data-redirect, data-id="{{data.id}}")
     h1 Are you sure you want to continue?
     .close(data-trigger="[modal/close]")
@@ -94,5 +97,7 @@
   script.execute.
     window.slug = "{{data.id}}"
     window.lazy('servers[detailed]', 'overview')
+    window.modal('servers[detailed][players]', '[modal/players]')
+    window.modal('servers[detailed][admins]', '[modal/admins]')
     window._.menu()
     window._.init()

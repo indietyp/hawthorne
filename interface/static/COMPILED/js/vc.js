@@ -58,6 +58,8 @@
           location: destination,
           scope: scope
         }, null, `/${url}`);
+        $('.overlay').fadeOut('fast');
+        $('.modal').fadeOut('fast');
         $('.main')[0].innerHTML = data;
         return $('.main script.execute:not(.evaluated)').forEach(function(scr) {
           return eval(scr.innerHTML);
