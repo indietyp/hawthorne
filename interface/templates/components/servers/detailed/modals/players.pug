@@ -1,0 +1,16 @@
+- load static
+
+for item in data
+  tr
+    td(style="width:1px")
+      - with "flags/"|add:item.country.code|add:".svg" as url
+        img.country(src='{% static url %}')
+    td
+      a(href='javascript:void(0)', onclick="window.vc('players[detailed]', '{{item.user.id}}')")
+        = item.namespace
+    td= item.connection|duration
+    td
+      button(title="Kick")
+        i.fa.fa-ban
+      button(title="Message", data-trigger="[modal/open]", data-trigger-target="[modal/players/message]")
+        i.fa.fa-comment
