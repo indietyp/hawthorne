@@ -1,0 +1,8 @@
+- load static
+
+for item in data
+  tr
+    td= item.ip
+    td.unset= item.connections
+    td= item.updated_at|date:"DATETIME_FORMAT"
+    td= item.created_at|date:"DATETIME_FORMAT"

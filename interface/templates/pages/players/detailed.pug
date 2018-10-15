@@ -3,6 +3,49 @@
 - load staticfiles
 
 - block content
+  .modal(data-component="[modal/usernames]")
+    h1
+      = data.namespace
+      |  – Usernames
+    .close(data-trigger="[modal/close]")
+      i.icon.ion-ios-close
+    table
+      thead
+        tr
+          th Username
+          th Connections
+          th Last Used
+          th First Used
+      tbody
+
+  .modal(data-component="[modal/ips]")
+    h1
+      = data.namespace
+      |  – IPs
+    .close(data-trigger="[modal/close]")
+      i.icon.ion-ios-close
+    table
+      thead
+        tr
+          th IP
+          th Connections
+          th Last Used
+          th First Used
+      tbody
+
+  .modal(data-component="[modal/roles]")
+    h1
+      = data.namespace
+      |  – Roles
+    .close(data-trigger="[modal/close]")
+      i.icon.ion-ios-close
+    table
+      thead
+        tr
+          th Role
+          th Assigned At
+      tbody
+
   ul.paginationTabs(data-target='players[detailed]')
     li(data-trigger="[ct/switch]", data="overview") Overview
     li(data-trigger="[ct/switch]", data="punishments") Punishments
@@ -18,5 +61,8 @@
   script.execute.
     window.slug = "{{data.id}}"
     window.lazy('players[detailed]', 'overview')
+    window.modal('players[detailed][ips]', '[modal/ips]')
+    window.modal('players[detailed][roles]', '[modal/roles]')
+    window.modal('players[detailed][usernames]', '[modal/usernames]')
     window._.menu()
     window._.init()

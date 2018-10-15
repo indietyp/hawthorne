@@ -187,8 +187,9 @@
             =  data.serverchat_set|count
           li
             b Most Active Server:
-            = activity
+            a(href="javascript:void(0)", onclick="window.vc('servers[detailed]', '{{activity.id}}')")
+              = activity.name
           li
-            a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/players]") View Roles
-            a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/players]", style="margin-left: 6px") View Usernames
-            a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/players]", style="margin-left: 6px") View IPs
+            a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/roles]") View Roles
+            a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/usernames]", style="margin-left: 6px") View Usernames
+            a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/ips]", style="margin-left: 6px") View IPs

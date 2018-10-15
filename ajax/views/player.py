@@ -13,8 +13,8 @@ from django.utils.formats import date_format
 from django.views.decorators.http import require_http_methods
 
 from ajax.views import renderer
-from core.models import Punishment, Server, User
-from log.models import ServerChat, UserOnlineTime
+from core.models import Membership, Punishment, Server, User
+from log.models import ServerChat, UserIP, UserNamespace, UserOnlineTime
 
 
 @login_required(login_url='/login')
@@ -125,6 +125,36 @@ def detailed_punishments_entries(request, u, page, *args, **kwargs):
   punishments = Punishment.objects.filter(user=u).order_by('created_at')
 
   return renderer(request, 'components/players/detailed/punishments/entry.pug', punishments, page)
+
+
+@login_required(login_url='/login')
+@permission_required('core.view_server')
+@require_http_methods(['POST'])
+def modal_usernames(request, u, *args, **kwargs):
+  user = User.objects.get(id=u)
+  log = UserNamespace.objects.filter(user=user).order_by('-updated_at')
+
+  return render(request, 'components/players/detailed/modals/usernames.pug', {'data': log})
+
+
+@login_required(login_url='/login')
+@permission_required('core.view_server')
+@require_http_methods(['POST'])
+def modal_roles(request, u, *args, **kwargs):
+  user = User.objects.get(id=u)
+  mems = Membership.objects.filter(user=user)
+
+  return render(request, 'components/players/detailed/modals/roles.pug', {'data': mems})
+
+
+@login_required(login_url='/login')
+@permission_required('core.view_server')
+@require_http_methods(['POST'])
+def modal_ips(request, u, *args, **kwargs):
+  user = User.objects.get(id=u)
+  log = UserIP.objects.filter(user=user).order_by('-updated_at')
+
+  return render(request, 'components/players/detailed/modals/ips.pug', {'data': log})
 
 
 @login_required(login_url='/login')

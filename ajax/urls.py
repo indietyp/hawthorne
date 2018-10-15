@@ -25,6 +25,9 @@ urlpatterns = [
   path('players/<uuid:u>/actions/<int:page>', player.detailed_actions_entries),
   path('players/<uuid:u>/punishments', player.detailed_punishments),
   path('players/<uuid:u>/punishments/<int:page>', player.detailed_punishments_entries),
+  path('players/<uuid:u>/modals/usernames', player.modal_usernames),
+  path('players/<uuid:u>/modals/roles', player.modal_roles),
+  path('players/<uuid:u>/modals/ips', player.modal_ips),
 
   path('punishments/bans', punishment.list, name="ajax[punishment][ban]"),
   path('punishments/bans/<int:page>', punishment.entries, name="ajax[punishment][ban]"),

@@ -115,6 +115,5 @@ def modal_players(request, s, *args, **kwargs):
 def modal_admins(request, s, *args, **kwargs):
   server = Server.objects.get(id=s)
   memberships = Membership.objects.filter(Q(role__server=server) | Q(role__server=None))
-  print(memberships)
 
   return render(request, 'components/servers/detailed/modals/admins.pug', {'data': memberships})

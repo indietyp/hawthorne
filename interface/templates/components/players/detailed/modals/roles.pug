@@ -1,0 +1,6 @@
+- load static
+
+for item in data
+  tr
+    td= item.role.name
+    td.unset= item.created_at|date:"DATETIME_FORMAT"

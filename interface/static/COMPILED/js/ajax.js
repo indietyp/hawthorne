@@ -237,6 +237,15 @@
         break;
       case 'servers[detailed][admins]':
         endpoint = window.endpoint.ajax.servers[window.slug].modals.admins;
+        break;
+      case 'players[detailed][roles]':
+        endpoint = window.endpoint.ajax.players[window.slug].modals.roles;
+        break;
+      case 'players[detailed][usernames]':
+        endpoint = window.endpoint.ajax.players[window.slug].modals.usernames;
+        break;
+      case 'players[detailed][ips]':
+        endpoint = window.endpoint.ajax.players[window.slug].modals.ips;
     }
     endpoint.post(header, {}, function(dummy, response) {
       var data, status, target;
