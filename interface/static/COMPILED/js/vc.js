@@ -11,6 +11,9 @@
       case 'home':
         url = '';
         break;
+      case 'settings':
+        url = 'settings';
+        break;
       case 'servers':
         url = 'servers';
         break;

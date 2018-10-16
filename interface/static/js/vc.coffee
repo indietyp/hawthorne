@@ -7,6 +7,8 @@ load = (destination = 'home', scope = '') ->
   switch destination
     when 'home'
       url = ''
+    when 'settings'
+      url = 'settings'
     when 'servers'
       url = 'servers'
     when 'servers[detailed]'
