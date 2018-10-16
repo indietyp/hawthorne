@@ -116,16 +116,21 @@ init = (scope = document) ->
 
 
   composer_select_open = ->
+    event.stopImmediatePropagation()
+
     $(@).parent('._Dynamic_Select').toggleClass '_Dynamic_Select_Activated'
-    $(@).parent('._Dynamic_Select').find('._Select').toggle()
-    $(@).parent('._Dynamic_Select').find('._Select').find('._Select_Search').find('input').focus()
+    $('._Select', $(@).parent('._Dynamic_Select')).toggleClass('selected')
+    $('._Select_Search input', $(@).parent('._Dynamic_Select'))[0].focus()
+
     return
-  $('[data-trigger=\'[composer/select/open]\']', scope).on 'click', composer_select_open
+  $('[data-trigger="[composer/select/open]"]', scope).on 'click', composer_select_open
 
 
   selectionData = []
   composer_select_choose = ->
-    if $(@).parent().closest('._Dynamic_Select').find('._Title').attr('data-select-multiple') == 'true'
+    event.stopImmediatePropagation()
+
+    if $('._Title', $(@).parent('._Dynamic_Select'))[0].getAttribute('data-select-multiple') is 'true'
       text = $(@).find('p').text()
       checkBox = $(@).find('.checkmarkContainer input')
       if not checkBox.is(':checked')
@@ -141,11 +146,54 @@ init = (scope = document) ->
           i += 1
       $(@).closest('._Dynamic_Select').find('._Title').text '(' + selectionData.length + ') selections'
       return
-    $(@).closest('._Dynamic_Select').find('._Title').text $(@).find('b').text()
-    $(@).closest('._Dynamic_Select').toggleClass '_Dynamic_Select_Activated'
-    $(@).closest('._Select').hide()
+
+    $(@).parent('._Dynamic_Select').toggleClass '_Dynamic_Select_Activated'
+    $('._Select', $(@).parent('._Dynamic_Select')).toggleClass 'selected'
+    $('._Title', $(@).parent('._Dynamic_Select'))[0].textContent = $('p', @)[0].textContent
     return
-  $('[data-trigger=\'[composer/select/choose]\']', scope).on 'click', composer_select_choose
+  $('[data-trigger="[composer/select/choose]"]', scope).on 'click', composer_select_choose
+
+  composer_select_search = (e) ->
+    event.stopImmediatePropagation()
+
+
+    values = []
+    input = @.value
+    parent = $(@).parent('._Select')
+    container = $('._Container', parent)
+    $('p', container).forEach((node) ->
+      values.push node
+      return
+    )
+
+    if @.value is ''
+      values.forEach((value) ->
+        $(value).parent('li')[0].style.display = 'block'
+      )
+
+      return
+
+    if e.which >= 90 or e.which <= 48
+      return
+
+    distances = []
+    values.forEach((value) ->
+      $(value).parent('li')[0].style.display = 'none'
+      distances.push [value, distance(value.textContent, input)]
+    )
+
+    distances.sort((a, b) ->
+      return b[1] - a[1]
+    )
+
+    distances = distances.slice(0, 5)
+    distances.forEach((value) ->
+      $(value[0]).parent('li')[0].style.display = 'block'
+    )
+
+    console.log distances
+
+  $('[data-trigger="[composer/select/search]"]', scope).on 'keyup', composer_select_search
 
   ct_switch = ->
     $('.paginationTabSelected', @.parentElement).removeClass('paginationTabSelected')

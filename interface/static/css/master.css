@@ -3590,6 +3590,10 @@ h3 input {
     border-radius: 4px;
 }
 
+._Dynamic_Select > ._Select.selected {
+    display: block;
+}
+
 ._Dynamic_Select > ._Select > ._STitle {
     padding: 15px 15px 15px 10px;
 
@@ -3678,6 +3682,32 @@ h3 input {
 
 .monospace {
     font-family: Monaco, monospace;
+}
+
+.inputGroup {
+    position: relative;
+    margin-bottom: 12px;
+}
+
+.inputGroup > input {
+    margin-bottom: 0 !important;
+}
+
+.inputGroup > span {
+    position: absolute;
+    padding-left: 15px;
+    color: #9DB5E3;
+    user-select: none;
+    pointer-events: none;
+    top: 50%;
+    left: 0%;
+    transform: translateY(-50%);
+    transition: all 0.2s ease-out;
+}
+
+.inputGroup > input:valid ~ span {
+    top: 0%;
+    left: -1%;
 }
 
 /* Safari */

@@ -7,7 +7,7 @@
   });
 
   init = function(scope = document) {
-    var announcement_expand, checkmark_toggle, clipboard, composer_select_choose, composer_select_open, ct_switch, ct_toggle, dropdown_toggle, grid_delete, modal_action, modal_close, modal_open, overlay, overlay_toggle, search_input, search_overlay, selectionData, server_item, system_messages_open, table_choice, user_toggle;
+    var announcement_expand, checkmark_toggle, clipboard, composer_select_choose, composer_select_open, composer_select_search, ct_switch, ct_toggle, dropdown_toggle, grid_delete, modal_action, modal_close, modal_open, overlay, overlay_toggle, search_input, search_overlay, selectionData, server_item, system_messages_open, table_choice, user_toggle;
     dropdown_toggle = function(event) {
       event.stopImmediatePropagation();
       $('.expand').not($('.expand', this.parentElement)).slideUp();
@@ -96,15 +96,17 @@
       $(this).parent().find('.appendInput').append('<input type=\'text\' placeholder=\'/home/server/addons/sourcemod/logs/error.log\' class=\'mbotSmall\'>');
     });
     composer_select_open = function() {
+      event.stopImmediatePropagation();
       $(this).parent('._Dynamic_Select').toggleClass('_Dynamic_Select_Activated');
-      $(this).parent('._Dynamic_Select').find('._Select').toggle();
-      $(this).parent('._Dynamic_Select').find('._Select').find('._Select_Search').find('input').focus();
+      $('._Select', $(this).parent('._Dynamic_Select')).toggleClass('selected');
+      $('._Select_Search input', $(this).parent('._Dynamic_Select'))[0].focus();
     };
-    $('[data-trigger=\'[composer/select/open]\']', scope).on('click', composer_select_open);
+    $('[data-trigger="[composer/select/open]"]', scope).on('click', composer_select_open);
     selectionData = [];
     composer_select_choose = function() {
       var checkBox, i, text;
-      if ($(this).parent().closest('._Dynamic_Select').find('._Title').attr('data-select-multiple') === 'true') {
+      event.stopImmediatePropagation();
+      if ($('._Title', $(this).parent('._Dynamic_Select'))[0].getAttribute('data-select-multiple') === 'true') {
         text = $(this).find('p').text();
         checkBox = $(this).find('.checkmarkContainer input');
         if (!checkBox.is(':checked')) {
@@ -124,11 +126,45 @@
         $(this).closest('._Dynamic_Select').find('._Title').text('(' + selectionData.length + ') selections');
         return;
       }
-      $(this).closest('._Dynamic_Select').find('._Title').text($(this).find('b').text());
-      $(this).closest('._Dynamic_Select').toggleClass('_Dynamic_Select_Activated');
-      $(this).closest('._Select').hide();
+      $(this).parent('._Dynamic_Select').toggleClass('_Dynamic_Select_Activated');
+      $('._Select', $(this).parent('._Dynamic_Select')).toggleClass('selected');
+      $('._Title', $(this).parent('._Dynamic_Select'))[0].textContent = $('p', this)[0].textContent;
     };
-    $('[data-trigger=\'[composer/select/choose]\']', scope).on('click', composer_select_choose);
+    $('[data-trigger="[composer/select/choose]"]', scope).on('click', composer_select_choose);
+    composer_select_search = function(e) {
+      var container, distances, input, parent, values;
+      event.stopImmediatePropagation();
+      values = [];
+      input = this.value;
+      parent = $(this).parent('._Select');
+      container = $('._Container', parent);
+      $('p', container).forEach(function(node) {
+        values.push(node);
+      });
+      if (this.value === '') {
+        values.forEach(function(value) {
+          return $(value).parent('li')[0].style.display = 'block';
+        });
+        return;
+      }
+      if (e.which >= 90 || e.which <= 48) {
+        return;
+      }
+      distances = [];
+      values.forEach(function(value) {
+        $(value).parent('li')[0].style.display = 'none';
+        return distances.push([value, distance(value.textContent, input)]);
+      });
+      distances.sort(function(a, b) {
+        return b[1] - a[1];
+      });
+      distances = distances.slice(0, 5);
+      distances.forEach(function(value) {
+        return $(value[0]).parent('li')[0].style.display = 'block';
+      });
+      return console.log(distances);
+    };
+    $('[data-trigger="[composer/select/search]"]', scope).on('keyup', composer_select_search);
     ct_switch = function() {
       var hash;
       $('.paginationTabSelected', this.parentElement).removeClass('paginationTabSelected');

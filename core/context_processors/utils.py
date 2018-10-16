@@ -1,5 +1,5 @@
+from core.models import Membership, Server
 from django.conf import settings
-from core.models import Membership
 
 
 def favicons(request):
@@ -7,7 +7,7 @@ def favicons(request):
 
 
 def globals(request):
-  return {'root': settings.ROOT}
+  return {'root': settings.ROOT, 'games': Server.SUPPORTED}
 
 
 def announcement(request):

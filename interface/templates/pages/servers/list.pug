@@ -1,11 +1,51 @@
 - extends ajax|yesno:'skeleton/wrappers/ajax.pug,skeleton/main.pug'
 - load i18n
+- load utils
 - load staticfiles
 
 - block content
+  .modal.modalDynamic(data-component='[modal/create]')
+    h1 Server – New
+    .close(data-trigger='[modal/close]')
+      i.icon.ion-ios-close
+    .modalContent
+      form
+        b.mtop.mbotSmall
+          i.icon.ion-ios-person(style='margin-right:10px')
+          |  Server Details
+        .section.group.inputGroup
+          input.smallInput(type='text', required)
+          span Name
+        .section.group.modalSelect
+          ._Dynamic_Select
+            ._Title(data-trigger='[composer/select/open]') Choose a Game
+            ._Select
+              ._Select_Search
+                input(type='text', placeholder='Type to filter...', data-trigger='[composer/select/search]')
+              ._STitle Results
+              ._Container
+                - for game in games
+                  li(data-trigger='[composer/select/choose]')
+                    p= game|get:"1"
+        .section.group.inputGroup
+          input.smallInput(type='text', required)
+          span Mode
+
+        b.mtop.mbotSmall
+          i.icon.ion-ios-person(style='margin-right:10px')
+          |  RCON Details
+        .section.group.inputGroup
+          input.smallInput#modal_connection(type='text', required)
+          span IP and Port
+        .section.group.inputGroup
+          input.smallInput(type='password', required)
+          span Password
+
+        input(type='submit', value='Create Server')
+
   ul.paginationTabs
     li.invisible Servers
-    li.fRight
+    li.fRight(data-trigger='[modal/open]', data-trigger-target='[modal/create]')
       i.icon.ion-ios-add(style="margin-right:5px")
       | New Server
   .paginationContent
