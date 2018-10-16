@@ -434,8 +434,8 @@ configure() {
     supervisorctl restart hawthorne
 
     printf "${BOLD}Setting up the toolchain...${NORMAL}\n"
-    ln -s $directory/cli/toolchain.sh /usr/bin/hawthorne
-    ln -s $directory/cli/toolchain.sh /usr/bin/ht
+    ln -s $directory/cli/helper.py /usr/bin/hawthorne
+    ln -s $directory/cli/helper.py /usr/bin/ht
     chmod +x /usr/bin/hawthorne
     chmod +x /usr/bin/ht
 
