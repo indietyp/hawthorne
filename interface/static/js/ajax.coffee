@@ -207,6 +207,8 @@ modal = (mode, component) ->
     'X-CSRFToken': window.csrftoken
 
   switch mode
+    when 'skeleton[servers]'
+      endpoint = window.endpoint.ajax.servers.modals
     when 'servers[detailed][players]'
       endpoint = window.endpoint.ajax.servers[window.slug].modals.players
     when 'servers[detailed][admins]'

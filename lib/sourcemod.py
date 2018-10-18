@@ -9,8 +9,10 @@ from django.utils import timezone
 
 from core.lib.steam import populate
 from core.models import User
+from django.core.cache import cache
 from lib.base import RCONBase
 from log.models import UserOnlineTime
+from panel.settings import RCON_TIMEOUT
 
 
 logger = logging.getLogger(__name__)
@@ -18,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 class SourcemodPluginWrapper(RCONBase):
   def __init__(self, server):
-    super(SourcemodPluginWrapper, self).__init__(server, timeout=0.5)
+    super(SourcemodPluginWrapper, self).__init__(server, timeout=RCON_TIMEOUT)
 
   def ban(self, punishment, *args, **kwargs):
     command = 'rcon_ban "{}" "{}" "{}" "{}"'.format(punishment.user.username,
@@ -67,6 +69,12 @@ class SourcemodPluginWrapper(RCONBase):
     return response
 
   def status(self, truncated=False, *args, **kwargs):
+    prefix = 'status-'.format(self.server.id)
+    cached = cache.get(prefix)
+
+    if cached:
+      return cached
+
     try:
       response = self.run('rcon_status')[0]
 
@@ -121,6 +129,8 @@ class SourcemodPluginWrapper(RCONBase):
       users.append(user)
 
     response['clients'] = users
+
+    cache.set(prefix, response, 60)
     return response
 
   def raw(self, command, *args, **kwargs):

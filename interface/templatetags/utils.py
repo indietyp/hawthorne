@@ -17,6 +17,9 @@ def get(value, key):
 
 @register.filter
 def duration(delta):
+  if isinstance(delta, str):
+    return ''
+
   now = datetime.datetime.now()
   return natural.date.delta(now, now + delta, words=False)[0]
 

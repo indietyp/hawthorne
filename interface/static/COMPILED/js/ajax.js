@@ -232,6 +232,9 @@
       'X-CSRFToken': window.csrftoken
     };
     switch (mode) {
+      case 'skeleton[servers]':
+        endpoint = window.endpoint.ajax.servers.modals;
+        break;
       case 'servers[detailed][players]':
         endpoint = window.endpoint.ajax.servers[window.slug].modals.players;
         break;

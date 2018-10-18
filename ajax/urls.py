@@ -38,6 +38,7 @@ urlpatterns = [
   path('punishments/gags', punishment.list, name="ajax[punishment][gag]"),
   path('punishments/gags/<int:page>', punishment.entries, name="ajax[punishment][gag]"),
 
+  path('servers/modals', server.modals),
   path('servers/<int:page>', server.list),
   path('servers/<slug:s>/overview', server.overview),
   path('servers/<slug:s>/logs', server.log),

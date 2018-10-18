@@ -10,12 +10,25 @@ from django.views.decorators.http import require_http_methods
 from ajax.views import renderer
 from core.models import Membership, Server
 from django.shortcuts import render
+from django.views.decorators.cache import cache_page
 from lib.sourcemod import SourcemodPluginWrapper
 from log.models import ServerChat, UserOnlineTime
 
 
 def status(server, *args, **kwargs):
   return SourcemodPluginWrapper(server).status(truncated=True)
+
+
+@cache_page(60 * 15)
+@login_required(login_url='/login')
+@permission_required('core.view_server')
+@require_http_methods(['POST'])
+def modals(request, *args, **kwargs):
+  servers = Server.objects.all()
+  for server in servers:
+    server.query = status(server)
+
+  return render(request, 'components/servers/modals/list.pug', {'data': servers})
 
 
 @login_required(login_url='/login')

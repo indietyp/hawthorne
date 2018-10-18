@@ -1,11 +1,13 @@
-from git import Repo
-from django.shortcuts import render
-from django.http import HttpResponse
-from panel.settings import BASE_DIR
-from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required, permission_required
+from django.http import HttpResponse
+from django.shortcuts import render
+from django.views.decorators.cache import cache_page
+from django.views.decorators.http import require_http_methods
+from git import Repo
+from panel.settings import BASE_DIR
 
 
+@cache_page(60 * 15)
 @login_required(login_url='/login')
 @permission_required('core.view_update')
 @require_http_methods(['POST'])
@@ -21,4 +23,3 @@ def update(request, *args, **kwargs):
                                                           'upstream': upstream})
   else:
     return HttpResponse('')
-
