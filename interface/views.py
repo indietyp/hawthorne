@@ -6,18 +6,14 @@ import random
 from automated_logging.models import Model as LogModel
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import Permission
-from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import ValidationError
 from django.db.models import Count, DateTimeField, ExpressionWrapper, F
 from django.db.models.deletion import Collector
 from django.db.models.functions import Extract
 from django.http import Http404, JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.utils import timezone
-from lib.mainframe import Mainframe
 
-from core.models import Punishment, Server, User
+from core.models import Punishment, Role, Server, User
 from log.models import UserOnlineTime
 
 
@@ -94,7 +90,8 @@ def server_detailed(request, s):
 
 @login_required(login_url='/login')
 def admins_servers(request):
-  return render(request, 'pages/admins/servers.pug')
+  roles = Role.objects.all()
+  return render(request, 'pages/admins/servers.pug', {'roles': roles})
 
 
 @login_required(login_url='/login')

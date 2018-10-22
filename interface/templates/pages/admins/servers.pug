@@ -8,58 +8,68 @@
     .close(data-trigger='[modal/close]')
       i.icon.ion-ios-close
     .modalContent
-      b.mtop.mbotSmall
-        i.icon.ion-ios-person(style='margin-right:10px')
-        |  User Details
-      .section.group
-        .col.span_1_of_2.modalSelect
+      .section.group.modalSelect
           ._Dynamic_Select
-            ._Title(data-trigger='[composer/select/open]') Username
+            ._Title(data-trigger='[composer/select/open]') Select a User
             ._Select
-              ._Select_Search
-                input(type='text', placeholder='Type to search in Steam...')
+              ._Select_Search(style='position:relative')
+                input(type='text', placeholder='Type to search...')
+                .tooltip_container
+                  .tooltip.left You can search via SteamID64, SteamID3, SteamID2, Steam profile URL or a username in the Hawthorne local database.
+                  i.icon.ion-ios-information-circle-outline
               ._STitle Results
               ._Container
                 li(data-trigger='[composer/select/choose]')
                   img.composerAvatar(src='https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/63/634ac38fd17b1b9527af0639f2295ac26e62c0b7_medium.jpg')
-                  p
-                    b Akke
-        .col.span_1_of_2.modalSelect
-          select
-            option(default='') Select a Group
-            option All
-      button
-        i.fa.fa-save(style='margin-right:10px;')
+                  p Akke
+      .section.group.modalSelect
+          ._Dynamic_Select
+            ._Title(data-trigger='[composer/select/open]') Select a Role
+            ._Select
+              ._Select_Search
+                input(type='text', placeholder='Type to search...', data-trigger='[composer/select/search]')
+              ._STitle Results
+              ._Container
+                - for role in roles
+                  li(data-trigger='[composer/select/choose]')
+                    p= role.name
+      button.unset
+        i.icon.ion-ios-save(style='margin-right:6px;')
         |  Save
   .modal.modalDynamic(data-component='[modal/group/add]')
-    h1 Group – New
+    h1 Role – New
     .close(data-trigger='[modal/close]')
       i.icon.ion-ios-close
     .modalContent
       b.mtop.mbotSmall
         i.icon.ion-ios-person(style='margin-right:10px')
-        |  Group Details
-      .section.group
-        .col.span_1_of_2
-          input.smallInput(type='text', placeholder='Group name')
-        .col.span_1_of_2
-          input.smallInput(type='text', placeholder='Group immunity (0-99)')
-      .section.group
-        .col.span_1_of_2
-          input.smallInput(type='text', placeholder='Expires in (11h 6m)')
-        .col.span_1_of_2.modalSelect
-          ._Dynamic_Select
-            ._Title(data-trigger='[composer/select/open]') Choose a server
-            ._Select
-              ._Select_Search
-                input(type='text', placeholder='Type to search in Steam...')
-              ._STitle Results
-              ._Container
-                li(data-trigger='[composer/select/choose]')
-                  img.composerAvatar(src='https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/63/634ac38fd17b1b9527af0639f2295ac26e62c0b7_medium.jpg')
-                  p
-                    b Some random server
-      b.mbotSmall
+        |  Role Details
+      .section.group.inputGroup
+        input.smallInput(type='text', required)
+        span Group Name
+      .section.group.inputGroup
+        input.smallInput(type='text', required)
+        span Group Immunity (0-99)
+      .section.group.inputGroup
+        input.smallInput(type='text', required)
+        span Expiration
+        .tooltip_container
+          .tooltip.left Valid is the duration format described in <a href='https://tools.ietf.org/html/rfc3339#page-13', target='_blank'>RFC 3339, Page 13</a>. The P is optional.
+          i.icon.ion-ios-information-circle-outline
+      .section.group.modalSelect
+        ._Dynamic_Select
+          ._Dynamic_Layer
+          ._Title(data-trigger='[composer/select/open]') Choose a server
+          ._Select
+            ._Select_Search
+              input(type='text', placeholder='Type to search...')
+            ._STitle Results
+            ._Container
+              li(data-trigger='[composer/select/choose]')
+                img.composerAvatar(src='https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/63/634ac38fd17b1b9527af0639f2295ac26e62c0b7_medium.jpg')
+                p
+                  b Some random server
+      b.mbotSmall(style='padding-top:6px')
         i.icon.ion-ios-flag(style='margin-right:10px')
         |  Flags
       .section.group
@@ -170,8 +180,8 @@
               input(type='checkbox')
               span.slider.round
             .switchText Custom 6
-      button
-        i.fa.fa-save(style='margin-right:10px;')
+      button.unset
+        i.icon.ion-ios-save(style='margin-right:6px;')
         |  Save
 
   ul.paginationTabs(data-target='admins[servers]')

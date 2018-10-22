@@ -37,6 +37,10 @@
       case 'admins[web][groups]':
         id = target.getAttribute('data-id');
         endpoint = window.endpoint.api.groups[id];
+        break;
+      case 'servers[detailed]':
+        uuid = target.getAttribute('data-id');
+        endpoint = window.endpoint.api.servers[uuid];
     }
     return endpoint.delete(options, {}, payload, function(err, data) {
       var parent;
@@ -52,6 +56,9 @@
         }
         if (target.hasAttribute('data-visibility')) {
           $(target).css('visibility', 'hidden');
+        }
+        if (target.hasAttribute('data-redirect')) {
+          window.vc();
         }
       }
     });

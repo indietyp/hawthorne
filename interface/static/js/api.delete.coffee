@@ -1,3 +1,4 @@
+
 single = (mode = '', target) ->
   payload = {}
   options = {}

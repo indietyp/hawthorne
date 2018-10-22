@@ -1,3 +1,4 @@
+
 ajax = (mode, target = '.main', page = 1, manual = false, action = 'append') ->
   endpoint = window.endpoint.ajax
   header =

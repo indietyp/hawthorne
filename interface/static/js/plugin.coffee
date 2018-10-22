@@ -120,6 +120,7 @@ init = (scope = document) ->
 
     $(@).parent('._Dynamic_Select').toggleClass '_Dynamic_Select_Activated'
     $('._Select', $(@).parent('._Dynamic_Select')).toggleClass('selected')
+    $('._Dynamic_Layer', $(@).parent('._Dynamic_Select')).toggleClass('selected')
     $('._Select_Search input', $(@).parent('._Dynamic_Select'))[0].focus()
 
     return
@@ -150,6 +151,7 @@ init = (scope = document) ->
     $(@).parent('._Dynamic_Select').toggleClass '_Dynamic_Select_Activated'
     $('._Select', $(@).parent('._Dynamic_Select')).toggleClass 'selected'
     $('._Title', $(@).parent('._Dynamic_Select'))[0].textContent = $('p', @)[0].textContent
+    $('._Title', $(@).parent('._Dynamic_Select'))[0].value = $('p', @)[0].value
     return
   $('[data-trigger="[composer/select/choose]"]', scope).on 'click', composer_select_choose
 

@@ -129,8 +129,8 @@ class SourcemodPluginWrapper(RCONBase):
       users.append(user)
 
     response['clients'] = users
-
     cache.set(prefix, response, 60)
+
     return response
 
   def raw(self, command, *args, **kwargs):
