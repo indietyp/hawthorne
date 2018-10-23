@@ -43,7 +43,7 @@ class CoyoteCompiler(base.BaseCompiler):
       args = ['google-closure-compiler',
               '--compilation_level=SIMPLE',
               '--js=' + full_output_path,
-              '--create_source_map',
+              '--create_source_map=' + full_output_path + '.map',
               '--assume_function_wrapper']
 
       return_code, out, errors = utils.run_command(args)

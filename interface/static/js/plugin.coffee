@@ -118,10 +118,28 @@ init = (scope = document) ->
   composer_select_open = ->
     event.stopImmediatePropagation()
 
-    $(@).parent('._Dynamic_Select').toggleClass '_Dynamic_Select_Activated'
-    $('._Select', $(@).parent('._Dynamic_Select')).toggleClass('selected')
-    $('._Dynamic_Layer', $(@).parent('._Dynamic_Select')).toggleClass('selected')
-    $('._Select_Search input', $(@).parent('._Dynamic_Select'))[0].focus()
+    parent = $(@).parent('._Dynamic_Select')
+    layer = $('._Dynamic_Layer', parent)
+
+    parent.toggleClass '_Dynamic_Select_Activated'
+    $('._Select', parent).toggleClass('selected')
+    layer.toggleClass('selected')
+
+    if layer.hasClass 'selected'
+      layer.on('click', (e) ->
+        composer_select_open.call(@)
+
+        simul = new MouseEvent(e.type, e)
+        element = document.elementFromPoint(e.clientX, e.clientY)
+
+        if element.matches('input')
+          element.focus()
+        if not element.matches('._Title')
+          element.dispatchEvent(simul)
+
+        $(@).off('click')
+      )
+      $('._Select_Search input', parent)[0].focus()
 
     return
   $('[data-trigger="[composer/select/open]"]', scope).on 'click', composer_select_open
