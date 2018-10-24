@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'log',
     'ajax',
     'core',
-    'interface'
+    'interface',
 ]
 
 MIDDLEWARE = [

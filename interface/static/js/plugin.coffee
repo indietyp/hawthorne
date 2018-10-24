@@ -134,7 +134,9 @@ init = (scope = document) ->
 
         if element.matches('input')
           element.focus()
-        if not element.matches('._Title')
+
+        parent = $(@).parent('._Dynamic_Select')
+        if not $('._Title', parent)[0] is element
           element.dispatchEvent(simul)
 
         $(@).off('click')
