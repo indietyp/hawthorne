@@ -423,7 +423,7 @@ configure() {
   if [ $docker -eq 1 ]; then
     export LC_ALL=en_US.UTF-8
 
-    sed -i "s#bind = 'unix:/tmp/sockets/hawthorne.sock'#bind = '0.0.0.0:8000'#g" $directory/gunicorn.conf.py
+    sed -i "s#bind = 'unix:/var/run/hawthorne.sock'#bind = '0.0.0.0:8000'#g" $directory/gunicorn.conf.py
     sed -i "s#ROOT = 'root'#ROOT = '$ROOT'#g" $directory/panel/local.py
 
     cd $directory
@@ -454,10 +454,10 @@ configure() {
       echo "$web"
       printf "${GREEN}These example configurations have been specificially generated for your system, they might need some tweaking: ${NORMAL}\n\n\n"
       if [ "$web" = "nginx" ]; then
-        sed "s/server_name example.com;/server_name '$domain';/g" $directory/cli/configs/nginx.example.conf
+        sed -i "s/server_name example.com;/server_name '$domain';/g" $directory/cli/configs/nginx.example.conf
       elif [ "$web" = "apache" ]; then
-        sed -i "s#bind = 'unix:/tmp/sockets/hawthorne.sock'#bind = '127.0.0.1:8000'#g" $directory/gunicorn.conf.py
-        sed "s/ServerName example.com/ServerName '$domain'/g" $directory/cli/configs/apache.example.conf
+        sed -i "s#bind = 'unix:/var/run/hawthorne.sock'#bind = '127.0.0.1:8000'#g" $directory/gunicorn.conf.py
+        sed -i "s/ServerName example.com/ServerName '$domain'/g" $directory/cli/configs/apache.example.conf
       fi
     fi
   fi

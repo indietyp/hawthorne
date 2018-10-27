@@ -335,7 +335,7 @@ svg#ht-logo {
 }
 .main th {
   padding: 15px;
-  color: #ace3ff;
+  color: rgba(172,227,255,0.5);
 }
 .main thead tr {
   background: rgba(0,0,0,0.1);
@@ -560,7 +560,7 @@ button.round .icon {
   background: #2c3370;
   background: linear-gradient(to bottom left, #265296, #2c3370);
   border-radius: 2px;
-  box-shadow: 0 15px 30px 0 rgba(0,0,0,0.11), 0 5px 15px 0 rgba(0,0,0,0.08);
+  box-shadow: 0 15px 30px 0 rgba(0,0,0,0.1), 0 5px 15px 0 rgba(0,0,0,0.05);
   -moz-box-shadow: 0 15px 30px 0 rgba(0,0,0,0.11), 0 5px 15px 0 rgba(0,0,0,0.08);
 }
 .modal table {
@@ -581,7 +581,7 @@ button
 }
 .modal .close .icon {
   font-size: 30px;
-  color: #ace3ff;
+  color: rgba(172,227,255,0.5);
 }
 .modal .checkmark {
   top: 0 !important;
@@ -657,7 +657,7 @@ th {
   font-size: 11px;
   font-weight: 400;
   font-weight: bold;
-  color: #ace3ff;
+  color: rgba(172,227,255,0.5);
   text-align: left;
   text-transform: uppercase;
 }
@@ -670,7 +670,7 @@ td {
   transition: 0.3s all;
 }
 thead tr {
-  background: #273b75;
+  background: #273c75;
   font-weight: 300;
   color: #989da0;
 }
@@ -968,7 +968,7 @@ form {
   background: -moz-linear-gradient(to bottom left, #265296, #2c3370);
   color: #d0eaf7;
   border-radius: 2px;
-  box-shadow: 0 15px 30px 0 rgba(0,0,0,0.11), 0 5px 15px 0 rgba(0,0,0,0.08);
+  box-shadow: 0 15px 30px 0 rgba(0,0,0,0.1), 0 5px 15px 0 rgba(0,0,0,0.05);
   -moz-box-shadow: 0 15px 30px 0 rgba(0,0,0,0.11), 0 5px 15px 0 rgba(0,0,0,0.08);
 }
 .search .searchArea ul {
@@ -1117,7 +1117,7 @@ form {
   padding: 20px;
   cursor: default;
   font-weight: 600;
-  color: #ace3ff;
+  color: rgba(172,227,255,0.5);
 }
 @font-face {
   font-family: Bebas;
@@ -1242,7 +1242,7 @@ form {
   margin-top: 3px;
   padding: 0 0 0 20px;
   font-family: "Ionicons";
-  color: #ace3ff;
+  color: rgba(172,227,255,0.5);
 }
 .breadcrumbs >ul >li a {
   transition: 0.3s all ease-in-out;
@@ -2074,7 +2074,7 @@ form {
   width: 5%;
   margin-right: 15px;
   font-size: 17px;
-  color: #ace3ff;
+  color: rgba(172,227,255,0.5);
 }
 .notificationsArea >li {
   display: flow-root;
@@ -2110,7 +2110,7 @@ form {
   display: flow-root;
   padding: 20px;
   cursor: pointer;
-  background: rgba(0,0,0,0.08);
+  background: rgba(0,0,0,0.05);
   color: #d0eaf7;
   border-radius: 2px;
   box-shadow: 0 5px 10px 0 rgba(0,0,0,0.1);
@@ -2125,7 +2125,7 @@ form {
   display: flow-root;
   margin-bottom: 20px;
   padding: 20px;
-  background: rgba(0,0,0,0.08);
+  background: rgba(0,0,0,0.05);
   color: rgba(255,255,255,0.8);
   border-radius: 2px;
   box-shadow: 0 5px 10px 0 rgba(0,0,0,0.1);
@@ -2220,7 +2220,7 @@ form {
 .mapName {
   margin: 20px -20px;
   padding: 10px 20px;
-  background: rgba(0,0,0,0.14);
+  background: rgba(0,0,0,0.15);
   font-size: 13px;
   color: #9babd2;
   border-radius: 2px;
@@ -2255,7 +2255,7 @@ form {
   background: rgba(0,255,92,0.2) !important;
 }
 .ActionSuccess:hover {
-  background: rgba(0,255,92,0.25) !important;
+  background: rgba(0,255,92,0.2) !important;
 }
 .CTag {
   display: inline-block;

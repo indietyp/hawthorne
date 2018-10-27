@@ -102,12 +102,14 @@ def list(request, validated=[], *args, **kwargs):
       user.is_active = True
       user.is_staff = False
 
+      # put into function
       base = Permission.objects.all()\
                                .annotate(encoded=F('content_type__model') + '.' + F('codename'))\
                                .filter(encoded__in=request.user.get_all_permissions())\
                                .order_by('content_type__model')
       exceptions = []
       perms = []
+
       for perm in validated['permissions']:
         perm = perm.split('.')
         p = base.filter(content_type__app_label=perm[0], codename=perm[1])
@@ -139,16 +141,8 @@ def list(request, validated=[], *args, **kwargs):
       server = Server.objects.get(id=validated['server'])
       user._server = server
 
-    # https://stackoverflow.com/questions/13729638/how-can-i-filter-emoji-characters-from-my-input-so-i-can-save-in-mysql-5-5
-    try:
-      # UCS-4
-      highpoints = re.compile(u'[\U00010000-\U0010ffff]')
-    except re.error:
-      # UCS-2
-      highpoints = re.compile(u'[\uD800-\uDBFF][\uDC00-\uDFFF]')
-
     if 'username' in validated:
-      user.namespace = highpoints.sub(u'\u25FD', validated['username'])
+      user.namespace = validated['username']
 
     user.save()
 
@@ -384,11 +378,12 @@ def punishment(request, u=None, validated={}, *args, **kwargs):
   except Exception as e:
     return 'non existent user queried - {}'.format(e), 403
 
-  Punishment.objects.annotate(completion=ExpressionWrapper(F('created_at') + F('length'),
-                                                    output_field=DateTimeField()))\
-                     .filter(completion__lte=timezone.now(),
-                             resolved=False,
-                             length__isnull=False).update(resolved=True)
+  Punishment.objects\
+            .annotate(completion=ExpressionWrapper(F('created_at') + F('length'),
+                                                   output_field=DateTimeField()))\
+            .filter(completion__lte=timezone.now(),
+                    resolved=False,
+                    length__isnull=False).update(resolved=True)
 
   if request.method == 'GET':
     punishments = Punishment.objects.filter(user=user)
