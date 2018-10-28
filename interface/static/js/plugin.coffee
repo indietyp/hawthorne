@@ -12,6 +12,8 @@ init = (scope = document) ->
     $('.expand', @.parentElement).slideToggle()
 
     return
+
+  $('[data-trigger=\'[dropdown/toggle]\']', scope).off 'click'
   $('[data-trigger=\'[dropdown/toggle]\']', scope).on 'click', dropdown_toggle
 
 
@@ -19,12 +21,16 @@ init = (scope = document) ->
     $('.overlay').fadeIn 'fast'
     $('[data-component=\'' + @.getAttribute('data-trigger-target') + '\']').fadeIn 'fast'
     return
+
+  $('[data-trigger=\'[modal/open]\']', scope).off 'click'
   $('[data-trigger=\'[modal/open]\']', scope).on 'click', modal_open
 
   server_item = ->
     $(@).toggleClass 'toggableListActive'
     $(@).find('.content').fadeToggle 'fast'
     return
+
+  $('[data-trigger=\'[server/item]\']', scope).off 'click'
   $('[data-trigger=\'[server/item]\']', scope).on 'click', server_item
 
 
@@ -37,6 +43,8 @@ init = (scope = document) ->
 
     $(parent).fadeOut 'fast'
     return
+
+  $('[data-trigger=\'[modal/close]\']', scope).off 'click'
   $('[data-trigger=\'[modal/close]\']', scope).on 'click', modal_close
 
 
@@ -44,6 +52,8 @@ init = (scope = document) ->
     $('.overlay').fadeOut 'fast'
     $('.modal').fadeOut 'fast'
     return
+
+  $('.overlay', scope).off 'click'
   $('.overlay', scope).on 'click', overlay
 
 
@@ -51,6 +61,8 @@ init = (scope = document) ->
     $('.notificationsArea', @).fadeToggle 'fast'
     $($('a', @)[0]).toggleClass 'userMenuActive'
     return
+
+  $('[data-trigger=\'[system/messages/open]\']', scope).off 'click'
   $('[data-trigger=\'[system/messages/open]\']', scope).on 'click', system_messages_open
 
   search_overlay = ->
@@ -58,18 +70,24 @@ init = (scope = document) ->
     $('.searchArea').fadeOut 'fast'
     $('.search').animate {width: '20%'}, 250
     return
+
+  $('.searchOverlay', scope).off 'click'
   $('.searchOverlay', scope).on 'click', search_overlay
 
 
   announcement_expand = ->
     $(@).find('.announcement-expand').slideToggle()
     return
+
+  $('[data-trigger=\'[announcement/expand]\']', scope).off 'click'
   $('[data-trigger=\'[announcement/expand]\']', scope).on 'click', announcement_expand
 
 
   user_toggle = ->
     $(@).find('.dropdown').fadeToggle 'fast'
     return
+
+  $('[data-trigger=\'[user/toggle]\']', scope).off 'click'
   $('[data-trigger=\'[user/toggle]\']', scope).on 'click', user_toggle
 
 
@@ -79,6 +97,8 @@ init = (scope = document) ->
     $('.searchArea').fadeToggle 'fast'
     $('.search').animate {width: '30%'}, 250
     return
+
+  $('.search input', scope).off 'click'
   $('.search input', scope).on 'click', search_input
 
 
@@ -92,6 +112,8 @@ init = (scope = document) ->
       $('.checkboxDialogue', @.parentElement).fadeOut 'fast'
 
     return
+
+  $('.timeTable tbody tr td .checkmarkContainer', scope).off 'mousedown'
   $('.timeTable tbody tr td .checkmarkContainer', scope).on 'mousedown', checkmark_toggle
 
 
@@ -106,10 +128,13 @@ init = (scope = document) ->
     )
     return
 
+  $('.timeTable tbody tr td .checkboxDialogue .paginationTabsDanger', scope).off 'click'
   $('.timeTable tbody tr td .checkboxDialogue .paginationTabsDanger', scope).on 'click', overlay_toggle
 
 
   # retired
+
+  $('[data-trigger=\'[modal/system/log/import/input/add]\']', scope).off 'click'
   $('[data-trigger=\'[modal/system/log/import/input/add]\']', scope).on 'click', ->
     $(@).parent().find('.appendInput').append '<input type=\'text\' placeholder=\'/home/server/addons/sourcemod/logs/error.log\' class=\'mbotSmall\'>'
     return
@@ -136,7 +161,7 @@ init = (scope = document) ->
           element.focus()
 
         parent = $(@).parent('._Dynamic_Select')
-        if not $('._Title', parent)[0] is element
+        if $('._Title', parent)[0] isnt element
           element.dispatchEvent(simul)
 
         $(@).off('click')
@@ -144,6 +169,8 @@ init = (scope = document) ->
       $('._Select_Search input', parent)[0].focus()
 
     return
+
+  $('[data-trigger="[composer/select/open]"]', scope).off 'click'
   $('[data-trigger="[composer/select/open]"]', scope).on 'click', composer_select_open
 
 
@@ -151,7 +178,7 @@ init = (scope = document) ->
   composer_select_choose = ->
     event.stopImmediatePropagation()
 
-    if $('._Title', $(@).parent('._Dynamic_Select'))[0].getAttribute('data-select-multiple') is 'true'
+    if $('._Title', $(@).parent('._Dynamic_Select'))[0].hasAttribute('data-select-multiple')
       text = $(@).find('p').text()
       checkBox = $(@).find('.checkmarkContainer input')
       if not checkBox.is(':checked')
@@ -173,11 +200,12 @@ init = (scope = document) ->
     $('._Title', $(@).parent('._Dynamic_Select'))[0].textContent = $('p', @)[0].textContent
     $('._Title', $(@).parent('._Dynamic_Select'))[0].value = $('p', @)[0].value
     return
+
+  $('[data-trigger="[composer/select/choose]"]', scope).off 'click'
   $('[data-trigger="[composer/select/choose]"]', scope).on 'click', composer_select_choose
 
   composer_select_search = (e) ->
     event.stopImmediatePropagation()
-
 
     values = []
     input = @.value
@@ -215,6 +243,7 @@ init = (scope = document) ->
 
     console.log distances
 
+  $('[data-trigger="[composer/select/search]"]', scope).off 'keyup'
   $('[data-trigger="[composer/select/search]"]', scope).on 'keyup', composer_select_search
 
   ct_switch = ->
@@ -225,6 +254,8 @@ init = (scope = document) ->
     history.replaceState({'location': window._.location, 'scope': window._.scope}, null, "##{hash}")
     window.lazy(@.parentElement.getAttribute('data-target'), '')
     return
+
+  $('[data-trigger=\'[ct/switch]\']', scope).off 'click'
   $('[data-trigger=\'[ct/switch]\']', scope).on 'click', ct_switch
 
 
@@ -243,6 +274,8 @@ init = (scope = document) ->
 
     if @.checked
       window.batch.push(parent)
+
+  $("[data-trigger='[ct/toggle]']", scope).off 'change'
   $("[data-trigger='[ct/toggle]']", scope).on 'change', ct_toggle
 
 
@@ -255,6 +288,8 @@ init = (scope = document) ->
     switch operation
       when 'delete'
         window.api.remove(mode, window.batch, true)
+
+  $("[data-trigger='[table/choice]']", scope).off 'click'
   $("[data-trigger='[table/choice]']", scope).on 'click', table_choice
 
   modal_action = ->
@@ -266,6 +301,8 @@ init = (scope = document) ->
     switch action
       when 'delete'
         window.api.remove(mode, parent[0], false)
+
+  $("[data-trigger='[modal/action]']", scope).off 'click'
   $("[data-trigger='[modal/action]']", scope).on 'click', modal_action
 
   grid_delete = ->
@@ -273,12 +310,64 @@ init = (scope = document) ->
 
     mode = @.getAttribute('data-mode')
     window.api.remove(mode, parent[0], false)
+
+  $("[data-trigger='[grid/delete]']", scope).off 'click'
   $("[data-trigger='[grid/delete]']", scope).on 'click', grid_delete
 
 
   clipboard = (event) ->
     window.style.copy(@.getAttribute('data-clipboard-text'))
+
+  $('[data-trigger="[clip/copy]"]', scope).off 'click'
   $('[data-trigger="[clip/copy]"]', scope).on 'click', clipboard
+
+  $('[data-trigger="[input/duration]"]', scope).off 'keypress'
+  $('[data-trigger="[input/duration]"]', scope).on 'keypress', (event) ->
+    event.preventDefault()
+
+    cursor = @.selectionStart
+
+    if not /[PTYDHMS0-9]/.test event.key.toUpperCase() or event.key.length isnt 1
+      return
+
+    value = event.target.value
+    value = value.substr(0, cursor) + event.key + value.substr(cursor)
+    value = value.toUpperCase()
+    if value[0] isnt 'P'
+      value = 'P' + value
+      cursor += 1
+
+    # component = /(?:P|T)(\d+[HMS])?(\d+[HMS])?(\d+(?:[HMS])?)/gm.exec value
+    # if component
+    #   component = component.slice(1).filter(Boolean)
+    #   index = value.length - component.join('').length
+
+    #   ordering = ['H', 'M', 'S']
+    #   reordered = []
+    #   component.forEach (e) ->
+    #     c = ordering.indexOf(e.slice(-1))
+    #     if c isnt -1
+    #       reordered[c] = e
+    #     else
+    #       reordered[4] = e
+
+    #   value = value.substr(0, index) + reordered.join('')
+    #   if not /T/.test value
+    #     cursor += 1
+    #     value = value.substr(0, index) + 'T' + value.substr(index)
+
+    event.target.value = value
+    @.setSelectionRange(cursor + 1, cursor + 1)
+
+    try
+      $(@).removeClass 'invalid'
+      new Duration(value)
+    catch e
+      $(@).addClass 'invalid'
+
+  $('[data-trigger="[input/range]"]', scope).off 'keyup'
+  $('[data-trigger="[input/range]"]', scope).on 'keyup', (event) ->
+    return
 
   return
 

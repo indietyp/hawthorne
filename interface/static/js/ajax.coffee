@@ -1,4 +1,3 @@
-
 ajax = (mode, target = '.main', page = 1, manual = false, action = 'append') ->
   endpoint = window.endpoint.ajax
   header =
@@ -35,7 +34,6 @@ ajax = (mode, target = '.main', page = 1, manual = false, action = 'append') ->
       endpoint = window.endpoint.ajax.punishments.mutes[page]
     when 'punishments[gags]'
       endpoint = window.endpoint.ajax.punishments.gags[page]
-
 
   endpoint.post(header, {}, (dummy, response) ->
     data = response.data

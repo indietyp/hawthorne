@@ -1,7 +1,6 @@
 """API module for users"""
 
 import datetime
-import re
 
 from django.conf import settings
 from django.contrib.auth.models import Group, Permission

@@ -88,16 +88,9 @@ $color-18 = rgba(255, 255, 255, .8)
 $color-53 = rgba(255, 255, 255, .9)
 $color-3  = rgba(255, 255, 255, 1)
 
-/* width */
-
-/* Track */
-
-/* Handle */
-
-/* Handle on hover */
-
 html
 	height 100%
+	background-color $color-2
 
 body
 	height 100%
@@ -697,6 +690,7 @@ button
 
 	h1
 		float left
+		user-select none
 
 	.close
 		float right
@@ -3087,7 +3081,10 @@ select
 
 	>input
 		margin-bottom 0 !important
+		border-bottom: 1px solid transparent
 
+		&.invalid
+			border-bottom-color red
 		&:valid
 			~span
 				top 0

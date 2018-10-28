@@ -8,13 +8,14 @@
       if mode == "gag"
         | Gags
     .CBox.nomargin
-      .timeTableGo.fRight(onclick="window.ajax('punishments[{{mode}}s]', '.paginationContent table tbody', window.pagination.current + 1, true)")
-        i.icon.ion-ios-arrow-forward
-      .timeTableGo.fLeft(onclick="window.ajax('punishments[{{mode}}s]', '.paginationContent table tbody', window.pagination.current - 1, true)")
-        i.icon.ion-ios-arrow-back
+      - if pages != 0
+        .timeTableGo.fRight(onclick="window.ajax('punishments[{{mode}}s]', '.paginationContent table tbody', window.pagination.current + 1, true)")
+          i.icon.ion-ios-arrow-forward
+        .timeTableGo.fLeft(onclick="window.ajax('punishments[{{mode}}s]', '.paginationContent table tbody', window.pagination.current - 1, true)")
+          i.icon.ion-ios-arrow-back
       h3.center
         span Page
-        span.current 1
+        span.current 0
         span /{{pages}}
       table.timeTable
         thead

@@ -22,10 +22,13 @@ def role(request):
   if request.user.is_superuser:
     return {'role': settings.ROOT}
 
-  memberships = Membership.objects.filter(user=request.user).order_by('-role__immunity')
-
-  if memberships:
-    return {'role': memberships[0].name}
+  if request.user.is_steam:
+    memberships = Membership.objects.filter(user=request.user).order_by('-role__immunity')
+    if memberships:
+      return {'role': memberships[0].name}
+  else:
+    if request.user.roles:
+      return {'role': request.user.roles.all()[0].name}
 
   return {'role': '-'}
 

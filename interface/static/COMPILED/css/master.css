@@ -1,9 +1,6 @@
-/* width */
-/* Track */
-/* Handle */
-/* Handle on hover */
 html {
   height: 100%;
+  background-color: #265296;
 }
 body {
   height: 100%;
@@ -572,6 +569,7 @@ button
 }
 .modal h1 {
   float: left;
+  user-select: none;
 }
 .modal .close {
   float: right;
@@ -2784,6 +2782,10 @@ select option:not(:checked) {
 }
 .inputGroup >input {
   margin-bottom: 0 !important;
+  border-bottom: 1px solid transparent;
+}
+.inputGroup >input.invalid {
+  border-bottom-color: #f00;
 }
 .inputGroup >input:valid ~span {
   top: 0;
