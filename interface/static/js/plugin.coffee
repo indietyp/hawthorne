@@ -365,10 +365,31 @@ init = (scope = document) ->
     catch e
       $(@).addClass 'invalid'
 
-  $('[data-trigger="[input/range]"]', scope).off 'keyup'
-  $('[data-trigger="[input/range]"]', scope).on 'keyup', (event) ->
-    return
 
+  # negative range is not supported (yet)
+  $('[data-trigger="[input/range]"]', scope).off 'keypress'
+  $('[data-trigger="[input/range]"]', scope).on 'keypress', (event) ->
+    event.preventDefault()
+    cursor = @.selectionStart
+
+    min = @.getAttribute 'data-min'
+    max = @.getAttribute 'data-max'
+
+    if not /[0-9]/.test event.key.toUpperCase() or event.key.length isnt 1
+      return
+
+    value = event.target.value
+    value = value.substr(0, cursor) + event.key + value.substr(cursor)
+    value = parseInt(value)
+
+    if value > parseInt(max)
+      value = max
+
+    if value < parseInt(min)
+      value = min
+
+    event.target.value = value
+    @.setSelectionRange(cursor + 1, cursor + 1)
   return
 
 menu = ->
