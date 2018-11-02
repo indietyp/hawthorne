@@ -1,5 +1,6 @@
 from core.models import Membership, Server
 from django.conf import settings
+from django.core.cache import cache
 
 
 def favicons(request):
@@ -7,7 +8,11 @@ def favicons(request):
 
 
 def globals(request):
-  return {'root': settings.ROOT, 'games': Server.SUPPORTED}
+  cached = cache.get_or_set('servers', Server.objects.all, None)
+
+  return {'root': settings.ROOT,
+          'games': Server.SUPPORTED,
+          'servers': cached}
 
 
 def announcement(request):

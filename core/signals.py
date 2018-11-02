@@ -1,10 +1,12 @@
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
-from django.utils import timezone
-from core.lib.steam import populate
 import logging
-from core.models import User, Server
+
+from core.lib.steam import populate
+from core.models import Server, User
+from django.core.cache import cache
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
 from django.template.defaultfilters import slugify
+from django.utils import timezone
 
 
 logger = logging.getLogger(__name__)
@@ -96,3 +98,8 @@ def server_slug_handler(sender, instance, raw, using, update_fields, **kwargs):
     return
 
   instance.slug = slugify(instance.name)[:50]
+
+
+@receiver(post_save, sender=Server, weak=False)
+def refresh_cache(*args, **kwargs):
+  cache.set('servers', Server.objects.all(), None)

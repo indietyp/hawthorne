@@ -65,44 +65,38 @@ init = (scope = document) ->
   $('[data-trigger=\'[system/messages/open]\']', scope).off 'click'
   $('[data-trigger=\'[system/messages/open]\']', scope).on 'click', system_messages_open
 
-  search_overlay = ->
+
+  $('.searchOverlay', scope).off 'click'
+  $('.searchOverlay', scope).on 'click', ->
     $('.searchOverlay').fadeOut 'fast'
     $('.searchArea').fadeOut 'fast'
     $('.search').animate {width: '20%'}, 250
     return
 
-  $('.searchOverlay', scope).off 'click'
-  $('.searchOverlay', scope).on 'click', search_overlay
 
-
-  announcement_expand = ->
-    $(@).find('.announcement-expand').slideToggle()
+  $('[data-trigger="[announcement/expand]"]', scope).off 'click'
+  $('[data-trigger="[announcement/expand]"]', scope).on 'click', ->
+    $('.announcement-expand', @).slideToggle()
     return
 
-  $('[data-trigger=\'[announcement/expand]\']', scope).off 'click'
-  $('[data-trigger=\'[announcement/expand]\']', scope).on 'click', announcement_expand
 
-
-  user_toggle = ->
-    $(@).find('.dropdown').fadeToggle 'fast'
+  $('[data-trigger="[user/toggle]"]', scope).off 'click'
+  $('[data-trigger="[user/toggle]"]', scope).on 'click', ->
+    $('.dropdown', @).fadeToggle 'fast'
     return
 
-  $('[data-trigger=\'[user/toggle]\']', scope).off 'click'
-  $('[data-trigger=\'[user/toggle]\']', scope).on 'click', user_toggle
 
-
-  search_input = ->
+  $('.search input', scope).off 'click'
+  $('.search input', scope).on 'click', ->
     $('.modal').fadeOut 'fast'
     $('.searchOverlay').fadeIn 'fast'
     $('.searchArea').fadeToggle 'fast'
     $('.search').animate {width: '30%'}, 250
     return
 
-  $('.search input', scope).off 'click'
-  $('.search input', scope).on 'click', search_input
 
-
-  checkmark_toggle = ->
+  $('.timeTable tbody tr td .checkmarkContainer', scope).off 'mousedown'
+  $('.timeTable tbody tr td .checkmarkContainer', scope).on 'mousedown', ->
     $(@.parentElement.parentElement).toggleClass 'logSelected'
     $('.checkboxDialogue').not($('.checkboxDialogue', @.parentElement)).fadeOut 'fast'
 
@@ -113,11 +107,9 @@ init = (scope = document) ->
 
     return
 
-  $('.timeTable tbody tr td .checkmarkContainer', scope).off 'mousedown'
-  $('.timeTable tbody tr td .checkmarkContainer', scope).on 'mousedown', checkmark_toggle
 
-
-  overlay_toggle = ->
+  $('.timeTable tbody tr td .checkboxDialogue .paginationTabsDanger', scope).off 'click'
+  $('.timeTable tbody tr td .checkboxDialogue .paginationTabsDanger', scope).on 'click', ->
     $(@.parentElement).fadeOut 'fast'
 
     table = $(@).parent('tbody')[0]
@@ -128,21 +120,9 @@ init = (scope = document) ->
     )
     return
 
-  $('.timeTable tbody tr td .checkboxDialogue .paginationTabsDanger', scope).off 'click'
-  $('.timeTable tbody tr td .checkboxDialogue .paginationTabsDanger', scope).on 'click', overlay_toggle
 
-
-  # retired
-
-  $('[data-trigger=\'[modal/system/log/import/input/add]\']', scope).off 'click'
-  $('[data-trigger=\'[modal/system/log/import/input/add]\']', scope).on 'click', ->
-    $(@).parent().find('.appendInput').append '<input type=\'text\' placeholder=\'/home/server/addons/sourcemod/logs/error.log\' class=\'mbotSmall\'>'
-    return
-
-
-  composer_select_open = ->
-    event.stopImmediatePropagation()
-
+  $('[data-trigger="[composer/select/open]"]', scope).off 'click'
+  $('[data-trigger="[composer/select/open]"]', scope).on 'click', ->
     parent = $(@).parent('._Dynamic_Select')
     layer = $('._Dynamic_Layer', parent)
 
@@ -170,14 +150,10 @@ init = (scope = document) ->
 
     return
 
-  $('[data-trigger="[composer/select/open]"]', scope).off 'click'
-  $('[data-trigger="[composer/select/open]"]', scope).on 'click', composer_select_open
-
 
   selectionData = []
-  composer_select_choose = ->
-    event.stopImmediatePropagation()
-
+  $('[data-trigger="[composer/select/choose]"]', scope).off 'click'
+  $('[data-trigger="[composer/select/choose]"]', scope).on 'click', (event) ->
     if $('._Title', $(@).parent('._Dynamic_Select'))[0].hasAttribute('data-select-multiple')
       text = $(@).find('p').text()
       checkBox = $(@).find('.checkmarkContainer input')
@@ -201,12 +177,12 @@ init = (scope = document) ->
     $('._Title', $(@).parent('._Dynamic_Select'))[0].value = $('p', @)[0].value
     return
 
-  $('[data-trigger="[composer/select/choose]"]', scope).off 'click'
-  $('[data-trigger="[composer/select/choose]"]', scope).on 'click', composer_select_choose
+  $('[data-trigger="[composer/select/steam]"]', scope).off 'keyup'
+  $('[data-trigger="[composer/select/steam]"]', scope).on 'keyup', (e) ->
+    return
 
-  composer_select_search = (e) ->
-    event.stopImmediatePropagation()
-
+  $('[data-trigger="[composer/select/search]"]', scope).off 'keyup'
+  $('[data-trigger="[composer/select/search]"]', scope).on 'keyup', (e) ->
     values = []
     input = @.value
     parent = $(@).parent('._Select')
@@ -241,12 +217,11 @@ init = (scope = document) ->
       $(value[0]).parent('li')[0].style.display = 'block'
     )
 
-    console.log distances
+    return
 
-  $('[data-trigger="[composer/select/search]"]', scope).off 'keyup'
-  $('[data-trigger="[composer/select/search]"]', scope).on 'keyup', composer_select_search
 
-  ct_switch = ->
+  $('[data-trigger=\'[ct/switch]\']', scope).off 'click'
+  $('[data-trigger=\'[ct/switch]\']', scope).on 'click', ->
     $('.paginationTabSelected', @.parentElement).removeClass('paginationTabSelected')
     hash = @.getAttribute('data')
     $(@).addClass('paginationTabSelected')
@@ -254,9 +229,6 @@ init = (scope = document) ->
     history.replaceState({'location': window._.location, 'scope': window._.scope}, null, "##{hash}")
     window.lazy(@.parentElement.getAttribute('data-target'), '')
     return
-
-  $('[data-trigger=\'[ct/switch]\']', scope).off 'click'
-  $('[data-trigger=\'[ct/switch]\']', scope).on 'click', ct_switch
 
 
   ct_toggle = ->

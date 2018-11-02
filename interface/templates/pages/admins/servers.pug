@@ -64,13 +64,12 @@
           ._Title(data-trigger='[composer/select/open]') Choose a Server
           ._Select
             ._Select_Search
-              input(type='text', placeholder='Type to search...')
+              input(type='text', placeholder='Type to search...', data-trigger='[composer/select/search]')
             ._STitle Results
             ._Container
-              li(data-trigger='[composer/select/choose]')
-                img.composerAvatar(src='https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/63/634ac38fd17b1b9527af0639f2295ac26e62c0b7_medium.jpg')
-                p
-                  b Some random server
+              - for server in servers
+                li(data-trigger='[composer/select/choose]')
+                  p= server.name
       b.mbotSmall(style='padding-top:6px')
         i.icon.ion-ios-flag(style='margin-right:10px')
         |  Flags
