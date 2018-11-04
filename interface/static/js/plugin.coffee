@@ -121,8 +121,7 @@ init = (scope = document) ->
     return
 
 
-  $('[data-trigger="[composer/select/open]"]', scope).off 'click'
-  $('[data-trigger="[composer/select/open]"]', scope).on 'click', ->
+  composer_select_open = ->
     parent = $(@).parent('._Dynamic_Select')
     layer = $('._Dynamic_Layer', parent)
 
@@ -150,8 +149,12 @@ init = (scope = document) ->
 
     return
 
+  $('[data-trigger="[composer/select/open]"]', scope).off 'click'
+  $('[data-trigger="[composer/select/open]"]', scope).on 'click', composer_select_open
+
 
   selectionData = []
+  # when choose selection is buggy af
   $('[data-trigger="[composer/select/choose]"]', scope).off 'click'
   $('[data-trigger="[composer/select/choose]"]', scope).on 'click', (event) ->
     if $('._Title', $(@).parent('._Dynamic_Select'))[0].hasAttribute('data-select-multiple')
@@ -171,15 +174,47 @@ init = (scope = document) ->
       $(@).closest('._Dynamic_Select').find('._Title').text '(' + selectionData.length + ') selections'
       return
 
-    $(@).parent('._Dynamic_Select').toggleClass '_Dynamic_Select_Activated'
-    $('._Select', $(@).parent('._Dynamic_Select')).toggleClass 'selected'
-    $('._Title', $(@).parent('._Dynamic_Select'))[0].textContent = $('p', @)[0].textContent
-    $('._Title', $(@).parent('._Dynamic_Select'))[0].value = $('p', @)[0].value
+    parent = $(@).parent('._Dynamic_Select')
+    parent.toggleClass '_Dynamic_Select_Activated'
+    $('._Select', parent).toggleClass 'selected'
+    $('._Dynamic_Layer', parent).toggleClass 'selected'
+    $('._Title', parent)[0].textContent = $('p', @)[0].textContent
+    $('._Title', parent)[0].value = $('p', @)[0].value
     return
 
   $('[data-trigger="[composer/select/steam]"]', scope).off 'keyup'
   $('[data-trigger="[composer/select/steam]"]', scope).on 'keyup', (e) ->
-    return
+    value = @.value
+    url =
+      profile: /^(?:https:\/\/)?steamcommunity\.com\/profiles\/(\d+)$/i.exec value
+      id: /^(?:https:\/\/)?steamcommunity\.com\/id\/(.+)$/i.exec value
+    header =
+    'X-CSRFToken': window.csrftoken
+
+    if SteamIDConverter.isSteamID(value) or SteamIDConverter.isSteamID3(value)
+      value = SteamIDConverter.toSteamID64(value)
+    else if url.profile
+      value = url.profile[1]
+    else if url.id
+      value = url.id[1]
+
+    if url.id
+      payload = JSON.stringify({'steam': value})
+    else if SteamIDConverter.isSteamID64(value)
+      payload = JSON.stringify({'steam64': value})
+    else
+      payload = JSON.stringify({'local': value})
+
+    parent = $(@).parent('._Dynamic_Select')
+
+    $('._Loading', parent).addClass('selected')
+    $('._Container', parent)[0].innerHTML = ''
+    window.endpoint.ajax.utils.search.post(header, payload, (dummy, response) ->
+      $('._Container', parent)[0].innerHTML = response.data
+      $('._Loading', parent).removeClass('selected')
+      window._.init($('._Container', parent)[0])
+      return
+    )
 
   $('[data-trigger="[composer/select/search]"]', scope).off 'keyup'
   $('[data-trigger="[composer/select/search]"]', scope).on 'keyup', (e) ->

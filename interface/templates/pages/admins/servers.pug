@@ -14,15 +14,14 @@
           ._Title._Select_User(data-trigger='[composer/select/open]') Select a User
           ._Select
             ._Select_Search(style='position:relative')
-              input(type='text', placeholder='Type to search...')
+              input(type='text', placeholder='Type to search...', data-trigger='[composer/select/steam]')
               .tooltip_container
                 .tooltip.left You can search via SteamID64, SteamID3, SteamID2, Steam profile URL or a username in the Hawthorne local database.
                 i.icon.ion-ios-information-circle-outline
             ._STitle Results
             ._Container
-              li(data-trigger='[composer/select/choose]')
-                img.composerAvatar(src='https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/63/634ac38fd17b1b9527af0639f2295ac26e62c0b7_medium.jpg')
-                p Akke
+            ._Loading
+              ._Loader
       .section.group.modalSelect
         ._Dynamic_Select
           ._Dynamic_Layer

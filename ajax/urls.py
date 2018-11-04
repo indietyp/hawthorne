@@ -53,4 +53,6 @@ urlpatterns = [
   # path('setting/token/<int:page>', setting.token),
 
   path('system/update', system.update),
+
+  path('utils/search', utils.search),
 ]

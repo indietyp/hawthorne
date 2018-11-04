@@ -1,5 +1,3 @@
-import re
-
 from core.models import Country
 
 

@@ -89,1355 +89,1355 @@ $color-53 = rgba(255, 255, 255, .9)
 $color-3  = rgba(255, 255, 255, 1)
 
 html
-	height 100%
-	background-color $color-2
+  height 100%
+  background-color $color-2
 
 body
-	height 100%
-	margin 0
-	background $color-1
-	background linear-gradient(to bottom left, $color-2, $color-1)
-	background-attachment fixed
-	background-repeat no-repeat
-	font-family 'Rubik', sans-serif
-	font-size 13px
-	font-weight 300
-	color $color-3
-	-webkit-font-smoothing antialiased
+  height 100%
+  margin 0
+  background $color-1
+  background linear-gradient(to bottom left, $color-2, $color-1)
+  background-attachment fixed
+  background-repeat no-repeat
+  font-family 'Rubik', sans-serif
+  font-size 13px
+  font-weight 300
+  color $color-3
+  -webkit-font-smoothing antialiased
 
 *
-	box-sizing border-box
-	outline none
+  box-sizing border-box
+  outline none
 
 /**:first-letter {
   text-transform: uppercase;
 }*/
 
 a
-	color inherit
-	text-decoration inherit
+  color inherit
+  text-decoration inherit
 
 code
-	padding 2px 5px
-	background $color-4
-	color white
-	line-height 2
-	border-radius 4px
+  padding 2px 5px
+  background $color-4
+  color white
+  line-height 2
+  border-radius 4px
 
 .loadingOverlay
-	position fixed
-	top 0
-	right 0
-	bottom 0
-	left 0
-	z-index 95
-	height 100%
-	width 100%
-	background $color-5
+  position fixed
+  top 0
+  right 0
+  bottom 0
+  left 0
+  z-index 95
+  height 100%
+  width 100%
+  background $color-5
 
-	>.loadingContainer
-		position absolute
-		top 50%
-		left 50%
-		-webkit-transform translate(-50%, -50%)
-		transform translate(-50%, -50%)
+  >.loadingContainer
+    position absolute
+    top 50%
+    left 50%
+    -webkit-transform translate(-50%, -50%)
+    transform translate(-50%, -50%)
 
-		>.hawthorne
-			margin 1px 0 0 10px
-			font-size 60px
+    >.hawthorne
+      margin 1px 0 0 10px
+      font-size 60px
 
 .menu
-	position relative
-	/* border-right: 2px solid rgb(20, 35, 78); */
-	position fixed
-	float left
-	z-index 1
-	overflow-y auto
-	height 100%
-	width 15%
-	background $color-6
-	background linear-gradient(to bottom, $color-2, $color-1)
-	background -moz-linear-gradient(to bottom, $color-6, $color-7)
-	box-shadow -5px 0 50px -5px $color-8
-	-moz-box-shadow -5px 0 50px -5px rgba(0, 0, 0, .3)
+  position relative
+  /* border-right: 2px solid rgb(20, 35, 78); */
+  position fixed
+  float left
+  z-index 1
+  overflow-y auto
+  height 100%
+  width 15%
+  background $color-6
+  background linear-gradient(to bottom, $color-2, $color-1)
+  background -moz-linear-gradient(to bottom, $color-6, $color-7)
+  box-shadow -5px 0 50px -5px $color-8
+  -moz-box-shadow -5px 0 50px -5px rgba(0, 0, 0, .3)
 
-	.icon
-		width 40px
-		float left
-		/* border-right: 1px solid rgba(255, 255, 255, 0.03); */
-		margin -10px 10px -10px 0
-		padding 10px 20px 7px 0
-		font-size 21px
-		text-align center
+  .icon
+    width 40px
+    float left
+    /* border-right: 1px solid rgba(255, 255, 255, 0.03); */
+    margin -10px 10px -10px 0
+    padding 10px 20px 7px 0
+    font-size 21px
+    text-align center
 
-	>ul
-		margin 0
-		padding 0
-		list-style-type none
+  >ul
+    margin 0
+    padding 0
+    list-style-type none
 
-		>li
-			>a
-				display inline-block
-				width 100%
-				padding 20px
-				font-weight bold
-				color $color-9
-				line-height 1.4
-				/* border-left: 3px solid transparent; */
-				border-bottom none
-				border-bottom 1px solid $color-10
-				outline none
-				transition .3s
-				transition all .3s ease-in-out
+    >li
+      >a
+        display inline-block
+        width 100%
+        padding 20px
+        font-weight bold
+        color $color-9
+        line-height 1.4
+        /* border-left: 3px solid transparent; */
+        border-bottom none
+        border-bottom 1px solid $color-10
+        outline none
+        transition .3s
+        transition all .3s ease-in-out
 
-				>.feather
-					font-size 25px
+        >.feather
+          font-size 25px
 
-				&:hover
-					opacity 1 !important
-					color $color-11 !important
-					background $color-12
-					/* border-color:#E9D460; */
+        &:hover
+          opacity 1 !important
+          color $color-11 !important
+          background $color-12
+          /* border-color:#E9D460; */
 
-					.icon
-						/* color: #E9D460; */
+          .icon
+            /* color: #E9D460; */
 
-			>.expand
-				float left
-				width 100%
-				background $color-13
-				display none
-				/* border-left: 3px solid #E9D460; */
-				box-shadow inset 0 7px 20px -7px $color-14
-				-moz-box-shadow inset 0 7px 20px -7px rgb(9, 35, 66)
+      >.expand
+        float left
+        width 100%
+        background $color-13
+        display none
+        /* border-left: 3px solid #E9D460; */
+        box-shadow inset 0 7px 20px -7px $color-14
+        -moz-box-shadow inset 0 7px 20px -7px rgb(9, 35, 66)
 
-				>ul
-					display flow-root
-					margin 0
-					padding 10px
-					color $color-15
-					list-style-type none
+        >ul
+          display flow-root
+          margin 0
+          padding 10px
+          color $color-15
+          list-style-type none
 
-					>li
-						>a
-							display block
-							margin 0 -10px
-							padding 10px 50px
-							font-weight 300
-							transition .3s all ease-in-out
+          >li
+            >a
+              display block
+              margin 0 -10px
+              padding 10px 50px
+              font-weight 300
+              transition .3s all ease-in-out
 
-							&:hover
-								background $color-10 !important
-								color $color-16
+              &:hover
+                background $color-10 !important
+                color $color-16
 
 
-		>.title
-			width 100%
+    >.title
+      width 100%
 
-			.feather
-				float right
-				height 17px
-				margin 1px 0
+      .feather
+        float right
+        height 17px
+        margin 1px 0
 
-	.more
-		float right
-		width auto
-		width 40px
-		margin -8px -7px
-		padding 10px
-		background $color-12
-		font-size 17px
-		color $color-18
-		text-align center
-		border none
-		border-radius 2px
+  .more
+    float right
+    width auto
+    width 40px
+    margin -8px -7px
+    padding 10px
+    background $color-12
+    font-size 17px
+    color $color-18
+    text-align center
+    border none
+    border-radius 2px
 
-	.user
-		position relative
-		float left
-		width 100%
-		margin 0
-		padding 20px
-		background $color-10
-		color $color-18
-		box-shadow inset 0 -10px 10px -10px $color-12
-		transition .3s all ease-in-out
-		-moz-box-shadow inset 0 -10px 10px -10px rgba(0, 0, 0, .1)
-		-webkit-box-shadow inset 0 -10px 10px -10px rgba(0, 0, 0, .1)
+  .user
+    position relative
+    float left
+    width 100%
+    margin 0
+    padding 20px
+    background $color-10
+    color $color-18
+    box-shadow inset 0 -10px 10px -10px $color-12
+    transition .3s all ease-in-out
+    -moz-box-shadow inset 0 -10px 10px -10px rgba(0, 0, 0, .1)
+    -webkit-box-shadow inset 0 -10px 10px -10px rgba(0, 0, 0, .1)
 
-		.dropdown
-			position absolute
-			display none
-			top 57px
-			right 0
-			width 250px
-			background $color-4
-			border-radius 0 0 2px 2px
+    .dropdown
+      position absolute
+      display none
+      top 57px
+      right 0
+      width 250px
+      background $color-4
+      border-radius 0 0 2px 2px
 
-			>ul
-				margin 0
-				padding 10px
-				list-style-type none
+      >ul
+        margin 0
+        padding 10px
+        list-style-type none
 
-				>li
-					>a
-						display block
-						width 100%
-						padding 10px 15px
-						font-weight 300
-						color $color-15
-						border-radius 2px
-						transition .3s all ease-in-out
+        >li
+          >a
+            display block
+            width 100%
+            padding 10px 15px
+            font-weight 300
+            color $color-15
+            border-radius 2px
+            transition .3s all ease-in-out
 
-						&:hover
-							background $color-19
-							color white
+            &:hover
+              background $color-19
+              color white
 
-		.username
-			font-size 15px
-			font-weight bold
-			color $color-9
-			line-height 1.5
+    .username
+      font-size 15px
+      font-weight bold
+      color $color-9
+      line-height 1.5
 
-		img
-			float left
-			height 42px
-			margin-right 15px
-			border-radius 50%
+    img
+      float left
+      height 42px
+      margin-right 15px
+      border-radius 50%
 
-		>.icon
-			margin-left 10px
+    >.icon
+      margin-left 10px
 
-	.links
-		display block
-		clear both
-		width 100%
-		margin-bottom 10px
-		padding 0 0 20px 0
-		border-bottom 1px solid $color-20
+  .links
+    display block
+    clear both
+    width 100%
+    margin-bottom 10px
+    padding 0 0 20px 0
+    border-bottom 1px solid $color-20
 
-		.icon
-			margin 0
-			font-size 25px
+    .icon
+      margin 0
+      font-size 25px
 
-		>ul
-			margin 0
-			padding 0
-			text-align center
-			list-style-type none
+    >ul
+      margin 0
+      padding 0
+      text-align center
+      list-style-type none
 
-			>li
-				display inline-block
-				padding 0 20px
+      >li
+        display inline-block
+        padding 0 20px
 
-				a
-					transition .05s all ease-in-out
+        a
+          transition .05s all ease-in-out
 
-					&:hover
-						color $color-3
+          &:hover
+            color $color-3
 
 svg
-	&#ht-logo
-		background transparent !important
-		stroke rgb(172, 227, 255)
+  &#ht-logo
+    background transparent !important
+    stroke rgb(172, 227, 255)
 
 .logo
-	float left
+  float left
 
 .loginLogo
-	margin-bottom 40px
-	text-align Center
+  margin-bottom 40px
+  text-align Center
 
 .navActive
-	opacity 1 !important
-	background $color-21 !important
-	color $color-11 !important
-	border-color transparent !important
-	/* border-left: 3px solid #E9D460 !important; */
+  opacity 1 !important
+  background $color-21 !important
+  color $color-11 !important
+  border-color transparent !important
+  /* border-left: 3px solid #E9D460 !important; */
 
-	.icon
-		/* color: #E9D460; */
+  .icon
+    /* color: #E9D460; */
 
-	a
-		color $color-3 !important
+  a
+    color $color-3 !important
 
 .wrap
-	position relative
-	float left
-	top 50%
-	left 50%
-	-webkit-transform translate(-50%, -50%)
-	transform translate(-50%, -50%)
+  position relative
+  float left
+  top 50%
+  left 50%
+  -webkit-transform translate(-50%, -50%)
+  transform translate(-50%, -50%)
 
-	h1
-		position relative
-		z-index 2
-		color $color-3
-		text-transform uppercase
+  h1
+    position relative
+    z-index 2
+    color $color-3
+    text-transform uppercase
 
 .center
-	text-align center
+  text-align center
 
 .pre
-	height 800px
-	width 1200px
-	margin -100px
+  height 800px
+  width 1200px
+  margin -100px
 
 .tooltip
-	position absolute
-	z-index 99
-	padding 2px 10px
-	background $color-22
-	font-family inherit
-	font-weight 600
-	color $color-3
-	text-align center
-	border-radius 4px
+  position absolute
+  z-index 99
+  padding 2px 10px
+  background $color-22
+  font-family inherit
+  font-weight 600
+  color $color-3
+  text-align center
+  border-radius 4px
 
-	&:after
-		content ''
-		position absolute
-		bottom -5px
-		left 50%
-		height 0
-		width 0
-		margin-left -5px
-		border-top 5px solid $color-22
-		border-right 5px solid transparent
-		border-left 5px solid transparent
+  &:after
+    content ''
+    position absolute
+    bottom -5px
+    left 50%
+    height 0
+    width 0
+    margin-left -5px
+    border-top 5px solid $color-22
+    border-right 5px solid transparent
+    border-left 5px solid transparent
 
-	&.top
-		&:after
-			top -10px
-			bottom auto
-			border-top-color black
-			border-bottom 5px solid $color-22
+  &.top
+    &:after
+      top -10px
+      bottom auto
+      border-top-color black
+      border-bottom 5px solid $color-22
 
-	&.left
-		&:after
-			left 10px
-			margin 0
+  &.left
+    &:after
+      left 10px
+      margin 0
 
-	&.right
-		&:after
-			right 10px
-			left auto
-			margin 0
+  &.right
+    &:after
+      right 10px
+      left auto
+      margin 0
 
 .main
-	float right
-	width 85%
-	padding 40px
-	color white
+  float right
+  width 85%
+  padding 40px
+  color white
 
-	table
-		border-collapse collapse
-		border-style hidden
-		border-radius 4px
+  table
+    border-collapse collapse
+    border-style hidden
+    border-radius 4px
 
-		tr
-			&:last-child
-				/* border-radius:30px; */
+    tr
+      &:last-child
+        /* border-radius:30px; */
 
-	th
-		padding 15px
-		color $color-29
-
-
-	thead
-		tr
-			background $color-12
-			color $color-32
-			font-weight 300
-			/* border-bottom: 1px solid rgba(0, 169, 255, 0.5); */
-
-	tbody
-		tr
-			width 100%
-			margin 20px 0
-			padding 15px
-			border-bottom none
-			transition .3s all ease-in-out
-
-		td
-			padding 12px
-			font-weight 300
+  th
+    padding 15px
+    color $color-29
 
 
-		tbody
-			tr
-				&:hover
-					/* background: rgba(0, 0, 0, 0.15); */
+  thead
+    tr
+      background $color-12
+      color $color-32
+      font-weight 300
+      /* border-bottom: 1px solid rgba(0, 169, 255, 0.5); */
+
+  tbody
+    tr
+      width 100%
+      margin 20px 0
+      padding 15px
+      border-bottom none
+      transition .3s all ease-in-out
+
+    td
+      padding 12px
+      font-weight 300
+
+
+    tbody
+      tr
+        &:hover
+          /* background: rgba(0, 0, 0, 0.15); */
 
 h1
-	margin 20px 0
-	padding 0
-	font-size 1.3em
+  margin 20px 0
+  padding 0
+  font-size 1.3em
 
-	&:first-child
-		margin-top 0 !important
+  &:first-child
+    margin-top 0 !important
 
-	button
-		float right
-		font-weight 300
+  button
+    float right
+    font-weight 300
 
 h2
-	margin 0 0 20px 0
-	padding 0
-	font-weight 300
+  margin 0 0 20px 0
+  padding 0
+  font-weight 300
 
 h3
-	margin 0 0 20px 0
-	padding 0
-	font-weight 300
+  margin 0 0 20px 0
+  padding 0
+  font-weight 300
 
-	input
-		float right
-		width 300px !important
-		margin -15px
-		padding 15px !important
-		font-size 13px !important
-		font-weight normal !important
+  input
+    float right
+    width 300px !important
+    margin -15px
+    padding 15px !important
+    font-size 13px !important
+    font-weight normal !important
 
 .box
-	width 100%
-	margin 40px 0
-	padding 20px
-	background $color-3
-	color $color-20
-	border-radius 2px
-	box-shadow 0 2px 4px 0 $color-12
-	-moz-box-shadow 0 2px 4px 0 rgba(0, 0, 0, .1)
-	-webkit-box-shadow 0 2px 4px 0 rgba(0, 0, 0, .1)
+  width 100%
+  margin 40px 0
+  padding 20px
+  background $color-3
+  color $color-20
+  border-radius 2px
+  box-shadow 0 2px 4px 0 $color-12
+  -moz-box-shadow 0 2px 4px 0 rgba(0, 0, 0, .1)
+  -webkit-box-shadow 0 2px 4px 0 rgba(0, 0, 0, .1)
 
 .section
-	clear both
-	margin 0
-	padding 0
+  clear both
+  margin 0
+  padding 0
 
 .col
-	display block
-	float left
-	margin 0 0 1.6% 1.6%
+  display block
+  float left
+  margin 0 0 1.6% 1.6%
 
-	&:first-child
-		margin-left 0
+  &:first-child
+    margin-left 0
 
-	&.avatar
-		overflow hidden
-		width calc(50% - 20px)
-		/*border-radius: calc(50%);*/
-		margin 0 20px 0 0 !important
-		border-radius 12px
-		border-radius 3px
+  &.avatar
+    overflow hidden
+    width calc(50% - 20px)
+    /*border-radius: calc(50%);*/
+    margin 0 20px 0 0 !important
+    border-radius 12px
+    border-radius 3px
 
-		img
-			width 100% !important
-			margin 0 !important
+    img
+      width 100% !important
+      margin 0 !important
 
 .group
-	zoom 1
+  zoom 1
 
-	&:before
-		content ""
-		display table
+  &:before
+    content ""
+    display table
 
-	&:after
-		content ""
-		display table
-		clear both
+  &:after
+    content ""
+    display table
+    clear both
 
 .span_4_of_4
-	width 100%
+  width 100%
 
 .span_3_of_4
-	width 74.6%
+  width 74.6%
 
 .span_2_of_4
-	width 49.2%
+  width 49.2%
 
 .span_1_of_4
-	width 23.8%
+  width 23.8%
 
 .overview
-	float left
-	width 100%
-	margin 30px 0 40px 0
-	text-align center
+  float left
+  width 100%
+  margin 30px 0 40px 0
+  text-align center
 
-	.icon
-		display list-item
-		float left
-		margin 7px 20px -7px 0
-		font-size 48px
-		color $color-23
-		list-style-type none
+  .icon
+    display list-item
+    float left
+    margin 7px 20px -7px 0
+    font-size 48px
+    color $color-23
+    list-style-type none
 
-	.title
-		display block
-		margin 30px 0 0 0
-		font-size 1.3em
-		font-weight bold
+  .title
+    display block
+    margin 30px 0 0 0
+    font-size 1.3em
+    font-weight bold
 
-	.count
-		display inline
-		margin-right 5px
-		font-size 20px
-		font-weight 400
-		font-weight bold
-		color $color-23
+  .count
+    display inline
+    margin-right 5px
+    font-size 20px
+    font-weight 400
+    font-weight bold
+    color $color-23
 
-	.info
-		display block
-		margin 0
-		margin-top 10px
-		color $color-24
+  .info
+    display block
+    margin 0
+    margin-top 10px
+    color $color-24
 
 .span_1_of_2
-	width 49.2%
+  width 49.2%
 
 button
 input[type='submit']
-	padding 13px
-	cursor pointer
-	background $color-12
-	font-family inherit
-	font-size inherit
-	font-weight bold
-	color inherit
-	color $color-3
-	border none
-	border-radius 2px
-	outline none
-	transition .3s all ease-in-out
-	width 100%
-	/* box-shadow: 0 10px 10px -5px rgba(0, 0, 0, 0.05); */
+  padding 13px
+  cursor pointer
+  background $color-12
+  font-family inherit
+  font-size inherit
+  font-weight bold
+  color inherit
+  color $color-3
+  border none
+  border-radius 2px
+  outline none
+  transition .3s all ease-in-out
+  width 100%
+  /* box-shadow: 0 10px 10px -5px rgba(0, 0, 0, 0.05); */
 
 button
-	&:hover
-		background $color-25
+  &:hover
+    background $color-25
 
-	&:not(.unset)
-		.icon
-			float left
-			margin 0 10px 0 0
-			font-size 15px
+  &:not(.unset)
+    .icon
+      float left
+      margin 0 10px 0 0
+      font-size 15px
 
-	&.round
-		height 42px
-		width 42px
-		padding 14px
-		border-radius 21px
+  &.round
+    height 42px
+    width 42px
+    padding 14px
+    border-radius 21px
 
-		.icon
-			height 16px
-			width 16px
-			margin 0
-			font-size 16px
+    .icon
+      height 16px
+      width 16px
+      margin 0
+      font-size 16px
 
 .overlay
-	position fixed
-	display none
-	top 0
-	right 0
-	bottom 0
-	left 0
-	z-index 10
-	height 100%
-	width 100%
-	opacity .9
-	background-color $color-26
-	/* background-image: url("https://www.transparenttextures.com/patterns/dark-denim.png"); */
+  position fixed
+  display none
+  top 0
+  right 0
+  bottom 0
+  left 0
+  z-index 10
+  height 100%
+  width 100%
+  opacity .9
+  background-color $color-26
+  /* background-image: url("https://www.transparenttextures.com/patterns/dark-denim.png"); */
 
 .searchOverlay
-	position fixed
-	display none
-	top 0
-	right 0
-	bottom 0
-	left 0
-	z-index 5
-	height 100%
-	width 100%
-	opacity .9
-	background-color $color-26
+  position fixed
+  display none
+  top 0
+  right 0
+  bottom 0
+  left 0
+  z-index 5
+  height 100%
+  width 100%
+  opacity .9
+  background-color $color-26
 
 .modal
-	position fixed
-	display none
-	top 10%
-	right 0
-	left 0
-	z-index 11
-	overflow-y auto !important
-	/*max-height: 80%;*/
-	width 50%
-	margin 0 auto
-	padding 20px
-	background $color-1
-	background linear-gradient(to bottom left, $color-2, $color-1)
-	border-radius 2px
-	box-shadow 0 15px 30px 0 $color-12, 0 5px 15px 0 $color-10
-	-moz-box-shadow 0 15px 30px 0 rgba(0, 0, 0, .11), 0 5px 15px 0 rgba(0, 0, 0, .08)
+  position fixed
+  display none
+  top 10%
+  right 0
+  left 0
+  z-index 11
+  overflow-y auto !important
+  /*max-height: 80%;*/
+  width 50%
+  margin 0 auto
+  padding 20px
+  background $color-1
+  background linear-gradient(to bottom left, $color-2, $color-1)
+  border-radius 2px
+  box-shadow 0 15px 30px 0 $color-12, 0 5px 15px 0 $color-10
+  -moz-box-shadow 0 15px 30px 0 rgba(0, 0, 0, .11), 0 5px 15px 0 rgba(0, 0, 0, .08)
 
-	table
-		clear both
-		width -webkit-fill-available
-		width calc(100% + 40px)
-		margin 0 -20px -20px -20px
+  table
+    clear both
+    width -webkit-fill-available
+    width calc(100% + 40px)
+    margin 0 -20px -20px -20px
 
-		button
+    button
 
-	h1
-		float left
-		user-select none
+  h1
+    float left
+    user-select none
 
-	.close
-		float right
-		margin-top -20px
-		padding 10px 0
-		cursor pointer
+  .close
+    float right
+    margin-top -20px
+    padding 10px 0
+    cursor pointer
 
-		.icon
-			font-size 30px
-			color $color-29
+    .icon
+      font-size 30px
+      color $color-29
 
-	.checkmark
-		top 0 !important
-		left 0 !important
-		margin 0
+  .checkmark
+    top 0 !important
+    left 0 !important
+    margin 0
 
-	.checkmarkContainer
-		display flow-root
-		margin 20px 0 0 -10px
-		padding-bottom 15px
+  .checkmarkContainer
+    display flow-root
+    margin 20px 0 0 -10px
+    padding-bottom 15px
 
-		span
-			position absolute
-			top 4px
-			left 50px
-			font-size 13px
+    span
+      position absolute
+      top 4px
+      left 50px
+      font-size 13px
 
 table
-	width 100%
-	border-collapse collapse
-	border-spacing 0
-	box-shadow 0 6px 10px -5px $color-8
-	-moz-box-shadow 0 6px 10px -5px rgba(0, 0, 0, .3)
+  width 100%
+  border-collapse collapse
+  border-spacing 0
+  box-shadow 0 6px 10px -5px $color-8
+  -moz-box-shadow 0 6px 10px -5px rgba(0, 0, 0, .3)
 
-	a
-		font-weight bold
-		color $color-9
+  a
+    font-weight bold
+    color $color-9
 
-	.red
-		display inline
-		margin 0 0 0 5px
-		color $color-33
+  .red
+    display inline
+    margin 0 0 0 5px
+    color $color-33
 
-	.green
-		display inline
-		margin 0 5px 0 0
-		color $color-35
+  .green
+    display inline
+    margin 0 5px 0 0
+    color $color-35
 
-	tbody
-		tr
-			&:nth-of-type(odd)
-				background $color-4
+  tbody
+    tr
+      &:nth-of-type(odd)
+        background $color-4
 
-			&:nth-of-type(even)
-				background $color-25
+      &:nth-of-type(even)
+        background $color-25
 
-	thead
-		.icon
-			float left
-			margin -3px 10px -3px 0
-			font-size 22px
+  thead
+    .icon
+      float left
+      margin -3px 10px -3px 0
+      font-size 22px
 
-	.country
-		border-radius 2px
-		/*height: 20px;*/
-		width 30px
+  .country
+    border-radius 2px
+    /*height: 20px;*/
+    width 30px
 
 .paginationTabsDanger
-	background $color-34 !important
-	color $color-18 !important
+  background $color-34 !important
+  color $color-18 !important
 
 .paginationTabsHarmless
-	background $color-35 !important
-	color $color-18 !important
+  background $color-35 !important
+  color $color-18 !important
 
 .online
-	background $color-35 !important
+  background $color-35 !important
 
 .offline
-	background $color-33 !important
+  background $color-33 !important
 
 th
-	padding 10px 20px
-	cursor default
-	font-family inherit
-	font-size 11px
-	font-weight 400
-	font-weight bold
-	color $color-29
-	text-align left
-	text-transform uppercase
+  padding 10px 20px
+  cursor default
+  font-family inherit
+  font-size 11px
+  font-weight 400
+  font-weight bold
+  color $color-29
+  text-align left
+  text-transform uppercase
 
 td
-	padding 15px
-	font-family inherit
-	font-size 13px
-	font-weight 400
-	text-align left
-	transition .3s all
+  padding 15px
+  font-family inherit
+  font-size 13px
+  font-weight 400
+  text-align left
+  transition .3s all
 
 thead
-	tr
-		background $color-37
-		font-weight 300
-		color $color-32
+  tr
+    background $color-37
+    font-weight 300
+    color $color-32
 
 tbody
-	tr
-		padding 15px
-		background $color-37
-		background linear-gradient(to bottom left, $color-37, $color-38)
-		transition .3s all
+  tr
+    padding 15px
+    background $color-37
+    background linear-gradient(to bottom left, $color-37, $color-38)
+    transition .3s all
 
 
-	td
-		position relative
-		padding 15px
-		font-weight 300
-		color $color-39
+  td
+    position relative
+    padding 15px
+    font-weight 300
+    color $color-39
 
 ::-webkit-scrollbar
-	width 10px
+  width 10px
 
 ::-webkit-scrollbar-track
-	background $color-40
+  background $color-40
 
 ::-webkit-scrollbar-thumb
-	background $color-41
+  background $color-41
 
 ::-webkit-scrollbar-thumb:hover
-	background $color-42
+  background $color-42
 
 .announcement
-	.server
-		.icon
-			float right
-			margin-top -5px
-			margin-left 10px
-			font-size 25px
+  .server
+    .icon
+      float right
+      margin-top -5px
+      margin-left 10px
+      font-size 25px
 
-	.expand
-		float right
-		margin 0
-		margin -10px
-		padding 12px 15px
-		cursor pointer
-		background $color-43
-		border-radius 2px
-		transition .3s all ease-in-out
+  .expand
+    float right
+    margin 0
+    margin -10px
+    padding 12px 15px
+    cursor pointer
+    background $color-43
+    border-radius 2px
+    transition .3s all ease-in-out
 
 .alert
-	display flow-root
-	margin 0 -30px
-	padding 20px
-	background $color-44
-	color $color-45
+  display flow-root
+  margin 0 -30px
+  padding 20px
+  background $color-44
+  color $color-45
 
-	&:hover
-		background $color-43
-		transition .3s all ease-in-out
+  &:hover
+    background $color-43
+    transition .3s all ease-in-out
 
-	.announcement-expand
-		display none
-		margin 35px -20px -20px -20px
-		margin-top 30px
-		padding 20px
-		background $color-46
-		box-shadow inset 0 -10px 10px -10px $color-47
-		-moz-box-shadow inset 0 -10px 10px -10px #2f2222
-		-webkit-box-shadow inset 0 -10px 10px -10px #2f2222
+  .announcement-expand
+    display none
+    margin 35px -20px -20px -20px
+    margin-top 30px
+    padding 20px
+    background $color-46
+    box-shadow inset 0 -10px 10px -10px $color-47
+    -moz-box-shadow inset 0 -10px 10px -10px #2f2222
+    -webkit-box-shadow inset 0 -10px 10px -10px #2f2222
 
 *[data-trigger='[announcement/expand]']
-	cursor pointer
+  cursor pointer
 
 .right
-	float right
+  float right
 
 .left
-	float left
+  float left
 
 .block
-	display block
+  display block
 
 .topbar
-	position relative
-	display flow-root
-	margin 0
-	margin -20px -40px 20px -40px
-	padding 0 20px 20px 20px
-	background transparent
-	border-bottom 1px solid $color-48
+  position relative
+  display flow-root
+  margin 0
+  margin -20px -40px 20px -40px
+  padding 0 20px 20px 20px
+  background transparent
+  border-bottom 1px solid $color-48
 
-	.search
-		position relative
-		float left
-		z-index 7
-		width 250px
-		margin 3px 20px 0 0
-		padding 15px
-		border-radius 2px
+  .search
+    position relative
+    float left
+    z-index 7
+    width 250px
+    margin 3px 20px 0 0
+    padding 15px
+    border-radius 2px
 
-		.icon
-			position absolute
-			top 12px
-			right 20px
-			cursor text
-			font-size 19px
-			color $color-49
+    .icon
+      position absolute
+      top 12px
+      right 20px
+      cursor text
+      font-size 19px
+      color $color-49
 
-		input
-			width -webkit-fill-available
-			width -moz-available
-			margin -15px
-			padding 15px
-			background $color-10
-			color $color-50
-			border none
-			border-radius 2px
-			box-shadow none
-			outline none
+    input
+      width -webkit-fill-available
+      width -moz-available
+      margin -15px
+      padding 15px
+      background $color-10
+      color $color-50
+      border none
+      border-radius 2px
+      box-shadow none
+      outline none
 
 input[type="text"]
 input[type="password"]
 select
 textarea
-	width 100%
-	margin-bottom 10px
-	padding 15px
-	background $color-12
-	font-family inherit
-	font-size inherit
-	font-weight inherit
-	color inherit
-	border none
-	border-radius 2px
-	box-shadow 0 5px 10px -5px $color-12
-	outline none
-	transition .3s all ease-in-out
-	-moz-box-shadow 0 5px 10px -5px rgba(0, 0, 0, .1)
+  width 100%
+  margin-bottom 10px
+  padding 15px
+  background $color-12
+  font-family inherit
+  font-size inherit
+  font-weight inherit
+  color inherit
+  border none
+  border-radius 2px
+  box-shadow 0 5px 10px -5px $color-12
+  outline none
+  transition .3s all ease-in-out
+  -moz-box-shadow 0 5px 10px -5px rgba(0, 0, 0, .1)
 
 textarea
-	&:last-child
-		margin-bottom 0
+  &:last-child
+    margin-bottom 0
 
 input:focus
 select:focus
 textarea:focus
-	background $color-25 !important
+  background $color-25 !important
 
 .switch
-	position relative
-	float left
-	height 29px
-	width 55px
+  position relative
+  float left
+  height 29px
+  width 55px
 
-	input
-		display none
+  input
+    display none
 
 .slider
-	position absolute
-	top 0
-	right 0
-	bottom 0
-	left 0
-	cursor pointer
-	background-color $color-12
-	transition .4s
+  position absolute
+  top 0
+  right 0
+  bottom 0
+  left 0
+  cursor pointer
+  background-color $color-12
+  transition .4s
 
-	&:before
-		content ""
-		position absolute
-		bottom 4px
-		left 4px
-		height 21px
-		width 21px
-		background-color white
-		transition .4s
+  &:before
+    content ""
+    position absolute
+    bottom 4px
+    left 4px
+    height 21px
+    width 21px
+    background-color white
+    transition .4s
 
-	&.round
-		border-radius 34px
+  &.round
+    border-radius 34px
 
-		&:before
-			border-radius 50%
+    &:before
+      border-radius 50%
 
 input
-	&:checked
-		+.slider
-			background $color-58
+  &:checked
+    +.slider
+      background $color-58
 
-			&:before
-				-webkit-transform translateX(26px)
-				transform translateX(26px)
+      &:before
+        -webkit-transform translateX(26px)
+        transform translateX(26px)
 
-	&:focus
-		+.slider
-			box-shadow 0 0 1px $color-52
+  &:focus
+    +.slider
+      box-shadow 0 0 1px $color-52
 
 /* Rounded sliders */
 
 ::moz-placeholder
-	color $color-49
+  color $color-49
 
 ::-webkit-input-placeholder
-	color $color-49
+  color $color-49
 
 :-ms-input-placeholder
-	color $color-49
+  color $color-49
 
 ::-ms-input-placeholder
-	color $color-49
+  color $color-49
 
 ::placeholder
-	color $color-49
+  color $color-49
 
 form
-	margin 0
+  margin 0
 
 .sidebar
-	display none
-	float right
-	overflow-y auto
-	height 100%
-	max-height 100%
-	width 20%
-	padding 30px
-	background $color-5
-	color $color-53
+  display none
+  float right
+  overflow-y auto
+  height 100%
+  max-height 100%
+  width 20%
+  padding 30px
+  background $color-5
+  color $color-53
 
-	h2
-		margin-top 40px
-		color $color-54
+  h2
+    margin-top 40px
+    color $color-54
 
-		&:first-child
-			margin-top 0
+    &:first-child
+      margin-top 0
 
-		.icon
-			margin-right 10px
+    .icon
+      margin-right 10px
 
-	>ul
-		margin 0 -30px
-		padding 20px 0
-		list-style-type none
+  >ul
+    margin 0 -30px
+    padding 20px 0
+    list-style-type none
 
-		>li
-			display flow-root
-			margin-bottom 0
-			padding 15px
-			background $color-10
-			color $color-55
+    >li
+      display flow-root
+      margin-bottom 0
+      padding 15px
+      background $color-10
+      color $color-55
 
-			&:last-child
-				margin-bottom 0
+      &:last-child
+        margin-bottom 0
 
-			.icon
-				float left
-				margin-top -4px
-				margin-right 8px
-				margin-bottom -5px
-				font-size 25px
+      .icon
+        float left
+        margin-top -4px
+        margin-right 8px
+        margin-bottom -5px
+        font-size 25px
 
-		.complete
-			color $color-35
+    .complete
+      color $color-35
 
-	.userlist
-		margin 0 -30px
-		padding 0
-		list-style-type none
+  .userlist
+    margin 0 -30px
+    padding 0
+    list-style-type none
 
-		>li
-			img
-				float left
-				width 36px
-				margin-right 10px
-				border-radius 2px
+    >li
+      img
+        float left
+        width 36px
+        margin-right 10px
+        border-radius 2px
 
-			.name
-				margin-bottom 0
-				font-weight bold
+      .name
+        margin-bottom 0
+        font-weight bold
 
-			.time
-				float right
-				font-weight 300
-				color $color-55
+      .time
+        float right
+        font-weight 300
+        color $color-55
 
-			.action
-				display -webkit-box
+      .action
+        display -webkit-box
 
-	a
-		color $color-56
-		transition .3s all ease-in-out
+  a
+    color $color-56
+    transition .3s all ease-in-out
 
-		&:hover
-			color $color-57
+    &:hover
+      color $color-57
 
-	button
-		width 100%
+  button
+    width 100%
 
 .search
-	.searchArea
-		position absolute
-		display none
-		top 53px
-		left 0
-		overflow-y auto
-		max-height 500px
-		width 100%
-		padding 20px
-		background linear-gradient(to bottom left, $color-2, $color-1)
-		background -moz-linear-gradient(to bottom left, $color-2, $color-1)
-		color $color-24
-		border-radius 2px
-		box-shadow 0 15px 30px 0 $color-12, 0 5px 15px 0 $color-10
-		-moz-box-shadow 0 15px 30px 0 rgba(0, 0, 0, .11), 0 5px 15px 0 rgba(0, 0, 0, .08)
+  .searchArea
+    position absolute
+    display none
+    top 53px
+    left 0
+    overflow-y auto
+    max-height 500px
+    width 100%
+    padding 20px
+    background linear-gradient(to bottom left, $color-2, $color-1)
+    background -moz-linear-gradient(to bottom left, $color-2, $color-1)
+    color $color-24
+    border-radius 2px
+    box-shadow 0 15px 30px 0 $color-12, 0 5px 15px 0 $color-10
+    -moz-box-shadow 0 15px 30px 0 rgba(0, 0, 0, .11), 0 5px 15px 0 rgba(0, 0, 0, .08)
 
-		ul
-			margin 0
-			padding 0
-			list-style-type none
+    ul
+      margin 0
+      padding 0
+      list-style-type none
 
-			li
-				padding 10px 0
-				transition .3s all ease-in-out
+      li
+        padding 10px 0
+        transition .3s all ease-in-out
 
-				&:last-child
-					padding-bottom 0
+        &:last-child
+          padding-bottom 0
 
-				&:first-child
-					padding-top 0
+        &:first-child
+          padding-top 0
 
-				a
-					transition .3s all ease-in-out
+        a
+          transition .3s all ease-in-out
 
-					&:hover
-						color white
+          &:hover
+            color white
 
-	input
-		&:focus
-			background $color-58 !important
-			color white
+  input
+    &:focus
+      background $color-58 !important
+      color white
 
 .loginContainer
-	position absolute
-	top 0
-	right 0
-	bottom 0
-	left 0
-	overflow-y none
-	height 304px
-	width 25%
-	max-width 100%
-	margin auto
+  position absolute
+  top 0
+  right 0
+  bottom 0
+  left 0
+  overflow-y none
+  height 304px
+  width 25%
+  max-width 100%
+  margin auto
 
-	hr
-		margin-bottom 15px
-		border-color $color-48
-		border-top none
+  hr
+    margin-bottom 15px
+    border-color $color-48
+    border-top none
 
 .errorContainer
-	position absolute
-	display flex
-	top 0
-	right 0
-	bottom 0
-	left 0
-	overflow-y none
-	height 304px
-	width 33%
-	max-width 100%
-	margin auto
-	align-items center
+  position absolute
+  display flex
+  top 0
+  right 0
+  bottom 0
+  left 0
+  overflow-y none
+  height 304px
+  width 33%
+  max-width 100%
+  margin auto
+  align-items center
 
-	.section
-		/*width: 50%;*/
+  .section
+    /*width: 50%;*/
 
-		svg
-			height 75%
-			fill white !important
+    svg
+      height 75%
+      fill white !important
 
-	h1
-		font-size 8em
-		text-align center
+  h1
+    font-size 8em
+    text-align center
 
-	h2
-		margin-top -1em
-		padding-bottom 1em
-		font-size 2em
-		text-align center
-		border-bottom 1px $color-8 solid
+  h2
+    margin-top -1em
+    padding-bottom 1em
+    font-size 2em
+    text-align center
+    border-bottom 1px $color-8 solid
 
-	p
-		text-align justify
+  p
+    text-align justify
 
 .login
-	margin-top 20px
-	border-radius 2px
+  margin-top 20px
+  border-radius 2px
 
-	input
-		background $color-12
+  input
+    background $color-12
 
 .logoText
-	float right
+  float right
 
 .btnGreen
-	background $color-3
-	color $color-59
+  background $color-3
+  color $color-59
 
-	&:hover
-		background $color-60
+  &:hover
+    background $color-60
 
 .topwrap
-	width 100%
-	margin 0 auto
+  width 100%
+  margin 0 auto
 
 .htAlert
-	position absolute
-	top 20px
-	left 50%
-	width 20%
-	margin-left -10%
-	padding 20px
-	background $color-44
-	color $color-45
-	border-radius 2px
+  position absolute
+  top 20px
+  left 50%
+  width 20%
+  margin-left -10%
+  padding 20px
+  background $color-44
+  color $color-45
+  border-radius 2px
 
 .htAlertSuccess
-	background $color-61 !important
-	color $color-62 !important
+  background $color-61 !important
+  color $color-62 !important
 
 .loading
-	position fixed
-	top 20px
-	right 20px
-	height 35px
-	width 35px
-	border 3px solid $color-8
-	border-radius 50%
-	border-top 3px solid $color-63
-	-webkit-animation spin 2s linear infinite
-	animation spin 2s linear infinite
+  position fixed
+  top 20px
+  right 20px
+  height 35px
+  width 35px
+  border 3px solid $color-8
+  border-radius 50%
+  border-top 3px solid $color-63
+  -webkit-animation spin 2s linear infinite
+  animation spin 2s linear infinite
 
 #nprogress
-	.bar
-		height 5px !important
-		background $color-23 !important
+  .bar
+    height 5px !important
+    background $color-23 !important
 
-	.spinner
-		top 20px !important
-		right 20px !important
+  .spinner
+    top 20px !important
+    right 20px !important
 
-	.spinner-icon
-		height 30px !important
-		width 30px !important
-		border solid 3px transparent !important
-		border-top-color $color-23 !important
-		border-left-color $color-23 !important
+  .spinner-icon
+    height 30px !important
+    width 30px !important
+    border solid 3px transparent !important
+    border-top-color $color-23 !important
+    border-left-color $color-23 !important
 
-	.peg
-		box-shadow none !important
+  .peg
+    box-shadow none !important
 
 .t
-	display inline-block
-	width 100%
-	padding 20px
-	cursor default
-	font-weight 600
-	color $color-29
+  display inline-block
+  width 100%
+  padding 20px
+  cursor default
+  font-weight 600
+  color $color-29
 
 @font-face
-	font-family Bebas
-	src url(../fonts/Bebas.otf)
+  font-family Bebas
+  src url(../fonts/Bebas.otf)
 
 @font-face
-	font-family Omnes
-	src url(../fonts/omnes-regular-webfont.ttf)
+  font-family Omnes
+  src url(../fonts/omnes-regular-webfont.ttf)
 
 @font-face
-	font-family Omnes
-	font-weight 600
-	src url(../fonts/omnes-semibold-webfont.ttf)
+  font-family Omnes
+  font-weight 600
+  src url(../fonts/omnes-semibold-webfont.ttf)
 
 .hawthorne
-	position absolute
-	float left
-	overflow hidden
-	margin 3px 0 0 10px
-	opacity 0
-	font-family Bebas
-	font-size 35px
-	color white
-	-webkit-animation-name logo-heading
-	animation-name logo-heading
-	-webkit-animation-duration 1.5s
-	animation-duration 1.5s
-	-webkit-animation-timing-function ease-out
-	animation-timing-function ease-out
-	-webkit-animation-delay 1.7s
-	animation-delay 1.7s
-	-webkit-animation-fill-mode forwards
-	animation-fill-mode forwards
+  position absolute
+  float left
+  overflow hidden
+  margin 3px 0 0 10px
+  opacity 0
+  font-family Bebas
+  font-size 35px
+  color white
+  -webkit-animation-name logo-heading
+  animation-name logo-heading
+  -webkit-animation-duration 1.5s
+  animation-duration 1.5s
+  -webkit-animation-timing-function ease-out
+  animation-timing-function ease-out
+  -webkit-animation-delay 1.7s
+  animation-delay 1.7s
+  -webkit-animation-fill-mode forwards
+  animation-fill-mode forwards
 
 .thorne
-	display inline
-	color $color-9
+  display inline
+  color $color-9
 
 @-webkit-keyframes logo-heading
-	from
-		position relative
-		max-width 0
-		opacity 0
+  from
+    position relative
+    max-width 0
+    opacity 0
 
-	to
-		position relative
-		max-width 10em
-		opacity 1
+  to
+    position relative
+    max-width 10em
+    opacity 1
 
 @keyframes logo-heading
-	from
-		position relative
-		max-width 0
-		opacity 0
+  from
+    position relative
+    max-width 0
+    opacity 0
 
-	to
-		position relative
-		max-width 10em
-		opacity 1
+  to
+    position relative
+    max-width 10em
+    opacity 1
 
 .usermenu
-	margin 0
-	padding 0
-	list-style-type none
+  margin 0
+  padding 0
+  list-style-type none
 
-	>li
-		position relative
+  >li
+    position relative
 
-		>a
-			position relative
-			float right
-			width 49px
-			margin-left 20px
-			padding 13px 0
-			color white
-			text-align center
-			border-radius 30px
-			transition .3s all ease-in-out
+    >a
+      position relative
+      float right
+      width 49px
+      margin-left 20px
+      padding 13px 0
+      color white
+      text-align center
+      border-radius 30px
+      transition .3s all ease-in-out
 
-			>.icon
-				font-size 22px
+      >.icon
+        font-size 22px
 
-	.flag
-		position absolute
-		top 0
-		right 0
-		width 30px
-		padding 3px 0
-		background $color-64
-		font-size 11px
-		font-weight bold
-		color white
-		text-align center
-		border-radius 2px
+  .flag
+    position absolute
+    top 0
+    right 0
+    width 30px
+    padding 3px 0
+    background $color-64
+    font-size 11px
+    font-weight bold
+    color white
+    text-align center
+    border-radius 2px
 
 .usermenu > li > a:hover
 .userMenuActive
-	background $color-12
-	color $color-9 !important
+  background $color-12
+  color $color-9 !important
 
 .breadcrumbs
-	position relative
-	display flow-root
-	z-index 2
-	margin 30px 0
-	padding 20px
-	background $color-58
-	border-radius 4px
-	box-shadow 0 5px 10px 0 $color-12
-	-moz-box-shadow 0 5px 10px 0 rgba(0, 0, 0, .1)
+  position relative
+  display flow-root
+  z-index 2
+  margin 30px 0
+  padding 20px
+  background $color-58
+  border-radius 4px
+  box-shadow 0 5px 10px 0 $color-12
+  -moz-box-shadow 0 5px 10px 0 rgba(0, 0, 0, .1)
 
-	>h3
-		float left
-		margin 0 20px 0 0
-		font-weight bold
-		color $color-9
+  >h3
+    float left
+    margin 0 20px 0 0
+    font-weight bold
+    color $color-9
 
-	>ul
-		float left
-		margin 0
-		padding 0
-		list-style-type none
+  >ul
+    float left
+    margin 0
+    padding 0
+    list-style-type none
 
-		>li
-			float left
-			padding 1px 10px
-			color white
+    >li
+      float left
+      padding 1px 10px
+      color white
 
-			&:after
-				content "\f3d1"
-				float right
-				margin-top 3px
-				padding 0 0 0 20px
-				font-family "Ionicons"
-				color $color-29
+      &:after
+        content "\f3d1"
+        float right
+        margin-top 3px
+        padding 0 0 0 20px
+        font-family "Ionicons"
+        color $color-29
 
-			a
-				transition .3s all ease-in-out
+      a
+        transition .3s all ease-in-out
 
-				&:hover
-					color $color-9
+        &:hover
+          color $color-9
 
-			&:last-child
-				&:after
-					content ""
+      &:last-child
+        &:after
+          content ""
 
-	.icon
-		float left
-		margin 2px 10px 0 0
+  .icon
+    float left
+    margin 2px 10px 0 0
 
 .searchArea
-	h3
-		color $color-9
+  h3
+    color $color-9
 
 .chartContainer
-	position relative
-	float left
-	width 100%
-	margin-top 20px
-	margin-bottom 40px
+  position relative
+  float left
+  width 100%
+  margin-top 20px
+  margin-bottom 40px
 
 .currentPlayers
-	float left
-	width 30%
+  float left
+  width 30%
 
 .tableavatar
-	height 20px
+  height 20px
 
 .server
-	display block
+  display block
 
-	.thumbnail
-		margin 0 20px 0 0
-		border-radius 2px
-		width 95%
-		/*height: 125px;*/
+  .thumbnail
+    margin 0 20px 0 0
+    border-radius 2px
+    width 95%
+    /*height: 125px;*/
 
 .logoContainer
-	display flow-root
-	padding 20px
-	border-bottom 1px solid $color-48
+  display flow-root
+  padding 20px
+  border-bottom 1px solid $color-48
 
 /****************************************************************
  *
@@ -1497,7 +1497,7 @@ form
 .c100.p98 .slice
 .c100.p99 .slice
 .c100.p100 .slice
-	clip rect(auto, auto, auto, auto)
+  clip rect(auto, auto, auto, auto)
 
 .pie
 .c100 .bar
@@ -1551,18 +1551,18 @@ form
 .c100.p98 .fill
 .c100.p99 .fill
 .c100.p100 .fill
-	position absolute
-	clip rect(0em, .5em, 1em, 0em)
-	height .84em
-	width .84em
-	border .08em solid $color-65
-	border-radius 50%
-	-webkit-transform rotate(0deg)
-	transform rotate(0deg)
-	-webkit-border-radius 50%
-	-moz-border-radius 50%
-	-ms-border-radius 50%
-	-o-border-radius 50%
+  position absolute
+  clip rect(0em, .5em, 1em, 0em)
+  height .84em
+  width .84em
+  border .08em solid $color-65
+  border-radius 50%
+  -webkit-transform rotate(0deg)
+  transform rotate(0deg)
+  -webkit-border-radius 50%
+  -moz-border-radius 50%
+  -ms-border-radius 50%
+  -o-border-radius 50%
 
 .pie-fill
 .c100.p51 .bar:after
@@ -1665,1229 +1665,1229 @@ form
 .c100.p99 .fill
 .c100.p100 .bar:after
 .c100.p100 .fill
-	-webkit-transform rotate(180deg)
-	transform rotate(180deg)
+  -webkit-transform rotate(180deg)
+  transform rotate(180deg)
 
 .c100
-	position relative
-	display inline-block
-	height 1em
-	width 1em
-	border-radius 50%
-	/* float: left; */
-	margin 0
-	background-color $color-66
-	font-size 120px
-	box-shadow 0 5px 2px -2px $color-12
-	-webkit-border-radius 50%
-	-moz-border-radius 50%
-	-ms-border-radius 50%
-	-o-border-radius 50%
-	-moz-box-shadow 0 5px 2px -2px rgba(0, 0, 0, .1)
-
-	&.center
-		float none
-		margin 0 auto
-
-	&.big
-		font-size 240px
-
-	&.small
-		font-size 80px
-
-	>span
-		position absolute
-		display block
-		top 0
-		left 0
-		z-index 1
-		width 100%
-		width 5em
-		font-size .2em
-		font-weight bold
-		color $color-66
-		line-height 5em
-		text-align center
-		white-space nowrap
-		transition-property all
-		transition-duration .2s
-		transition-timing-function ease-out
-
-	&:after
-		content " "
-		position absolute
-		display block
-		top .04em
-		left .04em
-		height .92em
-		width .92em
-		background-color $color-58
-		border-radius 50%
-		transition-property all
-		transition-duration .2s
-		transition-timing-function ease-in
-		-webkit-border-radius 50%
-		-moz-border-radius 50%
-		-ms-border-radius 50%
-		-o-border-radius 50%
-
-	.slice
-		position absolute
-		clip rect(0em, 1em, 1em, .5em)
-		height 1em
-		width 1em
-
-	&.p1
-		.bar
-			-webkit-transform rotate(3.6deg)
-			transform rotate(3.6deg)
-
-	&.p2
-		.bar
-			-webkit-transform rotate(7.2deg)
-			transform rotate(7.2deg)
-
-	&.p3
-		.bar
-			-webkit-transform rotate(10.8deg)
-			transform rotate(10.8deg)
-
-	&.p4
-		.bar
-			-webkit-transform rotate(14.4deg)
-			transform rotate(14.4deg)
-
-	&.p5
-		.bar
-			-webkit-transform rotate(18deg)
-			transform rotate(18deg)
-
-	&.p6
-		.bar
-			-webkit-transform rotate(21.6deg)
-			transform rotate(21.6deg)
-
-	&.p7
-		.bar
-			-webkit-transform rotate(25.2deg)
-			transform rotate(25.2deg)
-
-	&.p8
-		.bar
-			-webkit-transform rotate(28.8deg)
-			transform rotate(28.8deg)
-
-	&.p9
-		.bar
-			-webkit-transform rotate(32.4deg)
-			transform rotate(32.4deg)
-
-	&.p10
-		.bar
-			-webkit-transform rotate(36deg)
-			transform rotate(36deg)
-
-	&.p11
-		.bar
-			-webkit-transform rotate(39.6deg)
-			transform rotate(39.6deg)
-
-	&.p12
-		.bar
-			-webkit-transform rotate(43.2deg)
-			transform rotate(43.2deg)
-
-	&.p13
-		.bar
-			-webkit-transform rotate(46.8deg)
-			transform rotate(46.8deg)
-
-	&.p14
-		.bar
-			-webkit-transform rotate(50.4deg)
-			transform rotate(50.4deg)
-
-	&.p15
-		.bar
-			-webkit-transform rotate(54deg)
-			transform rotate(54deg)
-
-	&.p16
-		.bar
-			-webkit-transform rotate(57.6deg)
-			transform rotate(57.6deg)
-
-	&.p17
-		.bar
-			-webkit-transform rotate(61.2deg)
-			transform rotate(61.2deg)
-
-	&.p18
-		.bar
-			-webkit-transform rotate(64.8deg)
-			transform rotate(64.8deg)
-
-	&.p19
-		.bar
-			-webkit-transform rotate(68.4deg)
-			transform rotate(68.4deg)
-
-	&.p20
-		.bar
-			-webkit-transform rotate(72deg)
-			transform rotate(72deg)
-
-	&.p21
-		.bar
-			-webkit-transform rotate(75.6deg)
-			transform rotate(75.6deg)
-
-	&.p22
-		.bar
-			-webkit-transform rotate(79.2deg)
-			transform rotate(79.2deg)
-
-	&.p23
-		.bar
-			-webkit-transform rotate(82.8deg)
-			transform rotate(82.8deg)
-
-	&.p24
-		.bar
-			-webkit-transform rotate(86.4deg)
-			transform rotate(86.4deg)
-
-	&.p25
-		.bar
-			-webkit-transform rotate(90deg)
-			transform rotate(90deg)
-
-	&.p26
-		.bar
-			-webkit-transform rotate(93.6deg)
-			transform rotate(93.6deg)
-
-	&.p27
-		.bar
-			-webkit-transform rotate(97.2deg)
-			transform rotate(97.2deg)
-
-	&.p28
-		.bar
-			-webkit-transform rotate(100.8deg)
-			transform rotate(100.8deg)
-
-	&.p29
-		.bar
-			-webkit-transform rotate(104.4deg)
-			transform rotate(104.4deg)
-
-	&.p30
-		.bar
-			-webkit-transform rotate(108deg)
-			transform rotate(108deg)
-
-	&.p31
-		.bar
-			-webkit-transform rotate(111.6deg)
-			transform rotate(111.6deg)
-
-	&.p32
-		.bar
-			-webkit-transform rotate(115.2deg)
-			transform rotate(115.2deg)
-
-	&.p33
-		.bar
-			-webkit-transform rotate(118.8deg)
-			transform rotate(118.8deg)
-
-	&.p34
-		.bar
-			-webkit-transform rotate(122.4deg)
-			transform rotate(122.4deg)
-
-	&.p35
-		.bar
-			-webkit-transform rotate(126deg)
-			transform rotate(126deg)
-
-	&.p36
-		.bar
-			-webkit-transform rotate(129.6deg)
-			transform rotate(129.6deg)
-
-	&.p37
-		.bar
-			-webkit-transform rotate(133.2deg)
-			transform rotate(133.2deg)
-
-	&.p38
-		.bar
-			-webkit-transform rotate(136.8deg)
-			transform rotate(136.8deg)
-
-	&.p39
-		.bar
-			-webkit-transform rotate(140.4deg)
-			transform rotate(140.4deg)
-
-	&.p40
-		.bar
-			-webkit-transform rotate(144deg)
-			transform rotate(144deg)
-
-	&.p41
-		.bar
-			-webkit-transform rotate(147.6deg)
-			transform rotate(147.6deg)
-
-	&.p42
-		.bar
-			-webkit-transform rotate(151.2deg)
-			transform rotate(151.2deg)
-
-	&.p43
-		.bar
-			-webkit-transform rotate(154.8deg)
-			transform rotate(154.8deg)
-
-	&.p44
-		.bar
-			-webkit-transform rotate(158.4deg)
-			transform rotate(158.4deg)
-
-	&.p45
-		.bar
-			-webkit-transform rotate(162deg)
-			transform rotate(162deg)
-
-	&.p46
-		.bar
-			-webkit-transform rotate(165.6deg)
-			transform rotate(165.6deg)
-
-	&.p47
-		.bar
-			-webkit-transform rotate(169.2deg)
-			transform rotate(169.2deg)
-
-	&.p48
-		.bar
-			-webkit-transform rotate(172.8deg)
-			transform rotate(172.8deg)
-
-	&.p49
-		.bar
-			-webkit-transform rotate(176.4deg)
-			transform rotate(176.4deg)
-
-	&.p50
-		.bar
-			-webkit-transform rotate(180deg)
-			transform rotate(180deg)
-
-	&.p51
-		.bar
-			-webkit-transform rotate(183.6deg)
-			transform rotate(183.6deg)
-
-	&.p52
-		.bar
-			-webkit-transform rotate(187.2deg)
-			transform rotate(187.2deg)
-
-	&.p53
-		.bar
-			-webkit-transform rotate(190.8deg)
-			transform rotate(190.8deg)
-
-	&.p54
-		.bar
-			-webkit-transform rotate(194.4deg)
-			transform rotate(194.4deg)
-
-	&.p55
-		.bar
-			-webkit-transform rotate(198deg)
-			transform rotate(198deg)
-
-	&.p56
-		.bar
-			-webkit-transform rotate(201.6deg)
-			transform rotate(201.6deg)
-
-	&.p57
-		.bar
-			-webkit-transform rotate(205.2deg)
-			transform rotate(205.2deg)
-
-	&.p58
-		.bar
-			-webkit-transform rotate(208.8deg)
-			transform rotate(208.8deg)
-
-	&.p59
-		.bar
-			-webkit-transform rotate(212.4deg)
-			transform rotate(212.4deg)
-
-	&.p60
-		.bar
-			-webkit-transform rotate(216deg)
-			transform rotate(216deg)
-
-	&.p61
-		.bar
-			-webkit-transform rotate(219.6deg)
-			transform rotate(219.6deg)
-
-	&.p62
-		.bar
-			-webkit-transform rotate(223.2deg)
-			transform rotate(223.2deg)
-
-	&.p63
-		.bar
-			-webkit-transform rotate(226.8deg)
-			transform rotate(226.8deg)
-
-	&.p64
-		.bar
-			-webkit-transform rotate(230.4deg)
-			transform rotate(230.4deg)
-
-	&.p65
-		.bar
-			-webkit-transform rotate(234deg)
-			transform rotate(234deg)
-
-	&.p66
-		.bar
-			-webkit-transform rotate(237.6deg)
-			transform rotate(237.6deg)
-
-	&.p67
-		.bar
-			-webkit-transform rotate(241.2deg)
-			transform rotate(241.2deg)
-
-	&.p68
-		.bar
-			-webkit-transform rotate(244.8deg)
-			transform rotate(244.8deg)
-
-	&.p69
-		.bar
-			-webkit-transform rotate(248.4deg)
-			transform rotate(248.4deg)
-
-	&.p70
-		.bar
-			-webkit-transform rotate(252deg)
-			transform rotate(252deg)
-
-	&.p71
-		.bar
-			-webkit-transform rotate(255.6deg)
-			transform rotate(255.6deg)
-
-	&.p72
-		.bar
-			-webkit-transform rotate(259.2deg)
-			transform rotate(259.2deg)
-
-	&.p73
-		.bar
-			-webkit-transform rotate(262.8deg)
-			transform rotate(262.8deg)
-
-	&.p74
-		.bar
-			-webkit-transform rotate(266.4deg)
-			transform rotate(266.4deg)
-
-	&.p75
-		.bar
-			-webkit-transform rotate(270deg)
-			transform rotate(270deg)
-
-	&.p76
-		.bar
-			-webkit-transform rotate(273.6deg)
-			transform rotate(273.6deg)
-
-	&.p77
-		.bar
-			-webkit-transform rotate(277.2deg)
-			transform rotate(277.2deg)
-
-	&.p78
-		.bar
-			-webkit-transform rotate(280.8deg)
-			transform rotate(280.8deg)
-
-	&.p79
-		.bar
-			-webkit-transform rotate(284.4deg)
-			transform rotate(284.4deg)
-
-	&.p80
-		.bar
-			-webkit-transform rotate(288deg)
-			transform rotate(288deg)
-
-	&.p81
-		.bar
-			-webkit-transform rotate(291.6deg)
-			transform rotate(291.6deg)
-
-	&.p82
-		.bar
-			-webkit-transform rotate(295.2deg)
-			transform rotate(295.2deg)
-
-	&.p83
-		.bar
-			-webkit-transform rotate(298.8deg)
-			transform rotate(298.8deg)
-
-	&.p84
-		.bar
-			-webkit-transform rotate(302.4deg)
-			transform rotate(302.4deg)
-
-	&.p85
-		.bar
-			-webkit-transform rotate(306deg)
-			transform rotate(306deg)
-
-	&.p86
-		.bar
-			-webkit-transform rotate(309.6deg)
-			transform rotate(309.6deg)
-
-	&.p87
-		.bar
-			-webkit-transform rotate(313.2deg)
-			transform rotate(313.2deg)
-
-	&.p88
-		.bar
-			-webkit-transform rotate(316.8deg)
-			transform rotate(316.8deg)
-
-	&.p89
-		.bar
-			-webkit-transform rotate(320.4deg)
-			transform rotate(320.4deg)
-
-	&.p90
-		.bar
-			-webkit-transform rotate(324deg)
-			transform rotate(324deg)
-
-	&.p91
-		.bar
-			-webkit-transform rotate(327.6deg)
-			transform rotate(327.6deg)
-
-	&.p92
-		.bar
-			-webkit-transform rotate(331.2deg)
-			transform rotate(331.2deg)
-
-	&.p93
-		.bar
-			-webkit-transform rotate(334.8deg)
-			transform rotate(334.8deg)
-
-	&.p94
-		.bar
-			-webkit-transform rotate(338.4deg)
-			transform rotate(338.4deg)
-
-	&.p95
-		.bar
-			-webkit-transform rotate(342deg)
-			transform rotate(342deg)
-
-	&.p96
-		.bar
-			-webkit-transform rotate(345.6deg)
-			transform rotate(345.6deg)
-
-	&.p97
-		.bar
-			-webkit-transform rotate(349.2deg)
-			transform rotate(349.2deg)
-
-	&.p98
-		.bar
-			-webkit-transform rotate(352.8deg)
-			transform rotate(352.8deg)
-
-	&.p99
-		.bar
-			-webkit-transform rotate(356.4deg)
-			transform rotate(356.4deg)
-
-	&.p100
-		.bar
-			-webkit-transform rotate(360deg)
-			transform rotate(360deg)
-
-	&:hover
-		cursor default
-
-		>span
-			/* width: 3.33em; */
-
-		&:after
-			top .04em
-			left .04em
-			height .92em
-			width .92em
-
-	&.dark
-		background-color $color-67
-
-		>span
-			color $color-67
-
-		&:after
-			background-color $color-69
-
-		&:hover
-			>span
-				color $color-68
-
-	&.green
-		&:hover
-			>span
-				color $color-70
-
-		&.dark
-			&:hover
-				>span
-					color $color-71
-
-	&.orange
-		&:hover
-			>span
-				color $color-72
-
-		&.dark
-			&:hover
-				>span
-					color $color-73
+  position relative
+  display inline-block
+  height 1em
+  width 1em
+  border-radius 50%
+  /* float: left; */
+  margin 0
+  background-color $color-66
+  font-size 120px
+  box-shadow 0 5px 2px -2px $color-12
+  -webkit-border-radius 50%
+  -moz-border-radius 50%
+  -ms-border-radius 50%
+  -o-border-radius 50%
+  -moz-box-shadow 0 5px 2px -2px rgba(0, 0, 0, .1)
+
+  &.center
+    float none
+    margin 0 auto
+
+  &.big
+    font-size 240px
+
+  &.small
+    font-size 80px
+
+  >span
+    position absolute
+    display block
+    top 0
+    left 0
+    z-index 1
+    width 100%
+    width 5em
+    font-size .2em
+    font-weight bold
+    color $color-66
+    line-height 5em
+    text-align center
+    white-space nowrap
+    transition-property all
+    transition-duration .2s
+    transition-timing-function ease-out
+
+  &:after
+    content " "
+    position absolute
+    display block
+    top .04em
+    left .04em
+    height .92em
+    width .92em
+    background-color $color-58
+    border-radius 50%
+    transition-property all
+    transition-duration .2s
+    transition-timing-function ease-in
+    -webkit-border-radius 50%
+    -moz-border-radius 50%
+    -ms-border-radius 50%
+    -o-border-radius 50%
+
+  .slice
+    position absolute
+    clip rect(0em, 1em, 1em, .5em)
+    height 1em
+    width 1em
+
+  &.p1
+    .bar
+      -webkit-transform rotate(3.6deg)
+      transform rotate(3.6deg)
+
+  &.p2
+    .bar
+      -webkit-transform rotate(7.2deg)
+      transform rotate(7.2deg)
+
+  &.p3
+    .bar
+      -webkit-transform rotate(10.8deg)
+      transform rotate(10.8deg)
+
+  &.p4
+    .bar
+      -webkit-transform rotate(14.4deg)
+      transform rotate(14.4deg)
+
+  &.p5
+    .bar
+      -webkit-transform rotate(18deg)
+      transform rotate(18deg)
+
+  &.p6
+    .bar
+      -webkit-transform rotate(21.6deg)
+      transform rotate(21.6deg)
+
+  &.p7
+    .bar
+      -webkit-transform rotate(25.2deg)
+      transform rotate(25.2deg)
+
+  &.p8
+    .bar
+      -webkit-transform rotate(28.8deg)
+      transform rotate(28.8deg)
+
+  &.p9
+    .bar
+      -webkit-transform rotate(32.4deg)
+      transform rotate(32.4deg)
+
+  &.p10
+    .bar
+      -webkit-transform rotate(36deg)
+      transform rotate(36deg)
+
+  &.p11
+    .bar
+      -webkit-transform rotate(39.6deg)
+      transform rotate(39.6deg)
+
+  &.p12
+    .bar
+      -webkit-transform rotate(43.2deg)
+      transform rotate(43.2deg)
+
+  &.p13
+    .bar
+      -webkit-transform rotate(46.8deg)
+      transform rotate(46.8deg)
+
+  &.p14
+    .bar
+      -webkit-transform rotate(50.4deg)
+      transform rotate(50.4deg)
+
+  &.p15
+    .bar
+      -webkit-transform rotate(54deg)
+      transform rotate(54deg)
+
+  &.p16
+    .bar
+      -webkit-transform rotate(57.6deg)
+      transform rotate(57.6deg)
+
+  &.p17
+    .bar
+      -webkit-transform rotate(61.2deg)
+      transform rotate(61.2deg)
+
+  &.p18
+    .bar
+      -webkit-transform rotate(64.8deg)
+      transform rotate(64.8deg)
+
+  &.p19
+    .bar
+      -webkit-transform rotate(68.4deg)
+      transform rotate(68.4deg)
+
+  &.p20
+    .bar
+      -webkit-transform rotate(72deg)
+      transform rotate(72deg)
+
+  &.p21
+    .bar
+      -webkit-transform rotate(75.6deg)
+      transform rotate(75.6deg)
+
+  &.p22
+    .bar
+      -webkit-transform rotate(79.2deg)
+      transform rotate(79.2deg)
+
+  &.p23
+    .bar
+      -webkit-transform rotate(82.8deg)
+      transform rotate(82.8deg)
+
+  &.p24
+    .bar
+      -webkit-transform rotate(86.4deg)
+      transform rotate(86.4deg)
+
+  &.p25
+    .bar
+      -webkit-transform rotate(90deg)
+      transform rotate(90deg)
+
+  &.p26
+    .bar
+      -webkit-transform rotate(93.6deg)
+      transform rotate(93.6deg)
+
+  &.p27
+    .bar
+      -webkit-transform rotate(97.2deg)
+      transform rotate(97.2deg)
+
+  &.p28
+    .bar
+      -webkit-transform rotate(100.8deg)
+      transform rotate(100.8deg)
+
+  &.p29
+    .bar
+      -webkit-transform rotate(104.4deg)
+      transform rotate(104.4deg)
+
+  &.p30
+    .bar
+      -webkit-transform rotate(108deg)
+      transform rotate(108deg)
+
+  &.p31
+    .bar
+      -webkit-transform rotate(111.6deg)
+      transform rotate(111.6deg)
+
+  &.p32
+    .bar
+      -webkit-transform rotate(115.2deg)
+      transform rotate(115.2deg)
+
+  &.p33
+    .bar
+      -webkit-transform rotate(118.8deg)
+      transform rotate(118.8deg)
+
+  &.p34
+    .bar
+      -webkit-transform rotate(122.4deg)
+      transform rotate(122.4deg)
+
+  &.p35
+    .bar
+      -webkit-transform rotate(126deg)
+      transform rotate(126deg)
+
+  &.p36
+    .bar
+      -webkit-transform rotate(129.6deg)
+      transform rotate(129.6deg)
+
+  &.p37
+    .bar
+      -webkit-transform rotate(133.2deg)
+      transform rotate(133.2deg)
+
+  &.p38
+    .bar
+      -webkit-transform rotate(136.8deg)
+      transform rotate(136.8deg)
+
+  &.p39
+    .bar
+      -webkit-transform rotate(140.4deg)
+      transform rotate(140.4deg)
+
+  &.p40
+    .bar
+      -webkit-transform rotate(144deg)
+      transform rotate(144deg)
+
+  &.p41
+    .bar
+      -webkit-transform rotate(147.6deg)
+      transform rotate(147.6deg)
+
+  &.p42
+    .bar
+      -webkit-transform rotate(151.2deg)
+      transform rotate(151.2deg)
+
+  &.p43
+    .bar
+      -webkit-transform rotate(154.8deg)
+      transform rotate(154.8deg)
+
+  &.p44
+    .bar
+      -webkit-transform rotate(158.4deg)
+      transform rotate(158.4deg)
+
+  &.p45
+    .bar
+      -webkit-transform rotate(162deg)
+      transform rotate(162deg)
+
+  &.p46
+    .bar
+      -webkit-transform rotate(165.6deg)
+      transform rotate(165.6deg)
+
+  &.p47
+    .bar
+      -webkit-transform rotate(169.2deg)
+      transform rotate(169.2deg)
+
+  &.p48
+    .bar
+      -webkit-transform rotate(172.8deg)
+      transform rotate(172.8deg)
+
+  &.p49
+    .bar
+      -webkit-transform rotate(176.4deg)
+      transform rotate(176.4deg)
+
+  &.p50
+    .bar
+      -webkit-transform rotate(180deg)
+      transform rotate(180deg)
+
+  &.p51
+    .bar
+      -webkit-transform rotate(183.6deg)
+      transform rotate(183.6deg)
+
+  &.p52
+    .bar
+      -webkit-transform rotate(187.2deg)
+      transform rotate(187.2deg)
+
+  &.p53
+    .bar
+      -webkit-transform rotate(190.8deg)
+      transform rotate(190.8deg)
+
+  &.p54
+    .bar
+      -webkit-transform rotate(194.4deg)
+      transform rotate(194.4deg)
+
+  &.p55
+    .bar
+      -webkit-transform rotate(198deg)
+      transform rotate(198deg)
+
+  &.p56
+    .bar
+      -webkit-transform rotate(201.6deg)
+      transform rotate(201.6deg)
+
+  &.p57
+    .bar
+      -webkit-transform rotate(205.2deg)
+      transform rotate(205.2deg)
+
+  &.p58
+    .bar
+      -webkit-transform rotate(208.8deg)
+      transform rotate(208.8deg)
+
+  &.p59
+    .bar
+      -webkit-transform rotate(212.4deg)
+      transform rotate(212.4deg)
+
+  &.p60
+    .bar
+      -webkit-transform rotate(216deg)
+      transform rotate(216deg)
+
+  &.p61
+    .bar
+      -webkit-transform rotate(219.6deg)
+      transform rotate(219.6deg)
+
+  &.p62
+    .bar
+      -webkit-transform rotate(223.2deg)
+      transform rotate(223.2deg)
+
+  &.p63
+    .bar
+      -webkit-transform rotate(226.8deg)
+      transform rotate(226.8deg)
+
+  &.p64
+    .bar
+      -webkit-transform rotate(230.4deg)
+      transform rotate(230.4deg)
+
+  &.p65
+    .bar
+      -webkit-transform rotate(234deg)
+      transform rotate(234deg)
+
+  &.p66
+    .bar
+      -webkit-transform rotate(237.6deg)
+      transform rotate(237.6deg)
+
+  &.p67
+    .bar
+      -webkit-transform rotate(241.2deg)
+      transform rotate(241.2deg)
+
+  &.p68
+    .bar
+      -webkit-transform rotate(244.8deg)
+      transform rotate(244.8deg)
+
+  &.p69
+    .bar
+      -webkit-transform rotate(248.4deg)
+      transform rotate(248.4deg)
+
+  &.p70
+    .bar
+      -webkit-transform rotate(252deg)
+      transform rotate(252deg)
+
+  &.p71
+    .bar
+      -webkit-transform rotate(255.6deg)
+      transform rotate(255.6deg)
+
+  &.p72
+    .bar
+      -webkit-transform rotate(259.2deg)
+      transform rotate(259.2deg)
+
+  &.p73
+    .bar
+      -webkit-transform rotate(262.8deg)
+      transform rotate(262.8deg)
+
+  &.p74
+    .bar
+      -webkit-transform rotate(266.4deg)
+      transform rotate(266.4deg)
+
+  &.p75
+    .bar
+      -webkit-transform rotate(270deg)
+      transform rotate(270deg)
+
+  &.p76
+    .bar
+      -webkit-transform rotate(273.6deg)
+      transform rotate(273.6deg)
+
+  &.p77
+    .bar
+      -webkit-transform rotate(277.2deg)
+      transform rotate(277.2deg)
+
+  &.p78
+    .bar
+      -webkit-transform rotate(280.8deg)
+      transform rotate(280.8deg)
+
+  &.p79
+    .bar
+      -webkit-transform rotate(284.4deg)
+      transform rotate(284.4deg)
+
+  &.p80
+    .bar
+      -webkit-transform rotate(288deg)
+      transform rotate(288deg)
+
+  &.p81
+    .bar
+      -webkit-transform rotate(291.6deg)
+      transform rotate(291.6deg)
+
+  &.p82
+    .bar
+      -webkit-transform rotate(295.2deg)
+      transform rotate(295.2deg)
+
+  &.p83
+    .bar
+      -webkit-transform rotate(298.8deg)
+      transform rotate(298.8deg)
+
+  &.p84
+    .bar
+      -webkit-transform rotate(302.4deg)
+      transform rotate(302.4deg)
+
+  &.p85
+    .bar
+      -webkit-transform rotate(306deg)
+      transform rotate(306deg)
+
+  &.p86
+    .bar
+      -webkit-transform rotate(309.6deg)
+      transform rotate(309.6deg)
+
+  &.p87
+    .bar
+      -webkit-transform rotate(313.2deg)
+      transform rotate(313.2deg)
+
+  &.p88
+    .bar
+      -webkit-transform rotate(316.8deg)
+      transform rotate(316.8deg)
+
+  &.p89
+    .bar
+      -webkit-transform rotate(320.4deg)
+      transform rotate(320.4deg)
+
+  &.p90
+    .bar
+      -webkit-transform rotate(324deg)
+      transform rotate(324deg)
+
+  &.p91
+    .bar
+      -webkit-transform rotate(327.6deg)
+      transform rotate(327.6deg)
+
+  &.p92
+    .bar
+      -webkit-transform rotate(331.2deg)
+      transform rotate(331.2deg)
+
+  &.p93
+    .bar
+      -webkit-transform rotate(334.8deg)
+      transform rotate(334.8deg)
+
+  &.p94
+    .bar
+      -webkit-transform rotate(338.4deg)
+      transform rotate(338.4deg)
+
+  &.p95
+    .bar
+      -webkit-transform rotate(342deg)
+      transform rotate(342deg)
+
+  &.p96
+    .bar
+      -webkit-transform rotate(345.6deg)
+      transform rotate(345.6deg)
+
+  &.p97
+    .bar
+      -webkit-transform rotate(349.2deg)
+      transform rotate(349.2deg)
+
+  &.p98
+    .bar
+      -webkit-transform rotate(352.8deg)
+      transform rotate(352.8deg)
+
+  &.p99
+    .bar
+      -webkit-transform rotate(356.4deg)
+      transform rotate(356.4deg)
+
+  &.p100
+    .bar
+      -webkit-transform rotate(360deg)
+      transform rotate(360deg)
+
+  &:hover
+    cursor default
+
+    >span
+      /* width: 3.33em; */
+
+    &:after
+      top .04em
+      left .04em
+      height .92em
+      width .92em
+
+  &.dark
+    background-color $color-67
+
+    >span
+      color $color-67
+
+    &:after
+      background-color $color-69
+
+    &:hover
+      >span
+        color $color-68
+
+  &.green
+    &:hover
+      >span
+        color $color-70
+
+    &.dark
+      &:hover
+        >span
+          color $color-71
+
+  &.orange
+    &:hover
+      >span
+        color $color-72
+
+    &.dark
+      &:hover
+        >span
+          color $color-73
 
 .c100 *
 .c100 *:before
 .c100 *:after
-	box-sizing content-box
-	-webkit-box-sizing content-box
-	-moz-box-sizing content-box
+  box-sizing content-box
+  -webkit-box-sizing content-box
+  -moz-box-sizing content-box
 
 .c100.dark .bar
 .c100.dark .fill
-	border-color $color-68 !important
+  border-color $color-68 !important
 
 .c100.green .bar
 .c100.green .fill
-	border-color $color-70 !important
+  border-color $color-70 !important
 
 .c100.green.dark .bar
 .c100.green.dark .fill
-	border-color $color-71 !important
+  border-color $color-71 !important
 
 .c100.orange .bar
 .c100.orange .fill
-	border-color $color-72 !important
+  border-color $color-72 !important
 
 .c100.orange.dark .bar
 .c100.orange.dark .fill
-	border-color $color-73 !important
+  border-color $color-73 !important
 
 .btnLogout
-	width 100%
-	margin-top 20px
-	background $color-3
-	color $color-74
+  width 100%
+  margin-top 20px
+  background $color-3
+  color $color-74
 
-	&:hover
-		background $color-75
+  &:hover
+    background $color-75
 
 .notificationsArea
-	position absolute
-	display none
-	top 55px
-	right 10px
-	z-index 3
-	width 300px
-	margin 0
-	padding 20px
-	background $color-76
-	border-radius 2px
-	box-shadow 0 5px 10px 0 $color-12
-	list-style-type none
-	-moz-box-shadow 0 5px 10px 0 rgba(0, 0, 0, .1)
+  position absolute
+  display none
+  top 55px
+  right 10px
+  z-index 3
+  width 300px
+  margin 0
+  padding 20px
+  background $color-76
+  border-radius 2px
+  box-shadow 0 5px 10px 0 $color-12
+  list-style-type none
+  -moz-box-shadow 0 5px 10px 0 rgba(0, 0, 0, .1)
 
-	.icon
-		float left
-		width 5%
-		margin-right 15px
-		font-size 17px
-		color $color-29
+  .icon
+    float left
+    width 5%
+    margin-right 15px
+    font-size 17px
+    color $color-29
 
-	>li
-		display flow-root
-		margin -20px -20px 20px -20px
-		padding 20px
-		border-bottom 1px solid $color-77
+  >li
+    display flow-root
+    margin -20px -20px 20px -20px
+    padding 20px
+    border-bottom 1px solid $color-77
 
-		>.text
-			float right
-			width 89%
+    >.text
+      float right
+      width 89%
 
-		&:last-child
-			margin-bottom -10px !important
-			padding 10px 10 0 10px !important
-			text-align center
-			border-bottom none !important
+    &:last-child
+      margin-bottom -10px !important
+      padding 10px 10 0 10px !important
+      text-align center
+      border-bottom none !important
 
-			button
-				width 100%
-				margin-bottom 0 !important
+      button
+        width 100%
+        margin-bottom 0 !important
 
-		a
-			display block
-			font-weight bold
-			color $color-9
-			transition .3s all ease-in-out
+    a
+      display block
+      font-weight bold
+      color $color-9
+      transition .3s all ease-in-out
 
-			&:hover
-				color white
+      &:hover
+        color white
 
 .serverGridItem
-	position relative
-	display flow-root
-	padding 20px
-	cursor pointer
-	background $color-10
-	color $color-24
-	border-radius 2px
-	box-shadow 0 5px 10px 0 $color-12
-	transition .3s all ease-in-out
-	-moz-box-shadow 0 5px 10px 0 rgba(0, 0, 0, .1)
+  position relative
+  display flow-root
+  padding 20px
+  cursor pointer
+  background $color-10
+  color $color-24
+  border-radius 2px
+  box-shadow 0 5px 10px 0 $color-12
+  transition .3s all ease-in-out
+  -moz-box-shadow 0 5px 10px 0 rgba(0, 0, 0, .1)
 
-	&.noHover
-		cursor default
+  &.noHover
+    cursor default
 
 .CBox
-	position relative
-	display flow-root
-	margin-bottom 20px
-	padding 20px
-	background $color-10
-	color $color-18
-	border-radius 2px
-	box-shadow 0 5px 10px 0 $color-12
-	transition .3s all ease-in-out
-	-moz-box-shadow 0 5px 10px 0 rgba(0, 0, 0, .1)
+  position relative
+  display flow-root
+  margin-bottom 20px
+  padding 20px
+  background $color-10
+  color $color-18
+  border-radius 2px
+  box-shadow 0 5px 10px 0 $color-12
+  transition .3s all ease-in-out
+  -moz-box-shadow 0 5px 10px 0 rgba(0, 0, 0, .1)
 
-	a
-		transition .3s all
+  a
+    transition .3s all
 
-		&:hover
-			color $color-3
+    &:hover
+      color $color-3
 
-	h3
-		margin -20px -20px 20px
-		padding 20px
-		background $color-58
-		font-size 13px
-		font-weight bold
-		color white
-		border-radius 4px 4px 0 0
+  h3
+    margin -20px -20px 20px
+    padding 20px
+    background $color-58
+    font-size 13px
+    font-weight bold
+    color white
+    border-radius 4px 4px 0 0
 
 .toggableList
-	>ul
-		margin 0
-		padding 0
-		list-style-type none
+  >ul
+    margin 0
+    padding 0
+    list-style-type none
 
-		>li
-			display block
-			margin-bottom 20px
-			padding 20px
-			cursor pointer
-			background $color-12
-			border-radius 2px
-			box-shadow 0 5px 10px 0 $color-12
-			transition .3s all ease-in-out
-			-moz-box-shadow 0 5px 10px 0 rgba(0, 0, 0, .1)
+    >li
+      display block
+      margin-bottom 20px
+      padding 20px
+      cursor pointer
+      background $color-12
+      border-radius 2px
+      box-shadow 0 5px 10px 0 $color-12
+      transition .3s all ease-in-out
+      -moz-box-shadow 0 5px 10px 0 rgba(0, 0, 0, .1)
 
-			&:last-child
-				margin-bottom 40px
+      &:last-child
+        margin-bottom 40px
 
-			>.content
-				display none
-				margin 20px -20px -20px -20px
-				padding 20px
-				cursor initial
-				background $color-12
-				border-radius 0 0 2px 2px
+      >.content
+        display none
+        margin 20px -20px -20px -20px
+        padding 20px
+        cursor initial
+        background $color-12
+        border-radius 0 0 2px 2px
 
-			>.icon
-				float right
-				width auto
-				width 40px
-				margin -8px -7px
-				padding 10px
-				background $color-12
-				font-size 17px
-				color $color-18
-				text-align center
-				border none
-				border-radius 2px
+      >.icon
+        float right
+        width auto
+        width 40px
+        margin -8px -7px
+        padding 10px
+        background $color-12
+        font-size 17px
+        color $color-18
+        text-align center
+        border none
+        border-radius 2px
 
 .toggableList > ul > li:hover
 .toggableListActive
 .serverGridItem:not(.noHover):hover
-	opacity 1
-	background $color-25 !important
+  opacity 1
+  background $color-25 !important
 
 .serverInlineTable
-	tbody
-		td
-			&:first-child
-				font-weight bold
-				color $color-9
+  tbody
+    td
+      &:first-child
+        font-weight bold
+        color $color-9
 
 .playerCount
-	display inline-block
-	float right
-	margin 0
-	padding 3px 10px
-	background $color-78
-	border-radius 2px
+  display inline-block
+  float right
+  margin 0
+  padding 3px 10px
+  background $color-78
+  border-radius 2px
 
 .fRight
-	float right
+  float right
 
 .fLeft
-	float left
+  float left
 
 .fullPlayers
-	background $color-64 !important
+  background $color-64 !important
 
 .noPlayers
-	background $color-79 !important
+  background $color-79 !important
 
 .mapName
-	margin 20px -20px
-	padding 10px 20px
-	background $color-25
-	font-size 13px
-	color $color-81
-	border-radius 2px
+  margin 20px -20px
+  padding 10px 20px
+  background $color-25
+  font-size 13px
+  color $color-81
+  border-radius 2px
 
 .serverChart
-	position absolute
-	top 70px
-	right 20px
+  position absolute
+  top 70px
+  right 20px
 
 .serverStatus
-	float left
-	height 8px
-	width 8px
-	margin-top 4px
-	margin-right 10px
-	background white
-	border-radius 50%
+  float left
+  height 8px
+  width 8px
+  margin-top 4px
+  margin-right 10px
+  background white
+  border-radius 50%
 
 .itemFaded
-	opacity .5
+  opacity .5
 
 .transition
-	display none
+  display none
 
 .ActionError
-	background $color-82 !important
+  background $color-82 !important
 
-	&:hover
-		background $color-84 !important
+  &:hover
+    background $color-84 !important
 
 .ActionSuccess
-	background $color-83 !important
+  background $color-83 !important
 
-	&:hover
-		background $color-83 !important
+  &:hover
+    background $color-83 !important
 
 .CTag
-	display inline-block
-	margin-left 5px
-	padding 1px 10px
-	cursor pointer
-	background $color-4
-	font-family monospace
-	font-size 12px
-	border-radius 4px
-	transition .3s all
+  display inline-block
+  margin-left 5px
+  padding 1px 10px
+  cursor pointer
+  background $color-4
+  font-family monospace
+  font-size 12px
+  border-radius 4px
+  transition .3s all
 
-	&:hover
-		background $color-86
+  &:hover
+    background $color-86
 
 .nomargin
-	margin 0 !important
+  margin 0 !important
 
 .serverOverview
-	h3
-		display inline
-		font-weight normal
+  h3
+    display inline
+    font-weight normal
 
-	.playerCount
-		float none
-		margin-right 10px
+  .playerCount
+    float none
+    margin-right 10px
 
-	.list
-		margin 0
-		padding 0
-		list-style-type none
+  .list
+    margin 0
+    padding 0
+    list-style-type none
 
-		li
-			display block
-			padding 15px
-			border-bottom 1px solid $color-48
+    li
+      display block
+      padding 15px
+      border-bottom 1px solid $color-48
 
-			&:last-child
-				padding-bottom 0
-				border-bottom none
+      &:last-child
+        padding-bottom 0
+        border-bottom none
 
-			&:first-child
-				padding-top 0
+      &:first-child
+        padding-top 0
 
-			b
-				&:first-child
-					display inline-block
-					min-width 15%
-					cursor default
-					color $color-87
+      b
+        &:first-child
+          display inline-block
+          min-width 15%
+          cursor default
+          color $color-87
 
-	p
-		display inline-block
-		max-width 65%
-		margin 0
+  p
+    display inline-block
+    max-width 65%
+    margin 0
 
-	.country
-		vertical-align text-top
-		width 30px
-		margin-right 6px
-		border-radius 2px
+  .country
+    vertical-align text-top
+    width 30px
+    margin-right 6px
+    border-radius 2px
 
 .green
-	color $color-35
+  color $color-35
 
 .red
-	color $color-33
+  color $color-33
 
 .Modal
-	table
-		td
-			button
-				float right
-				width auto
-				margin -10px 0 -10px 10px
-				padding 10px 15px
+  table
+    td
+      button
+        float right
+        width auto
+        margin -10px 0 -10px 10px
+        padding 10px 15px
 
 .RCONwindow
-	display flow-root
-	padding 20px
-	background $color-10
-	font-family monospace
-	font-size 13px
-	border-radius 4px
+  display flow-root
+  padding 20px
+  background $color-10
+  font-family monospace
+  font-size 13px
+  border-radius 4px
 
-	input
-		margin 20px 0 10px 0
-		font-family 'Omnes', sans-serif
+  input
+    margin 20px 0 10px 0
+    font-family 'Omnes', sans-serif
 
 .serverActionButton
-	width 95%
-	margin 10px 0 5px 0
-	padding 10px
+  width 95%
+  margin 10px 0 5px 0
+  padding 10px
 
 .serverActionButton .fa
 .serverActionButton .fas
-	margin-right 5px
-	font-size 11px
+  margin-right 5px
+  font-size 11px
 
 button[disabled]
-	cursor not-allowed
-	background $color-88
+  cursor not-allowed
+  background $color-88
 
 .paginationTabs
-	margin 0 0 30px 0
-	padding 10px
-	background $color-12
-	border-radius 4px
-	list-style-type none
+  margin 0 0 30px 0
+  padding 10px
+  background $color-12
+  border-radius 4px
+  list-style-type none
 
-	>li
-		display inline-block
-		margin 0 10px 0 0
-		padding 12px 20px
-		cursor pointer
-		background $color-58
-		font-weight bold
-		color $color-9
-		border-radius 4px
-		box-shadow 0 10px 10px -5px $color-10
-		transition .3s all
-		-moz-box-shadow 0 10px 10px -5px rgba(0, 0, 0, .05)
+  >li
+    display inline-block
+    margin 0 10px 0 0
+    padding 12px 20px
+    cursor pointer
+    background $color-58
+    font-weight bold
+    color $color-9
+    border-radius 4px
+    box-shadow 0 10px 10px -5px $color-10
+    transition .3s all
+    -moz-box-shadow 0 10px 10px -5px rgba(0, 0, 0, .05)
 
-		&:last-child
-			margin-right 0
+    &:last-child
+      margin-right 0
 
 .paginationTabs > li:hover
 .paginationTabSelected
-	color $color-3 !important
+  color $color-3 !important
 
 .timeTable
-	width -moz-available
-	width -webkit-fill-available
-	width fill-available
-	margin -20px -20px -15px
-	box-shadow none
+  width -moz-available
+  width -webkit-fill-available
+  width fill-available
+  margin -20px -20px -15px
+  box-shadow none
 
-	.modalSelect
-		&:after
-			top 17px
-			right 17px
+  .modalSelect
+    &:after
+      top 17px
+      right 17px
 
-	tbody
-		tr
-			td
-				&:nth-of-type(2)
-					&:not(.unset)
-						text-align center
+  tbody
+    tr
+      td
+        &:nth-of-type(2)
+          &:not(.unset)
+            text-align center
 
-	.logSelected
-		background $color-92
+  .logSelected
+    background $color-92
 
-		td
-			color white
+    td
+      color white
 
-	.ion-ios-warning
-		font-size 20px
-		color $color-33
+  .ion-ios-warning
+    font-size 20px
+    color $color-33
 
-	.checkboxDialogue
-		position absolute
-		display none
-		top 14px
-		left 60px
-		z-index 2
-		width 300px
-		padding 10px
-		background $color-58
-		border-radius 4px
-		box-shadow 0 5px 10px 0 $color-12
-		-moz-box-shadow 0 5px 10px 0 rgba(0, 0, 0, .1)
+  .checkboxDialogue
+    position absolute
+    display none
+    top 14px
+    left 60px
+    z-index 2
+    width 300px
+    padding 10px
+    background $color-58
+    border-radius 4px
+    box-shadow 0 5px 10px 0 $color-12
+    -moz-box-shadow 0 5px 10px 0 rgba(0, 0, 0, .1)
 
-		select
-			padding 15px
+    select
+      padding 15px
 
-		button
-			float right
-			width auto
-			margin-left 10px
+    button
+      float right
+      width auto
+      margin-left 10px
 
-			.icon
-				float left
-				margin -5px 10px -5px 0
-				font-size 25px
+      .icon
+        float left
+        margin -5px 10px -5px 0
+        font-size 25px
 
 .orderChatLog
 .modalSelect
-	position relative
-	margin-bottom 10px !important
+  position relative
+  margin-bottom 10px !important
 
 .modalSelect
-	select
-		-webkit-appearance none
-		-moz-appearance none
+  select
+    -webkit-appearance none
+    -moz-appearance none
 
 .orderChatLog:after
 .modalSelect:after
-	content "\f3d0"
-	position absolute
-	top 6px
-	right 6px
-	z-index -1
-	margin 0
-	padding 5px 10px
-	background $color-4
-	font-family "Ionicons"
-	font-size 20px
-	border-radius 4px
+  content "\f3d0"
+  position absolute
+  top 6px
+  right 6px
+  z-index -1
+  margin 0
+  padding 5px 10px
+  background $color-4
+  font-family "Ionicons"
+  font-size 20px
+  border-radius 4px
 
 .switchText
-	display inline-block
-	margin 7px 10px
+  display inline-block
+  margin 7px 10px
 
 .modalContent
-	display block
-	clear both
+  display block
+  clear both
 
 .innerSide
-	float right
-	width 25%
+  float right
+  width 25%
 
 .innerMain
-	float left
-	width 73%
+  float left
+  width 73%
 
 .notificationWarning
-	position relative
-	margin 0 0 20px 0
-	padding 20px
-	background $color-89
-	background linear-gradient(to bottom left, $color-89, $color-90)
-	color $color-18
-	border-radius 4px
-	box-shadow 0 6px 10px -5px $color-8
-	-moz-box-shadow 0 6px 10px -5px rgba(0, 0, 0, .3)
+  position relative
+  margin 0 0 20px 0
+  padding 20px
+  background $color-89
+  background linear-gradient(to bottom left, $color-89, $color-90)
+  color $color-18
+  border-radius 4px
+  box-shadow 0 6px 10px -5px $color-8
+  -moz-box-shadow 0 6px 10px -5px rgba(0, 0, 0, .3)
 
-	button
-		position absolute
-		top 50%
-		right 10px
-		width auto
-		-webkit-transform translate(0%, -50%)
-		transform translate(0%, -50%)
+  button
+    position absolute
+    top 50%
+    right 10px
+    width auto
+    -webkit-transform translate(0%, -50%)
+    transform translate(0%, -50%)
 
-		.fa
-			margin-right 10px
+    .fa
+      margin-right 10px
 
-	h3
-		margin 0 0 10px 0
-		padding 0
-		font-size 1.1em
-		font-weight bold
-		color white
+  h3
+    margin 0 0 10px 0
+    padding 0
+    font-size 1.1em
+    font-weight bold
+    color white
 
 select
-	option
-		&:not(:checked)
-			background $color-91
-			color $color-3
+  option
+    &:not(:checked)
+      background $color-91
+      color $color-3
 
 .paginationContent select
 .modal select
 .checkboxDialogue select
-	position relative
-	appearance none
-	padding 15px
-	cursor pointer
-	font-weight bold
-	color $color-9
-	-moz-appearance none
-	-webkit-appearance none
+  position relative
+  appearance none
+  padding 15px
+  cursor pointer
+  font-weight bold
+  color $color-9
+  -moz-appearance none
+  -webkit-appearance none
 
 .paginationContent
-	table
-		width -moz-available
-		/* WebKit-based browsers will ignore this. */
-		width -webkit-fill-available
-		width fill-available
-		margin -20px -20px -10px
-		box-shadow none
+  table
+    width -moz-available
+    /* WebKit-based browsers will ignore this. */
+    width -webkit-fill-available
+    width fill-available
+    margin -20px -20px -10px
+    box-shadow none
 
 .paginationContent select:hover
 .modal select:hover
 .checkboxDialogue select:hover
-	background $color-25 !important
+  background $color-25 !important
 
 .timeTableGo
-	margin -14px
-	padding 15px 20px
-	cursor pointer
-	background $color-12
-	border-radius 4px
-	transition .3s all
+  margin -14px
+  padding 15px 20px
+  cursor pointer
+  background $color-12
+  border-radius 4px
+  transition .3s all
 
-	&:hover
-		background $color-25
+  &:hover
+    background $color-25
 
 /* The container */
 
 .checkmarkContainer
-	position relative
-	display block
-	cursor pointer
-	font-size 22px
-	-webkit-user-select none
-	-moz-user-select none
-	-ms-user-select none
-	user-select none
-	/* margin: -7px; */
+  position relative
+  display block
+  cursor pointer
+  font-size 22px
+  -webkit-user-select none
+  -moz-user-select none
+  -ms-user-select none
+  user-select none
+  /* margin: -7px; */
 
-	input
-		position absolute
-		cursor pointer
-		opacity 0
-		transition .3s all
+  input
+    position absolute
+    cursor pointer
+    opacity 0
+    transition .3s all
 
-		&:checked
-			~.checkmark
-				background-color $color-58
-				transition .3s all
+    &:checked
+      ~.checkmark
+        background-color $color-58
+        transition .3s all
 
-				&:after
-					display block
-					transition .3s all
+        &:after
+          display block
+          transition .3s all
 
-	&:hover
-		input
-			~.checkmark
-				background-color $color-86
-				transition .3s all
+  &:hover
+    input
+      ~.checkmark
+        background-color $color-86
+        transition .3s all
 
-	.checkmark
-		&:after
-			top 5px
-			left 9px
-			height 10px
-			width 5px
-			border solid white
-			border-width 0 3px 3px 0
-			transition .3s all
-			-webkit-transform rotate(45deg)
-			transform rotate(45deg)
+  .checkmark
+    &:after
+      top 5px
+      left 9px
+      height 10px
+      width 5px
+      border solid white
+      border-width 0 3px 3px 0
+      transition .3s all
+      -webkit-transform rotate(45deg)
+      transform rotate(45deg)
 
 /* Hide the browser's default checkbox */
 
 /* Create a custom checkbox */
 
 .checkmark
-	position absolute
-	top -13px
-	left 0
-	height 25px
-	width 25px
-	background-color $color-25
-	border-radius 4px
-	transition .3s all
-	-webkit-transform translateX(50%)
-	transform translateX(50%)
+  position absolute
+  top -13px
+  left 0
+  height 25px
+  width 25px
+  background-color $color-25
+  border-radius 4px
+  transition .3s all
+  -webkit-transform translateX(50%)
+  transform translateX(50%)
 
-	&:after
-		content ""
-		position absolute
-		display none
-		transition .3s all
+  &:after
+    content ""
+    position absolute
+    display none
+    transition .3s all
 
 /* On mouse-over, add a grey background color */
 
@@ -2900,276 +2900,339 @@ select
 /* Style the checkmark/indicator */
 
 .searchTags
-	margin 0
-	padding 0
-	list-style-type none
+  margin 0
+  padding 0
+  list-style-type none
 
-	>li
-		display inline-block
-		width 100%
-		margin-bottom 10px
-		padding 15px
-		cursor pointer
-		background $color-12
-		color $color-24
-		border-radius 4px
-		transition .3s all
+  >li
+    display inline-block
+    width 100%
+    margin-bottom 10px
+    padding 15px
+    cursor pointer
+    background $color-12
+    color $color-24
+    border-radius 4px
+    transition .3s all
 
-		&:hover
-			color $color-3
+    &:hover
+      color $color-3
 
-		&:last-child
-			margin-bottom 0 !important
+    &:last-child
+      margin-bottom 0 !important
 
-		.icon
-			float right
-			margin-top -5px
-			margin-bottom -5px
-			font-size 25px
+    .icon
+      float right
+      margin-top -5px
+      margin-bottom -5px
+      font-size 25px
 
 .mtop
-	display block
-	margin-top 30px
+  display block
+  margin-top 30px
 
 .mbotSmall
-	display block
-	margin-bottom 20px
+  display block
+  margin-bottom 20px
 
 .moreInput
-	width auto
-	margin-bottom 10px
-	background $color-35
-	color $color-93
+  width auto
+  margin-bottom 10px
+  background $color-35
+  color $color-93
 
-	.fa
-		margin 0 !important
-		padding 0 !important
+  .fa
+    margin 0 !important
+    padding 0 !important
 
-	&:hover
-		background $color-94
+  &:hover
+    background $color-94
 
 ._Dynamic_Select_Activated
-	background $color-25 !important
-	border-color white !important
-	outline none !important
+  background $color-25 !important
+  border-color white !important
+  outline none !important
 
-	>._Title
-		color $color-3 !important
+  >._Title
+    color $color-3 !important
 
 
 ._Dynamic_Select
-	position relative
-	margin-bottom 10px
-	padding 15px
-	cursor pointer
-	background $color-12
-	font-family inherit
-	color white
-	border-radius 4px
-	box-shadow 0 5px 10px -5px $color-12
-	outline none
-	transition all .1s ease-in-out
-	-moz-box-shadow 0 5px 10px -5px rgba(0, 0, 0, .1)
+  position relative
+  margin-bottom 10px
+  padding 15px
+  cursor pointer
+  background $color-12
+  font-family inherit
+  color white
+  border-radius 4px
+  box-shadow 0 5px 10px -5px $color-12
+  outline none
+  transition all .1s ease-in-out
+  -moz-box-shadow 0 5px 10px -5px rgba(0, 0, 0, .1)
 
-	>._Dynamic_Layer
-		position fixed
-		z-index 4
-		width 100%
-		height 100%
-		cursor default
-		top 0
-		left 0
-		display none
+  >._Dynamic_Layer
+    position fixed
+    z-index 4
+    width 100%
+    height 100%
+    cursor default
+    top 0
+    left 0
+    display none
 
-		&.selected
-			display block
+    &.selected
+      display block
 
-	>._Title
-		margin -20px
-		padding 20px
-		font-weight bold
-		color $color-9
+  >._Title
+    margin -20px
+    padding 20px
+    font-weight bold
+    color $color-9
 
-	>._Select
-		position absolute
-		display none
-		top 50px
-		left 0
-		z-index 5
-		width 100%
-		padding 10px
-		background $color-1
-		background linear-gradient(to bottom left, $color-2, $color-1)
-		border-radius 4px
+  >._Select
+    position absolute
+    display none
+    top 50px
+    left 0
+    z-index 5
+    width 100%
+    padding 10px
+    background $color-1
+    background linear-gradient(to bottom left, $color-2, $color-1)
+    border-radius 4px
 
-		&.selected
-			display block
+    &.selected
+      display block
 
-		>._STitle
-			padding 15px 15px 15px 10px
-			cursor default
-			background transparent
-			font-size 12px
-			font-weight 900
-			color $color-95
-			text-transform uppercase
-			border-top 1px solid $color-96
+    >._STitle
+      padding 15px 15px 15px 10px
+      cursor default
+      background transparent
+      font-size 12px
+      font-weight 900
+      color $color-95
+      text-transform uppercase
+      border-top 1px solid $color-96
 
-		>._Container
-			overflow-y auto
-			max-height 150px
+    >._Container
+      overflow-y auto
+      max-height 150px
 
-		li
-			padding 10px 15px
-			cursor pointer
-			border-radius 4px
-			list-style-type none
-			transition .1s
+    >._Loading
+      display none
 
-			Container
-				>.checkmark
-					>.checkmark
-						top -6px
-						left -23px
-						z-index -1
+      &.selected
+        display block
 
-			&:hover
-				background $color-4
+      >._Loader
+      >._Loader:before
+      >._Loader:after
+        border-radius 50%
+        width 2.5em
+        height 2.5em
+        -webkit-animation-fill-mode both
+        animation-fill-mode both
+        -webkit-animation load 1.8s infinite ease-in-out
+        animation load 1.8s infinite ease-in-out
 
-			._Dot
-				display inline-block
-				height 10px
-				width 10px
-				margin 0 10px -1px 0
-				background $color-97
-				border-radius 50%
+      >._Loader
+        color #ffffff
+        font-size 4px
+        margin-left 24px
+        margin-bottom 24px
+        position relative
+        text-indent -9999em
+        -webkit-transform translateZ(0)
+        -ms-transform translateZ(0)
+        transform translateZ(0)
+        -webkit-animation-delay -0.16s
+        animation-delay -0.16s
 
-			b
-				font-weight 900
+        &:before
+          left -3.5em
+          -webkit-animation-delay -0.32s
+          animation-delay -0.32s
 
-			p
-				margin -1px 0
+        &:after
+          left 3.5em
 
-			._Counter
-				float right
-				font-size 12px
-				font-weight bold
+        &:before
+        &:after
+          content ''
+          position absolute
+          top 0
+
+    li
+      padding 10px 15px
+      cursor pointer
+      border-radius 4px
+      list-style-type none
+      transition .1s
+
+      Container
+        >.checkmark
+          >.checkmark
+            top -6px
+            left -23px
+            z-index -1
+
+      &:hover
+        background $color-4
+
+      ._Dot
+        display inline-block
+        height 10px
+        width 10px
+        margin 0 10px -1px 0
+        background $color-97
+        border-radius 50%
+
+      b
+        font-weight 900
+
+      p
+        margin -1px 0
+
+      ._Counter
+        float right
+        font-size 12px
+        font-weight bold
 
 .composerAvatar
-	float left
-	width 20px
-	margin-top -3px
-	margin-right 10px
-	margin-left -5px
-	border-radius 4px
+  float left
+  width 20px
+  margin-top -3px
+  margin-right 10px
+  margin-left -5px
+  border-radius 4px
 
 .modalDynamic
-	overflow-y visible !important
+  overflow-y visible !important
 
 .smallInput
-	padding 15px !important
+  padding 15px !important
 
 .modalFlags
-	margin-bottom 10px
+  margin-bottom 10px
 
 .monospace
-	font-family Monaco, monospace
+  font-family Monaco, monospace
 
 .inputGroup
-	position relative
-	margin-bottom 12px
+  position relative
+  margin-bottom 12px
 
-	>input
-		margin-bottom 0 !important
-		border-bottom: 1px solid transparent
+  >input
+    margin-bottom 0 !important
+    border-bottom: 1px solid transparent
 
-		&.invalid
-			border-bottom-color red
-		&:valid
-			~span
-				top 0
-				left -1%
+    &.invalid
+      border-bottom-color red
+    &:valid
+      ~span
+        top 0
+        left -1%
 
-	.tooltip_container
-		height 15px
+  .tooltip_container
+    height 15px
 
-	>span
-		position absolute
-		top 50%
-		left 0
-		padding-left 15px
-		color $color-98
-		transition all .2s ease-out
-		-webkit-transform translateY(-50%)
-		transform translateY(-50%)
-		-webkit-user-select none
-		-moz-user-select none
-		-ms-user-select none
-		user-select none
-		pointer-events none
+  >span
+    position absolute
+    top 50%
+    left 0
+    padding-left 15px
+    color $color-98
+    transition all .2s ease-out
+    -webkit-transform translateY(-50%)
+    transform translateY(-50%)
+    -webkit-user-select none
+    -moz-user-select none
+    -ms-user-select none
+    user-select none
+    pointer-events none
 
 .tooltip_container
-	position absolute
-	top 50%
-	right 5px
-	z-index 30
-	height 24px
-	width 24px
-	font-size 16px
-	-webkit-transform translateY(-50%)
-	transform translateY(-50%)
+  position absolute
+  top 50%
+  right 5px
+  z-index 30
+  height 24px
+  width 24px
+  font-size 16px
+  -webkit-transform translateY(-50%)
+  transform translateY(-50%)
 
-	&:hover
-		.tooltip
-			display block
+  &:hover
+    .tooltip
+      display block
 
-	.tooltip
-		display none
-		bottom 125%
-		left -9px
-		width 256px
-		font-size 12px
-		font-weight normal
+  .tooltip
+    display none
+    bottom 125%
+    left -9px
+    width 256px
+    font-size 12px
+    font-weight normal
 
 ._Title
-	user-select none
+  user-select none
 
-/* Safari */
+
+@-webkit-keyframes load
+  0%
+  80%
+  100%
+    box-shadow 0 2.5em 0 -1.3em
+
+  40%
+    box-shadow 0 2.5em 0 0
+
+@keyframes load
+  0%
+  80%
+  100%
+    box-shadow 0 2.5em 0 -1.3em
+
+  40%
+    box-shadow 0 2.5em 0 0
+
+
 
 @-webkit-keyframes spin
-	0%
-		-webkit-transform rotate(0deg)
+  0%
+    -webkit-transform rotate(0deg)
 
-	100%
-		-webkit-transform rotate(360deg)
+  100%
+    -webkit-transform rotate(360deg)
 
 @keyframes spin
-	0%
-		-webkit-transform rotate(0deg)
-		transform rotate(0deg)
+  0%
+    -webkit-transform rotate(0deg)
+    transform rotate(0deg)
 
-	100%
-		-webkit-transform rotate(360deg)
-		transform rotate(360deg)
+  100%
+    -webkit-transform rotate(360deg)
+    transform rotate(360deg)
 
 @media only screen and (max-width:480px)
-	.col
-		margin 1% 0 1% 0
+  .col
+    margin 1% 0 1% 0
 
-	.span_1_of_4
-		width 100%
+  .span_1_of_4
+    width 100%
 
-	.span_2_of_4
-		width 100%
+  .span_2_of_4
+    width 100%
 
-	.span_3_of_4
-		width 100%
+  .span_3_of_4
+    width 100%
 
-	.span_4_of_4
-		width 100%
+  .span_4_of_4
+    width 100%
 
-	.span_2_of_2
-		width 100%
+  .span_2_of_2
+    width 100%
 
-	.span_1_of_2
-		width 100%
+  .span_1_of_2
+    width 100%

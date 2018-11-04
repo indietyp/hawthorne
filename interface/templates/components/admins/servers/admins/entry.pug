@@ -18,7 +18,9 @@ tr(data-id='{{data.role.id}}', data-user='{{data.user.id}}', data-remove)
   td(style='width:1px')
     - with "flags/"|add:data.user.country.code|add:".svg" as url
       img.country(src='{% static url %}')
-  td= data.user.namespace
+  td
+    a(href='javascript:void(0)', onclick="window.vc('players[detailed]', '{{data.user.id}}')")
+      = data.user.namespace
   td
     if data.is_superuser
       = root
