@@ -2,9 +2,9 @@
   .innerMain
     h1 Players
     .CBox.nomargin
-      .timeTableGo.fRight(onclick="window.ajax('admins[servers][admins]', '.paginationContent table tbody', window.pagination.current + 1, true)")
+      .timeTableGo.fRight(onclick="window.ajax('players[overview]', '.paginationContent table tbody', window.pagination.current + 1, true)")
         i.icon.ion-ios-arrow-forward
-      .timeTableGo.fLeft(onclick="window.ajax('admins[servers][admins]', '.paginationContent table tbody', window.pagination.current - 1, true)")
+      .timeTableGo.fLeft(onclick="window.ajax('players[overview]', '.paginationContent table tbody', window.pagination.current - 1, true)")
         i.icon.ion-ios-arrow-back
       h3.center
         span Page

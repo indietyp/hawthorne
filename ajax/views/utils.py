@@ -34,6 +34,7 @@ def search(request, *args, **kwargs):
       if not data:
         user = User()
         user.is_steam = True
+        user.is_active = False
         user.username = str(steamid.as_64)
         user.save()
 
@@ -45,6 +46,7 @@ def search(request, *args, **kwargs):
     if not data:
       user = User()
       user.is_steam = True
+      user.is_active = False
       user.username = str(steamid.as_64)
 
       populate(user)

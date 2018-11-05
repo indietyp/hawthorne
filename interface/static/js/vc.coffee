@@ -56,8 +56,6 @@ load = (destination = 'home', scope = '') ->
 
 
 window.onpopstate = (event) ->
-  # console.log event
-
   if not event.state or event.state.skip
     window.history.back()
   else
