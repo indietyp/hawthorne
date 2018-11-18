@@ -8,170 +8,80 @@
     .close(data-trigger='[modal/close]')
       i.icon.ion-ios-close
     .modalContent
-      b.mtop.mbotSmall
-        i.icon.ion-ios-person(style='margin-right:10px')
-        |  User Details
-      .section.group
-        .col.span_1_of_2.modalSelect
-          ._Dynamic_Select
-            ._Title(data-trigger='[composer/select/open]') Username
-            ._Select
-              ._Select_Search
-                input(type='text', placeholder='Type to search in Steam...')
-              ._STitle Results
-              ._Container
-                li(data-trigger='[composer/select/choose]')
-                  img.composerAvatar(src='https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/63/634ac38fd17b1b9527af0639f2295ac26e62c0b7_medium.jpg')
-                  p
-                    b Akke
-        .col.span_1_of_2.modalSelect
-          select
-            option(default='') Select a Group
-            option All
-      button
-        i.fa.fa-save(style='margin-right:10px;')
-        |  Save
+      .section.group.modalSelect
+        ._Dynamic_Select
+          ._Dynamic_Layer
+          ._Title._Select_User(data-trigger='[composer/select/open]') Select a User
+          ._Select
+            ._Select_Search(style='position:relative')
+              input(type='text', placeholder='Type to search...', data-trigger='[composer/select/steam]')
+              .tooltip_container
+                .tooltip.left You can search via SteamID64, SteamID3, SteamID2, Steam profile URL or a username in the Hawthorne local database.
+                //- you can also email?
+                i.icon.ion-ios-information-circle-outline
+            ._STitle Results
+            ._Container
+            ._Loading
+              ._Loader
+      .section.group.modalSelect
+        ._Dynamic_Select
+          ._Dynamic_Layer
+          ._Title._Select_Role(data-trigger='[composer/select/open]') Select a Group
+          ._Select
+            ._Select_Search
+              input(type='text', placeholder='Type to search...', data-trigger='[composer/select/search]')
+            ._STitle Results
+            ._Container
+              //- - for role in roles
+              //-   li(data-trigger='[composer/select/choose]')
+              //-     p= role.name
+      button.unset
+        i.icon.ion-ios-save(style='margin-right:6px;')
+        | Save
   .modal.modalDynamic(data-component='[modal/group/add]')
-    h1 Group – New
+    h1 Role – New
     .close(data-trigger='[modal/close]')
       i.icon.ion-ios-close
     .modalContent
       b.mtop.mbotSmall
         i.icon.ion-ios-person(style='margin-right:10px')
-        |  Group Details
-      .section.group
-        .col.span_1_of_2
-          input.smallInput(type='text', placeholder='Group name')
-        .col.span_1_of_2
-          input.smallInput(type='text', placeholder='Group immunity (0-99)')
-      .section.group
-        .col.span_1_of_2
-          input.smallInput(type='text', placeholder='Expires in (11h 6m)')
-        .col.span_1_of_2.modalSelect
-          ._Dynamic_Select
-            ._Title(data-trigger='[composer/select/open]') Choose a server
-            ._Select
-              ._Select_Search
-                input(type='text', placeholder='Type to search in Steam...')
-              ._STitle Results
-              ._Container
-                li(data-trigger='[composer/select/choose]')
-                  img.composerAvatar(src='https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/63/634ac38fd17b1b9527af0639f2295ac26e62c0b7_medium.jpg')
-                  p
-                    b Some random server
-      b.mbotSmall
+        |  Role Details
+      .section.group.inputGroup
+        input.smallInput(type='text', required, placeholder=' ')
+        span Group Name
+      .section.group.inputGroup
+        input.smallInput(type='text', data-trigger='[input/duration]', placeholder=' ')
+        span Expiration (optional)
+        .tooltip_container
+          .tooltip.left Valid is the duration format described in <a style='color:green' href='https://tools.ietf.org/html/rfc3339#page-13', target='_blank'>RFC 3339, Page 13</a> as is the order. The P will be inserted automatically.
+          i.icon.ion-ios-information-circle-outline
+      b.mbotSmall(style='padding-top:6px')
         i.icon.ion-ios-flag(style='margin-right:10px')
-        |  Flags
-      .section.group
-        .col.span_1_of_4
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Reserved Slots
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Generic
-        .col.span_1_of_4
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Kick
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Ban
-        .col.span_1_of_4
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Slap
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Map
-        .col.span_1_of_4
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Cvar
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Config
-      .section.group
-        .col.span_1_of_4
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Chat
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Vote
-        .col.span_1_of_4
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Password
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Remote Control
-        .col.span_1_of_4
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Cheats
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Custom 1
-        .col.span_1_of_4
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Custom 2
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Custom 3
-      .section.group
-        .col.span_1_of_4
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Custom 4
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Custom 5
-        .col.span_1_of_4
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Custom 6
-      button
-        i.fa.fa-save(style='margin-right:10px;')
+        |  Permissions
+      .section.group(style='display:flex;align-items:center')
+        .selection
+          b.mbotSmall(style='padding-top:6px') Available
+          select#select-available(multiple, style='height:250px')
+            each permission in permissions
+              if permission.content_type.app_label in excluded
+                option
+                  = permission.content_type.model.title
+                  |  |
+                  = permission.name.title
+          a(href='javascript:void(0)') Select All
+        .actions(style='padding:12px')
+          i.icon.ion-ios-arrow-dropleft(data-trigger='[select/multiple/double]', data-source='#select-selected', data-target='#select-available')
+          i.icon.ion-ios-arrow-dropright(data-trigger='[select/multiple/double]', data-target='#select-selected', data-source='#select-available')
+        .selection
+          b.mbotSmall(style='padding-top:6px;margin-bottom:0px') Selected
+          select#select-selected(multiple, style='height:250px')
+            each permission in permissions
+              if permission.content_type.app_label not in excluded
+                option.hidden(checked, disabled, value="{{permission.content_type.model|add:'.'|add:permission.codename}}")
+          a(href='javascript:void(0)') Select All
+
+      button.unset
+        i.icon.ion-ios-save(style='margin-right:6px;')
         |  Save
 
   ul.paginationTabs(data-target='admins[web]')

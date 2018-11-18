@@ -397,6 +397,9 @@ h3 input {
   margin: 0;
   padding: 0;
 }
+.section .more >a {
+  color: #ace3ff;
+}
 .col {
   display: block;
   float: left;
@@ -2639,6 +2642,10 @@ select option:not(:checked) {
   display: block;
   margin-bottom: 20px;
 }
+.mbotSuperSmall {
+  display: block;
+  margin-bottom: 6px;
+}
 .moreInput {
   width: auto;
   margin-bottom: 10px;
@@ -2831,7 +2838,7 @@ select option:not(:checked) {
 .inputGroup >input.invalid {
   border-bottom-color: #f00;
 }
-.inputGroup >input:valid ~span {
+.inputGroup >input:not(:placeholder-shown) ~span {
   top: 0;
   left: -1%;
 }
@@ -2877,6 +2884,40 @@ select option:not(:checked) {
 }
 ._Title {
   user-select: none;
+}
+.selection {
+  flex: 1;
+}
+.selection > a {
+  color: #ace3ff;
+  margin-bottom: 12px;
+  display: block;
+}
+.selection > b {
+  margin-bottom: 6px;
+  padding-top: 6px;
+}
+.selection select[multiple] {
+  padding: 0px;
+  overflow-y: auto;
+  height: 250px;
+  margin-bottom: 6px;
+}
+.selection select[multiple] > option {
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding: 6px;
+}
+.actions {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+}
+.actions > i {
+  font-size: 24px;
+  cursor: pointer;
+}
+.actions > i:first-child {
+  margin-bottom: 12px;
 }
 @-webkit-keyframes load {
   0%, 80%, 100% {

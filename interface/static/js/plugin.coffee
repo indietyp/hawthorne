@@ -3,19 +3,14 @@ $(->
 )
 
 init = (scope = document) ->
-  dropdown_toggle = (event) ->
-    event.stopImmediatePropagation()
-
+  $('[data-trigger="[dropdown/toggle]"]', scope).off 'click'
+  $('[data-trigger="[dropdown/toggle]"]', scope).on 'click', ->
     $('.expand').not($('.expand', @.parentElement)).slideUp()
     $('.menu > ul > li > a').not($(@)).removeClass 'navActive'
     $(@).toggleClass 'navActive'
     $('.expand', @.parentElement).slideToggle()
 
     return
-
-  $('[data-trigger=\'[dropdown/toggle]\']', scope).off 'click'
-  $('[data-trigger=\'[dropdown/toggle]\']', scope).on 'click', dropdown_toggle
-
 
   modal_open = ->
     $('.overlay').fadeIn 'fast'
@@ -397,6 +392,13 @@ init = (scope = document) ->
 
     event.target.value = value
     @.setSelectionRange(cursor + 1, cursor + 1)
+
+  $('[data-trigger="[select/multiple/double]"]', scope).on 'click', ->
+    source = $ @.getAttribute('data-source')
+    target = $ @.getAttribute('data-target')
+
+    Array.from(source[0].selectedOptions).forEach (el) ->
+      target[0].insertBefore el, target[0].firstChild
   return
 
 menu = ->

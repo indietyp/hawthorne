@@ -96,7 +96,12 @@ def admins_servers(request):
 
 @login_required(login_url='/login')
 def admins_web(request):
-  return render(request, 'pages/admins/web.pug')
+  from django.contrib.auth.models import Permission
+
+  permissions = Permission.objects.order_by('content_type__model')
+  excluded = ['core', 'log', 'auth']
+  return render(request, 'pages/admins/web.pug', {'permissions': permissions,
+                                                  'excluded': excluded})
 
 
 @login_required(login_url='/login')

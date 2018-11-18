@@ -515,6 +515,10 @@ h3
   margin 0
   padding 0
 
+  .more
+    >a
+      color $color-9
+
 .col
   display block
   float left
@@ -2935,6 +2939,10 @@ select
   display block
   margin-bottom 20px
 
+.mbotSuperSmall
+  display block
+  margin-bottom 6px
+
 .moreInput
   width auto
   margin-bottom 10px
@@ -3129,7 +3137,7 @@ select
 
     &.invalid
       border-bottom-color red
-    &:valid
+    &:not(:placeholder-shown)
       ~span
         top 0
         left -1%
@@ -3177,6 +3185,41 @@ select
 
 ._Title
   user-select none
+
+.selection
+  flex 1
+
+  & > a
+    color $color-9
+    margin-bottom 12px
+    display block
+
+  & > b
+    margin-bottom 6px
+    padding-top 6px
+
+  select[multiple]
+    padding 0px
+    overflow-y auto
+    height 250px
+    margin-bottom 6px
+
+    & > option
+      border-bottom 1px solid $color-48
+      padding 6px
+
+.actions
+  padding 12px
+  display flex
+  flex-direction column
+
+  > i
+    font-size 24px
+    cursor pointer
+
+    &:first-child
+      margin-bottom 12px
+
 
 
 @-webkit-keyframes load
