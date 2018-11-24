@@ -1,3 +1,4 @@
 li(data-trigger='[composer/select/choose]', data-id=data.id)
-  img.composerAvatar(src=data.avatar)
+  if data.avatar
+    img.composerAvatar(src=data.avatar)
   p= data.namespace

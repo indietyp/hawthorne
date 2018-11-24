@@ -59,5 +59,14 @@ def search(request, *args, **kwargs):
 
     data = [item[0] for item in sorted(data, key=lambda x: x[1])]
 
+  elif 'steam' in payload:
+    user = User()
+    user.is_steam = False
+    user.is_active = False
+    user.username = payload['steam']
+    user.save()
+
+    data = [user]
+
   return render(request, 'components/globals/dropdown/wrapper.pug',
                 {'data': data[:settings.PAGE_SIZE]})

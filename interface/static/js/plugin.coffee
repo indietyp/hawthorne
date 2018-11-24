@@ -180,9 +180,12 @@ init = (scope = document) ->
   $('[data-trigger="[composer/select/steam]"]', scope).off 'keyup'
   $('[data-trigger="[composer/select/steam]"]', scope).on 'keyup', (e) ->
     value = @.value
+    local = @.hasAttribute 'data-email'
     url =
       profile: /^(?:https:\/\/)?steamcommunity\.com\/profiles\/(\d+)$/i.exec value
       id: /^(?:https:\/\/)?steamcommunity\.com\/id\/(.+)$/i.exec value
+      email: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.exec value
+
     header =
     'X-CSRFToken': window.csrftoken
 
@@ -192,11 +195,15 @@ init = (scope = document) ->
       value = url.profile[1]
     else if url.id
       value = url.id[1]
+    else if local and url.email
+      return
 
     if url.id
       payload = JSON.stringify({'steam': value})
     else if SteamIDConverter.isSteamID64(value)
       payload = JSON.stringify({'steam64': value})
+    else if local and url.email
+      payload = JSON.stringify({'email': value})
     else
       payload = JSON.stringify({'local': value})
 

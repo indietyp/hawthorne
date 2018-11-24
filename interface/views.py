@@ -6,6 +6,7 @@ import random
 from automated_logging.models import Model as LogModel
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
 from django.db.models import Count, DateTimeField, ExpressionWrapper, F
 from django.db.models.deletion import Collector
 from django.db.models.functions import Extract
@@ -100,8 +101,10 @@ def admins_web(request):
 
   permissions = Permission.objects.order_by('content_type__model')
   excluded = ['core', 'log', 'auth']
+  groups = Group.objects.all()
   return render(request, 'pages/admins/web.pug', {'permissions': permissions,
-                                                  'excluded': excluded})
+                                                  'excluded': excluded,
+                                                  'groups': groups})
 
 
 @login_required(login_url='/login')
@@ -120,8 +123,10 @@ def punishments(request):
                     .filter(completion__lte=timezone.now(),
                             resolved=False,
                             length__isnull=False).update(resolved=True)
+  servers = Server.objects.all()
 
-  return render(request, 'pages/punishments/general.pug', {'mode': mode})
+  return render(request, 'pages/punishments/general.pug', {'mode': mode,
+                                                           'servers': servers})
 
 
 @login_required(login_url='/login')

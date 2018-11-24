@@ -263,9 +263,7 @@ class Punishment(BaseModel):
   updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='punishment_updated_by', null=True)
 
   class Meta:
-    permissions = [
-      # ('view_punishment', 'Can view punishments'),
-    ]
+    permissions = []
 
   def __str__(self):
     return "{} - {}".format(self.user, self.server)
