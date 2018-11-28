@@ -330,7 +330,6 @@ edit = (mode = '', that) ->
 
       roles.htmlAppend("<select id='user-group-#{uuid}' multiple></select>")
       selector = new Choices("#user-group-#{uuid}", {
-        searchEnabled: false,
         choices: [],
         duplicateItems: false,
         paste: false,

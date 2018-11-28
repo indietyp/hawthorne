@@ -1,10 +1,10 @@
 """API interface for internal groups"""
 
 from django.contrib.auth.models import Group, Permission
+from django.db.models import F
 from django.forms.models import model_to_dict
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.db.models import F
 
 from core.decorators.api import json_response, validation
 from core.decorators.auth import authentication_required, permission_required
@@ -31,11 +31,12 @@ def list(request, validated={}, *args, **kwargs):
                              .annotate(encoded=F('content_type__model') + '.' + F('codename'))\
                              .filter(encoded__in=request.user.get_all_permissions())\
                              .order_by('content_type__model')
+
     exceptions = []
     perms = []
     for perm in validated['permissions']:
       perm = perm.split('.')
-      p = base.filter(content_type__app_label=perm[0], codename=perm[1])
+      p = base.filter(content_type__model=perm[0], codename=perm[1])
 
       if not p:
         exceptions.append('.'.join(perm))

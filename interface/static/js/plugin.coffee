@@ -301,18 +301,28 @@ init = (scope = document) ->
   $("[data-trigger='[table/choice]']", scope).off 'click'
   $("[data-trigger='[table/choice]']", scope).on 'click', table_choice
 
-  modal_action = ->
+  $("[data-trigger='[modal/action]']", scope).off 'click'
+  $("[data-trigger='[modal/action]']", scope).on 'click', ->
     parent = $(@).parent '.modal'
 
     mode = @.getAttribute('data-mode')
-    action = @.getAttribute('data-mode')
+    action = @.getAttribute('data-action')
 
     switch action
       when 'delete'
         window.api.remove(mode, parent[0], false)
 
-  $("[data-trigger='[modal/action]']", scope).off 'click'
-  $("[data-trigger='[modal/action]']", scope).on 'click', modal_action
+
+  $("[data-trigger='[modal/form]']", scope).off 'submit'
+  $("[data-trigger='[modal/form]']", scope).on 'submit', (e) ->
+    e.preventDefault()
+
+    mode = @.getAttribute('data-mode')
+    action = @.getAttribute('data-action')
+
+    switch action
+      when 'create'
+        window.api.create(mode, @, false)
 
   grid_delete = ->
     parent = $(@).parent '.serverGridItem'

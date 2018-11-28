@@ -43,6 +43,10 @@ def warp(duration):
 @register.filter
 def permission_percentage(value):
   data = value.permissions.all().count() if isinstance(value, (Group, Token)) else len(value.get_all_permissions())
+
+  if data == 0:
+    return "0"
+
   return str(int(round(Permission.objects.all().count() / data * 100)))
 
 

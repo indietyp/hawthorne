@@ -38,50 +38,43 @@
         i.icon.ion-ios-save(style='margin-right:6px;')
         | Save
   .modal.modalDynamic(data-component='[modal/group/add]')
-    h1 Role – New
+    h1 Group – New
     .close(data-trigger='[modal/close]')
       i.icon.ion-ios-close
     .modalContent
-      b.mtop.mbotSmall
-        i.icon.ion-ios-person(style='margin-right:10px')
-        |  Role Details
-      .section.group.inputGroup
-        input.smallInput(type='text', required, placeholder=' ')
-        span Group Name
-      .section.group.inputGroup
-        input.smallInput(type='text', data-trigger='[input/duration]', placeholder=' ')
-        span Expiration (optional)
-        .tooltip_container
-          .tooltip.left Valid is the duration format described in <a style='color:green' href='https://tools.ietf.org/html/rfc3339#page-13', target='_blank'>RFC 3339, Page 13</a> as is the order. The P will be inserted automatically.
-          i.icon.ion-ios-information-circle-outline
-      b.mbotSmall(style='padding-top:6px')
-        i.icon.ion-ios-flag(style='margin-right:10px')
-        |  Permissions
-      .section.group(style='display:flex;align-items:center')
-        .selection
-          b.mbotSmall(style='padding-top:6px') Available
-          select#select-available(multiple, style='height:250px')
-            each permission in permissions
-              if permission.content_type.app_label in excluded
-                option
-                  = permission.content_type.model.title
-                  |  |
-                  = permission.name.title
-          a(href='javascript:void(0)') Select All
-        .actions(style='padding:12px')
-          i.icon.ion-ios-arrow-dropleft(data-trigger='[select/multiple/double]', data-source='#select-selected', data-target='#select-available')
-          i.icon.ion-ios-arrow-dropright(data-trigger='[select/multiple/double]', data-target='#select-selected', data-source='#select-available')
-        .selection
-          b.mbotSmall(style='padding-top:6px;margin-bottom:0px') Selected
-          select#select-selected(multiple, style='height:250px')
-            each permission in permissions
-              if permission.content_type.app_label not in excluded
-                option.hidden(checked, disabled, value="{{permission.content_type.model|add:'.'|add:permission.codename}}")
-          a(href='javascript:void(0)') Select All
+      form(data-trigger='[modal/form]', data-action='create', data-mode='admins[web][groups]')
+        b.mtop.mbotSmall
+          i.icon.ion-ios-person(style='margin-right:10px')
+          |  Group Details
+        .section.group.inputGroup
+          input.smallInput(type='text', required, placeholder=' ', name='name')
+          span Name
+        b.mbotSmall(style='padding-top:6px')
+          i.icon.ion-ios-flag(style='margin-right:10px')
+          |  Permissions
+        .section.group(style='display:flex;align-items:center')
+          .selection
+            b.mbotSmall(style='padding-top:6px') Available
+            select.skip#select-available(multiple, style='height:250px')
+              each permission in permissions
+                if permission.content_type.app_label in excluded
+                  option(value="{{permission.content_type.model|add:'.'|add:permission.codename}}")
+                    = permission.content_type.model.title
+                    |  |
+                    = permission.name.title
+            a(href='javascript:void(0)') Select All
+          .actions(style='padding:12px')
+            i.icon.ion-ios-arrow-dropleft(data-trigger='[select/multiple/double]', data-source='#select-selected', data-target='#select-available')
+            i.icon.ion-ios-arrow-dropright(data-trigger='[select/multiple/double]', data-target='#select-selected', data-source='#select-available')
+          .selection
+            b.mbotSmall(style='padding-top:6px;margin-bottom:0px') Selected
+            select#select-selected(multiple, style='height:250px', name='permissions')
+              each permission in permissions
+                if permission.content_type.app_label not in excluded
+                  option.hidden(checked, disabled, value="{{permission.content_type.model|add:'.'|add:permission.codename}}")
+            a(href='javascript:void(0)') Select All
 
-      button.unset
-        i.icon.ion-ios-save(style='margin-right:6px;')
-        |  Save
+        input.skip(type="submit", value='Save').unset
 
   ul.paginationTabs(data-target='admins[web]')
     li(data-trigger="[ct/switch]", data="admins") Admins
