@@ -3,7 +3,9 @@ html {
   background-color: #265296;
 }
 body {
-  height: 100%;
+  min-height: 100%;
+  display: block;
+  display: flow-root;
   margin: 0;
   background: #2c3370;
   background: linear-gradient(to bottom left, #265296, #2c3370);
@@ -819,6 +821,36 @@ textarea {
   transition: 0.3s all ease-in-out;
   -moz-box-shadow: 0 5px 10px -5px rgba(0,0,0,0.1);
 }
+input[type='radio'] + label {
+  display: block;
+  flex-grow: 1;
+  margin-bottom: 10px;
+  padding: 15px;
+  background: rgba(0,0,0,0.1);
+  font-family: inherit;
+  font-size: inherit;
+  text-align: center;
+  font-weight: bold;
+  color: #ace3ff;
+  border: none;
+  box-shadow: 0 5px 10px -5px rgba(0,0,0,0.1);
+  outline: none;
+  transition: 0.3s all ease-in-out;
+  -moz-box-shadow: 0 5px 10px -5px rgba(0,0,0,0.1);
+}
+input[type='radio'] + label.first {
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+  border-right: 1px solid rgba(255,255,255,0.05);
+}
+input[type='radio'] + label.last {
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-left: 1px solid rgba(255,255,255,0.05);
+}
+input[type='radio']:checked + label {
+  background: rgba(0,0,0,0.15) !important;
+}
 textarea:last-child {
   margin-bottom: 0;
 }
@@ -826,6 +858,9 @@ input:focus,
 select:focus,
 textarea:focus {
   background: rgba(0,0,0,0.15) !important;
+}
+.radioContainer {
+  display: flex;
 }
 .switch {
   position: relative;
@@ -2724,7 +2759,7 @@ select option:not(:checked) {
   padding: 10px;
   background: #2c3370;
   background: linear-gradient(to bottom left, #265296, #2c3370);
-  border-radius: 4px;
+  border-radius: 2px;
 }
 ._Dynamic_Select >._Select.selected {
   display: block;

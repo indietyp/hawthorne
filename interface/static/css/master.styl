@@ -93,7 +93,11 @@ html
   background-color $color-2
 
 body
-  height 100%
+  min-height 100%
+
+  display block
+  display flow-root
+
   margin 0
   background $color-1
   background linear-gradient(to bottom left, $color-2, $color-1)
@@ -949,6 +953,37 @@ textarea
   transition .3s all ease-in-out
   -moz-box-shadow 0 5px 10px -5px rgba(0, 0, 0, .1)
 
+input[type='radio']
+  & + label
+    display block
+    flex-grow 1
+    margin-bottom 10px
+    padding 15px
+    background $color-12
+    font-family inherit
+    font-size inherit
+    text-align center
+    font-weight bold
+    color $color-9
+    border none
+    box-shadow 0 5px 10px -5px $color-12
+    outline none
+    transition .3s all ease-in-out
+    -moz-box-shadow 0 5px 10px -5px rgba(0, 0, 0, .1)
+
+    &.first
+      border-bottom-left-radius 2px
+      border-top-left-radius 2px
+      border-right 1px solid $color-48
+
+    &.last
+      border-top-right-radius 2px
+      border-bottom-right-radius 2px
+      border-left 1px solid $color-48
+
+  &:checked + label
+    background $color-25 !important
+
 textarea
   &:last-child
     margin-bottom 0
@@ -957,6 +992,9 @@ input:focus
 select:focus
 textarea:focus
   background $color-25 !important
+
+.radioContainer
+  display flex
 
 .switch
   position relative
@@ -3022,7 +3060,7 @@ select
     padding 10px
     background $color-1
     background linear-gradient(to bottom left, $color-2, $color-1)
-    border-radius 4px
+    border-radius 2px
 
     &.selected
       display block
