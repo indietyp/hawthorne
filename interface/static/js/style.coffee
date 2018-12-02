@@ -109,11 +109,28 @@ loginUsername = (event) ->
   else
     $('.transition').slideUp()
 
+showToast = (mode, message) ->
+  toast = $ '.toast'
+  toast.addClass mode
+
+  description = $ '.desc', '.toast'
+  description[0].innerHTML = message
+
+  toast.addClass 'show'
+
+  setTimeout(->
+    toast.removeClass mode
+    toast.removeClass 'show'
+  , 5000)
+
+  return
+
 window.style.getOrCreate('utils').getOrCreate('verify').input = InputVerification
 window.style.card = InformationCard
 window.style.copy = copyTextToClipboard
 window.style.rcon = executeServer
 window.style.login = loginUsername
+window.style.toast = showToast
 
 window.endpoint =
   api: fermata.hawpi '/api/v1'

@@ -3863,6 +3863,147 @@ span.flatpickr-weekday
 .flatpickr-input[readonly]
   cursor pointer
 
+.toast
+  visibility hidden
+  max-width 50px
+  height 50px
+  margin auto
+  background linear-gradient(to bottom left, $color-2, $color-1)
+  text-align center
+  border-radius 2px
+  position fixed
+  z-index 1
+  left 0
+  right 0
+  bottom 30px
+  font-size 17px
+  white-space nowrap
+
+  box-shadow 0 15px 30px 0 $color-12, 0 5px 15px 0 $color-10
+  -moz-box-shadow 0 15px 30px 0 rgba(0, 0, 0, .11), 0 5px 15px 0 rgba(0, 0, 0, .08)
+
+  &.success .icon
+    background-color $color-35
+
+    i.success
+      display block
+
+  &.warn .icon
+    background-color $color-73
+    i.warn
+      display block
+
+  &.error .icon
+    background-color $color-64
+
+    i.error
+      display block
+
+  > .icon
+    width 50px
+    display flex
+    align-items center
+    height 50px
+    float left
+    padding-top 16px
+    padding-bottom 16px
+    box-sizing border-box
+    margin-right 16px
+    border-radius 2px
+
+    i
+      display none
+      font-size 32px
+      flex-grow 1
+
+  .desc
+    padding-top 16px
+    overflow hidden
+    white-space nowrap
+
+  &.show
+    visibility visible
+    -webkit-animation fadein 0.5s, expand 0.5s 0.5s,stay 3s 1s, shrink 0.5s 2s, fadeout 0.5s 2.5s
+    animation fadein 0.5s, expand 0.5s 0.5s,stay 3s 1s, shrink 0.5s 4s, fadeout 0.5s 4.5s
+
+@-webkit-keyframes fadein
+  from
+    bottom 0
+    opacity 0
+
+  to
+    bottom 30px
+    opacity 1
+
+@keyframes fadein
+  from
+    bottom 0
+    opacity 0
+
+  to
+    bottom 30px
+    opacity 1
+
+@-webkit-keyframes expand
+  from
+    min-width 50px
+
+  to
+    min-width 350px
+
+@keyframes expand
+  from
+    min-width 50px
+
+  to
+    min-width 350px
+
+@-webkit-keyframes stay
+  from
+    min-width 350px
+
+  to
+    min-width 350px
+
+@keyframes stay
+  from
+    min-width 350px
+
+  to
+    min-width 350px
+
+@-webkit-keyframes shrink
+  from
+    min-width 350px
+
+  to
+    min-width 50px
+
+@keyframes shrink
+  from
+    min-width 350px
+
+  to
+    min-width 50px
+
+@-webkit-keyframes fadeout
+  from
+    bottom 30px
+    opacity 1
+
+  to
+    bottom 60px
+    opacity 0
+
+@keyframes fadeout
+  from
+    bottom 30px
+    opacity 1
+
+  to
+    bottom 60px
+    opacity 0
+
 @-webkit-keyframes load
   0%
   80%
