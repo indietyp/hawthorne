@@ -7,7 +7,8 @@ request = (endpoint, options, payload, method, target) ->
 
 single = (mode = '', target) ->
   payload = {}
-  options = {}
+  options =
+    toast: true
   method = 'put'
   component = undefined
 
@@ -42,6 +43,7 @@ single = (mode = '', target) ->
     )
   else
     request endpoint, options, payload, method, target
+
   return
 
 create = (mode = '', target, batch = false) ->
