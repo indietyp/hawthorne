@@ -17,5 +17,13 @@ fermata.registerPlugin 'hawpi', (transport, base) ->
         catch e
           err = e
 
+      if request.options.toast
+        if err
+          window.style.toast 'error', err
+        else if not response.success
+          window.style.toast 'error', response.reason
+        else
+          window.style.toast 'success', 'Successfully applied changes!'
+
       callback err, response
       return
