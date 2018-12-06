@@ -174,7 +174,7 @@ init = (scope = document) ->
     $('._Select', parent).toggleClass 'selected'
     $('._Dynamic_Layer', parent).toggleClass 'selected'
     $('._Title', parent)[0].textContent = $('p', @)[0].textContent
-    $('._Title', parent)[0].value = $('p', @)[0].value
+    $('._Value', parent)[0].value = @.getAttribute('data-value')
     return
 
   $('[data-trigger="[composer/select/steam]"]', scope).off 'keyup'

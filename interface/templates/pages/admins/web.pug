@@ -8,35 +8,38 @@
     .close(data-trigger='[modal/close]')
       i.icon.ion-ios-close
     .modalContent
-      .section.group.modalSelect
-        ._Dynamic_Select
-          ._Dynamic_Layer
-          ._Title._Select_User(data-trigger='[composer/select/open]') Select a User
-          ._Select
-            ._Select_Search(style='position:relative')
-              input(type='text', placeholder='Type to search...', data-trigger='[composer/select/steam]', data-email)
-              .tooltip_container
-                .tooltip.left You can search via SteamID64, SteamID3, SteamID2, Steam profile URL or a username in the Hawthorne local database. You can also specify an email address.
-                i.icon.ion-ios-information-circle-outline
-            ._STitle Results
-            ._Container
-            ._Loading
-              ._Loader
-      .section.group.modalSelect
-        ._Dynamic_Select
-          ._Dynamic_Layer
-          ._Title._Select_Role(data-trigger='[composer/select/open]') Select a Group
-          ._Select
-            ._Select_Search
-              input(type='text', placeholder='Type to search...', data-trigger='[composer/select/search]')
-            ._STitle Results
-            ._Container
-              - for group in groups
-                li(data-trigger='[composer/select/choose]')
-                  p= group.name
-      button.unset
-        i.icon.ion-ios-save(style='margin-right:6px;')
-        | Save
+      //- , data-append='roles'
+      form(data-trigger='[modal/form]', data-action='create', data-mode='admins[web][admins]')
+        .section.group.modalSelect
+          ._Dynamic_Select
+            ._Dynamic_Layer
+            ._Title._Select_User(data-trigger='[composer/select/open]') Select a User
+            input._Value.hidden.target(required)
+            ._Select
+              ._Select_Search(style='position:relative')
+                input.skip(type='text', placeholder='Type to search...', data-trigger='[composer/select/steam]', data-email)
+                .tooltip_container
+                  .tooltip.left You can search via SteamID64, SteamID3, SteamID2, Steam profile URL or a username in the Hawthorne local database. You can also specify an email address.
+                  i.icon.ion-ios-information-circle-outline
+              ._STitle Results
+              ._Container
+              ._Loading
+                ._Loader
+        .section.group.modalSelect
+          ._Dynamic_Select
+            ._Dynamic_Layer
+            ._Title._Select_Role(data-trigger='[composer/select/open]') Select a Group
+            input._Value.hidden(name='groups', data-list, required)
+            ._Select
+              ._Select_Search
+                input.skip(type='text', placeholder='Type to search...', data-trigger='[composer/select/search]')
+              ._STitle Results
+              ._Container
+                - for group in groups
+                  li(data-trigger='[composer/select/choose]', data-value=group.id)
+                    p= group.name
+        input.skip(type="submit", value='Save').unset
+
   .modal.modalDynamic(data-component='[modal/group/add]')
     h1 Group – New
     .close(data-trigger='[modal/close]')

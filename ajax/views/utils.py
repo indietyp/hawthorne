@@ -23,7 +23,7 @@ def wrapper(target, root='', *args, **kwargs):
 @require_http_methods(['POST'])
 def search(request, *args, **kwargs):
   payload = json.loads(request.body.decode())
-  users = cache.get_or_set('steam', User.objects.filter(is_steam=True).all, None)
+  users = cache.get_or_set('steam', User.objects.filter(is_steam=True).all, 500)
 
   if 'steam' in payload:
     steamid = SteamID.from_url('https://steamcommunity.com/id/' + payload['steam'])
