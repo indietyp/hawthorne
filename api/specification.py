@@ -119,7 +119,7 @@ validation = {
                                    'immunity': {'type': 'integer', 'required': True, 'min': 0, 'max': 100},
                                    'server': {'type': 'uuid', 'default': None, 'nullable': True},
                                    'usetime': {'type': 'integer', 'default': None, 'nullable': True, 'min': 0},
-                                   'flags': {'type': 'string', 'default': None, 'nullable': True, 'regex': r'[A-N]+'},
+                                   'flags': {'type': 'string', 'default': None, 'nullable': True, 'regex': r'[A-T]+'},
                                    'members': {'type': 'list', 'default': [], 'schema': {'type': 'uuid'}}},
                     'permission': ['core.add_role']}
         },

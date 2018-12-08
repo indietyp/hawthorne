@@ -8,181 +8,184 @@
     .close(data-trigger='[modal/close]')
       i.icon.ion-ios-close
     .modalContent
-      .section.group.modalSelect
-        ._Dynamic_Select
-          ._Dynamic_Layer
-          ._Title._Select_User(data-trigger='[composer/select/open]') Select a User
-          ._Select
-            ._Select_Search(style='position:relative')
-              input(type='text', placeholder='Type to search...', data-trigger='[composer/select/steam]')
-              .tooltip_container
-                .tooltip.left You can search via SteamID64, SteamID3, SteamID2, Steam profile URL or a username in the Hawthorne local database.
-                i.icon.ion-ios-information-circle-outline
-            ._STitle Results
-            ._Container
-            ._Loading
-              ._Loader
-      .section.group.modalSelect
-        ._Dynamic_Select
-          ._Dynamic_Layer
-          ._Title._Select_Role(data-trigger='[composer/select/open]') Select a Role
-          ._Select
-            ._Select_Search
-              input(type='text', placeholder='Type to search...', data-trigger='[composer/select/search]')
-            ._STitle Results
-            ._Container
-              - for role in roles
-                li(data-trigger='[composer/select/choose]')
-                  p= role.name
-      button.unset
-        i.icon.ion-ios-save(style='margin-right:6px;')
-        | Save
+      form(data-trigger='[modal/form]', data-action='create', data-mode='admins[server][admins]', data-append='roles')
+        .section.group.modalSelect
+          ._Dynamic_Select
+            ._Dynamic_Layer
+            ._Title._Select_User(data-trigger='[composer/select/open]') Select a User
+            input._Value.hidden.target(required)
+            ._Select
+              ._Select_Search(style='position:relative')
+                input.skip(type='text', placeholder='Type to search...', data-trigger='[composer/select/steam]')
+                .tooltip_container
+                  .tooltip.left You can search via SteamID64, SteamID3, SteamID2, Steam profile URL or a username in the Hawthorne local database.
+                  i.icon.ion-ios-information-circle-outline
+              ._STitle Results
+              ._Container
+              ._Loading
+                ._Loader
+        .section.group.modalSelect
+          ._Dynamic_Select
+            ._Dynamic_Layer
+            ._Title._Select_Role(data-trigger='[composer/select/open]') Select a Role
+            input._Value.hidden(name='roles', data-list, required)
+            ._Select
+              ._Select_Search
+                input(type='text', placeholder='Type to search...', data-trigger='[composer/select/search]')
+              ._STitle Results
+              ._Container
+                - for role in roles
+                  li(data-trigger='[composer/select/choose]')
+                    p= role.name
+        input.skip.unset(type="submit", value='Save')
+
   .modal.modalDynamic(data-component='[modal/group/add]')
     h1 Role – New
     .close(data-trigger='[modal/close]')
       i.icon.ion-ios-close
     .modalContent
-      b.mtop.mbotSmall
-        i.icon.ion-ios-person(style='margin-right:10px')
-        |  Role Details
-      .section.group.inputGroup
-        input.smallInput(type='text', required, placeholder=' ')
-        span Group Name
-      .section.group.inputGroup
-        input.smallInput(type='text', required, data-trigger='[input/range]', data-max="99", data-min="0", placeholder=' ')
-        span Group Immunity (0-99)
-      .section.group.inputGroup
-        input.smallInput(type='text', data-trigger='[input/duration]', placeholder=' ')
-        span Expiration (optional)
-        .tooltip_container
-          .tooltip.left Valid is the duration format described in <a style='color:green' href='https://tools.ietf.org/html/rfc3339#page-13', target='_blank'>RFC 3339, Page 13</a> as is the order. The P will be inserted automatically.
-          i.icon.ion-ios-information-circle-outline
-      .section.group.modalSelect
-        ._Dynamic_Select
-          ._Dynamic_Layer
-          ._Title(data-trigger='[composer/select/open]') Choose a Server
-          ._Select
-            ._Select_Search
-              input(type='text', placeholder='Type to search...', data-trigger='[composer/select/search]')
-            ._STitle Results
-            ._Container
-              - for server in servers
-                li(data-trigger='[composer/select/choose]')
-                  p= server.name
-      b.mbotSmall(style='padding-top:6px')
-        i.icon.ion-ios-flag(style='margin-right:10px')
-        |  Flags
-      .section.group
-        .col.span_1_of_4
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Reserved Slots
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Generic
-        .col.span_1_of_4
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Kick
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Ban
-        .col.span_1_of_4
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Slap
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Map
-        .col.span_1_of_4
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Cvar
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Config
-      .section.group
-        .col.span_1_of_4
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Chat
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Vote
-        .col.span_1_of_4
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Password
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Remote Control
-        .col.span_1_of_4
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Cheats
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Custom 1
-        .col.span_1_of_4
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Custom 2
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Custom 3
-      .section.group
-        .col.span_1_of_4
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Custom 4
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Custom 5
-        .col.span_1_of_4
-          .modalFlags
-            label.switch
-              input(type='checkbox')
-              span.slider.round
-            .switchText Custom 6
-      button.unset
-        i.icon.ion-ios-save(style='margin-right:6px;')
-        |  Save
+      form(data-trigger='[modal/form]', data-action='create', data-mode='admins[server][roles]')
+        b.mtop.mbotSmall
+          i.icon.ion-ios-person(style='margin-right:10px')
+          |  Role Details
+        .section.group.inputGroup
+          input.smallInput(name='name', type='text', required, placeholder=' ')
+          span Role Name
+        .section.group.inputGroup
+          input.smallInput(name='immunity', type='text', required, data-trigger='[input/range]', data-max="99", data-min="0", placeholder=' ')
+          span Role Immunity (0-99)
+        .section.group.inputGroup
+          input.smallInput(name='duration', type='text', data-trigger='[input/duration]', placeholder=' ', data-transform='iso-duration')
+          span Expiration (optional)
+          .tooltip_container
+            .tooltip.left Valid is the duration format described in <a style='color:green' href='https://tools.ietf.org/html/rfc3339#page-13', target='_blank'>RFC 3339, Page 13</a> as is the order. The P will be inserted automatically.
+            i.icon.ion-ios-information-circle-outline
+        .section.group.modalSelect
+          ._Dynamic_Select
+            ._Dynamic_Layer
+            ._Title(data-trigger='[composer/select/open]') Choose a Server (optional)
+            input._Value.hidden(name='server')
+            ._Select
+              ._Select_Search
+                input.skip(type='text', placeholder='Type to search...', data-trigger='[composer/select/search]')
+              ._STitle Results
+              ._Container
+                - for server in servers
+                  li(data-trigger='[composer/select/choose]')
+                    p= server.name
+        b.mbotSmall(style='padding-top:6px')
+          i.icon.ion-ios-flag(style='margin-right:10px')
+          |  Flags
+        .section.group
+          .col.span_1_of_4
+            .modalFlags
+              label.switch
+                input(name='flags', type='checkbox', value='A')
+                span.slider.round
+              .switchText Reserved Slots
+            .modalFlags
+              label.switch
+                input(name='flags', type='checkbox', value='B')
+                span.slider.round
+              .switchText Generic
+          .col.span_1_of_4
+            .modalFlags
+              label.switch
+                input(name='flags', type='checkbox', value='C')
+                span.slider.round
+              .switchText Kick
+            .modalFlags
+              label.switch
+                input(name='flags', type='checkbox', value='DE')
+                span.slider.round
+              .switchText Ban
+          .col.span_1_of_4
+            .modalFlags
+              label.switch
+                input(name='flags', type='checkbox', value='F')
+                span.slider.round
+              .switchText Slap
+            .modalFlags
+              label.switch
+                input(name='flags', type='checkbox', value='G')
+                span.slider.round
+              .switchText Map
+          .col.span_1_of_4
+            .modalFlags
+              label.switch
+                input(name='flags', type='checkbox', value='H')
+                span.slider.round
+              .switchText Cvar
+            .modalFlags
+              label.switch
+                input(name='flags', type='checkbox', value='I')
+                span.slider.round
+              .switchText Config
+        .section.group
+          .col.span_1_of_4
+            .modalFlags
+              label.switch
+                input(name='flags', type='checkbox', value='J')
+                span.slider.round
+              .switchText Chat
+            .modalFlags
+              label.switch
+                input(name='flags', type='checkbox', value='K')
+                span.slider.round
+              .switchText Vote
+          .col.span_1_of_4
+            .modalFlags
+              label.switch
+                input(name='flags', type='checkbox', value='L')
+                span.slider.round
+              .switchText Password
+            .modalFlags
+              label.switch
+                input(name='flags', type='checkbox', value='M')
+                span.slider.round
+              .switchText Remote Control
+          .col.span_1_of_4
+            .modalFlags
+              label.switch
+                input(name='flags', type='checkbox', value='N')
+                span.slider.round
+              .switchText Cheats
+            .modalFlags
+              label.switch
+                input(name='flags', type='checkbox', value='O')
+                span.slider.round
+              .switchText Custom 1
+          .col.span_1_of_4
+            .modalFlags
+              label.switch
+                input(name='flags', type='checkbox', value='P')
+                span.slider.round
+              .switchText Custom 2
+            .modalFlags
+              label.switch
+                input(name='flags', type='checkbox', value='Q')
+                span.slider.round
+              .switchText Custom 3
+        .section.group
+          .col.span_1_of_4
+            .modalFlags
+              label.switch
+                input(name='flags', type='checkbox', value='R')
+                span.slider.round
+              .switchText Custom 4
+            .modalFlags
+              label.switch
+                input(name='flags', type='checkbox', value='S')
+                span.slider.round
+              .switchText Custom 5
+          .col.span_1_of_4
+            .modalFlags
+              label.switch
+                input(name='flags', type='checkbox', value='T')
+                span.slider.round
+              .switchText Custom 6
+
+        input.skip.unset(type="submit", value='Save')
 
   ul.paginationTabs(data-target='admins[servers]')
     li(data-trigger="[ct/switch]", data="admins") Admins

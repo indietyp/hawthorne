@@ -23,15 +23,26 @@ single = (mode = '', target) ->
     if e.hasAttribute 'multiple'
       options = Array.from e.options
       payload[e.name] = options.map((x) -> x.value)
+    else if e.getAttribute('type') is 'checkbox'
+      if not e.checked
+        return
+      if not payload.hasOwnProperty e.name
+        payload[e.name] = []
+      payload[e.name].push e.value
     else if e.hasAttribute 'data-list'
       payload[e.name] = [e.value]
-    else
+    else if e.value
       payload[e.name] = e.value
 
   switch mode
     when 'admins[web][groups]'
       endpoint = window.endpoint.api.groups
     when 'admins[web][admins]'
+      method = 'post'
+      endpoint = window.endpoint.api.users[component]
+    when 'admins[server][roles]'
+      endpoint = window.endpoint.api.roles
+    when 'admins[server][admins]'
       method = 'post'
       endpoint = window.endpoint.api.users[component]
 
