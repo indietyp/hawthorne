@@ -245,3 +245,7 @@ validation = {
         }
     },
 }
+
+if __name__ == '__main__':
+  import ruamel.yaml as yaml
+  print(yaml.dump(validation, default_flow_style=False))

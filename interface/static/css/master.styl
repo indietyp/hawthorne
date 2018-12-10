@@ -62,23 +62,17 @@ $color-95 = rgba(172, 227, 255, 1, 1)
 $color-39 = rgba(183, 211, 255, 1)
 $color-49 = rgba(186, 213, 255, 1)
 $color-56 = rgba(187, 147, 234, 1)
-$color-34 = rgba(189, 091, 099, 1)
 $color-45 = rgba(191, 166, 165, 1)
 $color-57 = rgba(198, 160, 243, 1)
 $color-68 = rgba(198, 255, 000, 1)
-$color-74 = rgba(199, 089, 117, 1)
 $color-16 = rgba(208, 208, 208, 1)
 $color-24 = rgba(208, 234, 247, 1)
-$color-33 = rgba(210, 077, 087, 1)
 $color-55 = rgba(212, 212, 212, 1)
 $color-11 = rgba(215, 241, 255, 1)
 $color-72 = rgba(221, 157, 034, 1)
 $color-73 = rgba(224, 136, 051, 1)
-$color-64 = rgba(232, 042, 093, 1)
 $color-75 = rgba(232, 232, 232, 1)
 $color-23 = rgba(233, 212, 096, 1)
-$color-82 = rgba(255, 000, 000, .2)
-$color-84 = rgba(255, 000, 000, .25)
 $color-96 = rgba(255, 255, 255, .03)
 $color-48 = rgba(255, 255, 255, .05)
 $color-87 = rgba(255, 255, 255, .5)
@@ -87,6 +81,26 @@ $color-50 = rgba(255, 255, 255, .7)
 $color-18 = rgba(255, 255, 255, .8)
 $color-53 = rgba(255, 255, 255, .9)
 $color-3  = rgba(255, 255, 255, 1)
+
+// red
+$red = rgba(232, 042, 093, 1)
+
+// blue
+// color-1
+// color-2
+// color-29
+// color-66
+// color-90
+
+// purple
+// $color-54
+
+// green
+// $color-78
+
+// yellow
+// $color-23
+
 
 html
   height 100%
@@ -754,7 +768,7 @@ table
   .red
     display inline
     margin 0 0 0 5px
-    color $color-33
+    color $red
 
   .green
     display inline
@@ -781,7 +795,7 @@ table
     width 30px
 
 .paginationTabsDanger
-  background $color-34 !important
+  background $red !important
   color $color-18 !important
 
 .paginationTabsHarmless
@@ -792,7 +806,7 @@ table
   background $color-35 !important
 
 .offline
-  background $color-33 !important
+  background $red !important
 
 th
   padding 10px 20px
@@ -938,6 +952,7 @@ input[type="text"]
 input[type="password"]
 select
 textarea
+.input-button
   width 100%
   margin-bottom 10px
   padding 15px
@@ -1401,7 +1416,7 @@ form
     right 0
     width 30px
     padding 3px 0
-    background $color-64
+    background $red
     font-size 11px
     font-weight bold
     color white
@@ -2369,7 +2384,7 @@ form
   width 100%
   margin-top 20px
   background $color-3
-  color $color-74
+  color $red
 
   &:hover
     background $color-75
@@ -2536,7 +2551,7 @@ form
   float left
 
 .fullPlayers
-  background $color-64 !important
+  background $red !important
 
 .noPlayers
   background $color-79 !important
@@ -2570,10 +2585,10 @@ form
   display none
 
 .ActionError
-  background $color-82 !important
+  background rgba($red, 0.2) !important
 
   &:hover
-    background $color-84 !important
+    background rgba($red, 0.25) !important
 
 .ActionSuccess
   background $color-83 !important
@@ -2646,7 +2661,7 @@ form
   color $color-35
 
 .red
-  color $color-33
+  color $red
 
 .Modal
   table
@@ -2737,7 +2752,7 @@ button[disabled]
 
   .ion-ios-warning
     font-size 20px
-    color $color-33
+    color $red
 
   .checkboxDialogue
     position absolute
@@ -3281,6 +3296,30 @@ select
     opacity 1
     transform translate3d(0, 0, 0)
 
+.flatpickr
+  display flex
+  align-items center
+
+  input
+    flex-grow 1
+    margin-bottom 0px
+
+    border-top-right-radius 0px
+    border-bottom-right-radius 0px
+
+  .input-button
+    padding-top 11px
+    padding-bottom 10px
+    width 15%
+    font-size 24px
+    margin-bottom 0px
+    color: $red
+
+    cursor pointer
+
+    border-top-left-radius 0px
+    border-bottom-left-radius 0px
+    border-left 1px solid $color-48
 
 .flatpickr-calendar
   background transparent
@@ -3894,7 +3933,7 @@ span.flatpickr-weekday
       display block
 
   &.error .icon
-    background-color $color-64
+    background-color $red
 
     i.error
       display block

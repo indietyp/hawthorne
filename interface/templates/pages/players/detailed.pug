@@ -51,42 +51,54 @@
     .close(data-trigger='[modal/close]')
       i.icon.ion-ios-close
     .modalContent
-      .section.group.radioContainer
-        input.hidden#ban(type='radio', name='type')
-        label.first(for='ban') Ban
-        input.hidden#mute(type='radio', name='type')
-        label(for='mute') Mute
-        input.hidden#gag(type='radio', name='type')
-        label.last(for='gag') Gag
-      .section.group.modalSelect
-        ._Dynamic_Select
-          ._Dynamic_Layer
-          ._Title(data-trigger='[composer/select/open]') Choose a Server (optional)
-          ._Select
-            ._Select_Search
-              input(type='text', placeholder='Type to search...', data-trigger='[composer/select/search]')
-            ._STitle Results
-            ._Container
-              - for server in servers
-                li(data-trigger='[composer/select/choose]')
-                  p= server.name
-      .section.group.inputGroup
-        input.smallInput(type='text', required, placeholder=' ')
-        span Reason
-      .section.divider
-        .group.inputGroup
-          input.smallInput(type='text', data-trigger='[input/duration]', placeholder=' ')
-          span Length
-          .tooltip_container
-            .tooltip.left Valid is the duration format described in <a style='color:green' href='https://tools.ietf.org/html/rfc3339#page-13', target='_blank'>RFC 3339, Page 13</a> as is the order. The P will be inserted automatically.
-            i.icon.ion-ios-information-circle-outline
-        .or or
-        .group.inputGroup
-          input(placeholder='Select a Date')#flatpickr
-          script.execute flatpickr('#flatpickr', {enableTime: true,dateFormat: "Y-m-d H:i",minDate: new Date()});
-      button.unset
-        i.icon.ion-ios-save(style='margin-right:6px;')
-        | Save
+      form
+        b.mtop.mbotSmall
+          i.icon.ion-ios-person(style='margin-right:10px')
+          |  Punishment Details
+        .section.group.radioContainer
+          input.hidden#ban(type='radio', name='type', data-boolean='banned')
+          label.first(for='ban') Ban
+          input.hidden#mute(type='radio', name='type', data-boolean='muted')
+          label(for='mute') Mute
+          input.hidden#gag(type='radio', name='type', data-boolean='gagged')
+          label.last(for='gag') Gag
+        .section.group.modalSelect
+          ._Dynamic_Select
+            ._Dynamic_Layer
+            ._Title(data-trigger='[composer/select/open]') Choose a Server (optional)
+            input._Value.hidden(name='server')
+            ._Select
+              ._Select_Search
+                input(type='text', placeholder='Type to search...', data-trigger='[composer/select/search]')
+              ._STitle Results
+              ._Container
+                - for server in servers
+                  li(data-trigger='[composer/select/choose]', data-value=server.id)
+                    p= server.name
+        .section.group.inputGroup
+          input.smallInput(type='text', required, placeholder=' ')
+          span Reason
+
+        b.mtop.mbotSmall
+          i.icon.ion-ios-person(style='margin-right:10px')
+          |  Punishment Length (optional)
+        .section.divider
+          .group.inputGroup
+            input.smallInput(name='duration', type='text', data-trigger='[input/duration]', placeholder=' ', data-link='date', data-transform='iso-duration')
+            span Length
+            .tooltip_container
+              .tooltip.left Valid is the duration format described in <a style='color:green' href='https://tools.ietf.org/html/rfc3339#page-13', target='_blank'>RFC 3339, Page 13</a> as is the order. The P will be inserted automatically.
+              i.icon.ion-ios-information-circle-outline
+          .or or
+          .group.inputGroup
+            .flatpickr
+              input(name='date', placeholder='Select a Date', data-link='duration', data-input)
+              .input-button(title='clear', data-clear)
+                i.icon.ion-ios-close
+            script.execute flatpickr('.flatpickr', {enableTime: true,dateFormat: "Y-m-d H:i",minDate: new Date(),wrap:true});
+        button.unset
+          i.icon.ion-ios-save(style='margin-right:6px;')
+          | Save
 
   ul.paginationTabs(data-target='players[detailed]')
     li(data-trigger="[ct/switch]", data="overview") Overview

@@ -1,19 +1,18 @@
 import io
-import re
-from functools import wraps
 import logging
-
+import re
 import ruamel.yaml as yaml
 import simplejson as json
 import xmltodict
-from django.conf import settings
-from django.http import JsonResponse
 
+from django.http import JsonResponse
+from functools import wraps
+
+from api.specification import validation as valid_dict
 from api.utils import s_to_l
+from core.utils import HawthorneJSONEncoder
 from lib.normalize import Normalize
 from lib.validator import BaseValidator
-from api.specification import validation as valid_dict
-from core.utils import HawthorneJSONEncoder
 
 
 def jsonparse(content=None, code=200, encoder=None):

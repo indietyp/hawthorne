@@ -630,7 +630,7 @@ table a {
 table .red {
   display: inline;
   margin: 0 0 0 5px;
-  color: #d24d57;
+  color: #e82a5d;
 }
 table .green {
   display: inline;
@@ -654,7 +654,7 @@ table .country {
   width: 30px;
 }
 .paginationTabsDanger {
-  background: #bd5b63 !important;
+  background: #e82a5d !important;
   color: rgba(255,255,255,0.8) !important;
 }
 .paginationTabsHarmless {
@@ -665,7 +665,7 @@ table .country {
   background: #2ecc71 !important;
 }
 .offline {
-  background: #d24d57 !important;
+  background: #e82a5d !important;
 }
 th {
   padding: 10px 20px;
@@ -805,7 +805,8 @@ tbody td {
 input[type="text"],
 input[type="password"],
 select,
-textarea {
+textarea,
+.input-button {
   width: 100%;
   margin-bottom: 10px;
   padding: 15px;
@@ -2099,7 +2100,7 @@ form {
   width: 100%;
   margin-top: 20px;
   background: #fff;
-  color: #c75975;
+  color: #e82a5d;
 }
 .btnLogout:hover {
   background: #e8e8e8;
@@ -2296,10 +2297,10 @@ form {
   display: none;
 }
 .ActionError {
-  background: rgba(255,0,0,0.2) !important;
+  background: rgba(232,42,93,0.2) !important;
 }
 .ActionError:hover {
-  background: rgba(255,0,0,0.25) !important;
+  background: rgba(232,42,93,0.25) !important;
 }
 .ActionSuccess {
   background: rgba(0,255,92,0.2) !important;
@@ -2370,7 +2371,7 @@ form {
   color: #2ecc71;
 }
 .red {
-  color: #d24d57;
+  color: #e82a5d;
 }
 .Modal table td button {
   float: right;
@@ -2453,7 +2454,7 @@ button[disabled] {
 }
 .timeTable .ion-ios-warning {
   font-size: 20px;
-  color: #d24d57;
+  color: #e82a5d;
 }
 .timeTable .checkboxDialogue {
   position: absolute;
@@ -2967,6 +2968,27 @@ select option:not(:checked) {
 }
 .actions > i:first-child {
   margin-bottom: 12px;
+}
+.flatpickr {
+  display: flex;
+  align-items: center;
+}
+.flatpickr input {
+  flex-grow: 1;
+  margin-bottom: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+.flatpickr .input-button {
+  padding-top: 11px;
+  padding-bottom: 10px;
+  width: 15%;
+  font-size: 24px;
+  margin-bottom: 0px;
+  color: #e82a5d;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-left: 1px solid rgba(255,255,255,0.05);
 }
 .flatpickr-calendar {
   background: transparent;
@@ -3585,7 +3607,7 @@ span.flatpickr-weekday {
   text-align: center;
   border-radius: 2px;
   position: fixed;
-  z-index: 16ye;
+  z-index: 16;
   left: 0;
   right: 0;
   bottom: 30px;
