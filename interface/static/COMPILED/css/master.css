@@ -2884,11 +2884,21 @@ select option:not(:checked) {
 .inputGroup >input {
   margin-bottom: 0 !important;
   border-bottom: 1px solid transparent;
+  position: relative;
 }
 .inputGroup >input.invalid {
-  border-bottom-color: #f00;
+  border-bottom-color: #e82a5d;
 }
-.inputGroup >input:not(:placeholder-shown) ~span {
+.inputGroup >input.invalid ~ span span.invalid {
+  color: #e82a5d;
+}
+.inputGroup >input.invalid ~ span span.invalid:before {
+  content: "[";
+}
+.inputGroup >input.invalid ~ span span.invalid:after {
+  content: "]";
+}
+.inputGroup >input:not(:placeholder-shown) ~ span {
   top: 0;
   left: -1%;
 }
@@ -2986,6 +2996,7 @@ select option:not(:checked) {
   font-size: 24px;
   margin-bottom: 0px;
   color: #e82a5d;
+  cursor: pointer;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   border-left: 1px solid rgba(255,255,255,0.05);

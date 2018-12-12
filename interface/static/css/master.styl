@@ -83,7 +83,7 @@ $color-53 = rgba(255, 255, 255, .9)
 $color-3  = rgba(255, 255, 255, 1)
 
 // red
-$red = rgba(232, 042, 093, 1)
+color-red = rgba(232, 042, 093, 1)
 
 // blue
 // color-1
@@ -768,7 +768,7 @@ table
   .red
     display inline
     margin 0 0 0 5px
-    color $red
+    color color-red
 
   .green
     display inline
@@ -795,7 +795,7 @@ table
     width 30px
 
 .paginationTabsDanger
-  background $red !important
+  background color-red !important
   color $color-18 !important
 
 .paginationTabsHarmless
@@ -806,7 +806,7 @@ table
   background $color-35 !important
 
 .offline
-  background $red !important
+  background color-red !important
 
 th
   padding 10px 20px
@@ -1416,7 +1416,7 @@ form
     right 0
     width 30px
     padding 3px 0
-    background $red
+    background color-red
     font-size 11px
     font-weight bold
     color white
@@ -2384,7 +2384,7 @@ form
   width 100%
   margin-top 20px
   background $color-3
-  color $red
+  color color-red
 
   &:hover
     background $color-75
@@ -2551,7 +2551,7 @@ form
   float left
 
 .fullPlayers
-  background $red !important
+  background color-red !important
 
 .noPlayers
   background $color-79 !important
@@ -2585,10 +2585,10 @@ form
   display none
 
 .ActionError
-  background rgba($red, 0.2) !important
+  background rgba(color-red, 0.2) !important
 
   &:hover
-    background rgba($red, 0.25) !important
+    background rgba(color-red, 0.25) !important
 
 .ActionSuccess
   background $color-83 !important
@@ -2661,7 +2661,7 @@ form
   color $color-35
 
 .red
-  color $red
+  color color-red
 
 .Modal
   table
@@ -2752,7 +2752,7 @@ button[disabled]
 
   .ion-ios-warning
     font-size 20px
-    color $red
+    color color-red
 
   .checkboxDialogue
     position absolute
@@ -3201,11 +3201,22 @@ select
   >input
     margin-bottom 0 !important
     border-bottom: 1px solid transparent
+    position relative
 
     &.invalid
-      border-bottom-color red
+      border-bottom-color color-red
+
+    &.invalid
+      ~ span span.invalid
+        color color-red
+
+        &:before
+          content: " ["
+        &:after
+          content: "]"
+
     &:not(:placeholder-shown)
-      ~span
+      ~ span
         top 0
         left -1%
 
@@ -3313,7 +3324,7 @@ select
     width 15%
     font-size 24px
     margin-bottom 0px
-    color: $red
+    color: color-red
 
     cursor pointer
 
@@ -3933,7 +3944,7 @@ span.flatpickr-weekday
       display block
 
   &.error .icon
-    background-color $red
+    background-color color-red
 
     i.error
       display block

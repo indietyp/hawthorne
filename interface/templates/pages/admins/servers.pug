@@ -50,13 +50,19 @@
           |  Role Details
         .section.group.inputGroup
           input.smallInput(name='name', type='text', required, placeholder=' ')
-          span Role Name
+          span
+            | Role Name
+            span.invalid
         .section.group.inputGroup
           input.smallInput(name='immunity', type='text', required, data-trigger='[input/range]', data-max="99", data-min="0", placeholder=' ')
-          span Role Immunity (0-99)
+          span
+            | Role Immunity (0-99)
+            span.invalid
         .section.group.inputGroup
           input.smallInput(name='duration', type='text', data-trigger='[input/duration]', placeholder=' ', data-transform='iso-duration')
-          span Expiration (optional)
+          span
+            | Expiration (optional)
+            span.invalid
           .tooltip_container
             .tooltip.left Valid is the duration format described in <a style='color:green' href='https://tools.ietf.org/html/rfc3339#page-13', target='_blank'>RFC 3339, Page 13</a> as is the order. The P will be inserted automatically.
             i.icon.ion-ios-information-circle-outline

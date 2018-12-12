@@ -12,12 +12,24 @@ single = (mode = '', target) ->
   method = 'put'
   component = undefined
 
+  validated = true
   Array.from(target.elements).forEach (e) ->
     if $(e).hasClass 'skip'
       return
 
+    value = window.api.utils.transform e.value
+    valid = window.api.utils.validation e
+
+    if not valid[0]
+      validated = false
+      $(e).addClass 'invalid'
+      $('span span.invalid', $(e).parent())[0].innerHTML = valid[1]
+
+      return
+
+
     if $(e).hasClass 'target'
-      component = e.value
+      component = value
       return
 
     if e.hasAttribute 'multiple'
@@ -28,11 +40,14 @@ single = (mode = '', target) ->
         return
       if not payload.hasOwnProperty e.name
         payload[e.name] = []
-      payload[e.name].push e.value
+      payload[e.name].push value
     else if e.hasAttribute 'data-list'
-      payload[e.name] = [e.value]
-    else if e.value
-      payload[e.name] = e.value
+      payload[e.name] = [value]
+    else if value
+      payload[e.name] = value
+
+  if not validated
+    return
 
   switch mode
     when 'admins[web][groups]'
