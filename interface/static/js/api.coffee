@@ -6,10 +6,9 @@ validation = (el) ->
   validated = true
   reason = ''
   if not el.value
-    return validated
+    return [validated, reason]
 
   if el.hasAttribute 'data-link'
-
     link = el.getAttribute 'data-link'
     form = $(el).parent 'form'
     reason = 'Only one field can be filled.'
@@ -18,7 +17,7 @@ validation = (el) ->
       if e.value
         validated = false
 
-  return validated
+  return [validated, reason]
 
 transform = (el) ->
   if not el.hasAttribute 'data-transform'
@@ -28,6 +27,12 @@ transform = (el) ->
   if transformation is 'iso-duration'
     duration = new Duration(el.value)
     return duration.seconds
+
+  if transformation is 'flatpickr'
+    timestamp = $(el).parent('.flatpickr')[0]._flatpickr.selectedDates[0].getTime()
+    timestamp = (timestamp / 1000) >> 0
+    current = (new Date / 1000) >> 0
+    return timestamp - current
 
   return el.value
 

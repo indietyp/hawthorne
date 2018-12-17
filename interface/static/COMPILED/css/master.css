@@ -2893,7 +2893,7 @@ select option:not(:checked) {
   color: #e82a5d;
 }
 .inputGroup >input.invalid ~ span span.invalid:before {
-  content: "[";
+  content: " [";
 }
 .inputGroup >input.invalid ~ span span.invalid:after {
   content: "]";

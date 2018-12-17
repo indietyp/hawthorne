@@ -51,16 +51,17 @@
     .close(data-trigger='[modal/close]')
       i.icon.ion-ios-close
     .modalContent
-      form
+      form(data-trigger='[modal/form]', data-action='create', data-mode='players[detailed][punishment]')
+        input.hidden.target(value=data.id)
         b.mtop.mbotSmall
           i.icon.ion-ios-person(style='margin-right:10px')
           |  Punishment Details
         .section.group.radioContainer
-          input.hidden#ban(type='radio', name='type', data-boolean='banned')
+          input.hidden#ban(type='radio', name='type', data-boolean='banned', required)
           label.first(for='ban') Ban
-          input.hidden#mute(type='radio', name='type', data-boolean='muted')
+          input.hidden#mute(type='radio', name='type', data-boolean='muted', required)
           label(for='mute') Mute
-          input.hidden#gag(type='radio', name='type', data-boolean='gagged')
+          input.hidden#gag(type='radio', name='type', data-boolean='gagged', required)
           label.last(for='gag') Gag
         .section.group.modalSelect
           ._Dynamic_Select
@@ -69,14 +70,14 @@
             input._Value.hidden(name='server')
             ._Select
               ._Select_Search
-                input(type='text', placeholder='Type to search...', data-trigger='[composer/select/search]')
+                input.skip(type='text', placeholder='Type to search...', data-trigger='[composer/select/search]')
               ._STitle Results
               ._Container
                 - for server in servers
                   li(data-trigger='[composer/select/choose]', data-value=server.id)
                     p= server.name
         .section.group.inputGroup
-          input.smallInput(type='text', required, placeholder=' ')
+          input.smallInput(name='reason', type='text', required, placeholder=' ')
           span
             | Reason
             span.invalid
@@ -86,7 +87,7 @@
           |  Punishment Length (optional)
         .section.divider
           .group.inputGroup
-            input.smallInput(name='duration', type='text', data-trigger='[input/duration]', placeholder=' ', data-link='duration', data-transform='iso-duration')
+            input.smallInput(name='duration', type='text', data-trigger='[input/duration]', placeholder=' ', data-link='duration', data-transform='iso-duration', data-name='length')
             span
               | Length
               span.invalid
@@ -96,13 +97,12 @@
           .or or
           .group.inputGroup
             .flatpickr
-              input(name='date', placeholder='Select a Date', data-link='duration', data-input)
+              input(name='date', placeholder='Select a Date', data-link='duration', data-input, data-transform='flatpickr', data-name='length')
               .input-button(title='clear', data-clear)
                 i.icon.ion-ios-close
             script.execute flatpickr('.flatpickr', {enableTime: true,dateFormat: "Y-m-d H:i",minDate: new Date(),wrap:true});
-        button.unset
-          i.icon.ion-ios-save(style='margin-right:6px;')
-          | Save
+
+        input.skip.unset(type="submit", value='Save')
 
   ul.paginationTabs(data-target='players[detailed]')
     li(data-trigger="[ct/switch]", data="overview") Overview

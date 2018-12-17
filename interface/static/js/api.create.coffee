@@ -17,12 +17,13 @@ single = (mode = '', target) ->
     if $(e).hasClass 'skip'
       return
 
-    value = window.api.utils.transform e.value
+    value = window.api.utils.transform e
     valid = window.api.utils.validation e
 
     if not valid[0]
       validated = false
       $(e).addClass 'invalid'
+      console.log valid
       $('span span.invalid', $(e).parent())[0].innerHTML = valid[1]
 
       return
@@ -32,19 +33,25 @@ single = (mode = '', target) ->
       component = value
       return
 
+    name = e.name
+    if e.hasAttribute 'data-name'
+      name = e.getAttribute 'data-name'
+
     if e.hasAttribute 'multiple'
       options = Array.from e.options
-      payload[e.name] = options.map((x) -> x.value)
+      payload[name] = options.map((x) -> x.value)
+    else if e.hasAttribute('data-boolean')
+      payload[e.getAttribute('data-boolean')] = e.checked
     else if e.getAttribute('type') is 'checkbox'
       if not e.checked
         return
       if not payload.hasOwnProperty e.name
-        payload[e.name] = []
-      payload[e.name].push value
+        payload[name] = []
+      payload[name].push value
     else if e.hasAttribute 'data-list'
-      payload[e.name] = [value]
+      payload[name] = [value]
     else if value
-      payload[e.name] = value
+      payload[name] = value
 
   if not validated
     return
@@ -60,6 +67,8 @@ single = (mode = '', target) ->
     when 'admins[server][admins]'
       method = 'post'
       endpoint = window.endpoint.api.users[component]
+    when 'players[detailed][punishment]'
+      endpoint = window.endpoint.api.users[component].punishments
 
   if target.hasAttribute 'data-append'
     endpoint.get({}, {}, {}, (err, data) ->
