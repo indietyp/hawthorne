@@ -17,6 +17,9 @@ validation = (el) ->
       if e.value
         validated = false
 
+  if not validated
+    window.style.toast('error', 'Invalid value detected!')
+
   return [validated, reason]
 
 transform = (el) ->

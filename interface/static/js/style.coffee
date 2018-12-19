@@ -32,46 +32,6 @@ copyTextToClipboard = (text) ->
   document.body.removeChild textArea
   return
 
-InputVerification = (mode, event, that) ->
-  keycode = undefined
-  if window.event
-    keycode = window.event.keyCode
-  else if event
-    keycode = event.which
-
-  character = String.fromCharCode(event.keyCode)
-  switch mode
-    when 'single'
-      if keycode is 13
-        return false
-
-  return true
-
-
-InformationCard = (show = true, reason) ->
-  if show
-    output = ''
-    reason.forEach((i) ->
-      if typeof i is 'string'
-        output += "<div class='content'>#{i}</div>"
-      else if typeof i is 'object'
-        Object.keys(i).forEach((k) ->
-          i[k].forEach((state) ->
-            state = state.replace /of uuid type/g, 'present'
-            state = state.replace /value/g, i[k]
-
-            if state.search k is -1
-              state = "#{k} #{state}"
-
-            output += "<div class='content'>#{state}</div>"
-          )
-        )
-    )
-    $('.status-card .info').html output
-    $('.status-card').addClass 'active'
-
-  else
-    $('.status-card').removeClass 'active'
 
 executeServer = (that) ->
   parent = $(that.parentElement)
@@ -109,6 +69,7 @@ loginUsername = (event) ->
   else
     $('.transition').slideUp()
 
+
 showToast = (mode, message) ->
   toast = $ '.toast'
   toast.addClass mode
@@ -125,8 +86,6 @@ showToast = (mode, message) ->
 
   return
 
-window.style.getOrCreate('utils').getOrCreate('verify').input = InputVerification
-window.style.card = InformationCard
 window.style.copy = copyTextToClipboard
 window.style.rcon = executeServer
 window.style.login = loginUsername

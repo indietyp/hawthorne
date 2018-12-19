@@ -9,37 +9,44 @@
     .close(data-trigger='[modal/close]')
       i.icon.ion-ios-close
     .modalContent
-      form
+      form(data-trigger='[modal/form]', data-action='create', data-mode='servers')
         b.mtop.mbotSmall
           i.icon.ion-ios-person(style='margin-right:10px')
           |  Server Details
         .section.group.inputGroup
-          input.smallInput(type='text', required)
+          input.smallInput(name='name', type='text', required, placeholder='')
           span Name
         .section.group.modalSelect
           ._Dynamic_Select
             ._Title(data-trigger='[composer/select/open]') Choose a Game
+            input._Value.hidden(name='game')
             ._Select
               ._Select_Search
-                input(type='text', placeholder='Type to filter...', data-trigger='[composer/select/search]')
+                input.skip(type='text', placeholder='Type to filter...', data-trigger='[composer/select/search]')
               ._STitle Results
               ._Container
                 - for game in games
-                  li(data-trigger='[composer/select/choose]')
-                    p= game|get:"1"
+                  li(data-trigger='[composer/select/choose]', data-value=game.0)
+                    p= game.1
         .section.group.inputGroup
-          input.smallInput(type='text', required)
-          span Mode
+          input.smallInput(name='gamemode', type='text', required, placeholder=' ')
+          span
+            | Mode
+            span.invalid
 
         b.mtop.mbotSmall
           i.icon.ion-ios-person(style='margin-right:10px')
           |  RCON Details
         .section.group.inputGroup
-          input.smallInput#modal_connection(type='text', required)
-          span IP and Port
+          input.smallInput(name='ip/port', type='text', required, placeholder=' ', data-transform='ip-port')
+          span
+            | IP and Port
+            span.invalid
         .section.group.inputGroup
-          input.smallInput(type='password', required)
-          span Password
+          input.smallInput(name='password', type='password', required, placeholder=' ')
+          span
+            | Password
+            span.invalid
 
         input(type='submit', value='Create Server')
 
