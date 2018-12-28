@@ -150,7 +150,7 @@ validation = {
             'PUT': {'parameters': {'name': {'type': 'string', 'required': True},
                                    'ip': {'type': 'ip', 'required': True},
                                    'verify': {'type': 'boolean', 'default': True},
-                                   'port': {'type': 'integer', 'required': True, 'min': 0, 'max': 65535},
+                                   'port': {'type': 'integer', 'required': True, 'min': 0, 'max': 65535, 'default': 27015},
                                    'password': {'type': 'string', 'required': True},
                                    'game': {'type': 'string', 'required': True},
                                    'mode': {'type': 'string', 'required': False}},

@@ -50,6 +50,16 @@ single = (mode = '', target) ->
       payload[name].push value
     else if e.hasAttribute 'data-list'
       payload[name] = [value]
+    else if name.includes('/') and value.constructor.name == 'Array'
+
+      values = []
+      names = name.split('/')
+      for i in [0..names.length] by 1
+        values.push [names[i], value[i]]
+
+      values.forEach (v) ->
+        payload[v[0]] = v[1]
+
     else if value
       payload[name] = value
 
@@ -69,6 +79,8 @@ single = (mode = '', target) ->
       endpoint = window.endpoint.api.users[component]
     when 'players[detailed][punishment]'
       endpoint = window.endpoint.api.users[component].punishments
+    when 'servers'
+      endpoint = window.endpoint.api.servers
 
   if target.hasAttribute 'data-append'
     endpoint.get({}, {}, {}, (err, data) ->

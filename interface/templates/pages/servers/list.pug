@@ -14,7 +14,7 @@
           i.icon.ion-ios-person(style='margin-right:10px')
           |  Server Details
         .section.group.inputGroup
-          input.smallInput(name='name', type='text', required, placeholder='')
+          input.smallInput(name='name', type='text', required, placeholder=' ')
           span Name
         .section.group.modalSelect
           ._Dynamic_Select
@@ -26,10 +26,10 @@
               ._STitle Results
               ._Container
                 - for game in games
-                  li(data-trigger='[composer/select/choose]', data-value=game.0)
+                  li(data-trigger='[composer/select/choose]', data-value="{{game.0}}")
                     p= game.1
         .section.group.inputGroup
-          input.smallInput(name='gamemode', type='text', required, placeholder=' ')
+          input.smallInput(name='gamemode', type='text', required, placeholder=' ', data-transform='lower')
           span
             | Mode
             span.invalid
@@ -48,7 +48,7 @@
             | Password
             span.invalid
 
-        input(type='submit', value='Create Server')
+        input.skip(type='submit', value='Create Server')
 
   ul.paginationTabs
     li.invisible Servers

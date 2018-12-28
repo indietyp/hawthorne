@@ -31,11 +31,17 @@ transform = (el) ->
     duration = new Duration(el.value)
     return duration.seconds
 
+  if transformation is 'ip-port'
+    return el.value.split(':').splice(0, 2)
+
   if transformation is 'flatpickr'
     timestamp = $(el).parent('.flatpickr')[0]._flatpickr.selectedDates[0].getTime()
     timestamp = (timestamp / 1000) >> 0
     current = (new Date / 1000) >> 0
     return timestamp - current
+
+  if transformation is 'lower'
+    return el.value.toLowerCase()
 
   return el.value
 
