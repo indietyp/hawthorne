@@ -17,4 +17,6 @@ deploy:
   provider: script
   script: bash cli/utils/travis.sh
   on:
-    branch: master
+    branch:
+      - master
+      - dev
