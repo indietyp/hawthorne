@@ -32,7 +32,7 @@ def role(request):
     if memberships:
       return {'role': memberships[0].name}
   else:
-    if request.user.roles:
+    if request.user.roles.all():
       return {'role': request.user.roles.all()[0].name}
 
   return {'role': '-'}

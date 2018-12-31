@@ -14,6 +14,7 @@ def get_groups_name(value):
 
 @register.filter
 def get_groups_id(value):
-  if value.is_superuser:
+  if value.is_superuser or not value.groups.all():
     return ""
+
   return value.groups.all()[0].id
