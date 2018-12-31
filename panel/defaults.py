@@ -58,16 +58,12 @@ LOGGING = {
 }
 
 STATIC_PRECOMPILER_COMPILERS = (
-    ('static_precompiler.compilers.CoffeeScript'),
-    ('static_precompiler.compilers.SASS', {
-        "sourcemap_enabled": True,
-        "compass_enabled": True,
-        "precision": 8,
-        "output_style": "compressed",
-    }),
+    ('interface.compilers.CoyoteCompiler', {'compress': True}),
+    ('static_precompiler.compilers.Stylus', {"sourcemap_enabled": True}),
 )
 
 DEMO = False
 ROOT = "root"
 LOGIN_REDIRECT_URL = '/'
 RCON_TIMEOUT = 0.5
+PAGE_SIZE = 16

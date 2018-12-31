@@ -5,7 +5,7 @@ from django.db import models
 
 
 class BaseModel(models.Model):
-  id = models.UUIDField(primary_key=True, auto_created=True, default=uuid.uuid4, editable=False, unique=True)
+  id = models.UUIDField(db_index=True, primary_key=True, auto_created=True, default=uuid.uuid4, editable=False, unique=True)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
@@ -72,7 +72,7 @@ class Country(BaseModel):
 
 
 class User(AbstractUser):
-  id = models.UUIDField(primary_key=True, auto_created=True, default=uuid.uuid4, editable=False, unique=True)
+  id = models.UUIDField(db_index=True, primary_key=True, auto_created=True, default=uuid.uuid4, editable=False, unique=True)
   namespace = models.CharField(max_length=255, null=True)
 
   online = models.BooleanField(default=False)

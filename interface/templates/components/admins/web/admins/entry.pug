@@ -30,6 +30,8 @@ tr(data-id="{{data|get_groups_id}}", data-user="{{data.id}}", data-remove)
   td
     if data.is_superuser
       = root
+    elif data.groups.count == 0
+      | NaN
     else
       = data|get_groups_name
   td
