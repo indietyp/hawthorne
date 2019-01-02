@@ -14,16 +14,11 @@ from core.lib.steam import populate
 from core.models import User
 
 
-def wrapper(target, root='', *args, **kwargs):
-  return [target, jaro_winkler(root, target.namespace)]
-
-
 @login_required(login_url='/login')
 @permission_required('core.view_user')
 @require_http_methods(['POST'])
 def search(request, *args, **kwargs):
   payload = json.loads(request.body.decode())
-  users = cache.get_or_set('steam', User.objects.filter(is_steam=True).all, 500)
 
   if 'steam' in payload:
     steamid = SteamID.from_url('https://steamcommunity.com/id/' + payload['steam'])
@@ -53,11 +48,8 @@ def search(request, *args, **kwargs):
       data = [user]
 
   elif 'local' in payload:
-    with Pool(cpu_count()) as p:
-      target = partial(wrapper, root=payload['local'])
-      data = p.map(target, users)
-
-    data = [item[0] for item in sorted(data, key=lambda x: x[1])]
+    data = User.objects.filter(is_steam=True, namespace__icontains=payload['local'])
+    data = list(data)
 
   elif 'steam' in payload:
     user = User()
