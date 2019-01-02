@@ -31,11 +31,11 @@
             input._Value.hidden(name='roles', data-list, required)
             ._Select
               ._Select_Search
-                input(type='text', placeholder='Type to search...', data-trigger='[composer/select/search]')
+                input.skip(type='text', placeholder='Type to search...', data-trigger='[composer/select/search]')
               ._STitle Results
               ._Container
                 - for role in roles
-                  li(data-trigger='[composer/select/choose]')
+                  li(data-trigger='[composer/select/choose]', data-value=role.id)
                     p= role.name
         input.skip.unset(type="submit", value='Save')
 
