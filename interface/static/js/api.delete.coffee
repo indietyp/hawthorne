@@ -14,7 +14,8 @@ single = (mode = '', target) ->
       endpoint = window.endpoint.api.users[user]
 
       payload =
-        reset: true
+        roles: [uuid]
+        reset: false
 
     when 'admins[server][roles]'
       uuid = target.getAttribute('data-id')
@@ -26,8 +27,7 @@ single = (mode = '', target) ->
       endpoint = window.endpoint.api.users[user]
 
       payload =
-        groups: [id]
-        reset: false
+        reset: true
 
     when 'admins[web][groups]'
       id = target.getAttribute('data-id')
