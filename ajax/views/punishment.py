@@ -5,12 +5,12 @@ from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 
 from ajax.views import renderer
-from django.conf import settings
 from core.models import Punishment
+from django.conf import settings
 
 
 @login_required(login_url='/login')
-@permission_required('core.view_user')
+@permission_required('core.view_punishment')
 @require_http_methods(['POST'])
 def list(request):
   current = request.POST.get("page", 1)
@@ -34,7 +34,7 @@ def list(request):
 
 
 @login_required(login_url='/login')
-@permission_required('core.view_user')
+@permission_required('core.view_punishment')
 @require_http_methods(['POST'])
 def entries(request, page):
   name = request.resolver_match.url_name
