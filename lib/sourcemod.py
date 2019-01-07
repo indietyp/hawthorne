@@ -87,7 +87,7 @@ class SourcemodPluginWrapper(RCONBase):
 
       response = ''.join(response)
     except (valve.rcon.RCONError, IndexError) as e:
-      return {'error': e}
+      return {'error': e.__class__.__name__}
 
     response = response.split('\n')[0]
     try:

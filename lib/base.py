@@ -1,7 +1,7 @@
 import functools
 import socket
 
-from valve.rcon import RCON, RCONAuthenticationError, RCONTimeoutError, RCONError
+from valve.rcon import RCON, RCONAuthenticationError, RCONError, RCONTimeoutError
 
 from core.models import Server
 
@@ -22,8 +22,7 @@ class RCONBase(RCON):
       @functools.wraps(function)
       def wrapper(instance, *args, **kwargs):
         if getattr(instance, state) is not value:
-          raise RCONError("Must {} {}".format(
-            "be" if value else "not be", state))
+          raise RCONError("Must {} {}".format("be" if value else "not be", state))
         return function(instance, *args, **kwargs)
 
       return wrapper
@@ -34,8 +33,7 @@ class RCONBase(RCON):
   @_ensure('closed', False)
   def connect(self):
     """Create a connection to a server."""
-    self._socket = socket.socket(
-      socket.AF_INET, socket.SOCK_STREAM, socket.IPPROTO_TCP)
+    self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM, socket.IPPROTO_TCP)
     self._socket.settimeout(self._timeout)
     self._socket.connect(self._address)
 
@@ -47,16 +45,13 @@ class RCONBase(RCON):
 
       self.connect()
       self.authenticate()
+
       for cmd in command:
         response = self.execute(cmd)
         output.append(response.body.decode('utf-8'))
 
-    except RCONAuthenticationError:
-      pass
-    except RCONTimeoutError:
-      pass
-    except Exception:
-      pass
+    except socket.timeout:
+      raise RCONTimeoutError('timed out')
     finally:
       self.close()
 

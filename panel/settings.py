@@ -170,8 +170,7 @@ MAINFRAME = "hawthornepanel.org"
 CELERY_BROKER_URL = "redis://{}/2".format(REDISCACHE)
 CELERY_BEAT_SCHEDULE = {
     'rcon-server': {
-        'task': 'panel.celery.test',
-        'schedule': 10,
-        'args': ('Hello',)
+        'task': 'core.tasks.rcon.wrapper',
+        'schedule': RCON_TASK_SCHEDULE,
     }
 }

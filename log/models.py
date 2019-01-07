@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.db import models
 
 from core.models import BaseModel, Server, User
@@ -24,15 +25,23 @@ class ServerChat(BaseModel):
     return "{} - {}".format(self.user, self.server)
 
 
+class ServerScore(BaseModel):
+  team_name = models.CharField(max_length=255)
+  team_id = models.IntegerField()
+
+  score = models.IntegerField()
+
+
 class ServerDataPoint(BaseModel):
   server = models.ForeignKey(Server, on_delete=models.CASCADE)
 
-  map_name = models.CharField(max_length=255)
+  map = models.CharField(max_length=255, null=True)
+  uptime = models.DurationField(default=timedelta(seconds=0))
 
-  time_left = models.FloatField()
-  time_up = models.FloatField()
+  time_left = models.DurationField(null=True)
 
   clients = models.ManyToManyField(User)
+  score = models.ManyToManyField(ServerScore)
 
   is_online = models.BooleanField(default=True)
 

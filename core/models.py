@@ -232,7 +232,11 @@ class Server(BaseModel):
   )
   game = models.CharField(max_length=255, choices=SUPPORTED)
   mode = models.CharField(max_length=255, null=True)
+
   vac = models.BooleanField(default=True)
+  protected = models.BooleanField(default=False)
+
+  max_clients = models.IntegerField(default=0)
 
   class Meta:
     unique_together = (('ip', 'port'),)
