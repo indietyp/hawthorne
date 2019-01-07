@@ -15,7 +15,7 @@ from django.shortcuts import render
 from django.utils import timezone
 
 from core.models import Punishment, Role, Server, User
-from log.models import UserOnlineTime
+from log.models import UserConnection
 
 
 def login(request):
@@ -32,7 +32,7 @@ def login(request):
 @login_required(login_url='/login')
 def home(request):
   current = datetime.datetime.now().month
-  query = UserOnlineTime.objects.annotate(mo=Extract('disconnected', 'month'))\
+  query = UserConnection.objects.annotate(mo=Extract('disconnected', 'month'))\
                                 .values('user', 'mo')\
                                 .annotate(active=Count('user', distinct=True))
 

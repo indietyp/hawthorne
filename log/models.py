@@ -1,6 +1,6 @@
 from django.db import models
 
-from core.models import User, BaseModel, Server
+from core.models import BaseModel, Server, User
 
 
 class ServerChat(BaseModel):
@@ -24,6 +24,19 @@ class ServerChat(BaseModel):
     return "{} - {}".format(self.user, self.server)
 
 
+class ServerDataPoint(BaseModel):
+  server = models.ForeignKey(Server, on_delete=models.CASCADE)
+
+  map_name = models.CharField(max_length=255)
+
+  time_left = models.FloatField()
+  time_up = models.FloatField()
+
+  clients = models.ManyToManyField(User)
+
+  is_online = models.BooleanField(default=True)
+
+
 class UserIP(BaseModel):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   ip = models.GenericIPAddressField()
@@ -40,7 +53,7 @@ class UserIP(BaseModel):
     default_permissions = ()
 
 
-class UserOnlineTime(BaseModel):
+class UserConnection(BaseModel):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   server = models.ForeignKey(Server, on_delete=models.CASCADE)
 

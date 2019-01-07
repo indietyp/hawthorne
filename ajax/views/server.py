@@ -12,7 +12,7 @@ from core.models import Membership, Server
 from django.shortcuts import render
 from django.views.decorators.cache import cache_page
 from lib.sourcemod import SourcemodPluginWrapper
-from log.models import ServerChat, UserOnlineTime
+from log.models import ServerChat, UserConnection
 
 
 def status(server, *args, **kwargs):
@@ -54,7 +54,7 @@ def overview(request, s, *args, **kwargs):
   now = datetime.datetime.now()
   server = Server.objects.get(id=s)
 
-  query = UserOnlineTime.objects.annotate(day=Extract('disconnected', 'day'),
+  query = UserConnection.objects.annotate(day=Extract('disconnected', 'day'),
                                           month=Extract('disconnected', 'month'),
                                           year=Extract('disconnected', 'year'))
 

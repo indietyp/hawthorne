@@ -11,7 +11,7 @@ from core.lib.steam import populate
 from core.models import User
 from django.core.cache import cache
 from lib.base import RCONBase
-from log.models import UserOnlineTime
+from log.models import UserConnection
 from panel.settings import RCON_TIMEOUT
 
 
@@ -120,7 +120,7 @@ class SourcemodPluginWrapper(RCONBase):
 
         populate(user)
 
-      online = UserOnlineTime.objects.filter(user=user, disconnected=None)\
+      online = UserConnection.objects.filter(user=user, disconnected=None)\
                                      .order_by('-created_at')
 
       if online.count() > 0:

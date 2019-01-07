@@ -14,7 +14,7 @@ from django.views.decorators.http import require_http_methods
 
 from ajax.views import renderer
 from core.models import Membership, Punishment, Server, User
-from log.models import ServerChat, UserIP, UserNamespace, UserOnlineTime
+from log.models import ServerChat, UserConnection, UserIP, UserNamespace
 
 
 @login_required(login_url='/login')
@@ -168,7 +168,7 @@ def detailed_overview(request, u, *args, **kwargs):
 
   years = []
   months = []
-  query = UserOnlineTime.objects.filter(user=user)\
+  query = UserConnection.objects.filter(user=user)\
                                 .annotate(time=ExpressionWrapper(F('disconnected') - F('connected'),
                                                                  output_field=DurationField()))
 

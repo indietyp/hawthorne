@@ -39,7 +39,7 @@ def user_log_handler(sender, instance, raw, using, update_fields, **kwargs):
     else:
       instance.namespace = instance.username
 
-  from log.models import UserNamespace, UserOnlineTime, UserIP
+  from log.models import UserNamespace, UserConnection, UserIP
 
   try:
     state = User.objects.get(id=instance.id)
@@ -67,14 +67,14 @@ def user_log_handler(sender, instance, raw, using, update_fields, **kwargs):
     iplog = False
 
   if 'online' in changelog and '_server' in instance.__dict__.keys():
-    for disconnect in UserOnlineTime.objects.filter(user=instance,
+    for disconnect in UserConnection.objects.filter(user=instance,
                                                     server=instance._server,
                                                     disconnected=None):
       disconnect.disconnected = timezone.now()
       disconnect.save()
 
     if instance.online:
-      online = UserOnlineTime(user=instance, server=instance._server)
+      online = UserConnection(user=instance, server=instance._server)
       online.save()
 
       if iplog:

@@ -26,3 +26,5 @@ rstr
 gitpython
 clicker
 jellyfish
+humanize
+celery[redis]

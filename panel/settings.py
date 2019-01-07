@@ -153,11 +153,8 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en'
 
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
@@ -169,3 +166,12 @@ AUTOMATED_LOGGING = {
 }
 
 MAINFRAME = "hawthornepanel.org"
+
+CELERY_BROKER_URL = "redis://{}/2".format(REDISCACHE)
+CELERY_BEAT_SCHEDULE = {
+    'rcon-server': {
+        'task': 'panel.celery.test',
+        'schedule': 10,
+        'args': ('Hello',)
+    }
+}
