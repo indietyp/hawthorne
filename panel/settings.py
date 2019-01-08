@@ -52,7 +52,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'automated_logging.middleware.AutomatedLoggingMiddleware'
+    'automated_logging.middleware.AutomatedLoggingMiddleware',
+    'django_cprofile_middleware.middleware.ProfilerMiddleware'
 ]
 
 LOCALE_PATHS = [

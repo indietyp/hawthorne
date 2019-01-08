@@ -28,3 +28,4 @@ clicker
 jellyfish
 humanize
 celery[redis]
+django-cprofile-middleware
