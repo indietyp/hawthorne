@@ -12,11 +12,16 @@ from core.models import Membership, Server
 from django.shortcuts import render
 from django.views.decorators.cache import cache_page
 from lib.sourcemod import SourcemodPluginWrapper
-from log.models import ServerChat, UserConnection
+from log.models import ServerChat, ServerDataPoint, UserConnection
 
 
 def status(server, *args, **kwargs):
-  return SourcemodPluginWrapper(server).status(truncated=True)
+  datapoints = ServerDataPoint.objects.filter(server=server).order_by('-created_at')
+
+  dataset = [0] * 4 if not datapoints else [d.clients.count() for d in datapoints[:4]]
+  datapoint = ServerDataPoint() if not datapoints else datapoints[0]
+
+  return {'dataset': dataset, 'datapoint': datapoint}
 
 
 @cache_page(60 * 15)
@@ -26,7 +31,7 @@ def status(server, *args, **kwargs):
 def modals(request, *args, **kwargs):
   servers = Server.objects.all()
   for server in servers:
-    server.query = status(server)
+    server.query = ServerDataPoint.objects.filter(server=server).order_by('-created_at')[0]
 
   return render(request, 'components/servers/modals/list.pug', {'data': servers})
 
@@ -34,17 +39,10 @@ def modals(request, *args, **kwargs):
 @login_required(login_url='/login')
 @permission_required('core.view_server')
 @require_http_methods(['POST'])
-def server(request, page, *args, **kwargs):
-  obj = Server.objects.all()
-  return renderer(request, 'components/servers/overview.pug', obj, page, execute=status)
-
-
-@login_required(login_url='/login')
-@permission_required('core.view_server')
-@require_http_methods(['POST'])
 def list(request, page, *args, **kwargs):
   obj = Server.objects.all()
-  return renderer(request, 'components/servers/overview.pug', obj, page, execute=status, size=4, overwrite=True)
+  return renderer(request, 'components/servers/overview.pug', obj, page,
+                  execute=status, size=4, overwrite=True)
 
 
 @login_required(login_url='/login')

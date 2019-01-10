@@ -55,6 +55,7 @@ def update(supervisor):
 
 @click.command()
 def report():
+  # create a pdf instead of a request
   click.echo('I am a very big boi report, yes!')
 
 
@@ -92,10 +93,26 @@ def version(yes):
     click.echo("You are up-to-date!")
 
 
+@click.command()
+@click.option('--gunicorn/--no-gunicorn', is_flag=True, expose_value=True,
+              prompt='reconfigure gunicorn')
+@click.option('--logrotate/--no-logrotate', is_flag=True, expose_value=True,
+              prompt='reconfigure logrotate.d config')
+@click.option('--supervisor/--no-supervisor', is_flag=True, expose_value=True,
+              prompt='reconfigure supervisor.d config')
+def reconfigure(gunicorn, logrotate, supervisor):
+  # TODO:
+  # --> gunicorn
+  # --> supervisor
+  # --> logrotate
+  pass
+
+
 cli.add_command(update)
 cli.add_command(report)
 cli.add_command(verify)
 cli.add_command(version)
+cli.add_command(reconfigure)
 
 
 if __name__ == '__main__':

@@ -1,23 +1,25 @@
 //- h1 Europe #1
 .section.group
   each item in data
-    .serverGridItem.col.span_1_of_4(class='{{item.executed|yesno:",itemFaded"}}', onclick="window.vc('servers[detailed]', '{{item.id}}')")
+    .serverGridItem.col.span_1_of_4(class='{{item.executed.datapoint.is_online|yesno:",itemFaded"}}', onclick="window.vc('servers[detailed]', '{{item.id}}')")
       b(style="color:rgb(0,169,255)")
         if item.name
           = item.name
         else
           | --
-      .playerCount(class='{{item.executed|yesno:",noPlayers"}} {%if item.executed.clients|length == item.executed.limitations.clients%}fullPlayers{%endif%}"')
+      .playerCount(class='{{item.executed.datapoint.is_online|yesno:",noPlayers"}} {%if item.executed.datapoint.clients|length == item.executed.datapoint.limitations.clients%}fullPlayers{%endif%}"')
         i.icon.ion-md-person(style="margin-right:5px")
         if item.executed
-          | {{item.executed.clients|length}} of {{item.executed.limitations.clients}}
+          | {{item.executed.datapoint.clients.count}} of {{item.max_clients}}
         else
           | 0 of 0
       .mapName
-        if item.executed
-          = item.executed.map
+        if item.executed.datapoint.map
+          = item.executed.datapoint.map
+        else
+          | -
       .fLeft
-        if item.executed
+        if item.executed.datapoint.is_online
           .serverStatus.online
           | Online
         else
@@ -28,51 +30,52 @@
       script.execute.
         var ctx = document.getElementsByClassName("chart-{{item.id}}")[0].getContext('2d');
         var gradient = ctx.createLinearGradient(0, 0, 0, 400);
+
         var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-        labels: ["24h", "12h", "6h", "Now"],
-        datasets: [{
-        label: 'Players',
-        data: [30, 22, 30, 0],
-        backgroundColor: gradient,
-        borderColor: [
-        'rgb(0,169,255)'
-        ],
-        borderWidth: 1
-        }]
-        },
-        options: {
-        legend: {
-        display: false
-        },
-        elements: {
-        point: {
-        radius: 0
-        },
-        line: {
-        tension: 0
-        }
-        },
-        maintainAspectRatio: true,
-        scales: {
-        yAxes: [{
-        display: false,
-        gridLines: {
-        color: "rgba(0, 0, 0, 0)",
-        },
-        ticks: {
-          beginAtZero: true
-        }
-        }],
-        xAxes: [{
-        display: false,
-        gridLines: {
-        color: "rgba(0, 0, 0, 0)",
-        }
-        }]
-        }
-        }
+          type: 'line',
+          data: {
+            labels: ["45m", "30m", "15m", "Now"],
+            datasets: [{
+              label: 'Players',
+              data: {{item.executed.dataset|safe}},
+              backgroundColor: gradient,
+              borderColor: [
+                'rgb(0,169,255)'
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            legend: {
+              display: false
+            },
+            elements: {
+              point: {
+                radius: 0
+              },
+              line: {
+                tension: 0
+              }
+            },
+            maintainAspectRatio: true,
+            scales: {
+              yAxes: [{
+                display: false,
+                gridLines: {
+                  color: "rgba(0, 0, 0, 0)",
+                },
+                ticks: {
+                  beginAtZero: true
+                }
+              }],
+              xAxes: [{
+                display: false,
+                gridLines: {
+                  color: "rgba(0, 0, 0, 0)",
+                }
+              }]
+            }
+          }
         });
         myChart.canvas.parentNode.style.height = '80px';
         myChart.canvas.parentNode.style.width = '80px';

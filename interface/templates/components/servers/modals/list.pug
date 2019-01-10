@@ -5,8 +5,8 @@
     td= item.name
     td= item.query.map
     td
-      div(class="{%if item.query.clients|length == item.query.limitations.clients%}red{%else%}green{%endif%}")= item.query.clients|length
+      div(class="{%if item.query.clients.count == item.max_clients%}red{%else%}green{%endif%}")= item.query.clients.count
       |  /
-      .red= item.query.limitations.clients
-    td= item.query.time.up|duration
+      .red= item.max_clients
+    td= item.query.uptime|duration
     td= item.get_game_display

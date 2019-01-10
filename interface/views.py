@@ -61,10 +61,10 @@ def home(request):
     population.append((calendar.month_abbr[month], value))
 
   payload = {'population': population[::-1],
-             'punishments': Punishment.objects.all().count(),
-             'users': User.objects.all().count(),
-             'servers': Server.objects.all().count(),
-             'actions': LogModel.objects.all().count()}
+             'punishments': Punishment.objects.count(),
+             'users': User.objects.count(),
+             'servers': Server.objects.count(),
+             'actions': LogModel.objects.count()}
   return render(request, 'pages/home.pug', payload)
 
 

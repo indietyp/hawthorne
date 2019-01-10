@@ -1,0 +1,11 @@
+/var/log/hawthorne/*log {
+  rotate 14
+  daily
+  create
+
+  compress
+  delaycompress
+
+  missingok
+  notifempty
+}

@@ -407,6 +407,7 @@ configure() {
 
   printf "${BOLD}Setting up supervisor...${NORMAL}\n"
   cp -rf $directory/cli/configs/gunicorn.default.conf.py $directory/gunicorn.conf.py
+  cp -rf $directory/cli/configs/logrotate.default /etc/logrotate.d/hawthorne
 
   if hash yum >/dev/null 2>&1; then
     mkdir -p /etc/supervisor/conf.d/
