@@ -111,3 +111,4 @@ mainframe.ini
 .idea/
 
 todo
+celerybeat-schedule.db
