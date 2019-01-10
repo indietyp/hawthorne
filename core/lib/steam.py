@@ -19,8 +19,9 @@ def populate(user, save=True):
       user.profile = fetched.profile_url
       user.avatar = fetched.avatar_full
 
-      if fetched.country_code is not None:
-        user.country = Country.objects.get_or_create(code=fetched.country_code)[0]
+      # switch to IP based country when not present yet
+      if fetched.country_code is not None and not user.county:
+        user.country = Country.objects.get_or_create(code=fetched.country_code.lower())[0]
 
       try:
         realname = fetched.real_name
