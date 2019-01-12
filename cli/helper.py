@@ -3,8 +3,11 @@
 import click
 import os
 import pip
+import re
+import shutil
 
 
+from configparser import ConfigParser
 from django.core.management import call_command
 from django.db import connection
 from git import Repo
@@ -94,18 +97,58 @@ def version(yes):
 
 
 @click.command()
+@click.option('--link/--no-link', is_flag=True, expose_value=True,
+              default=False)
+@click.option('--bind', type=click.Choice(['socket', 'port']), default='socket')
 @click.option('--gunicorn/--no-gunicorn', is_flag=True, expose_value=True,
               prompt='reconfigure gunicorn')
 @click.option('--logrotate/--no-logrotate', is_flag=True, expose_value=True,
               prompt='reconfigure logrotate.d config')
 @click.option('--supervisor/--no-supervisor', is_flag=True, expose_value=True,
               prompt='reconfigure supervisor.d config')
-def reconfigure(gunicorn, logrotate, supervisor):
-  # TODO:
-  # --> gunicorn
-  # --> supervisor
-  # --> logrotate
-  pass
+def reconfigure(bind, link, gunicorn, logrotate, supervisor):
+  CONFIG_LOCATION = BASE_DIR + '/cli/configs'
+
+  if gunicorn:
+    shutil.copy(CONFIG_LOCATION + '/gunicorn.default.conf.py',
+                BASE_DIR + '/gunicorn.conf.py')
+
+    if bind == 'port':
+      with open(BASE_DIR + '/gunicorn.conf.py', 'r+') as file:
+        contents = file.read()
+        contents = contents.replace("bind = 'unix:/var/run/hawthorne.sock'",
+                                    "bind = '127.0.0.1:8000'")
+
+        file.seek(0)
+        file.truncate()
+        file.write(contents)
+
+  if supervisor:
+    config = ConfigParser()
+    config.read(CONFIG_LOCATION + '/supervisor.default.conf')
+
+    for section in config.sections():
+      if 'directory' in config[section]:
+        config[section]['directory'] = BASE_DIR
+
+    with open(BASE_DIR + '/supervisor.conf', 'w') as file:
+      config.write(file)
+
+    if link:
+      try:
+        os.symlink(BASE_DIR + '/supervisor.conf', '/etc/supervisor/conf.d/hawthorne.conf')
+      except Exception as e:
+        click.echo('Symlink to supervisor failed. ({})'.format(e))
+
+    run(['supervisorctl', 'reread'], stdout=PIPE, stderr=PIPE)
+    run(['supervisorctl', 'update'], stdout=PIPE, stderr=PIPE)
+    run(['supervisorctl', 'restart', 'hawthorne'], stdout=PIPE, stderr=PIPE)
+
+  if logrotate:
+    try:
+      os.symlink(CONFIG_LOCATION + '/logrotate.default', '/etc/logrotate.d/hawthorne')
+    except Exception as e:
+      click.echo('Symlink to logrotate failed. ({})'.format(e))
 
 
 cli.add_command(update)

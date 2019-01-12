@@ -428,6 +428,7 @@ configure() {
     sed -i "s#ROOT = 'root'#ROOT = '$ROOT'#g" $directory/panel/local.py
 
     cd $directory
+    celery -A panel worker -B -l info &> /dev/stdout &
     python3 -m gunicorn.app.wsgiapp panel.wsgi:application
   else
     supervisorctl reread
