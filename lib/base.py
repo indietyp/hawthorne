@@ -1,9 +1,13 @@
 import functools
 import socket
 
-from valve.rcon import RCON, RCONAuthenticationError, RCONError, RCONTimeoutError
+from valve.rcon import RCON, RCONError, RCONTimeoutError
 
 from core.models import Server
+
+
+class RCONConnectionRefusedError(RCONError):
+  """Raised when a timeout occurs waiting for a response."""
 
 
 class RCONBase(RCON):
@@ -52,6 +56,8 @@ class RCONBase(RCON):
 
     except socket.timeout:
       raise RCONTimeoutError('timed out')
+    except ConnectionRefusedError:
+      raise RCONConnectionRefusedError('server refused connection')
     finally:
       self.close()
 

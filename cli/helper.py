@@ -3,7 +3,6 @@
 import click
 import os
 import pip
-import re
 import shutil
 
 
