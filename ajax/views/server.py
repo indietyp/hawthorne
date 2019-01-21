@@ -1,6 +1,5 @@
 import datetime
 import json
-import logging
 import urllib.request
 
 from django.contrib.auth.decorators import login_required, permission_required

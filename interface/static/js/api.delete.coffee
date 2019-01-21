@@ -37,6 +37,10 @@ single = (mode = '', target) ->
       uuid = target.getAttribute('data-id')
       endpoint = window.endpoint.api.servers[uuid]
 
+    when 'system[token]'
+      uuid = target.getAttribute('data-id')
+      endpoint = window.endpoint.api.system.tokens[uuid]
+
   endpoint.delete(options, {}, payload, (err, data) ->
     if data.success
       if target.hasAttribute('data-opacity')

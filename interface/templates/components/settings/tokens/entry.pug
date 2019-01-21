@@ -1,21 +1,22 @@
 - load utils
 - load static
 
-tr(style="{%if not data.is_active%}opacity:0.5;{%endif%}", data-id='{{data.id}}')
+tr(style="{%if not data.is_active%}opacity:0.5;{%endif%}", data-id='{{data.id}}', data-remove)
   td(style='width:48px')
-    label.checkmarkContainer
-      input(type='checkbox', data-trigger='[ct/toggle]')
-      span.checkmark
-    .checkboxDialogue.modalSelect
-      select
-        //- maybe make this option dependent on the owner? immunity?
-        option Delete
-      button
-        i.icon.ion-ios-checkmark
-        |  Confirm
-      button.paginationTabsDanger
-        i.icon.ion-ios-close
-        |  Cancel
+    - if data.owner == request.user
+      label.checkmarkContainer
+        input(type='checkbox', data-trigger='[ct/toggle]')
+        span.checkmark
+      .checkboxDialogue.modalSelect
+        select
+          //- maybe make this option dependent on the owner? immunity?
+          option(value='delete') Delete
+        button(data-trigger='[table/choice]', data-mode='system[token]')
+          i.icon.ion-ios-checkmark
+          |  Confirm
+        button.paginationTabsDanger
+          i.icon.ion-ios-close
+          |  Cancel
   td.unset
     if request.user == data.owner
       a(href="javascript:void(0)", data-trigger="[clip/copy]", data-clipboard-text="{{data.id}}")

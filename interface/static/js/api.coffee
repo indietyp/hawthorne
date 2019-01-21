@@ -36,14 +36,20 @@ transform = (el) ->
     return el.value.split(':').splice(0, 2)
 
   if transformation is 'flatpickr'
-    timestamp = $(el).parent('.flatpickr')[0]._flatpickr.selectedDates[0].getTime()
-    timestamp = (timestamp / 1000) >> 0
-    current = (new Date / 1000) >> 0
-    return timestamp - current
+    if $(el).parent('.flatpickr')[0]._flatpickr.selectedDates[0]
+      timestamp = $(el).parent('.flatpickr')[0]._flatpickr.selectedDates[0].getTime()
+      timestamp = (timestamp / 1000) >> 0
+      current = (new Date / 1000) >> 0
+      return timestamp - current
+    else
+      return null
 
   if transformation is 'flatpickr-timestamp'
-    timestamp = $(el).parent('.flatpickr')[0]._flatpickr.selectedDates[0].getTime()
-    timestamp = (timestamp / 1000) >> 0
+    if $(el).parent('.flatpickr')[0]._flatpickr.selectedDates[0]
+      timestamp = $(el).parent('.flatpickr')[0]._flatpickr.selectedDates[0].getTime()
+      timestamp = (timestamp / 1000) >> 0
+    else
+      timestamp = null
 
     return timestamp
 
@@ -94,7 +100,7 @@ normalize = (form) ->
       payload[name].push value
     else if e.hasAttribute 'data-list'
       payload[name] = [value]
-    else if name.includes('/') and value.constructor.name == 'Array'
+    else if name.includes('/') and value.constructor.name is 'Array'
       values = []
       names = name.split('/')
       for i in [0..names.length] by 1
