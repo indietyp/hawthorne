@@ -20,7 +20,7 @@ def populate(user, save=True):
       user.avatar = fetched.avatar_full
 
       # switch to IP based country when not present yet
-      if fetched.country_code is not None and not user.county:
+      if fetched.country_code is not None and not user.country:
         user.country = Country.objects.get_or_create(code=fetched.country_code.lower())[0]
 
       try:
