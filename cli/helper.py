@@ -99,13 +99,16 @@ def version(yes):
 @click.option('--link/--no-link', is_flag=True, expose_value=True,
               default=False)
 @click.option('--bind', type=click.Choice(['socket', 'port']), default='socket')
+@click.option('--config', type=click.Path(exists=True), default='/etc/nginx/sites-enabled/hawthorne.conf',)
 @click.option('--gunicorn/--no-gunicorn', is_flag=True, expose_value=True,
               prompt='reconfigure gunicorn')
+@click.option('--nginx/--no-nginx', is_flag=True, expose_value=True,
+              prompt='reconfigure nginx config')
 @click.option('--logrotate/--no-logrotate', is_flag=True, expose_value=True,
               prompt='reconfigure logrotate.d config')
 @click.option('--supervisor/--no-supervisor', is_flag=True, expose_value=True,
               prompt='reconfigure supervisor.d config')
-def reconfigure(bind, link, gunicorn, logrotate, supervisor):
+def reconfigure(bind, link, config, gunicorn, nginx, logrotate, supervisor):
   CONFIG_LOCATION = BASE_DIR + '/cli/configs'
 
   if gunicorn:
@@ -148,6 +151,9 @@ def reconfigure(bind, link, gunicorn, logrotate, supervisor):
       os.symlink(CONFIG_LOCATION + '/logrotate.default', '/etc/logrotate.d/hawthorne')
     except Exception as e:
       click.echo('Symlink to logrotate failed. ({})'.format(e))
+
+  if nginx:
+    pass
 
 
 cli.add_command(update)

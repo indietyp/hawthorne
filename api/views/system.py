@@ -2,17 +2,18 @@
 
 import datetime
 
-from django.db.models import F
 from django.contrib.auth.models import Permission
+from django.db.models import F
+from django.http import HttpResponse
+from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.http import HttpResponse
 
 from core.decorators.api import json_response, validation
 from core.decorators.auth import authentication_required, permission_required
-from core.models import User, Server, Token, Punishment
-from log.models import ServerChat
+from core.models import Punishment, Server, Token, User
 from lib.sourcemod import SourcemodPluginWrapper
+from log.models import ServerChat
 
 
 @csrf_exempt
@@ -86,7 +87,11 @@ def token(request, validated={}, *args, **kwargs):
   else:
     token = Token()
     token.is_active = validated['active']
-    token.due = None if not validated['due'] else datetime.datetime.fromtimestamp(validated['due'])
+
+    token.due = None
+    if validated['due']:
+      token.due = timezone.make_aware(datetime.datetime.fromtimestamp(validated['due']))
+
     token.owner = request.user
 
     base = Permission.objects.all()\
@@ -97,7 +102,7 @@ def token(request, validated={}, *args, **kwargs):
     perms = []
     for perm in validated['permissions']:
       perm = perm.split('.')
-      p = base.filter(content_type__app_label=perm[0], codename=perm[1])
+      p = base.filter(content_type__model=perm[0], codename=perm[1])
 
       if not p:
         exceptions.append('.'.join(perm))

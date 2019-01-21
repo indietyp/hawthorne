@@ -323,6 +323,8 @@ init = (scope = document) ->
     switch action
       when 'create'
         window.api.create(mode, @, false)
+      when 'edit'
+        window.api.edit(mode, @, window.batch.length != 0)
 
   grid_delete = ->
     parent = $(@).parent '.serverGridItem'
@@ -333,12 +335,9 @@ init = (scope = document) ->
   $("[data-trigger='[grid/delete]']", scope).off 'click'
   $("[data-trigger='[grid/delete]']", scope).on 'click', grid_delete
 
-
-  clipboard = (event) ->
-    window.style.copy(@.getAttribute('data-clipboard-text'))
-
   $('[data-trigger="[clip/copy]"]', scope).off 'click'
-  $('[data-trigger="[clip/copy]"]', scope).on 'click', clipboard
+  $('[data-trigger="[clip/copy]"]', scope).on 'click', (event) ->
+    window.style.copy(@.getAttribute('data-clipboard-text'))
 
   $('[data-trigger="[input/duration]"]', scope).off 'keypress'
   $('[data-trigger="[input/duration]"]', scope).on 'keypress', (event) ->
@@ -355,25 +354,6 @@ init = (scope = document) ->
     if value[0] isnt 'P'
       value = 'P' + value
       cursor += 1
-
-    # component = /(?:P|T)(\d+[HMS])?(\d+[HMS])?(\d+(?:[HMS])?)/gm.exec value
-    # if component
-    #   component = component.slice(1).filter(Boolean)
-    #   index = value.length - component.join('').length
-
-    #   ordering = ['H', 'M', 'S']
-    #   reordered = []
-    #   component.forEach (e) ->
-    #     c = ordering.indexOf(e.slice(-1))
-    #     if c isnt -1
-    #       reordered[c] = e
-    #     else
-    #       reordered[4] = e
-
-    #   value = value.substr(0, index) + reordered.join('')
-    #   if not /T/.test value
-    #     cursor += 1
-    #     value = value.substr(0, index) + 'T' + value.substr(index)
 
     event.target.value = value
     @.setSelectionRange(cursor + 1, cursor + 1)

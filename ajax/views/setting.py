@@ -31,7 +31,7 @@ def get_perms(o, user, *args, **kwargs):
 @require_http_methods(['POST'])
 def tokens(request, *args, **kwargs):
   current = request.POST.get("page", 1)
-  pages = math.ceil(Token.objects.all().count() / settings.PAGE_SIZE)
+  pages = math.ceil(Token.objects.filter(is_active=True).count() / settings.PAGE_SIZE)
 
   return render(request, 'components/settings/tokens/wrapper.pug', {'pages': pages,
                                                                     'current': current})
@@ -41,5 +41,5 @@ def tokens(request, *args, **kwargs):
 @permission_required('core.view_token')
 @require_http_methods(['POST'])
 def tokens_entries(request, page, *args, **kwargs):
-  tokens = Token.objects.all().order_by('created_at')
+  tokens = Token.objects.filter(is_active=True).order_by('created_at')
   return renderer(request, 'components/settings/tokens/entry.pug', tokens, page)

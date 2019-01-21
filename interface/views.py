@@ -6,7 +6,7 @@ import random
 from automated_logging.models import Model as LogModel
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission
 from django.db import connection
 from django.db.models import Count, DateTimeField, ExpressionWrapper, F, Subquery
 from django.db.models.deletion import Collector
@@ -114,8 +114,6 @@ def admins_servers(request):
 
 @login_required(login_url='/login')
 def admins_web(request):
-  from django.contrib.auth.models import Permission
-
   permissions = Permission.objects.order_by('content_type__model')
   excluded = ['core', 'log', 'auth']
   groups = Group.objects.all()
@@ -148,19 +146,11 @@ def punishments(request):
 
 @login_required(login_url='/login')
 def settings(request):
-  # modules = [c for c in ContentType.objects.filter(app_label__in=['core', 'log']) if
-  #            Permission.objects.filter(content_type=c).count() > 0]
+  permissions = Permission.objects.order_by('content_type__model')
+  excluded = ['core', 'log', 'auth']
 
-  # base = request.user.user_permissions if not request.user.is_superuser else Permission.objects
-  # perms = base.all().order_by('content_type__model')
-
-  # mainframe = Mainframe()
-  # mf = None
-
-  # if mainframe.check():
-  #   mf = mainframe.populate().current.id
-
-  return render(request, 'pages/settings.pug', {})
+  return render(request, 'pages/settings.pug', {'permissions': permissions,
+                                                'excluded': excluded})
 
 
 def page_not_found(request, exception=None, template_name='404.pug'):

@@ -6,62 +6,11 @@ request = (endpoint, options, payload, method, target) ->
 
 
 single = (mode = '', target) ->
-  payload = {}
   options =
     toast: true
   method = 'put'
-  component = undefined
 
-  validated = true
-  Array.from(target.elements).forEach (e) ->
-    if $(e).hasClass 'skip'
-      return
-
-    value = window.api.utils.transform e
-    valid = window.api.utils.validation e
-
-    if not valid[0]
-      validated = false
-      $(e).addClass 'invalid'
-      console.log valid
-      $('span span.invalid', $(e).parent())[0].innerHTML = valid[1]
-
-      return
-
-
-    if $(e).hasClass 'target'
-      component = value
-      return
-
-    name = e.name
-    if e.hasAttribute 'data-name'
-      name = e.getAttribute 'data-name'
-
-    if e.hasAttribute 'multiple'
-      options = Array.from e.options
-      payload[name] = options.map((x) -> x.value)
-    else if e.hasAttribute('data-boolean')
-      payload[e.getAttribute('data-boolean')] = e.checked
-    else if e.getAttribute('type') is 'checkbox'
-      if not e.checked
-        return
-      if not payload.hasOwnProperty e.name
-        payload[name] = []
-      payload[name].push value
-    else if e.hasAttribute 'data-list'
-      payload[name] = [value]
-    else if name.includes('/') and value.constructor.name == 'Array'
-
-      values = []
-      names = name.split('/')
-      for i in [0..names.length] by 1
-        values.push [names[i], value[i]]
-
-      values.forEach (v) ->
-        payload[v[0]] = v[1]
-
-    else if value
-      payload[name] = value
+  [payload, component, validated] = window.api.utils.normalize target
 
   if not validated
     return
@@ -81,6 +30,8 @@ single = (mode = '', target) ->
       endpoint = window.endpoint.api.users[component].punishments
     when 'servers'
       endpoint = window.endpoint.api.servers
+    when 'system[token]'
+      endpoint = window.endpoint.api.system.tokens
 
   if target.hasAttribute 'data-append'
     endpoint.get({}, {}, {}, (err, data) ->

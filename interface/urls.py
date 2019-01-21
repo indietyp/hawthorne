@@ -22,7 +22,6 @@ urlpatterns = [
     # path('announcements', views.announcement),
     path('settings', views.settings),
 
-    # path('login', views.login),
     path('logout', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
     path('login', auth_views.LoginView.as_view(template_name='skeleton/login.pug', redirect_authenticated_user=True), name='login'),
 ]

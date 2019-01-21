@@ -24,8 +24,11 @@ tr(style="{%if not data.is_active%}opacity:0.5;{%endif%}", data-id='{{data.id}}'
     else
       = data.id|mask
   td
-    a(href="javascript:void(0)", onclick="window.vc('players[detailed]', '{{data.owner.id}}')")
-      = data.owner.namespace
+    if data.owner.is_steam
+      a(href="javascript:void(0)", onclick="window.vc('players[detailed]', '{{data.owner.id}}')")
+        = data.owner.namespace
+    else
+      = data.owner.username
   td
     if data.due
       = data.due|date:"DATETIME_FORMAT"
