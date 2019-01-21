@@ -11,7 +11,7 @@ git+https://github.com/smiley/steamapi
 django-static-precompiler
 argon2-cffi
 django-redis-cache
-redis
+redis==2.10.6
 python-valve
 pypugjs
 steam
@@ -29,3 +29,4 @@ jellyfish
 humanize
 celery[redis]
 django-cprofile-middleware
+python-nginx

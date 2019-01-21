@@ -1,9 +1,9 @@
 #!/usr/bin/python3
-
 import click
 import os
 import pip
 import shutil
+import sys
 
 
 from configparser import ConfigParser
@@ -16,6 +16,8 @@ from subprocess import PIPE, run
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(BASE_DIR)
+
 repo = Repo(BASE_DIR)
 repo.git.fetch()
 
@@ -52,7 +54,7 @@ def update(supervisor):
   if supervisor and which('supervisorctl'):
     run(['supervisorctl', 'reread'], stdout=PIPE, stderr=PIPE)
     run(['supervisorctl', 'update'], stdout=PIPE, stderr=PIPE)
-    run(['supervisorctl', 'restart', 'hawthorne'], stdout=PIPE, stderr=PIPE)
+    run(['supervisorctl', 'restart', 'hawthorne:*'], stdout=PIPE, stderr=PIPE)
 
 
 @click.command()
@@ -67,7 +69,8 @@ def verify():
     repo.git.diff_index('HEAD', '--', quiet=True)
     click.echo('You are compatible with the upstream.')
   except GitCommandError:
-    click.echo('You are {} compatible with the upstream.'.format(click.style('not', bold=True)))
+    click.echo('You are {} compatible with the upstream.'.format(click.style('not',
+                                                                             bold=True)))
     stash = click.confirm('Do you want to stash your local changes?')
 
     if stash:
@@ -99,7 +102,9 @@ def version(yes):
 @click.option('--link/--no-link', is_flag=True, expose_value=True,
               default=False)
 @click.option('--bind', type=click.Choice(['socket', 'port']), default='socket')
-@click.option('--config', type=click.Path(exists=True), default='/etc/nginx/sites-enabled/hawthorne.conf',)
+@click.option('--config', type=click.Path(dir_okay=False, resolve_path=True,
+                                          writeable=True, readable=True),
+              default='/etc/nginx/sites-enabled/hawthorne.conf')
 @click.option('--gunicorn/--no-gunicorn', is_flag=True, expose_value=True,
               prompt='reconfigure gunicorn')
 @click.option('--nginx/--no-nginx', is_flag=True, expose_value=True,
@@ -144,7 +149,7 @@ def reconfigure(bind, link, config, gunicorn, nginx, logrotate, supervisor):
 
     run(['supervisorctl', 'reread'], stdout=PIPE, stderr=PIPE)
     run(['supervisorctl', 'update'], stdout=PIPE, stderr=PIPE)
-    run(['supervisorctl', 'restart', 'hawthorne'], stdout=PIPE, stderr=PIPE)
+    run(['supervisorctl', 'restart', 'hawthorne:*'], stdout=PIPE, stderr=PIPE)
 
   if logrotate:
     try:
@@ -153,7 +158,12 @@ def reconfigure(bind, link, config, gunicorn, nginx, logrotate, supervisor):
       click.echo('Symlink to logrotate failed. ({})'.format(e))
 
   if nginx:
-    pass
+    from panel.settings import ALLOWED_HOSTS
+    import nginx
+
+    c = nginx.loadf(CONFIG_LOCATION + '/nginx.example.conf')
+    c.server.filter('Key', 'server_name')[0].value = ' '.join(ALLOWED_HOSTS)
+    nginx.dumpf(c, config)
 
 
 cli.add_command(update)
