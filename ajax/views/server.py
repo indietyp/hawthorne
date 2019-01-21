@@ -17,13 +17,10 @@ from log.models import ServerChat, ServerDataPoint, UserConnection
 
 
 def status(server, *args, **kwargs):
-  logger = logging.getLogger(__name__)
-  now = datetime.datetime.now()
   datapoints = ServerDataPoint.objects.filter(server=server).order_by('-created_at')
 
   dataset = [0] * 4 if not datapoints else [d.clients.count() for d in datapoints[:4]]
   datapoint = ServerDataPoint() if not datapoints else datapoints[0]
-  logger.warning(datetime.datetime.now() - now)
 
   return {'dataset': dataset, 'datapoint': datapoint}
 

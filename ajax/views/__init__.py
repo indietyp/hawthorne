@@ -52,11 +52,11 @@ def wrapper(target, func=None, *args, **kwargs):
 
 def renderer(request, template, obj, page,
              extra=[], size=PAGE_SIZE, execute=None, overwrite=False):
+  logger = logging.getLogger(__name__)
+  logger.warning('HEY!')
   data = obj[(page - 1) * size:page * size]
   data = list(data)
 
-  logger = logging.getLogger(__name__)
-  logger.warning('HEY!')
   if execute and callable(execute):
     with Pool(cpu_count()) as p:
       target = partial(wrapper, func=execute, user=request.user)
