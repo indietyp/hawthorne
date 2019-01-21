@@ -1,3 +1,4 @@
+import logging
 import os
 
 from django.http import HttpResponse
@@ -54,6 +55,8 @@ def renderer(request, template, obj, page,
   data = obj[(page - 1) * size:page * size]
   data = list(data)
 
+  logger = logging.getLogger(__name__)
+  logger.warning('HEY!')
   if execute and callable(execute):
     with Pool(cpu_count()) as p:
       target = partial(wrapper, func=execute, user=request.user)
