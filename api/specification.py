@@ -77,6 +77,7 @@ validation = {
                                     'resolved': {'type': 'boolean', 'nullable': True, 'default': None},
                                     'reason': {'type': 'string', 'nullable': True, 'default': None},
                                     'length': {'type': 'integer', 'nullable': True, 'default': None},
+                                    'plugin': {'type': 'boolean', 'default': True},
                                     'banned': {'type': 'boolean', 'nullable': True, 'default': None},
                                     'kicked': {'type': 'boolean', 'nullable': True, 'default': None},
                                     'muted': {'type': 'boolean', 'nullable': True, 'default': None},

@@ -74,7 +74,6 @@ normalize = (form) ->
     if not valid[0]
       validated = false
       $(e).addClass 'invalid'
-      console.log valid
       $('span span.invalid', $(e).parent())[0].innerHTML = valid[1]
 
       return

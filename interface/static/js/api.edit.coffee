@@ -17,7 +17,8 @@ single = (mode = '', target, overwrite) ->
     when 'admins[server][roles]'
       endpoint = window.endpoint.api.roles[component]
     when 'players[detailed][punishment]'
-      endpoint = window.endpoint.api.users[component].punishments
+      [c0, c1] =  component.split(':')
+      endpoint = window.endpoint.api.users[c0].punishments[c1]
     when 'servers'
       endpoint = window.endpoint.api.servers[component]
 
@@ -29,9 +30,9 @@ single = (mode = '', target, overwrite) ->
 
 edit = (mode = '', target, batch = false) ->
   if batch
-    window.batch.forEach (value) ->
-      single(mode, target, value.getAttribute('data-id'))
-    window.batch = []
+    window.batch.forEach (e) ->
+      single(mode, target, e.getAttribute('data-overwrite'))
+
   else
     single(mode, target)
 

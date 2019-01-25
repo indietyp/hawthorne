@@ -113,6 +113,8 @@ init = (scope = document) ->
     $('input:checked', table).forEach((e) ->
       e.checked = false
     )
+
+    window.batch = []
     return
 
 
@@ -287,7 +289,6 @@ init = (scope = document) ->
   $("[data-trigger='[ct/toggle]']", scope).off 'change'
   $("[data-trigger='[ct/toggle]']", scope).on 'change', ct_toggle
 
-
   table_choice = ->
     parent = $(@).parent '.modalSelect'
 
@@ -297,6 +298,27 @@ init = (scope = document) ->
     switch operation
       when 'delete'
         window.api.remove(mode, window.batch, true)
+      when 'edit'
+        $('.overlay').fadeIn 'fast'
+        modal = $("[data-component='[modal/#{mode}/edit]']")
+        modal.fadeIn 'fast'
+
+        if window.batch.length is 1
+          $('input.single', modal).removeClass 'hidden'
+          $('input.batch', modal).addClass 'hidden'
+
+          target = window.batch[0]
+          $('input:not(.skip):not([type=checkbox])', modal).forEach (e) ->
+            parent = $(e).parent()
+            e.value = target.getAttribute "data-#{e.name}"
+
+            if parent.hasClass '_Dynamic_Select'
+              value = $("._Container li[data-value='#{e.value}'] p", parent)[0].textContent
+              $('._Title', parent)[0].textContent = value
+
+        else
+          $('input.batch', modal).removeClass 'hidden'
+          $('input.single', modal).addClass 'hidden'
 
   $("[data-trigger='[table/choice]']", scope).off 'click'
   $("[data-trigger='[table/choice]']", scope).on 'click', table_choice

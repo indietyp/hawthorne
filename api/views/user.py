@@ -490,11 +490,11 @@ def punishment_detailed(request, u=None, p=None, validated={}, *args, **kwargs):
         server = Server.objects.filter(id=validated['server'])
 
         if server:
-          validated.server = server[0]
+          punishment.server = server[0]
         else:
           return 'This UUID is not a server', 428
       else:
-        validated.server = None
+        punishment.server = None
 
     if validated['resolved'] is not None:
       punishment.resolved = validated['resolved']
@@ -517,7 +517,9 @@ def punishment_detailed(request, u=None, p=None, validated={}, *args, **kwargs):
     if validated['gagged'] is not None:
       punishment.is_gagged = validated['gagged']
 
-    punishment.updated_by = validated[''] if validated[''] else request.user
+    # updated_by will be global
+    # punishment.updated_by = validated[''] if validated[''] else request.user
+    punishment.updated_by = request.user
 
   elif request.method == 'DELETE':
     punishment.resolved = True

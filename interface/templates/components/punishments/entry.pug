@@ -1,7 +1,10 @@
 - load utils
 - load static
 
-tr(style="{%if data.resolved%}opacity:0.5;{%endif%}", data-id='{{data.id}}', data-user='{{data.user.id}}', data-opacity)
+tr(style="{%if data.resolved%}opacity:0.5;{%endif%}",
+  data-id='{{data.id}}', data-user='{{data.user.id}}', data-opacity,
+  data-reason='{{data.reason}}', data-duration='{{data.length|isoduration}}',
+  data-server='{{data.server.id}}', data-overwrite='{{data.user.id}}:{{data.id}}')
   td(style='width:48px')
     if not data.resolved
       label.checkmarkContainer
@@ -9,11 +12,12 @@ tr(style="{%if data.resolved%}opacity:0.5;{%endif%}", data-id='{{data.id}}', dat
         span.checkmark
       .checkboxDialogue.modalSelect
         select
+          option(value='edit') Modify
           option(value='delete') Resolve
         button(data-trigger='[table/choice]', data-mode='punishment')
           i.icon.ion-ios-checkmark
           |  Confirm
-        button.paginationTabsDanger
+        button.paginationTabsDanger(data-trigger='[ct/clear]')
           i.icon.ion-ios-close
           |  Cancel
   td(style='width:1px;height:30px')
