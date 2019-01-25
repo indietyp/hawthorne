@@ -131,7 +131,7 @@ validation = {
                                                  'max': 100},
                                     'usetime': {'type': 'integer', 'default': None, 'nullable': True, 'min': -1},
                                     'server': {'type': 'uuid', 'default': None, 'nullable': True},
-                                    'flags': {'type': 'string', 'default': None, 'nullable': True, 'regex': r'[A-N]+'},
+                                    'flags': {'type': 'string', 'default': None, 'nullable': True, 'regex': r'[A-T]+'},
                                     'members': {'type': 'list', 'default': [], 'schema': {'type': 'uuid'}}},
                      'permission': ['core.change_role']},
             'DELETE': {'parameters': {},

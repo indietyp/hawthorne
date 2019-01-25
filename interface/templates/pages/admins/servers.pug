@@ -1,6 +1,7 @@
 - extends ajax|yesno:'skeleton/wrappers/ajax.pug,skeleton/main.pug'
 - load i18n
 - load staticfiles
+- load utils
 
 - block content
   .modal.modalDynamic(data-component='[modal/admins/add]')
@@ -59,7 +60,7 @@
             | Role Immunity (0-99)
             span.invalid
         .section.group.inputGroup
-          input.smallInput(name='duration', type='text', data-trigger='[input/duration]', placeholder=' ', data-transform='iso-duration')
+          input.smallInput(name='usetime', type='text', data-trigger='[input/duration]', placeholder=' ', data-transform='iso-duration')
           span
             | Expiration (optional)
             span.invalid
@@ -82,114 +83,13 @@
         b.mbotSmall(style='padding-top:6px')
           i.icon.ion-ios-flag(style='margin-right:10px')
           |  Flags
-        .section.group
-          .col.span_1_of_4
+        .section.group.checkboxGroup
+          for flag, name, value in dummy|gen_srv_perms
             .modalFlags
               label.switch
-                input(name='flags', type='checkbox', value='A')
+                input(name='flags', type='checkbox', value='{{flag}}')
                 span.slider.round
-              .switchText Reserved Slots
-            .modalFlags
-              label.switch
-                input(name='flags', type='checkbox', value='B')
-                span.slider.round
-              .switchText Generic
-          .col.span_1_of_4
-            .modalFlags
-              label.switch
-                input(name='flags', type='checkbox', value='C')
-                span.slider.round
-              .switchText Kick
-            .modalFlags
-              label.switch
-                input(name='flags', type='checkbox', value='DE')
-                span.slider.round
-              .switchText Ban
-          .col.span_1_of_4
-            .modalFlags
-              label.switch
-                input(name='flags', type='checkbox', value='F')
-                span.slider.round
-              .switchText Slap
-            .modalFlags
-              label.switch
-                input(name='flags', type='checkbox', value='G')
-                span.slider.round
-              .switchText Map
-          .col.span_1_of_4
-            .modalFlags
-              label.switch
-                input(name='flags', type='checkbox', value='H')
-                span.slider.round
-              .switchText Cvar
-            .modalFlags
-              label.switch
-                input(name='flags', type='checkbox', value='I')
-                span.slider.round
-              .switchText Config
-        .section.group
-          .col.span_1_of_4
-            .modalFlags
-              label.switch
-                input(name='flags', type='checkbox', value='J')
-                span.slider.round
-              .switchText Chat
-            .modalFlags
-              label.switch
-                input(name='flags', type='checkbox', value='K')
-                span.slider.round
-              .switchText Vote
-          .col.span_1_of_4
-            .modalFlags
-              label.switch
-                input(name='flags', type='checkbox', value='L')
-                span.slider.round
-              .switchText Password
-            .modalFlags
-              label.switch
-                input(name='flags', type='checkbox', value='M')
-                span.slider.round
-              .switchText Remote Control
-          .col.span_1_of_4
-            .modalFlags
-              label.switch
-                input(name='flags', type='checkbox', value='N')
-                span.slider.round
-              .switchText Cheats
-            .modalFlags
-              label.switch
-                input(name='flags', type='checkbox', value='O')
-                span.slider.round
-              .switchText Custom 1
-          .col.span_1_of_4
-            .modalFlags
-              label.switch
-                input(name='flags', type='checkbox', value='P')
-                span.slider.round
-              .switchText Custom 2
-            .modalFlags
-              label.switch
-                input(name='flags', type='checkbox', value='Q')
-                span.slider.round
-              .switchText Custom 3
-        .section.group
-          .col.span_1_of_4
-            .modalFlags
-              label.switch
-                input(name='flags', type='checkbox', value='R')
-                span.slider.round
-              .switchText Custom 4
-            .modalFlags
-              label.switch
-                input(name='flags', type='checkbox', value='S')
-                span.slider.round
-              .switchText Custom 5
-          .col.span_1_of_4
-            .modalFlags
-              label.switch
-                input(name='flags', type='checkbox', value='T')
-                span.slider.round
-              .switchText Custom 6
+              .switchText= name
 
         input.skip.unset(type="submit", value='Save')
 

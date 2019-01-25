@@ -1,10 +1,13 @@
 import datetime
+import isodate
 import natural.date
 
 from django.contrib.auth.models import Group, Permission
+from django.db.models import BooleanField
+from django.template import Node
 from django.template.defaulttags import register
 
-from core.models import Token
+from core.models import ServerPermission, Token
 
 
 @register.filter
@@ -78,3 +81,25 @@ def mask(target, modifier='0.75'):
       result += target[i]
 
   return result
+
+
+@register.filter
+def isoduration(v):
+  return isodate.duration_isoformat(v)
+
+
+@register.filter
+def srv_perms(v):
+  output = []
+  for field in v._meta.get_fields():
+    if isinstance(field, BooleanField):
+      name = field.name.split('can_')[1].capitalize().replace('_', ' ')
+      output.append([field.help_text, name, getattr(v, field.name)])
+
+  output = sorted(output, key=lambda x: x[0])
+  return output
+
+
+@register.filter
+def gen_srv_perms(v):
+  return srv_perms(ServerPermission())

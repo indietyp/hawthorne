@@ -1,3 +1,5 @@
+- load utils
+
 .section.group
   each item in data
     .modal(data-component='[modal/edit/{{item.id}}]')
@@ -19,8 +21,7 @@
               | Role Immunity (0-99)
               span.invalid
           .section.group.inputGroup
-            //- convert expiration to ISO Duration?
-            input.smallInput(name='duration', type='text', data-trigger='[input/duration]', placeholder=' ', data-transform='iso-duration')
+            input.smallInput(name='usetime', type='text', data-trigger='[input/duration]', placeholder=' ', data-transform='iso-duration', value='{%if item.usetime%}{{item.usetime|isoduration}}{%endif%}')
             span
               | Expiration (optional)
               span.invalid
@@ -45,7 +46,20 @@
                     li(data-trigger='[composer/select/choose]', data-value=server.id)
                       p= server.name
 
-          //- add stuffs
+          b.mbotSmall(style='padding-top:6px')
+            i.icon.ion-ios-flag(style='margin-right:10px')
+            |  Flags
+          .section.group.checkboxGroup
+            for flag, name, value in item.flags|srv_perms
+              .modalFlags
+                label.switch
+                  if value
+                    input(name='flags', type='checkbox', value='{{flag}}', checked)
+                  else
+                    input(name='flags', type='checkbox', value='{{flag}}')
+                  span.slider.round
+                .switchText= name
+
           input.skip(type='submit', value='Edit {{item.name}}')
 
     .serverGridItem.noHover.col.span_1_of_4(style="padding-bottom:6px", data-id="{{item.id}}", data-visibility)

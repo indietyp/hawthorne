@@ -448,6 +448,14 @@ h3 input {
   display: table;
   clear: both;
 }
+.group.checkboxGroup {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 6px 0;
+}
+.group.checkboxGroup:before {
+  display: none;
+}
 .span_4_of_4 {
   width: 100%;
 }

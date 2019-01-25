@@ -21,10 +21,8 @@ single = (mode = '', target, overwrite) ->
     when 'servers'
       endpoint = window.endpoint.api.servers[component]
 
-
   endpoint[method](options, {}, payload, (err, data) ->
-    if data.success
-      target.reset()
+    return
   )
 
   return
