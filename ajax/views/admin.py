@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 
 from ajax.views import renderer
-from core.models import Membership, Role, User
+from core.models import Membership, Role, Server, User
 from django.contrib.auth.models import Group
 
 
@@ -51,7 +51,8 @@ def servers_roles(request):
 @require_http_methods(['POST'])
 def servers_roles_entries(request, page):
   obj = Role.objects.all()
-  return renderer(request, 'components/admins/servers/roles/entry.pug', obj, page, size=4, overwrite=True)
+  return renderer(request, 'components/admins/servers/roles/entry.pug', obj, page,
+                  size=4, overwrite=True, payload={'servers': Server.objects.all()})
 
 
 @login_required(login_url='/login')

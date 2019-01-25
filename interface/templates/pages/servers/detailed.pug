@@ -80,6 +80,53 @@
       i.fa.fa-paper-plane(style="margin-right:10px;")
       | Send
 
+  .modal(data-component='[modal/edit]')
+    h1 Server – Edit
+    .close(data-trigger='[modal/close]')
+      i.icon.ion-ios-close
+    .modalContent
+      form(data-trigger='[modal/form]', data-action='edit', data-mode='servers')
+        input.hidden.target(value='{{data.id}}')
+        b.mtop.mbotSmall
+          i.icon.ion-ios-person(style='margin-right:10px')
+          |  Server Details
+        .section.group.inputGroup
+          input.smallInput(name='name', type='text', required, placeholder=' ', value='{{data.name}}')
+          span Name
+        .section.group.modalSelect
+          ._Dynamic_Select
+            ._Title(data-trigger='[composer/select/open]')= data.get_game_display
+            input._Value.hidden(name='game', value='{{data.game}}')
+            ._Select
+              ._Select_Search
+                input.skip(type='text', placeholder='Type to filter...', data-trigger='[composer/select/search]')
+              ._STitle Results
+              ._Container
+                - for game in games
+                  li(data-trigger='[composer/select/choose]', data-value="{{game.0}}")
+                    p= game.1
+        .section.group.inputGroup
+          input.smallInput(name='gamemode', type='text', required, placeholder=' ', data-transform='lower', value='{{data.mode}}')
+          span
+            | Mode
+            span.invalid
+
+        b.mtop.mbotSmall
+          i.icon.ion-ios-person(style='margin-right:10px')
+          |  RCON Details
+        .section.group.inputGroup
+          input.smallInput(name='ip/port', type='text', required, placeholder=' ', data-transform='ip-port', value='{{data.ip}}:{{data.port}}')
+          span
+            | IP and Port
+            span.invalid
+        .section.group.inputGroup
+          input.smallInput(name='password', type='password', placeholder=' ')
+          span
+            | Password
+            span.invalid
+
+        input.skip(type='submit', value='Edit {{data.name}}')
+
   ul.paginationTabs(data-target='servers[detailed]')
     li(data-trigger="[ct/switch]", data="overview") Overview
     li(data-trigger="[ct/switch]", data="logs") Chat Log
@@ -90,7 +137,7 @@
     li.fRight.paginationTabsDanger(data-trigger="[modal/open]", data-trigger-target="[modal/delete]")
       i.icon.ion-ios-trash(style="margin-right:5px")
       | Delete Server
-    li.fRight.paginationTabsHarmless(style="margin-right:6px")
+    li.fRight.paginationTabsHarmless(style="margin-right:6px", data-trigger="[modal/open]", data-trigger-target="[modal/edit]")
       i.fa.fa-cog(style="margin-right:5px")
       | Edit
 

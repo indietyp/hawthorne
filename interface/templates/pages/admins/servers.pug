@@ -77,7 +77,7 @@
               ._STitle Results
               ._Container
                 - for server in servers
-                  li(data-trigger='[composer/select/choose]')
+                  li(data-trigger='[composer/select/choose]', data-value=server.id)
                     p= server.name
         b.mbotSmall(style='padding-top:6px')
           i.icon.ion-ios-flag(style='margin-right:10px')

@@ -115,7 +115,12 @@ def rcon(request, s, *args, **kwargs):
 @require_http_methods(['POST'])
 def modal_players(request, s, *args, **kwargs):
   server = Server.objects.get(id=s)
-  clients = SourcemodPluginWrapper(server).status(truncated=True)['clients']
+  clients = ServerDataPoint.objects.filter(server=server).order_by('-created_at')
+
+  if clients:
+    clients = clients[0].clients
+  else:
+    clients = []
 
   return render(request, 'components/servers/detailed/modals/players.pug', {'data': clients})
 

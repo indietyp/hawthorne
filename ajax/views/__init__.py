@@ -50,7 +50,8 @@ def wrapper(target, func=None, *args, **kwargs):
 
 
 def renderer(request, template, obj, page,
-             extra=[], size=PAGE_SIZE, execute=None, overwrite=False):
+             extra=[], size=PAGE_SIZE, execute=None, overwrite=False,
+             payload={}):
   data = obj[(page - 1) * size:page * size]
   data = list(data)
 
@@ -64,9 +65,10 @@ def renderer(request, template, obj, page,
 
   if len(data) > 0:
     if overwrite:
-      return render(request, template, {'data': data})
+      return render(request, template, {'data': data, **payload})
 
     return render(request, 'skeleton/wrappers/pagination.pug', {'data': data,
-                                                                'template': template})
+                                                                'template': template,
+                                                                **payload})
   else:
     return HttpResponse('', status=416)

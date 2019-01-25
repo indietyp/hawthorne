@@ -179,9 +179,9 @@
             = data.mode
           li
             b Players:
-            .playerCount(class="{%if status.clients|length == status.limitations.clients%}fullPlayers{%endif%}")
+            .playerCount(class="{%if status.clients|length == data.max_clients%}fullPlayers{%endif%}")
               = status.clients|length
               |  of
-              = status.limitations.clients
+              = data.max_clients
             a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/players]") View Players
             a(href="javascript:void(0)", style="margin-left:10px", data-trigger="[modal/open]", data-trigger-target="[modal/admins]") View Admins

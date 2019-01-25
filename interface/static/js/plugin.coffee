@@ -324,7 +324,7 @@ init = (scope = document) ->
       when 'create'
         window.api.create(mode, @, false)
       when 'edit'
-        window.api.edit(mode, @, window.batch.length != 0)
+        window.api.edit(mode, @, window.batch.length > 0)
 
   grid_delete = ->
     parent = $(@).parent '.serverGridItem'

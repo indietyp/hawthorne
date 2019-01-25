@@ -3,7 +3,7 @@ single = (mode = '', target, overwrite) ->
     toast: true
   method = 'post'
 
-  [payload, component, validated] = window.api.util.normalize target
+  [payload, component, validated] = window.api.utils.normalize target
 
   if overwrite
     component = overwrite
