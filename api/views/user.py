@@ -111,7 +111,7 @@ def list(request, validated=[], *args, **kwargs):
 
       for perm in validated['permissions']:
         perm = perm.split('.')
-        p = base.filter(content_type__app_label=perm[0], codename=perm[1])
+        p = base.filter(content_type__model=perm[0], codename=perm[1])
 
         if not p:
           exceptions.append('.'.join(perm))
@@ -293,7 +293,7 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
       perms = []
       for perm in validated['permissions']:
         perm = perm.split('.')
-        p = base.filter(content_type__app_label=perm[0], codename=perm[1])
+        p = base.filter(content_type__model=perm[0], codename=perm[1])
 
         if not p:
           exceptions.append('.'.join(perm))

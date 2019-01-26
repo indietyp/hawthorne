@@ -91,12 +91,25 @@ def detailed(request, g=None, validated={}, *args, **kwargs):
 
     if len(validated['permissions']) > 0:
       perms = []
-      for p in validated['permissions']:
-        p = p.split('.')
-        try:
-          perms.append(Permission.objects.get(content_type__app_label=p[0], codename=p[1]))
-        except Exception:
-          continue
+      base = Permission.objects.all()\
+                               .annotate(encoded=F('content_type__model') + '.' + F('codename'))\
+                               .filter(encoded__in=request.user.get_all_permissions())\
+                               .order_by('content_type__model')
+      exceptions = []
+      perms = []
+
+      for perm in validated['permissions']:
+        perm = perm.split('.')
+        p = base.filter(content_type__model=perm[0], codename=perm[1])
+
+        if not p:
+          exceptions.append('.'.join(perm))
+
+        perms.extend(p)
+
+      if exceptions:
+        return {'info': 'You are trying to assign permissions that either do not exist or are out of your scope.', 'affects': exceptions}, 403
+
       group.permissions.set(perms)
 
     group.save()

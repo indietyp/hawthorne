@@ -312,13 +312,19 @@ init = (scope = document) ->
             parent = $(e).parent()
             e.value = target.getAttribute "data-#{e.name}"
 
-            if parent.hasClass '_Dynamic_Select'
+            if parent.hasClass '_Dynamic_Select' and e.value
               value = $("._Container li[data-value='#{e.value}'] p", parent)[0].textContent
               $('._Title', parent)[0].textContent = value
 
         else
+          $('input:not(.skip):not([type=checkbox])', modal).forEach (e) ->
+            e.value = ''
+
           $('input.batch', modal).removeClass 'hidden'
           $('input.single', modal).addClass 'hidden'
+
+          button = $('input.batch', modal)[0]
+          button.value = button.value.replace /(\d+)/g, window.batch.length
 
   $("[data-trigger='[table/choice]']", scope).off 'click'
   $("[data-trigger='[table/choice]']", scope).on 'click', table_choice

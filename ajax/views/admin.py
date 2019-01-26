@@ -2,12 +2,12 @@ import math
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.models import Group, Permission
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 
 from ajax.views import renderer
 from core.models import Membership, Role, Server, User
-from django.contrib.auth.models import Group
 
 
 @login_required(login_url='/login')
@@ -87,4 +87,8 @@ def web_groups(request):
 @require_http_methods(['POST'])
 def web_groups_entries(request, page):
   obj = Group.objects.all()
-  return renderer(request, 'components/admins/web/groups/entry.pug', obj, page, size=4, overwrite=True)
+  permissions = Permission.objects.all()
+
+  return renderer(request, 'components/admins/web/groups/entry.pug', obj, page, size=4,
+                  overwrite=True, payload={'permissions': permissions,
+                                           'excluded': ['core', 'log', 'auth']})
