@@ -1,4 +1,4 @@
-Django==2.0.8
+Django
 mysqlclient
 social-auth-app-django==2.1.0
 cerberus
