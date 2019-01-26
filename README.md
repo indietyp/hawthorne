@@ -22,8 +22,8 @@ We're currently in an unstable beta release cycle.
 * Direct Sourcemod integration
 
 ## Partners & Tools
-### [![](https://avatars1.githubusercontent.com/u/4094939?s=50&v=4)](https://crossbrowsertesting.com) CrossBrowserTesting
-[CrossBrowserTesting](https://crossbrowsertesting.com) gives us the ability to cross-test our webpages over multiple devices and services. Without it, we would not be able to ensure that our webpage works in every scenario. CBT is therefore an essential tool for our UI development and testing. Testing without such a tool just isn't possible. This is due to the huge number of possible configurations and the time consuming nature which CBT fully resolves. Thank you CBT for providing this project with the necessary tools.
+### [![](https://images.g2crowd.com/uploads/product/image/social_landscape/social_landscape_1519937783/browserstack.png) BrowserStack
+Thanks to [BrowserStack](https://www.browserstack.com) we're able to automatically test our application on many different operating systems and browser, which we would not be able to otherwise.
 
 ## Showcase
 ![][image-1]
