@@ -22,8 +22,7 @@ We're currently in an unstable beta release cycle.
 * Direct Sourcemod integration
 
 ## Partners & Tools
-### [![](docs/images/browserstack.png)](https://www.browserstack.com) BrowserStack
-Thanks to [BrowserStack](https://www.browserstack.com) we're able to automatically test our application on many different operating systems and browser, which we would not be able to otherwise.
+### [![](docs/images/browserstack.png)](https://www.browserstack.com)
 
 ## Showcase
 ![][image-1]
