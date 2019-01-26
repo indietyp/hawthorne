@@ -5,7 +5,6 @@ Hawthorne is a project aimed to provide an easy and modern way to interact with 
 Hawthorne uses [Semantic Versioning][1], which means that _0.x.x_ is currently the unstable beta version - where things can drastically change from one point release to another, with the planned 1.x.x release cycle the product will be stable.
 
 ## Documentation
-
 For the project documentation and installing guide please visit https://docs.hawthornepanel.org/
 
 ## Functionality & Features
@@ -19,6 +18,7 @@ For the project documentation and installing guide please visit https://docs.haw
 * Reports (_ETA v0.13_)
 * Intuitive & Secure
 * Direct Sourcemod integration
+
 
 ## Roadmap
 * 0.9.0 UI rework
@@ -35,6 +35,11 @@ For the project documentation and installing guide please visit https://docs.haw
 * 1.2: Full Server Control (Start, Stop, Restart)
 * 1.3: Automatically adding and removing game servers
 * 2.0: General Improvements & Polish
+
+
+## Partners & Tools
+### [![](docs/images/browserstack.png)](https://www.browserstack.com)
+
 
 ## Showcase
 ![][image-1]
