@@ -50,7 +50,7 @@ def permission_percentage(value):
   if data == 0:
     return "0"
 
-  return str(int(round(Permission.objects.all().count() / data * 100)))
+  return str(int(round(data / Permission.objects.all().count() * 100)))
 
 
 @register.filter
