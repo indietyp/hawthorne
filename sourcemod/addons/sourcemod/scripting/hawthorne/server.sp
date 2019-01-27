@@ -11,8 +11,10 @@ void GetServerUUID() {
   }
 
   char public_ip[20];
-  GetConVarString(net_public_address, public_ip, sizeof(public_ip));
   char ip[20];
+  if (net_public_address != null) {
+    GetConVarString(net_public_address, public_ip, sizeof(public_ip));
+  }
 
   if (strlen(public_ip) == 0) {
     int raw_ip = GetConVarInt(host_ip);
