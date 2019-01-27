@@ -2884,6 +2884,11 @@ select
     margin -20px -20px -10px
     box-shadow none
 
+  &.gridContent
+    display grid
+    grid-template-columns repeat(4, 1fr)
+    grid-gap 18px 12px
+
 .paginationContent select:hover
 .modal select:hover
 .checkboxDialogue select:hover
@@ -4098,7 +4103,7 @@ span.flatpickr-weekday
     -webkit-transform rotate(360deg)
     transform rotate(360deg)
 
-@media only screen and (max-width:480px)
+@media only screen and (max-width: 480px)
   .col
     margin 1% 0 1% 0
 
@@ -4119,3 +4124,15 @@ span.flatpickr-weekday
 
   .span_1_of_2
     width 100%
+
+@media only screen and (max-width: 1300px)
+  .gridContent
+    grid-template-columns repeat(3, 1fr) !important
+
+@media only screen and (max-width: 900px)
+  .gridContent
+    grid-template-columns repeat(2, 1fr) !important
+
+@media only screen and (max-width: 500px)
+  .gridContent
+    grid-template-columns repeat(1, 1fr) !important

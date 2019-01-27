@@ -4,7 +4,6 @@ import natural.date
 
 from django.contrib.auth.models import Group, Permission
 from django.db.models import BooleanField
-from django.template import Node
 from django.template.defaulttags import register
 
 from core.models import ServerPermission, Token

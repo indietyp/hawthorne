@@ -1,62 +1,61 @@
-.section.group
-  each item in data
-    .modal.modalDynamic(data-component='[modal/edit/{{item.id}}]')
-      h1 Group – Edit
-      .close(data-trigger='[modal/close]')
-        i.icon.ion-ios-close
-      .modalContent
-        form(data-trigger='[modal/form]', data-action='edit', data-mode='admins[web][groups]')
-          input.hidden.target(value='{{item.id}}')
-          b.mtop.mbotSmall
-            i.icon.ion-ios-person(style='margin-right:10px')
-            |  Group Details
-          .section.group.inputGroup
-            input.smallInput(type='text', required, placeholder=' ', name='name', value=item.name)
-            span
-              | Name
-              span.invalid
-          b.mbotSmall(style='padding-top:6px')
-            i.icon.ion-ios-flag(style='margin-right:10px')
-            |  Permissions
+each item in data
+  .modal.modalDynamic(data-component='[modal/edit/{{item.id}}]')
+    h1 Group – Edit
+    .close(data-trigger='[modal/close]')
+      i.icon.ion-ios-close
+    .modalContent
+      form(data-trigger='[modal/form]', data-action='edit', data-mode='admins[web][groups]')
+        input.hidden.target(value='{{item.id}}')
+        b.mtop.mbotSmall
+          i.icon.ion-ios-person(style='margin-right:10px')
+          |  Group Details
+        .section.group.inputGroup
+          input.smallInput(type='text', required, placeholder=' ', name='name', value=item.name)
+          span
+            | Name
+            span.invalid
+        b.mbotSmall(style='padding-top:6px')
+          i.icon.ion-ios-flag(style='margin-right:10px')
+          |  Permissions
 
-          - with item.permissions.all as perms
-            .section.group(style='display:flex;align-items:center')
-              .selection
-                b.mbotSmall(style='padding-top:6px') Available
-                select.skip(multiple, style='height:250px', id="select-available-{{item.id}}")
-                  each permission in permissions
-                    if permission not in perms
-                      option(value="{{permission.content_type.model|add:'.'|add:permission.codename}}", class="{%if permission.content_type.app_label not in excluded%}hidden{%endif%}")
-                        = permission.content_type.model.title
-                        |  |
-                        = permission.name.title
-                a(href='javascript:void(0)') Select All
-              .actions(style='padding:12px')
-                i.icon.ion-ios-arrow-dropleft(data-trigger='[select/multiple/double]', data-source='#select-selected-{{item.id}}', data-target='#select-available-{{item.id}}')
-                i.icon.ion-ios-arrow-dropright(data-trigger='[select/multiple/double]', data-target='#select-selected-{{item.id}}', data-source='#select-available-{{item.id}}')
-              .selection
-                b.mbotSmall(style='padding-top:6px;margin-bottom:0px') Selected
-                select(multiple, style='height:250px', name='permissions', id='select-selected-{{item.id}}')
-                  each permission in permissions
-                    if permission in perms
-                      option(value="{{permission.content_type.model|add:'.'|add:permission.codename}}", class="{%if permission.content_type.app_label not in excluded%}hidden{%endif%}")
-                        = permission.content_type.model.title
-                        |  |
-                        = permission.name.title
-                a(href='javascript:void(0)') Select All
+        - with item.permissions.all as perms
+          .section.group(style='display:flex;align-items:center')
+            .selection
+              b.mbotSmall(style='padding-top:6px') Available
+              select.skip(multiple, style='height:250px', id="select-available-{{item.id}}")
+                each permission in permissions
+                  if permission not in perms
+                    option(value="{{permission.content_type.model|add:'.'|add:permission.codename}}", class="{%if permission.content_type.app_label not in excluded%}hidden{%endif%}")
+                      = permission.content_type.model.title
+                      |  |
+                      = permission.name.title
+              a(href='javascript:void(0)') Select All
+            .actions(style='padding:12px')
+              i.icon.ion-ios-arrow-dropleft(data-trigger='[select/multiple/double]', data-source='#select-selected-{{item.id}}', data-target='#select-available-{{item.id}}')
+              i.icon.ion-ios-arrow-dropright(data-trigger='[select/multiple/double]', data-target='#select-selected-{{item.id}}', data-source='#select-available-{{item.id}}')
+            .selection
+              b.mbotSmall(style='padding-top:6px;margin-bottom:0px') Selected
+              select(multiple, style='height:250px', name='permissions', id='select-selected-{{item.id}}')
+                each permission in permissions
+                  if permission in perms
+                    option(value="{{permission.content_type.model|add:'.'|add:permission.codename}}", class="{%if permission.content_type.app_label not in excluded%}hidden{%endif%}")
+                      = permission.content_type.model.title
+                      |  |
+                      = permission.name.title
+              a(href='javascript:void(0)') Select All
 
-          input.skip.unset(type="submit", value='Edit {{item.name}}')
+        input.skip.unset(type="submit", value='Edit {{item.name}}')
 
-    .serverGridItem.col.span_1_of_4(style="padding-bottom:6px", data-id="{{item.id}}", data-visibility)
-      b(style="color:rgb(0,169,255)")= item.name
-      .playerCount
-        i.icon.ion-md-person(style="margin-right:5px")
-        = item.user_set.all|length
-      .mapName(style="margin-bottom:6px")
-        = item|permission_percentage|add:"% granted"
-      .fRight
-        button.round(data-trigger="[modal/open]", data-trigger-target="[modal/edit/{{item.id}}]")
-          i.icon.ion-md-create
-        button.round.red(data-trigger="[grid/delete]", data-mode='admins[web][groups]')
-          i.icon.ion-md-trash
+  .serverGridItem.noHover(style="padding-bottom:6px", data-id="{{item.id}}", data-visibility)
+    b(style="color:rgb(0,169,255)")= item.name
+    .playerCount
+      i.icon.ion-md-person(style="margin-right:5px")
+      = item.user_set.all|length
+    .mapName(style="margin-bottom:6px")
+      = item|permission_percentage|add:"% granted"
+    .fRight
+      button.round(data-trigger="[modal/open]", data-trigger-target="[modal/edit/{{item.id}}]")
+        i.icon.ion-md-create
+      button.round.red(data-trigger="[grid/delete]", data-mode='admins[web][groups]')
+        i.icon.ion-md-trash
 
