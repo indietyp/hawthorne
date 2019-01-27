@@ -139,7 +139,7 @@
         ul.list
           li
             b IP:
-            a(href="javascript:void(0)", data-trigger="[clip/copy]", data-clipboard-text="0.0.0.0:27015")
+            a(href="javascript:void(0)", data-trigger="[clip/copy]", data-clipboard-text="{{data.ip}}:{{data.port}}")
               = data.ip|add:":"
               =data.port
               i.fa.fa-copy(style="margin-left:5px")
