@@ -43,7 +43,7 @@ def wrapper(target, func=None, *args, **kwargs):
   try:
     target.executed = func(target, *args, **kwargs)
   except Exception as e:
-    target.executed = []
+    target.executed = {}
     target.exception = e
 
   return target
@@ -57,10 +57,11 @@ def renderer(request, template, obj, page,
 
   if execute and callable(execute):
     for k in range(len(data)):
-      data[k].executed = execute(data[k], user=request.user)
-    # with Pool(cpu_count()) as p:
-    #   target = partial(wrapper, func=execute, user=request.user)
-    #   data = p.map(target, data)
+      try:
+        data[k].executed = execute(data[k], user=request.user)
+      except Exception as e:
+        data[k].executed = {}
+        data[k].exception = e
 
   if page == 1:
     data.extend(extra)
