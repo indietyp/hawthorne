@@ -57,7 +57,7 @@ def renderer(request, template, obj, page,
 
   if execute and callable(execute):
     for k in range(len(data)):
-      data[k] = execute(data[k], user=request.user)
+      data[k].executed = execute(data[k], user=request.user)
     # with Pool(cpu_count()) as p:
     #   target = partial(wrapper, func=execute, user=request.user)
     #   data = p.map(target, data)
