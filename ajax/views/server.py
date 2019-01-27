@@ -97,7 +97,7 @@ def log(request, s, *args, **kwargs):
 @require_http_methods(['POST'])
 def log_entries(request, s, page, *args, **kwargs):
   server = Server.objects.get(id=s)
-  logs = ServerChat.objects.filter(server=server).order_by('created_at')
+  logs = ServerChat.objects.filter(server=server).order_by('-created_at')
 
   return renderer(request, 'components/servers/detailed/logs/entry.pug', logs, page)
 
