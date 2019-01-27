@@ -113,12 +113,13 @@ class Importer:
       server.name = "{}:{}".format(raw['ip'], raw['port'])
       server.save()
 
-      servers[raw['sid']] = server
       try:
         conn = RCONBase(server, timeout=3)
         conn.connect()
         conn.authenticate(timeout=3)
         conn.close()
+
+        servers[raw['sid']] = server
       except (valve.rcon.RCONTimeoutError,
               valve.rcon.RCONAuthenticationError,
               ConnectionError,
@@ -227,7 +228,6 @@ class Importer:
       if raw['sid'] in servers:
         b.server = servers[raw['sid']] if raw['sid'] != 0 else None
         # I dunno if this is even something that should be done?
-        servers[raw['sid']].save()
       else:
         b.server = None
 
@@ -388,7 +388,7 @@ class Importer:
 
       m = Punishment()
       m.user = users[raw["pid"]]
-      m.server = servers[raw['sid']] if raw['sid'] != 0 else None
+      m.server = servers[raw['sid']] if raw['sid'] != 0 and raw['sid'] in servers else None
       m.created_by = users[raw['aid']]
       m.created_at = timezone.make_aware(datetime.datetime.fromtimestamp(raw['time']))
       m.reason = raw['reason']
@@ -415,7 +415,7 @@ class Importer:
       b = Punishment()
       b.is_banned = True
       b.user = users[raw["pid"]]
-      b.server = servers[raw['sid']] if raw['sid'] != 0 else None
+      b.server = servers[raw['sid']] if raw['sid'] != 0 and raw['sid'] in servers else None
       b.created_by = users[raw['aid']]
       m.created_at = timezone.make_aware(datetime.datetime.fromtimestamp(raw['time']))
       b.reason = raw['reason']
