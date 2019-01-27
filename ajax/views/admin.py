@@ -47,7 +47,7 @@ def servers_roles(request):
 
 
 @login_required(login_url='/login')
-@permission_required('core.view_servergroup')
+@permission_required('core.view_role')
 @require_http_methods(['POST'])
 def servers_roles_entries(request, page):
   obj = Role.objects.all()
@@ -76,14 +76,14 @@ def web_admins_entries(request, page):
 
 
 @login_required(login_url='/login')
-@permission_required('core.view_servergroup')
+@permission_required('auth.view_group')
 @require_http_methods(['POST'])
 def web_groups(request):
   return render(request, 'components/admins/web/groups/wrapper.pug')
 
 
 @login_required(login_url='/login')
-@permission_required('core.view_servergroup')
+@permission_required('auth.view_group')
 @require_http_methods(['POST'])
 def web_groups_entries(request, page):
   obj = Group.objects.all()

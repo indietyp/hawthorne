@@ -118,7 +118,7 @@ def modal_players(request, s, *args, **kwargs):
   clients = ServerDataPoint.objects.filter(server=server).order_by('-created_at')
 
   if clients:
-    clients = clients[0].clients
+    clients = clients[0].clients.all()
   else:
     clients = []
 
