@@ -2,11 +2,13 @@
 - load i18n
 
 .logoContainer
+  .flex.grow
   .logo
     include assets/logo.svg
   .hawthorne
     | Haw
     span.thorne thorne
+  .flex.grow
 .user
   img(src=request.user.avatar)
   .username= request.user.namespace

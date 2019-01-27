@@ -244,9 +244,6 @@ svg#ht-logo {
   background: transparent !important;
   stroke: #ace3ff;
 }
-.logo {
-  float: left;
-}
 .loginLogo {
   margin-bottom: 40px;
   text-align: Center;
@@ -1191,38 +1188,12 @@ form {
   font-weight: 600;
   src: url("/static/fonts/omnes-semibold-webfont.ttf");
 }
-.hawthorne {
-  position: absolute;
-  float: left;
-  overflow: hidden;
-  margin: 3px 0 0 10px;
-  opacity: 0;
-  font-family: Bebas;
-  font-size: 35px;
-  color: #fff;
-  -webkit-animation-name: logo-heading;
-  animation-name: logo-heading;
-  -webkit-animation-duration: 1.5s;
-  animation-duration: 1.5s;
-  -webkit-animation-timing-function: ease-out;
-  animation-timing-function: ease-out;
-  -webkit-animation-delay: 1.7s;
-  animation-delay: 1.7s;
-  -webkit-animation-fill-mode: forwards;
-  animation-fill-mode: forwards;
-}
-.thorne {
-  display: inline;
-  color: #ace3ff;
-}
 @-webkit-keyframes logo-heading {
   from {
-    position: relative;
     max-width: 0;
     opacity: 0;
   }
   to {
-    position: relative;
     max-width: 10em;
     opacity: 1;
   }
@@ -1343,9 +1314,33 @@ form {
 /*height: 125px;*/
 }
 .logoContainer {
-  display: flow-root;
+  display: flex;
+  align-items: center;
   padding: 20px;
   border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.logoContainer .hawthorne {
+  overflow: hidden;
+  margin: 3px 0 0 10px;
+  opacity: 0;
+  max-width: 0;
+  font-family: Bebas;
+  font-size: 35px;
+  color: #fff;
+  -webkit-animation-name: logo-heading;
+  animation-name: logo-heading;
+  -webkit-animation-duration: 1.5s;
+  animation-duration: 1.5s;
+  -webkit-animation-timing-function: ease-out;
+  animation-timing-function: ease-out;
+  -webkit-animation-delay: 1.7s;
+  animation-delay: 1.7s;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+.logoContainer .thorne {
+  display: inline;
+  color: #ace3ff;
 }
 /****************************************************************
  *
@@ -3685,6 +3680,9 @@ span.flatpickr-weekday {
   -webkit-animation: fadein 0.5s, expand 0.5s 0.5s, stay 3s 1s, shrink 0.5s 2s, fadeout 0.5s 2.5s;
   animation: fadein 0.5s, expand 0.5s 0.5s, stay 3s 1s, shrink 0.5s 4s, fadeout 0.5s 4.5s;
 }
+.flex.grow {
+  flex-grow: 1;
+}
 @-webkit-keyframes fadein {
   from {
     bottom: 0;
@@ -3785,48 +3783,40 @@ span.flatpickr-weekday {
 }
 @-moz-keyframes logo-heading {
   from {
-    position: relative;
     max-width: 0;
     opacity: 0;
   }
   to {
-    position: relative;
     max-width: 10em;
     opacity: 1;
   }
 }
 @-webkit-keyframes logo-heading {
   from {
-    position: relative;
     max-width: 0;
     opacity: 0;
   }
   to {
-    position: relative;
     max-width: 10em;
     opacity: 1;
   }
 }
 @-o-keyframes logo-heading {
   from {
-    position: relative;
     max-width: 0;
     opacity: 0;
   }
   to {
-    position: relative;
     max-width: 10em;
     opacity: 1;
   }
 }
 @keyframes logo-heading {
   from {
-    position: relative;
     max-width: 0;
     opacity: 0;
   }
   to {
-    position: relative;
     max-width: 10em;
     opacity: 1;
   }

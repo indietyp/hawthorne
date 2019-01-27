@@ -361,9 +361,6 @@ svg
     background transparent !important
     stroke rgb(172, 227, 255)
 
-.logo
-  float left
-
 .loginLogo
   margin-bottom 40px
   text-align Center
@@ -1352,49 +1349,21 @@ form
   font-weight 600
   src url(../fonts/omnes-semibold-webfont.ttf)
 
-.hawthorne
-  position absolute
-  float left
-  overflow hidden
-  margin 3px 0 0 10px
-  opacity 0
-  font-family Bebas
-  font-size 35px
-  color white
-  -webkit-animation-name logo-heading
-  animation-name logo-heading
-  -webkit-animation-duration 1.5s
-  animation-duration 1.5s
-  -webkit-animation-timing-function ease-out
-  animation-timing-function ease-out
-  -webkit-animation-delay 1.7s
-  animation-delay 1.7s
-  -webkit-animation-fill-mode forwards
-  animation-fill-mode forwards
-
-.thorne
-  display inline
-  color $color-9
-
 @-webkit-keyframes logo-heading
   from
-    position relative
     max-width 0
     opacity 0
 
   to
-    position relative
     max-width 10em
     opacity 1
 
 @keyframes logo-heading
   from
-    position relative
     max-width 0
     opacity 0
 
   to
-    position relative
     max-width 10em
     opacity 1
 
@@ -1516,9 +1485,33 @@ form
     /*height: 125px;*/
 
 .logoContainer
-  display flow-root
+  display flex
+  align-items center
   padding 20px
   border-bottom 1px solid $color-48
+
+  .hawthorne
+    overflow hidden
+    margin 3px 0 0 10px
+    opacity 0
+    max-width 0
+    font-family Bebas
+    font-size 35px
+    color white
+    -webkit-animation-name logo-heading
+    animation-name logo-heading
+    -webkit-animation-duration 1.5s
+    animation-duration 1.5s
+    -webkit-animation-timing-function ease-out
+    animation-timing-function ease-out
+    -webkit-animation-delay 1.7s
+    animation-delay 1.7s
+    -webkit-animation-fill-mode forwards
+    animation-fill-mode forwards
+
+  .thorne
+    display inline
+    color $color-9
 
 /****************************************************************
  *
@@ -3991,6 +3984,9 @@ span.flatpickr-weekday
     -webkit-animation fadein 0.5s, expand 0.5s 0.5s,stay 3s 1s, shrink 0.5s 2s, fadeout 0.5s 2.5s
     animation fadein 0.5s, expand 0.5s 0.5s,stay 3s 1s, shrink 0.5s 4s, fadeout 0.5s 4.5s
 
+.flex.grow
+  flex-grow 1
+
 @-webkit-keyframes fadein
   from
     bottom 0
@@ -4086,8 +4082,6 @@ span.flatpickr-weekday
 
   40%
     box-shadow 0 2.5em 0 0
-
-
 
 @-webkit-keyframes spin
   0%
