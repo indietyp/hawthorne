@@ -37,6 +37,7 @@
                 - for group in groups
                   li(data-trigger='[composer/select/choose]', data-value=group.id)
                     p= group.name
+        input.hidden(type='checkbox', name='internal', checked, data-boolean='internal')
         input.skip(type="submit", value='Save').unset
 
   .modal.modalDynamic(data-component='[modal/group/add]')

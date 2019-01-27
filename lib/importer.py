@@ -1,12 +1,13 @@
-from MySQLdb import connect
-import valve
-from valve.steam.id import SteamID
-from django.utils import timezone
-import socket
 import datetime
-from core.models import Server, Role, ServerPermission, User, Membership, Punishment
+import socket
+import valve
+
+from MySQLdb import connect
 from core.lib.steam import populate
+from core.models import Membership, Punishment, Role, Server, ServerPermission, User
+from django.utils import timezone
 from lib.base import RCONBase
+from valve.steam.id import SteamID
 
 
 class Importer:
@@ -106,9 +107,11 @@ class Importer:
     for raw in result:
       if raw['enabled'] != 1:
         continue
+
       server, _ = Server.objects.get_or_create(ip=raw['ip'], port=raw['port'])
       server.password = raw['rcon']
       server.name = "{}:{}".format(raw['ip'], raw['port'])
+      server.save()
 
       servers[raw['sid']] = server
       try:
@@ -125,8 +128,6 @@ class Importer:
         server.delete()
         print("Warning: Could not connect to server {}:{} ({})".format(raw['ip'], raw['port'], e))
         continue
-
-      server.save()
 
     # get groups
     self.conn.query("""SELECT * FROM sb_srvgroups""")
