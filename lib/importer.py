@@ -238,7 +238,7 @@ class Importer:
         continue
 
       m.created_at = timezone.make_aware(datetime.datetime.fromtimestamp(raw['created']))
-      b.reason = raw['reason']
+      b.reason = raw['reason'][:255]
       b.length = datetime.timedelta(seconds=raw['length']) if raw['length'] > 0 and raw['length'] < 31540000 else None
       b.resolved = False
       if raw['created'] + raw['length'] < self.now.timestamp() and raw['length'] > 0:
@@ -287,7 +287,7 @@ class Importer:
         continue
 
       m.created_at = timezone.make_aware(datetime.datetime.fromtimestamp(raw['created']))
-      m.reason = raw['reason']
+      m.reason = raw['reason'][:255]
       m.length = datetime.timedelta(seconds=raw['length']) if raw['length'] > 0 and raw['length'] < 31540000 else None
       m.is_muted = True if raw['type'] == 1 else False
       m.is_gagged = True if raw['type'] == 2 else False
@@ -390,7 +390,7 @@ class Importer:
       m.server = servers[raw['sid']] if raw['sid'] != 0 and raw['sid'] in servers else None
       m.created_by = users[raw['aid']]
       m.created_at = timezone.make_aware(datetime.datetime.fromtimestamp(raw['time']))
-      m.reason = raw['reason']
+      m.reason = raw['reason'][:255]
       m.length = datetime.timedelta(seconds=raw['length'] * 60) if raw['length'] > 0 else None
       m.is_muted = True if raw['type'] == 1 else False
       m.is_gagged = True if raw['type'] == 2 else False
@@ -417,7 +417,7 @@ class Importer:
       b.server = servers[raw['sid']] if raw['sid'] != 0 and raw['sid'] in servers else None
       b.created_by = users[raw['aid']]
       m.created_at = timezone.make_aware(datetime.datetime.fromtimestamp(raw['time']))
-      b.reason = raw['reason']
+      b.reason = raw['reason'][:255]
       b.length = datetime.timedelta(seconds=raw['length']) if raw['length'] > 0 else None
       b.resolved = False
       if raw['time'] + raw['length'] < self.now.timestamp() and raw['length'] > 0:
