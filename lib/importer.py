@@ -226,6 +226,8 @@ class Importer:
 
       if raw['sid'] in servers:
         b.server = servers[raw['sid']] if raw['sid'] != 0 else None
+        # I dunno if this is even something that should be done?
+        servers[raw['sid']].save()
       else:
         b.server = None
 
