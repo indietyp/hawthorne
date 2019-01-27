@@ -131,15 +131,15 @@ def reconfigure(bind, link, config, gunicorn, nginx, logrotate, supervisor):
         file.write(contents)
 
   if supervisor:
-    config = ConfigParser()
-    config.read(CONFIG_LOCATION + '/supervisor.default.conf')
+    ini = ConfigParser()
+    ini.read(CONFIG_LOCATION + '/supervisor.default.conf')
 
-    for section in config.sections():
-      if 'directory' in config[section]:
-        config[section]['directory'] = BASE_DIR
+    for section in ini.sections():
+      if 'directory' in ini[section]:
+        ini[section]['directory'] = BASE_DIR
 
     with open(BASE_DIR + '/supervisor.conf', 'w') as file:
-      config.write(file)
+      ini.write(file)
 
     if link:
       try:
