@@ -7,7 +7,7 @@
           = item.name
         else
           | --
-      .playerCount(class='{{item.executed.datapoint.is_online|yesno:",noPlayers"}} {%if item.executed.datapoint.clients|length == item.executed.datapoint.limitations.clients%}fullPlayers{%endif%}"')
+      .playerCount(class='{{item.executed.datapoint.is_online|yesno:",noPlayers"}} {%if item.executed.datapoint.clients.count == item.max_clients%}fullPlayers{%endif%}"')
         i.icon.ion-md-person(style="margin-right:5px")
         if item.executed
           | {{item.executed.datapoint.clients.count}} of {{item.max_clients}}
