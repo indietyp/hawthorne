@@ -1194,7 +1194,7 @@ form {
     opacity: 0;
   }
   to {
-    max-width: 10em;
+    max-width: 141px;
     opacity: 1;
   }
 }
@@ -1319,7 +1319,10 @@ form {
   padding: 20px;
   border-bottom: 1px solid rgba(255,255,255,0.05);
 }
-.logoContainer .hawthorne {
+.logoContainer .hawthorneContainer {
+  width: 141px;
+}
+.logoContainer .hawthorneContainer .hawthorne {
   overflow: hidden;
   margin: 3px 0 0 10px;
   opacity: 0;
@@ -1329,8 +1332,8 @@ form {
   color: #fff;
   -webkit-animation-name: logo-heading;
   animation-name: logo-heading;
-  -webkit-animation-duration: 1.5s;
-  animation-duration: 1.5s;
+  -webkit-animation-duration: 0.75s;
+  animation-duration: 0.75s;
   -webkit-animation-timing-function: ease-out;
   animation-timing-function: ease-out;
   -webkit-animation-delay: 1.7s;
@@ -1338,7 +1341,7 @@ form {
   -webkit-animation-fill-mode: forwards;
   animation-fill-mode: forwards;
 }
-.logoContainer .thorne {
+.logoContainer .hawthorneContainer .hawthorne .thorne {
   display: inline;
   color: #ace3ff;
 }
@@ -3787,7 +3790,7 @@ span.flatpickr-weekday {
     opacity: 0;
   }
   to {
-    max-width: 10em;
+    max-width: 141px;
     opacity: 1;
   }
 }
@@ -3797,7 +3800,7 @@ span.flatpickr-weekday {
     opacity: 0;
   }
   to {
-    max-width: 10em;
+    max-width: 141px;
     opacity: 1;
   }
 }
@@ -3807,7 +3810,7 @@ span.flatpickr-weekday {
     opacity: 0;
   }
   to {
-    max-width: 10em;
+    max-width: 141px;
     opacity: 1;
   }
 }
@@ -3817,7 +3820,7 @@ span.flatpickr-weekday {
     opacity: 0;
   }
   to {
-    max-width: 10em;
+    max-width: 141px;
     opacity: 1;
   }
 }
