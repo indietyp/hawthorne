@@ -165,6 +165,8 @@ def reconfigure(bind, link, config, gunicorn, nginx, logrotate, supervisor):
     c.server.filter('Key', 'server_name')[0].value = ' '.join(ALLOWED_HOSTS)
     nginx.dumpf(c, config)
 
+    run(['nginx', '-s', 'reload'], stdout=PIPE, stderr=PIPE)
+
 
 cli.add_command(update)
 cli.add_command(report)

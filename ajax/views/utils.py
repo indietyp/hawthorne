@@ -42,7 +42,7 @@ def search(request, *args, **kwargs):
       user = User()
       user.is_steam = True
       user.is_active = False
-      user.username = str(steamid.as_64)
+      user.username = str(payload['steam64'])
 
       populate(user)
       data = [user]
