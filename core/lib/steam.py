@@ -34,7 +34,7 @@ def populate(user, save=True):
         if len(realname) > 1:
           user.last_name = realname[-1][:150]
     except Exception as e:
-      logger.warning("Could not populate user ({})", e)
+      logger.warning("Could not populate user ({})".format(e))
       return
 
     if save:
