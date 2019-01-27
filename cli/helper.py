@@ -103,7 +103,7 @@ def version(yes):
               default=False)
 @click.option('--bind', type=click.Choice(['socket', 'port']), default='socket')
 @click.option('--config', type=click.Path(dir_okay=False, resolve_path=True,
-                                          writeable=True, readable=True),
+                                          writable=True, readable=True),
               default='/etc/nginx/sites-enabled/hawthorne.conf')
 @click.option('--gunicorn/--no-gunicorn', is_flag=True, expose_value=True,
               prompt='reconfigure gunicorn')

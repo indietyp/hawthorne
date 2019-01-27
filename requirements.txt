@@ -23,7 +23,7 @@ requests
 Faker
 rstr
 gitpython
-clicker
+click
 jellyfish
 humanize
 celery[redis]
