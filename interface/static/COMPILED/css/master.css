@@ -65,7 +65,7 @@ code {
   z-index: 1;
   overflow-y: auto;
   height: 100%;
-  width: 15%;
+  width: 256px;
   background: #141c4c;
   background: linear-gradient(to bottom, #265296, #2c3370);
   background: -moz-linear-gradient(to bottom, #141c4c, #061131);
@@ -323,7 +323,7 @@ svg#ht-logo {
 }
 .main {
   float: right;
-  width: 85%;
+  width: calc(100% - 256px);
   padding: 40px;
   color: #fff;
 }
@@ -3773,12 +3773,12 @@ span.flatpickr-weekday {
     grid-template-columns: repeat(3, 1fr) !important;
   }
 }
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 1024px) {
   .gridContent {
     grid-template-columns: repeat(2, 1fr) !important;
   }
 }
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 780px) {
   .gridContent {
     grid-template-columns: repeat(1, 1fr) !important;
   }
