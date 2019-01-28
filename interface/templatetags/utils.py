@@ -5,6 +5,7 @@ import natural.date
 from django.contrib.auth.models import Group, Permission
 from django.db.models import BooleanField
 from django.template.defaulttags import register
+from django.utils import timezone
 
 from core.models import ServerPermission, Token
 
@@ -90,7 +91,7 @@ def isoduration(v):
 @register.filter
 def userconnection(v):
   connection = v.userconnection_set.order_by('-created_at')[0]
-  return datetime.datetime.now() - connection.connected
+  return timezone.now() - connection.connected
 
 
 @register.filter
