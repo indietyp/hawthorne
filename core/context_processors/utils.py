@@ -27,8 +27,8 @@ def role(request):
   if request.user.is_superuser:
     return {'role': settings.ROOT}
 
-  if request.user.roles.all():
-    return {'role': request.user.roles.all()[0].name}
+  if request.user.groups.all():
+    return {'role': request.user.groups.all()[0].name}
 
   return {'role': '-'}
 

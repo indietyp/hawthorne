@@ -122,10 +122,12 @@
           .col.span_1_of_2.nomargin
             if data.game == 'csgo'
               img.thumbnail(src="{% static 'img/games/csgo.png' %}")
-            button.serverActionButton(disabled="")
+            else if data.game == 'tf2'
+              img.thumbnail(src="{% static 'img/games/tf2.png' %}")
+            button.serverActionButton(disabled)
               i.fa.fa-stop
               |  Stop
-            button.serverActionButton.nomargin(disabled="")
+            button.serverActionButton.nomargin(disabled)
               i.fa.fa-sync
               |  Restart
           .col.span_1_of_2.nomargin
@@ -148,13 +150,20 @@
             = location
           li
             b VAC:
-            i.ion.ion-ios-checkmark.green
+            if data.vac
+              i.ion.ion-ios-checkmark.green
+            else
+              i.ion.ion-ios-close.red
           li
-            b Password:
-            i.ion.ion-ios-close.red
+            b Protected:
+            if data.protected
+              i.ion.ion-ios-checkmark.green
+            else
+              i.ion.ion-ios-close.red
+
           li
             b Uptime:
-            = status.time.up|duration
+            = status.datapoint.uptime|duration
   .CBox.nomargin
     .section.group.nomargin.serverOverview
       .col.span_1_of_2.nomargin
@@ -167,11 +176,11 @@
             | de_dust
           li
             b Time Left:
-            if status.time.left
-              = status.time.left|duration
+            if status.datapoint.time_left
+              = status.datapoint.time_left|duration
               | -
               b Map change scheduled for
-                = status.time.left|warp|time
+                = status.datapoint.time_left|warp|time
             else
               | indefinitely
           li
@@ -179,8 +188,8 @@
             = data.mode
           li
             b Players:
-            .playerCount(class="{%if status.clients|length == data.max_clients%}fullPlayers{%endif%}")
-              = status.clients|length
+            .playerCount(class="{%if status.datapoint.clients|length == data.max_clients%}fullPlayers{%endif%}")
+              = status.datapoint.clients|length
               |  of
               = data.max_clients
             a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/players]") View Players

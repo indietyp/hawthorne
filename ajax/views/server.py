@@ -11,7 +11,6 @@ from ajax.views import renderer
 from core.models import Membership, Server
 from django.shortcuts import render
 from django.views.decorators.cache import cache_page
-from lib.sourcemod import SourcemodPluginWrapper
 from log.models import ServerChat, ServerDataPoint, UserConnection
 
 
