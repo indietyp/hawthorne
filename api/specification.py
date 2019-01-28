@@ -166,7 +166,7 @@ validation = {
                                     'port': {'type': 'integer', 'nullable': True, 'default': None, 'min': 0,
                                              'max': 65535},
                                     'password': {'type': 'string', 'nullable': True, 'default': None},
-                                    'game': {'type': 'string', 'nullable': True, 'default': None},
+                                    'game': {'type': 'string', 'nullable': True, 'default': None, 'allowed': ['csgo', 'tf2']},
                                     'gamemode': {'type': 'string', 'nullable': True, 'default': None}},
                      'permission': ['core.change_server']},
             'DELETE': {'parameters': {},
