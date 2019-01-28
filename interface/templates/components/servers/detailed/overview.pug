@@ -188,8 +188,8 @@
             = data.mode
           li
             b Players:
-            .playerCount(class="{%if status.datapoint.clients|length == data.max_clients%}fullPlayers{%endif%}")
-              = status.datapoint.clients|length
+            .playerCount(class="{%if status.datapoint.clients.count == data.max_clients%}fullPlayers{%endif%}")
+              = status.datapoint.clients.count
               |  of
               = data.max_clients
             a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/players]") View Players
