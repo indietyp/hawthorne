@@ -88,6 +88,11 @@ def isoduration(v):
 
 
 @register.filter
+def userconnection(v):
+  return v.userconnection_set.order_by('-created_at')[0]
+
+
+@register.filter
 def srv_perms(v):
   output = []
   for field in v._meta.get_fields():

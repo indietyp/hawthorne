@@ -1,4 +1,5 @@
 - load static
+- load utils
 
 for item in data
   tr
@@ -9,7 +10,7 @@ for item in data
     td
       a(href='javascript:void(0)', onclick="window.vc('players[detailed]', '{{item.user.id}}')")
         = item.namespace
-    td= item.connection|duration
+    td= item|userconnection|duration
     td
       button(title="Kick")
         i.fa.fa-ban
