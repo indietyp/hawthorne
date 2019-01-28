@@ -122,7 +122,7 @@
           .col.span_1_of_2.nomargin
             if data.game == 'csgo'
               img.thumbnail(src="{% static 'img/games/csgo.png' %}")
-            else if data.game == 'tf2'
+            elif data.game == 'tf2'
               img.thumbnail(src="{% static 'img/games/tf2.png' %}")
             button.serverActionButton(disabled)
               i.fa.fa-stop
