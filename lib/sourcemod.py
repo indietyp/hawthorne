@@ -69,12 +69,6 @@ class SourcemodPluginWrapper(RCONBase):
     return response
 
   def status(self, truncated=False, *args, **kwargs):
-    prefix = 'status-'.format(self.server.id)
-    cached = cache.get(prefix)
-
-    if cached:
-      return cached
-
     try:
       response = self.run('rcon_status')[0]
 
@@ -129,8 +123,6 @@ class SourcemodPluginWrapper(RCONBase):
       users.append(user)
 
     response['clients'] = users
-    cache.set(prefix, response, 60)
-
     return response
 
   def raw(self, command, *args, **kwargs):

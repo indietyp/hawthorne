@@ -15,7 +15,7 @@ from django.conf import settings
 def list(request):
   current = request.POST.get("page", 1)
   name = request.resolver_match.url_name
-  punishments = Punishment.objects.all()
+  punishments = Punishment.objects.all().order_by('-created_at')
 
   if "ban" in name:
     punishments = punishments.filter(is_banned=True)
