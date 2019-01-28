@@ -23,6 +23,7 @@ We're currently in an unstable beta release cycle.
 
 ## Partners & Tools
 ### [![](docs/images/browserstack.png)](https://www.browserstack.com)
+BrowserStack enables us to test the Hawthorne interface and it's functionality over multiple devices and services automatically. BrowserStack is therefore fundamental to our UI and UX development and testing process and identifies inconsistencies we might face with different operating systems and browsers, which we wouldn't be able to identify manually.
 
 ## Showcase
 ![][image-1]
