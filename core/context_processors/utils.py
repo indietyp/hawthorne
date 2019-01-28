@@ -1,4 +1,4 @@
-from core.models import Membership, Server
+from core.models import Server
 from django.conf import settings
 from django.core.cache import cache
 
