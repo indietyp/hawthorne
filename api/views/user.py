@@ -128,7 +128,7 @@ def list(request, validated=[], *args, **kwargs):
         user.groups.add(group)
 
     if validated['country'] is not None and len(validated['country']) == 2:
-      country = validated['country'].upper()
+      country = validated['country'].lower()
       user.country = Country.objects.get_or_create(code=country)[0]
 
     if validated['ip'] is not None:
