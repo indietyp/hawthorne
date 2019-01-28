@@ -89,7 +89,8 @@ def isoduration(v):
 
 @register.filter
 def userconnection(v):
-  return v.userconnection_set.order_by('-created_at')[0]
+  connection = v.userconnection_set.order_by('-created_at')[0]
+  return datetime.datetime.now() - connection.connected
 
 
 @register.filter
