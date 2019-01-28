@@ -1,0 +1,8 @@
+{
+"version":3,
+"file":"",
+"lineCount":1,
+"mappings":"AAEEA,MAAAC,UAAAC,YAAA,CAA+BC,QAAQ,CAACC,CAAD,CAAO,CACzB,IAAK,EAAxB,GAAI,IAAA,CAAKA,CAAL,CAAJ,GACE,IAAA,CAAKA,CAAL,CADF,CACe,EADf,CAGA,OAAO,KAAA,CAAKA,CAAL,CAJqC,CAO9CC,OAAAC,MAAA,CAAe,EAEfD,OAAAE,MAAA,CAAe,EAEfF,OAAAG,IAAA,CAAa,CACXC,QAAS,EADE;",
+"sources":["/Users/eatonlab/Dropbox/projects/development/hawthorne/interface/static/COMPILED/js/globals.js"],
+"names":["Object","prototype","getOrCreate","Object.prototype.getOrCreate","prop","window","style","cache","api","storage"]
+}
