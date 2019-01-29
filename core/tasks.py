@@ -32,6 +32,7 @@ def entry(server):
     datapoint.is_online = False
     datapoint.save()
 
+    logger.info('Error with {} occured ({})'.format(server.name, response['error']))
     return
 
   datapoint.map = response['map']

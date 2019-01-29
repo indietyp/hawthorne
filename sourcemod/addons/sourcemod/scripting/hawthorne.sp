@@ -103,14 +103,11 @@ public void OnConfigsExecuted() {
   GetConVarString(APITOKEN, token, sizeof(token));
   StrCat(endpoint, sizeof(endpoint), "/api/v1");
 
-  LogMessage("Configured Endpoint:");
-  LogMessage(endpoint);
+  LogMessage("Configured Endpoint: %s", endpoint);
 
   httpClient = new HTTPClient(endpoint);
   httpClient.SetHeader("X-TOKEN", token);
-  httpClient.ConnectTimeout = 120;
   httpClient.FollowLocation = true;
-  httpClient.Timeout = 120;
 
   GetServerUUID();
 }
