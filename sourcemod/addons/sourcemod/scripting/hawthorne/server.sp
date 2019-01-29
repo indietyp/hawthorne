@@ -37,7 +37,8 @@ void GetServerUUID() {
   httpClient.Get(url, APIGetServerUUID);
 }
 
-void APIGetServerUUID(HTTPResponse response, any value) {
+void APIGetServerUUID(HTTPResponse response, any value, const char[] error) {
+  LogError("%s", error);
   if (!APIValidator(response)) return;
 
   JSONObject output = view_as<JSONObject>(response.Data);

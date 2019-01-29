@@ -125,7 +125,7 @@ public void APINoResponseCall(HTTPResponse response, any value) {
 
 bool APIValidator(HTTPResponse response) {
   if (response == INVALID_HANDLE) {
-    LogError("[HT] API ERROR (HTTP Handle invalid) - check your SourceMod version");
+    LogError("[HT] API ERROR (HTTP Handle invalid)");
     return false;
   }
 
