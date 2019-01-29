@@ -108,6 +108,8 @@ public void OnConfigsExecuted() {
 
   httpClient = new HTTPClient(endpoint);
   httpClient.SetHeader("X-TOKEN", token);
+  httpClient.ConnectTimeout = 120;
+  httpClient.FollowLocation = true;
   httpClient.Timeout = 120;
 
   GetServerUUID();
