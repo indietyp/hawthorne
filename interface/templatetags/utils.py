@@ -57,7 +57,8 @@ def permission_percentage(value):
 def m2m_duration(m2m):
   total = datetime.timedelta()
   for delta in m2m.all():
-    total += delta.disconnected - delta.connected
+    disconnected = delta.disconnected if delta.disconnected else timezone.now()
+    total += disconnected - delta.connected
 
   return total
 
