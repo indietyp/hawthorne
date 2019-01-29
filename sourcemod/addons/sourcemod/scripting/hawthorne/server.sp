@@ -32,6 +32,8 @@ void GetServerUUID() {
   StrCat(url, sizeof(url), ip);
   StrCat(url, sizeof(url), "&port=");
   StrCat(url, sizeof(url), port);
+
+  LogError("URL: %s", url);
   httpClient.Get(url, APIGetServerUUID);
 }
 

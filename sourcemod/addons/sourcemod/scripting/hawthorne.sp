@@ -47,7 +47,7 @@ public Plugin myinfo = {
   name = "hawthorne",
   author = "indietyp",
   description = "Admin plugin for the integration into the hawthorne gameserver panel, for managing multiple servers from an web interface.",
-  version = "0.8.14",
+  version = "0.9.0",
   url = "hawthornepanel.org"
 };
 
@@ -113,7 +113,7 @@ public void OnConfigsExecuted() {
 }
 
 bool IsSpectator(int client) {
-  if(GetClientTeam(client) == 2 || GetClientTeam(client) == 3)
+  if (GetClientTeam(client) == 2 || GetClientTeam(client) == 3)
     return false;
   else
     return true;
@@ -124,6 +124,11 @@ public void APINoResponseCall(HTTPResponse response, any value) {
 }
 
 bool APIValidator(HTTPResponse response) {
+  if (response == INVALID_HANDLE) {
+    LogError("[HT] API ERROR (HTTP Handle invalid) - check your SourceMod version");
+    return false;
+  }
+
   if (response.Status != HTTPStatus_OK) {
     LogError("[HT] API ERROR (request did not return 200 OK, but %d)", response.Status);
     return false;
