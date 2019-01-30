@@ -6,8 +6,6 @@ from core.models import BaseModel, Server, User
 
 class ServerChat(BaseModel):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-  ip = models.GenericIPAddressField()
   server = models.ForeignKey(Server, on_delete=models.CASCADE)
   message = models.CharField(max_length=255)
 

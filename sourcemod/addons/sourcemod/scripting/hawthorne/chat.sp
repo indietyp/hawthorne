@@ -16,18 +16,17 @@ public Action OnPlayerChatMessage(int client, const char[] command, int args) {
 }
 
 stock void SendChatMessage(int client, char[] message, int type = 0) {
-  char ip[128];
-
-  GetClientIP(client, ip, sizeof(ip));
-
   JSONObject payload = new JSONObject();
   payload.SetString("user", CLIENTS[client]);
   payload.SetString("server", SERVER);
-  payload.SetString("ip", ip);
   payload.SetString("message", message);
-  httpClient.Put("system/chat", payload, APINoResponseCall);
-
+  message_queue.Push(payload);
   delete payload;
+
+  if (message_queue.Length >= 100) {
+    httpClient.Put("system/chat", message_queue, APINoResponseCall);
+    message_queue.Clear();
+  }
 }
 
 

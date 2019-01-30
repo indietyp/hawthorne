@@ -183,11 +183,15 @@ validation = {
                                    'limit': {'type': 'integer', 'min': -1, 'default': -1},
                                    'match': {'type': 'string', 'default': ''}},
                     'permission': ['log.view_chat']},
-            'PUT': {'parameters': {'user': {'type': 'uuid', 'required': True},
-                                   'server': {'type': 'uuid', 'required': True},
-                                   'ip': {'type': 'ip', 'required': True},
-                                   'message': {'type': 'string', 'required': True},
-                                   'command': {'type': 'boolean', 'default': None, 'nullable': True}},
+            'PUT': {'parameters': {'messages': {'type': 'list', 'schema':
+                                    {'type': 'dict', 'schema': {
+                                      'user': {'type': 'uuid', 'required': True},
+                                      'server': {'type': 'uuid', 'required': True},
+                                      'message': {'type': 'string', 'required': True},
+                                      'command': {'type': 'boolean', 'default': None, 'nullable': True}
+                                      }
+                                    }
+                                  }},
                     'permission': ['log.add_serverchat']}
         },
         'token': {

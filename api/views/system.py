@@ -26,7 +26,7 @@ def chat(request, validated={}, *args, **kwargs):
   if request.method == 'GET':
     direction = '-created_at' if validated['descend'] else 'created_at'
     chats = ServerChat.objects.filter(message__contains=validated['match']) \
-                              .values('ip', 'message', 'command', 'created_at') \
+                              .values('message', 'command', 'created_at') \
                               .order_by(direction) \
                               .annotate(user=F('user__id'), server=F('server__id'))
 
@@ -36,21 +36,24 @@ def chat(request, validated={}, *args, **kwargs):
 
     return [c for c in chats]
   elif request.method == 'PUT':
-    chat = ServerChat()
-    chat.user = User.objects.get(id=validated['user'])
-    chat.server = Server.objects.get(id=validated['server'])
-    chat.ip = validated['ip']
-    chat.message = validated['message']
+    messages = []
+    for message in validated['messages']:
+      chat = ServerChat()
+      chat.user = User.objects.get(id=message['user'])
+      chat.server = Server.objects.get(id=message['server'])
+      chat.message = message['message']
 
-    # command == None is a best-guess effort
-    if validated['command'] is None:
-      chat.command = True if chat.message.startswith('sm_') or \
-                             chat.message.startswith('rcon_') or \
-                             chat.message.startswith('json_') else False
-    else:
-      chat.command = validated['command']
+      if message['command'] is None:
+        chat.command = True if \
+            chat.message.startswith('sm_') or \
+            chat.message.startswith('rcon_') or \
+            chat.message.startswith('json_') else False
+      else:
+        chat.command = message['command']
 
-    chat.save()
+      messages.append(chat)
+
+    ServerChat.objects.bulk_create(messages)
     return 'passed'
 
 
