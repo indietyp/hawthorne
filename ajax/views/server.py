@@ -4,6 +4,7 @@ import urllib.request
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import Count, Q
+from django.db.models.deletion import Collector
 from django.db.models.functions import Extract
 from django.views.decorators.http import require_http_methods
 
@@ -71,10 +72,10 @@ def overview(request, s, *args, **kwargs):
 
   loc = None
 
-  with urllib.request.urlopen("https://geoip-db.com/jsonp/{}".format(server.ip)) as url:
-    data = json.loads(url.read().decode().split("(")[1].strip(")"))
+  with urllib.request.urlopen("https://geoip-db.com/json/{}".format(server.ip)) as url:
+    data = json.loads(url.read().decode())
 
-  loc = data['city']
+  loc = '{}, {}'.format(data['city'], data['country_name']) if data['city'] else data['country_name']
 
   return render(request, 'components/servers/detailed/overview.pug', {'data': server,
                                                                       'months': month,
@@ -132,3 +133,23 @@ def modal_admins(request, s, *args, **kwargs):
   memberships = Membership.objects.filter(Q(role__server=server) | Q(role__server=None))
 
   return render(request, 'components/servers/detailed/modals/admins.pug', {'data': memberships})
+
+
+@login_required(login_url='/login')
+@permission_required('core.view_server')
+@require_http_methods(['POST'])
+def modal_delete(request, s, *args, **kwargs):
+  server = Server.objects.get(id=s)
+
+  collector = Collector(using='default')
+  collector.collect([server])
+  estimate = sum(len(x) for x in collector.data.values())
+
+  breakdown = {}
+  for k, v in collector.data.items():
+    name = k._meta.verbose_name_plural if len(v) != 1 else k._meta.verbose_name
+    breakdown[name] = len(v)
+
+  return render(request, 'components/servers/detailed/modals/delete.pug',
+                {'estimate': estimate,
+                 'breakdown': breakdown})

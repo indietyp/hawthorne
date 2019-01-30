@@ -30,24 +30,6 @@
           th Username
           th Role
       tbody
-  .modal(data-component="[modal/delete]", data-redirect, data-id="{{data.id}}")
-    h1 Are you sure you want to continue?
-    .close(data-trigger="[modal/close]")
-      i.icon.ion-ios-close
-    .modalContent
-      | Continuing will cause irreversible data loss of <b>{{estimate}}</b> associated objects. These include:
-      ul(style="font-family:monospace")
-        for k, v in breakdown.items
-          li
-            = v
-            | x
-            = k|title
-    .actions
-      button.paginationTabsDanger(data-trigger='[modal/action]', data-action='delete', data-mode='servers[detailed]')
-        i.icon.ion-ios-trash(style="margin-right:10px;")
-        | Delete Server
-      button(data-trigger="[modal/close]")
-        | Cancel
 
   .modal(data-component="[modal/players/message]")
     h1 Hawthornepanel.org – Players – Akke – Compose A Message
@@ -146,5 +128,6 @@
     window.lazy('servers[detailed]', 'overview')
     window.modal('servers[detailed][players]', '[modal/players]')
     window.modal('servers[detailed][admins]', '[modal/admins]')
+    window.prependLoad('servers[detailed][delete]')
     window._.menu()
     window._.init()

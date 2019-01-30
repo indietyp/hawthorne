@@ -232,7 +232,31 @@ modal = (mode, component) ->
 
   return
 
+
+prepend = (mode, component = '.main') ->
+  endpoint = window.endpoint.ajax
+  header =
+    'X-CSRFToken': window.csrftoken
+
+  switch mode
+    when 'servers[detailed][delete]'
+      endpoint = window.endpoint.ajax.servers[window.slug].modals.delete
+
+  endpoint.post(header, {}, (dummy, response) ->
+    status = response.status
+    data = response.data
+    target = $(component)
+
+    if status is 200
+      target.htmlPrepend data
+
+    return
+  )
+
+  return
+
 window.ajax = ajax
 window.lazy = lazy
 window.date = date
 window.modal = modal
+window.prependLoad = prepend
