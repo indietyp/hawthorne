@@ -33,7 +33,7 @@ public void OnBanCheck(HTTPResponse response, any value) {
   JSONObject output = view_as<JSONObject>(response.Data);
   JSONArray results = view_as<JSONArray>(output.Get("result"));
 
-  if (results.Length < 1) return;
+  if (results.Length == 0) return;
   JSONObject result = view_as<JSONObject>(results.Get(0));
 
   char passed[200], total[200];

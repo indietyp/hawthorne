@@ -31,3 +31,4 @@ redis==2.10.6
 django-cprofile-middleware
 python-nginx
 isodate
+gevent
