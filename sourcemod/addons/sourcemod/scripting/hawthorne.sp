@@ -107,7 +107,7 @@ public void OnConfigsExecuted() {
 
   httpClient = new HTTPClient(endpoint);
   httpClient.SetHeader("X-TOKEN", token);
-  // httpClient.FollowLocation = true;
+  httpClient.FollowLocation = true;
 
   message_queue = new JSONArray();
   GetServerUUID();

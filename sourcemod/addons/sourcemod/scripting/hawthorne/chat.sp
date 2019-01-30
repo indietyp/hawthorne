@@ -24,8 +24,11 @@ stock void SendChatMessage(int client, char[] message, int type = 0) {
   delete payload;
 
   if (message_queue.Length >= 100) {
-    httpClient.Put("system/chat", message_queue, APINoResponseCall);
+    JSONObject wrapper = new JSONObject();
+    wrapper.Set("messages", message_queue);
+    httpClient.Put("system/chat", wrapper, APINoResponseCall);
     message_queue.Clear();
+    delete payload;
   }
 }
 
