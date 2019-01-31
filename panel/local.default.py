@@ -1,4 +1,4 @@
-from socket import gethostname, gethostbyname
+from socket import gethostbyname, gethostname
 
 DATABASES = {
     'default': {
