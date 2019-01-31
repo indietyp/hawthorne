@@ -22,6 +22,7 @@ void Hawthorne_InitConVars() {
                                    FCVAR_NONE,
                                    true, 0.0,
                                    true, 1.0);
+
   MODULE_PUNISH     = CreateConVar("ht_punish",
                                    "1",
                                    "Toggle the internal mute and gag module",
@@ -42,10 +43,10 @@ void Hawthorne_InitConVars() {
                                    FCVAR_NONE,
                                    true, 0.0,
                                    true, 1.0);
-  
+
   MODULE_SMAC       = CreateConVar("ht_smac",
                                    "1",
-                                   "Enables hextag support",
+                                   "Enables SMAC support",
                                    FCVAR_NONE,
                                    true, 0.0,
                                    true, 1.0);

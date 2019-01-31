@@ -1,19 +1,18 @@
 """API module for users"""
 
 import datetime
-import re
 
-from django.contrib.auth.models import Group, Permission
-from django.db.models import F, Q, DateTimeField, ExpressionWrapper, Case, When, CharField, BooleanField
-from django.utils import timezone
 from django.conf import settings
+from django.contrib.auth.models import Group, Permission
+from django.db.models import BooleanField, Case, CharField, DateTimeField, ExpressionWrapper, F, Q, When
+from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 from core.decorators.api import json_response, validation
 from core.decorators.auth import authentication_required, permission_required
 from core.lib.steam import populate as steam_populate
-from core.models import User, Country, Server, Role, Punishment, Membership
+from core.models import Country, Membership, Punishment, Role, Server, User
 from lib.mainframe import Mainframe
 from lib.sourcemod import SourcemodPluginWrapper
 
@@ -102,15 +101,17 @@ def list(request, validated=[], *args, **kwargs):
       user.is_active = True
       user.is_staff = False
 
+      # put into function
       base = Permission.objects.all()\
                                .annotate(encoded=F('content_type__model') + '.' + F('codename'))\
                                .filter(encoded__in=request.user.get_all_permissions())\
                                .order_by('content_type__model')
       exceptions = []
       perms = []
+
       for perm in validated['permissions']:
         perm = perm.split('.')
-        p = base.filter(content_type__app_label=perm[0], codename=perm[1])
+        p = base.filter(content_type__model=perm[0], codename=perm[1])
 
         if not p:
           exceptions.append('.'.join(perm))
@@ -127,7 +128,7 @@ def list(request, validated=[], *args, **kwargs):
         user.groups.add(group)
 
     if validated['country'] is not None and len(validated['country']) == 2:
-      country = validated['country'].upper()
+      country = validated['country'].lower()
       user.country = Country.objects.get_or_create(code=country)[0]
 
     if validated['ip'] is not None:
@@ -139,16 +140,8 @@ def list(request, validated=[], *args, **kwargs):
       server = Server.objects.get(id=validated['server'])
       user._server = server
 
-    # https://stackoverflow.com/questions/13729638/how-can-i-filter-emoji-characters-from-my-input-so-i-can-save-in-mysql-5-5
-    try:
-      # UCS-4
-      highpoints = re.compile(u'[\U00010000-\U0010ffff]')
-    except re.error:
-      # UCS-2
-      highpoints = re.compile(u'[\uD800-\uDBFF][\uDC00-\uDFFF]')
-
     if 'username' in validated:
-      user.namespace = highpoints.sub(u'\u25FD', validated['username'])
+      user.namespace = validated['username']
 
     user.save()
 
@@ -289,6 +282,8 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
       groups = Group.objects.filter(id__in=validated['groups'])
       user.groups.set(groups)
 
+      user.is_active = True
+
     if validated['permissions'] is not None:
       base = Permission.objects.all()\
                                .annotate(encoded=F('content_type__model') + '.' + F('codename'))\
@@ -298,7 +293,7 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
       perms = []
       for perm in validated['permissions']:
         perm = perm.split('.')
-        p = base.filter(content_type__app_label=perm[0], codename=perm[1])
+        p = base.filter(content_type__model=perm[0], codename=perm[1])
 
         if not p:
           exceptions.append('.'.join(perm))
@@ -314,13 +309,13 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
     return ':+1:'
 
   elif request.method == 'DELETE':
-    if u is not None:
+    if u:
       try:
         user = User.objects.get(id=u)
       except Exception as e:
         return 'not existent user queried - {}'.format(e), 403
 
-    if s is not None:
+    if s:
       try:
         user = User.objects.get(username=s)
       except Exception as e:
@@ -364,6 +359,9 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
       for group in validated['groups']:
         user.groups.remove(Group.objects.get(id=group))
 
+      if user.groups.count() == 0:
+        user.is_active = False
+
     user.save()
 
 
@@ -379,11 +377,12 @@ def punishment(request, u=None, validated={}, *args, **kwargs):
   except Exception as e:
     return 'non existent user queried - {}'.format(e), 403
 
-  Punishment.objects.annotate(completion=ExpressionWrapper(F('created_at') + F('length'),
-                                                    output_field=DateTimeField()))\
-                     .filter(completion__lte=timezone.now(),
-                             resolved=False,
-                             length__isnull=False).update(resolved=True)
+  Punishment.objects\
+            .annotate(completion=ExpressionWrapper(F('created_at') + F('length'),
+                                                   output_field=DateTimeField()))\
+            .filter(completion__lte=timezone.now(),
+                    resolved=False,
+                    length__isnull=False).update(resolved=True)
 
   if request.method == 'GET':
     punishments = Punishment.objects.filter(user=user)
@@ -491,11 +490,11 @@ def punishment_detailed(request, u=None, p=None, validated={}, *args, **kwargs):
         server = Server.objects.filter(id=validated['server'])
 
         if server:
-          validated.server = server[0]
+          punishment.server = server[0]
         else:
           return 'This UUID is not a server', 428
       else:
-        validated.server = None
+        punishment.server = None
 
     if validated['resolved'] is not None:
       punishment.resolved = validated['resolved']
@@ -518,7 +517,9 @@ def punishment_detailed(request, u=None, p=None, validated={}, *args, **kwargs):
     if validated['gagged'] is not None:
       punishment.is_gagged = validated['gagged']
 
-    punishment.updated_by = validated[''] if validated[''] else request.user
+    # updated_by will be global
+    # punishment.updated_by = validated[''] if validated[''] else request.user
+    punishment.updated_by = request.user
 
   elif request.method == 'DELETE':
     punishment.resolved = True

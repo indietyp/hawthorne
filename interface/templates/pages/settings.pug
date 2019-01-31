@@ -1,0 +1,66 @@
+- extends ajax|yesno:'skeleton/wrappers/ajax.pug,skeleton/main.pug'
+
+- load i18n
+- load staticfiles
+
+
+- block content
+  .modal.modalDynamic(data-component='[modal/token/add]')
+    h1 Token – New
+    .close(data-trigger='[modal/close]')
+      i.icon.ion-ios-close
+    .modalContent
+      form(data-trigger='[modal/form]', data-action='create', data-mode='system[token]')
+        b.mbotSmall(style='padding-top:6px')
+          i.icon.ion-ios-flag(style='margin-right:10px')
+          |  Permissions
+        .section.group(style='display:flex;align-items:center')
+          .selection
+            b.mbotSmall(style='padding-top:6px') Available
+            select.skip#select-available(multiple, style='height:250px')
+              each permission in permissions
+                if permission.content_type.app_label in excluded
+                  option(value="{{permission.content_type.model|add:'.'|add:permission.codename}}")
+                    = permission.content_type.model.title
+                    |  |
+                    = permission.name.title
+            a(href='javascript:void(0)') Select All
+          .actions.selector(style='padding:12px')
+            i.icon.ion-ios-arrow-dropleft(data-trigger='[select/multiple/double]', data-source='#select-selected', data-target='#select-available')
+            i.icon.ion-ios-arrow-dropright(data-trigger='[select/multiple/double]', data-target='#select-selected', data-source='#select-available')
+          .selection
+            b.mbotSmall(style='padding-top:6px;margin-bottom:0px') Selected
+            select#select-selected(multiple, style='height:250px', name='permissions')
+              each permission in permissions
+                if permission.content_type.app_label not in excluded
+                  option.hidden(checked, disabled, value="{{permission.content_type.model|add:'.'|add:permission.codename}}")
+            a(href='javascript:void(0)') Select All
+
+        b.mtop.mbotSmall
+          i.icon.ion-ios-person(style='margin-right:10px')
+          |  Expiration (optional)
+        .section.divider
+          .group.inputGroup
+            .flatpickr
+              input(name='date', placeholder='Select A Date', data-input, data-transform='flatpickr-timestamp', data-name='due')
+              .input-button(title='clear', data-clear)
+                i.icon.ion-ios-close
+            script.execute flatpickr('.flatpickr', {enableTime: true,dateFormat: "Y-m-d H:i",minDate: new Date(),wrap:true});
+
+        input.skip.unset(type="submit", value='Save')
+
+  ul.paginationTabs(data-target='settings[overview]')
+    li(data-trigger="[ct/switch]", data="overview") Overview
+    li(data-trigger="[ct/switch]", data="tokens") Tokens
+    li(data-trigger="[ct/switch]", data="webhooks") Webhooks
+    li.fRight
+      i.icon.ion-ios-add(style="margin-right:5px")
+      | New Webhook
+    li.fRight(style="margin-right:6px", data-trigger='[modal/open]', data-trigger-target='[modal/token/add]')
+      i.icon.ion-ios-add(style="margin-right:5px")
+      | New Token
+
+  script.execute.
+    window.lazy('settings[overview]', 'overview')
+    window._.menu()
+    window._.init()

@@ -1,22 +1,21 @@
-import json
+import calendar
 import datetime
+import json
+import random
 
 from automated_logging.models import Model as LogModel
-from lib.mainframe import Mainframe
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import Permission
-from django.contrib.contenttypes.models import ContentType
-from django.db.models import DateField, Count, Q, F, ExpressionWrapper, DateTimeField
-from django.db.models.functions import Cast
-from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate
-from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group, Permission
+from django.db import connection
+from django.db.models import Count, DateTimeField, ExpressionWrapper, F, Subquery
+from django.db.models.functions import Extract
+from django.http import Http404, JsonResponse
+from django.shortcuts import render
 from django.utils import timezone
-from django.contrib.auth.password_validation import validate_password
-from django.core.exceptions import ValidationError
 
-from core.models import Server, Role, User, Punishment
-from log.models import UserOnlineTime, ServerChat
+from core.models import Punishment, Role, Server, User
+from log.models import UserConnection
 
 
 def login(request):
@@ -30,139 +29,128 @@ def login(request):
     return JsonResponse({"success": False, "reason": "credentials incorrect or unkown"})
 
 
-def setup(request, u=None):
-  try:
-    user = User.objects.get(id=u)
-  except User.DoesNotExist:
-    return redirect('/login')
-
-  if user.username != user.email:
-    return redirect('/login')
-
-  if request.method == 'PUT':
-    data = json.loads(request.body)
-
-    if not data['username']:
-      return JsonResponse({'setup': False, 'username': 'cannot be nothing'})
-
-    user.namespace = data['username']
-    user.username = data['username']
-
-    try:
-      validate_password(data['password'])
-    except ValidationError as e:
-      return JsonResponse({'setup': False, 'password': str(e)})
-
-    user.set_password(data['password'])
-    user.save()
-
-    return JsonResponse({'setup': True})
-  else:
-    return render(request, 'skeleton/setup.pug', {'user': user})
-
-
 @login_required(login_url='/login')
 def home(request):
-  query = UserOnlineTime.objects.annotate(date=Cast('disconnected', DateField())) \
-                                .values('user') \
-                                .annotate(active=Count('user', distinct=True))
+  current = datetime.datetime.now().month
 
-  last30 = query.filter(date__gte=datetime.date.today() - datetime.timedelta(days=30))
-  prev30 = query.filter(date__gte=datetime.date.today() - datetime.timedelta(days=60)) \
-                .filter(date__lte=datetime.date.today() - datetime.timedelta(days=30))
+  # there seems to be now way to derive a django query from another one
+  with connection.cursor() as cursor:
+    cursor.execute('''
+      SELECT COUNT(*), `subquery`.`mo`
+      FROM (SELECT `log_userconnection`.`user_id` AS `Col1`,
+                   EXTRACT(MONTH FROM CONVERT_TZ(`log_userconnection`.`disconnected`, 'UTC', 'UTC')) AS `mo`,
+                   COUNT(DISTINCT `log_userconnection`.`user_id`) AS `active`
+            FROM `log_userconnection`
+            GROUP BY `log_userconnection`.`user_id`,
+                     `mo`
+            ORDER BY NULL) `subquery`
+      GROUP BY `subquery`.`mo`;
+    ''')
 
-  recent = last30.count()
-  alltime = query.count()
+    query = cursor.fetchall()
 
-  try:
-    change = int((recent / prev30.count()) - 1) * 100
-  except ZeroDivisionError:
-    change = 100
+  query = {i[1]: i[0] for i in query if i[1] is not None}
 
-  payload = {'instances': Server.objects.all().count(),
-             'counts': {'all': alltime,
-                        'month': recent,
-                        'change': change},
-             'roles': Role.objects.all().count(),
-             'mem_roles': User.objects.filter(Q(roles__isnull=False) | Q(is_superuser=True)).count(),
-             'messages': ServerChat.objects.filter(command=False)
-                                           .annotate(date=Cast('created_at', DateField()))
-                                           .filter(date__gte=datetime.date.today() - datetime.timedelta(days=30))
-                                           .count(),
-             'actions': LogModel.objects.filter(user__isnull=False)
-                                .annotate(date=Cast('created_at', DateField()))
-                                .filter(date__gte=datetime.date.today() - datetime.timedelta(days=30))
-                                .count()
-             }
-  return render(request, 'components/home.pug', payload)
+  population = []
+  for month in range(current, current - 12, -1):
+    if month < 1:
+      month += 12
+
+    value = 0 if month not in query else query[month]
+    population.append((calendar.month_abbr[month], value))
+
+  payload = {'population': population[::-1],
+             'punishments': Punishment.objects.count(),
+             'users': User.objects.count(),
+             'servers': Server.objects.count(),
+             'actions': LogModel.objects.count()}
+  return render(request, 'pages/home.pug', payload)
 
 
 @login_required(login_url='/login')
 def player(request):
-  return render(request, 'components/player.pug', {})
+  return render(request, 'pages/players/list.pug', {})
 
 
 @login_required(login_url='/login')
-def admin(request):
-  return render(request, 'components/admin.pug', {})
+def player_detailed(request, u):
+  try:
+    user = User.objects.get(id=u)
+  except User.DoesNotExist:
+    raise Http404('This user is nowhere to be found!')
+
+  return render(request, 'pages/players/detailed.pug', {'data': user})
 
 
 @login_required(login_url='/login')
 def server(request):
-  return render(request, 'components/server.pug',
-                {'supported': [{'label': x[1], 'value': x[0]} for x in Server.SUPPORTED]})
+  return render(request, 'pages/servers/list.pug')
 
 
 @login_required(login_url='/login')
-def ban(request):
-  Punishment.objects.annotate(completion=ExpressionWrapper(F('created_at') + F('length'),
-                                                           output_field=DateTimeField()))\
-             .filter(completion__lte=timezone.now(),
-                     resolved=False,
-                     length__isnull=False)\
-             .filter(Q(is_gagged=True) | Q(is_muted=True)).update(resolved=True)
+def server_detailed(request, s):
+  server = Server.objects.filter(id=s)
 
-  return render(request, 'components/ban.pug', {})
+  if not server:
+    return render(request, 'skeleton/404.pug')
+
+  server = server[0]
+
+  return render(request, 'pages/servers/detailed.pug', {'data': server})
 
 
 @login_required(login_url='/login')
-def mutegag(request):
+def admins_servers(request):
+  roles = Role.objects.all()
+  return render(request, 'pages/admins/servers.pug', {'roles': roles})
+
+
+@login_required(login_url='/login')
+def admins_web(request):
+  permissions = Permission.objects.order_by('content_type__model')
+  excluded = ['core', 'log', 'auth']
+  groups = Group.objects.all()
+  return render(request, 'pages/admins/web.pug', {'permissions': permissions,
+                                                  'excluded': excluded,
+                                                  'groups': groups})
+
+
+@login_required(login_url='/login')
+def punishments(request):
+  name = request.resolver_match.url_name
+
+  if "ban" in name:
+    mode = "ban"
+  elif "mute" in name:
+    mode = "mute"
+  elif "gag" in name:
+    mode = "gag"
+
   Punishment.objects.annotate(completion=ExpressionWrapper(F('created_at') + F('length'),
                                                            output_field=DateTimeField()))\
                     .filter(completion__lte=timezone.now(),
                             resolved=False,
-                            length__isnull=False)\
-                    .filter(Q(is_gagged=True) | Q(is_muted=True)).update(resolved=True)
+                            length__isnull=False).update(resolved=True)
+  servers = Server.objects.all()
 
-  return render(request, 'components/mutegag.pug')
-
-
-@login_required(login_url='/login')
-def announcement(request):
-  return render(request, 'components/home.pug', {})
-
-
-@login_required(login_url='/login')
-def chat(request):
-  return render(request, 'components/chat.pug', {})
+  return render(request, 'pages/punishments/general.pug', {'mode': mode,
+                                                           'servers': servers})
 
 
 @login_required(login_url='/login')
 def settings(request):
-  modules = [c for c in ContentType.objects.filter(app_label__in=['core', 'log']) if
-             Permission.objects.filter(content_type=c).count() > 0]
+  permissions = Permission.objects.order_by('content_type__model')
+  excluded = ['core', 'log', 'auth']
 
-  base = request.user.user_permissions if not request.user.is_superuser else Permission.objects
-  perms = base.all().order_by('content_type__model')
-
-  mainframe = Mainframe()
-  mf = None
-
-  if mainframe.check():
-    mf = mainframe.populate().current.id
-
-  return render(request, 'components/settings.pug', {'simple': modules, 'advanced': perms, 'mainframe': mf, 'discord': None})
+  return render(request, 'pages/settings.pug', {'permissions': permissions,
+                                                'excluded': excluded})
 
 
-def dummy(request):
-  return render(request, 'skeleton/main.pug', {})
+def page_not_found(request, exception=None, template_name='404.pug'):
+  creatures = ['retarded', 'hot', 'crazed', 'embarrassed', 'worried', 'annoyed']
+  return render(request, 'skeleton/errors/404.pug', {'creature': random.choice(creatures)})
+
+
+def internal_server_error(request, template_name='500.pug '):
+  creatures = ['retarded', 'hot', 'crazed', 'embarrassed', 'worried', 'annoyed']
+  return render(request, 'skeleton/errors/500.pug', {'creature': random.choice(creatures)})

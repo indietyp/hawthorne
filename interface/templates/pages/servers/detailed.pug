@@ -1,0 +1,133 @@
+- extends ajax|yesno:'skeleton/wrappers/ajax.pug,skeleton/main.pug'
+- load i18n
+- load staticfiles
+
+- block content
+  .modal(data-component="[modal/players]")
+    h1
+      = data.name
+      |  – Players
+    .close(data-trigger="[modal/close]")
+      i.icon.ion-ios-close
+    table
+      thead
+        tr
+          th(style="width:auto")
+          th Player
+          th Connection Time
+          th.fRight Actions
+      tbody
+  .modal(data-component="[modal/admins]")
+    h1
+      = data.name
+      |  – Admins
+    .close(data-trigger="[modal/close]")
+      i.icon.ion-ios-close
+    table
+      thead
+        tr
+          th(style="width:auto")
+          th Username
+          th Role
+      tbody
+
+  .modal(data-component="[modal/players/message]")
+    h1 Hawthornepanel.org – Players – Akke – Compose A Message
+    .close(data-trigger="[modal/close]")
+      i.icon.ion-ios-close
+    .modalContent You can send in-game messages to players through this modal. The message will appear in their chat box with you as the sender, unless specified otherwise in the options.
+    textarea(placeholder="Send them a message...", style="margin-top:20px")
+    .section.group(style="margin: 10px 0")
+      .col.span_1_of_4
+        label.switch
+          input(type="checkbox")
+          span.slider.round
+        .switchText Send as CONSOLE
+      .col.span_1_of_4
+        label.switch
+          input(type="checkbox")
+          span.slider.round
+        .switchText Kick player
+      .col.span_1_of_4
+        label.switch
+          input(type="checkbox")
+          span.slider.round
+        .switchText Send as a warning
+      .col.span_1_of_4
+        label.switch
+          input(type="checkbox")
+          span.slider.round
+        .switchText Send to entire server
+    button
+      i.fa.fa-paper-plane(style="margin-right:10px;")
+      | Send
+
+  .modal(data-component='[modal/edit]')
+    h1 Server – Edit
+    .close(data-trigger='[modal/close]')
+      i.icon.ion-ios-close
+    .modalContent
+      form(data-trigger='[modal/form]', data-action='edit', data-mode='servers')
+        input.hidden.target(value='{{data.id}}')
+        b.mtop.mbotSmall
+          i.icon.ion-ios-person(style='margin-right:10px')
+          |  Server Details
+        .section.group.inputGroup
+          input.smallInput(name='name', type='text', required, placeholder=' ', value='{{data.name}}')
+          span Name
+        .section.group.modalSelect
+          ._Dynamic_Select
+            ._Title(data-trigger='[composer/select/open]')= data.get_game_display
+            input._Value.hidden(name='game', value='{{data.game}}')
+            ._Select
+              ._Select_Search
+                input.skip(type='text', placeholder='Type to filter...', data-trigger='[composer/select/search]')
+              ._STitle Results
+              ._Container
+                - for game in games
+                  li(data-trigger='[composer/select/choose]', data-value="{{game.0}}")
+                    p= game.1
+        .section.group.inputGroup
+          input.smallInput(name='gamemode', type='text', required, placeholder=' ', data-transform='lower', value='{{data.mode}}')
+          span
+            | Mode
+            span.invalid
+
+        b.mtop.mbotSmall
+          i.icon.ion-ios-person(style='margin-right:10px')
+          |  RCON Details
+        .section.group.inputGroup
+          input.smallInput(name='ip/port', type='text', required, placeholder=' ', data-transform='ip-port', value='{{data.ip}}:{{data.port}}')
+          span
+            | IP and Port
+            span.invalid
+        .section.group.inputGroup
+          input.smallInput(name='password', type='password', placeholder=' ')
+          span
+            | Password
+            span.invalid
+
+        input.skip(type='submit', value='Edit {{data.name}}')
+
+  ul.paginationTabs(data-target='servers[detailed]')
+    li(data-trigger="[ct/switch]", data="overview") Overview
+    li(data-trigger="[ct/switch]", data="logs") Chat Log
+    li(data-trigger="[ct/switch]", data="rcon") RCon
+    li(data-trigger="[ct/switch]", data="roles")
+      i.fa.fa-id-card(style="margin-right:5px")
+      | Roles
+    li.fRight.paginationTabsDanger(data-trigger="[modal/open]", data-trigger-target="[modal/delete]")
+      i.icon.ion-ios-trash(style="margin-right:5px")
+      | Delete Server
+    li.fRight.paginationTabsHarmless(style="margin-right:6px", data-trigger="[modal/open]", data-trigger-target="[modal/edit]")
+      i.fa.fa-cog(style="margin-right:5px")
+      | Edit
+
+  script.execute.
+    window.slug = "{{data.id}}"
+    window.lazy('servers[detailed]', 'overview')
+    window.modal('servers[detailed][players]', '[modal/players]')
+    window.modal('servers[detailed][admins]', '[modal/admins]')
+    window.prependLoad('servers[detailed][delete]')
+    window._.menu()
+    window._.init()

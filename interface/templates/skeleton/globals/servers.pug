@@ -1,0 +1,16 @@
+.modal(data-component='[modal/servers]')
+  h1 Servers
+  .close(data-trigger='[modal/close]')
+    i.icon.ion-ios-close
+  table
+    thead
+      tr
+        th Server
+        th Map
+        th Players
+        th Uptime
+        th Game
+    tbody
+
+script.
+  window.modal('skeleton[servers]', '[modals/servers]')

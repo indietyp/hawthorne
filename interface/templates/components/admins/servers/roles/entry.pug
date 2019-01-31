@@ -1,0 +1,82 @@
+- load utils
+
+each item in data
+  .modal(data-component='[modal/edit/{{item.id}}]')
+    h1 Role – Edit
+    .close(data-trigger='[modal/close]')
+      i.icon.ion-ios-close
+    .modalContent
+      form(data-trigger='[modal/form]', data-action='edit', data-mode='admins[server][roles]')
+        input.hidden.target(value='{{item.id}}')
+        b.mtop.mbotSmall
+          i.icon.ion-ios-person(style='margin-right:10px')
+          |  Role Details
+        .section.group.inputGroup
+          input.smallInput(name='name', type='text', required, placeholder=' ', value='{{item.name}}')
+          span Name
+        .section.group.inputGroup
+          input.smallInput(name='immunity', type='text', required, data-trigger='[input/range]', data-max="99", data-min="0", placeholder=' ', value='{{item.immunity}}')
+          span
+            | Role Immunity (0-99)
+            span.invalid
+        .section.group.inputGroup
+          input.smallInput(name='usetime', type='text', data-trigger='[input/duration]', placeholder=' ', data-transform='iso-duration', value='{%if item.usetime%}{{item.usetime|isoduration}}{%endif%}')
+          span
+            | Expiration (optional)
+            span.invalid
+          .tooltip_container
+            .tooltip.left Valid is the duration format described in <a style='color:green' href='https://tools.ietf.org/html/rfc3339#page-13', target='_blank'>RFC 3339, Page 13</a> as is the order. The P will be inserted automatically.
+            i.icon.ion-ios-information-circle-outline
+        .section.group.modalSelect
+          ._Dynamic_Select
+            ._Dynamic_Layer
+            if item.server
+              ._Title(data-trigger='[composer/select/open]')= item.server.name
+              input._Value.hidden(name='server', value="{{item.server.id}}")
+            else
+              ._Title(data-trigger='[composer/select/open]') Choose a Server (optional)
+              input._Value.hidden(name='server')
+            ._Select
+              ._Select_Search
+                input.skip(type='text', placeholder='Type to search...', data-trigger='[composer/select/search]')
+              ._STitle Results
+              ._Container
+                - for server in servers
+                  li(data-trigger='[composer/select/choose]', data-value=server.id)
+                    p= server.name
+
+        b.mbotSmall(style='padding-top:6px')
+          i.icon.ion-ios-flag(style='margin-right:10px')
+          |  Flags
+        .section.group.checkboxGroup
+          for flag, name, value in item.flags|srv_perms
+            .modalFlags
+              label.switch
+                if value
+                  input(name='flags', type='checkbox', value='{{flag}}', checked)
+                else
+                  input(name='flags', type='checkbox', value='{{flag}}')
+                span.slider.round
+              .switchText= name
+
+        input.skip(type='submit', value='Edit {{item.name}}')
+
+  .serverGridItem.noHover(style="padding-bottom:6px", data-id="{{item.id}}", data-visibility)
+    b(style="color:rgb(0,169,255)")= item.name
+    .playerCount
+      i.icon.ion-md-flash(style="margin-right:5px")
+      = item.immunity
+      | %
+    .mapName(style="margin-bottom:6px")
+      = item.flags
+    .fLeft(style="margin-top:13.5px")
+      i.icon.ion-md-time(style="margin-right:5px")
+      if item.usetime
+        = item.usetime|duration
+      else
+        | Indefinetly
+    .fRight
+      button.round(data-trigger="[modal/open]", data-trigger-target="[modal/edit/{{item.id}}]")
+        i.icon.ion-md-create
+      button.round.red(data-trigger="[grid/delete]", data-mode='admins[server][roles]')
+        i.icon.ion-md-trash

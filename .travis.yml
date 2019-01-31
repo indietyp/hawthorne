@@ -2,7 +2,7 @@ sudo: required
 
 branches:
   except:
-  - dev
+  - interface
 
 language: python
 python:
@@ -19,4 +19,7 @@ deploy:
   provider: script
   script: bash cli/utils/travis.sh
   on:
-    branch: master
+    # tags: true
+    branch:
+      - master
+      - dev

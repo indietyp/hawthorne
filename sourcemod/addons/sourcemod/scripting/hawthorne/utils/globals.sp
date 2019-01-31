@@ -19,6 +19,7 @@
 
 
 HTTPClient httpClient;
+JSONArray message_queue;
 
 char SERVER[37] = "",
      CLIENTS[MAXPLAYERS + 1][37],

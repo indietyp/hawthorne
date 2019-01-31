@@ -1,0 +1,17 @@
+html(lang='en')
+  head
+    title Hawthorne
+    meta(charset='utf-8')
+    meta(name='viewport', content='initial-scale=1.0, user-scalable=no')
+    meta(name='ROBOTS', content='NOODP')
+
+    include skeleton/meta/include.pug
+  body
+    .errorContainer
+      .section
+        - include "assets/mascot/"|add:creature|add:".svg"
+      .section
+        h1 500
+        h2 Internal Server Error
+        p It seems that something went horribly wrong! This probably should not have happened...
+        p Contact the system administrator and let him check /var/log/hawthorne/debug.log for more information.

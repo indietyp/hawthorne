@@ -1,0 +1,47 @@
+- load utils
+- load static
+
+tr(style="{%if data.resolved%}opacity:0.5;{%endif%}", data-id='{{data.id}}')
+  td(style='width:48px')
+    if data.resolved
+      label.checkmarkContainer
+        input(type='checkbox', data-trigger='[ct/toggle]')
+        span.checkmark
+      .checkboxDialogue.modalSelect
+        select
+          option Resolve
+        button
+          i.icon.ion-ios-checkmark
+          |  Confirm
+        button.paginationTabsDanger
+          i.icon.ion-ios-close
+          |  Cancel
+  td.unset
+    if data.is_banned
+      | Ban
+    elif data.is_muted
+      | Mute
+    elif data.is_gagged
+      | Gag
+  td= data.reason
+  td
+    if data.length
+      = data.length|duration
+    else
+      | Eternal
+  td
+    if data.server
+      a(href="javascript:void(0)", onclick="window.vc('servers[detailed]', '{{data.server.id}}')")
+        = data.server.name
+    else
+      | All
+  td
+    a(href="javascript:void(0)", onclick="window.vc('players[detailed]', '{{data.created_by.id}}')")
+      = data.created_by.namespace
+  td
+    if data.updated_by
+      a(href="javascript:void(0)", onclick="window.vc('players[detailed]', '{{data.updated_by.id}}')")
+        = data.updated_by.namespace
+    else
+      | N/A
+

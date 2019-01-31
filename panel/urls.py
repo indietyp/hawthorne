@@ -14,12 +14,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import include, path
+from interface.views import internal_server_error, page_not_found
 
 urlpatterns = [
-  path('admin/', admin.site.urls),
-  path('api/v1/', include('api.urls')),
-  path('ajax/v1/', include('ajax.urls')),
-  path('', include('interface.urls')),
-  path('external/', include('social_django.urls', namespace='social')),
+    path('admin/', admin.site.urls),
+    path('api/v1/', include('api.urls')),
+    path('ajax/v1/', include('ajax.urls')),
+    path('', include('interface.urls')),
+    path('external/', include('social_django.urls', namespace='social')),
 ]
+
+handler404 = page_not_found
+handler500 = internal_server_error

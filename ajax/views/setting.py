@@ -1,11 +1,15 @@
+import math
+
+from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import F
+from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 
-from django.db.models import Count, F
-from django.contrib.auth.models import Permission, Group
 from ajax.views import renderer
-from core.models import User, Token
+from core.models import Token
 
 
 def get_perms(o, user, *args, **kwargs):
@@ -23,37 +27,19 @@ def get_perms(o, user, *args, **kwargs):
 
 
 @login_required(login_url='/login')
-@permission_required('core.view_user')
+@permission_required('core.view_token')
 @require_http_methods(['POST'])
-def user(request, page, *args, **kwargs):
-  perms = Permission.objects.all().count()
+def tokens(request, *args, **kwargs):
+  current = request.POST.get("page", 1)
+  pages = math.ceil(Token.objects.filter(is_active=True).count() / settings.PAGE_SIZE)
 
-  obj = User.objects.filter(is_active=True)
-                    # .order_by('perms')
-                    # .annotate(perms=(Count('user_permissions') / perms) * 100)\
-
-  # print(obj[0].perms)
-  return renderer(request, 'partials/setting/user.pug', obj, page, execute=get_perms)
-
-
-@login_required(login_url='/login')
-@permission_required('core.view_group')
-@require_http_methods(['POST'])
-def group(request, page, *args, **kwargs):
-  perms = Permission.objects.all().count()
-  obj = Group.objects.all()\
-                     .annotate(perms=(Count('permissions') / perms) * 100)\
-                     .order_by('perms')
-  return renderer(request, 'partials/setting/group.pug', obj, page, execute=get_perms)
+  return render(request, 'components/settings/tokens/wrapper.pug', {'pages': pages,
+                                                                    'current': current})
 
 
 @login_required(login_url='/login')
 @permission_required('core.view_token')
 @require_http_methods(['POST'])
-def token(request, page, *args, **kwargs):
-  perms = Permission.objects.all().count()
-  obj = Token.objects.all()\
-                     .annotate(perms=(Count('permissions') / perms) * 100)\
-                     .order_by('perms')
-
-  return renderer(request, 'partials/setting/token.pug', obj, page)
+def tokens_entries(request, page, *args, **kwargs):
+  tokens = Token.objects.filter(is_active=True).order_by('created_at')
+  return renderer(request, 'components/settings/tokens/entry.pug', tokens, page)

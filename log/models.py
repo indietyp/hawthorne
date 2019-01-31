@@ -1,12 +1,11 @@
+from datetime import timedelta
 from django.db import models
 
-from core.models import User, BaseModel, Server
+from core.models import BaseModel, Server, User
 
 
 class ServerChat(BaseModel):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-  ip = models.GenericIPAddressField()
   server = models.ForeignKey(Server, on_delete=models.CASCADE)
   message = models.CharField(max_length=255)
 
@@ -22,6 +21,27 @@ class ServerChat(BaseModel):
 
   def __str__(self):
     return "{} - {}".format(self.user, self.server)
+
+
+class ServerScore(BaseModel):
+  team_name = models.CharField(max_length=255)
+  team_id = models.IntegerField()
+
+  score = models.IntegerField()
+
+
+class ServerDataPoint(BaseModel):
+  server = models.ForeignKey(Server, on_delete=models.CASCADE)
+
+  map = models.CharField(max_length=255, null=True)
+  uptime = models.DurationField(default=timedelta(seconds=0))
+
+  time_left = models.DurationField(null=True)
+
+  clients = models.ManyToManyField(User)
+  score = models.ManyToManyField(ServerScore)
+
+  is_online = models.BooleanField(default=True)
 
 
 class UserIP(BaseModel):
@@ -40,7 +60,7 @@ class UserIP(BaseModel):
     default_permissions = ()
 
 
-class UserOnlineTime(BaseModel):
+class UserConnection(BaseModel):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   server = models.ForeignKey(Server, on_delete=models.CASCADE)
 

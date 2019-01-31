@@ -1,68 +1,75 @@
-remove = (mode = '', that) ->
-  trans = $(that)
-
-  if not trans.hasClass 'confirmation'
-    trans.addClass 'explicit red confirmation'
-    return
-
+single = (mode = '', target) ->
   payload = {}
-  node = that.parentElement.parentElement.parentElement
+  options = {}
 
   switch mode
-    when 'admin__administrator'
-      user = $('input.uuid', node)[0].value
-      role = $('input.role', node)[0].value
+    when 'punishment'
+      uuid = target.getAttribute('data-id')
+      user = target.getAttribute('data-user')
+      endpoint = window.endpoint.api.users[user].punishments[uuid]
+
+    when 'admins[server][admins]'
+      uuid = target.getAttribute('data-id')
+      user = target.getAttribute('data-user')
+      endpoint = window.endpoint.api.users[user]
 
       payload =
-        role: role
+        roles: [uuid]
+        reset: false
 
+    when 'admins[server][roles]'
+      uuid = target.getAttribute('data-id')
+      endpoint = window.endpoint.api.roles[uuid]
+
+    when 'admins[web][admins]'
+      id = target.getAttribute('data-id')
+      user = target.getAttribute('data-user')
       endpoint = window.endpoint.api.users[user]
-    when 'admin__groups'
-      role = $('input.uuid', node)[0].value
 
-      endpoint = window.endpoint.api.roles[role]
-    when 'ban'
-      user = $('input.user', node)[0].value
-      server = $('input.server', node)[0].value
-      punishment = $('input.punishment', node)[0].value
+      payload =
+        reset: true
 
-      endpoint = window.endpoint.api.users[user].punishments[punishment]
-    when 'mutegag'
-      user = $('input.user', node)[0].value
-      punishment = $('input.punishment', node)[0].value
+    when 'admins[web][groups]'
+      id = target.getAttribute('data-id')
+      endpoint = window.endpoint.api.groups[id]
 
-      endpoint = window.endpoint.api.users[user].punishments[punishment]
-    when 'server'
-      node = that.parentElement.parentElement.parentElement.parentElement
-      server = $('input.uuid', node)[0].value
+    when 'servers[detailed]'
+      uuid = target.getAttribute('data-id')
+      endpoint = window.endpoint.api.servers[uuid]
 
-      endpoint = window.endpoint.api.servers[server]
-
-    when 'setting__user'
-      uuid = $('input.uuid', node)[0].value
-
-      endpoint = window.endpoint.api.users[uuid]
-
-    when 'setting__group'
-      uuid = $('input.uuid', node)[0].value
-
-      endpoint = window.endpoint.api.groups[uuid]
-
-    when 'setting__token'
-      token = $('input.uuid', node)[0].value
-
-      endpoint = window.endpoint.api.system.tokens[token]
-    else
-      console.warning 'mode not implemented'
-      return
-
-  options =
-    target: that
-    skip_animation: true
+    when 'system[token]'
+      uuid = target.getAttribute('data-id')
+      endpoint = window.endpoint.api.system.tokens[uuid]
 
   endpoint.delete(options, {}, payload, (err, data) ->
     if data.success
-      $(node).remove()
+      if target.hasAttribute('data-opacity')
+        uuid = target.getAttribute('data-id')
+        parent = $("[data-id='#{uuid}']").css('opacity', '0.5').removeClass('logSelected')
+        $('.checkboxDialogue', parent).fadeOut 'fast'
+        $('.checkmarkContainer', parent).css('visibility', 'hidden')
+
+      if target.hasAttribute('data-remove')
+        $(target).remove()
+
+      if target.hasAttribute('data-visibility')
+        $(target).css('visibility', 'hidden')
+
+      if target.hasAttribute('data-redirect')
+        window.vc()
+
+    return
+  )
+
+remove = (mode = '', target, batch = false) ->
+  if batch
+    targets = window.batch
+    window.batch = []
+  else
+    targets = [target]
+
+  targets.forEach((element) ->
+    single(mode, element)
   )
   return
 

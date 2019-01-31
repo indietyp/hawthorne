@@ -1,0 +1,36 @@
+- load static
+
+tr(data-id='{{data.role.id}}', data-user='{{data.user.id}}', data-remove)
+  td
+    if not data.is_superuser
+      label.checkmarkContainer
+        input(type='checkbox', data-trigger='[ct/toggle]')
+        span.checkmark
+      .checkboxDialogue.modalSelect
+        select
+          option(value='delete') Delete
+        button(data-trigger='[table/choice]', data-mode='admins[server][admins]')
+          i.icon.ion-ios-checkmark
+          |  Confirm
+        button.paginationTabsDanger
+          i.icon.ion-ios-close
+          |  Cancel
+  td(style='width:1px;height:30px')
+    if data.user.country
+      - with "flags/"|add:data.user.country.code|add:".svg" as url
+        img.country(src='{% static url %}')
+  td
+    a(href='javascript:void(0)', onclick="window.vc('players[detailed]', '{{data.user.id}}')")
+      = data.user.namespace
+  td
+    if data.is_superuser
+      = root
+    else
+      = data.role.name
+  td
+    if data.role.server
+      a(href='javascript:void(0)', onclick="window.vc('servers[detailed]', '{{data.role.server.id}}')")
+        = data.role.server.name
+    else
+      | All
+

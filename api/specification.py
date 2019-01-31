@@ -45,7 +45,7 @@ validation = {
                                     'permissions': {'type': 'list', 'schema': {'regex': '\w+\.\w+\_\w+'}, 'default': []}},
                      'permission': ['core.change_user']},
             'DELETE': {'parameters': {'purge': {'type': 'boolean', 'default': False, 'required': False},
-                                      'reset': {'type': 'boolean', 'default': True, 'required': False},
+                                      'reset': {'type': 'boolean', 'default': False, 'required': False},
                                       'role': {'type': 'uuid', 'default': None, 'nullable': True, 'required': False},
 
                                       'roles': {'type': 'list', 'default': [], 'schema': {'type': 'uuid'}},
@@ -77,6 +77,7 @@ validation = {
                                     'resolved': {'type': 'boolean', 'nullable': True, 'default': None},
                                     'reason': {'type': 'string', 'nullable': True, 'default': None},
                                     'length': {'type': 'integer', 'nullable': True, 'default': None},
+                                    'plugin': {'type': 'boolean', 'default': True},
                                     'banned': {'type': 'boolean', 'nullable': True, 'default': None},
                                     'kicked': {'type': 'boolean', 'nullable': True, 'default': None},
                                     'muted': {'type': 'boolean', 'nullable': True, 'default': None},
@@ -119,7 +120,7 @@ validation = {
                                    'immunity': {'type': 'integer', 'required': True, 'min': 0, 'max': 100},
                                    'server': {'type': 'uuid', 'default': None, 'nullable': True},
                                    'usetime': {'type': 'integer', 'default': None, 'nullable': True, 'min': 0},
-                                   'flags': {'type': 'string', 'default': None, 'nullable': True, 'regex': r'[A-N]+'},
+                                   'flags': {'type': 'string', 'default': None, 'nullable': True, 'regex': r'[A-T]+'},
                                    'members': {'type': 'list', 'default': [], 'schema': {'type': 'uuid'}}},
                     'permission': ['core.add_role']}
         },
@@ -131,7 +132,7 @@ validation = {
                                                  'max': 100},
                                     'usetime': {'type': 'integer', 'default': None, 'nullable': True, 'min': -1},
                                     'server': {'type': 'uuid', 'default': None, 'nullable': True},
-                                    'flags': {'type': 'string', 'default': None, 'nullable': True, 'regex': r'[A-N]+'},
+                                    'flags': {'type': 'string', 'default': None, 'nullable': True, 'regex': r'[A-T]+'},
                                     'members': {'type': 'list', 'default': [], 'schema': {'type': 'uuid'}}},
                      'permission': ['core.change_role']},
             'DELETE': {'parameters': {},
@@ -150,7 +151,7 @@ validation = {
             'PUT': {'parameters': {'name': {'type': 'string', 'required': True},
                                    'ip': {'type': 'ip', 'required': True},
                                    'verify': {'type': 'boolean', 'default': True},
-                                   'port': {'type': 'integer', 'required': True, 'min': 0, 'max': 65535},
+                                   'port': {'type': 'integer', 'required': True, 'min': 0, 'max': 65535, 'default': 27015},
                                    'password': {'type': 'string', 'required': True},
                                    'game': {'type': 'string', 'required': True},
                                    'mode': {'type': 'string', 'required': False}},
@@ -165,7 +166,7 @@ validation = {
                                     'port': {'type': 'integer', 'nullable': True, 'default': None, 'min': 0,
                                              'max': 65535},
                                     'password': {'type': 'string', 'nullable': True, 'default': None},
-                                    'game': {'type': 'string', 'nullable': True, 'default': None},
+                                    'game': {'type': 'string', 'nullable': True, 'default': None, 'allowed': ['csgo', 'tf2']},
                                     'gamemode': {'type': 'string', 'nullable': True, 'default': None}},
                      'permission': ['core.change_server']},
             'DELETE': {'parameters': {},
@@ -182,11 +183,15 @@ validation = {
                                    'limit': {'type': 'integer', 'min': -1, 'default': -1},
                                    'match': {'type': 'string', 'default': ''}},
                     'permission': ['log.view_chat']},
-            'PUT': {'parameters': {'user': {'type': 'uuid', 'required': True},
-                                   'server': {'type': 'uuid', 'required': True},
-                                   'ip': {'type': 'ip', 'required': True},
-                                   'message': {'type': 'string', 'required': True},
-                                   'command': {'type': 'boolean', 'default': None, 'nullable': True}},
+            'PUT': {'parameters': {'messages': {'type': 'list', 'schema':
+                                    {'type': 'dict', 'schema': {
+                                      'user': {'type': 'uuid', 'required': True},
+                                      'server': {'type': 'uuid', 'required': True},
+                                      'message': {'type': 'string', 'required': True},
+                                      'command': {'type': 'boolean', 'default': None, 'nullable': True}
+                                      }
+                                    }
+                                  }},
                     'permission': ['log.add_serverchat']}
         },
         'token': {
@@ -245,3 +250,7 @@ validation = {
         }
     },
 }
+
+if __name__ == '__main__':
+  import ruamel.yaml as yaml
+  print(yaml.dump(validation, default_flow_style=False))

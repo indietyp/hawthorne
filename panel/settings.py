@@ -11,10 +11,10 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import pypugjs.ext.django
 
 from panel.defaults import *
 from panel.local import *
-import pypugjs.ext.django
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -38,20 +38,22 @@ INSTALLED_APPS = [
     'log',
     'ajax',
     'core',
-    'interface'
+    'interface',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'core.middleware.LanguageMiddleware',
+    'core.middleware.TokenMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'automated_logging.middleware.AutomatedLoggingMiddleware'
+    'automated_logging.middleware.AutomatedLoggingMiddleware',
+    'django_cprofile_middleware.middleware.ProfilerMiddleware'
 ]
 
 LOCALE_PATHS = [
@@ -74,7 +76,10 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'core.context_processors.ajax.ajax_processor',
                 'core.context_processors.utils.favicons',
+                'core.context_processors.utils.role',
                 'core.context_processors.utils.announcement',
+                'core.context_processors.utils.globals',
+                'core.context_processors.utils.path',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
             ],
@@ -149,20 +154,24 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en'
 
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 STATIC_URL = '/static/'
-PAGE_SIZE = 16
 
 AUTOMATED_LOGGING = {
     'exclude': {'model': ['automated_logging', 'Session', 'basehttp', 'django.server']}
 }
 
 MAINFRAME = "hawthornepanel.org"
+
+CELERY_BROKER_URL = "redis://{}/2".format(REDISCACHE)
+CELERY_BEAT_SCHEDULE = {
+    'rcon-server': {
+        'task': 'core.tasks.rcon.wrapper',
+        'schedule': RCON_TASK_SCHEDULE,
+    }
+}

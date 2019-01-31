@@ -50,6 +50,25 @@ public Action Event_PlayerSpawn(Event event, const char[] name, bool dontBroadca
 public void OnAllPluginsLoaded() {
   hextags = LibraryExists("hextags");
   smac = LibraryExists("smac");
+
+  // create compatibility with other plugins by registering if no other register is present
+  if (!CommandExists("sm_ban"))
+    RegAdminCmd("sm_ban", CLINoActionCommand, ADMFLAG_BAN);
+
+  if (!CommandExists("sm_mute"))
+    RegAdminCmd("sm_mute", CLINoActionCommand, ADMFLAG_CHAT);
+  if (!CommandExists("sm_unmute"))
+    RegAdminCmd("sm_unmute", CLINoActionCommand, ADMFLAG_CHAT);
+
+  if (!CommandExists("sm_gag"))
+    RegAdminCmd("sm_gag", CLINoActionCommand, ADMFLAG_CHAT);
+  if (!CommandExists("sm_ungag"))
+    RegAdminCmd("sm_ungag", CLINoActionCommand, ADMFLAG_CHAT);
+
+  if (!CommandExists("sm_silence"))
+    RegAdminCmd("sm_silence", CLINoActionCommand, ADMFLAG_CHAT);
+  if (!CommandExists("sm_unsilence"))
+    RegAdminCmd("sm_unsilence", CLINoActionCommand, ADMFLAG_CHAT);
 }
 
 public Action SMAC_OnCheatDetected(int client, const char[] module, DetectionType type, Handle info) {

@@ -10,10 +10,12 @@ class Normalize:
     if isinstance(v, str):
       return int(v)
 
-  def __2s(self, v):
+    if isinstance(v, float):
+      return int(v)
 
+  def __2s(self, v):
     if isinstance(v, list):
-      v = ','.join(v)
+      v = ''.join(v)
     return v
 
   def __2l(self, v):

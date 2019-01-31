@@ -3,6 +3,7 @@
 import socket
 
 import valve.rcon
+
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
@@ -102,6 +103,9 @@ def detailed(request, validated={}, s=None, *args, **kwargs):
 
     if validated['port'] is not None:
       server.port = validated['port']
+
+    if validated['game'] is not None:
+      server.game = validated['game']
 
     if validated['gamemode'] is not None:
       server.gamemode = validated['gamemode']

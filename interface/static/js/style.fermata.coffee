@@ -9,34 +9,21 @@ fermata.registerPlugin 'hawpi', (transport, base) ->
     request.data = JSON.stringify(request.data)
 
     transport request, (err, response) ->
-      if !err
-        if response.status.toFixed()[0] != '2'
+      if not err
+        if response.status.toFixed()[0] is not '2'
           err = Error('Bad status code from server: ' + response.status)
         try
           response = JSON.parse(response.data)
         catch e
           err = e
 
-      target = request.options.target
-      skip = request.options.skip_animation
-      if target
-        if !err and not skip
-          window.style.submit.state(target, true)
-
-        if err and not skip
-          window.style.submit.state(target, false)
-
-        if err or not response.success
-          window.style.card(true, response.reason)
+      if request.options.toast
+        if err
+          window.style.toast 'error', err
+        else if not response.success
+          window.style.toast 'error', response.reason
+        else
+          window.style.toast 'success', 'Successfully applied changes!'
 
       callback err, response
-
-      if request.options.target
-        setTimeout(->
-          window.style.submit.clear(target)
-
-          if err
-            window.style.card(false)
-        , 2400)
-
       return

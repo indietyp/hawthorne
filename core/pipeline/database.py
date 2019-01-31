@@ -1,5 +1,3 @@
-import re
-
 from core.models import Country
 
 
@@ -16,8 +14,10 @@ def populate(strategy, details, backend, user=None, *args, **kwargs):
         user.last_name = information['realname'][-1][:150]
 
     user.namespace = information['personaname']
-    if 'loccountrycode' in information and information['loccountrycode']:
-      user.country = Country.objects.get_or_create(code=information['loccountrycode'])[0]
+
+    # switch to IP based country when not present yet
+    if 'loccountrycode' in information and information['loccountrycode'] and not user.country:
+      user.country = Country.objects.get_or_create(code=information['loccountrycode'].lower())[0]
 
     user.avatar = information['avatar']
     user.profile = information['profileurl']

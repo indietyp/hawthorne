@@ -1,21 +1,28 @@
 from django.contrib.auth import views as auth_views
 from django.urls import path
 
-from . import views
+from interface import views
+
 
 urlpatterns = [
     path('', views.home),
-    path('bans', views.ban),
-    path('chat', views.chat),
-    path('admins', views.admin),
-    path('servers', views.server),
-    path('players', views.player),
-    path('mutegags', views.mutegag),
-    path('settings', views.settings),
-    path('announcements', views.announcement),
 
-    path('setup/<uuid:u>', views.setup),
-    path('login', views.login),
+    path('servers', views.server),
+    path('servers/<slug:s>', views.server_detailed),
+
+    path('admins/servers', views.admins_servers),
+    path('admins/web', views.admins_web),
+
+    path('punishments/bans', views.punishments, name="interface[punishments][ban]"),
+    path('punishments/mutes', views.punishments, name="interface[punishments][mutes]"),
+    path('punishments/gags', views.punishments, name="interface[punishments][gags]"),
+
+    path('players', views.player),
+    path('players/<uuid:u>', views.player_detailed),
+
+    # path('announcements', views.announcement),
+    path('settings', views.settings),
+
     path('logout', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
-    path('internal/login', auth_views.LoginView.as_view(redirect_authenticated_user=True, template_name='skeleton/login.pug')),
+    path('login', auth_views.LoginView.as_view(template_name='skeleton/login.pug', redirect_authenticated_user=True), name='login'),
 ]

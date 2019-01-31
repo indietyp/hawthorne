@@ -109,3 +109,6 @@ mainframe.ini
 *.plist
 *.rdb
 .idea/
+
+todo
+celerybeat-schedule.db

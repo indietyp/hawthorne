@@ -1,0 +1,126 @@
+- extends ajax|yesno:'skeleton/wrappers/ajax.pug,skeleton/main.pug'
+- load i18n
+- load staticfiles
+
+- block content
+  .modal(data-component="[modal/usernames]")
+    h1
+      = data.namespace
+      |  – Usernames
+    .close(data-trigger="[modal/close]")
+      i.icon.ion-ios-close
+    table
+      thead
+        tr
+          th Username
+          th Connections
+          th Last Used
+          th First Used
+      tbody
+
+  .modal(data-component="[modal/ips]")
+    h1
+      = data.namespace
+      |  – IPs
+    .close(data-trigger="[modal/close]")
+      i.icon.ion-ios-close
+    table
+      thead
+        tr
+          th IP
+          th Connections
+          th Last Used
+          th First Used
+      tbody
+
+  .modal(data-component="[modal/roles]")
+    h1
+      = data.namespace
+      |  – Roles
+    .close(data-trigger="[modal/close]")
+      i.icon.ion-ios-close
+    table
+      thead
+        tr
+          th Role
+          th Assigned At
+      tbody
+
+  .modal.modalDynamic(data-component='[modal/punishment]')
+    h1 Punishment – New
+    .close(data-trigger='[modal/close]')
+      i.icon.ion-ios-close
+    .modalContent
+      form(data-trigger='[modal/form]', data-action='create', data-mode='players[detailed][punishment]')
+        input.hidden.target(value=data.id)
+        b.mtop.mbotSmall
+          i.icon.ion-ios-person(style='margin-right:10px')
+          |  Punishment Details
+        .section.group.radioContainer
+          input.hidden#ban(type='radio', name='type', data-boolean='banned', required)
+          label.first(for='ban') Ban
+          input.hidden#mute(type='radio', name='type', data-boolean='muted', required)
+          label(for='mute') Mute
+          input.hidden#gag(type='radio', name='type', data-boolean='gagged', required)
+          label.last(for='gag') Gag
+        .section.group.modalSelect
+          ._Dynamic_Select
+            ._Dynamic_Layer
+            ._Title(data-trigger='[composer/select/open]') Choose a Server (optional)
+            input._Value.hidden(name='server')
+            ._Select
+              ._Select_Search
+                input.skip(type='text', placeholder='Type to search...', data-trigger='[composer/select/search]')
+              ._STitle Results
+              ._Container
+                - for server in servers
+                  li(data-trigger='[composer/select/choose]', data-value=server.id)
+                    p= server.name
+        .section.group.inputGroup
+          input.smallInput(name='reason', type='text', required, placeholder=' ')
+          span
+            | Reason
+            span.invalid
+
+        b.mtop.mbotSmall
+          i.icon.ion-ios-person(style='margin-right:10px')
+          |  Punishment Length (optional)
+        .section.divider
+          .group.inputGroup
+            input.smallInput(name='duration', type='text', data-trigger='[input/duration]', placeholder=' ', data-link='duration', data-transform='iso-duration', data-name='length')
+            span
+              | Length
+              span.invalid
+            .tooltip_container
+              .tooltip.left Valid is the duration format described in <a style='color:green' href='https://tools.ietf.org/html/rfc3339#page-13', target='_blank'>RFC 3339, Page 13</a> as is the order. The P will be inserted automatically.
+              i.icon.ion-ios-information-circle-outline
+          .or or
+          .group.inputGroup
+            .flatpickr
+              input(name='date', placeholder='Select a Date', data-link='duration', data-input, data-transform='flatpickr', data-name='length')
+              .input-button(title='clear', data-clear)
+                i.icon.ion-ios-close
+            script.execute flatpickr('.flatpickr', {enableTime: true,dateFormat: "Y-m-d H:i",minDate: new Date(),wrap:true});
+
+        input.skip.unset(type="submit", value='Save')
+
+  ul.paginationTabs(data-target='players[detailed]')
+    li(data-trigger="[ct/switch]", data="overview") Overview
+    li(data-trigger="[ct/switch]", data="punishments") Punishments
+    li(data-trigger="[ct/switch]", data="actions") Actions
+    li(data-trigger="[ct/switch]", data="logs") Chat Log
+    li.fRight.paginationTabsDanger(data-trigger='[modal/open]', data-trigger-target='[modal/punishment]', style="margin-left: 12px")
+      i.icon.ion-ios-warning(style="margin-right:5px")
+      | Punish User
+    li.fRight.paginationTabsHarmless(data-trigger="[ct/switch]", data="ct4")
+      i.icon.ion-ios-archive(style="margin-right:5px")
+      | Export for GDPR
+
+  script.execute.
+    window.slug = "{{data.id}}"
+    window.lazy('players[detailed]', 'overview')
+    window.modal('players[detailed][ips]', '[modal/ips]')
+    window.modal('players[detailed][roles]', '[modal/roles]')
+    window.modal('players[detailed][usernames]', '[modal/usernames]')
+    window._.menu()
+    window._.init()

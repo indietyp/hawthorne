@@ -1,0 +1,40 @@
+- load utils
+- load static
+
+tr(style="{%if not data.is_active%}opacity:0.5;{%endif%}", data-id='{{data.id}}', data-remove)
+  td(style='width:48px')
+    - if data.owner == request.user
+      label.checkmarkContainer
+        input(type='checkbox', data-trigger='[ct/toggle]')
+        span.checkmark
+      .checkboxDialogue.modalSelect
+        select
+          //- maybe make this option dependent on the owner? immunity?
+          option(value='delete') Delete
+        button(data-trigger='[table/choice]', data-mode='system[token]')
+          i.icon.ion-ios-checkmark
+          |  Confirm
+        button.paginationTabsDanger
+          i.icon.ion-ios-close
+          |  Cancel
+  td.unset
+    if request.user == data.owner
+      a(href="javascript:void(0)", data-trigger="[clip/copy]", data-clipboard-text="{{data.id}}")
+        = data.id
+        i.fa.fa-copy(style="margin-left:5px")
+    else
+      = data.id|mask
+  td
+    if data.owner.is_steam
+      a(href="javascript:void(0)", onclick="window.vc('players[detailed]', '{{data.owner.id}}')")
+        = data.owner.namespace
+    else
+      = data.owner.username
+  td
+    if data.due
+      = data.due|date:"DATETIME_FORMAT"
+    else
+      | Never
+  td
+    = data|permission_percentage
+    |%

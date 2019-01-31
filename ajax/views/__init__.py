@@ -2,8 +2,8 @@ import os
 
 from django.http import HttpResponse
 from django.shortcuts import render
-from multiprocessing import Pool, cpu_count
 from functools import partial
+from multiprocessing import Pool, cpu_count
 
 from panel.settings import PAGE_SIZE
 
@@ -43,26 +43,35 @@ def wrapper(target, func=None, *args, **kwargs):
   try:
     target.executed = func(target, *args, **kwargs)
   except Exception as e:
-    print(e)
-    target.executed = []
+    target.executed = {}
     target.exception = e
 
   return target
 
 
-def renderer(request, template, obj, page, extra=[], execute=None):
-  data = obj[(page - 1) * PAGE_SIZE:page * PAGE_SIZE]
+def renderer(request, template, obj, page,
+             extra=[], size=PAGE_SIZE, execute=None, overwrite=False,
+             payload={}):
+  data = obj[(page - 1) * size:page * size]
   data = list(data)
 
   if execute and callable(execute):
-    with Pool(cpu_count()) as p:
-      target = partial(wrapper, func=execute, user=request.user)
-      data = p.map(target, data)
+    for k in range(len(data)):
+      try:
+        data[k].executed = execute(data[k], user=request.user)
+      except Exception as e:
+        data[k].executed = {}
+        data[k].exception = e
 
   if page == 1:
     data.extend(extra)
 
   if len(data) > 0:
-    return render(request, 'skeleton/pagination.pug', {'data': data, 'template': template})
+    if overwrite:
+      return render(request, template, {'data': data, **payload})
+
+    return render(request, 'skeleton/wrappers/pagination.pug', {'data': data,
+                                                                'template': template,
+                                                                **payload})
   else:
     return HttpResponse('', status=416)

@@ -47,7 +47,7 @@ public Plugin myinfo = {
   name = "hawthorne",
   author = "indietyp",
   description = "Admin plugin for the integration into the hawthorne gameserver panel, for managing multiple servers from an web interface.",
-  version = "0.8.3",
+  version = "0.9.0",
   url = "hawthornepanel.org"
 };
 
@@ -103,17 +103,18 @@ public void OnConfigsExecuted() {
   GetConVarString(APITOKEN, token, sizeof(token));
   StrCat(endpoint, sizeof(endpoint), "/api/v1");
 
-  LogMessage("Configured Endpoint:");
-  LogMessage(endpoint);
+  LogMessage("Configured Endpoint: %s", endpoint);
 
   httpClient = new HTTPClient(endpoint);
   httpClient.SetHeader("X-TOKEN", token);
+  httpClient.FollowLocation = true;
 
+  message_queue = new JSONArray();
   GetServerUUID();
 }
 
 bool IsSpectator(int client) {
-  if(GetClientTeam(client) == 2 || GetClientTeam(client) == 3)
+  if (GetClientTeam(client) == 2 || GetClientTeam(client) == 3)
     return false;
   else
     return true;
@@ -124,6 +125,11 @@ public void APINoResponseCall(HTTPResponse response, any value) {
 }
 
 bool APIValidator(HTTPResponse response) {
+  if (response == INVALID_HANDLE) {
+    LogError("[HT] API ERROR (HTTP Handle invalid)");
+    return false;
+  }
+
   if (response.Status != HTTPStatus_OK) {
     LogError("[HT] API ERROR (request did not return 200 OK, but %d)", response.Status);
     return false;
@@ -141,4 +147,8 @@ bool APIValidator(HTTPResponse response) {
   }
 
   return true;
+}
+
+Action CLINoActionCommand(int client, int args) {
+  return Plugin_Continue;
 }

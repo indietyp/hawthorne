@@ -1,31 +1,36 @@
-#if defined _bellwether_included
+#if defined _hawthorne_included
  #endinput
 #endif
-#define _bellwether_included
+#define _hawthorne_included
 
 /**
 * Returns current server ID from API
 *
 * @return char				server ID
 */
-native void Bellwether_GetServerID(char[] buffer, int maxlength);
+native void Hawthorne_GetServerID(char[] buffer, int maxlength);
 
 /**
 * Returns clients ID from API
 *
 * @return char				clients ID
 */
-native void Bellwether_GetClientID(char[] buffer, int maxlength, int client);
+native void Hawthorne_GetClientID(char[] buffer, int maxlength, int client);
 
 
 /**
 * Called when clientID is received
 *
 */
-forward void Bellwether_OnClientIDReceived(int client, int clientID);
+forward void Hawthorne_OnClientIDReceived(int client, int clientID);
 
 
-public void __pl_bellwether__SetNTVOptional() {
-	MarkNativeAsOptional("Bellwether_GetServerID");
-	MarkNativeAsOptional("Bellwether_GetClientID");
+public void __pl_Hawthorne__SetNTVOptional() {
+	MarkNativeAsOptional("Hawthorne_GetServerID");
+	MarkNativeAsOptional("Hawthorne_GetClientID");
 }
+
+// ADD: Hawthorne_AddPunishment
+// ADD: Hawthorne_ModifyPunishment
+// ADD: Hawthorne_DeletePunishment
+// ADD: Hawthorne_GetPunishments

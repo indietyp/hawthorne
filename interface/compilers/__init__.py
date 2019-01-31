@@ -1,10 +1,13 @@
 import os
-from static_precompiler import exceptions, utils, url_converter
+import posixpath
+import re
+
+from static_precompiler import exceptions, url_converter, utils
 from static_precompiler.compilers import base, less
 
 __all__ = (
-  "CoyoteCompiler",
-  "ImprovedLESS"
+    "CoyoteCompiler",
+    "ImprovedLESS"
 )
 
 
@@ -13,28 +16,22 @@ class CoyoteCompiler(base.BaseCompiler):
   input_extension = "coffee"
   output_extension = "js"
 
+  supports_dependencies = True
+
+  REQUIRE_RE = r'#=\srequire\s(.+)'
+
   def __init__(self, executable="coyote", compress=False):
     self.executable = executable
     self.compress = compress
 
     super(CoyoteCompiler, self).__init__()
 
-  def should_compile(self, source_path, from_management=False):
-    # if settings.DEBUG:
-    #   return True
-
-    return super(CoyoteCompiler, self).should_compile(source_path, from_management)
-
   def compile_file(self, source_path):
     full_output_path = self.get_full_output_path(source_path)
-    args = [
-      self.executable,
-    ]
-    if self.compress:
-      args.append("-c")
+    args = [self.executable]
 
     args.append(
-      "{}:{}".format(self.get_full_source_path(source_path), full_output_path)
+        "{}:{}".format(self.get_full_source_path(source_path), full_output_path)
     )
 
     return_code, out, errors = utils.run_command(args)
@@ -42,8 +39,37 @@ class CoyoteCompiler(base.BaseCompiler):
     if return_code:
       raise exceptions.StaticCompilationError(errors)
 
-    print("Hi")
+    if self.compress:
+      args = ['google-closure-compiler',
+              '--compilation_level=SIMPLE',
+              '--js=' + full_output_path,
+              '--create_source_map=' + full_output_path + '.map',
+              '--assume_function_wrapper']
+
+      return_code, out, errors = utils.run_command(args)
+
+      with open(full_output_path, 'w') as file:
+        file.write(out)
+
     return self.get_output_path(source_path)
+
+  def locate_imported_file(self, source_dir, import_path):
+    return posixpath.normpath(posixpath.join(source_dir, import_path))
+
+  def find_requirements(self, source):
+    imports = re.findall(self.REQUIRE_RE, source)
+
+    return imports
+
+  def find_dependencies(self, source_path):
+    source = self.get_source(source_path)
+    source_dir = posixpath.dirname(source_path)
+    dependencies = set()
+    for import_path in self.find_requirements(source):
+      import_path = self.locate_imported_file(source_dir, import_path)
+      dependencies.add(import_path)
+      dependencies.update(self.find_dependencies(import_path))
+    return sorted(dependencies)
 
   def compile_source(self, source):
     raise exceptions.StaticCompilationError("This is currently not supported")

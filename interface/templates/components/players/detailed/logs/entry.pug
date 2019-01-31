@@ -1,0 +1,11 @@
+tr
+  td.center= data.created_at|date:"SHORT_DATETIME_FORMAT"
+  td.unset
+    a(href="javascript:void(0)", onclick="window.vc('servers[detailed]', '{{data.server.id}}')")
+      = data.server
+  td(style='width:50%')
+    //- b
+    //- we don't want to be too bold :wink:
+    = data.message
+  td
+    //- i.icon.ion-ios-warning(title='Critical Error')

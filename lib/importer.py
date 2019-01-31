@@ -1,12 +1,13 @@
-from MySQLdb import connect
-import valve
-from valve.steam.id import SteamID
-from django.utils import timezone
-import socket
 import datetime
-from core.models import Server, Role, ServerPermission, User, Membership, Punishment
+import socket
+import valve
+
+from MySQLdb import connect
 from core.lib.steam import populate
+from core.models import Membership, Punishment, Role, Server, ServerPermission, User
+from django.utils import timezone
 from lib.base import RCONBase
+from valve.steam.id import SteamID
 
 
 class Importer:
@@ -106,16 +107,19 @@ class Importer:
     for raw in result:
       if raw['enabled'] != 1:
         continue
+
       server, _ = Server.objects.get_or_create(ip=raw['ip'], port=raw['port'])
       server.password = raw['rcon']
       server.name = "{}:{}".format(raw['ip'], raw['port'])
+      server.save()
 
-      servers[raw['sid']] = server
       try:
         conn = RCONBase(server, timeout=3)
         conn.connect()
         conn.authenticate(timeout=3)
         conn.close()
+
+        servers[raw['sid']] = server
       except (valve.rcon.RCONTimeoutError,
               valve.rcon.RCONAuthenticationError,
               ConnectionError,
@@ -125,8 +129,6 @@ class Importer:
         server.delete()
         print("Warning: Could not connect to server {}:{} ({})".format(raw['ip'], raw['port'], e))
         continue
-
-      server.save()
 
     # get groups
     self.conn.query("""SELECT * FROM sb_srvgroups""")
@@ -236,7 +238,7 @@ class Importer:
         continue
 
       m.created_at = timezone.make_aware(datetime.datetime.fromtimestamp(raw['created']))
-      b.reason = raw['reason']
+      b.reason = raw['reason'][:255]
       b.length = datetime.timedelta(seconds=raw['length']) if raw['length'] > 0 and raw['length'] < 31540000 else None
       b.resolved = False
       if raw['created'] + raw['length'] < self.now.timestamp() and raw['length'] > 0:
@@ -285,7 +287,7 @@ class Importer:
         continue
 
       m.created_at = timezone.make_aware(datetime.datetime.fromtimestamp(raw['created']))
-      m.reason = raw['reason']
+      m.reason = raw['reason'][:255]
       m.length = datetime.timedelta(seconds=raw['length']) if raw['length'] > 0 and raw['length'] < 31540000 else None
       m.is_muted = True if raw['type'] == 1 else False
       m.is_gagged = True if raw['type'] == 2 else False
@@ -385,10 +387,10 @@ class Importer:
 
       m = Punishment()
       m.user = users[raw["pid"]]
-      m.server = servers[raw['sid']] if raw['sid'] != 0 else None
+      m.server = servers[raw['sid']] if raw['sid'] != 0 and raw['sid'] in servers else None
       m.created_by = users[raw['aid']]
       m.created_at = timezone.make_aware(datetime.datetime.fromtimestamp(raw['time']))
-      m.reason = raw['reason']
+      m.reason = raw['reason'][:255]
       m.length = datetime.timedelta(seconds=raw['length'] * 60) if raw['length'] > 0 else None
       m.is_muted = True if raw['type'] == 1 else False
       m.is_gagged = True if raw['type'] == 2 else False
@@ -412,10 +414,10 @@ class Importer:
       b = Punishment()
       b.is_banned = True
       b.user = users[raw["pid"]]
-      b.server = servers[raw['sid']] if raw['sid'] != 0 else None
+      b.server = servers[raw['sid']] if raw['sid'] != 0 and raw['sid'] in servers else None
       b.created_by = users[raw['aid']]
       m.created_at = timezone.make_aware(datetime.datetime.fromtimestamp(raw['time']))
-      b.reason = raw['reason']
+      b.reason = raw['reason'][:255]
       b.length = datetime.timedelta(seconds=raw['length']) if raw['length'] > 0 else None
       b.resolved = False
       if raw['time'] + raw['length'] < self.now.timestamp() and raw['length'] > 0:

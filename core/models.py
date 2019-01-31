@@ -5,7 +5,7 @@ from django.db import models
 
 
 class BaseModel(models.Model):
-  id = models.UUIDField(primary_key=True, auto_created=True, default=uuid.uuid4, editable=False, unique=True)
+  id = models.UUIDField(db_index=True, primary_key=True, auto_created=True, default=uuid.uuid4, editable=False, unique=True)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
@@ -52,7 +52,7 @@ class Mainframe(BaseModel):
 
   class Meta:
     permissions = [
-        ('view_mainframe', 'Can check mainframe'),
+        # ('view_mainframe', 'Can check mainframe'),
     ]
 
 
@@ -72,7 +72,7 @@ class Country(BaseModel):
 
 
 class User(AbstractUser):
-  id = models.UUIDField(primary_key=True, auto_created=True, default=uuid.uuid4, editable=False, unique=True)
+  id = models.UUIDField(db_index=True, primary_key=True, auto_created=True, default=uuid.uuid4, editable=False, unique=True)
   namespace = models.CharField(max_length=255, null=True)
 
   online = models.BooleanField(default=False)
@@ -84,6 +84,7 @@ class User(AbstractUser):
   profile = models.URLField(null=True)
 
   is_steam = models.BooleanField(default=True)
+  is_active = models.BooleanField(default=False)
 
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
@@ -92,10 +93,9 @@ class User(AbstractUser):
 
   class Meta:
     permissions = [
-        ('view_user', 'Can view user'),
+        # ('view_user', 'Can view user'),
         ('kick_user', 'Can kick user'),
-        ('verify_user', 'Can verify user'),
-        ('view_group', 'Can view user group'),
+        # ('view_group', 'Can view user group'),
 
         ('view_settings', 'Can view settings'),
         ('view_capabilities', 'Can check capabilities'),
@@ -120,7 +120,7 @@ class Token(BaseModel):
     verbose_name_plural = 'tokens'
 
     permissions = [
-        ('view_token', 'Can view token'),
+        # ('view_token', 'Can view token'),
     ]
 
   def has_perm(self, perm, obj=None):
@@ -131,8 +131,7 @@ class Token(BaseModel):
 
     try:
       self.permissions.get(codename=perm[-1], content_type__app_label=perm[0])
-    except Exception as e:
-      print(e)
+    except Exception:
       return False
 
     return True
@@ -213,7 +212,7 @@ class Role(BaseModel):
     verbose_name = 'server role'
     verbose_name_plural = 'server roles'
     permissions = [
-      ('view_role', 'Can view server role'),
+      # ('view_role', 'Can view server role'),
     ]
 
   def __str__(self):
@@ -234,13 +233,17 @@ class Server(BaseModel):
   )
   game = models.CharField(max_length=255, choices=SUPPORTED)
   mode = models.CharField(max_length=255, null=True)
+
   vac = models.BooleanField(default=True)
+  protected = models.BooleanField(default=False)
+
+  max_clients = models.IntegerField(default=0)
 
   class Meta:
     unique_together = (('ip', 'port'),)
 
     permissions = [
-      ('view_server', 'Can view server'),
+      # ('view_server', 'Can view server'),
       ('execute_server', 'Can execute command'),
     ]
 
@@ -265,9 +268,7 @@ class Punishment(BaseModel):
   updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='punishment_updated_by', null=True)
 
   class Meta:
-    permissions = [
-      ('view_punishment', 'Can view punishments'),
-    ]
+    permissions = []
 
   def __str__(self):
     return "{} - {}".format(self.user, self.server)

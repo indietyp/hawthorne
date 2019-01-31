@@ -1,0 +1,12 @@
+- load static
+
+for item in data
+  tr
+    td(style="width:1px;height:30px")
+      if item.user.country
+        - with "flags/"|add:item.user.country.code|add:".svg" as url
+          img.country(src='{% static url %}')
+    td
+      a(href='javascript:void(0)', onclick="window.vc('players[detailed]', '{{item.user.id}}')")
+        = item.user.namespace
+    td= item.role.name

@@ -1,0 +1,10 @@
+tr
+  td= data.created_at|date:"SHORT_DATETIME_FORMAT"
+  td.unset
+    if data.action == 1
+      | added
+    elif data.action == 2
+      | changed
+    elif data.action == 3
+      | deleted
+    =  data.information.value

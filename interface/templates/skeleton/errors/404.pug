@@ -1,0 +1,17 @@
+html(lang='en')
+  head
+    title Hawthorne
+    meta(charset='utf-8')
+    meta(name='viewport', content='initial-scale=1.0, user-scalable=no')
+    meta(name='ROBOTS', content='NOODP')
+
+    include skeleton/meta/include.pug
+  body
+    .errorContainer
+      .section
+        - include "assets/mascot/"|add:creature|add:".svg"
+      .section
+        h1 404
+        h2 Page not found
+        p Our highly trained staff of first class unidentifiable creatures searched through all of space and time, but couldn't find the page you were looking for.
+        p Please make sure you have spelled the URL correctly.

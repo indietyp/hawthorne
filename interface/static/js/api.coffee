@@ -2,134 +2,117 @@
 #= require api.edit.coffee
 #= require api.create.coffee
 
-game = (that = null, selected = '') ->
-  window.endpoint.api.capabilities.games.get((err, data) ->
-    data = data.result
+validation = (el) ->
+  validated = true
+  reason = ''
+  if not el.value
+    return [validated, reason]
+
+  if el.hasAttribute 'data-link'
+    link = el.getAttribute 'data-link'
+    form = $(el).parent 'form'
+    reason = 'Only one field can be filled.'
+
+    $("[data-link=#{link}]", form).not([el]).forEach (e) ->
+      if e.value
+        validated = false
+
+  if not validated
+    window.style.toast('error', 'Invalid value detected!')
+
+  return [validated, reason]
 
 
-    if that != null
-      formatted = []
-      for ele in data
-        fmt =
-          value: ele.value
-          label: ele.label
+transform = (el) ->
+  if not el.hasAttribute 'data-transform'
+    return el.value
 
-        if selected != '' and fmt.value == selected
-          fmt.selected = true
+  transformation = el.getAttribute 'data-transform'
+  if transformation is 'iso-duration'
+    duration = new Duration(el.value)
+    return duration.seconds
 
-        formatted.push fmt
-      that.setChoices(formatted, 'value', 'label', true)
+  if transformation is 'ip-port'
+    return el.value.split(':').splice(0, 2)
 
-    return data
-  )
-  return
+  if transformation is 'flatpickr'
+    if $(el).parent('.flatpickr')[0]._flatpickr.selectedDates[0]
+      timestamp = $(el).parent('.flatpickr')[0]._flatpickr.selectedDates[0].getTime()
+      timestamp = (timestamp / 1000) >> 0
+      current = (new Date / 1000) >> 0
+      return timestamp - current
+    else
+      return null
 
-server = (query, that = null, selected = '') ->
-  window.endpoint.api.servers({'query': query}).get((err, data) ->
-    data = data.result
+  if transformation is 'flatpickr-timestamp'
+    if $(el).parent('.flatpickr')[0]._flatpickr.selectedDates[0]
+      timestamp = $(el).parent('.flatpickr')[0]._flatpickr.selectedDates[0].getTime()
+      timestamp = (timestamp / 1000) >> 0
+    else
+      timestamp = null
 
-    if that != null
-      formatted = [{'value': 'all', 'label': '<b>all</b>'}]
+    return timestamp
 
-      if selected == 'all'
-        formatted[0].selected = true
+  if transformation is 'lower'
+    return el.value.toLowerCase()
 
-      for ele in data
-        fmt =
-          value: ele.id
-          label: ele.name
+  return el.value
 
-        if selected != '' and fmt.value == selected
-          fmt.selected = true
 
-        formatted.push fmt
-      that.setChoices(formatted, 'value', 'label', true)
+normalize = (form) ->
+  payload = {}
+  validated = true
+  component = undefined
 
-    return data
-  )
-  return
+  Array.from(form.elements).forEach (e) ->
+    if $(e).hasClass 'skip'
+      return
 
-role = (query, that = null, selected = '') ->
-  window.endpoint.api.roles({'match': query}).get((err, data) ->
-    data = data['result']
+    value = window.api.utils.transform e
+    valid = window.api.utils.validation e
 
-    if that != null
-      formatted = []
-      for ele in data
-        fmt =
-          value: ele.id
-          label: ele.name
-          customProperties:
-            server: ele.server
+    if not valid[0]
+      validated = false
+      $(e).addClass 'invalid'
+      $('span span.invalid', $(e).parent())[0].innerHTML = valid[1]
 
-        if selected != '' and fmt.value == selected
-          fmt.selected = true
+      return
 
-        formatted.push fmt
-      that.setChoices(formatted, 'value', 'label', true)
+    if $(e).hasClass 'target'
+      component = value
+      return
 
-    return data
-  )
-  return
+    name = e.name
+    if e.hasAttribute 'data-name'
+      name = e.getAttribute 'data-name'
 
-group = (query, that = null, selected = ['']) ->
-  window.endpoint.api.groups({'match': query}).get((err, data) ->
-    data = data['result']
+    if e.hasAttribute 'multiple'
+      options = Array.from e.options
+      payload[name] = options.map((x) -> x.value)
+    else if e.hasAttribute('data-boolean')
+      payload[e.getAttribute('data-boolean')] = e.checked
+    else if e.getAttribute('type') is 'checkbox'
+      if not e.checked
+        return
+      if not payload.hasOwnProperty e.name
+        payload[name] = []
+      payload[name].push value
+    else if e.hasAttribute 'data-list'
+      payload[name] = [value]
+    else if name.includes('/') and value.constructor.name is 'Array'
+      values = []
+      names = name.split('/')
+      for i in [0..names.length] by 1
+        values.push [names[i], value[i]]
 
-    if that != null
-      formatted = []
-      for ele in data
-        fmt =
-          value: ele.id
-          label: ele.name
+      values.forEach (v) ->
+        payload[v[0]] = v[1]
+    else if value
+      payload[name] = value
 
-        if selected != '' and fmt.value in selected
-          fmt.selected = true
+  return [payload, component, validated]
 
-        formatted.push fmt
-      that.setChoices(formatted, 'value', 'label', true)
-
-    return data
-  )
-  return
-
-setup = (that) ->
-  node = that.parentNode.parentNode
-  header =
-    "X-CSRFToken": window.csrftoken
-
-  payload =
-    username: $('input.username', node)[0].value
-    password: $('input.password', node)[0].value
-
-  uuid = $('input.uuid', node)[0].value
-
-  fermata.json("/setup")[uuid].put(header, payload, (err, data) ->
-    window.location.href = "/login";
-  )
-
-login = (that) ->
-  node = that.parentNode.parentNode
-  header =
-    "X-CSRFToken": window.csrftoken
-    'Content-Type': "application/x-www-form-urlencoded; charset=utf-8"
-
-  # payload =
-  #   username: $('input.username', node)[0].value
-  #   password: $('input.password', node)[0].value
-
-  payload = "username=#{$('input.username', node)[0].value}&password=#{$('input.password', node)[0].value}"
-
-  fermata.raw({base: window.location.origin + "/internal/login"}).post(header, payload, (dummy, data) ->
-    window.location.href = "/";
-  )
-
-mainframe = (that) ->
-  window.endpoint.api.mainframe.connect()
-
-window.api.servers = server
-window.api.roles = role
-window.api.groups = group
-window.api.games = game
-window.api.setup = setup
-window.api.login = login
+window.api.utils =
+  validation: validation
+  transform: transform
+  normalize: normalize

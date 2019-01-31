@@ -1,51 +1,71 @@
 - load staticfiles
 - load i18n
 
-.placeholder
-  .spacer
-  include assets/logo.svg
-  .heading
-    span.white hawthorne
-  .spacer
-.item.action(onclick="window.vc.change('home')")
-  i(data-feather="home")
-  span {% trans "Home" %}
+.logoContainer
+  .flex.grow
+  .logo
+    include assets/logo.svg
+  .hawthorneContainer
+    .hawthorne
+      | Haw
+      span.thorne thorne
+  .flex.grow
+.user
+  img(src=request.user.avatar)
+  .username= request.user.namespace
+  .role= role
+  button.btnLogout(onclick="window.location='{% url 'logout' %}';") Logout
 
-- if perms.core.view_user
-  .item.action(onclick="window.vc.change('player')")
-    i(data-feather="users")
-    span {% trans "Players" %}
+ul
+  .t MENU
+  li.title(onclick="window.vc('home')")
+    a(href="javascript:void(0)")
+      i.icon.ion-md-globe
+      | Dashboard
+  li.title
+    a(href='javascript:void(0)', data-trigger='[dropdown/toggle]')
+      i.icon.ion-ios-warning
+      | Punishments
+      i.icon.ion-ios-arrow-down.more
+    .expand
+      ul
+        li(onclick="window.vc('punishments[bans]')")
+          a(href="javascript:void(0)") Bans
+        li(onclick="window.vc('punishments[mutes]')")
+          a(href="javascript:void(0)") Mutes
+        li(onclick="window.vc('punishments[gags]')")
+          a(href="javascript:void(0)") Gags
+  li.title(onclick="window.vc('players')")
+    a(href='javascript:void(0)')
+      i.icon.ion-ios-people
+      | Players
+  li.title
+    a(href='javascript:void(0)', data-trigger='[dropdown/toggle]')
+      i.icon.ion-ios-flash
+      | Admins
+      i.icon.ion-ios-arrow-down.more
+    .expand
+      ul
+        li(onclick="window.vc('admins[servers]')")
+          a(href="javascript:void(0)") Servers
+        li(onclick="window.vc('admins[web]')")
+          a(href="javascript:void(0)") Web
+  li.title(onclick="window.vc('servers')")
+    a(href="javascript:void(0)")
+      i.icon.ion-logo-buffer
+      | Servers
+  li.title
+    a(href='')
+      i.icon.ion-ios-megaphone
+      | Announcements
+  li.title
+    a(href='')
+      i.icon.ion-ios-paper
+      | System Messages
+  li.title(onclick="window.vc('settings')")
+    a(href="javascript:void(0)", onclick="window.vc('settings')")
+      i.icon.ion-ios-options
+      | Settings
 
-- if perms.core.view_user or perms.core.view_servergroup or perms.core.view_chat
-  .item.action(onclick="window.vc.change('admin')")
-    i(data-feather="zap")
-    span {% trans "Admins" %}
 
-- if perms.core.view_server
-  .item.action(onclick="window.vc.change('server')")
-    i(data-feather="server")
-    span {% trans "Servers" %}
-
-- if perms.core.view_punishment
-  .item.action(onclick="window.vc.change('ban')")
-    i(data-feather="slash")
-    span {% trans "Bans" %}
-
-- if perms.core.view_punishment
-  .item.action(onclick="window.vc.change('mutegag')")
-    i(data-feather="volume-x")
-    span {% trans "Mute/Gag" %}
-
-.item.action(onclick="window.vc.change('announcements')")
-  i(data-feather="phone-outgoing")
-  span {% trans "Announcements" %}
-
-- if perms.log.view_chat
-  .item.action(onclick="window.vc.change('chat')")
-    i(data-feather="message-circle")
-    span {% trans "Chat" %}
-
-- if request.user.is_superuser
-  .item.action(onclick="window.vc.change('settings')")
-    i(data-feather="sliders")
-    span {% trans "Settings" %}
+// window.vc.change('settings')

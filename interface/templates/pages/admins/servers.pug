@@ -1,0 +1,109 @@
+- extends ajax|yesno:'skeleton/wrappers/ajax.pug,skeleton/main.pug'
+- load i18n
+- load staticfiles
+- load utils
+
+- block content
+  .modal.modalDynamic(data-component='[modal/admins/add]')
+    h1 Admins – New
+    .close(data-trigger='[modal/close]')
+      i.icon.ion-ios-close
+    .modalContent
+      form(data-trigger='[modal/form]', data-action='create', data-mode='admins[server][admins]', data-append='roles')
+        .section.group.modalSelect
+          ._Dynamic_Select
+            ._Dynamic_Layer
+            ._Title._Select_User(data-trigger='[composer/select/open]') Select a User
+            input._Value.hidden.target(required)
+            ._Select
+              ._Select_Search(style='position:relative')
+                input.skip(type='text', placeholder='Type to search...', data-trigger='[composer/select/steam]')
+                .tooltip_container
+                  .tooltip.left You can search via SteamID64, SteamID3, SteamID2, Steam profile URL or a username in the Hawthorne local database.
+                  i.icon.ion-ios-information-circle-outline
+              ._STitle Results
+              ._Container
+              ._Loading
+                ._Loader
+        .section.group.modalSelect
+          ._Dynamic_Select
+            ._Dynamic_Layer
+            ._Title._Select_Role(data-trigger='[composer/select/open]') Select a Role
+            input._Value.hidden(name='roles', data-list, required)
+            ._Select
+              ._Select_Search
+                input.skip(type='text', placeholder='Type to search...', data-trigger='[composer/select/search]')
+              ._STitle Results
+              ._Container
+                - for role in roles
+                  li(data-trigger='[composer/select/choose]', data-value=role.id)
+                    p= role.name
+        input.skip.unset(type="submit", value='Save')
+
+  .modal.modalDynamic(data-component='[modal/group/add]')
+    h1 Role – New
+    .close(data-trigger='[modal/close]')
+      i.icon.ion-ios-close
+    .modalContent
+      form(data-trigger='[modal/form]', data-action='create', data-mode='admins[server][roles]')
+        b.mtop.mbotSmall
+          i.icon.ion-ios-person(style='margin-right:10px')
+          |  Role Details
+        .section.group.inputGroup
+          input.smallInput(name='name', type='text', required, placeholder=' ')
+          span
+            | Role Name
+            span.invalid
+        .section.group.inputGroup
+          input.smallInput(name='immunity', type='text', required, data-trigger='[input/range]', data-max="99", data-min="0", placeholder=' ')
+          span
+            | Role Immunity (0-99)
+            span.invalid
+        .section.group.inputGroup
+          input.smallInput(name='usetime', type='text', data-trigger='[input/duration]', placeholder=' ', data-transform='iso-duration')
+          span
+            | Expiration (optional)
+            span.invalid
+          .tooltip_container
+            .tooltip.left Valid is the duration format described in <a style='color:green' href='https://tools.ietf.org/html/rfc3339#page-13', target='_blank'>RFC 3339, Page 13</a> as is the order. The P will be inserted automatically.
+            i.icon.ion-ios-information-circle-outline
+        .section.group.modalSelect
+          ._Dynamic_Select
+            ._Dynamic_Layer
+            ._Title(data-trigger='[composer/select/open]') Choose a Server (optional)
+            input._Value.hidden(name='server')
+            ._Select
+              ._Select_Search
+                input.skip(type='text', placeholder='Type to search...', data-trigger='[composer/select/search]')
+              ._STitle Results
+              ._Container
+                - for server in servers
+                  li(data-trigger='[composer/select/choose]', data-value=server.id)
+                    p= server.name
+        b.mbotSmall(style='padding-top:6px')
+          i.icon.ion-ios-flag(style='margin-right:10px')
+          |  Flags
+        .section.group.checkboxGroup
+          for flag, name, value in dummy|gen_srv_perms
+            .modalFlags
+              label.switch
+                input(name='flags', type='checkbox', value='{{flag}}')
+                span.slider.round
+              .switchText= name
+
+        input.skip.unset(type="submit", value='Save')
+
+  ul.paginationTabs(data-target='admins[servers]')
+    li(data-trigger="[ct/switch]", data="admins") Admins
+    li(data-trigger="[ct/switch]", data="roles") Roles
+    li.fRight(data-trigger='[modal/open]', data-trigger-target='[modal/admins/add]')
+      i.icon.ion-ios-add(style='margin-right:5px')
+      | New Admin
+    li.fRight(data-trigger='[modal/open]', data-trigger-target='[modal/group/add]', style="margin-right:6px")
+      i.icon.ion-ios-add(style='margin-right:5px')
+      | New Role
+
+  script.execute.
+    window.lazy('admins[servers]', 'admins')
+    window._.menu()
+    window._.init()

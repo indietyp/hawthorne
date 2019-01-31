@@ -1,0 +1,23 @@
+.paginationContent
+  h1 Actions
+  .CBox.nomargin
+    .timeTableGo.fRight
+      i.icon.ion-ios-arrow-forward
+    .timeTableGo.fLeft
+      i.icon.ion-ios-arrow-back
+    h3.center
+      span.space-after Page
+      span.current 1
+      span /{{pages}}
+    table.timeTable
+      thead
+        tr
+          th Time
+          th.unset Action
+      tbody
+  script.execute.
+    window.ajax("players[detailed][actions]", ".paginationContent table tbody", {{current}}, true)
+    window.pagination = {
+      'current': {{current}},
+      'limitation': {{pages}}
+    }

@@ -1,0 +1,196 @@
+- load i18n
+- load staticfiles
+- load utils
+- load steam
+
+.paginationContent.ct1
+  .section.group
+    .col.span_1_of_2
+      .CBox.nomargin
+        h3 Activity in {% now "F" %} (Days)
+        .chartContainer.nomargin
+          canvas.serverChartMonthly
+        script.execute.
+          var ctx = document.getElementsByClassName("serverChartMonthly")[0].getContext('2d');
+          var gradient = ctx.createLinearGradient(0, 0, 0, 400);
+          gradient.addColorStop(0, 'rgba(0,169,255,0.2)');
+          gradient.addColorStop(1, 'rgba(0,169,255,0)');
+          var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: {{months|flatten:"0"|safe}},
+              datasets: [{
+                pointHoverBorderColor: '#0075b1',
+                pointHoverBackgroundColor: '#fff',
+                label: 'Playtime',
+                data: {{months|flatten:"1"|safe}},
+                backgroundColor: gradient,
+                borderColor: [
+                  'rgb(0,169,255)'
+                ],
+                borderWidth: 4
+              }]
+            },
+            options: {
+              hover: {
+                intersect: false
+              },
+              tooltips: {
+                intersect: false,
+                displayColors: false
+              },
+              legend: {
+                display: false
+              },
+              maintainAspectRatio: false,
+              scales: {
+                yAxes: [{
+                  display: true,
+                  gridLines: {
+                    color: "rgba(0, 0, 0, 0)",
+                  },
+                  ticks: {
+                    beginAtZero: false,
+                    fontColor: 'white',
+                    callback: function (value, index, values) {
+                      return value + 'h';
+                    }
+                  }
+                }],
+                xAxes: [{
+                  display: true,
+                  gridLines: {
+                    display: false,
+                    color: "rgba(0, 0, 0, 0)",
+                  },
+                  ticks: {
+                    fontColor: 'white',
+                  }
+                }]
+              }
+            }
+          });
+          myChart.canvas.parentNode.style.height = '200px';
+    .col.span_1_of_2
+      .CBox.nomargin
+        h3 Activity throughout time (Years)
+        .chartContainer.nomargin
+          canvas.serverChartAllTime
+        script.execute.
+          var ctx = document.getElementsByClassName("serverChartAllTime")[0].getContext('2d');
+          var gradient = ctx.createLinearGradient(0, 0, 0, 400);
+          gradient.addColorStop(0, 'rgba(0,169,255,0.2)');
+          gradient.addColorStop(1, 'rgba(0,169,255,0)');
+          var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: {{years|flatten:"0"|safe}},
+              datasets: [{
+                pointHoverBorderColor: '#0075b1',
+                pointHoverBackgroundColor: '#fff',
+                label: 'Playtime',
+                data: {{years|flatten:"1"|safe}},
+                backgroundColor: gradient,
+                borderColor: [
+                  'rgb(0,169,255)'
+                ],
+                borderWidth: 4
+              }]
+            },
+            options: {
+              hover: {
+                intersect: false
+              },
+              tooltips: {
+                intersect: false,
+                displayColors: false
+              },
+              legend: {
+                display: false
+              },
+              maintainAspectRatio: false,
+              scales: {
+                yAxes: [{
+                  display: true,
+                  gridLines: {
+                    color: "rgba(0, 0, 0, 0)",
+                  },
+                  ticks: {
+                    beginAtZero: false,
+                    fontColor: 'white',
+                    callback: function (value, index, values) {
+                      return value + 'h';
+                    }
+                  }
+                }],
+                xAxes: [{
+                  display: true,
+                  gridLines: {
+                    display: false,
+                    color: "rgba(0, 0, 0, 0)",
+                  },
+                  ticks: {
+                    fontColor: 'white',
+                  }
+                }]
+              }
+            }
+          });
+          myChart.canvas.parentNode.style.height = '200px';
+  .server.CBox
+    .section.group.nomargin.serverOverview
+      .col.span_1_of_2.nomargin
+        .section.group.nomargin.serverOverview
+          .col.span_1_of_2.nomargin.avatar
+            img.thumbnail(src="{{data.avatar}}")
+          .col.span_1_of_2.nomargin
+            h2
+              if data.country
+                - with "flags/"|add:data.country.code|add:".svg" as url
+                  img.country(src='{% static url %}')
+              = data.namespace
+            p
+              i.fa.fa-gamepad(style="margin: 0 5px 0 0")
+              = games
+      .col.span_1_of_2.nomargin
+        ul.list
+          li
+            b SteamID32:
+            a.space-before(href="javascript:void(0)", data-trigger="[clip/copy]", data-clipboard-text="{{data.username|as2}}")
+              = data.username|as2
+              i.fa.fa-copy(style="margin-left:5px")
+          li
+            b SteamID64:
+            a.space-before(href="javascript:void(0)", data-trigger="[clip/copy]", data-clipboard-text="{{data.username}}")
+              = data.username
+              i.fa.fa-copy(style="margin-left:5px")
+          li
+            b.space-after Steam Level:
+            =  data.username|level
+          li
+            b VAC:
+            =  data.username|vac
+          li
+            b Created At:
+            =  data.username|created
+  .CBox.nomargin
+    .section.group.nomargin.serverOverview
+      .col.span_1_of_2.nomargin
+        h2 Personal Data
+        p Data is constantly collected from servers and sent to your Hawthorne panel. We display specific user data - like profiles, activity, logs and recorded actions, etc.
+      .col.span_1_of_2.nomargin
+        ul.list
+          li
+            b Punishments:
+            =  data.punishment_set|count
+          li
+            b Messages:
+            =  data.serverchat_set|count
+          li
+            b Most Active Server:
+            a(href="javascript:void(0)", onclick="window.vc('servers[detailed]', '{{activity.id}}')")
+              = activity.name
+          li
+            a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/roles]") View Roles
+            a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/usernames]", style="margin-left: 6px") View Usernames
+            a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/ips]", style="margin-left: 6px") View IPs

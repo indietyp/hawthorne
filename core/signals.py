@@ -1,10 +1,12 @@
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
-from django.utils import timezone
-from core.lib.steam import populate
 import logging
-from core.models import User, Server
+
+from core.lib.steam import populate
+from core.models import Server, User
+from django.core.cache import cache
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
 from django.template.defaultfilters import slugify
+from django.utils import timezone
 
 
 logger = logging.getLogger(__name__)
@@ -19,10 +21,10 @@ def compare(state1, state2):
   for k, v in d1.items():
     if k not in included_keys:
       continue
+
     try:
       if v != d2[k]:
         changeset.append(k)
-
     except KeyError:
       changeset.append(k)
 
@@ -37,7 +39,8 @@ def user_log_handler(sender, instance, raw, using, update_fields, **kwargs):
     else:
       instance.namespace = instance.username
 
-  from log.models import UserNamespace, UserOnlineTime, UserIP
+  from log.models import UserNamespace, UserConnection, UserIP
+
   try:
     state = User.objects.get(id=instance.id)
   except User.DoesNotExist:
@@ -64,14 +67,14 @@ def user_log_handler(sender, instance, raw, using, update_fields, **kwargs):
     iplog = False
 
   if 'online' in changelog and '_server' in instance.__dict__.keys():
-    for disconnect in UserOnlineTime.objects.filter(user=instance,
+    for disconnect in UserConnection.objects.filter(user=instance,
                                                     server=instance._server,
                                                     disconnected=None):
       disconnect.disconnected = timezone.now()
       disconnect.save()
 
     if instance.online:
-      online = UserOnlineTime(user=instance, server=instance._server)
+      online = UserConnection(user=instance, server=instance._server)
       online.save()
 
       if iplog:
@@ -95,3 +98,8 @@ def server_slug_handler(sender, instance, raw, using, update_fields, **kwargs):
     return
 
   instance.slug = slugify(instance.name)[:50]
+
+
+@receiver(post_save, sender=Server, weak=False)
+def refresh_cache(*args, **kwargs):
+  cache.set('servers', Server.objects.all(), None)

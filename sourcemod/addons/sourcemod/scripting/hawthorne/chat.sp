@@ -1,4 +1,4 @@
-public Action OnPlayerChatMessage(int client, const char[] command, int argc) {
+public Action OnPlayerChatMessage(int client, const char[] command, int args) {
   // check if the client is an actual person
   if (client < 1) return Plugin_Continue;
 
@@ -16,18 +16,20 @@ public Action OnPlayerChatMessage(int client, const char[] command, int argc) {
 }
 
 stock void SendChatMessage(int client, char[] message, int type = 0) {
-  char ip[128];
-
-  GetClientIP(client, ip, sizeof(ip));
-
   JSONObject payload = new JSONObject();
   payload.SetString("user", CLIENTS[client]);
   payload.SetString("server", SERVER);
-  payload.SetString("ip", ip);
   payload.SetString("message", message);
-  httpClient.Put("system/chat", payload, APINoResponseCall);
-
+  message_queue.Push(payload);
   delete payload;
+
+  if (message_queue.Length >= 100) {
+    JSONObject wrapper = new JSONObject();
+    wrapper.Set("messages", message_queue);
+    httpClient.Put("system/chat", wrapper, APINoResponseCall);
+    message_queue.Clear();
+    delete payload;
+  }
 }
 
 

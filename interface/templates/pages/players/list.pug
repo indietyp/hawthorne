@@ -1,0 +1,13 @@
+- extends ajax|yesno:'skeleton/wrappers/ajax.pug,skeleton/main.pug'
+- load i18n
+- load staticfiles
+
+- block content
+  ul.paginationTabs(data-target='punishments[bans]')
+    li(data-trigger="[ct/switch]", data="", style="visibility:hidden")
+      | Players
+
+  script.execute.
+    window.lazy('players[overview]', '')
+    window._.menu()
+    window._.init()
