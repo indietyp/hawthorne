@@ -15,15 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from interface.views import page_not_found
 
 urlpatterns = [
-  path('admin/', admin.site.urls),
-  path('api/v1/', include('api.urls')),
-  path('ajax/v1/', include('ajax.urls')),
-  path('', include('interface.urls')),
-  path('external/', include('social_django.urls', namespace='social')),
-  path('404', page_not_found)
+    path('admin/', admin.site.urls),
+    path('api/v1/', include('api.urls')),
+    path('ajax/v1/', include('ajax.urls')),
+    path('', include('interface.urls')),
+    path('external/', include('social_django.urls', namespace='social')),
 ]
 
 handler404 = 'interface.views.page_not_found'

@@ -30,7 +30,7 @@ each item in data
                       |  |
                       = permission.name.title
               a(href='javascript:void(0)') Select All
-            .actions(style='padding:12px')
+            .actions.selector(style='padding:12px')
               i.icon.ion-ios-arrow-dropleft(data-trigger='[select/multiple/double]', data-source='#select-selected-{{item.id}}', data-target='#select-available-{{item.id}}')
               i.icon.ion-ios-arrow-dropright(data-trigger='[select/multiple/double]', data-target='#select-selected-{{item.id}}', data-source='#select-available-{{item.id}}')
             .selection

@@ -61,14 +61,14 @@
           .selection
             b.mbotSmall(style='padding-top:6px') Available
             select.skip#select-available(multiple, style='height:250px')
-              each permission in permissions
+              each permission in  permissions
                 if permission.content_type.app_label in excluded
                   option(value="{{permission.content_type.model|add:'.'|add:permission.codename}}")
                     = permission.content_type.model.title
                     |  |
                     = permission.name.title
             a(href='javascript:void(0)') Select All
-          .actions(style='padding:12px')
+          .actions.selector(style='padding:12px')
             i.icon.ion-ios-arrow-dropleft(data-trigger='[select/multiple/double]', data-source='#select-selected', data-target='#select-available')
             i.icon.ion-ios-arrow-dropright(data-trigger='[select/multiple/double]', data-target='#select-selected', data-source='#select-available')
           .selection

@@ -2984,6 +2984,9 @@ select option:not(:checked) {
   align-items: center;
   flex-flow: row-reverse;
 }
+.actions.selector {
+  flex-flow: column;
+}
 .actions > i {
   font-size: 24px;
   cursor: pointer;
