@@ -52,7 +52,7 @@ def servers_roles(request):
 def servers_roles_entries(request, page):
   obj = Role.objects.all()
   return renderer(request, 'components/admins/servers/roles/entry.pug', obj, page,
-                  size=4, overwrite=True, payload={'servers': Server.objects.all()})
+                  size=1, overwrite=True, payload={'servers': Server.objects.all()})
 
 
 @login_required(login_url='/login')
@@ -89,6 +89,6 @@ def web_groups_entries(request, page):
   obj = Group.objects.all()
   permissions = Permission.objects.all()
 
-  return renderer(request, 'components/admins/web/groups/entry.pug', obj, page, size=4,
+  return renderer(request, 'components/admins/web/groups/entry.pug', obj, page, size=1,
                   overwrite=True, payload={'permissions': permissions,
                                            'excluded': ['core', 'log', 'auth']})

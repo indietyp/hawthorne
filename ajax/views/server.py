@@ -42,7 +42,7 @@ def modals(request, *args, **kwargs):
 def list(request, page, *args, **kwargs):
   obj = Server.objects.all()
   return renderer(request, 'components/servers/overview.pug', obj, page,
-                  execute=status, size=4, overwrite=True)
+                  execute=status, size=1, overwrite=True)
 
 
 @login_required(login_url='/login')
