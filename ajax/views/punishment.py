@@ -9,8 +9,8 @@ from core.models import Punishment
 from django.conf import settings
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_punishment')
+@login_required
+@permission_required('core.view_punishment', raise_exception=True)
 @require_http_methods(['POST'])
 def list(request):
   current = request.POST.get("page", 1)
@@ -33,8 +33,8 @@ def list(request):
                                                                 'mode': mode})
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_punishment')
+@login_required
+@permission_required('core.view_punishment', raise_exception=True)
 @require_http_methods(['POST'])
 def entries(request, page):
   name = request.resolver_match.url_name

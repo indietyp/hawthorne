@@ -17,8 +17,8 @@ from core.models import Membership, Punishment, Server, User
 from log.models import ServerChat, UserConnection, UserIP, UserNamespace
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_user')
+@login_required
+@permission_required('core.view_user', raise_exception=True)
 @require_http_methods(['POST'])
 def list(request, *args, **kwargs):
   current = request.POST.get("page", 1)
@@ -28,16 +28,16 @@ def list(request, *args, **kwargs):
                                                             'current': current})
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_user')
+@login_required
+@permission_required('core.view_user', raise_exception=True)
 @require_http_methods(['POST'])
 def list_entries(request, page, *args, **kwargs):
   players = User.objects.filter(is_steam=True)
   return renderer(request, 'components/players/entry.pug', players, page)
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_user')
+@login_required
+@permission_required('core.view_user', raise_exception=True)
 @require_http_methods(['POST'])
 def detailed_log(request, u, *args, **kwargs):
   c = request.POST.get("page", 1)
@@ -52,8 +52,8 @@ def detailed_log(request, u, *args, **kwargs):
                                                                           'current': c})
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_user')
+@login_required
+@permission_required('core.view_user', raise_exception=True)
 @require_http_methods(['POST'])
 def detailed_log_date(request, u, date, *args, **kwargs):
   pages = ServerChat.objects.filter(user=u)\
@@ -67,8 +67,8 @@ def detailed_log_date(request, u, date, *args, **kwargs):
                                   use_l10n=True))
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_user')
+@login_required
+@permission_required('core.view_user', raise_exception=True)
 @require_http_methods(['POST'])
 def detailed_log_entries(request, u, date, page, *args, **kwargs):
   pages = ServerChat.objects.filter(user=u)\
@@ -84,8 +84,8 @@ def detailed_log_entries(request, u, date, page, *args, **kwargs):
   return renderer(request, 'components/players/detailed/logs/entry.pug', logs, page)
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_user')
+@login_required
+@permission_required('core.view_user', raise_exception=True)
 @require_http_methods(['POST'])
 def detailed_actions(request, u, *args, **kwargs):
   c = request.POST.get("page", 1)
@@ -97,8 +97,8 @@ def detailed_actions(request, u, *args, **kwargs):
                                                                              'current': c})
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_user')
+@login_required
+@permission_required('core.view_user', raise_exception=True)
 @require_http_methods(['POST'])
 def detailed_actions_entries(request, u, page, *args, **kwargs):
   application = DALApplication.objects.get(name='core')
@@ -107,8 +107,8 @@ def detailed_actions_entries(request, u, page, *args, **kwargs):
   return renderer(request, 'components/players/detailed/actions/entry.pug', logs, page)
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_user')
+@login_required
+@permission_required('core.view_user', raise_exception=True)
 @require_http_methods(['POST'])
 def detailed_punishments(request, u, *args, **kwargs):
   c = request.POST.get("page", 1)
@@ -118,8 +118,8 @@ def detailed_punishments(request, u, *args, **kwargs):
                                                                                  'current': c})
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_user')
+@login_required
+@permission_required('core.view_user', raise_exception=True)
 @require_http_methods(['POST'])
 def detailed_punishments_entries(request, u, page, *args, **kwargs):
   punishments = Punishment.objects.filter(user=u).order_by('created_at')
@@ -127,8 +127,8 @@ def detailed_punishments_entries(request, u, page, *args, **kwargs):
   return renderer(request, 'components/players/detailed/punishments/entry.pug', punishments, page)
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_server')
+@login_required
+@permission_required('core.view_server', raise_exception=True)
 @require_http_methods(['POST'])
 def modal_usernames(request, u, *args, **kwargs):
   user = User.objects.get(id=u)
@@ -137,8 +137,8 @@ def modal_usernames(request, u, *args, **kwargs):
   return render(request, 'components/players/detailed/modals/usernames.pug', {'data': log})
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_server')
+@login_required
+@permission_required('core.view_server', raise_exception=True)
 @require_http_methods(['POST'])
 def modal_roles(request, u, *args, **kwargs):
   user = User.objects.get(id=u)
@@ -147,8 +147,8 @@ def modal_roles(request, u, *args, **kwargs):
   return render(request, 'components/players/detailed/modals/roles.pug', {'data': mems})
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_server')
+@login_required
+@permission_required('core.view_server', raise_exception=True)
 @require_http_methods(['POST'])
 def modal_ips(request, u, *args, **kwargs):
   user = User.objects.get(id=u)
@@ -157,8 +157,8 @@ def modal_ips(request, u, *args, **kwargs):
   return render(request, 'components/players/detailed/modals/ips.pug', {'data': log})
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_user')
+@login_required
+@permission_required('core.view_user', raise_exception=True)
 @require_http_methods(['POST'])
 def detailed_overview(request, u, *args, **kwargs):
   try:

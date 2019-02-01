@@ -10,8 +10,8 @@ from ajax.views import renderer
 from core.models import Membership, Role, Server, User
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_user')
+@login_required
+@permission_required('core.view_user', raise_exception=True)
 @require_http_methods(['POST'])
 def servers_admins(request):
   current = request.POST.get("page", 1)
@@ -24,8 +24,8 @@ def servers_admins(request):
                                                                           'current': current})
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_user')
+@login_required
+@permission_required('core.view_user', raise_exception=True)
 @require_http_methods(['POST'])
 def servers_admins_entries(request, page):
   superusers = []
@@ -39,15 +39,15 @@ def servers_admins_entries(request, page):
   return renderer(request, 'components/admins/servers/admins/entry.pug', memberships, page, extra=superusers)
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_role')
+@login_required
+@permission_required('core.view_role', raise_exception=True)
 @require_http_methods(['POST'])
 def servers_roles(request):
   return render(request, 'components/admins/servers/roles/wrapper.pug')
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_role')
+@login_required
+@permission_required('core.view_role', raise_exception=True)
 @require_http_methods(['POST'])
 def servers_roles_entries(request, page):
   obj = Role.objects.all()
@@ -55,8 +55,8 @@ def servers_roles_entries(request, page):
                   size=1, overwrite=True, payload={'servers': Server.objects.all()})
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_user')
+@login_required
+@permission_required('core.view_user', raise_exception=True)
 @require_http_methods(['POST'])
 def web_admins(request):
   current = request.POST.get("page", 1)
@@ -66,8 +66,8 @@ def web_admins(request):
                                                                       'current': current})
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_user')
+@login_required
+@permission_required('core.view_user', raise_exception=True)
 @require_http_methods(['POST'])
 def web_admins_entries(request, page):
   users = User.objects.filter(is_active=True)
@@ -75,15 +75,15 @@ def web_admins_entries(request, page):
   return renderer(request, 'components/admins/web/admins/entry.pug', users, page)
 
 
-@login_required(login_url='/login')
-@permission_required('auth.view_group')
+@login_required
+@permission_required('auth.view_group', raise_exception=True)
 @require_http_methods(['POST'])
 def web_groups(request):
   return render(request, 'components/admins/web/groups/wrapper.pug')
 
 
-@login_required(login_url='/login')
-@permission_required('auth.view_group')
+@login_required
+@permission_required('auth.view_group', raise_exception=True)
 @require_http_methods(['POST'])
 def web_groups_entries(request, page):
   obj = Group.objects.all()

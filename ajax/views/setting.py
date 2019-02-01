@@ -26,8 +26,8 @@ def get_perms(o, user, *args, **kwargs):
   return {'advanced': perms, 'base': modules, 'used': used.all()}
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_token')
+@login_required
+@permission_required('core.view_token', raise_exception=True)
 @require_http_methods(['POST'])
 def tokens(request, *args, **kwargs):
   current = request.POST.get("page", 1)
@@ -37,8 +37,8 @@ def tokens(request, *args, **kwargs):
                                                                     'current': current})
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_token')
+@login_required
+@permission_required('core.view_token', raise_exception=True)
 @require_http_methods(['POST'])
 def tokens_entries(request, page, *args, **kwargs):
   tokens = Token.objects.filter(is_active=True).order_by('created_at')

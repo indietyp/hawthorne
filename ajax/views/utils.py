@@ -14,8 +14,8 @@ from core.lib.steam import populate
 from core.models import User
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_user')
+@login_required
+@permission_required('core.view_user', raise_exception=True)
 @require_http_methods(['POST'])
 def search(request, *args, **kwargs):
   payload = json.loads(request.body.decode())

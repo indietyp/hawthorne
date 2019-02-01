@@ -25,8 +25,8 @@ def status(server, *args, **kwargs):
 
 
 @cache_page(60 * 15)
-@login_required(login_url='/login')
-@permission_required('core.view_server')
+@login_required
+@permission_required('core.view_server', raise_exception=True)
 @require_http_methods(['POST'])
 def modals(request, *args, **kwargs):
   servers = Server.objects.all()
@@ -36,8 +36,8 @@ def modals(request, *args, **kwargs):
   return render(request, 'components/servers/modals/list.pug', {'data': servers})
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_server')
+@login_required
+@permission_required('core.view_server', raise_exception=True)
 @require_http_methods(['POST'])
 def list(request, page, *args, **kwargs):
   obj = Server.objects.all()
@@ -45,8 +45,8 @@ def list(request, page, *args, **kwargs):
                   execute=status, size=1, overwrite=True)
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_server')
+@login_required
+@permission_required('core.view_server', raise_exception=True)
 @require_http_methods(['POST'])
 def overview(request, s, *args, **kwargs):
   now = datetime.datetime.now()
@@ -84,16 +84,16 @@ def overview(request, s, *args, **kwargs):
                                                                       'status': status(server)})
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_server')
+@login_required
+@permission_required('core.view_server', raise_exception=True)
 @require_http_methods(['POST'])
 def log(request, s, *args, **kwargs):
   server = Server.objects.get(id=s)
   return render(request, 'components/servers/detailed/logs/wrapper.pug', {'data': server})
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_server')
+@login_required
+@permission_required('core.view_server', raise_exception=True)
 @require_http_methods(['POST'])
 def log_entries(request, s, page, *args, **kwargs):
   server = Server.objects.get(id=s)
@@ -102,16 +102,16 @@ def log_entries(request, s, page, *args, **kwargs):
   return renderer(request, 'components/servers/detailed/logs/entry.pug', logs, page)
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_server')
+@login_required
+@permission_required('core.view_server', raise_exception=True)
 @require_http_methods(['POST'])
 def rcon(request, s, *args, **kwargs):
   server = Server.objects.get(id=s)
   return render(request, 'components/servers/detailed/rcon.pug', {'data': server})
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_server')
+@login_required
+@permission_required('core.view_server', raise_exception=True)
 @require_http_methods(['POST'])
 def modal_players(request, s, *args, **kwargs):
   server = Server.objects.get(id=s)
@@ -125,8 +125,8 @@ def modal_players(request, s, *args, **kwargs):
   return render(request, 'components/servers/detailed/modals/players.pug', {'data': clients})
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_server')
+@login_required
+@permission_required('core.view_server', raise_exception=True)
 @require_http_methods(['POST'])
 def modal_admins(request, s, *args, **kwargs):
   server = Server.objects.get(id=s)
@@ -135,8 +135,8 @@ def modal_admins(request, s, *args, **kwargs):
   return render(request, 'components/servers/detailed/modals/admins.pug', {'data': memberships})
 
 
-@login_required(login_url='/login')
-@permission_required('core.view_server')
+@login_required
+@permission_required('core.view_server', raise_exception=True)
 @require_http_methods(['POST'])
 def modal_delete(request, s, *args, **kwargs):
   server = Server.objects.get(id=s)

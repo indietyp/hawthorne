@@ -29,7 +29,7 @@ def login(request):
     return JsonResponse({"success": False, "reason": "credentials incorrect or unkown"})
 
 
-@login_required(login_url='/login')
+@login_required
 def home(request):
   current = datetime.datetime.now().month
 
@@ -67,12 +67,12 @@ def home(request):
   return render(request, 'pages/home.pug', payload)
 
 
-@login_required(login_url='/login')
+@login_required
 def player(request):
   return render(request, 'pages/players/list.pug', {})
 
 
-@login_required(login_url='/login')
+@login_required
 def player_detailed(request, u):
   try:
     user = User.objects.get(id=u)
@@ -82,12 +82,12 @@ def player_detailed(request, u):
   return render(request, 'pages/players/detailed.pug', {'data': user})
 
 
-@login_required(login_url='/login')
+@login_required
 def server(request):
   return render(request, 'pages/servers/list.pug')
 
 
-@login_required(login_url='/login')
+@login_required
 def server_detailed(request, s):
   server = Server.objects.filter(id=s)
 
@@ -99,13 +99,13 @@ def server_detailed(request, s):
   return render(request, 'pages/servers/detailed.pug', {'data': server})
 
 
-@login_required(login_url='/login')
+@login_required
 def admins_servers(request):
   roles = Role.objects.all()
   return render(request, 'pages/admins/servers.pug', {'roles': roles})
 
 
-@login_required(login_url='/login')
+@login_required
 def admins_web(request):
   permissions = Permission.objects.order_by('content_type__model')
   excluded = ['core', 'log', 'auth']
@@ -115,7 +115,7 @@ def admins_web(request):
                                                   'groups': groups})
 
 
-@login_required(login_url='/login')
+@login_required
 def punishments(request):
   name = request.resolver_match.url_name
 
@@ -137,7 +137,7 @@ def punishments(request):
                                                            'servers': servers})
 
 
-@login_required(login_url='/login')
+@login_required
 def settings(request):
   permissions = Permission.objects.order_by('content_type__model')
   excluded = ['core', 'log', 'auth']

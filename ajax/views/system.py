@@ -8,8 +8,8 @@ from panel.settings import BASE_DIR
 
 
 @cache_page(60 * 15)
-@login_required(login_url='/login')
-@permission_required('core.view_update')
+@login_required
+@permission_required('core.view_update', raise_exception=True)
 @require_http_methods(['POST'])
 def update(request, *args, **kwargs):
   repo = Repo(BASE_DIR)
