@@ -1,9 +1,10 @@
 import datetime
-import natural.date
 import humanize
-from steam import WebAPI, SteamID
+import natural.date
+
 from django.conf import settings
 from django.template.defaulttags import register
+from steam import SteamID, WebAPI
 
 
 api = WebAPI(key=settings.SOCIAL_AUTH_STEAM_API_KEY)
@@ -30,11 +31,12 @@ def vac(value):
   if ban['VACBanned']:
     return "currently banned"
   elif ban['DaysSinceLastBan'] == 0:
-    return "no recorded ban"
+    return "no recorded ban(s)"
   else:
     now = datetime.datetime.now()
     delta = datetime.timedelta(days=ban['DaysSinceLastBan'])
-    return "expired {}".format(natural.date.duration(now - delta))
+    return "{} on record and expired {}".format(ban['NumberOfVACBans'],
+                                                natural.date.duration(now - delta))
 
 
 @register.filter
