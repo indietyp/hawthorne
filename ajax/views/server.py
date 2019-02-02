@@ -52,7 +52,8 @@ def overview(request, s, *args, **kwargs):
   now = datetime.datetime.now()
   server = Server.objects.get(id=s)
 
-  query = UserConnection.objects.annotate(day=Extract('disconnected', 'day'),
+  query = UserConnection.objects.filter(disconnected__isnull=False)\
+                                .annotate(day=Extract('disconnected', 'day'),
                                           month=Extract('disconnected', 'month'),
                                           year=Extract('disconnected', 'year'))
 
