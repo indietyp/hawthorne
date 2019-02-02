@@ -168,7 +168,7 @@ def detailed_overview(request, u, *args, **kwargs):
 
   years = []
   months = []
-  query = UserConnection.objects.filter(user=user)\
+  query = UserConnection.objects.filter(user=user, disconnected__isnull=False)\
                                 .annotate(time=ExpressionWrapper(F('disconnected') - F('connected'),
                                                                  output_field=DurationField()))
 
