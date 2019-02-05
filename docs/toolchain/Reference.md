@@ -8,7 +8,7 @@ This part of the documentation references to different commands that are impleme
 
 The purpose of this command is to output all the other commands. It shows the current capabilities and version of the toolchain.
 ```bash
-hawthorne help
+hawthorne --help
 ```
 
 # Verify
@@ -18,6 +18,15 @@ Verifies the module and deletes or changes files if necessary. You have the choi
 
 ```bash
 hawthorne verify
+```
+
+# Reconfigure
+> **available** since v0.9.0
+
+Replaces and newly configures several configuration files needed for HT, like gunicorn, nginx or supervisor. Useful when a major version bump occured or a configuration file is corrupted.
+
+```bash
+hawthorne reconfigure
 ```
 
 # Version
@@ -47,7 +56,7 @@ hawthorne update
 ?> This command is recommended to be included in a regular _weekly_ crontab.
 
 # Report
-> **available** since v0.7
+> **available** since v0.7; **reworked** in v0.9.1
 
 This command saves the data required for common debugging of your problem. It has been well tested and only uses the data it needs. This data includes your…
 * … **PYTHONPATH** environment variable
@@ -60,10 +69,6 @@ This command saves the data required for common debugging of your problem. It ha
 ```bash
 hawthorne report
 ```
-
-?> Your submitted data will be saved for 24 hours.
-
-!> You will be registered to the mainframe, and therefor your instance will be known by a database. **Please bear that in mind.** Only data that is necessary will be saved for the shortest time possible. For more information on the topic please refer to this [chapter].
 
 # Server
 ## Start

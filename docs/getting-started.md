@@ -41,7 +41,7 @@ Currently hawthorne has been tested with _nginx_ and _Apache 2_, every server th
 ## Starting/Restarting/Stopping Hawthorne
 To start Hawthorne after the installation is complete, or to restart or stop the service:
 ```bash
-supervisorctl start/stop/restart hawthorne
+supervisorctl start/stop/restart hawthorne:*
 ```
 
 ## Additional information

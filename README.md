@@ -8,37 +8,39 @@ Hawthorne uses [Semantic Versioning][1], which means that _0.x.x_ is currently t
 For the project documentation and installing guide please visit https://docs.hawthornepanel.org/
 
 ## Functionality & Features
-* Handcrafted, modern, responsive and user friendly UI
-* Bans, Mute & Gags
-* Extensive logs
-* Public accesible, configurable page (_ETA v0.12_)
-* Rich settings and 120+ permissions
-* Mature API and webhooks
-* Discord integration (_ETA v0.15_)
-* Reports (_ETA v0.13_)
-* Intuitive & Secure
-* Direct Sourcemod integration
+* Multiple Managed Instances
+* Bans, Mutes, Gags
+* Detailed Chat & Activity Logs
+* Handcrafted UI
+* Custom Public Pages\*
+* Configurable, Granular and Secure
+* SourceMod Integration
+* Server Controls\*
+* API & Webhooks
+* Docker Support
+* Migrate old Systems (such as SourceBans)
 
+\* are planned features
 
 ## Roadmap
-* 0.9.0 UI rework
-* 0.9.1 CLI install.sh rework
-* 0.9.2 APIv2
-* 0.10 System Messages (Logs) & GDPR Export
-* 0.11 Webhooks & personal settings
-* 0.12 Public Page & User Credibility Score
+* ~0.9.0: UI rework~
+* 0.9.1: CLI install.sh rework
+* 0.9.2: APIv2
+* 0.10: System Messages (Logs) & GDPR Export
+* 0.11: Webhooks & personal settings
+* 0.12: Public Page & User Credibility Score
 * 0.13: Warnings & Reports
 * 0.14: Player Rankings
 * 0.15: Integrations (Discord, Minecraft, Rust, and more to come)
-* 1.0: General Improvements & Polish
+* **1.0**: General Improvements & Polish
 * 1.1: Instances
 * 1.2: Full Server Control (Start, Stop, Restart)
 * 1.3: Automatically adding and removing game servers
-* 2.0: General Improvements & Polish
+* **2.0**: General Improvements & Polish
 
 
 ## Partners & Tools
-### [![](docs/images/browserstack.png)](https://www.browserstack.com)
+### [![](docs/_media/browserstack.png)](https://www.browserstack.com)
 BrowserStack enables us to test the Hawthorne interface and it's functionality over multiple devices and services automatically. BrowserStack is therefore fundamental to our UI and UX development and testing process and identifies inconsistencies we might face with different operating systems and browsers, which we wouldn't be able to identify manually.
 
 
@@ -49,6 +51,6 @@ BrowserStack enables us to test the Hawthorne interface and it's functionality o
 
 [1]:  https://semver.org/
 
-[image-1]:  docs/images/1.png
-[image-2]:  docs/images/7.png
-[image-3]:  docs/images/5.png
+[image-1]:  docs/_media/1.png
+[image-2]:  docs/_media/7.png
+[image-3]:  docs/_media/5.png

@@ -14,10 +14,6 @@
 	* [Usage][8]
 	* [Reference][9]
 
-* **Mainframe**
-	* [Quickstart][10]
-	* [Explanation][11]
-
 * **Miscellaneous**
 	* [Hosting][12]
 	* [Integrations][13]
@@ -28,6 +24,7 @@
 *  **Changelog**
 	* [v0.7][17]
 	* [v0.8][18]
+	* [v0.9][20]
 
 [1]:	getting-started.md
 [2]:	toolchain/Quickstart.md
@@ -37,7 +34,7 @@
 [6]:	sourcemod/Configuration.md
 [7]:	api/Quickstart.md
 [8]:	api/Usage.md
-[9]:	https://api.hawthorne.in
+[9]:	https://api.hawthornepanel.org
 [10]:	mainframe/Quickstart.md
 [11]:	mainframe/Explanation.md
 [12]:	services/Hosting.md
@@ -48,3 +45,4 @@
 [17]:	changelog/v07.md
 [18]:	changelog/v08.md
 [19]:	faq.md
+[20]:	changelog/v09.md

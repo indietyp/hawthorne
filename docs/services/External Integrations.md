@@ -1,16 +1,12 @@
 # External Integrations
 ## Importing from:
 
-!> ETA v0.8
+```bash
+python3 manage.py import --mode <mode> --host <host> --user <user> --password <password> --database <database>
+```
 
-- Sourcebans
-- Sourcemods
-- ctbans
-- BoomPanel
-
-## Discord Bot
-
-!> ETA v0.9
+<mode> can either be sourceban, boompanel or sourcemod
+<host>, <user>, <password>, <database> are all the credentials used for the MySQL database
 
 
 ## More

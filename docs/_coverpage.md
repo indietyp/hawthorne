@@ -1,21 +1,20 @@
 ![logo][image-1]
 
-# hawthorne <small>0.8.4</small>
+# Hawthorne <small>beta</small>
 
-> Just reimagined game server management.
+> Server Management and Administration in one place.
 
-* allround solution
-* simple installation and maintenance
-* built with modern technologies
-* server resource friendly
+* Complete Control
+* Blazing Fast & Secure
+* Multilingual & Extendable
 
 [GitHub][1]
 [Get Started][2]
 
-![color][image-2]
+![color](rgba(0,0,0,0))
 
 [1]:	https://github.com/laevis/hawthorne/
 [2]:	getting-started#getting-started-with-hawthorne
 
-[image-1]:	images/logo.svg
-[image-2]:	#1F262D
+[image-1]:	_media/logo.svg
+

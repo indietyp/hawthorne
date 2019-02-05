@@ -5,6 +5,6 @@ The API is the primary way to interact  with the application. It gathers informa
 The API is in itself stable, should there be a major revision and a new version will be issued. (e.g. `api/v2`), **and in the next major point release the old API endpoint removed**.
 
 # Versions
-?> v1 added in v0.0; final in v0.8
+?> v1 added in v0.0; final in v0.9
 
 ?> v2 TBD
