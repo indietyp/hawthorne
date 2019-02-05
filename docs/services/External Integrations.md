@@ -1,5 +1,7 @@
 # External Integrations
-## Importing from:
+## Import
+
+You can import from many different similar systems using a simple command. Beware that due to the nature of the operation this can take _hours_ to complete. Using something like `screen` is recommended.
 
 ```bash
 python3 manage.py import --mode <mode> --host <host> --user <user> --password <password> --database <database>

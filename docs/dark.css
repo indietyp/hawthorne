@@ -344,6 +344,7 @@ body.sticky .sidebar, body.sticky .sidebar-toggle {
 }
 
 .content {
+  min-height: 100vh;
   padding-top: 60px;
   margin-left: 300px;
   transition: left .25s ease;
@@ -926,8 +927,9 @@ pre:after {
 }
 
 .markdown-section p.tip {
-  background-color: #282828;
-  color: #657b83;
+  background-color: rgba(0, 0, 0, 0.05);
+
+  /*  color: #657b83;*/
 }
 
 input[type=search] {
