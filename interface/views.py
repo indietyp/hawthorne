@@ -148,9 +148,11 @@ def settings(request):
 
 def page_not_found(request, exception=None, template_name='404.pug'):
   creatures = ['retarded', 'hot', 'crazed', 'embarrassed', 'worried', 'annoyed']
-  return render(request, 'skeleton/errors/404.pug', {'creature': random.choice(creatures)})
+  return render(request, 'skeleton/errors/404.pug',
+                {'creature': random.choice(creatures)}, status=404)
 
 
 def internal_server_error(request, template_name='500.pug '):
   creatures = ['retarded', 'hot', 'crazed', 'embarrassed', 'worried', 'annoyed']
-  return render(request, 'skeleton/errors/500.pug', {'creature': random.choice(creatures)})
+  return render(request, 'skeleton/errors/500.pug',
+                {'creature': random.choice(creatures)}, status=500)
