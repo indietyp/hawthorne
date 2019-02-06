@@ -5,7 +5,8 @@ Hawthorne is a project aimed to provide an easy and modern way to interact with 
 Hawthorne uses [Semantic Versioning][1], which means that _0.x.x_ is currently the unstable beta version - where things can drastically change from one point release to another, with the planned 1.x.x release cycle the product will be stable.
 
 ## Documentation
-For the project documentation and installing guide please visit https://docs.hawthornepanel.org/
+
+For the project documentation and installing guide please visit [our dedicated documentation](https://docs.hawthornepanel.org/)
 
 ## Functionality & Features
 
@@ -44,10 +45,11 @@ For the project documentation and installing guide please visit https://docs.haw
 ## Partners & Tools
 
 ### [![](docs/_media/browserstack.png)](https://www.browserstack.com)
+
 BrowserStack enables us to test the Hawthorne interface and it's functionality over multiple devices and services automatically. BrowserStack is therefore fundamental to our UI and UX development and testing process and identifies inconsistencies we might face with different operating systems and browsers, which we wouldn't be able to identify manually.
 
-
 ## Showcase
+
 ![][image-1]
 ![][image-2]
 ![][image-3]
