@@ -2,12 +2,8 @@ import json
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
-from django.core.cache import cache
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
-from functools import partial
-from jellyfish import jaro_winkler
-from multiprocessing import Pool, cpu_count
 from steam.steamid import SteamID
 
 from core.lib.steam import populate

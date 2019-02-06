@@ -8,14 +8,12 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group, Permission
 from django.db import connection
-from django.db.models import Count, DateTimeField, ExpressionWrapper, F, Subquery
-from django.db.models.functions import Extract
+from django.db.models import DateTimeField, ExpressionWrapper, F
 from django.http import Http404, JsonResponse
 from django.shortcuts import render
 from django.utils import timezone
 
 from core.models import Punishment, Role, Server, User
-from log.models import UserConnection
 
 
 def login(request):
