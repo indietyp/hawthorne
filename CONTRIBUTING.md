@@ -6,14 +6,14 @@ This CONTRIBUTING.md is adapted from the atom project.
 #### Table Of Contents
 
 [Styleguides](#styleguides)
-  * [Git Commit Messages](#git-commit-messages)
-  * [Python Styleguide](#python-styleguide)
-  * [SourcePawn Styleguide](#sourcepawn-styleguide)
+* [Git Commit Messages](#git-commit-messages)
+* [Python Styleguide](#python-styleguide)
+* [SourcePawn Styleguide](#sourcepawn-styleguide)
 
 [How Can I Contribute?](#how-can-i-contribute)
-  * [Reporting Bugs](#reporting-bugs)
-  * [Suggesting Enhancements](#suggesting-enhancements)
-  * [Pull Requests](#pull-requests)
+* [Reporting Bugs](#reporting-bugs)
+* [Suggesting Enhancements](#suggesting-enhancements)
+* [Pull Requests](#pull-requests)
 
 
 ## How Can I Contribute?
@@ -60,26 +60,28 @@ SourcePawn has no global styleguide so these are the one in the project used - t
 * 90-ish characters per line or less
 * `{` and `}` **never** on a line alone
 
-    Valid:
-    ```
-        if () {
+Valid:
 
-        } else {
+```
+    if () {
 
-        }
-    ```
+    } else {
 
-    Invalid:
-    ```
-        if ()
-        {
+    }
+```
 
-        }
-        else
-        {
+Invalid:
 
-        }
-    ```
+```
+    if ()
+    {
+
+    }
+    else
+    {
+
+    }
+```
 * Functions are in _CamelCase_
 * Variables are in _snake_case_
 * Variable and function names need to be short **and** expressive. Variablename `a` is **not valid**, `state` is **valid**

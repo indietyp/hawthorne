@@ -8,6 +8,7 @@ Hawthorne uses [Semantic Versioning][1], which means that _0.x.x_ is currently t
 For the project documentation and installing guide please visit https://docs.hawthornepanel.org/
 
 ## Functionality & Features
+
 * Multiple Managed Instances
 * Bans, Mutes, Gags
 * Detailed Chat & Activity Logs
@@ -23,6 +24,7 @@ For the project documentation and installing guide please visit https://docs.haw
 \* are planned features
 
 ## Roadmap
+
 * ~0.9.0: UI rework~
 * 0.9.1: CLI install.sh rework
 * 0.9.2: APIv2
@@ -41,6 +43,7 @@ For the project documentation and installing guide please visit https://docs.haw
 
 ## Partners & Tools
 ### [![](docs/_media/browserstack.png)](https://www.browserstack.com)
+
 BrowserStack enables us to test the Hawthorne interface and it's functionality over multiple devices and services automatically. BrowserStack is therefore fundamental to our UI and UX development and testing process and identifies inconsistencies we might face with different operating systems and browsers, which we wouldn't be able to identify manually.
 
 
