@@ -4,8 +4,7 @@ First of, thank you for taking the time out of your busy schedule to help this p
 
 This CONTRIBUTING.md is adapted from the atom project.
 
-## Table Of Contents
-
+#### Table Of Contents
 [Styleguides](#styleguides)
 *  [Git Commit Messages](#git-commit-messages)
 *  [Python Styleguide](#python-styleguide)
