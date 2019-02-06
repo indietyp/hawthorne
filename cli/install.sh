@@ -8,6 +8,7 @@ dev=0
 path=0
 local=0
 docker=0
+ui=1
 
 web="nginx"
 domain=""
@@ -16,6 +17,13 @@ stapi=""
 admin=""
 user=""
 conn=""
+
+# whiptail configuration
+MAX_HEIGHT=$(tput lines)
+MAX_WIDTH=$(tput cols)
+
+MAX_HEIGHT=$(( $MAX_HEIGHT / 2 ))
+MAX_WIDTH=$(( $MAX_WIDTH * 3 / 4 ))
 
 export LC_ALL=C
 
@@ -41,10 +49,60 @@ fi
 
 set -e
 
+# whiptail shortcuts
+dconf() {
+  whiptail --yesno "$1" --title "$2" $MAX_HEIGHT $MAX_WIDTH
+}
+
+dnoti() {
+  if [ $ui -eq 1 ]; then
+    whiptail --infobox "$1" --title "$2" $MAX_HEIGHT $MAX_WIDTH
+  else
+    printf "${BOLD}$2:${NORMAL}$1\n"
+  fi
+}
+
+dmsg() {
+  if [ $ui -eq 1 ]; then
+    whiptail --msgbox "$1" --title "$2" $MAX_HEIGHT $MAX_WIDTH
+  else
+    printf "${BOLD}$2:${NORMAL}$1\n"
+  fi
+}
+
+dinpu() {
+  whiptail --inputbox "$1" --title "$2" $MAX_HEIGHT $MAX_WIDTH "$3" 2>&1 1>&3
+}
+
+trap cleanup 1 2 3 6
+
+dcolor() {
+  if [ "x$1" = "x" ]; then
+    NEWT_COLOR="brightblue"
+  else
+    NEWT_COLOR="$1"
+  fi
+
+  export NEWT_COLORS="
+    window=cyan,${NEWT_COLOR}
+    border=white,${NEWT_COLOR}
+    title=white,${NEWT_COLOR}
+    textbox=white,${NEWT_COLOR}
+    button=black,white
+    actbutton=black,red
+    compactbutton=white,${NEWT_COLOR}
+  "
+}
+
 cleanup() {
-  printf "${RED}Configuration or Installation have failed... Cleaning up the downloaded repo${NORMAL}\n"
+  dcolor "red"
+  log=$(tail -n 25 install.log)
+  dmsg "A criticial error occured, installation script is cleaning up.\nStacktrace of the error: (complete log can be found in install.log)\n\n$log" "[EXIT]"
+  dcolor
+
   rm -rf $directory
 }
+
 
 usage() {
   printf "\nThe hawthorne installation tool is an effort to make the installation on unix based system a bit easier and automated."
@@ -54,8 +112,8 @@ usage() {
   printf "\n\t${GREEN}install${NORMAL}"
   printf "\n\t${GREEN}configure${NORMAL}"
   printf "\n\n${RED}Installation Options:${NORMAL}"
-  printf "\n\t${GREEN}-d${NORMAL}                                       --development"
   printf "\n\t${GREEN}-h${NORMAL}                                       --help"
+  printf "\n\t${GREEN}-noui${NORMAL}                                    (disable UI)"
   printf "\n\n${RED}Optional Arguments:${NORMAL}"
   printf "\n\t${GREEN}+d <domain>${NORMAL}                              --domain example.com"
   printf "\n\t${GREEN}+s <steam api key>${NORMAL}                       --steam 665F388103DAF49235356BA3EFD0849E"
@@ -73,10 +131,10 @@ parser() {
 
   while [ "$1" != "" ]; do
     case $1 in
-        -d | --development)               dev=1
-                                          ;;
         -h | --help | help)               usage
                                           exit
+                                          ;;
+        -noui)                            ui=0
                                           ;;
         -c | --configure | configure)     configure=1
                                           ;;
@@ -132,107 +190,84 @@ parser() {
 }
 
 install() {
+  exec 3>&1
   if ! [ $(id -u) -eq 0 ]; then
-    echo "Please run as ${RED}root${NORMAL}"
+    dcolor "red"
+    dmsg "Critical Error. The installation script needs to be run with root privileges." "[01/??] Checking Prerequisites"
     exit 1
   fi
 
-  printf "${GREEN}You have entered the installation part of the installations script. ${NORMAL}\n"
 
-  if [ $nginx -ne 1 ]; then
-    printf "${RED}You still need to install a webserver of your choosing and provide a mysql server. ${NORMAL}\n\n"
-  else
-    printf "We are going to install ${RED}nginx.${NORMAL}\n\n"
-  fi
-
-  printf "Everything will be configured by itelf.\n"
-  printf "The configured installation path used will be ${GREEN}${directory}${NORMAL}\n"
+  dmsg "MySQL as well as a webserver as not going to be installed." "[01/??] Checking Prerequisites"
 
   if [ $path -eq 0 ]; then
-    while true; do
-      read -p "Do you want to define a custom path? ${GREEN}(y)${NORMAL}es or ${RED}(n)${NORMAL}o: " yn
-      case $yn in
-          [Yy]* ) read -p "Where should hawthorne be installed? " directory; break;;
-          [Nn]* ) break;;
-          * ) echo "Please answer with the choices provided.";;
-      esac
-    done
+    directory=$(dinpu "Please choose an installation directory." "[01/??] Checking Prerequisites" $directory)
+  else
+    dmsg "Hawthorne will be installed at ${directory}" "[01/??] Checking Prerequisites"
   fi
 
   umask g-w,o-w
 
-  printf "${BLUE}Installing system wide package requirements...${NORMAL}\n"
-  if hash apt >/dev/null 2>&1; then
-    apt update
-    apt install -y libmysqlclient-dev || {
-      apt install -y default-libmysqlclient-dev
-    }
+  {
+    dnoti "Currently installing packages with the package manager" "[02/??] Installing Packages"
 
-    apt install -y -qq --force-yes --fix-missing python3 python3-dev python3-pip redis-server libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential curl bash
+    if hash apt >/dev/null 2>&1; then
+      apt update
+      apt install -y libmysqlclient-dev || {
+        apt install -y default-libmysqlclient-dev
+      }
 
-    if [ $dev -eq 1 ]; then
-      wget -O ruby-install-0.6.1.tar.gz https://github.com/postmodern/ruby-install/archive/v0.6.1.tar.gz
-      tar -xzvf ruby-install-0.6.1.tar.gz
-      cd ruby-install-0.6.1/
-      sudo make install --silent
+      apt install -y --force-yes --fix-missing python3 python3-dev python3-pip redis-server libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential curl bash
+
+      curl -sL deb.nodesource.com/setup_8.x | bash -
+      apt install -y nodejs
+
+      hash git >/dev/null 2>&1 || {
+        apt install git
+      }
+
+    elif hash yum >/dev/null 2>&1; then
+      yum -y update
+      yum -y install wget
+      yum-builddep python
+      curl -O https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz
+      tar xf Python-3.6.4.tgz
+      rm Python-3.6.4.tgz
+      cd Python-3.6.4
+      ./configure
+      make
+      make install
       cd ..
-      rm -rf ruby-install-0.6.1
-      rm ruby-install-0.6.1.tar.gz
+      rm -rf Python-3.6.4
+
+      yum -y install epel-release
+      yum -y update
+      yum -y install redis supervisor
+      systemctl start redis
+      systemctl enable redis
+
+      yum -y install mysql mysql-devel mysql-lib
+      yum -y install libxml2-devel libffi-devel libxslt-devel openssl-devel
+
+      curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -
+      yum -y install nodejs
+
+      hash git >/dev/null 2>&1 || {
+        yum install http://opensource.wandisco.com/centos/7/git/x86_64/wandisco-git-release-7-2.noarch.rpm
+        yum -y install git
+      }
+
+      ln -s /usr/local/bin/python3 /usr/bin/python3
+      ln -s /usr/local/bin/pip3 /usr/bin/pip3
+      /usr/sbin/setsebool -P httpd_can_network_connect 1
+    else
+      dcolor "red"
+      dmsg "The installation has been aborted. Your package manager is currently not supported. \n\n To enable support for your package manager please contact the current maintainer." "[02/??] Installing Packages"
+      dcolor
+
+      exit 1
     fi
-
-
-    curl -sL deb.nodesource.com/setup_8.x | bash -
-    apt install -y -qq nodejs
-
-    if [ $nginx -eq 1 ]; then
-      apt install -y -qq --force-yes --fix-missing nginx
-    fi
-
-    hash git >/dev/null 2>&1 || {
-      printf "${YELLOW}Git not preinstalled. Reinstalling...${NORMAL}\n"
-      apt install -qq git
-    }
-
-  elif hash yum >/dev/null 2>&1; then
-    yum -y update
-    yum -y install wget
-    yum-builddep python
-    curl -O https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz
-    tar xf Python-3.6.4.tgz
-    rm Python-3.6.4.tgz
-    cd Python-3.6.4
-    ./configure
-    make
-    make install
-    cd ..
-    rm -rf Python-3.6.4
-
-    yum -y install epel-release
-    yum -y update
-    yum -y install redis supervisor
-    systemctl start redis
-    systemctl enable redis
-
-    yum -y install mysql mysql-devel mysql-lib
-    yum -y install libxml2-devel libffi-devel libxslt-devel openssl-devel
-
-    curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -
-    yum -y install nodejs
-
-    hash git >/dev/null 2>&1 || {
-      printf "${YELLOW}Git not preinstalled. Reinstalling...${NORMAL}\n"
-      yum install http://opensource.wandisco.com/centos/7/git/x86_64/wandisco-git-release-7-2.noarch.rpm
-      yum -y install git
-    }
-
-    ln -s /usr/local/bin/python3 /usr/bin/python3
-    ln -s /usr/local/bin/pip3 /usr/bin/pip3
-    /usr/sbin/setsebool -P httpd_can_network_connect 1
-  else
-    printf "Your package manager is currently not supported. Please contact the maintainer\n"
-    printf "${BLUE}opensource@indietyp.com${NORMAL} or open an issue\n"
-    exit 1
-  fi
+  } >> install.log 2>&1
 
   # we need that total path boi
   directory=$(python3 -c "import os; print(os.path.abspath(os.path.expanduser('$directory')))")
@@ -257,7 +292,6 @@ install() {
   pip3 install -U wheel setuptools
   pip3 install cryptography || {
     printf "${BOLD}Too old pip3 version... upgrading${NORMAL}\n"
-    apt install -y wget
     wget https://bootstrap.pypa.io/get-pip.py
     python3 get-pip.py
     rm get-pip.py
@@ -267,18 +301,10 @@ install() {
 
   pip3 install gunicorn
   pip3 install -r $directory/requirements.txt
-  if [ $dev -eq 1 ]; then
-    pip3 install -r $directory/requirements.dev.txt
-  fi
 
   npm install -g --quiet pug
-
-  if [ $dev -eq 1 ]; then
-    npm install -g --quiet coffeescript
-    gem install -q sass --no-user-install
-  fi
-
   printf "${GREEN}Installation has been successfully finished...${NORMAL}\n"
+  exec 3>&-
 }
 
 configure() {
@@ -355,10 +381,6 @@ configure() {
   sed -i "s/'PASSWORD': ''/'PASSWORD': '$dbpwd'/g" $directory/panel/local.py
   sed -i "s/SOCIAL_AUTH_STEAM_API_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'/SOCIAL_AUTH_STEAM_API_KEY = '$stapi'/g" $directory/panel/local.py
 
-  if [ $dev -eq 1 ]; then
-    sed -i "s/DEBUG = False/DEBUG = True/g" $directory/panel/local.py
-  fi
-
   if [ $demo -eq 1 ]; then
     sed -i "s/DEMO = False/DEMO = True/g" $directory/panel/local.py
   fi
@@ -375,9 +397,6 @@ configure() {
     python3 $directory/manage.py superusersteam --steamid $admin --check
   fi
 
-  if [ $dev -eq 1 ]; then
-    python3 $directory/manage.py compilestatic
-  fi
   python3 $directory/manage.py collectstatic --noinput -v 0
 
   if [ $nginx -eq 0 ]; then
@@ -475,4 +494,5 @@ main() {
   configure
 }
 
+dcolor
 parser "$@"
