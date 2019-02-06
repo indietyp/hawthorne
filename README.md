@@ -42,8 +42,8 @@ For the project documentation and installing guide please visit https://docs.haw
 
 
 ## Partners & Tools
-### [![](docs/_media/browserstack.png)](https://www.browserstack.com)
 
+### [![](docs/_media/browserstack.png)](https://www.browserstack.com)
 BrowserStack enables us to test the Hawthorne interface and it's functionality over multiple devices and services automatically. BrowserStack is therefore fundamental to our UI and UX development and testing process and identifies inconsistencies we might face with different operating systems and browsers, which we wouldn't be able to identify manually.
 
 
