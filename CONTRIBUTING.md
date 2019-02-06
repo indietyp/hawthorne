@@ -6,14 +6,14 @@ This CONTRIBUTING.md is adapted from the atom project.
 #### Table Of Contents
 
 [Styleguides](#styleguides)
-* [Git Commit Messages](#git-commit-messages)
-* [Python Styleguide](#python-styleguide)
-* [SourcePawn Styleguide](#sourcepawn-styleguide)
+*  [Git Commit Messages](#git-commit-messages)
+*  [Python Styleguide](#python-styleguide)
+*  [SourcePawn Styleguide](#sourcepawn-styleguide)
 
 [How Can I Contribute?](#how-can-i-contribute)
-* [Reporting Bugs](#reporting-bugs)
-* [Suggesting Enhancements](#suggesting-enhancements)
-* [Pull Requests](#pull-requests)
+*  [Reporting Bugs](#reporting-bugs)
+*  [Suggesting Enhancements](#suggesting-enhancements)
+*  [Pull Requests](#pull-requests)
 
 
 ## How Can I Contribute?
