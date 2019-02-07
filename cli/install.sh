@@ -19,8 +19,8 @@ user=""
 conn=""
 
 # whiptail configuration
-MAX_HEIGHT=$(tput lines 2>/dev/null || 0)
-MAX_WIDTH=$(tput cols 2>/dev/null || 0)
+MAX_HEIGHT=$(tput lines 2>/dev/null || echo 0)
+MAX_WIDTH=$(tput cols 2>/dev/null || echo 0)
 
 MAX_HEIGHT=$(( $MAX_HEIGHT / 2 ))
 MAX_WIDTH=$(( $MAX_WIDTH * 3 / 4 ))
