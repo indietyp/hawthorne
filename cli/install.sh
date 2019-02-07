@@ -93,6 +93,7 @@ dcolor() {
     compactbutton=white,${NEWT_COLOR}
   "
 }
+dcolor
 
 cleanup() {
   log=$(tail -n 25 install.log)
