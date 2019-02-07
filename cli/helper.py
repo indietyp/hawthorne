@@ -168,6 +168,7 @@ def reconfigure(bind, link, config, gunicorn, nginx, logrotate, supervisor):
     run(['nginx', '-s', 'reload'], stdout=PIPE, stderr=PIPE)
 
 
+# hawthorne initialize
 cli.add_command(update)
 cli.add_command(report)
 cli.add_command(verify)

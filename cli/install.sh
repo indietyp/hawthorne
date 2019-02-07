@@ -19,8 +19,8 @@ user=""
 conn=""
 
 # whiptail configuration
-MAX_HEIGHT=$(tput lines)
-MAX_WIDTH=$(tput cols)
+MAX_HEIGHT=$(tput lines 2>/dev/null || 0)
+MAX_WIDTH=$(tput cols 2>/dev/null || 0)
 
 MAX_HEIGHT=$(( $MAX_HEIGHT / 2 ))
 MAX_WIDTH=$(( $MAX_WIDTH * 3 / 4 ))
@@ -95,8 +95,9 @@ dcolor() {
 }
 
 cleanup() {
-  dcolor "red"
   log=$(tail -n 25 install.log)
+
+  dcolor "red"
   dmsg "A criticial error occured, installation script is cleaning up.\nStacktrace of the error: (complete log can be found in install.log)\n\n$log" "[EXIT]"
   dcolor
 
@@ -171,34 +172,32 @@ parser() {
     shift
   done
 
+  dmsg "Welcome to the automated installation script of Hawthorne. With this script we're going to install and configure all necessary tools to run HT. You may be asked to provide additional information." "Introduction"
+
   if [ $install -eq 0 -a $configure -eq 0 ]; then
-    main || {
-      printf "${RED}Detected problem, cleaning up.${NORMAL}\n"
-      cleanup
-    }
+    main
   elif [ $install -eq 1 ]; then
-    install || {
-      printf "${RED}Detected problem, cleaning up.${NORMAL}\n"
-      cleanup
-    }
+    install
   elif [ $configure -eq 1 ]; then
-    configure || {
-      printf "${RED}Detected problem, cleaning up.${NORMAL}\n"
-      cleanup
-    }
+    configure
   fi
+
+  dcolor "green"
+  dmsg "Installation has been successfully finished! You can now use Hawthorne." "Completion"
+  dcolor
 }
 
 install() {
   exec 3>&1
+
   if ! [ $(id -u) -eq 0 ]; then
     dcolor "red"
-    dmsg "Critical Error. The installation script needs to be run with root privileges." "[01/??] Checking Prerequisites"
+    dmsg "The installation script needs to be run with root privileges." "[01/??] [ERROR] Checking Prerequisites"
+    dcolor
     exit 1
   fi
 
-
-  dmsg "MySQL as well as a webserver as not going to be installed." "[01/??] Checking Prerequisites"
+  dmsg "MySQL as well as a webserver are not going to be installed." "[01/??] Checking Prerequisites"
 
   if [ $path -eq 0 ]; then
     directory=$(dinpu "Please choose an installation directory." "[01/??] Checking Prerequisites" $directory)
@@ -208,9 +207,8 @@ install() {
 
   umask g-w,o-w
 
+  dnoti "Currently installing packages with the package manager" "[02/??] Installing Packages"
   {
-    dnoti "Currently installing packages with the package manager" "[02/??] Installing Packages"
-
     if hash apt >/dev/null 2>&1; then
       apt update
       apt install -y libmysqlclient-dev || {
@@ -242,15 +240,11 @@ install() {
 
       yum -y install epel-release
       yum -y update
-      yum -y install redis supervisor
+      curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -
+
+      yum -y install redis supervisor mysql mysql-devel mysql-lib libxml2-devel libffi-devel libxslt-devel openssl-devel nodejs
       systemctl start redis
       systemctl enable redis
-
-      yum -y install mysql mysql-devel mysql-lib
-      yum -y install libxml2-devel libffi-devel libxslt-devel openssl-devel
-
-      curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -
-      yum -y install nodejs
 
       hash git >/dev/null 2>&1 || {
         yum install http://opensource.wandisco.com/centos/7/git/x86_64/wandisco-git-release-7-2.noarch.rpm
@@ -269,41 +263,45 @@ install() {
     fi
   } >> install.log 2>&1
 
-  # we need that total path boi
-  directory=$(python3 -c "import os; print(os.path.abspath(os.path.expanduser('$directory')))")
+  dnoti "Getting the codebase from the internet" "[03/??] Cloning Repository"
+  {
+    directory=$(python3 -c "import os; print(os.path.abspath(os.path.expanduser('$directory')))")
 
-  if [ $local -eq 0 ]; then
-    printf "${BOLD}Cloning the project...${NORMAL}\n"
-    env git clone https://github.com/indietyp/hawthorne $directory || {
-      printf "${RED}Error:${NORMAL} git clone of hawthorne repo failed\n"
-      exit 1
+    if [ $local -eq 0 ]; then
+      env git clone https://github.com/indietyp/hawthorne $directory || {
+        dcolor "red"
+        dmsg "Cloning the Repository failed" "[03/??] [ERROR] Cloning Repository"
+        dcolor
+
+        exit 1
+      }
+    else
+      SCRIPT=$(readlink -f "$0")
+      current=$(dirname $(dirname "$SCRIPT"))
+
+      mv "$current" "$directory"
+      chmod -R +x $directory
+    fi
+  } >> install.log 2>&1
+
+  dnoti "Currently installing language specific packages" "[04/??] Installing Languages"
+  {
+    printf "${BOLD}Installing dependencies...${NORMAL}\n"
+    pip3 install -U wheel setuptools
+    pip3 install cryptography || {
+      wget https://bootstrap.pypa.io/get-pip.py
+      python3 get-pip.py
+      rm get-pip.py
+
+      alias pip3="/usr/local/bin/pip3"
     }
-  else
-    printf "${BOLD}Moving files...${NORMAL}\n"
 
-    SCRIPT=$(readlink -f "$0")
-    current=$(dirname $(dirname "$SCRIPT"))
+    pip3 install gunicorn
+    pip3 install -r $directory/requirements.txt
 
-    mv "$current" "$directory"
-    chmod -R +x $directory
-  fi
+    npm install -g pug
+  } >> install.log 2>&1
 
-  printf "${BOLD}Installing dependencies...${NORMAL}\n"
-  pip3 install -U wheel setuptools
-  pip3 install cryptography || {
-    printf "${BOLD}Too old pip3 version... upgrading${NORMAL}\n"
-    wget https://bootstrap.pypa.io/get-pip.py
-    python3 get-pip.py
-    rm get-pip.py
-
-    alias pip3="/usr/local/bin/pip3"
-  }
-
-  pip3 install gunicorn
-  pip3 install -r $directory/requirements.txt
-
-  npm install -g --quiet pug
-  printf "${GREEN}Installation has been successfully finished...${NORMAL}\n"
   exec 3>&-
 }
 
