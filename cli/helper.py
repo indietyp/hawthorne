@@ -194,20 +194,28 @@ def initialize(database, steam, demo, host, root, secret):
     connection = database if database.startswith('mysql://') else 'mysql://' + database
 
     connection = urlparse(connection)
-    ini['database']['user'] = connection.username
-    ini['database']['password'] = connection.password
-    ini['database']['host'] = connection.hostname
-    ini['database']['port'] = connection.port if connection.port else 3306
-    ini['database']['database'] = connection.query[1:]
+
+    if connection.username:
+      ini['database']['user'] = connection.username
+
+    if connection.password:
+      ini['database']['password'] = connection.password
+
+    if connection.hostname:
+      ini['database']['host'] = connection.hostname
+    ini['database']['port'] = str(connection.port if connection.port else 3306)
+
+    if connection.path:
+      ini['database']['name'] = connection.path[1:]
 
   if steam:
     ini['system']['steamapi'] = steam
 
-  if demo:
-    ini['system']['demo'] = demo
+  if demo is not None:
+    ini['system']['demo'] = str(demo).lower()
 
   if host:
-    ini['system']['hosts'] = host
+    ini['system']['hosts'] = ','.join(host)
 
   if secret:
     secret = ''
