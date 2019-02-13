@@ -168,12 +168,48 @@ def reconfigure(bind, link, config, gunicorn, nginx, logrotate, supervisor):
     run(['nginx', '-s', 'reload'], stdout=PIPE, stderr=PIPE)
 
 
+@click.command()
+@click.option('--database', expose_value=True)
+@click.option('--steam', expose_value=True)
+@click.option('--demo', type=bool, expose_value=True)
+@click.option('--host', multiple=True, expose_value=True)  # array
+@click.option('--root', expose_value=True)
+@click.option('--secret', is_flag=True, default=False, expose_value=True)
+def initialize(database, steam, demo, host, root, secret):
+  print(database, steam, demo, host, root, secret)
+  return
+
+  config = BASE_DIR + '/panel/local.ini'
+  target = 'local.ini' if os.path.isfile(config) else "local.default.ini"
+
+  if not os.path.isfile(config):
+    shutil.copy(BASE_DIR + '/panel/local.default.py',
+                BASE_DIR + '/panel/local.py')
+
+  ini = ConfigParser()
+  ini.read(BASE_DIR + '/panel/' + target)
+
+
+  with open(config, 'w') as file:
+    ini.write(file)
+
+  # copy local.ini and local.py
+  # database
+  # steam
+  # demo
+  # hosts
+  # secret
+  # root
+  pass
+
+
 # hawthorne initialize
 cli.add_command(update)
 cli.add_command(report)
 cli.add_command(verify)
 cli.add_command(version)
 cli.add_command(reconfigure)
+cli.add_command(initialize)
 
 
 if __name__ == '__main__':

@@ -58,7 +58,7 @@ dnoti() {
   if [ $ui -eq 1 ]; then
     whiptail --infobox "$1" --title "$2" $MAX_HEIGHT $MAX_WIDTH
   else
-    printf "${BOLD}$2:${NORMAL}$1\n"
+    printf "${BOLD}$2: ${NORMAL}$1\n"
   fi
 }
 
@@ -66,7 +66,7 @@ dmsg() {
   if [ $ui -eq 1 ]; then
     whiptail --msgbox "$1" --title "$2" $MAX_HEIGHT $MAX_WIDTH
   else
-    printf "${BOLD}$2:${NORMAL}$1\n"
+    printf "${BOLD}$2: ${NORMAL}$1\n"
   fi
 }
 
@@ -173,7 +173,7 @@ parser() {
     shift
   done
 
-  dmsg "Welcome to the automated installation script of Hawthorne. With this script we're going to install and configure all necessary tools to run HT. You may be asked to provide additional information." "Introduction"
+  dmsg "Welcome to the automated installation script of Hawthorne. With this script we're going to install and configure all necessary tools to run HT. You may be asked to provide additional information." "[00/??] Introduction"
 
   if [ $install -eq 0 -a $configure -eq 0 ]; then
     main
@@ -184,7 +184,7 @@ parser() {
   fi
 
   dcolor "green"
-  dmsg "Installation has been successfully finished! You can now use Hawthorne." "Completion"
+  dmsg "Installation has been successfully finished! You can now use Hawthorne." "[00/??] Completion"
   dcolor
 }
 
@@ -243,7 +243,7 @@ install() {
       yum -y update
       curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -
 
-      yum -y install redis supervisor mysql mysql-devel mysql-lib libxml2-devel libffi-devel libxslt-devel openssl-devel nodejs
+      yum -y install redis supervisor mysql mysql-devel MariaDB-devel mysql-lib libxml2-devel libffi-devel libxslt-devel openssl-devel nodejs
       systemctl start redis
       systemctl enable redis
 
@@ -307,39 +307,21 @@ install() {
 }
 
 configure() {
-  printf "${GREEN}Configuration has been successfully started...${NORMAL}\n"
-  printf "${BOLD}Copying the local only files...${NORMAL}\n"
-  cp -rf $directory/panel/local.default.py $directory/panel/local.py
-  cp -rf $directory/cli/configs/gunicorn.default.conf.py $directory/gunicorn.conf.py
-  cp -rf $directory/cli/configs/supervisor.default.conf $directory/supervisor.conf
   mkdir -p /var/log/hawthorne
+  ln -s $directory/cli/helper.py /usr/bin/hawthorne
+  ln -s $directory/cli/helper.py /usr/bin/ht
 
   if [ "$conn" = "" ]; then
-    printf "\n\n${GREEN}Database configuration:${NORMAL}\n"
-    while true; do
-      read -p 'Host     (default: localhost):  ' dbhost
-      read -p 'Port     (default: 3306):       ' dbport
-      read -p 'User     (default: root):       ' dbuser
-      read -p 'Database (default: hawthorne):  ' dbname
-      read -p 'Password:                       ' dbpwd
-
-      dbhost=${dbhost:-localhost}
-      dbport=${dbport:-3306}
-      dbuser=${dbuser:-root}
-      dbname=${dbname:-hawthorne}
-
-      export MYSQL_PWD=$dbpwd
-      export MYSQL_HOST=$dbhost
-      export MYSQL_TCP_PORT=$dbport
-
-      if mysql -u $dbuser -e "CREATE DATABASE IF NOT EXISTS $dbname CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"; then
-        printf "\n${GREEN}Successfully connected to database.${NORMAL}\n"
-        break;
-      else
-        printf "\n${RED}Could not connect${NORMAL} to database with provided credentials.\n"
-      fi
-    done
+    pconn=0
   else
+    pconn=1
+  fi
+
+  while true; do
+    if [ $pconn -eq 0 ]; then
+      conn=$(dinpu "MySQL Connection String \n\n Formatting: <user>:<password>@<host>:<port>/<database>" "[05/??] Database")
+    fi
+
     dbuser=$(echo "$conn" | sed -nE 's#^([[:alpha:]]+)[:@].*#\1#p')
     dbpwd=$(echo "$conn" | sed -nE 's#.*:([^@]+)@.*#\1#p')
     dbhost=$(echo "$conn" | sed -nE 's#.*\@([^:]+)[:/].*#\1#p')
@@ -355,137 +337,91 @@ configure() {
     export MYSQL_HOST=$dbhost
     export MYSQL_TCP_PORT=$dbport
 
-    if mysql -u $dbuser -e "CREATE DATABASE IF NOT EXISTS $dbname"; then
-      printf "\n${GREEN}Successfully connected.${NORMAL}\n"
+    if mysql -u $dbuser -e "CREATE DATABASE IF NOT EXISTS $dbname CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"; then
+      dcolor "red"
+      dmsg "Successfully connected to the database."
+      dcolor
+
+      break;
     else
-      printf "\n${RED}Could not connect${NORMAL} to database with provided credentials. Exiting configuration\n"
-      exit 1
-    fi
-  fi
+      dcolor "red"
+      dmsg "Could not connect to database with the provided credentials, please try again." "[05/??] Database"
+      dcolor
 
-  hash mysql_tzinfo_to_sql >/dev/null 2>&1 && {
-    mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u $dbuser mysql
-  }
-
-  if [ "$stapi" = "" ]; then
-    printf "\n\n${GREEN}SteamAPI configuration:${NORMAL}\n"
-    read -p 'Steam API Key: ' stapi
-  fi
-
-  printf "\n\n${BOLD}Setting project specific settings...${NORMAL}\n"
-  sed -i "s/'HOST': 'localhost'/'HOST': '$dbhost'/g" $directory/panel/local.py
-  sed -i "s/'PORT': 'root'/'PORT': '$dbport'/g" $directory/panel/local.py
-  sed -i "s/'NAME': 'hawthorne'/'NAME': '$dbname'/g" $directory/panel/local.py
-  sed -i "s/'USER': 'root'/'USER': '$dbuser'/g" $directory/panel/local.py
-  sed -i "s/'PASSWORD': ''/'PASSWORD': '$dbpwd'/g" $directory/panel/local.py
-  sed -i "s/SOCIAL_AUTH_STEAM_API_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'/SOCIAL_AUTH_STEAM_API_KEY = '$stapi'/g" $directory/panel/local.py
-
-  if [ $demo -eq 1 ]; then
-    sed -i "s/DEMO = False/DEMO = True/g" $directory/panel/local.py
-  fi
-
-  sed -i "s#directory=<replace>#directory=$directory#g" $directory/supervisor.conf
-
-  printf "${BLUE}Setting up the project...${NORMAL}\n"
-  sed -i "s/SECRET_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'/SECRET_KEY = '$(python3 $directory/manage.py generatesecret | tail -1)'/g" $directory/panel/local.py
-  python3 $directory/manage.py migrate
-
-  if [ "$admin" = "" ]; then
-    python3 $directory/manage.py superusersteam --check
-  else
-    python3 $directory/manage.py superusersteam --steamid $admin --check
-  fi
-
-  python3 $directory/manage.py collectstatic --noinput -v 0
-
-  if [ $nginx -eq 0 ]; then
-    printf "${BOLD}Setting up the web server...${NORMAL}\n"
-    while true; do
-      read -p "Is your webserver ${BOLD}(A)${NORMAL}pache, ${BOLD}(N)${NORMAL}ginx or ${BOLD}(D)${NORMAL}ifferent? " yn
-      case $yn in
-          [Aa]* ) web="apache"
-                  break;;
-          [Nn]* ) break;;
-          [Dd]* ) web="unspecified"
-                  break;;
-          * ) echo "Please answer with the choices provided.";;
-      esac
-    done
-  fi
-
-  if [ "$domain" = "" ]; then
-    while true; do
-      read -p "Is the site on an ${BOLD}(I)${NORMAL}P or ${BOLD}(D)${NORMAL}omain? " yn
-      case $yn in
-          [Ii]* ) domain=$(curl -sSSL "https://api.ipify.org/?format=text"); break;;
-          [Dd]* ) read -p "Which (sub-)domain will hawthorne be hosted? " domain; break;;
-          * ) echo "Please answer with the choices provided.";;
-      esac
-    done
-  fi
-
-  sed -i "s|ALLOWED_HOSTS = \[gethostname(), gethostbyname(gethostname())\]|ALLOWED_HOSTS = \['$domain'\]|g" $directory/panel/local.py
-
-  printf "${BOLD}Setting up supervisor...${NORMAL}\n"
-  cp -rf $directory/cli/configs/gunicorn.default.conf.py $directory/gunicorn.conf.py
-  cp -rf $directory/cli/configs/logrotate.default /etc/logrotate.d/hawthorne
-
-  if hash yum >/dev/null 2>&1; then
-    mkdir -p /etc/supervisor/conf.d/
-    mkdir -p /etc/supervisord
-    cp $directory/cli/configs/supervisord.default.conf /etc/supervisord/supervisord.conf
-
-    wget https://gist.githubusercontent.com/mozillazg/6cbdcccbf46fe96a4edd/raw/2f5c6f5e88fc43e27b974f8a4c19088fc22b1bd5/supervisord.service -O /usr/lib/systemd/system/supervisord.service
-    systemctl start supervisord
-    systemctl enable supervisord
-  fi
-
-  ln -sr $directory/supervisor.conf /etc/supervisor/conf.d/hawthorne.conf
-
-  if [ $docker -eq 1 ]; then
-    export LC_ALL=en_US.UTF-8
-
-    sed -i "s#bind = 'unix:/var/run/hawthorne.sock'#bind = '0.0.0.0:8000'#g" $directory/gunicorn.conf.py
-    sed -i "s#ROOT = 'root'#ROOT = '$ROOT'#g" $directory/panel/local.py
-
-    cd $directory
-    celery -A panel worker -B -l info &> /dev/stdout &
-    python3 -m gunicorn.app.wsgiapp panel.wsgi:application
-  else
-    supervisorctl reread
-    supervisorctl update
-    supervisorctl restart hawthorne
-
-    printf "${BOLD}Setting up the toolchain...${NORMAL}\n"
-    ln -s $directory/cli/helper.py /usr/bin/hawthorne
-    ln -s $directory/cli/helper.py /usr/bin/ht
-    chmod +x /usr/bin/hawthorne
-    chmod +x /usr/bin/ht
-
-    if [ $nginx -eq 1 ]; then
-      rm /etc/nginx/sites-enabled/hawthorne
-      ln -s $directory/cli/configs/nginx.example.conf /etc/nginx/sites-enabled/hawthorne
-
-      service nginx restart
-    fi
-
-    printf "\n\n${GREEN}The installation tool has finished the configuration process${NORMAL}\n"
-    printf "Please look over the $directory/${RED}panel/local.py${NORMAL} for additional configuration options. You can restart hawthorne with ${YELLOW}supervisorctl restart hawthorne${NORMAL}\n"
-    printf "For additional information about the configuration please refer to ${YELLOW}https://docs.hawthornepanel.org/#/getting-started?id=web-server-configuration${NORMAL}\n"
-
-    if [ $nginx -ne 2 ]; then
-      echo "$web"
-      printf "${GREEN}These example configurations have been specificially generated for your system, they might need some tweaking: ${NORMAL}\n\n\n"
-      if [ "$web" = "nginx" ]; then
-        sed -i "s/server_name example.com;/server_name '$domain';/g" $directory/cli/configs/nginx.example.conf
-      elif [ "$web" = "apache" ]; then
-        sed -i "s#bind = 'unix:/var/run/hawthorne.sock'#bind = '127.0.0.1:8000'#g" $directory/gunicorn.conf.py
-        sed -i "s/ServerName example.com/ServerName '$domain'/g" $directory/cli/configs/apache.example.conf
+      if [ $pconn -eq 1 ]; then
+        exit 1
       fi
     fi
+  done
+
+  dnoti "Enabling MySQL timezone support" "[05/??] Database"
+  {
+    hash mysql_tzinfo_to_sql >/dev/null 2>&1 && {
+      mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u $dbuser mysql
+    }
+  } >> install.log 2>&1
+
+
+  if [ "$stapi" = "" ]; then
+    stapi=$(dinpu "Your SteamAPI key" "[06/??] Steam credentials")
+  fi
+  if [ "$admin" = "" ]; then
+    admin=$(dinpu "Your SteamID64" "[06/??] Steam credentials")
+  fi
+  if [ "$domain" = "" ]; then
+    hosted=$(dinpu "Which domain/ip is hawthorne going to be hosted on?" "[07/??] HTTP Configuration")
+  fi
+  if [ $nginx -eq 0 ]; then
+    webserver=$(whiptail --radiolist "Choose your used http server" --title "[07/??] HTTP Configuration" $MAX_HEIGHT $MAX_WIDTH 2 "nginx" "" 1 "Apache 2" "" 0 2>&1 1>&3)
   fi
 
-  printf "Without the help of our platinum patreons this wouldn't have been possible. Thank you ${RED}Xypherium${DEFAULT}\n"
+  dmsg "Setting up Hawthorne...." "[08/??] Hawthorne Initialize"
+  {
+    if hash yum >/dev/null 2>&1; then
+      mkdir -p /etc/supervisor/conf.d/
+      mkdir -p /etc/supervisord
+      cp $directory/cli/configs/supervisord.default.conf /etc/supervisord/supervisord.conf
+
+      wget https://gist.githubusercontent.com/mozillazg/6cbdcccbf46fe96a4edd/raw/2f5c6f5e88fc43e27b974f8a4c19088fc22b1bd5/supervisord.service -O /usr/lib/systemd/system/supervisord.service
+      systemctl start supervisord
+      systemctl enable supervisord
+    fi
+
+    bind=socket
+    owner=Owner
+    if [ $docker -eq 1 ]; then
+      owner=$ROOT
+      bind=port
+    fi
+
+    hawthorne initialize --database $conn --steam $stapi --demo $demo --hosts $domain --secret --root $owner
+    hawthorne reconfigure --supervisor --no-nginx --no-apache --gunicorn --logrotate --bind $bind
+    python3 $directory/manage.py migrate
+    python3 $directory/manage.py superusersteam --steamid $admin --check
+    python3 $directory/manage.py collectstatic --noinput -v 0
+
+    if [ "$webserver" = "nginx" ]; then
+      hawthorne reconfigure --no-supervisor --nginx --no-apache --no-gunicorn --no-logrotate
+    else
+      hawthorne reconfigure --no-supervisor --no-nginx --apache --no-gunicorn --no-logrotate
+    fi
+
+  } >> install.log 2>&1
+
+  dsmg "Starting Hawthorne..." "[09/??] Supervisor"
+  {
+    if [ $docker -eq 1 ]; then
+      export LC_ALL=en_US.UTF-8
+
+      cd $directory
+      celery -A panel worker -B -l info &> /dev/stdout &
+      python3 -m gunicorn.app.wsgiapp panel.wsgi:application
+    else
+      supervisorctl reread
+      supervisorctl update
+      supervisorctl restart hawthorne
+    fi
+  } >> install.log 2>&1
 }
 
 main() {
