@@ -319,9 +319,10 @@ configure() {
 
   while true; do
     if [ $pconn -eq 0 ]; then
-      conn=$(dinpu "MySQL Connection String \n\n Formatting: <user>:<password>@<host>:<port>/<database>" "[05/??] Database")
+      conn=$(dinpu "MySQL URL \n\n Formatting: mysql://<user>:<password>@<host>:<port>/<database>\n(Reference: RFC 1808 and RFC1738 Section 3.1)" "[05/??] Database")
     fi
 
+    conn=$(echo "$conn" | sed -nE 's#(mysql://)?(.*)#\2#p')
     dbuser=$(echo "$conn" | sed -nE 's#^([[:alpha:]]+)[:@].*#\1#p')
     dbpwd=$(echo "$conn" | sed -nE 's#.*:([^@]+)@.*#\1#p')
     dbhost=$(echo "$conn" | sed -nE 's#.*\@([^:]+)[:/].*#\1#p')

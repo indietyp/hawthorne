@@ -169,7 +169,8 @@ def reconfigure(bind, link, config, gunicorn, nginx, logrotate, supervisor):
 
 
 @click.command()
-@click.option('--database', expose_value=True)
+@click.option('--database', expose_value=True,
+              help="MySQL Connection URL as described in RFC1738 Section 3.1")
 @click.option('--steam', expose_value=True)
 @click.option('--demo', type=bool, expose_value=True)
 @click.option('--host', multiple=True, expose_value=True)  # array
