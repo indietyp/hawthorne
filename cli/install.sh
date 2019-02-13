@@ -12,6 +12,7 @@ ui=1
 
 web="nginx"
 domain=""
+branch="master"
 
 stapi=""
 admin=""
@@ -117,6 +118,7 @@ usage() {
   printf "\n\t${GREEN}-h${NORMAL}                                       --help"
   printf "\n\t${GREEN}-noui${NORMAL}                                    (disable UI)"
   printf "\n\n${RED}Optional Arguments:${NORMAL}"
+  printf "\n\t${GREEN}+d <branch>${NORMAL}                              --branch master (defaults to master)"
   printf "\n\t${GREEN}+d <domain>${NORMAL}                              --domain example.com"
   printf "\n\t${GREEN}+s <steam api key>${NORMAL}                       --steam 665F388103DAF49235356BA3EFD0849E"
   printf "\n\t${GREEN}+p <path>${NORMAL}                                --path /hawthorne"
@@ -143,6 +145,9 @@ parser() {
         -i | --install | install)         install=1
                                           ;;
         +d | --domain)          shift
+                                domain=$1
+                                ;;
+        +b | --branch)          shift
                                 domain=$1
                                 ;;
         +l | --local)           local=1
@@ -173,7 +178,7 @@ parser() {
     shift
   done
 
-  dmsg "Welcome to the automated installation script of Hawthorne. With this script we're going to install and configure all necessary tools to run HT. You may be asked to provide additional information." "[00/??] Introduction"
+  dmsg "Welcome to the automated installation script of Hawthorne. With this script we're going to install and configure all necessary tools to run HT. You may be asked to provide additional information." "[00/09] Introduction"
 
   if [ $install -eq 0 -a $configure -eq 0 ]; then
     main
@@ -184,7 +189,7 @@ parser() {
   fi
 
   dcolor "green"
-  dmsg "Installation has been successfully finished! You can now use Hawthorne." "[00/??] Completion"
+  dmsg "Installation has been successfully finished! You can now use Hawthorne." "[00/09] Completion"
   dcolor
 }
 
@@ -193,22 +198,22 @@ install() {
 
   if ! [ $(id -u) -eq 0 ]; then
     dcolor "red"
-    dmsg "The installation script needs to be run with root privileges." "[01/??] [ERROR] Checking Prerequisites"
+    dmsg "The installation script needs to be run with root privileges." "[01/09] [ERROR] Checking Prerequisites"
     dcolor
     exit 1
   fi
 
-  dmsg "MySQL as well as a webserver are not going to be installed." "[01/??] Checking Prerequisites"
+  dmsg "MySQL as well as a webserver are not going to be installed." "[01/09] Checking Prerequisites"
 
   if [ $path -eq 0 ]; then
-    directory=$(dinpu "Please choose an installation directory." "[01/??] Checking Prerequisites" $directory)
+    directory=$(dinpu "Please choose an installation directory." "[01/09] Checking Prerequisites" $directory)
   else
-    dmsg "Hawthorne will be installed at ${directory}" "[01/??] Checking Prerequisites"
+    dmsg "Hawthorne will be installed at ${directory}" "[01/09] Checking Prerequisites"
   fi
 
   umask g-w,o-w
 
-  dnoti "Currently installing packages with the package manager" "[02/??] Installing Packages"
+  dnoti "Currently installing packages with the package manager" "[02/09] Installing Packages"
   {
     if hash apt >/dev/null 2>&1; then
       apt update
@@ -257,21 +262,21 @@ install() {
       /usr/sbin/setsebool -P httpd_can_network_connect 1
     else
       dcolor "red"
-      dmsg "The installation has been aborted. Your package manager is currently not supported. \n\n To enable support for your package manager please contact the current maintainer." "[02/??] Installing Packages"
+      dmsg "The installation has been aborted. Your package manager is currently not supported. \n\n To enable support for your package manager please contact the current maintainer." "[02/09] Installing Packages"
       dcolor
 
       exit 1
     fi
   } >> install.log 2>&1
 
-  dnoti "Getting the codebase from the internet" "[03/??] Cloning Repository"
+  dnoti "Getting the codebase from the internet" "[03/09] Cloning Repository"
   {
     directory=$(python3 -c "import os; print(os.path.abspath(os.path.expanduser('$directory')))")
 
     if [ $local -eq 0 ]; then
-      env git clone https://github.com/indietyp/hawthorne $directory || {
+      env git clone --branch $branch https://github.com/indietyp/hawthorne $directory || {
         dcolor "red"
-        dmsg "Cloning the Repository failed" "[03/??] [ERROR] Cloning Repository"
+        dmsg "Cloning the Repository failed" "[03/09] [ERROR] Cloning Repository"
         dcolor
 
         exit 1
@@ -285,7 +290,7 @@ install() {
     fi
   } >> install.log 2>&1
 
-  dnoti "Currently installing language specific packages" "[04/??] Installing Languages"
+  dnoti "Currently installing language specific packages" "[04/09] Installing Languages"
   {
     printf "${BOLD}Installing dependencies...${NORMAL}\n"
     pip3 install -U wheel setuptools
@@ -319,7 +324,7 @@ configure() {
 
   while true; do
     if [ $pconn -eq 0 ]; then
-      conn=$(dinpu "MySQL URL \n\n Formatting: mysql://<user>:<password>@<host>:<port>/<database>\n(Reference: RFC 1808 and RFC1738 Section 3.1)" "[05/??] Database")
+      conn=$(dinpu "MySQL URL \n\n Formatting: mysql://<user>:<password>@<host>:<port>/<database>\n(Reference: RFC 1808 and RFC1738 Section 3.1)" "[05/09] Database")
     fi
 
     conn=$(echo "$conn" | sed -nE 's#(mysql://)?(.*)#\2#p')
@@ -346,7 +351,7 @@ configure() {
       break;
     else
       dcolor "red"
-      dmsg "Could not connect to database with the provided credentials, please try again." "[05/??] Database"
+      dmsg "Could not connect to database with the provided credentials, please try again." "[05/09] Database"
       dcolor
 
       if [ $pconn -eq 1 ]; then
@@ -355,7 +360,7 @@ configure() {
     fi
   done
 
-  dnoti "Enabling MySQL timezone support" "[05/??] Database"
+  dnoti "Enabling MySQL timezone support" "[05/09] Database"
   {
     hash mysql_tzinfo_to_sql >/dev/null 2>&1 && {
       mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u $dbuser mysql
@@ -364,19 +369,19 @@ configure() {
 
 
   if [ "$stapi" = "" ]; then
-    stapi=$(dinpu "Your SteamAPI key" "[06/??] Steam credentials")
+    stapi=$(dinpu "Your SteamAPI key" "[06/09] Steam credentials")
   fi
   if [ "$admin" = "" ]; then
-    admin=$(dinpu "Your SteamID64" "[06/??] Steam credentials")
+    admin=$(dinpu "Your SteamID64" "[06/09] Steam credentials")
   fi
   if [ "$domain" = "" ]; then
-    hosted=$(dinpu "Which domain/ip is hawthorne going to be hosted on?" "[07/??] HTTP Configuration")
+    hosted=$(dinpu "Which domain/ip is hawthorne going to be hosted on?" "[07/09] HTTP Configuration")
   fi
   if [ $nginx -eq 0 ]; then
-    webserver=$(whiptail --radiolist "Choose your used http server" --title "[07/??] HTTP Configuration" $MAX_HEIGHT $MAX_WIDTH 2 "nginx" "" 1 "Apache 2" "" 0 2>&1 1>&3)
+    webserver=$(whiptail --radiolist "Choose your used http server" --title "[07/09] HTTP Configuration" $MAX_HEIGHT $MAX_WIDTH 2 "nginx" "" 1 "Apache 2" "" 0 2>&1 1>&3)
   fi
 
-  dmsg "Setting up Hawthorne...." "[08/??] Hawthorne Initialize"
+  dmsg "Setting up Hawthorne...." "[08/09] Hawthorne Initialize"
   {
     if hash yum >/dev/null 2>&1; then
       mkdir -p /etc/supervisor/conf.d/
@@ -409,7 +414,7 @@ configure() {
 
   } >> install.log 2>&1
 
-  dsmg "Starting Hawthorne..." "[09/??] Supervisor"
+  dsmg "Starting Hawthorne..." "[09/09] Supervisor"
   {
     if [ $docker -eq 1 ]; then
       export LC_ALL=en_US.UTF-8

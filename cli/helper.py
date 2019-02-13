@@ -2,7 +2,9 @@
 import click
 import os
 import pip
+import random
 import shutil
+import string
 import sys
 
 
@@ -13,6 +15,7 @@ from git import Repo
 from git.exc import GitCommandError
 from shutil import which
 from subprocess import PIPE, run
+from urllib.parse import urlparse
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -177,9 +180,6 @@ def reconfigure(bind, link, config, gunicorn, nginx, logrotate, supervisor):
 @click.option('--root', expose_value=True)
 @click.option('--secret', is_flag=True, default=False, expose_value=True)
 def initialize(database, steam, demo, host, root, secret):
-  print(database, steam, demo, host, root, secret)
-  return
-
   config = BASE_DIR + '/panel/local.ini'
   target = 'local.ini' if os.path.isfile(config) else "local.default.ini"
 
@@ -190,21 +190,39 @@ def initialize(database, steam, demo, host, root, secret):
   ini = ConfigParser()
   ini.read(BASE_DIR + '/panel/' + target)
 
+  if database:
+    connection = database if database.startswith('mysql://') else 'mysql://' + database
+
+    connection = urlparse(connection)
+    ini['database']['user'] = connection.username
+    ini['database']['password'] = connection.password
+    ini['database']['host'] = connection.hostname
+    ini['database']['port'] = connection.port if connection.port else 3306
+    ini['database']['database'] = connection.query[1:]
+
+  if steam:
+    ini['system']['steamapi'] = steam
+
+  if demo:
+    ini['system']['demo'] = demo
+
+  if host:
+    ini['system']['hosts'] = host
+
+  if secret:
+    secret = ''
+    for _ in range(64):
+      secret += random.choice(string.ascii_letters + string.digits)
+
+    ini['system']['secret'] = secret
+
+  if root:
+    ini['system']['root'] = root
 
   with open(config, 'w') as file:
     ini.write(file)
 
-  # copy local.ini and local.py
-  # database
-  # steam
-  # demo
-  # hosts
-  # secret
-  # root
-  pass
 
-
-# hawthorne initialize
 cli.add_command(update)
 cli.add_command(report)
 cli.add_command(verify)
