@@ -26,7 +26,13 @@ MAX_WIDTH=$(tput cols 2>/dev/null || echo 0)
 MAX_HEIGHT=$(( $MAX_HEIGHT / 2 ))
 MAX_WIDTH=$(( $MAX_WIDTH * 3 / 4 ))
 
+# fallback if dialog is not present
+DIALOG=$(which dialog 2>/dev/null || which whiptail 2>/dev/null)
+curl https://gist.githubusercontent.com/indietyp/d35983f3d943b61eb3c503e6104f4ccf/raw/886ebc08885a386aa6d61feb93fad9841b867472/.ht.dialogrc -o ~/.ht.dialogrc
+
 export LC_ALL=C
+export NCURSES_NO_UTF8_ACS=1
+export DIALOGRC="~/.ht.dialogrc"
 
 if which tput >/dev/null 2>&1; then
   ncolors=$(tput colors)
@@ -52,12 +58,14 @@ set -e
 
 # whiptail shortcuts
 dconf() {
-  whiptail --yesno "$1" --title "$2" $MAX_HEIGHT $MAX_WIDTH
+  $DIALOG --title "$2" --yesno "$1" $MAX_HEIGHT $MAX_WIDTH
 }
 
 dnoti() {
   if [ $ui -eq 1 ]; then
-    whiptail --infobox "$1" --title "$2" $MAX_HEIGHT $MAX_WIDTH
+    $DIALOG --title "$2" --infobox "$1" $MAX_HEIGHT $MAX_WIDTH
+  elif [[ "$DIALOG" = "$(which whiptail)" ]]; then
+    printf "${BOLD}$2: ${NORMAL}$1 (This can take some time)\n"
   else
     printf "${BOLD}$2: ${NORMAL}$1\n"
   fi
@@ -65,14 +73,14 @@ dnoti() {
 
 dmsg() {
   if [ $ui -eq 1 ]; then
-    whiptail --msgbox "$1" --title "$2" $MAX_HEIGHT $MAX_WIDTH
+    $DIALOG --title "$2" --msgbox "$1" $MAX_HEIGHT $MAX_WIDTH
   else
     printf "${BOLD}$2: ${NORMAL}$1\n"
   fi
 }
 
 dinpu() {
-  whiptail --inputbox "$1" --title "$2" $MAX_HEIGHT $MAX_WIDTH "$3" 2>&1 1>&3
+  $DIALOG --inputbox "$1" --title "$2" $MAX_HEIGHT $MAX_WIDTH "$3" 2>&1 1>&3
 }
 
 trap cleanup 1 2 3 6
@@ -221,7 +229,7 @@ install() {
         apt install -y default-libmysqlclient-dev
       }
 
-      apt install -y --force-yes --fix-missing python3 python3-dev python3-pip redis-server libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential curl bash
+      apt install -y --force-yes --fix-missing python3 python3-dev python3-pip redis-server libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential curl bash dialog
 
       curl -sL deb.nodesource.com/setup_8.x | bash -
       apt install -y nodejs
@@ -248,7 +256,7 @@ install() {
       yum -y update
       curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -
 
-      yum -y install redis supervisor mysql mysql-devel MariaDB-devel mysql-lib libxml2-devel libffi-devel libxslt-devel openssl-devel nodejs
+      yum -y install redis supervisor mysql mysql-devel MariaDB-devel mysql-lib libxml2-devel libffi-devel libxslt-devel openssl-devel nodejs dialog
       systemctl start redis
       systemctl enable redis
 
@@ -268,6 +276,8 @@ install() {
       exit 1
     fi
   } >> install.log 2>&1
+
+  DIALOG=$(which dialog)
 
   dnoti "Getting the codebase from the internet" "[03/09] Cloning Repository"
   {
@@ -378,10 +388,10 @@ configure() {
     hosted=$(dinpu "Which domain/ip is hawthorne going to be hosted on?" "[07/09] HTTP Configuration")
   fi
   if [ $nginx -eq 0 ]; then
-    webserver=$(whiptail --radiolist "Choose your used http server" --title "[07/09] HTTP Configuration" $MAX_HEIGHT $MAX_WIDTH 2 "nginx" "" 1 "Apache 2" "" 0 2>&1 1>&3)
+    webserver=$($DIALOG --radiolist "Choose your used http server" --title "[07/09] HTTP Configuration" $MAX_HEIGHT $MAX_WIDTH 2 "nginx" "" 1 "Apache 2" "" 0 2>&1 1>&3)
   fi
 
-  dmsg "Setting up Hawthorne...." "[08/09] Hawthorne Initialize"
+  dnoti "Setting up Hawthorne...." "[08/09] Hawthorne Initialize"
   {
     if hash yum >/dev/null 2>&1; then
       mkdir -p /etc/supervisor/conf.d/
@@ -414,7 +424,7 @@ configure() {
 
   } >> install.log 2>&1
 
-  dsmg "Starting Hawthorne..." "[09/09] Supervisor"
+  dnoti "Starting Hawthorne..." "[09/09] Supervisor"
   {
     if [ $docker -eq 1 ]; then
       export LC_ALL=en_US.UTF-8
