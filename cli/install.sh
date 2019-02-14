@@ -118,7 +118,7 @@ usage() {
   printf "\n\t${GREEN}-h${NORMAL}                                       --help"
   printf "\n\t${GREEN}-noui${NORMAL}                                    (disable UI)"
   printf "\n\n${RED}Optional Arguments:${NORMAL}"
-  printf "\n\t${GREEN}+d <branch>${NORMAL}                              --branch master (defaults to master)"
+  printf "\n\t${GREEN}+b <branch>${NORMAL}                              --branch master (defaults to master)"
   printf "\n\t${GREEN}+d <domain>${NORMAL}                              --domain example.com"
   printf "\n\t${GREEN}+s <steam api key>${NORMAL}                       --steam 665F388103DAF49235356BA3EFD0849E"
   printf "\n\t${GREEN}+p <path>${NORMAL}                                --path /hawthorne"
@@ -148,7 +148,7 @@ parser() {
                                 domain=$1
                                 ;;
         +b | --branch)          shift
-                                domain=$1
+                                branch=$1
                                 ;;
         +l | --local)           local=1
                                 nginx=2
