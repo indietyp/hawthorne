@@ -62,7 +62,7 @@ dconf() {
 }
 
 dnoti() {
-  if [[ "$DIALOG" = "$(which whiptail)" ]]; then
+  if [ "$DIALOG" = "$(which whiptail)" ]; then
     printf "${BOLD}$2: ${NORMAL}$1\n"
   elif [ $ui -eq 1 ]; then
     $DIALOG --title "$2" --infobox "$1" $MAX_HEIGHT $MAX_WIDTH
@@ -393,7 +393,7 @@ configure() {
 
   dnoti "Setting up Hawthorne...." "[08/09] Hawthorne Initialize"
   {
-    if hash yum >/dev/null 2>&1; then
+    hash yum >/dev/null 2>&1 && {
       mkdir -p /etc/supervisor/conf.d/
       mkdir -p /etc/supervisord
       cp $directory/cli/configs/supervisord.default.conf /etc/supervisord/supervisord.conf
@@ -401,7 +401,7 @@ configure() {
       wget https://gist.githubusercontent.com/mozillazg/6cbdcccbf46fe96a4edd/raw/2f5c6f5e88fc43e27b974f8a4c19088fc22b1bd5/supervisord.service -O /usr/lib/systemd/system/supervisord.service
       systemctl start supervisord
       systemctl enable supervisord
-    fi
+    }
 
     bind=socket
     owner=Owner
@@ -421,6 +421,13 @@ configure() {
     else
       hawthorne reconfigure --no-supervisor --no-nginx --apache --no-gunicorn --no-logrotate
     fi
+
+    hash getenforce >/dev/null 2>&1 && {
+      if [ getenforce != "Disabled" ]; then
+        /usr/sbin/setsebool -P httpd_can_network_connect 1
+        chcon --user system_u --type httpd_sys_content_t -Rv /local/static
+      fi
+    }
 
   } >> install.log 2>&1
 
