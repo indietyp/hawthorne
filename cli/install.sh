@@ -63,7 +63,7 @@ dconf() {
 
 dnoti() {
   if [[ "$DIALOG" = "$(which whiptail)" ]]; then
-    printf "${BOLD}$2: ${NORMAL}$1 (This can take some time)\n"
+    printf "${BOLD}$2: ${NORMAL}$1\n"
   elif [ $ui -eq 1 ]; then
     $DIALOG --title "$2" --infobox "$1" $MAX_HEIGHT $MAX_WIDTH
   else
@@ -221,7 +221,7 @@ install() {
 
   umask g-w,o-w
 
-  dnoti "Currently installing packages with the package manager" "[02/09] Installing Packages"
+  dnoti "Currently installing packages with the package manager (This may take some time)" "[02/09] Installing Packages"
   {
     if hash apt >/dev/null 2>&1; then
       apt update
@@ -241,7 +241,7 @@ install() {
     elif hash yum >/dev/null 2>&1; then
       yum -y update
       yum -y install wget yum-utils
-      yum-builddep python
+      yum-builddep -y python
       curl -O https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz
       tar xf Python-3.6.4.tgz
       rm Python-3.6.4.tgz
