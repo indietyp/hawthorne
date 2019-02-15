@@ -62,10 +62,10 @@ dconf() {
 }
 
 dnoti() {
-  if [ $ui -eq 1 ]; then
-    $DIALOG --title "$2" --infobox "$1" $MAX_HEIGHT $MAX_WIDTH
-  elif [[ "$DIALOG" = "$(which whiptail)" ]]; then
+  if [[ "$DIALOG" = "$(which whiptail)" ]]; then
     printf "${BOLD}$2: ${NORMAL}$1 (This can take some time)\n"
+  elif [ $ui -eq 1 ]; then
+    $DIALOG --title "$2" --infobox "$1" $MAX_HEIGHT $MAX_WIDTH
   else
     printf "${BOLD}$2: ${NORMAL}$1\n"
   fi
@@ -240,7 +240,7 @@ install() {
 
     elif hash yum >/dev/null 2>&1; then
       yum -y update
-      yum -y install wget
+      yum -y install wget yum-utils
       yum-builddep python
       curl -O https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz
       tar xf Python-3.6.4.tgz
