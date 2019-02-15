@@ -34,8 +34,6 @@ Currently hawthorne has been tested with _nginx_ and _Apache 2_, every server th
 
 !> Example configurations are provided [here][5].
 
-!> **Nginx:** Configuration files are usually placed in `/etc/nginx/sites-avaiable`
-
 ## Starting/Restarting/Stopping Hawthorne
 To start Hawthorne after the installation is complete, or to restart or stop the service:
 ```bash
@@ -46,6 +44,13 @@ supervisorctl start/stop/restart hawthorne:*
 Because there are several different environments out there, it is not possible to say that it will work on your machine reliably. It was tested on numerous machines and over and over tweaked. If there’s a problem with your configuration, let me know by creating a pull request on [GitHub][1] and/or by contacting [me][2] directly.
 
 > This script has been tested on Debian 8+, Ubuntu 13+ as well as CentOS 7+. Windows and macOS are currently **not** supported by the installation script.
+
+
+## Configuration
+The configuration of Hawthorne takes place in the files `local.py` as well as `local.ini` located in `<hawthorne>/panel` where `<hawthorne>` is the chosen hawthorne installation directory. Default values that are present in `<hawthorne>/panel/defaults.py`, can be also overwritten in the `local.py`.
+
+> Modifying the `defaults.py` instead of copying the value into the `local.py` and modifying it there will result in the inability to update Hawthorne. **It is not recommended to modify the `defaults.py` in any way.**
+
 
 ## Toolchain integration
 Upon installing, the toolchain has been linked to your system over the commands `hawthorne` and `ht`. There are several commands integrated.
