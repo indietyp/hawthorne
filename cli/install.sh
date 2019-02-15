@@ -28,7 +28,7 @@ MAX_WIDTH=$(( $MAX_WIDTH * 3 / 4 ))
 
 # fallback if dialog is not present
 DIALOG=$(which dialog 2>/dev/null || which whiptail 2>/dev/null)
-curl https://gist.githubusercontent.com/indietyp/d35983f3d943b61eb3c503e6104f4ccf/raw/886ebc08885a386aa6d61feb93fad9841b867472/.ht.dialogrc -o ~/.ht.dialogrc
+curl https://gist.githubusercontent.com/indietyp/d35983f3d943b61eb3c503e6104f4ccf/raw/886ebc08885a386aa6d61feb93fad9841b867472/.ht.dialogrc -o ~/.ht.dialogrc >/dev/null 2>&1
 
 export LC_ALL=C
 export NCURSES_NO_UTF8_ACS=1
@@ -58,7 +58,7 @@ set -e
 
 # whiptail shortcuts
 dconf() {
-  $DIALOG --title "$2" --yesno "$1" $MAX_HEIGHT $MAX_WIDTH
+  whiptail --title "$2" --yesno "$1" $MAX_HEIGHT $MAX_WIDTH
 }
 
 dnoti() {
@@ -73,14 +73,14 @@ dnoti() {
 
 dmsg() {
   if [ $ui -eq 1 ]; then
-    $DIALOG --title "$2" --msgbox "$1" $MAX_HEIGHT $MAX_WIDTH
+    whiptail --title "$2" --msgbox "$1" $MAX_HEIGHT $MAX_WIDTH
   else
     printf "${BOLD}$2: ${NORMAL}$1\n"
   fi
 }
 
 dinpu() {
-  $DIALOG --inputbox "$1" --title "$2" $MAX_HEIGHT $MAX_WIDTH "$3" 2>&1 1>&3
+  whiptail --inputbox "$1" --title "$2" $MAX_HEIGHT $MAX_WIDTH "$3" 2>&1 1>&3
 }
 
 trap cleanup 1 2 3 6
@@ -388,7 +388,7 @@ configure() {
     hosted=$(dinpu "Which domain/ip is hawthorne going to be hosted on?" "[07/09] HTTP Configuration")
   fi
   if [ $nginx -eq 0 ]; then
-    webserver=$($DIALOG --radiolist "Choose your used http server" --title "[07/09] HTTP Configuration" $MAX_HEIGHT $MAX_WIDTH 2 "nginx" "" 1 "Apache 2" "" 0 2>&1 1>&3)
+    webserver=$(whiptail --radiolist "Choose your used http server" --title "[07/09] HTTP Configuration" $MAX_HEIGHT $MAX_WIDTH 2 "nginx" "" 1 "Apache 2" "" 0 2>&1 1>&3)
   fi
 
   dnoti "Setting up Hawthorne...." "[08/09] Hawthorne Initialize"
