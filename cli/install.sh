@@ -265,8 +265,8 @@ install() {
         yum -y install git
       }
 
-      ln -s /usr/local/bin/python3 /usr/bin/python3
-      ln -s /usr/local/bin/pip3 /usr/bin/pip3
+      ln -nsf /usr/local/bin/python3 /usr/bin/python3
+      ln -nsf /usr/local/bin/pip3 /usr/bin/pip3
       /usr/sbin/setsebool -P httpd_can_network_connect 1
     else
       dcolor "red"
@@ -323,8 +323,8 @@ install() {
 
 configure() {
   mkdir -p /var/log/hawthorne
-  ln -s $directory/cli/helper.py /usr/bin/hawthorne
-  ln -s $directory/cli/helper.py /usr/bin/ht
+  ln -nsf $directory/cli/helper.py /usr/bin/hawthorne
+  ln -nsf $directory/cli/helper.py /usr/bin/ht
 
   if [ "$conn" = "" ]; then
     pconn=0
