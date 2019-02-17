@@ -336,9 +336,11 @@ configure() {
 
   while true; do
     if [ $pconn -eq 0 ]; then
+      echo "Entering Input"
       conn=$(dinpu "MySQL URL \n\n Formatting: mysql://<user>:<password>@<host>:<port>/<database>\n(Reference: RFC 1808 and RFC1738 Section 3.1)" "[05/09] Database")
     fi
 
+    echo $conn
     conn=$(echo "$conn" | sed -nE 's#(mysql://)?(.*)#\2#p')
     dbuser=$(echo "$conn" | sed -nE 's#^([[:alpha:]]+)[:@].*#\1#p')
     dbpwd=$(echo "$conn" | sed -nE 's#.*:([^@]+)@.*#\1#p')
@@ -357,7 +359,7 @@ configure() {
 
     if mysql -u $dbuser -e "CREATE DATABASE IF NOT EXISTS $dbname CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"; then
       dcolor "red"
-      dmsg "Successfully connected to the database."
+      dmsg "Successfully connected to the database." "[05/09] Database")
       dcolor
 
       break;
