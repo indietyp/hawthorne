@@ -7,6 +7,7 @@ from core.lib.steam import populate
 from core.models import Membership, Punishment, Role, Server, ServerPermission, User
 from django.utils import timezone
 from lib.base import RCONBase
+from tqdm import tqdm
 from valve.steam.id import SteamID
 
 
@@ -16,6 +17,23 @@ class Importer:
     self.now = datetime.datetime.now()
 
   def sourcemod(self):
+    self.conn.query(
+        """
+        SELECT
+          Sum(a.count)
+        FROM (
+            SELECT Count(*) AS count FROM sm_groups
+            UNION ALL
+            SELECT Count(*) AS count FROM sm_admins
+            UNION ALL
+            SELECT Count(*) AS count FROM sm_admins_groups
+        ) a
+        """
+    )
+    r = self.conn.store_result()
+    objects = r.fetch_row(maxrows=1, how=0)[0][0]
+    progress = tqdm(total=int(objects))
+
     self.conn.query("""SELECT * FROM sm_groups""")
     r = self.conn.store_result()
     result = r.fetch_row(maxrows=0, how=1)
@@ -25,14 +43,16 @@ class Importer:
       flags = ServerPermission().convert(raw['flags'])
       flags.save()
 
-      role = Role.objects.get_or_create(name=raw['name'], default={'flags': flags,
-                                                                   'immunity': raw['immunity_level']})
+      role = Role.objects.get_or_create(name=raw['name'],
+                                        defaults={'flags': flags,
+                                                  'immunity': raw['immunity_level']})
       role.name = raw['name']
       role.flags = flags
       role.immunity = raw['immunity_level']
       role.save()
 
       roles[raw['id']] = role
+      progress.update(1)
 
     self.conn.query("""SELECT * FROM sm_admins""")
     r = self.conn.store_result()
@@ -42,7 +62,7 @@ class Importer:
     for raw in result:
       try:
         steamid = SteamID.from_text(raw['identity']).as_64()
-      except:
+      except Exception:
         print("Could not add admin {}".format(raw['name']))
         continue
 
@@ -92,11 +112,35 @@ class Importer:
           m.role = role
           m.save()
 
+      progress.update(1)
+
+    progress.close()
     return True
 
   def sourceban(self):
     superuser = User.objects.filter(is_superuser=True)
     superuser = superuser[0] if superuser else None
+
+    self.conn.query(
+        """
+        SELECT
+          Sum(a.count)
+        FROM (
+            SELECT Count(*) AS count FROM sb_servers
+            UNION ALL
+            SELECT Count(*) AS count FROM sb_srvgroups
+            UNION ALL
+            SELECT Count(*) AS count FROM sb_admins
+            UNION ALL
+            SELECT Count(*) AS count FROM sb_bans
+            UNION ALL
+            SELECT Count(*) AS count FROM sb_comms
+        ) a
+        """
+    )
+    r = self.conn.store_result()
+    objects = r.fetch_row(maxrows=1, how=0)[0][0]
+    progress = tqdm(total=int(objects))
 
     # get servers
     self.conn.query("""SELECT * FROM sb_servers""")
@@ -124,11 +168,14 @@ class Importer:
               valve.rcon.RCONAuthenticationError,
               ConnectionError,
               TimeoutError,
-              socket.timeout) as e:
+              socket.timeout,
+              OSError) as e:
 
         server.delete()
-        print("Warning: Could not connect to server {}:{} ({})".format(raw['ip'], raw['port'], e))
+        print("Could not connect to server {}:{} ({})".format(raw['ip'], raw['port'], e))
         continue
+
+      progress.update(1)
 
     # get groups
     self.conn.query("""SELECT * FROM sb_srvgroups""")
@@ -138,12 +185,14 @@ class Importer:
     for raw in result:
       flags = ServerPermission().convert(raw['flags'])
       flags.save()
-      role, _ = Role.objects.get_or_create(name=raw['name'], defaults={'flags': flags,
-                                                                              'immunity': raw['immunity']})
+      role, _ = Role.objects.get_or_create(name=raw['name'],
+                                           defaults={'flags': flags,
+                                                     'immunity': raw['immunity']})
       role.immunity = raw['immunity']
       role.flags = flags
       role.save()
 
+      progress.update(1)
 
     # get admins
     self.conn.query("""SELECT * FROM sb_admins""")
@@ -155,7 +204,7 @@ class Importer:
     for raw in result:
       try:
         steamid = SteamID.from_text(raw['authid']).as_64()
-      except:
+      except Exception:
         print("Could not add admin {}".format(raw['user']))
         continue
 
@@ -197,6 +246,7 @@ class Importer:
 
       users[raw['aid']] = user
 
+      progress.update(1)
 
     # get bans
     self.conn.query("""SELECT * FROM sb_bans""")
@@ -206,7 +256,7 @@ class Importer:
     for raw in result:
       try:
         steamid = SteamID.from_text(raw['authid']).as_64()
-      except:
+      except Exception:
         print("Could not add ban of user {}".format(raw['name']))
         continue
 
@@ -239,7 +289,10 @@ class Importer:
 
       m.created_at = timezone.make_aware(datetime.datetime.fromtimestamp(raw['created']))
       b.reason = raw['reason'][:255]
-      b.length = datetime.timedelta(seconds=raw['length']) if raw['length'] > 0 and raw['length'] < 31540000 else None
+
+      if raw['length'] > 0 and raw['length'] < 31540000:
+        b.length = datetime.timedelta(seconds=raw['length'])
+
       b.resolved = False
       if raw['created'] + raw['length'] < self.now.timestamp() and raw['length'] > 0:
         b.resolved = True
@@ -247,6 +300,8 @@ class Importer:
       if raw['RemovedOn']:
         b.resolved = True
       b.save()
+
+      progress.update(1)
 
     # get comms
     self.conn.query("""SELECT * FROM sb_comms""")
@@ -256,7 +311,7 @@ class Importer:
     for raw in result:
       try:
         steamid = SteamID.from_text(raw['authid']).as_64()
-      except:
+      except Exception:
         print("Could not add mutegag of user {}".format(raw['name']))
         continue
 
@@ -288,7 +343,10 @@ class Importer:
 
       m.created_at = timezone.make_aware(datetime.datetime.fromtimestamp(raw['created']))
       m.reason = raw['reason'][:255]
-      m.length = datetime.timedelta(seconds=raw['length']) if raw['length'] > 0 and raw['length'] < 31540000 else None
+
+      if raw['length'] > 0 and raw['length'] < 31540000:
+        m.length = datetime.timedelta(seconds=raw['length'])
+
       m.is_muted = True if raw['type'] == 1 else False
       m.is_gagged = True if raw['type'] == 2 else False
 
@@ -301,9 +359,35 @@ class Importer:
 
       m.save()
 
+      progress.update(1)
+
+    progress.close()
     return True
 
   def boompanel(self):
+    self.conn.query(
+        """
+        SELECT
+          Sum(a.count)
+        FROM (
+            SELECT Count(*) AS count FROM bp_players
+            UNION ALL
+            SELECT Count(*) AS count FROM bp_servers
+            UNION ALL
+            SELECT Count(*) AS count FROM bp_admin_groups
+            UNION ALL
+            SELECT Count(*) AS count FROM bp_admins
+            UNION ALL
+            SELECT Count(*) AS count FROM bp_mutegag
+            UNION ALL
+            SELECT Count(*) AS count FROM bp_bans
+        ) a
+        """
+    )
+    r = self.conn.store_result()
+    objects = r.fetch_row(maxrows=1, how=0)[0][0]
+    progress = tqdm(total=int(objects))
+
     self.conn.query("""SELECT * FROM bp_players""")
     r = self.conn.store_result()
     result = r.fetch_row(maxrows=0, how=1)
@@ -322,6 +406,8 @@ class Importer:
       user.save()
 
       users[raw["id"]] = user
+
+      progress.update(1)
 
     self.conn.query("""SELECT * FROM bp_servers""")
     r = self.conn.store_result()
@@ -345,10 +431,11 @@ class Importer:
               TimeoutError,
               socket.timeout) as e:
 
-        print("Warning: Could not connect to server {}:{} ({})".format(raw['ip'], raw['port'], e))
+        print("Could not connect to server {}:{} ({})".format(raw['ip'], raw['port'], e))
         continue
 
       server.save()
+      progress.update(1)
 
     self.conn.query("""SELECT * FROM bp_admin_groups""")
     r = self.conn.store_result()
@@ -363,6 +450,7 @@ class Importer:
       role.save()
 
       roles[raw['id']] = role
+      progress.update(1)
 
     self.conn.query("""SELECT * FROM bp_admins""")
     r = self.conn.store_result()
@@ -376,6 +464,7 @@ class Importer:
       m.save()
 
       admins[raw['aid']] = m
+      progress.update(1)
 
     self.conn.query("""SELECT * FROM bp_mutegag""")
     r = self.conn.store_result()
@@ -387,11 +476,14 @@ class Importer:
 
       m = Punishment()
       m.user = users[raw["pid"]]
-      m.server = servers[raw['sid']] if raw['sid'] != 0 and raw['sid'] in servers else None
+      if raw['sid'] != 0 and raw['sid'] in servers:
+        m.server = servers[raw['sid']]
       m.created_by = users[raw['aid']]
       m.created_at = timezone.make_aware(datetime.datetime.fromtimestamp(raw['time']))
       m.reason = raw['reason'][:255]
-      m.length = datetime.timedelta(seconds=raw['length'] * 60) if raw['length'] > 0 else None
+
+      if raw['length'] > 0:
+        m.length = datetime.timedelta(seconds=raw['length'] * 60)
       m.is_muted = True if raw['type'] == 1 else False
       m.is_gagged = True if raw['type'] == 2 else False
 
@@ -402,6 +494,7 @@ class Importer:
       if raw['unbanned'] == 1:
         m.resolved = True
       m.save()
+      progress.update(1)
 
     self.conn.query("""SELECT * FROM bp_bans""")
     r = self.conn.store_result()
@@ -414,7 +507,8 @@ class Importer:
       b = Punishment()
       b.is_banned = True
       b.user = users[raw["pid"]]
-      b.server = servers[raw['sid']] if raw['sid'] != 0 and raw['sid'] in servers else None
+      if raw['sid'] != 0 and raw['sid'] in servers:
+        b.server = servers[raw['sid']]
       b.created_by = users[raw['aid']]
       m.created_at = timezone.make_aware(datetime.datetime.fromtimestamp(raw['time']))
       b.reason = raw['reason'][:255]
@@ -426,5 +520,7 @@ class Importer:
       if raw['unbanned'] == 1:
         b.resolved = True
       b.save()
+      progress.update(1)
 
+    progress.close()
     return True

@@ -345,7 +345,7 @@ configure() {
 
   while true; do
     if [ $pconn -eq 0 ]; then
-      conn=$(dinpu "MySQL URL \n\n Formatting: mysql://<user>:<password>@<host>:<port>/<database>\n(Reference: RFC 1808 and RFC1738 Section 3.1)" "[05/09] Database")
+      conn=$(dinpu "MySQL URL \n\nFormatting: mysql://<user>:<password>@<host>:<port>/<database>\n(Reference: RFC 1808 and RFC1738 Section 3.1)" "[05/09] Database")
     fi
 
     conn=$(echo "$conn" | sed -nE 's#(mysql://)?(.*)#\2#p')

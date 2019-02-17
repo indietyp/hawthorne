@@ -49,6 +49,11 @@ LOGGING = {
             'level': 'INFO',
             'propagate': True,
         },
+        'valve.rcon': {
+            'handlers': ['file'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
         'automated_logging': {
             'handlers': ['auto', 'database'],
             'level': 'INFO',

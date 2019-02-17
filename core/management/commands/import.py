@@ -1,62 +1,61 @@
+import sys
+import traceback
+
 from django.core.management.base import BaseCommand
 from lib.importer import Importer
+from urllib.parse import urlparse
 
 
 class Command(BaseCommand):
-  help = 'Imports from different external systems'
+  help = 'Toolset to import data from external systems into hawthorne.'
 
   def add_arguments(self, parser):
     parser.add_argument(
-      '--mode',
-      action='store',
-      dest='mode',
-      help='Currently supported: sourceban, boompanel, sourcemod',
+        'database',
+        action='store',
+        help='mysql://<user>:<password>@<host>:<port>/<database> ' +
+             '(Reference: RFC 1808 and RFC1738 Section 3.1)',
+        metavar='DATABASE'
     )
 
     parser.add_argument(
-      '--host',
-      action='store',
-      dest='host',
-      help='DB Host',
+        '--system', '-s',
+        action='store',
+        dest='system',
+        help='Currently %(choices)s are supported. %(default)s is the default.',
+        choices=['sourcebans', 'boompanel', 'sourcemod'],
+        metavar='SYSTEM',
+        default='sourcebans'
     )
 
-    parser.add_argument(
-      '--user',
-      action='store',
-      dest='user',
-      help='DB User',
-    )
+  def handle(self, system, database, *args, **options):
+    connection = database if database.startswith('mysql://') else 'mysql://' + database
+    connection = urlparse(connection)
 
-    parser.add_argument(
-      '--password',
-      action='store',
-      dest='pwd',
-      help='DB Password',
-    )
+    importer = Importer(connection.hostname,
+                        connection.port if connection.port else 3306,
+                        connection.username,
+                        connection.password,
+                        connection.path[1:])
 
-    parser.add_argument(
-      '--database',
-      action='store',
-      dest='db',
-      help='DB Database',
-    )
+    sys.stdout = open('/var/log/hawthorne/import.log', 'w')
+    try:
+      if system == 'sourcebans':
+        importer.sourceban()
+      elif system == 'boompanel':
+        importer.boompanel()
+      elif system == 'sourcemod':
+        importer.sourcemod()
+    except Exception as e:
+      print(e)
+      traceback.print_exc(file=sys.stdout)
 
+      sys.stdout = sys.__stdout__
 
-  def handle(self, mode, host, user, pwd, db, *args, **options):
-    mode = mode.lower()
-    if mode not in ['sourceban', 'boompanel', 'sourcemod']:
-      self.stdout.write(self.style.WARNING('Currently your selected mode is not available'))
+      self.stdout.write(self.style.ERROR('The import has failed due to {}'.format(e)))
+      self.stdout.write("The traceback is located in /var/log/hawthorne/import.log")
+
       return
 
-    domain = host.split(":")[0]
-    port = int(host.split(":")[1])
-    importer = Importer(domain, port, user, pwd, db)
-
-    if mode == 'sourceban':
-      importer.sourceban()
-    elif mode == 'boompanel':
-      importer.boompanel()
-    elif mode == 'sourcemod':
-      importer.sourcemod()
-
-    self.stdout.write(self.style.SUCCESS('Successfully imported'))
+    sys.stdout = sys.__stdout__
+    self.stdout.write(self.style.SUCCESS('The import has been successfully finished.'))

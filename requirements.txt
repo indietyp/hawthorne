@@ -32,3 +32,4 @@ django-cprofile-middleware
 python-nginx
 isodate
 gevent
+tqdm
