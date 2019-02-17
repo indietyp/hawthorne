@@ -6,6 +6,14 @@ matrix:
     language: minimal
     script:
       - docker build -t indietyp/hawthorne .
+    deploy:
+      skip_cleanup: true
+      provider: script
+      script: bash cli/utils/travis.sh
+      on:
+        branch:
+          - master
+          - dev
 
   - name: "centOS Functionality Test"
     language: minimal
@@ -38,16 +46,6 @@ services:
 branches:
   except:
   - interface
-
-deploy:
-  skip_cleanup: true
-  provider: script
-  script: bash cli/utils/travis.sh
-  on:
-    # tags: true
-    branch:
-      - master
-      - dev
 
 # add shell installation script testing
 # docker: add mock test database
