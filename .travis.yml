@@ -1,18 +1,23 @@
 sudo: required
 
-branches:
-  except:
-  - interface
-
-language: python
-python:
-  - "3.6"
+matrix:
+  include:
+  - language: minimal
+    script:
+      - docker build -t indietyp/hawthorne .
+  - language: minimal
+    script:
+      - docker run --name db -e MYSQL_ROOT_PASSWORD=testing -d mariadb:tag
+      - docker run -itd --name centos --link db:mysql centos
+      - docker cp . centos:/hawthorne
+      - docker exec -t -w / centos sh /hawthorne/cli/install.sh --path /hawthorne --local -noui --domain localhost --steam $STEAMAPI --admin $STEAMADMIN --database root@test:db:3306/hawthorne
 
 services:
   - docker
 
-script:
-  - docker build -t indietyp/hawthorne .
+branches:
+  except:
+  - interface
 
 deploy:
   skip_cleanup: true
@@ -23,3 +28,11 @@ deploy:
     branch:
       - master
       - dev
+
+# add shell installation script testing
+# docker: add mock test database
+# docker: centOS, Ubuntu and Debian
+# run install.sh on all containers (skip UI and inputs)
+# run install.sh on Ubuntu again to verify overwrite
+
+# docker unit testing APIv2

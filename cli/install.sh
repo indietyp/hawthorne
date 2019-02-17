@@ -83,8 +83,6 @@ dinpu() {
   whiptail --inputbox "$1" --title "$2" $MAX_HEIGHT $MAX_WIDTH "$3" 2>&1 1>&3
 }
 
-trap cleanup 1 2 3 6
-
 dcolor() {
   if [ "x$1" = "x" ]; then
     NEWT_COLOR="brightblue"
@@ -112,6 +110,8 @@ cleanup() {
   dcolor
 
   rm -rf $directory
+
+  exit 1
 }
 
 
@@ -187,14 +187,15 @@ parser() {
   done
 
   dmsg "Welcome to the automated installation script of Hawthorne. With this script we're going to install and configure all necessary tools to run HT. You may be asked to provide additional information." "[00/09] Introduction"
-
-  if [ $install -eq 0 -a $configure -eq 0 ]; then
-    main
-  elif [ $install -eq 1 ]; then
-    install
-  elif [ $configure -eq 1 ]; then
-    configure
-  fi
+  {
+    if [ $install -eq 0 -a $configure -eq 0 ]; then
+      main
+    elif [ $install -eq 1 ]; then
+      install
+    elif [ $configure -eq 1 ]; then
+      configure
+    fi
+  } || cleanup
 
   dcolor "green"
   dmsg "Installation has been successfully finished! You can now use Hawthorne." "[00/09] Completion"
@@ -208,6 +209,7 @@ install() {
     dcolor "red"
     dmsg "The installation script needs to be run with root privileges." "[01/09] [ERROR] Checking Prerequisites"
     dcolor
+
     exit 1
   fi
 
