@@ -324,6 +324,8 @@ install() {
 }
 
 configure() {
+  exec 3>&1
+
   mkdir -p /var/log/hawthorne
   ln -nsf $directory/cli/helper.py /usr/bin/hawthorne
   ln -nsf $directory/cli/helper.py /usr/bin/ht
@@ -336,11 +338,9 @@ configure() {
 
   while true; do
     if [ $pconn -eq 0 ]; then
-      echo "Entering Input"
       conn=$(dinpu "MySQL URL \n\n Formatting: mysql://<user>:<password>@<host>:<port>/<database>\n(Reference: RFC 1808 and RFC1738 Section 3.1)" "[05/09] Database")
     fi
 
-    echo $conn
     conn=$(echo "$conn" | sed -nE 's#(mysql://)?(.*)#\2#p')
     dbuser=$(echo "$conn" | sed -nE 's#^([[:alpha:]]+)[:@].*#\1#p')
     dbpwd=$(echo "$conn" | sed -nE 's#.*:([^@]+)@.*#\1#p')
@@ -449,6 +449,8 @@ configure() {
       supervisorctl restart hawthorne
     fi
   } >> install.log 2>&1
+
+  exec 3>&-
 }
 
 main() {
