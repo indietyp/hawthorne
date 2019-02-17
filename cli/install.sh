@@ -111,6 +111,9 @@ cleanup() {
 
   rm -rf $directory
 
+  if [ $ui -eq 1 ]; then
+    clear
+  fi
   exit 1
 }
 
@@ -199,6 +202,10 @@ parser() {
 
   dcolor "green"
   dmsg "Installation has been successfully finished! You can now use Hawthorne." "[00/09] Completion"
+
+  if [ $ui -eq 1 ]; then
+    clear
+  fi
   dcolor
 }
 
