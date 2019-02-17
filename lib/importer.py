@@ -32,7 +32,7 @@ class Importer:
     )
     r = self.conn.store_result()
     objects = r.fetch_row(maxrows=1, how=0)[0][0]
-    progress = tqdm(total=int(objects))
+    progress = tqdm(total=int(objects), unit='insertions')
 
     self.conn.query("""SELECT * FROM sm_groups""")
     r = self.conn.store_result()
@@ -140,7 +140,7 @@ class Importer:
     )
     r = self.conn.store_result()
     objects = r.fetch_row(maxrows=1, how=0)[0][0]
-    progress = tqdm(total=int(objects))
+    progress = tqdm(total=int(objects), unit='insertions')
 
     # get servers
     self.conn.query("""SELECT * FROM sb_servers""")
@@ -386,7 +386,7 @@ class Importer:
     )
     r = self.conn.store_result()
     objects = r.fetch_row(maxrows=1, how=0)[0][0]
-    progress = tqdm(total=int(objects))
+    progress = tqdm(total=int(objects), unit='insertions')
 
     self.conn.query("""SELECT * FROM bp_players""")
     r = self.conn.store_result()
