@@ -27,7 +27,7 @@ MAX_HEIGHT=$(( $MAX_HEIGHT / 2 ))
 MAX_WIDTH=$(( $MAX_WIDTH * 3 / 4 ))
 
 # fallback if dialog is not present
-DIALOG=$(which dialog 2>/dev/null || which whiptail 2>/dev/null)
+DIALOG=$(which dialog 2>/dev/null || which whiptail 2>/dev/null || which echo 2>/dev/null)
 curl https://gist.githubusercontent.com/indietyp/d35983f3d943b61eb3c503e6104f4ccf/raw/886ebc08885a386aa6d61feb93fad9841b867472/.ht.dialogrc -o ~/.ht.dialogrc >/dev/null 2>&1
 
 export LC_ALL=C
@@ -62,7 +62,7 @@ dconf() {
 }
 
 dnoti() {
-  if [ "$DIALOG" = "$(which whiptail)" ]; then
+  if [ "$DIALOG" = "$(which whiptail 2>/dev/null)" ]; then
     printf "${BOLD}$2: ${NORMAL}$1\n"
   elif [ $ui -eq 1 ]; then
     $DIALOG --title "$2" --infobox "$1" $MAX_HEIGHT $MAX_WIDTH
