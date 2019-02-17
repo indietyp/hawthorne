@@ -359,7 +359,7 @@ configure() {
 
     if mysql -u $dbuser -e "CREATE DATABASE IF NOT EXISTS $dbname CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"; then
       dcolor "green"
-      dmsg "Successfully connected to the database." "[05/09] Database")
+      dmsg "Successfully connected to the database." "[05/09] Database"
       dcolor
 
       break;
