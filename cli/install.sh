@@ -80,7 +80,7 @@ dmsg() {
 }
 
 dinpu() {
-  whiptail --inputbox "$1" --title "$2" $MAX_HEIGHT $MAX_WIDTH "$3" 2>&1 1>&3
+  whiptail --title "$2" --inputbox "$1" $MAX_HEIGHT $MAX_WIDTH "$3" 2>&1 1>&3
 }
 
 dcolor() {
@@ -358,7 +358,7 @@ configure() {
     export MYSQL_TCP_PORT=$dbport
 
     if mysql -u $dbuser -e "CREATE DATABASE IF NOT EXISTS $dbname CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"; then
-      dcolor "red"
+      dcolor "green"
       dmsg "Successfully connected to the database." "[05/09] Database")
       dcolor
 
