@@ -1,6 +1,6 @@
 # Frequently Asked Questions
 ## 400 - Bad Request
-This is due to a misconfigured variable `ALLOWED_HOSTS` in `panel/local.py`. To this array please add the IP or domain hawthorne is accessed over. After this please restart hawthorne by using `supervisorctl restart hawthorne`.
+This is due to a misconfiguration of `ALLOWED_HOSTS`. This setting can be accessed via `local.py` or `local.ini` and depends if you have installed Hawthorne prior to `v0.9.1`, if Hawthorne has been installed after the release of `v0.9.1` use the command `hawthorne initialize --host <host> --host <host> [...]` for adding multiple hosts, if Hawthorne has been installed prior to the release of `v0.9.1` please add the domain or IP manually in `panel/local.py`.
 
 ## 500
 This should not happen, please first refer to the logs in `/var/logs/hawthorne/debug.log`. **Please read the logs carefully.** Quite often there is a database misconfiguration - if present - please change the settings in `panel/local.py`.

@@ -12,13 +12,13 @@ init = (scope = document) ->
 
     return
 
-  modal_open = ->
-    $('.overlay').fadeIn 'fast'
-    $('[data-component=\'' + @.getAttribute('data-trigger-target') + '\']').fadeIn 'fast'
-    return
 
-  $('[data-trigger=\'[modal/open]\']', scope).off 'click'
-  $('[data-trigger=\'[modal/open]\']', scope).on 'click', modal_open
+  $("[data-trigger='[modal/open]']", scope).off 'click'
+  $("[data-trigger='[modal/open]']", scope).on 'click', ->
+    $('.overlay').fadeIn 'fast'
+    target = @.getAttribute('data-trigger-target')
+    $("[data-component='#{target}']").fadeIn 'fast'
+    return
 
   server_item = ->
     $(@).toggleClass 'toggableListActive'
