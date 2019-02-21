@@ -21,7 +21,6 @@ matrix:
       - docker run --name db -e MYSQL_ROOT_PASSWORD=testing -d mariadb
       - docker run -itd --name centos --link db:mysql centos
       - docker cp . centos:/hawthorne
-      - docker exec -t centos yum -y install which
       - docker exec -t centos sh /hawthorne/cli/install.sh --path /hawthorne --local -noui --domain localhost --steam $STEAMAPI --admin $STEAMADMIN --database root:testing@db:3306/hawthorne
 
   - name: "Ubuntu Functionality Test"

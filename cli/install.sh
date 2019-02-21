@@ -19,6 +19,13 @@ admin=""
 user=""
 conn=""
 
+# yum package installation
+{
+  if hash yum >/dev/null 2>&1; then
+    yum -y install which newt
+  fi
+} >> install.log 2>&1
+
 # whiptail configuration
 MAX_HEIGHT=$(tput lines 2>/dev/null || echo 0)
 MAX_WIDTH=$(tput cols 2>/dev/null || echo 0)
@@ -251,21 +258,21 @@ install() {
       yum -y update
       yum -y install wget yum-utils
       yum-builddep -y python
-      curl -O https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz
-      tar xf Python-3.6.4.tgz
-      rm Python-3.6.4.tgz
-      cd Python-3.6.4
+      curl -O https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tgz
+      tar xf Python-3.7.2.tgz
+      rm Python-3.7.2.tgz
+      cd Python-3.7.2
       ./configure
       make
       make install
       cd ..
-      rm -rf Python-3.6.4
+      rm -rf Python-3.7.2
 
       yum -y install epel-release
       yum -y update
       curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -
 
-      yum -y install redis supervisor mysql mysql-devel MariaDB-devel mysql-lib libxml2-devel libffi-devel libxslt-devel openssl-devel nodejs dialog
+      yum -y install redis supervisor mysql mysql-devel MariaDB-shared mysql-lib libxml2-devel libffi-devel libxslt-devel openssl-devel nodejs dialog
       systemctl start redis
       systemctl enable redis
 
@@ -336,6 +343,8 @@ configure() {
   mkdir -p /var/log/hawthorne
   ln -nsf $directory/cli/helper.py /usr/bin/hawthorne
   ln -nsf $directory/cli/helper.py /usr/bin/ht
+  chmod +x /usr/bin/hawthorne
+  chmod +x /usr/bin/ht
 
   if [ "$conn" = "" ]; then
     pconn=0
