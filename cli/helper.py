@@ -18,7 +18,7 @@ from subprocess import PIPE, run
 from urllib.parse import urlparse
 
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(os.path.realpath(__file__))))
 sys.path.append(BASE_DIR)
 
 repo = Repo(BASE_DIR)

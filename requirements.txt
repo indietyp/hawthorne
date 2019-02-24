@@ -33,3 +33,7 @@ python-nginx
 isodate
 gevent
 tqdm
+distro
+tabulate
+psutil
+py-cpuinfo

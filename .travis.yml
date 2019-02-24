@@ -39,17 +39,20 @@ matrix:
       - docker cp . debian:/hawthorne
       - docker exec -t debian sh /hawthorne/cli/install.sh --path /hawthorne --local -noui --domain localhost --steam $STEAMAPI --admin $STEAMADMIN --database root:testing@db:3306/hawthorne
 
+  - name: "Ubuntu Reinstallation Test"
+    language: minimal
+    script:
+      - docker run --name db -e MYSQL_ROOT_PASSWORD=testing -d mariadb
+      - docker run -itd --name ubuntu --link db:mysql ubuntu
+      - docker cp . ubuntu:/hawthorne
+      - docker exec -t ubuntu sh /hawthorne/cli/install.sh --path /hawthorne --local -noui --domain localhost --steam $STEAMAPI --admin $STEAMADMIN --database root:testing@db:3306/hawthorne
+      - docker exec -t ubuntu sh /hawthorne/cli/install.sh --path /hawthorne --local -noui --domain localhost --steam $STEAMAPI --admin $STEAMADMIN --database root:testing@db:3306/hawthorne
+
 services:
   - docker
 
 branches:
   except:
   - interface
-
-# add shell installation script testing
-# docker: add mock test database
-# docker: centOS, Ubuntu and Debian
-# run install.sh on all containers (skip UI and inputs)
-# run install.sh on Ubuntu again to verify overwrite
 
 # docker unit testing APIv2
