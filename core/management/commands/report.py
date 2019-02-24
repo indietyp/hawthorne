@@ -1,7 +1,7 @@
 import cpuinfo
 import datetime
 import distro
-import humanize
+import natural.size
 import os
 import platform
 import psutil
@@ -111,9 +111,9 @@ class Command(BaseCommand):
       output += '## RAM \n'
       ram = psutil.virtual_memory()
       table = [
-          ['Total', humanize.naturalsize(ram.total)],
-          ['Used', humanize.naturalsize(ram.used)],
-          ['Available', humanize.naturalsize(ram.available)],
+          ['Total', natural.size.filesize(ram.total, format='binary')],
+          ['Used', natural.size.filesize(ram.used, format='binary')],
+          ['Available', natural.size.filesize(ram.available, format='binary')],
       ]
       output += tabulate(table, tablefmt="github", headers=self.HEADERS)
       output += '\n\n'
@@ -131,9 +131,9 @@ class Command(BaseCommand):
       # disk usage per disk?
       disk = psutil.disk_usage('/')
       table = [
-          ['Total', humanize.naturalsize(disk.total)],
-          ['Free', humanize.naturalsize(disk.free)],
-          ['Used', humanize.naturalsize(disk.used)],
+          ['Total', natural.size.filesize(disk.total, format='binary')],
+          ['Free', natural.size.filesize(disk.free, format='binary')],
+          ['Used', natural.size.filesize(disk.used, format='binary')],
           ['Used (%)', disk.percent]
       ]
       output += tabulate(table, tablefmt="github", headers=self.HEADERS)

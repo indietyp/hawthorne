@@ -1,6 +1,7 @@
 import calendar
 import datetime
 import json
+import lib.int
 import random
 
 from automated_logging.models import Model as LogModel
@@ -57,11 +58,12 @@ def home(request):
     value = 0 if month not in query else query[month]
     population.append((calendar.month_abbr[month], value))
 
+  # shorten actions
   payload = {'population': population[::-1],
              'punishments': Punishment.objects.count(),
-             'users': User.objects.count(),
-             'servers': Server.objects.count(),
-             'actions': LogModel.objects.count()}
+             'users': lib.int.shorten(User.objects.count()),
+             'servers': lib.int.shorten(Server.objects.count()),
+             'actions': lib.int.shorten(LogModel.objects.count())}
   return render(request, 'pages/home.pug', payload)
 
 
