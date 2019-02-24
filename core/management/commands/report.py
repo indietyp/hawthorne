@@ -111,9 +111,9 @@ class Command(BaseCommand):
       output += '## RAM \n'
       ram = psutil.virtual_memory()
       table = [
-          ['Total', ram.total],
-          ['Used', ram.used],
-          ['Available', ram.available],
+          ['Total', humanize.naturalsize(ram.total)],
+          ['Used', humanize.naturalsize(ram.used)],
+          ['Available', humanize.naturalsize(ram.available)],
       ]
       output += tabulate(table, tablefmt="github", headers=self.HEADERS)
       output += '\n\n'
