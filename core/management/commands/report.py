@@ -128,6 +128,7 @@ class Command(BaseCommand):
       output += '\n\n'
 
       output += '## Disk \n'
+      # disk usage per disk?
       disk = psutil.disk_usage('/')
       table = [
           ['Total', humanize.naturalsize(disk.total)],

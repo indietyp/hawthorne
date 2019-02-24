@@ -24,7 +24,8 @@ tr(data-id="{{data|get_groups_id}}", data-user="{{data.id}}", data-remove)
       - include "assets/local.svg"
   td
     if data.is_steam
-      = data.namespace
+      a(href='javascript:void(0)', onclick="window.vc('players[detailed]', '{{data.id}}')")
+        = data.namespace
     else
       = data.username
   td

@@ -19,7 +19,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': '/var/log/hawthorne/debug.log',
+            'filename': '/var/log/hawthorne/error.log',
             'formatter': 'verbose'
         },
         'auto': {
@@ -51,7 +51,7 @@ LOGGING = {
         },
         'valve.rcon': {
             'handlers': ['file'],
-            'level': 'WARNING',
+            'level': 'ERROR',
             'propagate': False,
         },
         'automated_logging': {
