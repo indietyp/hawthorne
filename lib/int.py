@@ -1,8 +1,8 @@
 def shorten(value):
   for i in ['', 'T', 'M', 'B', 'T']:
-    if value < 100:
+    if value < 1000:
       identifier = i
       break
-    value = value // 100
+    value = value // 1000
 
   return '{:0d}{}'.format(value, identifier)
