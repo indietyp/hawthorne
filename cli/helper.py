@@ -112,11 +112,13 @@ def version(yes):
               prompt='reconfigure gunicorn')
 @click.option('--nginx/--no-nginx', is_flag=True, expose_value=True,
               prompt='reconfigure nginx config')
+@click.option('--apache/--no-apache', is_flag=True, expose_value=True,
+              prompt='reconfigure apache config')
 @click.option('--logrotate/--no-logrotate', is_flag=True, expose_value=True,
               prompt='reconfigure logrotate.d config')
 @click.option('--supervisor/--no-supervisor', is_flag=True, expose_value=True,
               prompt='reconfigure supervisor.d config')
-def reconfigure(bind, link, config, gunicorn, nginx, logrotate, supervisor):
+def reconfigure(bind, link, config, gunicorn, nginx, apache, logrotate, supervisor):
   CONFIG_LOCATION = BASE_DIR + '/cli/configs'
 
   if gunicorn:

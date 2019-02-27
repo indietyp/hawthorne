@@ -430,7 +430,7 @@ configure() {
       bind=port
     fi
 
-    hawthorne initialize --database $conn --steam $stapi --demo $demo --hosts $domain --secret --root $owner
+    hawthorne initialize --database $conn --steam $stapi --demo $demo --host $domain --secret --root $owner
     hawthorne reconfigure --supervisor --no-nginx --no-apache --gunicorn --logrotate --bind $bind
     python3 $directory/manage.py migrate
     python3 $directory/manage.py superusersteam --steamid $admin --check
