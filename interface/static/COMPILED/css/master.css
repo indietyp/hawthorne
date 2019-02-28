@@ -1308,6 +1308,9 @@ form {
   stroke-width: 0.5px;
   stroke: #fff;
 }
+.chartContainer .chart .chart-container {
+  width: 100% !important;
+}
 .chartContainer .chart .comparison li {
   border-top: none !important;
 }

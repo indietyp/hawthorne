@@ -42,75 +42,7 @@
   h1 Player Activity
   .chartContainer
     .chart.overview
-    canvas.overviewChart
+    //- canvas.overviewChart
   script.execute.
-    let chart = new frappe.Chart( ".chart.overview", {
-      data: {
-        labels: ["12am-3am", "3am-6am", "6am-9am", "9am-12pm",
-        "12pm-3pm", "3pm-6pm", "6pm-9pm", "9pm-12am"],
-
-        datasets: [
-          {
-            chartType: 'bar',
-            values: [25, 40, 30, 35, 8, 52, 17, -4]
-          }
-        ],
-      },
-
-      type: 'axis-mixed', // or 'bar', 'line', 'pie', 'percentage'
-      height: 400,
-      colors: ['purple'],
-
-      tooltipOptions: {
-        formatTooltipX: d => (d + '').toUpperCase(),
-        formatTooltipY: d => d + ' players',
-      }
-    });
-
-    var ctx = $(".overviewChart")[0].getContext('2d');
-    var gradient = ctx.createLinearGradient(0, 0, 0, 400);
-    gradient.addColorStop(0, 'rgba(0,169,255,0.2)');
-    gradient.addColorStop(1, 'rgba(0,169,255,0)');
-
-    var dataChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: {{population|flatten:"0"|safe}},
-        datasets: [{
-          label: 'Players',
-          data: {{population|flatten:"1"|safe}},
-          backgroundColor: gradient,
-          borderColor: [
-            'rgb(0,169,255)'
-          ],
-          borderWidth: 4
-        }]
-      },
-      options: {
-        legend: {
-          display: false
-        },
-        maintainAspectRatio: false,
-        scales: {
-          yAxes: [{
-            gridLines: {
-              color: "rgba(0, 0, 0, 0)",
-            },
-            ticks: {
-              beginAtZero: true,
-              fontColor: 'white'
-            }
-          }],
-          xAxes: [{
-            gridLines: {
-              color: "rgba(0, 0, 0, 0)",
-            },
-            ticks: {
-              fontColor: 'white'
-            }
-          }]
-        }
-      }
-    });
-    dataChart.canvas.parentNode.style.height = '400px';
+    window.style.charts.heatmap('.chart.overview', {{population|safe}})
     window.ajax("home[update]", '.main > .overview', 0, NaN, 'before');

@@ -1,7 +1,7 @@
 #= require style.fermata.coffee
 #= require style.ext.coffee
 #= require style.time.coffee
-
+#= require style.charts.coffee
 
 copyTextToClipboard = (text) ->
   textArea = document.createElement('textarea')

@@ -35,31 +35,30 @@ def home(request):
   # there seems to be now way to derive a django query from another one
   with connection.cursor() as cursor:
     cursor.execute('''
-      SELECT COUNT(*), `subquery`.`mo`
+      SELECT COUNT(*), `subquery`.`mo`, `subquery`.`da`, `subquery`.`ye`
       FROM (SELECT `log_userconnection`.`user_id` AS `Col1`,
+                   EXTRACT(YEAR FROM CONVERT_TZ(`log_userconnection`.`disconnected`, 'UTC', 'UTC'))  AS `ye`,
                    EXTRACT(MONTH FROM CONVERT_TZ(`log_userconnection`.`disconnected`, 'UTC', 'UTC')) AS `mo`,
+                   EXTRACT(DAY FROM CONVERT_TZ(`log_userconnection`.`disconnected`, 'UTC', 'UTC'))   AS `da`,
                    COUNT(DISTINCT `log_userconnection`.`user_id`) AS `active`
             FROM `log_userconnection`
-            GROUP BY `log_userconnection`.`user_id`,
-                     `mo`
+            GROUP BY `log_userconnection`.`user_id`, `mo`, `da`, `ye`
             ORDER BY NULL) `subquery`
-      GROUP BY `subquery`.`mo`;
+      WHERE `da` IS NOT NULL
+      GROUP BY `subquery`.`mo`, `subquery`.`da`, `subquery`.`ye`
+      ORDER BY `ye` DESC, `mo` DESC, `da` DESC
+      LIMIT 356;
     ''')
 
     query = cursor.fetchall()
 
-  query = {i[1]: i[0] for i in query if i[1] is not None}
+  population = {}
+  for i in query:
+    key = datetime.datetime(year=i[3], month=i[1], day=i[2])
+    key = str(int(key.timestamp()))
+    population[key] = i[0]
 
-  population = []
-  for month in range(current, current - 12, -1):
-    if month < 1:
-      month += 12
-
-    value = 0 if month not in query else query[month]
-    population.append((calendar.month_abbr[month], value))
-
-  # shorten actions
-  payload = {'population': population[::-1],
+  payload = {'population': population,
              'punishments': Punishment.objects.count(),
              'users': lib.int.shorten(User.objects.count()),
              'servers': lib.int.shorten(Server.objects.count()),

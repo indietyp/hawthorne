@@ -148,9 +148,11 @@ def reconfigure(bind, link, config, gunicorn, nginx, apache, logrotate, supervis
 
     if link:
       try:
-        os.symlink(BASE_DIR + '/supervisor.conf', '/etc/supervisor/conf.d/hawthorne.conf')
-      except Exception as e:
-        click.echo('Symlink to supervisor failed. ({})'.format(e))
+        os.unlink('/etc/supervisor/conf.d/hawthorne.conf')
+      except OSError:
+        pass
+
+      os.symlink(BASE_DIR + '/supervisor.conf', '/etc/supervisor/conf.d/hawthorne.conf')
 
     run(['supervisorctl', 'reread'], stdout=PIPE, stderr=PIPE)
     run(['supervisorctl', 'update'], stdout=PIPE, stderr=PIPE)
@@ -158,9 +160,11 @@ def reconfigure(bind, link, config, gunicorn, nginx, apache, logrotate, supervis
 
   if logrotate:
     try:
-      os.symlink(CONFIG_LOCATION + '/logrotate.default', '/etc/logrotate.d/hawthorne')
-    except Exception as e:
-      click.echo('Symlink to logrotate failed. ({})'.format(e))
+      os.unlink('/etc/logrotate.d/hawthorne')
+    except OSError:
+      pass
+
+    os.symlink(CONFIG_LOCATION + '/logrotate.default', '/etc/logrotate.d/hawthorne')
 
   if nginx:
     from panel.settings import ALLOWED_HOSTS
