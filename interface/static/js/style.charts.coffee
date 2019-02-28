@@ -8,7 +8,7 @@ heatmap = (selector, data, height = 400) ->
       start: new Date("Januar 01, #{year} 00:00:00"),
       end: new Date("December 31, #{year} 00:00:00")
     },
-    colors: ['#0B2545', '#13315C', '#054A91', '#3E7CB1', '#00A9FF'],
+    colors: ['#eaf8ff', '#aae2ff', '#6acdff', '#2bb7ff', '#00a9ff'],
   }
   return
 
