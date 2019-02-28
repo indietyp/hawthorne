@@ -1,5 +1,5 @@
 def shorten(value):
-  for i in ['', 'T', 'M', 'B', 'T']:
+  for i in ['', 'K', 'M', 'B', 'T']:
     if value < 1000:
       identifier = i
       break
