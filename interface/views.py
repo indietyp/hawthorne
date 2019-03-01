@@ -1,4 +1,3 @@
-import calendar
 import datetime
 import json
 import lib.int
@@ -30,9 +29,7 @@ def login(request):
 
 @login_required
 def home(request):
-  current = datetime.datetime.now().month
-
-  # there seems to be now way to derive a django query from another one
+  # there seems to be no way to derive a django query from another one
   with connection.cursor() as cursor:
     cursor.execute('''
       SELECT COUNT(*), `subquery`.`mo`, `subquery`.`da`, `subquery`.`ye`

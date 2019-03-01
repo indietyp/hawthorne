@@ -1473,15 +1473,20 @@ form
   position relative
   float left
   width 100%
-  margin-top 20px
+  margin-top -40px
   margin-bottom 40px
 
   .chart
+    svg
+      width 100% !important
+
     text
       stroke-width .5px
       stroke white
 
     .chart-container
+      display flex
+      justify-content center
       width 100% !important
 
     .comparison

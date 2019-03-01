@@ -4,6 +4,7 @@ import math
 from automated_logging.models import Application as DALApplication, Model as DALModel
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
+from django.db import connection
 from django.db.models import DurationField, ExpressionWrapper, F
 from django.db.models.fields import DateField
 from django.db.models.functions import Cast
@@ -166,41 +167,35 @@ def detailed_overview(request, u, *args, **kwargs):
   except User.DoesNotExist:
     raise Http404('User does not exist')
 
-  years = []
-  months = []
+  with connection.cursor() as cursor:
+    cursor.execute('''
+      SELECT COUNT(*), `subquery`.`mo`, `subquery`.`da`, `subquery`.`ye`
+      FROM (SELECT `log_userconnection`.`user_id` AS `Col1`,
+                   EXTRACT(YEAR FROM CONVERT_TZ(`log_userconnection`.`disconnected`, 'UTC', 'UTC'))  AS `ye`,
+                   EXTRACT(MONTH FROM CONVERT_TZ(`log_userconnection`.`disconnected`, 'UTC', 'UTC')) AS `mo`,
+                   EXTRACT(DAY FROM CONVERT_TZ(`log_userconnection`.`disconnected`, 'UTC', 'UTC'))   AS `da`,
+                   COUNT(DISTINCT `log_userconnection`.`user_id`) AS `active`
+            FROM `log_userconnection`
+            WHERE `log_userconnection`.`user_id` = %s
+            GROUP BY `log_userconnection`.`user_id`, `mo`, `da`, `ye`
+            ORDER BY NULL) `subquery`
+      WHERE `da` IS NOT NULL
+      GROUP BY `subquery`.`mo`, `subquery`.`da`, `subquery`.`ye`
+      ORDER BY `ye` DESC, `mo` DESC, `da` DESC
+      LIMIT 356;
+    ''', [user.id])
+
+    query = cursor.fetchall()
+
+  population = {}
+  for i in query:
+    key = datetime.datetime(year=i[3], month=i[1], day=i[2])
+    key = str(int(key.timestamp()))
+    population[key] = i[0]
+
   query = UserConnection.objects.filter(user=user, disconnected__isnull=False)\
                                 .annotate(time=ExpressionWrapper(F('disconnected') - F('connected'),
                                                                  output_field=DurationField()))
-
-  current = datetime.datetime.now()
-  for year in range(current.year - 2, current.year + 1):
-    sub = query.filter(disconnected__year=year)
-
-    times = datetime.timedelta()
-    for s in sub:
-      times += s.time
-
-    if sub:
-      years.append([year, round(times.seconds / 3600)])
-    else:
-      years.append([year, 0])
-
-  for day in range(1, current.day + 1):
-    sub = query.filter(disconnected__year=current.year,
-                       disconnected__month=current.month,
-                       disconnected__day=day)
-
-    times = datetime.timedelta()
-    for s in sub:
-      times += s.time
-
-    formatting = datetime.datetime.now() - datetime.timedelta(days=day)
-    formatting = date_format(formatting, format='SHORT_DATE_FORMAT', use_l10n=True)
-
-    if sub:
-      months.append([formatting, round(times.seconds / 3600)])
-    else:
-      months.append([formatting, 0])
 
   activity = []
   for server in Server.objects.all():
@@ -222,8 +217,9 @@ def detailed_overview(request, u, *args, **kwargs):
   activity = sorted(activity, reverse=True, key=lambda x: x[1].seconds)[0][0]
   games = sorted(games.items(), reverse=True, key=lambda x: x[1].seconds)[0][0]
 
-  return render(request, 'components/players/detailed/overview.pug', {'data': user,
-                                                                      'months': months,
-                                                                      'years': years,
-                                                                      'activity': activity,
-                                                                      'games': games})
+  return render(request,
+                'components/players/detailed/overview.pug',
+                {'data': user,
+                 'population': population,
+                 'activity': activity,
+                 'games': games})

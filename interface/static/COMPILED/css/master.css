@@ -1301,14 +1301,19 @@ form {
   position: relative;
   float: left;
   width: 100%;
-  margin-top: 20px;
+  margin-top: -40px;
   margin-bottom: 40px;
+}
+.chartContainer .chart svg {
+  width: 100% !important;
 }
 .chartContainer .chart text {
   stroke-width: 0.5px;
   stroke: #fff;
 }
 .chartContainer .chart .chart-container {
+  display: flex;
+  justify-content: center;
   width: 100% !important;
 }
 .chartContainer .chart .comparison li {
