@@ -46,7 +46,7 @@
             b Created At:
             =  data.username|created
   .CBox
-    h3 Daily Activity
+    h3 Daily Connections
     .chartContainer.nomargin
       .chart.activity
     script.execute.
@@ -54,10 +54,9 @@
   .CBox
     h3 Average Connection Time
     .chartContainer.nomargin
-      canvas.serverChartAllTime
-    //- script.execute.
-    //-   console.log
-    //-   window.style.charts.heatmap()
+      .chart.average.no-vertical
+    script.execute.
+      window.style.charts.line('.chart.average', {{average.labels|safe}}, {{average.dataset|safe}}, 200, ' hours')
   .CBox.nomargin
     .section.group.nomargin.serverOverview
       .col.span_1_of_2.nomargin

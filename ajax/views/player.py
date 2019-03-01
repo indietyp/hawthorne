@@ -1,3 +1,4 @@
+import calendar
 import datetime
 import math
 
@@ -5,9 +6,9 @@ from automated_logging.models import Application as DALApplication, Model as DAL
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
 from django.db import connection
-from django.db.models import DurationField, ExpressionWrapper, F
+from django.db.models import Avg, DurationField, ExpressionWrapper, F
 from django.db.models.fields import DateField
-from django.db.models.functions import Cast
+from django.db.models.functions import Cast, ExtractMonth, ExtractYear
 from django.http import Http404, HttpResponse
 from django.shortcuts import render
 from django.utils.formats import date_format
@@ -183,7 +184,7 @@ def detailed_overview(request, u, *args, **kwargs):
       GROUP BY `subquery`.`mo`, `subquery`.`da`, `subquery`.`ye`
       ORDER BY `ye` DESC, `mo` DESC, `da` DESC
       LIMIT 356;
-    ''', [user.id])
+    ''', [user.id.hex])
 
     query = cursor.fetchall()
 
@@ -196,6 +197,32 @@ def detailed_overview(request, u, *args, **kwargs):
   query = UserConnection.objects.filter(user=user, disconnected__isnull=False)\
                                 .annotate(time=ExpressionWrapper(F('disconnected') - F('connected'),
                                                                  output_field=DurationField()))
+
+  average = {'dataset': [], 'labels': []}
+  today = datetime.date.today()
+  year = today.year
+  month = today.month
+
+  derived = query.annotate(month=ExtractMonth('disconnected'),
+                           year=ExtractYear('disconnected'))
+  for i in range(0, 12):
+    year_modifier = 0
+    scope = month - i
+
+    if scope < 1:
+      scope += 12
+      year_modifier = 1
+
+    datapoint = derived.filter(month=scope, year=year - year_modifier)\
+                       .aggregate(Avg('time'))['time__avg']
+    label = calendar.month_abbr[scope]
+
+    average['dataset'].append(
+        round(datapoint.total_seconds() / 60 / 60, 1) if datapoint else 0)
+    average['labels'].append("{} '{}".format(label, (year - year_modifier) % 2000))
+
+  average['dataset'] = average['dataset'][::-1]
+  average['labels'] = average['labels'][::-1]
 
   activity = []
   for server in Server.objects.all():
@@ -220,6 +247,7 @@ def detailed_overview(request, u, *args, **kwargs):
   return render(request,
                 'components/players/detailed/overview.pug',
                 {'data': user,
+                 'average': average,
                  'population': population,
                  'activity': activity,
                  'games': games})

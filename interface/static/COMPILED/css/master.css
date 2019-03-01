@@ -1304,6 +1304,12 @@ form {
   margin-top: -40px;
   margin-bottom: 40px;
 }
+.chartContainer .chart.no-vertical .line-vertical {
+  stroke-width: 0.25px;
+}
+.chartContainer .chart .line-chart circle {
+  stroke: none !important;
+}
 .chartContainer .chart svg {
   width: 100% !important;
 }

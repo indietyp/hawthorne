@@ -1,4 +1,4 @@
-heatmap = (selector, data, height = 400) ->
+heatmap = (selector, data) ->
   year = 31536000000
   today = new Date()
   past = new Date(today.getTime() - year)
@@ -31,7 +31,20 @@ heatmap = (selector, data, height = 400) ->
 
   return
 
-line = (selector, data, height = 400) ->
+line = (selector, labels, data, height = 400, tooltip = ' ') ->
+  chart = new frappe.Chart selector, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{values: data}]
+    },
+    colors: ['#00a9ff'],
+    height: height,
+    tooltipOptions: {
+      formatTooltipY: (d) -> d + tooltip,
+    }
+  }
+
   return
 
 window.style.charts =
