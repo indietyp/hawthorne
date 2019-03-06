@@ -405,7 +405,7 @@ configure() {
     admin=$(dinpu "Your SteamID64" "[06/09] Steam credentials")
   fi
   if [ "$domain" = "" ]; then
-    hosted=$(dinpu "Which domain/ip is hawthorne going to be hosted on?" "[07/09] HTTP Configuration")
+    domain=$(dinpu "Which domain/ip is hawthorne going to be hosted on?" "[07/09] HTTP Configuration")
   fi
   if [ $nginx -eq 0 ]; then
     webserver=$(whiptail --radiolist "Choose your used http server" --title "[07/09] HTTP Configuration" $MAX_HEIGHT $MAX_WIDTH 2 "nginx" "" 1 "Apache 2" "" 0 2>&1 1>&3)

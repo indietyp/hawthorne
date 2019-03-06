@@ -1312,15 +1312,15 @@ form {
 }
 .chartContainer .chart svg {
   width: 100% !important;
+  height: unset !important;
 }
 .chartContainer .chart text {
   stroke-width: 0.5px;
   stroke: #fff;
 }
 .chartContainer .chart .chart-container {
-  display: flex;
-  justify-content: center;
   width: 100% !important;
+  height: unset !important;
 }
 .chartContainer .chart .comparison li {
   border-top: none !important;
