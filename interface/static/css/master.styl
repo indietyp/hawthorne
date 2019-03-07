@@ -1477,6 +1477,16 @@ form
   margin-bottom 40px
 
   .chart
+    &.minimal
+      .line-vertical
+        display none
+
+      .line-horizontal
+        display none
+
+      text
+        display none
+
     &.no-vertical
       .line-vertical
         stroke-width 0.25px
@@ -2607,8 +2617,10 @@ form
 
 .serverChart
   position absolute
-  top 70px
-  right 20px
+  bottom -25px
+  right -35px
+
+  margin 0 !important
 
 .serverStatus
   float left

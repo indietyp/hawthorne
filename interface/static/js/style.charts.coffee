@@ -42,11 +42,37 @@ line = (selector, labels, data, height = 400, tooltip = ' ') ->
     height: height,
     tooltipOptions: {
       formatTooltipY: (d) -> d + tooltip,
-    }
+    },
+    lineOptions: {
+      heatline: 1,
+      regionFill: 1
+    },
   }
+
+  return
+
+card = (selector, labels, data, height = 80, tooltip = ' clients') ->
+  chart = new frappe.Chart selector, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{values: data}]
+    },
+    colors: ['#00a9ff'],
+    height: height,
+    tooltipOptions: {
+      formatTooltipY: (d) -> d + tooltip,
+    },
+    lineOptions: {
+      hideDots: 1
+    },
+  }
+
+  $(selector).addClass 'minimal'
 
   return
 
 window.style.charts =
   heatmap: heatmap
   line: line
+  card: card
