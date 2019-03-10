@@ -44,7 +44,7 @@ def home(request):
       WHERE `da` IS NOT NULL
       GROUP BY `subquery`.`mo`, `subquery`.`da`, `subquery`.`ye`
       ORDER BY `ye` DESC, `mo` DESC, `da` DESC
-      LIMIT 356;
+      LIMIT 365;
     ''')
 
     query = cursor.fetchall()
