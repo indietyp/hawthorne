@@ -46,7 +46,7 @@ def update(supervisor):
   repo.git.pull()
   pip.main(['install', '-U', '-r', BASE_DIR + '/requirements.txt'])
   call_command('migrate', interactive=False)
-  call_command('collectstatic', interactive=False)
+  call_command('collectstatic', interactive=False, clear=True)
 
   timezones = run(['mysql_tzinfo_to_sql', '/usr/share/zoneinfo'],
                   stdout=PIPE, stderr=PIPE).stdout

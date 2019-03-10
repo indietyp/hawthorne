@@ -17,7 +17,6 @@ for i in favicon_sizes
   - with 'favicons/'|add:i|add:'.png' as url
     link(rel="shortcut icon", type="image/png", sizes="{{i}}x{{i}}", href="{% static url %}")
 
-script(src='//cdn.jsdelivr.net/npm/chart.js@2.7.3/dist/Chart.min.js')
 script(src='//cdn.jsdelivr.net/npm/frappe-charts@1.1.0/dist/frappe-charts.min.iife.js')
 script(src="//cdn.jsdelivr.net/npm/fermata@v0.11.0-beta2/fermata.min.js")
 script(src="//cdn.jsdelivr.net/npm/balalaika@1.0.1/balalaika.min.js")

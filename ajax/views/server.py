@@ -3,7 +3,8 @@ import json
 import urllib.request
 
 from django.contrib.auth.decorators import login_required, permission_required
-from django.db.models import Count, Q
+from django.db import connection
+from django.db.models import Count, Q, Sum
 from django.db.models.deletion import Collector
 from django.db.models.functions import Extract
 from django.views.decorators.http import require_http_methods
@@ -49,38 +50,57 @@ def list(request, page, *args, **kwargs):
 @permission_required('core.view_server', raise_exception=True)
 @require_http_methods(['POST'])
 def overview(request, s, *args, **kwargs):
-  now = datetime.datetime.now()
   server = Server.objects.get(id=s)
 
-  query = UserConnection.objects.filter(disconnected__isnull=False)\
-                                .annotate(day=Extract('disconnected', 'day'),
-                                          month=Extract('disconnected', 'month'),
-                                          year=Extract('disconnected', 'year'))
+  with connection.cursor() as cursor:
+    cursor.execute('''
+      SELECT AVG(`subquery`.`clients`) AS `clients`, `subquery`.`hour` AS `hour`
+      FROM (SELECT COUNT(`log_serverdatapoint_clients`.`user_id`)                                  AS `clients`,
+                   EXTRACT(HOUR FROM CONVERT_TZ(`log_serverdatapoint`.`created_at`, 'UTC', 'UTC')) AS `hour`
+            FROM `log_serverdatapoint`
+                   LEFT OUTER JOIN `log_serverdatapoint_clients`
+                     ON (`log_serverdatapoint`.`id` = `log_serverdatapoint_clients`.`serverdatapoint_id`)
+            WHERE `log_serverdatapoint`.`server_id` = %s
+            GROUP BY `log_serverdatapoint`.`id`
+            ORDER BY NULL) `subquery`
+      GROUP BY `subquery`.`hour`
+      ORDER BY `subquery`.`hour`
+    ''', [server.id.hex])
 
-  month = []
-  subquery = query.filter(month=now.month, year=now.year, server=server)\
-                  .values('user', 'day')\
-                  .annotate(active=Count('user', distinct=True))
-  for day in range(1, now.day):
-    month.append((day, subquery.filter(day=day).count()))
+    query = cursor.fetchall()
 
-  ever = []
-  subquery = query.filter(server=server)\
-                  .values('user', 'year')\
-                  .annotate(active=Count('user', distinct=True))
-  for year in range(now.year - 2, now.year + 1):
-    ever.append((year, subquery.filter(year=year).count()))
+  hourly = {'labels': [str(x) for x in range(0, 24)], 'dataset': [0] * 24}
+  for result in query:
+    hourly['dataset'][result[1]] = float(result[0])
+
+  with connection.cursor() as cursor:
+    cursor.execute('''
+      SELECT COUNT(`log_serverdatapoint_clients`.`user_id`) AS `clients`,
+             CAST(`created_at` AS DATE) `created_date`
+      FROM `log_serverdatapoint`
+             LEFT OUTER JOIN `log_serverdatapoint_clients`
+               ON (`log_serverdatapoint`.`id` = `log_serverdatapoint_clients`.`serverdatapoint_id`)
+      WHERE `log_serverdatapoint`.`server_id` = %s
+      GROUP BY `created_date`
+      ORDER BY `created_date` DESC
+      LIMIT 365
+    ''', [server.id.hex])
+
+    query = cursor.fetchall()
+
+  daily = {}
+  for result in query:
+    date = datetime.datetime(result[1].year, result[1].month, result[1].day)
+    daily[str(date.timestamp() * 1000)] = result[0]
 
   loc = None
-
   with urllib.request.urlopen("https://geoip-db.com/json/{}".format(server.ip)) as url:
     data = json.loads(url.read().decode())
-
   loc = '{}, {}'.format(data['city'], data['country_name']) if data['city'] else data['country_name']
 
   return render(request, 'components/servers/detailed/overview.pug', {'data': server,
-                                                                      'months': month,
-                                                                      'years': ever,
+                                                                      'hourly': hourly,
+                                                                      'daily': hourly,
                                                                       'location': loc,
                                                                       'status': status(server)})
 

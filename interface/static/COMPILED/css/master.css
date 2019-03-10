@@ -2383,7 +2383,8 @@ form {
   list-style-type: none;
 }
 .serverOverview .list li {
-  display: block;
+  display: flex;
+  align-items: center;
   padding: 15px;
   border-bottom: 1px solid rgba(255,255,255,0.05);
 }
@@ -2396,9 +2397,12 @@ form {
 }
 .serverOverview .list li b:first-child {
   display: inline-block;
-  min-width: 15%;
   cursor: default;
   color: rgba(255,255,255,0.5);
+}
+.serverOverview .list li > *:first-child,
+.serverOverview .list li *:last-child:not(.exception) {
+  max-width: 50%;
 }
 .serverOverview p {
   display: inline-block;
@@ -2423,6 +2427,16 @@ form {
   margin: -10px 0 -10px 10px;
   padding: 10px 15px;
 }
+.ht-ion {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 900;
+  height: 15px;
+  font-size: 13px;
+}
+.ht-ion.ht-ion-large {
+  font-size: 23px;
+}
 .RCONwindow {
   display: flow-root;
   padding: 20px;
@@ -2446,6 +2460,7 @@ form {
   font-size: 11px;
 }
 button[disabled] {
+  opacity: 0.25;
   cursor: not-allowed;
   background: rgba(38,81,149,0.5);
 }

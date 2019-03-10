@@ -29,38 +29,46 @@
         ul.list
           li
             b IP:
+            .flex.grow
             a(href="javascript:void(0)", data-trigger="[clip/copy]", data-clipboard-text="{{data.ip}}:{{data.port}}")
               = data.ip|add:":"
               =data.port
-              i.fa.fa-copy(style="margin-left:5px")
+              i.ht-ion.ion.ion-ios-copy(style="margin-left:5px")
           li
             b Location:
-            = location
+            .flex.grow
+            span= location
           li
             b VAC:
+            .flex.grow
             if data.vac
-              i.ion.ion-ios-checkmark.green
+              i.ht-ion.ht-ion-large.ion.ion-ios-checkmark.green
             else
-              i.ion.ion-ios-close.red
+              i.ht-ion.ht-ion-large.ion.ion-ios-close.red
           li
             b Protected:
+            .flex.grow
             if data.protected
-              i.ion.ion-ios-checkmark.green
+              i.ht-ion.ht-ion-large.ion.ion-ios-checkmark.green
             else
-              i.ion.ion-ios-close.red
+              i.ht-ion.ht-ion-large.ion.ion-ios-close.red
 
           li
             b Uptime:
-            = status.datapoint.uptime|duration
+            .flex.grow
+            span= status.datapoint.uptime|duration
   .CBox
     h3 Average Population (by day)
     .chartContainer.nomargin
       .chart.population.day
+    script.execute window.style.charts.heatmap('.chart.population.day', {{daily|safe}}, ' clients')
+
   .CBox
     h3 Average Population (by hour)
     //- maybe add weekday?
     .chartContainer.nomargin
       .chart.population.hour
+    script.execute window.style.charts.line('.chart.population.hour', {{hourly.labels|safe}}, {{hourly.dataset|safe}}, 200, ' clients')
   .CBox
     .section.group.nomargin.serverOverview
       .col.span_1_of_2.nomargin
@@ -70,24 +78,30 @@
         ul.list
           li
             b Map:
-            = status.datapoint.map
+            .flex.grow
+            span= status.datapoint.map
           li
             b Time Left:
-            if status.datapoint.time_left
-              = status.datapoint.time_left|duration
-              |  -
-              b Map change scheduled for
-                = status.datapoint.time_left|warp|time
-            else
-              | indefinitely
+            .flex.grow
+            span
+              if status.datapoint.time_left
+                = status.datapoint.time_left|duration
+                |  -
+                b Map change scheduled for
+                  = status.datapoint.time_left|warp|time
+              else
+                | indefinitely
           li
             b Gamemode:
-            = data.mode
+            .flex.grow
+            span= data.mode
           li
             b Players:
-            .playerCount(class="{%if status.datapoint.clients.count == data.max_clients%}fullPlayers{%endif%}")
-              = status.datapoint.clients.count
-              |  of
-              = data.max_clients
-            a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/players]") View Players
-            a(href="javascript:void(0)", style="margin-left:10px", data-trigger="[modal/open]", data-trigger-target="[modal/admins]") View Admins
+            .flex.grow
+            .exception
+              .playerCount(class="{%if status.datapoint.clients.count == data.max_clients%}fullPlayers{%endif%}")
+                = status.datapoint.clients.count
+                |  of
+                = data.max_clients
+              a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/players]") View Players
+              a(href="javascript:void(0)", style="margin-left:10px", data-trigger="[modal/open]", data-trigger-target="[modal/admins]") View Admins
