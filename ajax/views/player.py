@@ -170,29 +170,22 @@ def detailed_overview(request, u, *args, **kwargs):
 
   with connection.cursor() as cursor:
     cursor.execute('''
-      SELECT COUNT(*), `subquery`.`mo`, `subquery`.`da`, `subquery`.`ye`
-      FROM (SELECT `log_userconnection`.`user_id` AS `Col1`,
-                   EXTRACT(YEAR FROM CONVERT_TZ(`log_userconnection`.`disconnected`, 'UTC', 'UTC'))  AS `ye`,
-                   EXTRACT(MONTH FROM CONVERT_TZ(`log_userconnection`.`disconnected`, 'UTC', 'UTC')) AS `mo`,
-                   EXTRACT(DAY FROM CONVERT_TZ(`log_userconnection`.`disconnected`, 'UTC', 'UTC'))   AS `da`,
-                   COUNT(DISTINCT `log_userconnection`.`user_id`) AS `active`
-            FROM `log_userconnection`
-            WHERE `log_userconnection`.`user_id` = %s
-            GROUP BY `log_userconnection`.`user_id`, `mo`, `da`, `ye`
-            ORDER BY NULL) `subquery`
-      WHERE `da` IS NOT NULL
-      GROUP BY `subquery`.`mo`, `subquery`.`da`, `subquery`.`ye`
-      ORDER BY `ye` DESC, `mo` DESC, `da` DESC
-      LIMIT 356;
+      SELECT COUNT(DISTINCT `log_userconnection`.`user_id`) AS `connection`,
+             CAST(`log_userconnection`.`disconnected` AS DATE) `created_date`
+      FROM `log_userconnection`
+      WHERE `log_userconnection`.`user_id` = %s
+        AND `log_userconnection`.`disconnected` IS NOT NULL
+      GROUP BY `created_date`
+      ORDER BY `created_date` DESC
+      LIMIT 365;
     ''', [user.id.hex])
 
     query = cursor.fetchall()
 
   population = {}
   for i in query:
-    key = datetime.datetime(year=i[3], month=i[1], day=i[2])
-    key = str(int(key.timestamp()))
-    population[key] = i[0]
+    key = datetime.datetime(year=i[1].year, month=i[1].month, day=i[1].day)
+    population[str(key.timestamp())] = i[0]
 
   query = UserConnection.objects.filter(user=user, disconnected__isnull=False)\
                                 .annotate(time=ExpressionWrapper(F('disconnected') - F('connected'),

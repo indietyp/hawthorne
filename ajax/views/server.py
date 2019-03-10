@@ -54,17 +54,20 @@ def overview(request, s, *args, **kwargs):
 
   with connection.cursor() as cursor:
     cursor.execute('''
-      SELECT AVG(`subquery`.`clients`) AS `clients`, `subquery`.`hour` AS `hour`
-      FROM (SELECT COUNT(`log_serverdatapoint_clients`.`user_id`)                                  AS `clients`,
-                   EXTRACT(HOUR FROM CONVERT_TZ(`log_serverdatapoint`.`created_at`, 'UTC', 'UTC')) AS `hour`
+      SELECT AVG(`subquery`.`clients`), `subquery`.`hour`
+      FROM (SELECT COUNT(`log_serverdatapoint_clients`.`user_id`) AS `clients`,
+                   EXTRACT(HOUR FROM
+                           CONVERT_TZ(`log_serverdatapoint`.`created_at`, 'UTC',
+                                      'UTC'))                     AS `hour`
             FROM `log_serverdatapoint`
                    LEFT OUTER JOIN `log_serverdatapoint_clients`
-                     ON (`log_serverdatapoint`.`id` = `log_serverdatapoint_clients`.`serverdatapoint_id`)
+                     ON (`log_serverdatapoint`.`id` =
+                         `log_serverdatapoint_clients`.`serverdatapoint_id`)
             WHERE `log_serverdatapoint`.`server_id` = %s
             GROUP BY `log_serverdatapoint`.`id`
             ORDER BY NULL) `subquery`
       GROUP BY `subquery`.`hour`
-      ORDER BY `subquery`.`hour`
+      ORDER BY `subquery`.`hour`;
     ''', [server.id.hex])
 
     query = cursor.fetchall()
@@ -76,14 +79,15 @@ def overview(request, s, *args, **kwargs):
   with connection.cursor() as cursor:
     cursor.execute('''
       SELECT COUNT(`log_serverdatapoint_clients`.`user_id`) AS `clients`,
-             CAST(`created_at` AS DATE) `created_date`
+             CAST(`created_at` AS DATE)                        `created_date`
       FROM `log_serverdatapoint`
              LEFT OUTER JOIN `log_serverdatapoint_clients`
-               ON (`log_serverdatapoint`.`id` = `log_serverdatapoint_clients`.`serverdatapoint_id`)
+               ON (`log_serverdatapoint`.`id` =
+                   `log_serverdatapoint_clients`.`serverdatapoint_id`)
       WHERE `log_serverdatapoint`.`server_id` = %s
       GROUP BY `created_date`
       ORDER BY `created_date` DESC
-      LIMIT 365
+      LIMIT 365;
     ''', [server.id.hex])
 
     query = cursor.fetchall()
@@ -91,7 +95,7 @@ def overview(request, s, *args, **kwargs):
   daily = {}
   for result in query:
     date = datetime.datetime(result[1].year, result[1].month, result[1].day)
-    daily[str(date.timestamp() * 1000)] = result[0]
+    daily[str(date.timestamp())] = result[0]
 
   loc = None
   with urllib.request.urlopen("https://geoip-db.com/json/{}".format(server.ip)) as url:

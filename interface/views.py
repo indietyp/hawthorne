@@ -32,18 +32,12 @@ def home(request):
   # there seems to be no way to derive a django query from another one
   with connection.cursor() as cursor:
     cursor.execute('''
-      SELECT COUNT(*), `subquery`.`mo`, `subquery`.`da`, `subquery`.`ye`
-      FROM (SELECT `log_userconnection`.`user_id` AS `Col1`,
-                   EXTRACT(YEAR FROM CONVERT_TZ(`log_userconnection`.`disconnected`, 'UTC', 'UTC'))  AS `ye`,
-                   EXTRACT(MONTH FROM CONVERT_TZ(`log_userconnection`.`disconnected`, 'UTC', 'UTC')) AS `mo`,
-                   EXTRACT(DAY FROM CONVERT_TZ(`log_userconnection`.`disconnected`, 'UTC', 'UTC'))   AS `da`,
-                   COUNT(DISTINCT `log_userconnection`.`user_id`) AS `active`
-            FROM `log_userconnection`
-            GROUP BY `log_userconnection`.`user_id`, `mo`, `da`, `ye`
-            ORDER BY NULL) `subquery`
-      WHERE `da` IS NOT NULL
-      GROUP BY `subquery`.`mo`, `subquery`.`da`, `subquery`.`ye`
-      ORDER BY `ye` DESC, `mo` DESC, `da` DESC
+      SELECT COUNT(DISTINCT `log_userconnection`.`user_id`)    AS `active`,
+             CAST(`log_userconnection`.`disconnected` AS DATE) `created_date`
+      FROM `log_userconnection`
+      WHERE `log_userconnection`.`disconnected` IS NOT NULL
+      GROUP BY `created_date`
+      ORDER BY `created_date` DESC
       LIMIT 365;
     ''')
 
@@ -51,9 +45,8 @@ def home(request):
 
   population = {}
   for i in query:
-    key = datetime.datetime(year=i[3], month=i[1], day=i[2])
-    key = str(int(key.timestamp()))
-    population[key] = i[0]
+    key = datetime.datetime(year=i[1].year, month=i[1].month, day=i[1].day)
+    population[str(key.timestamp())] = i[0]
 
   payload = {'population': population,
              'punishments': Punishment.objects.count(),
