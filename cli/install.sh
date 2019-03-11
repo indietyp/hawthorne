@@ -156,8 +156,6 @@ parser() {
         -h | --help | help)               usage
                                           exit
                                           ;;
-        -noui)                            ui=0
-                                          ;;
         -c | --configure | configure)     configure=1
                                           ;;
         -i | --install | install)         install=1
@@ -187,6 +185,8 @@ parser() {
         +f | --docker)          docker=1
                                 ;;
         +n | --nginx)           nginx=1
+                                ;;
+        +h | --headless)        ui=0
                                 ;;
         +o | --demo)            demo=1
                                 ;;
@@ -409,6 +409,8 @@ configure() {
   fi
   if [ $nginx -eq 0 ]; then
     webserver=$(whiptail --radiolist "Choose your used http server" --title "[07/09] HTTP Configuration" $MAX_HEIGHT $MAX_WIDTH 2 "nginx" "" 1 "Apache 2" "" 0 2>&1 1>&3)
+  else
+    webserver="nginx"
   fi
 
   dnoti "Setting up Hawthorne...." "[08/09] Hawthorne Initialize"

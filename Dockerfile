@@ -14,7 +14,7 @@ ENV LC_ALL en_US.UTF-8
 
 ADD . hawthorne/
 
-RUN hawthorne/cli/install.sh install --path /hawthorne --local -noui
+RUN hawthorne/cli/install.sh install --path /hawthorne --local --headless
 RUN apt-get clean
 RUN rm -rf /var/lib/apt/lists/*
 
