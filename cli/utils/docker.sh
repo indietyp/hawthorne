@@ -11,6 +11,6 @@ redis-server --daemonize yes
 /hawthorne/cli/utils/wait.sh ${DB_HOST}:${DB_PORT}
 
 if [ $DEMO -ne 1 ]; then
-  /hawthorne/cli/install.sh configure --path /hawthorne --database $DB --domain $DOMAIN --steam $API --admin $ADMIN --local --docker
+  /hawthorne/cli/install.sh configure --path /hawthorne --database $DB --domain $DOMAIN --steam $API --admin $ADMIN --local --docker -noui
 fi
-  /hawthorne/cli/install.sh configure --path /hawthorne --database $DB --domain $DOMAIN --steam $API --admin $ADMIN --local --docker --demo
+  /hawthorne/cli/install.sh configure --path /hawthorne --database $DB --domain $DOMAIN --steam $API --admin $ADMIN --local --docker --demo -noui
