@@ -14,3 +14,5 @@ if [ $DEMO -ne 1 ]; then
   /hawthorne/cli/install.sh configure --path /hawthorne --database $DB --domain $DOMAIN --steam $API --admin $ADMIN --local --docker -noui
 fi
   /hawthorne/cli/install.sh configure --path /hawthorne --database $DB --domain $DOMAIN --steam $API --admin $ADMIN --local --docker --demo -noui
+
+tail -n 20 install.log

@@ -462,7 +462,7 @@ configure() {
     else
       supervisorctl reread
       supervisorctl update
-      supervisorctl restart hawthorne
+      supervisorctl restart hawthorne:*
     fi
   } >> install.log 2>&1
 
