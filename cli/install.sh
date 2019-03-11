@@ -42,7 +42,7 @@ export NCURSES_NO_UTF8_ACS=1
 export DIALOGRC="~/.ht.dialogrc"
 
 if which tput >/dev/null 2>&1; then
-  ncolors=$(tput colors)
+  ncolors=$(tput colors 2>/dev/null)
 fi
 
 if [ -t 1 ] && [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
