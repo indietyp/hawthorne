@@ -186,6 +186,7 @@ def reconfigure(bind, link, config, gunicorn, nginx, apache, logrotate, supervis
 @click.option('--root', expose_value=True)
 @click.option('--secret', is_flag=True, default=False, expose_value=True)
 def initialize(database, steam, demo, host, root, secret):
+  print(BASE_DIR)
   config = BASE_DIR + '/panel/local.ini'
   target = 'local.ini' if os.path.isfile(config) else "local.default.ini"
 
@@ -233,6 +234,7 @@ def initialize(database, steam, demo, host, root, secret):
   if root:
     ini['system']['root'] = root
 
+  print('is this the problem?!')
   with open(config, 'w') as file:
     ini.write(file)
 
