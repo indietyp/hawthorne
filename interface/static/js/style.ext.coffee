@@ -102,9 +102,9 @@ $.fn.htmlPrepend = (value) ->
   insertHtml value, 'prepend', @
   @
 
-$.fn.fadeIn = (value) ->
+$.fn.fadeIn = (value, display = 'block') ->
   @forEach((item) ->
-    item.style.display = 'block'
+    item.style.display = display
     item.style.opacity = '0'
     item.style.transition = '0.2s opacity ease'
 
@@ -125,12 +125,12 @@ $.fn.fadeOut = (value) ->
   @
 
 
-$.fn.fadeToggle = (value) ->
+$.fn.fadeToggle = (value, display = 'block') ->
   @forEach((item) ->
     item.style.transition = '0.2s opacity ease'
 
     if window.getComputedStyle(item).display is 'none'
-      item.style.display = 'block'
+      item.style.display = display
       setTimeout(->
         item.style.opacity = null
       , 10)

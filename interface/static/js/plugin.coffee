@@ -85,7 +85,7 @@ init = (scope = document) ->
   $('.search input', scope).on 'click', ->
     $('.modal').fadeOut 'fast'
     $('.searchOverlay').fadeIn 'fast'
-    $('.searchArea').fadeToggle 'fast'
+    $('.searchArea').fadeToggle 'fast', 'grid'
     $('.search').animate {width: '30%'}, 250
     return
 

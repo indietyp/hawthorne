@@ -10,15 +10,14 @@ ROOT=${ROOT:-root}
 redis-server --daemonize yes
 /hawthorne/cli/utils/wait.sh ${DB_HOST}:${DB_PORT}
 
-{
-  if [ $DEMO -ne 1 ]; then
-    /hawthorne/cli/install.sh configure --path /hawthorne --database $DB --domain $DOMAIN --steam $API --admin $ADMIN --local --docker --headless
-  fi
-    /hawthorne/cli/install.sh configure --path /hawthorne --database $DB --domain $DOMAIN --steam $API --admin $ADMIN --local --docker --demo --headless
-} || {
-  echo "install.log dump:"
-  cat ~/install.log
+if [ $DEMO -ne 1 ]; then
+  /hawthorne/cli/install.sh configure --path /hawthorne --database $DB --domain $DOMAIN --steam $API --admin $ADMIN --local --docker --headless
+fi
+  /hawthorne/cli/install.sh configure --path /hawthorne --database $DB --domain $DOMAIN --steam $API --admin $ADMIN --local --docker --demo --headless
 
-  echo "/hawthorne/install.log dump:"
-  cat /hawthorne/install.log
-}
+echo "install.log dump:"
+cat ~/install.log
+
+echo "/hawthorne/install.log dump:"
+cat /hawthorne/install.log
+

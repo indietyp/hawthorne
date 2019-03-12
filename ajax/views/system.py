@@ -1,3 +1,7 @@
+import json
+import re
+
+from core.models import Server, User
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -25,13 +29,43 @@ def update(request, *args, **kwargs):
     return HttpResponse('')
 
 
+def convert_steamid(q):
+  steamid3 = re.compile(r'^\[(?P<type>[UgT]):1:(?P<W>\d+)\]$')
+  steamid32 = re.compile(r'^STEAM_(?P<X>\d+):(?P<Y>\d+):(?P<Z>\d+)$')
+  steamid64 = re.compile(r'^(?P<W>\d{17})$')
+
+  match = steamid64.match(q)
+  if match and 0x0110000100000001 <= int(q) and 0x01100001FFFFFFFF >= int(q):
+    return match.group('W'), True
+
+  match = steamid32.match(q)
+  if match:
+    pass
+
+  match = steamid3.match(q)
+  if match:
+    pass
+
+  return q, False
+
+
 @login_required
 @permission_required('core.view_update', raise_exception=True)
 @require_http_methods(['POST'])
 def search(request, *args, **kwargs):
-  # search for
   # --> User
   # --> Server
 
-  return render(request, 'components/home/update.pug', {'current': '',
-                                                        'upstream': ''})
+  payload = json.loads(request.body)
+  q = payload['query']
+
+  servers = Server.objects.filter(name__icontains=q)
+
+  q, converted = convert_steamid(q)
+  if converted:
+    users = User.objects.filter(username__icontains=q, is_steam=True)
+  else:
+    users = User.objects.filter(namespace__icontains=q, is_steam=True)
+
+  return render(request, 'skeleton/globals/search.pug', {'servers': servers,
+                                                         'users': users})
