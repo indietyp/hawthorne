@@ -16,4 +16,4 @@ fi
   /hawthorne/cli/install.sh configure --path /hawthorne --database $DB --domain $DOMAIN --steam $API --admin $ADMIN --local --docker --demo --headless
 
 echo "install.log dump:"
-cat ~/install.log
+cat /root/install.log
