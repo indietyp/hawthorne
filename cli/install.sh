@@ -438,7 +438,9 @@ configure() {
     python3 $directory/manage.py superusersteam --steamid $admin --check
     python3 $directory/manage.py collectstatic --noinput -v 0
 
-    if [ "$webserver" = "nginx" ]; then
+    if [ $docker -eq 1 ]; then
+      hawthorne reconfigure --no-supervisor --no-nginx --no-apache --no-gunicorn --no-logrotate
+    elif [ "$webserver" = "nginx" ]; then
       hawthorne reconfigure --no-supervisor --nginx --no-apache --no-gunicorn --no-logrotate
     else
       hawthorne reconfigure --no-supervisor --no-nginx --apache --no-gunicorn --no-logrotate

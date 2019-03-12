@@ -23,28 +23,34 @@
         ul.list
           li
             b SteamID 2:
+            .flex.grow
             a.space-before(href="javascript:void(0)", data-trigger="[clip/copy]", data-clipboard-text="{{data.username|as2}}")
               = data.username|as2
-              i.fa.fa-copy(style="margin-left:5px")
+              i.ht-ion.ion.ion-ios-copy(style="margin-left:5px")
           li
             b SteamID 3:
+            .flex.grow
             a.space-before(href="javascript:void(0)", data-trigger="[clip/copy]", data-clipboard-text="{{data.username|as3}}")
               = data.username|as3
-              i.fa.fa-copy(style="margin-left:5px")
+              i.ht-ion.ion.ion-ios-copy(style="margin-left:5px")
           li
             b SteamID64:
+            .flex.grow
             a.space-before(href="javascript:void(0)", data-trigger="[clip/copy]", data-clipboard-text="{{data.username}}")
               = data.username
-              i.fa.fa-copy(style="margin-left:5px")
+              i.ht-ion.ion.ion-ios-copy(style="margin-left:5px")
           li
-            b.space-after Steam Level:
-            =  data.username|level
+            b Steam Level:
+            .flex.grow
+            span= data.username|level
           li
             b VAC:
-            =  data.username|vac
+            .flex.grow
+            span= data.username|vac
           li
             b Created At:
-            =  data.username|created
+            .flex.grow
+            span= data.username|created
   .CBox
     h3 Daily Connections
     .chartContainer.nomargin
@@ -66,15 +72,21 @@
         ul.list
           li
             b Punishments:
-            =  data.punishment_set|count
+            .flex.grow
+            span= data.punishment_set|count
           li
             b Messages:
-            =  data.serverchat_set|count
+            .flex.grow
+            span= data.serverchat_set|count
           li
             b Most Active Server:
+            .flex.grow
             a(href="javascript:void(0)", onclick="window.vc('servers[detailed]', '{{activity.id}}')")
               = activity.name
           li
-            a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/roles]") View Roles
-            a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/usernames]", style="margin-left: 6px") View Usernames
-            a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/ips]", style="margin-left: 6px") View IPs
+            span.dummy
+            .flex.grow
+            span
+              a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/roles]") View Roles
+              a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/usernames]", style="margin-left: 6px") View Usernames
+              a(href="javascript:void(0)", data-trigger="[modal/open]", data-trigger-target="[modal/ips]", style="margin-left: 6px") View IPs
