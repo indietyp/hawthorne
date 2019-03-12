@@ -21,7 +21,7 @@ matrix:
       - docker run --name db -e MYSQL_ROOT_PASSWORD=testing -d mariadb
       - docker run -itd --name centos --link db:mysql centos
       - docker cp . centos:/hawthorne
-      - docker exec -t centos sh /hawthorne/cli/install.sh --path /hawthorne --local -noui --domain localhost --steam $STEAMAPI --admin $STEAMADMIN --database root:testing@db:3306/hawthorne
+      - docker exec -t centos sh /hawthorne/cli/install.sh --path /hawthorne --local --headless --domain localhost --steam $STEAMAPI --admin $STEAMADMIN --database root:testing@db:3306/hawthorne
 
   - name: "Ubuntu Functionality Test"
     language: minimal
@@ -29,7 +29,7 @@ matrix:
       - docker run --name db -e MYSQL_ROOT_PASSWORD=testing -d mariadb
       - docker run -itd --name ubuntu --link db:mysql ubuntu
       - docker cp . ubuntu:/hawthorne
-      - docker exec -t ubuntu sh /hawthorne/cli/install.sh --path /hawthorne --local -noui --domain localhost --steam $STEAMAPI --admin $STEAMADMIN --database root:testing@db:3306/hawthorne
+      - docker exec -t ubuntu sh /hawthorne/cli/install.sh --path /hawthorne --local --headless --domain localhost --steam $STEAMAPI --admin $STEAMADMIN --database root:testing@db:3306/hawthorne
 
   - name: "Debian Functionality Test"
     language: minimal
@@ -37,7 +37,7 @@ matrix:
       - docker run --name db -e MYSQL_ROOT_PASSWORD=testing -d mariadb
       - docker run -itd --name debian --link db:mysql debian
       - docker cp . debian:/hawthorne
-      - docker exec -t debian sh /hawthorne/cli/install.sh --path /hawthorne --local -noui --domain localhost --steam $STEAMAPI --admin $STEAMADMIN --database root:testing@db:3306/hawthorne
+      - docker exec -t debian sh /hawthorne/cli/install.sh --path /hawthorne --local --headless --domain localhost --steam $STEAMAPI --admin $STEAMADMIN --database root:testing@db:3306/hawthorne
 
   - name: "Ubuntu Reinstallation Test"
     language: minimal
@@ -45,8 +45,8 @@ matrix:
       - docker run --name db -e MYSQL_ROOT_PASSWORD=testing -d mariadb
       - docker run -itd --name ubuntu --link db:mysql ubuntu
       - docker cp . ubuntu:/hawthorne
-      - docker exec -t ubuntu sh /hawthorne/cli/install.sh --path /hawthorne --local -noui --domain localhost --steam $STEAMAPI --admin $STEAMADMIN --database root:testing@db:3306/hawthorne
-      - docker exec -t ubuntu sh /hawthorne/cli/install.sh --path /hawthorne --local -noui --domain localhost --steam $STEAMAPI --admin $STEAMADMIN --database root:testing@db:3306/hawthorne
+      - docker exec -t ubuntu sh /hawthorne/cli/install.sh --path /hawthorne --local --headless --domain localhost --steam $STEAMAPI --admin $STEAMADMIN --database root:testing@db:3306/hawthorne
+      - docker exec -t ubuntu sh /hawthorne/cli/install.sh --path /hawthorne --local --headless --domain localhost --steam $STEAMAPI --admin $STEAMADMIN --database root:testing@db:3306/hawthorne
 
 services:
   - docker
