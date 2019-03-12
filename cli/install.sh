@@ -430,8 +430,8 @@ configure() {
     bind=socket
     owner=Owner
     if [ $docker -eq 1 ]; then
-      # owner=$ROOT
-      bind=port
+      owner=$ROOT
+      bind=container
     fi
 
     hawthorne initialize --database $conn --steam $stapi --demo $demo --host $domain --secret --root $owner
@@ -456,8 +456,6 @@ configure() {
     }
 
   } >> install.log 2>&1
-
-  cat install.log
 
   dnoti "Starting Hawthorne..." "[09/09] Supervisor"
   {

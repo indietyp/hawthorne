@@ -104,7 +104,8 @@ def version(yes):
 @click.command()
 @click.option('--link/--no-link', is_flag=True, expose_value=True,
               default=False)
-@click.option('--bind', type=click.Choice(['socket', 'port']), default='socket')
+@click.option('--bind', type=click.Choice(['socket', 'port', 'container']),
+              default='socket')
 @click.option('--config', type=click.Path(dir_okay=False, resolve_path=True,
                                           writable=True, readable=True),
               default='/etc/nginx/sites-enabled/hawthorne.conf')
@@ -125,11 +126,16 @@ def reconfigure(bind, link, config, gunicorn, nginx, apache, logrotate, supervis
     shutil.copy(CONFIG_LOCATION + '/gunicorn.default.conf.py',
                 BASE_DIR + '/gunicorn.conf.py')
 
-    if bind == 'port':
+    if bind in ['port', 'container']:
       with open(BASE_DIR + '/gunicorn.conf.py', 'r+') as file:
         contents = file.read()
-        contents = contents.replace("bind = 'unix:/var/run/hawthorne.sock'",
-                                    "bind = '127.0.0.1:8000'")
+
+        if bind == 'port':
+          contents = contents.replace("bind = 'unix:/var/run/hawthorne.sock'",
+                                      "bind = '127.0.0.1:8000'")
+        else:
+          contents = contents.replace("bind = 'unix:/var/run/hawthorne.sock'",
+                                      "bind = '0.0.0.0:8000'")
 
         file.seek(0)
         file.truncate()
@@ -186,7 +192,6 @@ def reconfigure(bind, link, config, gunicorn, nginx, apache, logrotate, supervis
 @click.option('--root', expose_value=True)
 @click.option('--secret', is_flag=True, default=False, expose_value=True)
 def initialize(database, steam, demo, host, root, secret):
-  print(BASE_DIR)
   config = BASE_DIR + '/panel/local.ini'
   target = 'local.ini' if os.path.isfile(config) else "local.default.ini"
 
@@ -234,7 +239,6 @@ def initialize(database, steam, demo, host, root, secret):
   if root:
     ini['system']['root'] = root
 
-  print('is this the problem?!')
   with open(config, 'w') as file:
     ini.write(file)
 
