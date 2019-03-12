@@ -17,7 +17,3 @@ fi
 
 echo "install.log dump:"
 cat ~/install.log
-
-echo "/hawthorne/install.log dump:"
-cat /hawthorne/install.log
-
