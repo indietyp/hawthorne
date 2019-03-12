@@ -15,5 +15,7 @@ if [ $DEMO -ne 1 ]; then
 fi
   /hawthorne/cli/install.sh configure --path /hawthorne --database $DB --domain $DOMAIN --steam $API --admin $ADMIN --local --docker --demo --headless
 
-echo "install.log dump:"
+echo $PATH
+echo "install.log dump [2]:"
 cat /root/install.log
+cat /hawthorne/install.log
