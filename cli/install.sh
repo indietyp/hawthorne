@@ -455,6 +455,8 @@ configure() {
 
   } >> install.log 2>&1
 
+  cat install.log
+
   dnoti "Starting Hawthorne..." "[09/09] Supervisor"
   {
     if [ $docker -eq 1 ]; then
