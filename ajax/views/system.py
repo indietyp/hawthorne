@@ -23,3 +23,15 @@ def update(request, *args, **kwargs):
                                                           'upstream': upstream})
   else:
     return HttpResponse('')
+
+
+@login_required
+@permission_required('core.view_update', raise_exception=True)
+@require_http_methods(['POST'])
+def search(request, *args, **kwargs):
+  # search for
+  # --> User
+  # --> Server
+
+  return render(request, 'components/home/update.pug', {'current': '',
+                                                        'upstream': ''})
