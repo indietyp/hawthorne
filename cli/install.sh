@@ -37,7 +37,9 @@ MAX_WIDTH=$(( $MAX_WIDTH * 3 / 4 ))
 DIALOG=$(which dialog 2>/dev/null || which whiptail 2>/dev/null || which echo 2>/dev/null)
 curl https://gist.githubusercontent.com/indietyp/d35983f3d943b61eb3c503e6104f4ccf/raw/886ebc08885a386aa6d61feb93fad9841b867472/.ht.dialogrc -o ~/.ht.dialogrc >/dev/null 2>&1
 
-export LC_ALL=C
+export LANG=C.UTF-8
+export LC_ALL=C.UTF-8
+
 export NCURSES_NO_UTF8_ACS=1
 export DIALOGRC="~/.ht.dialogrc"
 
