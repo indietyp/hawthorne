@@ -427,7 +427,12 @@ configure() {
       systemctl enable supervisord
     }
 
-    bind=socket
+    if [ $webserver = "Apache 2" ]; then
+      bind=port
+    else
+      bind=socket
+    fi
+
     owner=Owner
     if [ $docker -eq 1 ]; then
       owner=$ROOT

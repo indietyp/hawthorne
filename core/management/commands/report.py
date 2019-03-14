@@ -14,17 +14,15 @@ from django.core.management.base import BaseCommand
 from git import Repo
 from tabulate import tabulate
 
-from lib.mainframe import Mainframe
-
 
 class Command(BaseCommand):
-  help = 'creates a new report sent to the current maintainer'
+  help = 'creates a disgnostic report'
   MODULES = ['hawthorne', 'system', 'logs', 'python', 'usage']
   HEADERS = ['Property', 'Value']
 
   def add_arguments(self, parser):
     parser.add_argument(
-        '--module',
+        '--module', '-m',
         dest='modules',
         action='store',
         nargs='*',
@@ -146,12 +144,14 @@ class Command(BaseCommand):
       def memory(process):
         try:
           return process.memory_percent()
-        except psutil.AccessDenied:
+        except (psutil.AccessDenied,
+                psutil.ZombieProcess):
           return 0
       procs = sorted(psutil.process_iter(), key=memory, reverse=True)[:3]
       for process in procs:
         table.append([process.name(), process.memory_percent()])
-      output += tabulate(table, tablefmt="github", headers=['Process', 'Memory Usage (%)'])
+      output += tabulate(table, tablefmt="github",
+                         headers=['Process', 'Memory Usage (%)'])
       output += '\n\n'
 
       output += '### Top CPU Usage \n'
@@ -160,7 +160,8 @@ class Command(BaseCommand):
       def cpu(process):
         try:
           return sum(process.cpu_times())
-        except psutil.AccessDenied:
+        except (psutil.AccessDenied,
+                psutil.ZombieProcess):
           return 0
       procs = sorted(psutil.process_iter(), key=cpu, reverse=True)[:3]
       for process in procs:
