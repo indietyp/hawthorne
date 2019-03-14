@@ -50,10 +50,9 @@ urlpatterns = [
 
   path('settings/tokens', setting.tokens),
   path('settings/tokens/<int:page>', setting.tokens_entries),
-  # path('setting/group/<int:page>', setting.group),
-  # path('setting/token/<int:page>', setting.token),
 
   path('system/update', system.update),
+  path('system/search', system.search),
 
   path('utils/search', utils.search),
 ]

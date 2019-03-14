@@ -3,10 +3,10 @@
   ul
     for user in users
       li
-        a(href='javascript:void(0)', onclick="window.vc('players[detailed]', '{{user.id}}')")= data.namespace
+        a(href='javascript:void(0)', onclick="window.vc('players[detailed]', '{{user.id}}')")= user.namespace
 .section
   h3 Servers
   ul
     for server in servers
       li
-        a(href='javascript:void(0)', onclick="window.vc('servers[detailed]', '{{server.id}}')")= data.namespace
+        a(href='javascript:void(0)', onclick="window.vc('servers[detailed]', '{{server.id}}')")= server.name

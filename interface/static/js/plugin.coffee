@@ -61,14 +61,6 @@ init = (scope = document) ->
   $('[data-trigger=\'[system/messages/open]\']', scope).on 'click', system_messages_open
 
 
-  $('.searchOverlay', scope).off 'click'
-  $('.searchOverlay', scope).on 'click', ->
-    $('.searchOverlay').fadeOut 'fast'
-    $('.searchArea').fadeOut 'fast'
-    $('.search').animate {width: '20%'}, 250
-    return
-
-
   $('[data-trigger="[announcement/expand]"]', scope).off 'click'
   $('[data-trigger="[announcement/expand]"]', scope).on 'click', ->
     $('.announcement-expand', @).slideToggle()
@@ -88,6 +80,26 @@ init = (scope = document) ->
     $('.searchArea').fadeToggle 'fast', 'grid'
     $('.search').animate {width: '30%'}, 250
     return
+
+
+  search_fade = ->
+    $('.searchOverlay').fadeOut 'fast'
+    $('.searchArea').fadeOut 'fast'
+    $('.search').animate {width: '20%'}, 250
+    return
+
+  $('.searchOverlay', scope).off 'click'
+  $('.searchOverlay', scope).on 'click', search_fade
+
+  $('.search input', scope).off 'keyup'
+  $('.search input', scope).on 'keyup', (e) ->
+    window.search e.target.value
+    return
+
+  $('.search .searchArea', scope).off 'click'
+  $('.search .searchArea', scope).on 'click', (e) ->
+    if e.target.nodeName is 'A'
+      search_fade e
 
 
   $('.timeTable tbody tr td .checkmarkContainer', scope).off 'mousedown'

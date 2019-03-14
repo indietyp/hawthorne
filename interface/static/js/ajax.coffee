@@ -255,8 +255,31 @@ prepend = (mode, component = '.main') ->
 
   return
 
+
+search = (query) ->
+  endpoint = window.endpoint.ajax.system.search
+  header =
+    'X-CSRFToken': window.csrftoken
+
+  payload =
+    query: query
+
+  payload = JSON.stringify payload
+
+  endpoint.post(header, payload, (dummy, response) ->
+    status = response.status
+    data = response.data
+    target = $('.searchArea')
+
+    if status is 200
+      target.html data
+
+    return
+  )
+
 window.ajax = ajax
 window.lazy = lazy
 window.date = date
 window.modal = modal
+window.search = search
 window.prependLoad = prepend
