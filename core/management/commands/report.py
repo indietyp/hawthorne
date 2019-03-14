@@ -126,16 +126,27 @@ class Command(BaseCommand):
       output += '\n\n'
 
       output += '## Disk \n'
-      # disk usage per disk?
-      disk = psutil.disk_usage('/')
-      table = [
-          ['Total', natural.size.filesize(disk.total, format='binary')],
-          ['Free', natural.size.filesize(disk.free, format='binary')],
-          ['Used', natural.size.filesize(disk.used, format='binary')],
-          ['Used (%)', disk.percent]
-      ]
-      output += tabulate(table, tablefmt="github", headers=self.HEADERS)
-      output += '\n\n'
+      for disk in psutil.disk_partitions():
+        output += '### {} \n'.format(disk.device)
+        storage = psutil.disk_usage(disk.mountpoint)
+        output += '#### Properties \n'
+        table = [
+            ['Mountpoint', disk.mountpoint],
+            ['Filesystem', disk.fstype],
+            ['Options', disk.opts]
+        ]
+        output += tabulate(table, tablefmt="github", headers=self.HEADERS)
+        output += '\n\n'
+
+        output += '#### Storage \n'
+        table = [
+            ['Total', natural.size.filesize(storage.total, format='binary')],
+            ['Free', natural.size.filesize(storage.free, format='binary')],
+            ['Used', natural.size.filesize(storage.used, format='binary')],
+            ['Used (%)', storage.percent]
+        ]
+        output += tabulate(table, tablefmt="github", headers=self.HEADERS)
+        output += '\n\n'
 
       output += '## Processes \n'
       output += '### Top Memory Usage \n'
