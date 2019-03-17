@@ -268,18 +268,28 @@ install() {
             debconf-set-selections <<< "mariadb-server mysql-server/root_password password $PASSWORD"
             debconf-set-selections <<< "mariadb-server mysql-server/root_password_again password $PASSWORD"
 
-            apt-get install -y mariadb-server
+            apt install -y mariadb-server
           elif hash yum >/dev/null 2>&1; then
-            yum -y install nginx
+            yum -y install mariadb-server
+
+            mysql_secure_installation <<- EOF
+
+              y
+              $PASSWORD
+              $PASSWORD
+              y
+              y
+              y
+              y
+            EOF
           fi
 
           conn="mysql://root:$PASSWORD@localhost/hawthorne"
         } >> install.log 2>&1
+        unset PASSWORD
       fi
     fi
   fi
-
-  # dmsg "MySQL as well as a webserver are not going to be installed." "[01/09] Checking Prerequisites"
 
   if [ $path -eq 0 ]; then
     directory=$(dinpu "Please choose an installation directory." "[01/09] Checking Prerequisites" $directory)
@@ -309,16 +319,9 @@ install() {
     elif hash yum >/dev/null 2>&1; then
       yum -y update
       yum -y install wget yum-utils
-      yum-builddep -y python
-      curl -O https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tgz
-      tar xf Python-3.7.2.tgz
-      rm Python-3.7.2.tgz
-      cd Python-3.7.2
-      ./configure
-      make
-      make install
-      cd ..
-      rm -rf Python-3.7.2
+
+      yum -y install https://centos7.iuscommunity.org/ius-release.rpm
+      yum -y install python37u
 
       yum -y install epel-release
       yum -y update
