@@ -434,8 +434,8 @@ configure() {
   exec 3>&1
 
   mkdir -p /var/log/hawthorne
-  ln -nsf $directory/cli/helper.py /usr/bin/hawthorne
-  ln -nsf $directory/cli/helper.py /usr/bin/ht
+  ln -nsf "$directory/cli/helper.py" /usr/bin/hawthorne
+  ln -nsf "$directory/cli/helper.py" /usr/bin/ht
   chmod +x /usr/bin/hawthorne
   chmod +x /usr/bin/ht
 
