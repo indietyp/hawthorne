@@ -278,16 +278,16 @@ install() {
           elif hash yum >/dev/null 2>&1; then
             yum -y install mariadb-server
 
-            mysql_secure_installation <<- EOF
+            # mysql_secure_installation <<- EOF
 
-              y
-              $PASSWORD
-              $PASSWORD
-              y
-              y
-              y
-              y
-            EOF
+            #   y
+            #   $PASSWORD
+            #   $PASSWORD
+            #   y
+            #   y
+            #   y
+            #   y
+            # EOF
           fi
 
           conn="mysql://root:$PASSWORD@localhost/hawthorne"
