@@ -278,21 +278,40 @@ install() {
 
             apt install -y mariadb-server
           elif hash yum >/dev/null 2>&1; then
-            yum -y install mariadb-server
+            yum -y install mariadb-server expect
 
-            # mysql_secure_installation
-            commands=$(cat <<- EOM
+            SECURE_MYSQL=$(expect -c "
+            set timeout 10
+            spawn mysql_secure_installation
 
-            y
-            $PASSWORD
-            $PASSWORD
-            y
-            y
-            y
-            y
-            EOM
-            )
-            # pls send help
+            expect \"Enter current password for root (enter for none):\"
+            send -- \"\r\"
+
+            expect \"Change the root password?\"
+            send -- \"y\r\"
+
+            expect "New password:"
+            send -- "${PASSWORD}\r"
+
+            expect "Re-enter new password:"
+            send -- "${PASSWORD}\r"
+
+            expect \"Remove anonymous users?\"
+            send -- \"y\r\"
+
+            expect \"Disallow root login remotely?\"
+            send -- \"y\r\"
+
+            expect \"Remove test database and access to it?\"
+            send -- \"y\r\"
+
+            expect \"Reload privilege tables now?\"
+            send -- \"y\r\"
+
+            expect eof
+            ")
+
+            echo $SECURE_MYSQL
           fi
 
           conn="mysql://root:$PASSWORD@localhost/hawthorne"
