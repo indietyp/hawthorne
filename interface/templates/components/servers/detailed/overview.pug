@@ -13,17 +13,17 @@
             elif data.game == 'tf2'
               img.thumbnail(src="{% static 'img/games/tf2.png' %}")
             button.serverActionButton(disabled)
-              i.fa.fa-stop
+              i.ion.ion-ios-power
               |  Stop
             button.serverActionButton.nomargin(disabled)
-              i.fa.fa-sync
+              i.ion.ion-ios-sync
               |  Restart
           .col.span_1_of_2.nomargin
             h2
               = data.name
               // .CTag Europe #1
             p
-              i.fa.fa-gamepad(style="margin: 0 5px 0 0")
+              i.ion.ion-logo-game-controller-b(style="margin: 0 5px 0 0")
               = data.get_game_display
       .col.span_1_of_2.nomargin
         ul.list

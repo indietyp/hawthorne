@@ -1,9 +1,8 @@
 #pragma dynamic 524288
 
 void RConCommands_OnPluginStart() {
-  RegAdminCmd("json_status",        JsonStatus,       ADMFLAG_RCON);
-
   RegAdminCmd("rcon_status",        RconStatus,       ADMFLAG_RCON);
+  RegAdminCmd("rcon_message",       RConMessage,      ADMFLAG_RCON);
   RegAdminCmd("rcon_ban",           RConBanKick,      ADMFLAG_RCON);
   RegAdminCmd("rcon_mutegag",       RConPunishment,   ADMFLAG_RCON);
   RegAdminCmd("rcon_init",          RConInit,         ADMFLAG_RCON);
@@ -85,6 +84,41 @@ public Action RConInit(int client, int args) {
   MANAGER.SetString(url);
 }
 
+public Action RConMessage(int client, int args) {
+  // ARGS:
+  // player (regex)
+  // kick
+  // message
+  if (client != 0) return Plugin_Handled;
+  char selector[64], raw_kick[8], message[512];
+  bool kick;
+
+  GetCmdArg(1, selector, sizeof(selector));
+  GetCmdArg(2, raw_kick, sizeof(raw_kick));
+  kick = StrEqual(raw_kick, "1");
+
+  for (int i = 3; i <= args; i++) {
+    char component[128];
+    GetCmdArg(i, component, sizeof(component));
+
+    StrCat(message, sizeof(message), component);
+    StrCat(message, sizeof(message), "");
+  }
+
+  Regex regex = CompileRegex(selector);
+  for (int i = 1; i <= MaxClients; i++) {
+    if (!IsClientInGame(client) || IsFakeClient(client)) continue;
+
+    char tmp[128];
+    GetClientName(i, tmp, sizeof(tmp));
+    if (MatchRegex(regex, tmp) > -1) {
+      if (kick) KickClient(i, message);
+      else CPrintToChat(i, message);
+    }
+  }
+  return Plugin_Handled;
+}
+
 public Action RconStatus(int client, int args) {
   char json[12288], reply[513], map[64], password[128];
   ConVar cv_password = FindConVar("sv_password");
@@ -107,7 +141,7 @@ public Action RconStatus(int client, int args) {
   output.SetBool("password", !StrEqual(password, ""));
 
   // -- insert clients --
-  JSONObject players = AddToList();
+  JSONArray players = AddToList();
   output.Set("clients", players);
 
   // -- insert time  --
@@ -156,66 +190,6 @@ public Action RconStatus(int client, int args) {
   return Plugin_Handled;
 }
 
-public Action JsonStatus(int client, int args) {
-  if (client != 0)
-    return Plugin_Handled;
-
-  int online = 0;
-  for (int i = 1; i <= MaxClients; i++)
-    if(IsClientInGame(i) && !IsFakeClient(i))
-      online++;
-
-  char map[64];
-  GetCurrentMap(map, sizeof(map));
-
-  JSONObject scores = new JSONObject();
-  int teams = GetTeamCount();
-  for (int i = 0; i < teams; i++) {
-    char name[256];
-    GetTeamName(i, name, sizeof(name));
-    scores.SetInt(name, GetTeamScore(i));
-  }
-
-  JSONObject output = new JSONObject();
-  JSONObject stats = new JSONObject();
-
-  int timeleft;
-  GetMapTimeLeft(timeleft);
-
-  stats.SetString("id", SERVER);
-  stats.SetString("map", map);
-  stats.SetInt("online", online);
-  stats.SetInt("timeleft", timeleft);
-  stats.SetFloat("uptime", GetGameTime());
-  stats.Set("scores", scores);
-
-  output.Set("stats", stats);
-  output.Set("players", LegacyAddToList());
-
-  char json[12288];
-  output.ToString(json, sizeof(json));
-
-  char reply[513];
-  for (int i = 0; i <= sizeof(json); i++) {
-    if (i % 512 == 0 && i != 0) {
-      PrintToServer(reply);
-      reply = "";
-    }
-
-    reply[i % 512] = json[i];
-    if (json[i] == 0) {
-      if (i % 512 != 0) PrintToServer(reply);
-      break;
-    }
-  }
-
-  delete stats;
-  delete scores;
-  delete output;
-
-  return Plugin_Handled;
-}
-
 JSONArray AddToList() {
   JSONArray output = new JSONArray();
 
@@ -242,43 +216,6 @@ JSONArray AddToList() {
 
       output.Push(client);
       delete client;
-    }
-  }
-
-  return output;
-}
-
-JSONArray LegacyAddToList() {
-  JSONArray output = new JSONArray();
-
-  for (int i = 1; i <= MaxClients; i++) {
-    if (IsClientInGame(i) && !IsFakeClient(i)) {
-      char username[MAX_NAME_LENGTH], steamid[20], cIP[20], cCountry[50];
-
-      GetClientName(i, username, sizeof(username));
-      ReplaceString(username, sizeof(username), "\\", "");
-      ReplaceString(username, sizeof(username), "\"", "''");
-
-      GetClientAuthId(i, AuthId_SteamID64, steamid, sizeof(steamid));
-      GetClientIP(i, cIP, sizeof(cIP));
-      GeoipCountry(cIP, cCountry, sizeof(cCountry));
-
-      int kills   = (!IsSpectator(i)) ? GetClientFrags(i) : 0;
-      int deaths  = (!IsSpectator(i)) ? GetClientDeaths(i) : 0;
-      float online = GetClientTime(i);
-
-      JSONObject player = new JSONObject();
-
-      player.SetString("id", CLIENTS[i]);
-      player.SetString("username", username);
-      player.SetString("steamid", steamid);
-
-      player.SetInt("team", GetClientTeam(i));
-      player.SetInt("kills", kills);
-      player.SetInt("deaths", deaths);
-      player.SetInt("online", RoundFloat(online));
-
-      output.Push(player);
     }
   }
 

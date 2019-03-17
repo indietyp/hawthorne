@@ -148,7 +148,7 @@ def version(yes):
               help=("The file path of the configuration files for apache and nginx. "
                     "The variable <system> will be replaced with the configured webserver"
                     ". (possible values are nginx, apache)"))
-def reconfigure(bind, link, config, gunicorn, nginx, apache, logrotate, supervisor):
+def reconfigure(bind, config, gunicorn, nginx, apache, logrotate, supervisor):
   """reconfiguration of external configs"""
 
   CONFIG_LOCATION = BASE_DIR + '/cli/configs'
