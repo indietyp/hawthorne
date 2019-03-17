@@ -8,6 +8,7 @@ dev=0
 path=0
 local=0
 docker=0
+redis=1
 ui=1
 
 web="nginx"
@@ -144,7 +145,6 @@ usage() {
   printf "\n\t${GREEN}configure${NORMAL}"
   printf "\n\n${RED}Installation Options:${NORMAL}"
   printf "\n\t${GREEN}-h${NORMAL}                                       --help"
-  printf "\n\t${GREEN}-noui${NORMAL}                                    (disable UI)"
   printf "\n\n${RED}Optional Arguments:${NORMAL}"
   printf "\n\t${GREEN}+b <branch>${NORMAL}                              --branch master (defaults to master)"
   printf "\n\t${GREEN}+d <domain>${NORMAL}                              --domain example.com"
@@ -154,6 +154,8 @@ usage() {
   printf "\n\t${GREEN}+l${NORMAL}                                       --local"
   printf "\n\t${GREEN}+n${NORMAL}                                       --nginx"
   printf "\n\t${GREEN}+o${NORMAL}                                       --demo"
+  printf "\n\t${GREEN}--headless${NORMAL}                               (disable UI)"
+  printf "\n\t${GREEN}--no-redis${NORMAL}                               (remove redis from installation)"
   printf "\n"
 }
 
@@ -196,7 +198,9 @@ parser() {
                                 ;;
         +n | --nginx)           nginx=1
                                 ;;
-        +h | --headless)        ui=0
+        --headless)             ui=0
+                                ;;
+        --no-redis)             redis=0
                                 ;;
         +o | --demo)            demo=1
                                 ;;
@@ -307,7 +311,11 @@ install() {
         apt install -y default-libmysqlclient-dev
       }
 
-      apt install -y --force-yes --fix-missing python3 python3-dev python3-pip redis-server libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential curl bash dialog
+      apt install -y --force-yes --fix-missing python3 python3-dev python3-pip libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential curl bash dialog
+
+      if [ $redis -eq 1 ]; then
+        apt install -y redis-server
+      fi
 
       curl -sL deb.nodesource.com/setup_8.x | bash -
       apt install -y nodejs
@@ -327,9 +335,13 @@ install() {
       yum -y update
       curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -
 
-      yum -y install redis supervisor mysql mysql-devel MariaDB-shared mysql-lib libxml2-devel libffi-devel libxslt-devel openssl-devel nodejs dialog
-      systemctl start redis
-      systemctl enable redis
+      yum -y install supervisor mysql mysql-devel MariaDB-shared mysql-lib libxml2-devel libffi-devel libxslt-devel openssl-devel nodejs dialog
+
+      if [ $redis -eq 1 ]; then
+        yum -y install redis
+        systemctl start redis
+        systemctl enable redis
+      fi
 
       hash git >/dev/null 2>&1 || {
         yum -y install http://opensource.wandisco.com/centos/7/git/x86_64/wandisco-git-release-7-2.noarch.rpm
