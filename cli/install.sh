@@ -22,8 +22,10 @@ conn=""
 
 # yum package installation
 {
-  if hash yum >/dev/null 2>&1; then
-    yum -y install which newt
+  if hash apt >/dev/null 2>&1; then
+    apt install -y lsof
+  elif hash yum >/dev/null 2>&1
+    yum -y install which newt lsof
   fi
 } >> install.log 2>&1
 
@@ -241,7 +243,7 @@ install() {
     exit 1
   fi
 
-  if [ $docker -eq 0 ]; then
+  if [ $ui -eq 1 ]; then
     if ! [ "$(lsof -i:80,443 -sTCP:LISTEN -P -n)" ]; then
       proceed=$(dyeno "A webserver doesn't seem to be installed or running. Do you want Hawthorne to install nginx for you?" "[01/09] Checking Prerequisites")
 
@@ -278,16 +280,16 @@ install() {
           elif hash yum >/dev/null 2>&1; then
             yum -y install mariadb-server
 
-            # mysql_secure_installation <<- EOF
+            mysql_secure_installation <<- EOF
 
-            #   y
-            #   $PASSWORD
-            #   $PASSWORD
-            #   y
-            #   y
-            #   y
-            #   y
-            # EOF
+            y
+            $PASSWORD
+            $PASSWORD
+            y
+            y
+            y
+            y
+            EOF
           fi
 
           conn="mysql://root:$PASSWORD@localhost/hawthorne"
