@@ -24,7 +24,7 @@ conn=""
 {
   if hash apt >/dev/null 2>&1; then
     apt install -y lsof
-  elif hash yum >/dev/null 2>&1
+  elif hash yum >/dev/null 2>&1; then
     yum -y install which newt lsof
   fi
 } >> install.log 2>&1
