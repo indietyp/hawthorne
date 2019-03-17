@@ -243,7 +243,7 @@ install() {
 
   if [ $docker -eq 0 ]; then
     if ! [ "$(lsof -i:80,443 -sTCP:LISTEN -P -n)" ]; then
-      proceed=$(dyeno "A webserver doesn't seem to be present. Do you want Hawthorne to install nginx for you?" "[01/09] Checking Prerequisites")
+      proceed=$(dyeno "A webserver doesn't seem to be installed or running. Do you want Hawthorne to install nginx for you?" "[01/09] Checking Prerequisites")
 
       if [ $proceed -eq 0 ]; then
         nginx=1
@@ -269,8 +269,10 @@ install() {
 
           if hash apt >/dev/null 2>&1; then
             export DEBIAN_FRONTEND="noninteractive"
-            debconf-set-selections <<< "mariadb-server mysql-server/root_password password $PASSWORD"
-            debconf-set-selections <<< "mariadb-server mysql-server/root_password_again password $PASSWORD"
+            echo 'mariadb-server mysql-server/root_password password test' >> /root/src/debconf.txt
+            echo 'mariadb-server mysql-server/root_password_again password test' >> /root/src/debconf.txt
+
+            debconf-set-selections /root/src/debconf.txt
 
             apt install -y mariadb-server
           elif hash yum >/dev/null 2>&1; then
