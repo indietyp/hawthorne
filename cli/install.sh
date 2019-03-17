@@ -23,8 +23,10 @@ conn=""
 # yum package installation
 {
   if hash apt >/dev/null 2>&1; then
+    apt update
     apt install -y lsof
   elif hash yum >/dev/null 2>&1; then
+    yum -y update
     yum -y install which newt lsof
   fi
 } >> install.log 2>&1
