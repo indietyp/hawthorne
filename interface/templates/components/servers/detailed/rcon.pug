@@ -11,6 +11,6 @@
         .RCONwindow(contenteditable="true", autocorrect="off", autocapitalize="off", spellcheck="false")
           input.command(type="text", placeholder="Enter your command...", onkeypress="(function(e){if(e.key == 'Enter'){window.style.rcon(e.currentTarget)}})(event)")
           input.hidden(type="text" value="{{data.id}}")
-          button(onclick="window.style.rcon(this)")
-            i.fa.fa-paper-plane(style="margin-right:10px;")
+          button.unset(onclick="window.style.rcon(this)")
+            i.icon.ion-ios-send(style="margin-right:10px;")
             |  Send

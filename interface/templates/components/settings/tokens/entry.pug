@@ -21,7 +21,7 @@ tr(style="{%if not data.is_active%}opacity:0.5;{%endif%}", data-id='{{data.id}}'
     if request.user == data.owner
       a(href="javascript:void(0)", data-trigger="[clip/copy]", data-clipboard-text="{{data.id}}")
         = data.id
-        i.fa.fa-copy(style="margin-left:5px")
+        i.icon.ion-ios-copy(style="margin-left:5px")
     else
       = data.id|mask
   td

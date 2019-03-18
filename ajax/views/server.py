@@ -4,13 +4,12 @@ import urllib.request
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.db import connection
-from django.db.models import Count, Q, Sum
+from django.db.models import Q
 from django.db.models.deletion import Collector
-from django.db.models.functions import Extract
 from django.views.decorators.http import require_http_methods
 
 from ajax.views import renderer
-from core.models import Membership, Server
+from core.models import Membership, Server, User
 from django.shortcuts import render
 from django.views.decorators.cache import cache_page
 from log.models import ServerChat, ServerDataPoint, UserConnection

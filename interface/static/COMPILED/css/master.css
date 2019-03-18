@@ -1192,15 +1192,6 @@ form {
   font-family: Bebas;
   src: url("/static/fonts/Bebas.otf");
 }
-@font-face {
-  font-family: Omnes;
-  src: url("/static/fonts/omnes-regular-webfont.ttf");
-}
-@font-face {
-  font-family: Omnes;
-  font-weight: 600;
-  src: url("/static/fonts/omnes-semibold-webfont.ttf");
-}
 @-webkit-keyframes logo-heading {
   from {
     max-width: 0;
@@ -2453,7 +2444,10 @@ form {
 }
 .RCONwindow input {
   margin: 20px 0 10px 0;
-  font-family: 'Omnes', sans-serif;
+  font-family: 'Rubik', sans-serif;
+}
+.RCONwindow button {
+  font-family: 'Rubik', sans-serif;
 }
 .serverActionButton {
   width: 95%;

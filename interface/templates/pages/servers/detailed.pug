@@ -58,8 +58,9 @@
           input(type="checkbox")
           span.slider.round
         .switchText Send to entire server
-    button
-      i.fa.fa-paper-plane(style="margin-right:10px;")
+
+    button.unset
+      i.icon.ion-ios-send(style="margin-right:10px;")
       | Send
 
   .modal(data-component='[modal/edit]')
@@ -114,13 +115,13 @@
     li(data-trigger="[ct/switch]", data="logs") Chat Log
     li(data-trigger="[ct/switch]", data="rcon") RCon
     li(data-trigger="[ct/switch]", data="roles")
-      i.fa.fa-id-card(style="margin-right:5px")
+      i.icon.ion-ios-people(style="margin-right:5px")
       | Roles
     li.fRight.paginationTabsDanger(data-trigger="[modal/open]", data-trigger-target="[modal/delete]")
       i.icon.ion-ios-trash(style="margin-right:5px")
       | Delete Server
     li.fRight.paginationTabsHarmless(style="margin-right:6px", data-trigger="[modal/open]", data-trigger-target="[modal/edit]")
-      i.fa.fa-cog(style="margin-right:5px")
+      i.ht-ion.icon.ion-ios-settings(style="margin-right:5px")
       | Edit
 
   script.execute.
