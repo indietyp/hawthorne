@@ -259,12 +259,14 @@ install() {
           fi
         } >> install.log 2>&1
       fi
+
+      unset proceed
     fi
 
     if ! [ "$(lsof -i:3306 -sTCP:LISTEN -P -n)" ]; then
-      p=$(dyeno "MySQL/MariaDB don't seem to be installed or running. Do you want Hawthorne to install MySQL/MariaDB for you?" "[01/09] Checking Prerequisites")
+      proceed=$(dyeno "MySQL/MariaDB don't seem to be installed or running. Do you want Hawthorne to install MySQL/MariaDB for you?" "[01/09] Checking Prerequisites")
 
-      if [ $p -eq 0 ]; then
+      if [ $proceed -eq 0 ]; then
         {
           PASSWORD=$(cat /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 
