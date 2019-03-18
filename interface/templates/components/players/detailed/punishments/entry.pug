@@ -28,7 +28,7 @@ tr(style="{%if data.resolved%}opacity:0.5;{%endif%}", data-id='{{data.id}}')
     if data.length
       = data.length|duration
     else
-      | Eternal
+      i.icon.ion-ios-infinite
   td
     if data.server
       a(href="javascript:void(0)", onclick="window.vc('servers[detailed]', '{{data.server.id}}')")

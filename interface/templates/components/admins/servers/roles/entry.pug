@@ -74,7 +74,7 @@ each item in data
       if item.usetime
         = item.usetime|duration
       else
-        | Indefinetly
+        i.icon.ion-ios-infinite
     .fRight
       button.round(data-trigger="[modal/open]", data-trigger-target="[modal/edit/{{item.id}}]")
         i.icon.ion-md-create

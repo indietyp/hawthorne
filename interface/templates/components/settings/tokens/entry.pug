@@ -34,7 +34,7 @@ tr(style="{%if not data.is_active%}opacity:0.5;{%endif%}", data-id='{{data.id}}'
     if data.due
       = data.due|date:"DATETIME_FORMAT"
     else
-      | Never
+      i.icon.ion-ios-infinite
   td
     = data|permission_percentage
     |%
