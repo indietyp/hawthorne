@@ -44,6 +44,28 @@ class SourcemodPluginWrapper(RCONBase):
 
     return response
 
+  def message(self, message, clients=[], kick=False, console=False, *args, **kwargs):
+    if clients:
+      selector = ''
+      for client in clients:
+        selector += client.username + '|'
+
+      selector = selector[:-1]
+    else:
+      selector = '.*'
+
+    # selector = '({})'.format(selector)  # dunno if needed w/ SourcePawn
+
+    try:
+      response = self.run('sm_message {} {} {} {}'.format(selector,
+                                                          int(kick),
+                                                          int(console),
+                                                          message))[0]
+    except (valve.rcon.RCONError, IndexError) as e:
+      return {'error': e}
+
+    return response
+
   def mutegag(self, punishment, *args, **kwargs):
     if punishment.is_gagged and punishment.is_muted:
       mode = 'silence'
@@ -55,10 +77,11 @@ class SourcemodPluginWrapper(RCONBase):
       return {'error': 'operation not supported'}
 
     mode = 'un' + mode if punishment.resolved else mode
+    length = punishment.length.total_seconds() if punishment.length else 0
 
     command = 'rcon_mutegag "{}" "{}" "{}" "{}"'.format(punishment.user.username,
                                                         mode,
-                                                        punishment.length.total_seconds() if punishment.length else 0,
+                                                        length,
                                                         punishment.reason)
 
     try:

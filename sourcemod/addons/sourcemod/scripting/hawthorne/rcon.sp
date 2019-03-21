@@ -90,14 +90,16 @@ public Action RConMessage(int client, int args) {
   // kick
   // message
   if (client != 0) return Plugin_Handled;
-  char selector[64], raw_kick[8], message[512];
-  bool kick;
+  char selector[64], raw_kick[8], raw_console[8], message[512];
+  bool kick, console;
 
   GetCmdArg(1, selector, sizeof(selector));
   GetCmdArg(2, raw_kick, sizeof(raw_kick));
+  GetCmdArg(3, raw_console, sizeof(raw_console));
   kick = StrEqual(raw_kick, "1");
+  console = StrEqual(raw_console, "1");
 
-  for (int i = 3; i <= args; i++) {
+  for (int i = 4; i <= args; i++) {
     char component[128];
     GetCmdArg(i, component, sizeof(component));
 
@@ -110,12 +112,15 @@ public Action RConMessage(int client, int args) {
     if (!IsClientInGame(client) || IsFakeClient(client)) continue;
 
     char tmp[128];
-    GetClientName(i, tmp, sizeof(tmp));
+    GetClientAuthId(i, AuthId_SteamID64, tmp, sizeof(tmp));
     if (MatchRegex(regex, tmp) > -1) {
       if (kick) KickClient(i, message);
       else CPrintToChat(i, message);
     }
   }
+
+  if (console) PrintToServer(message);
+
   return Plugin_Handled;
 }
 

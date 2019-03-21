@@ -247,9 +247,9 @@ install() {
 
   if [ $ui -eq 1 ]; then
     if ! [ "$(lsof -i:80,443 -sTCP:LISTEN -P -n)" ]; then
-      proceed=$(dyeno "A webserver doesn't seem to be installed or running. Do you want Hawthorne to install nginx for you?" "[01/09] Checking Prerequisites")
+      pnginx=$(dyeno "A webserver doesn't seem to be installed or running. Do you want Hawthorne to install nginx for you?" "[01/09] Checking Prerequisites")
 
-      if [ $proceed -eq 0 ]; then
+      if [ $pnginx -eq 0 ]; then
         nginx=1
         {
           if hash apt >/dev/null 2>&1; then
@@ -259,14 +259,12 @@ install() {
           fi
         } >> install.log 2>&1
       fi
-
-      unset proceed
     fi
 
     if ! [ "$(lsof -i:3306 -sTCP:LISTEN -P -n)" ]; then
-      proceed=$(dyeno "MySQL/MariaDB don't seem to be installed or running. Do you want Hawthorne to install MySQL/MariaDB for you?" "[01/09] Checking Prerequisites")
+      pmysql=$(dyeno "MySQL/MariaDB don't seem to be installed or running. Do you want Hawthorne to install MySQL/MariaDB for you?" "[01/09] Checking Prerequisites")
 
-      if [ $proceed -eq 0 ]; then
+      if [ $pmysql -eq 0 ]; then
         {
           PASSWORD=$(cat /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 
