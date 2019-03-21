@@ -175,6 +175,13 @@ validation = {
         'action': {
             'PUT': {'parameters': {'command': {'type': 'string', 'required': True}},
                     'permission': ['core.execute_server']}
+        },
+        'message': {
+            'PUT': {'parameters': {'command': {'message': 'string', 'required': True},
+                                   'kick': {'type': 'boolean', 'default': False},
+                                   'clients': {'type': 'list', 'default': [], 'schema': {'type': 'uuid'}},
+                                   'console': {'type': 'boolean', 'default': False}},
+                    'permission': ['core.execute_server']}
         }
     },
     'system': {

@@ -1,8 +1,8 @@
-from django.urls import register_converter, path
+from django.urls import path, register_converter
 
 from api.converters import SteamIDConverter
-from api.views import documentation
 from api.views import *
+from api.views import documentation
 
 register_converter(SteamIDConverter, 'steamid')
 
@@ -29,6 +29,7 @@ urlpatterns = [
     path('servers', server.list, name='server.list'),
     path('servers/<uuid:s>', server.detailed, name='server.detailed'),
     path('servers/<uuid:s>/execute', server.action, name='server.action'),
+    path('servers/<uuid:s>/message', server.message, name='server.message'),
 
     # system
     path('system/chat', system.chat, name='system.chat'),

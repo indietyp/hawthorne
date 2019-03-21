@@ -10,7 +10,7 @@ from django.views.decorators.http import require_http_methods
 
 from core.decorators.api import json_response, validation
 from core.decorators.auth import authentication_required, permission_required
-from core.models import Server
+from core.models import Server, User
 from lib.base import RCONBase
 from lib.sourcemod import SourcemodPluginWrapper
 
@@ -147,3 +147,18 @@ def detailed(request, validated={}, s=None, *args, **kwargs):
 def action(request, validated={}, s=None, *args, **kwargs):
   server = Server.objects.get(id=s)
   return {'response': SourcemodPluginWrapper(server).raw(validated['command'])}
+
+
+@csrf_exempt
+@json_response
+@authentication_required
+@permission_required
+@validation
+@require_http_methods(['PUT'])
+def message(request, validated={}, s=None, *args, **kwargs):
+  server = Server.objects.get(id=s)
+  clients = User.objects.filter(id__in=validated['clients'])
+  return {'response': SourcemodPluginWrapper(server).message(validated['message'],
+                                                             clients=clients,
+                                                             console=validated['console'],
+                                                             kick=validated['kick'])}
