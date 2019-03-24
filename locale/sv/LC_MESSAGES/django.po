@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-24 01:12+0000\n"
+"POT-Creation-Date: 2019-03-24 01:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Axel Lindgren Wenell, 2018\n"
 "Language-Team: Swedish (https://www.transifex.com/laevisug/teams/85920/sv/)\n"
@@ -38,6 +38,7 @@ msgid "Could not reach server ({0})"
 msgstr "Kunde inte nå server ({0})"
 
 #: interface/templates/pages/admins/servers.pug:8
+#: interface/templates/pages/admins/web.pug:7
 #, fuzzy
 #| msgid "Admins"
 msgid "Admins – New"
@@ -52,6 +53,8 @@ msgstr ""
 #: interface/templates/pages/admins/servers.pug:24
 #: interface/templates/pages/admins/servers.pug:36
 #: interface/templates/pages/admins/servers.pug:78
+#: interface/templates/pages/admins/web.pug:23
+#: interface/templates/pages/admins/web.pug:35
 msgid "Results"
 msgstr ""
 
@@ -94,8 +97,9 @@ msgid "Choose a Server (optional)"
 msgstr ""
 
 #: interface/templates/pages/admins/servers.pug:97
-#: interface/templates/skeleton/globals/breadcrumb.pug:7
-#: interface/templates/skeleton/globals/breadcrumb.pug:22
+#: interface/templates/pages/admins/web.pug:85
+#: interface/templates/skeleton/globals/breadcrumb.pug:8
+#: interface/templates/skeleton/globals/breadcrumb.pug:23
 #: interface/templates/skeleton/sidebar.pug:45
 msgid "Admins"
 msgstr "Administratörer"
@@ -105,6 +109,7 @@ msgid "Roles"
 msgstr ""
 
 #: interface/templates/pages/admins/servers.pug:101
+#: interface/templates/pages/admins/web.pug:89
 #, fuzzy
 #| msgid "Admins"
 msgid "New Admin"
@@ -114,12 +119,75 @@ msgstr "Administratörer"
 msgid "New Role"
 msgstr ""
 
+#: interface/templates/pages/admins/web.pug:15
+msgid "Select a User"
+msgstr ""
+
+#: interface/templates/pages/admins/web.pug:21
+msgid ""
+"You can search via SteamID64, SteamID3, SteamID2, Steam profile URL or a "
+"username in the Hawthorne local database. You can also specify an email "
+"address."
+msgstr ""
+
+#: interface/templates/pages/admins/web.pug:30
+msgid "Select a Group"
+msgstr ""
+
+#: interface/templates/pages/admins/web.pug:44
+msgid "Group – New"
+msgstr ""
+
+#: interface/templates/pages/admins/web.pug:51
+#, fuzzy
+#| msgid "Groups"
+msgid "Group Details"
+msgstr "Grupper"
+
+#: interface/templates/pages/admins/web.pug:55
+#, fuzzy
+#| msgid "Name"
+msgid "Name"
+msgstr "Namn"
+
+#: interface/templates/pages/admins/web.pug:59
+#: interface/templates/pages/settings.pug:16
+msgid "Permissions"
+msgstr ""
+
+#: interface/templates/pages/admins/web.pug:62
+#: interface/templates/pages/settings.pug:19
+msgid "Available"
+msgstr ""
+
+#: interface/templates/pages/admins/web.pug:70
+#: interface/templates/pages/admins/web.pug:80
+#: interface/templates/pages/settings.pug:27
+#: interface/templates/pages/settings.pug:37
+msgid "Select All"
+msgstr ""
+
+#: interface/templates/pages/admins/web.pug:75
+#: interface/templates/pages/settings.pug:32
+msgid "Selected"
+msgstr ""
+
+#: interface/templates/pages/admins/web.pug:86
+msgid "Groups"
+msgstr "Grupper"
+
+#: interface/templates/pages/admins/web.pug:92
+#, fuzzy
+#| msgid "Group"
+msgid "New Group"
+msgstr "Grupp"
+
 #: interface/templates/pages/home.pug:16
-#: interface/templates/skeleton/globals/breadcrumb.pug:9
-#: interface/templates/skeleton/globals/breadcrumb.pug:26
-#: interface/templates/skeleton/globals/breadcrumb.pug:43
-#: interface/templates/skeleton/globals/search.pug:8
-#: interface/templates/skeleton/globals/servers.pug:2
+#: interface/templates/skeleton/globals/breadcrumb.pug:10
+#: interface/templates/skeleton/globals/breadcrumb.pug:27
+#: interface/templates/skeleton/globals/breadcrumb.pug:44
+#: interface/templates/skeleton/globals/search.pug:9
+#: interface/templates/skeleton/globals/servers.pug:3
 #: interface/templates/skeleton/sidebar.pug:50
 #: interface/templates/skeleton/sidebar.pug:56
 msgid "Servers"
@@ -130,8 +198,8 @@ msgid "The total amount of servers connected to this panel."
 msgstr ""
 
 #: interface/templates/pages/home.pug:24
-#: interface/templates/skeleton/globals/breadcrumb.pug:11
-#: interface/templates/skeleton/globals/breadcrumb.pug:29
+#: interface/templates/skeleton/globals/breadcrumb.pug:12
+#: interface/templates/skeleton/globals/breadcrumb.pug:30
 #: interface/templates/skeleton/sidebar.pug:28
 msgid "Punishments"
 msgstr ""
@@ -166,23 +234,6 @@ msgstr ""
 msgid "Token – New"
 msgstr ""
 
-#: interface/templates/pages/settings.pug:16
-msgid "Permissions"
-msgstr ""
-
-#: interface/templates/pages/settings.pug:19
-msgid "Available"
-msgstr ""
-
-#: interface/templates/pages/settings.pug:27
-#: interface/templates/pages/settings.pug:37
-msgid "Select All"
-msgstr ""
-
-#: interface/templates/pages/settings.pug:32
-msgid "Selected"
-msgstr ""
-
 #: interface/templates/pages/settings.pug:53
 msgid "Overview"
 msgstr ""
@@ -203,93 +254,93 @@ msgstr ""
 msgid "New Token"
 msgstr ""
 
-#: interface/templates/skeleton/errors/404.pug:15
+#: interface/templates/skeleton/errors/404.pug:16
 msgid "Page not found"
 msgstr ""
 
-#: interface/templates/skeleton/errors/404.pug:16
+#: interface/templates/skeleton/errors/404.pug:17
 msgid ""
 "Our highly trained staff of first class unidentifiable creatures searched "
 "through all of space and time, but couldn't find the page you were looking "
 "for."
 msgstr ""
 
-#: interface/templates/skeleton/errors/404.pug:17
+#: interface/templates/skeleton/errors/404.pug:18
 msgid "Please make sure you have spelled the URL correctly."
 msgstr ""
 
-#: interface/templates/skeleton/errors/500.pug:15
+#: interface/templates/skeleton/errors/500.pug:16
 msgid "Internal Server Error"
 msgstr ""
 
-#: interface/templates/skeleton/errors/500.pug:16
+#: interface/templates/skeleton/errors/500.pug:17
 msgid ""
 "It seems that something went horribly wrong! This probably should not have "
 "happened..."
 msgstr ""
 
-#: interface/templates/skeleton/errors/500.pug:17
+#: interface/templates/skeleton/errors/500.pug:18
 msgid ""
 "Contact the system administrator and let him check /var/log/hawthorne/debug."
 "log for more information."
 msgstr ""
 
-#: interface/templates/skeleton/globals/breadcrumb.pug:5
-#: interface/templates/skeleton/globals/breadcrumb.pug:19
+#: interface/templates/skeleton/globals/breadcrumb.pug:6
+#: interface/templates/skeleton/globals/breadcrumb.pug:20
 #: interface/templates/skeleton/sidebar.pug:24
 msgid "Dashboard"
 msgstr ""
 
-#: interface/templates/skeleton/globals/breadcrumb.pug:13
-#: interface/templates/skeleton/globals/breadcrumb.pug:33
-#: interface/templates/skeleton/globals/servers.pug:10
+#: interface/templates/skeleton/globals/breadcrumb.pug:14
+#: interface/templates/skeleton/globals/breadcrumb.pug:34
+#: interface/templates/skeleton/globals/servers.pug:11
 #: interface/templates/skeleton/sidebar.pug:41
 msgid "Players"
 msgstr "Spelare"
 
-#: interface/templates/skeleton/globals/breadcrumb.pug:40
+#: interface/templates/skeleton/globals/breadcrumb.pug:41
 #: interface/templates/skeleton/sidebar.pug:52
 msgid "Web"
 msgstr ""
 
-#: interface/templates/skeleton/globals/breadcrumb.pug:53
+#: interface/templates/skeleton/globals/breadcrumb.pug:54
 #: interface/templates/skeleton/sidebar.pug:33
 msgid "Bans"
 msgstr "Bannlysningar"
 
-#: interface/templates/skeleton/globals/breadcrumb.pug:56
+#: interface/templates/skeleton/globals/breadcrumb.pug:57
 #: interface/templates/skeleton/sidebar.pug:35
 #, fuzzy
 #| msgid "Mute/Gag"
 msgid "Mutes"
 msgstr "Muta/Gag"
 
-#: interface/templates/skeleton/globals/breadcrumb.pug:59
+#: interface/templates/skeleton/globals/breadcrumb.pug:60
 #: interface/templates/skeleton/sidebar.pug:37
 msgid "Gags"
 msgstr ""
 
-#: interface/templates/skeleton/globals/search.pug:2
+#: interface/templates/skeleton/globals/search.pug:3
 #, fuzzy
 #| msgid "Username"
 msgid "Users"
 msgstr "Användarnamn"
 
-#: interface/templates/skeleton/globals/servers.pug:8
+#: interface/templates/skeleton/globals/servers.pug:9
 msgid "Server"
 msgstr "Server"
 
-#: interface/templates/skeleton/globals/servers.pug:9
+#: interface/templates/skeleton/globals/servers.pug:10
 msgid "Map"
 msgstr ""
 
-#: interface/templates/skeleton/globals/servers.pug:11
+#: interface/templates/skeleton/globals/servers.pug:12
 #, fuzzy
 #| msgid "time"
 msgid "Uptime"
 msgstr "tid"
 
-#: interface/templates/skeleton/globals/servers.pug:12
+#: interface/templates/skeleton/globals/servers.pug:13
 msgid "Game"
 msgstr "Spel"
 
@@ -463,9 +514,6 @@ msgstr "En eller flera definitioner kan inte valideras"
 #~ msgid "Username"
 #~ msgstr "Användarnamn"
 
-#~ msgid "Group"
-#~ msgstr "Grupp"
-
 #~ msgid "Steam Username"
 #~ msgstr "Steam Användarnamn"
 
@@ -477,9 +525,6 @@ msgstr "En eller flera definitioner kan inte valideras"
 
 #~ msgid "Press to select"
 #~ msgstr "Klicka för att välja"
-
-#~ msgid "Groups"
-#~ msgstr "Grupper"
 
 #~ msgid "all"
 #~ msgstr "Alla"
