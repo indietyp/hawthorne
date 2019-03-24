@@ -4,7 +4,7 @@
 
 - block content
   .modal.modalDynamic(data-component='[modal/admins/add]')
-    h1 Admins – New
+    h1 {% trans "Admins – New" %}
     .close(data-trigger='[modal/close]')
       i.icon.ion-ios-close
     .modalContent
@@ -12,27 +12,27 @@
         .section.group.modalSelect
           ._Dynamic_Select
             ._Dynamic_Layer
-            ._Title._Select_User(data-trigger='[composer/select/open]') Select a User
+            ._Title._Select_User(data-trigger='[composer/select/open]') {% trans "Select a User" %}
             input._Value.hidden.target(required)
             ._Select
               ._Select_Search(style='position:relative')
                 input.skip(type='text', placeholder='Type to search...', data-trigger='[composer/select/steam]', data-email)
                 .tooltip_container
-                  .tooltip.left You can search via SteamID64, SteamID3, SteamID2, Steam profile URL or a username in the Hawthorne local database. You can also specify an email address.
+                  .tooltip.left {% trans "You can search via SteamID64, SteamID3, SteamID2, Steam profile URL or a username in the Hawthorne local database. You can also specify an email address." %}
                   i.icon.ion-ios-information-circle-outline
-              ._STitle Results
+              ._STitle {% trans "Results" %}
               ._Container
               ._Loading
                 ._Loader
         .section.group.modalSelect
           ._Dynamic_Select
             ._Dynamic_Layer
-            ._Title._Select_Role(data-trigger='[composer/select/open]') Select a Group
+            ._Title._Select_Role(data-trigger='[composer/select/open]') {% trans "Select a Group" %}
             input._Value.hidden(name='groups', data-list, required)
             ._Select
               ._Select_Search
                 input.skip(type='text', placeholder='Type to search...', data-trigger='[composer/select/search]')
-              ._STitle Results
+              ._STitle {% trans "Results" %}
               ._Container
                 - for group in groups
                   li(data-trigger='[composer/select/choose]', data-value=group.id)
@@ -41,25 +41,25 @@
         input.skip(type="submit", value='Save').unset
 
   .modal.modalDynamic(data-component='[modal/group/add]')
-    h1 Group – New
+    h1 {% trans "Group – New" %}
     .close(data-trigger='[modal/close]')
       i.icon.ion-ios-close
     .modalContent
       form(data-trigger='[modal/form]', data-action='create', data-mode='admins[web][groups]')
         b.mtop.mbotSmall
           i.icon.ion-ios-person(style='margin-right:10px')
-          |  Group Details
+          |  {% trans "Group Details" %}
         .section.group.inputGroup
           input.smallInput(type='text', required, placeholder=' ', name='name')
           span
-            | Name
+            | {% trans "Name" %}
             span.invalid
         b.mbotSmall(style='padding-top:6px')
           i.icon.ion-ios-flag(style='margin-right:10px')
-          |  Permissions
+          |  {% trans "Permissions" %}
         .section.group(style='display:flex;align-items:center')
           .selection
-            b.mbotSmall(style='padding-top:6px') Available
+            b.mbotSmall(style='padding-top:6px') {% trans "Available" %}
             select.skip#select-available(multiple, style='height:250px')
               each permission in  permissions
                 if permission.content_type.app_label in excluded
@@ -67,29 +67,29 @@
                     = permission.content_type.model.title
                     |  |
                     = permission.name.title
-            a(href='javascript:void(0)') Select All
+            a(href='javascript:void(0)') {% trans "Select All" %}
           .actions.selector(style='padding:12px')
             i.icon.ion-ios-arrow-dropleft(data-trigger='[select/multiple/double]', data-source='#select-selected', data-target='#select-available')
             i.icon.ion-ios-arrow-dropright(data-trigger='[select/multiple/double]', data-target='#select-selected', data-source='#select-available')
           .selection
-            b.mbotSmall(style='padding-top:6px;margin-bottom:0px') Selected
+            b.mbotSmall(style='padding-top:6px;margin-bottom:0px') {% trans "Selected" %}
             select#select-selected(multiple, style='height:250px', name='permissions')
               each permission in permissions
                 if permission.content_type.app_label not in excluded
                   option.hidden(checked, disabled, value="{{permission.content_type.model|add:'.'|add:permission.codename}}")
-            a(href='javascript:void(0)') Select All
+            a(href='javascript:void(0)') {% trans "Select All" %}
 
         input.skip(type="submit", value='Save').unset
 
   ul.paginationTabs(data-target='admins[web]')
-    li(data-trigger="[ct/switch]", data="admins") Admins
-    li(data-trigger="[ct/switch]", data="groups") Groups
+    li(data-trigger="[ct/switch]", data="admins") {% trans "Admins" %}
+    li(data-trigger="[ct/switch]", data="groups") {% trans "Groups" %}
     li.fRight(data-trigger='[modal/open]', data-trigger-target='[modal/admins/add]')
       i.icon.ion-ios-add(style='margin-right:5px')
-      | New Admin
+      | {% trans "New Admin" %}
     li.fRight(data-trigger='[modal/open]', data-trigger-target='[modal/group/add]', style="margin-right:6px")
       i.icon.ion-ios-add(style='margin-right:5px')
-      | New Group
+      | {% trans "New Group" %}
 
   script.execute.
     window.lazy('admins[web]', 'admins')

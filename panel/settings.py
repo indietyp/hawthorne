@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
-import pypugjs.ext.django
 
 from panel.defaults import *
 from panel.local import *

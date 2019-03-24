@@ -1,11 +1,11 @@
 .section
-  h3 Users
+  h3 {% trans "Users" %}
   ul
     for user in users
       li
         a(href='javascript:void(0)', onclick="window.vc('players[detailed]', '{{user.id}}')")= user.namespace
 .section
-  h3 Servers
+  h3 {% trans "Servers" %}
   ul
     for server in servers
       li

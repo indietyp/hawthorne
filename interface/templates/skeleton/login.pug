@@ -72,7 +72,7 @@ html(lang='en')
         form(method="post", action="{% url 'login' %}")
           {% csrf_token %}
           {% if form.errors %}
-          p.red.center Your username and password didn't match. Please try again.
+          p.red.center {% trans "Your username and password didn't match. Please try again." %}
           {% endif %}
           input.username(type='text', placeholder='Username', onkeyup='window.style.login(event)', name="username", id="id_username", required, autofocus)
           .transition

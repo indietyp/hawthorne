@@ -110,6 +110,7 @@ mainframe.ini
 *.plist
 *.rdb
 .idea/
+.ignore/
 
 todo
 celerybeat-schedule.db

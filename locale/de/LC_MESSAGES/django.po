@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-08 21:05+0000\n"
+"POT-Creation-Date: 2019-03-24 01:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Bilal Mahmoud <bilalmahmoud@posteo.net>, 2018\n"
 "Language-Team: German (https://www.transifex.com/laevisug/teams/85920/de/)\n"
@@ -18,322 +18,298 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: api/views/server.py:42 api/views/server.py:100
+#: api/views/server.py:43 api/views/server.py:101
 #, python-brace-format
 msgid "Could not resolve host by domain ({0})"
 msgstr "Konnte den Host nicht per Domain finden ({0})"
 
-#: api/views/server.py:58 api/views/server.py:119
+#: api/views/server.py:59 api/views/server.py:123
 msgid "Server timed out"
 msgstr "Server hat nicht geantwortet"
 
-#: api/views/server.py:60 api/views/server.py:121
+#: api/views/server.py:61 api/views/server.py:125
 msgid "Could not authenticate with given password"
 msgstr "Konnte nicht mit dem gegeben Passwort authentifizieren"
 
-#: api/views/server.py:62 api/views/server.py:64 api/views/server.py:123
-#: api/views/server.py:125 api/views/server.py:127
+#: api/views/server.py:63 api/views/server.py:65 api/views/server.py:127
+#: api/views/server.py:129 api/views/server.py:131
 #, python-brace-format
 msgid "Could not reach server ({0})"
 msgstr "Konnte nicht den Server erreichen ({0})"
 
-#: interface/templates/components/admin.pug:8
-msgid "Administration"
-msgstr "Administration"
-
-#: interface/templates/components/admin.pug:16
-#: interface/templates/components/ban.pug:17
-#: interface/templates/components/mutegag.pug:16
-#: interface/templates/components/settings.pug:23
-msgid "Username"
-msgstr "Benutzername"
-
-#: interface/templates/components/admin.pug:19
-#: interface/templates/components/settings.pug:77
-msgid "Group"
-msgstr "Gruppen"
-
-#: interface/templates/components/admin.pug:28
-#: interface/templates/components/ban.pug:39
-#: interface/templates/components/mutegag.pug:44
-#: interface/templates/components/settings.pug:48
-msgid "Steam Username"
-msgstr "Steam Benutzername"
-
-#: interface/templates/components/admin.pug:30
-#: interface/templates/components/ban.pug:41
-#: interface/templates/components/mutegag.pug:46
-#: interface/templates/components/settings.pug:50
-msgid "Could not find any user"
-msgstr "Konnte keinen Benutzer finden"
-
-#: interface/templates/components/admin.pug:31
-#: interface/templates/components/ban.pug:42
-#: interface/templates/components/mutegag.pug:47
-#: interface/templates/components/settings.pug:51
-msgid "Type to search"
-msgstr "Schreibe um zu suchen"
-
-#: interface/templates/components/admin.pug:32
-#: interface/templates/components/admin.pug:50
-#: interface/templates/components/admin.pug:174
-#: interface/templates/components/ban.pug:43
-#: interface/templates/components/mutegag.pug:48
-#: interface/templates/components/mutegag.pug:65
-#: interface/templates/components/server.pug:41
-#: interface/templates/components/settings.pug:52
-#: interface/templates/components/settings.pug:79
-#: interface/templates/components/settings.pug:160
-#: interface/templates/components/settings.pug:260
-msgid "Press to select"
-msgstr "Klicke zum auswählen"
-
-#: interface/templates/components/admin.pug:57
-#: interface/templates/components/settings.pug:86
-msgid "Groups"
-msgstr "Gruppen"
-
-#: interface/templates/components/admin.pug:76
-#: interface/templates/partials/admin/group.pug:36
-#: interface/templates/partials/admin/user.pug:22
-#: interface/templates/partials/ban/user.pug:26
-#: interface/templates/partials/mutegag/user.pug:45
-#: interface/templates/partials/server/server.pug:88
-msgid "all"
-msgstr "Alle"
-
-#: interface/templates/components/admin.pug:122
-#: interface/templates/components/ban.pug:20
-#: interface/templates/components/mutegag.pug:19
-msgid "Server"
-msgstr "Server"
-
-#: interface/templates/components/admin.pug:189
-msgid "Logs"
-msgstr "Protokolle"
-
-#: interface/templates/components/chat.pug:7
-#: interface/templates/skeleton/sidebar.pug:47
-msgid "Chat"
-msgstr "Chat"
-
-#: interface/templates/components/home.pug:35
-msgid "current month"
-msgstr ""
-
-#: interface/templates/components/home.pug:45
+#: interface/templates/pages/admins/servers.pug:8
 #, fuzzy
-#| msgid "time"
-msgid "all time"
-msgstr "Zeit"
+#| msgid "Admins"
+msgid "Admins – New"
+msgstr "Admins"
 
-#: interface/templates/components/home.pug:55
-msgid "actions performed"
+#: interface/templates/pages/admins/servers.pug:22
+msgid ""
+"You can search via SteamID64, SteamID3, SteamID2, Steam profile URL or a "
+"username in the Hawthorne local database."
 msgstr ""
 
-#: interface/templates/components/home.pug:67
-msgid "roles"
+#: interface/templates/pages/admins/servers.pug:24
+#: interface/templates/pages/admins/servers.pug:36
+#: interface/templates/pages/admins/servers.pug:78
+msgid "Results"
 msgstr ""
 
-#: interface/templates/components/home.pug:77
-msgid "with roles"
+#: interface/templates/pages/admins/servers.pug:31
+msgid "Select a Role"
 msgstr ""
 
-#: interface/templates/components/home.pug:87
-msgid "messages"
+#: interface/templates/pages/admins/servers.pug:44
+msgid "Role – New"
 msgstr ""
 
-#: interface/templates/components/home.pug:97
-msgid "our Discord"
+#: interface/templates/pages/admins/servers.pug:51
+msgid "Role Details"
 msgstr ""
 
-#: interface/templates/components/home.pug:101
-#: interface/templates/components/settings.pug:188
+#: interface/templates/pages/admins/servers.pug:55
+#, fuzzy
+#| msgid "Name"
+msgid "Role Name"
+msgstr "Name"
+
+#: interface/templates/pages/admins/servers.pug:60
+msgid "Role Immunity (0-99)"
+msgstr ""
+
+#: interface/templates/pages/admins/servers.pug:65
+#: interface/templates/pages/settings.pug:41
+msgid "Expiration (optional)"
+msgstr ""
+
+#: interface/templates/pages/admins/servers.pug:68
+msgid ""
+"Valid is the duration format described in <a style='color:green' "
+"href='https://tools.ietf.org/html/rfc3339#page-13', target='_blank'>RFC "
+"3339, Page 13</a> as is the order. The P will be inserted automatically."
+msgstr ""
+
+#: interface/templates/pages/admins/servers.pug:73
+msgid "Choose a Server (optional)"
+msgstr ""
+
+#: interface/templates/pages/admins/servers.pug:97
+#: interface/templates/skeleton/globals/breadcrumb.pug:7
+#: interface/templates/skeleton/globals/breadcrumb.pug:22
+#: interface/templates/skeleton/sidebar.pug:45
+msgid "Admins"
+msgstr "Admins"
+
+#: interface/templates/pages/admins/servers.pug:98
+msgid "Roles"
+msgstr ""
+
+#: interface/templates/pages/admins/servers.pug:101
+#, fuzzy
+#| msgid "Admins"
+msgid "New Admin"
+msgstr "Admins"
+
+#: interface/templates/pages/admins/servers.pug:104
+msgid "New Role"
+msgstr ""
+
+#: interface/templates/pages/home.pug:16
+#: interface/templates/skeleton/globals/breadcrumb.pug:9
+#: interface/templates/skeleton/globals/breadcrumb.pug:26
+#: interface/templates/skeleton/globals/breadcrumb.pug:43
+#: interface/templates/skeleton/globals/search.pug:8
+#: interface/templates/skeleton/globals/servers.pug:2
+#: interface/templates/skeleton/sidebar.pug:50
+#: interface/templates/skeleton/sidebar.pug:56
+msgid "Servers"
+msgstr "Servers"
+
+#: interface/templates/pages/home.pug:17
+msgid "The total amount of servers connected to this panel."
+msgstr ""
+
+#: interface/templates/pages/home.pug:24
+#: interface/templates/skeleton/globals/breadcrumb.pug:11
+#: interface/templates/skeleton/globals/breadcrumb.pug:29
 #: interface/templates/skeleton/sidebar.pug:28
-msgid "Instances"
-msgstr "Instanzen"
+msgid "Punishments"
+msgstr ""
 
-#: interface/templates/components/home.pug:108
-#: interface/templates/skeleton/sidebar.pug:42
-msgid "Announcements"
-msgstr "Mitteilungen"
+#: interface/templates/pages/home.pug:25
+msgid "The total amount of punishments handed out by your admins."
+msgstr ""
 
-#: interface/templates/components/mutegag.pug:7
-#: interface/templates/skeleton/sidebar.pug:38
-msgid "Mute/Gag"
-msgstr "Mute/Gag"
+#: interface/templates/pages/home.pug:32
+#, fuzzy
+#| msgid "Players"
+msgid "Unique Players"
+msgstr "Spieler"
 
-#: interface/templates/components/player.pug:7
-#: interface/templates/skeleton/sidebar.pug:17
+#: interface/templates/pages/home.pug:33
+msgid "The total amount of players that have joined your servers."
+msgstr ""
+
+#: interface/templates/pages/home.pug:40
+msgid "Actions"
+msgstr ""
+
+#: interface/templates/pages/home.pug:41
+msgid "The total amount of administrative actions executed."
+msgstr ""
+
+#: interface/templates/pages/home.pug:42
+msgid "Player Activity"
+msgstr ""
+
+#: interface/templates/pages/settings.pug:9
+msgid "Token – New"
+msgstr ""
+
+#: interface/templates/pages/settings.pug:16
+msgid "Permissions"
+msgstr ""
+
+#: interface/templates/pages/settings.pug:19
+msgid "Available"
+msgstr ""
+
+#: interface/templates/pages/settings.pug:27
+#: interface/templates/pages/settings.pug:37
+msgid "Select All"
+msgstr ""
+
+#: interface/templates/pages/settings.pug:32
+msgid "Selected"
+msgstr ""
+
+#: interface/templates/pages/settings.pug:53
+msgid "Overview"
+msgstr ""
+
+#: interface/templates/pages/settings.pug:54
+msgid "Tokens"
+msgstr ""
+
+#: interface/templates/pages/settings.pug:55
+msgid "Webhooks"
+msgstr ""
+
+#: interface/templates/pages/settings.pug:58
+msgid "New Webhook"
+msgstr ""
+
+#: interface/templates/pages/settings.pug:61
+msgid "New Token"
+msgstr ""
+
+#: interface/templates/skeleton/errors/404.pug:15
+msgid "Page not found"
+msgstr ""
+
+#: interface/templates/skeleton/errors/404.pug:16
+msgid ""
+"Our highly trained staff of first class unidentifiable creatures searched "
+"through all of space and time, but couldn't find the page you were looking "
+"for."
+msgstr ""
+
+#: interface/templates/skeleton/errors/404.pug:17
+msgid "Please make sure you have spelled the URL correctly."
+msgstr ""
+
+#: interface/templates/skeleton/errors/500.pug:15
+msgid "Internal Server Error"
+msgstr ""
+
+#: interface/templates/skeleton/errors/500.pug:16
+msgid ""
+"It seems that something went horribly wrong! This probably should not have "
+"happened..."
+msgstr ""
+
+#: interface/templates/skeleton/errors/500.pug:17
+msgid ""
+"Contact the system administrator and let him check /var/log/hawthorne/debug."
+"log for more information."
+msgstr ""
+
+#: interface/templates/skeleton/globals/breadcrumb.pug:5
+#: interface/templates/skeleton/globals/breadcrumb.pug:19
+#: interface/templates/skeleton/sidebar.pug:24
+msgid "Dashboard"
+msgstr ""
+
+#: interface/templates/skeleton/globals/breadcrumb.pug:13
+#: interface/templates/skeleton/globals/breadcrumb.pug:33
+#: interface/templates/skeleton/globals/servers.pug:10
+#: interface/templates/skeleton/sidebar.pug:41
 msgid "Players"
 msgstr "Spieler"
 
-#: interface/templates/components/server.pug:11
-msgid "Name"
-msgstr "Name"
+#: interface/templates/skeleton/globals/breadcrumb.pug:40
+#: interface/templates/skeleton/sidebar.pug:52
+msgid "Web"
+msgstr ""
 
-#: interface/templates/components/server.pug:19
-msgid "Password"
-msgstr "Password"
+#: interface/templates/skeleton/globals/breadcrumb.pug:53
+#: interface/templates/skeleton/sidebar.pug:33
+msgid "Bans"
+msgstr "Bans"
 
-#: interface/templates/components/server.pug:25
-msgid "Gamemode"
-msgstr "Spielmodus"
+#: interface/templates/skeleton/globals/breadcrumb.pug:56
+#: interface/templates/skeleton/sidebar.pug:35
+#, fuzzy
+#| msgid "Mute/Gag"
+msgid "Mutes"
+msgstr "Mute/Gag"
 
-#: interface/templates/components/server.pug:30
-msgid "Game"
-msgstr "Spiel"
+#: interface/templates/skeleton/globals/breadcrumb.pug:59
+#: interface/templates/skeleton/sidebar.pug:37
+msgid "Gags"
+msgstr ""
 
-#: interface/templates/components/settings.pug:10
+#: interface/templates/skeleton/globals/search.pug:2
 #, fuzzy
 #| msgid "Username"
 msgid "Users"
 msgstr "Benutzername"
 
-#: interface/templates/components/settings.pug:114
-msgid "API Tokens"
+#: interface/templates/skeleton/globals/servers.pug:8
+msgid "Server"
+msgstr "Server"
+
+#: interface/templates/skeleton/globals/servers.pug:9
+msgid "Map"
 msgstr ""
 
-#: interface/templates/components/settings.pug:122
-msgid "Simple"
-msgstr ""
-
-#: interface/templates/components/settings.pug:136
-msgid "Webhooks"
-msgstr ""
-
-#: interface/templates/components/settings.pug:142
-msgid "Public Page"
-msgstr ""
-
-#: interface/templates/components/settings.pug:148
-msgid "Import"
-msgstr ""
-
-#: interface/templates/components/settings.pug:152
-msgid "System"
-msgstr ""
-
-#: interface/templates/components/settings.pug:170
-#: interface/templates/skeleton/sidebar.pug:33
-msgid "Bans"
-msgstr "Bans"
-
-#: interface/templates/components/settings.pug:176
+#: interface/templates/skeleton/globals/servers.pug:11
 #, fuzzy
-#| msgid "Mute/Gag"
-msgid "Mute & Gags"
-msgstr "Mute/Gag"
-
-#: interface/templates/components/settings.pug:182
-#: interface/templates/skeleton/sidebar.pug:22
-msgid "Admins"
-msgstr "Admins"
-
-#: interface/templates/components/settings.pug:208
-msgid "Utilities"
-msgstr ""
-
-#: interface/templates/components/settings.pug:220
-msgid "Token for Bot:"
-msgstr ""
-
-#: interface/templates/components/settings.pug:224
-msgid "Not connected:"
-msgstr ""
-
-#: interface/templates/components/settings.pug:225
-msgid "to mainframe"
-msgstr ""
-
-#: interface/templates/components/settings.pug:230
-msgid "Connect"
-msgstr ""
-
-#: interface/templates/components/settings.pug:231
-msgid "to mainframe:"
-msgstr ""
-
-#: interface/templates/components/settings.pug:244
-msgid "Alerts"
-msgstr ""
-
-#: interface/templates/components/settings.pug:251
-msgid "Severity"
-msgstr ""
-
-#: interface/templates/components/settings.pug:277
-msgid "Usage Report to Developer"
-msgstr ""
-
-#: interface/templates/components/settings.pug:279
-msgid "Why and what is the usage report?"
-msgstr ""
-
-#: interface/templates/components/settings.pug:290
-msgid "Changelogs:"
-msgstr ""
-
-#: interface/templates/components/settings.pug:295
-msgid "Unspecified:"
-msgstr ""
-
-#: interface/templates/components/settings.pug:300
-msgid "Requests:"
-msgstr ""
-
-#: interface/templates/partials/ban/user.pug:33
-#: interface/templates/partials/mutegag/user.pug:50
-#, python-format
-msgid "until %(until)s"
-msgstr "bis %(until)s"
-
-#: interface/templates/partials/chat/entry.pug:11
-msgid "in"
-msgstr "in"
-
-#: interface/templates/partials/server/server.pug:53
-msgid "Not Supported"
-msgstr "Nicht Unterstützt"
-
-#: interface/templates/partials/server/server.pug:68
-msgid "Enter command here..."
-msgstr "Schreibe hier einen Befehl..."
-
-#: interface/templates/partials/server/server.pug:81
-msgid "last"
-msgstr "letzter"
-
-#: interface/templates/partials/server/server.pug:82
-msgid "month"
-msgstr "Monat"
-
-#: interface/templates/partials/server/server.pug:89
-msgid "time"
+#| msgid "time"
+msgid "Uptime"
 msgstr "Zeit"
 
-#: interface/templates/partials/setting/group.pug:10
-#, python-format
-msgid "%(user_count)s user%(user_count|pluralize)s"
+#: interface/templates/skeleton/globals/servers.pug:12
+msgid "Game"
+msgstr "Spiel"
+
+#: interface/templates/skeleton/login.pug:75
+msgid "Your username and password didn't match. Please try again."
 msgstr ""
 
-#: interface/templates/partials/setting/group.pug:13
-#: interface/templates/partials/setting/token.pug:18
-#: interface/templates/partials/setting/user.pug:21
-#: interface/templates/partials/setting/user.pug:23
-#, python-format
-msgid "%(permission_percentage)s%% granted"
+#: interface/templates/skeleton/sidebar.pug:17
+msgid "Logout"
 msgstr ""
 
-#: interface/templates/skeleton/sidebar.pug:12
-msgid "Home"
-msgstr "Startseite"
+#: interface/templates/skeleton/sidebar.pug:60
+msgid "Announcements"
+msgstr "Mitteilungen"
 
-#: interface/templates/skeleton/sidebar.pug:27
-msgid "Servers"
-msgstr "Servers"
+#: interface/templates/skeleton/sidebar.pug:64
+msgid "System Messages"
+msgstr ""
 
-#: interface/templates/skeleton/sidebar.pug:52
+#: interface/templates/skeleton/sidebar.pug:68
 msgid "Settings"
 msgstr "Einstellungen"
 
@@ -483,6 +459,77 @@ msgstr "Keine Definition wurde validiert"
 #: lib/validator.py:49
 msgid "one or more definitions don't validate"
 msgstr "Eine oder mehrere Definitionen konnten nicht validiert werden"
+
+#~ msgid "Administration"
+#~ msgstr "Administration"
+
+#~ msgid "Username"
+#~ msgstr "Benutzername"
+
+#~ msgid "Group"
+#~ msgstr "Gruppen"
+
+#~ msgid "Steam Username"
+#~ msgstr "Steam Benutzername"
+
+#~ msgid "Could not find any user"
+#~ msgstr "Konnte keinen Benutzer finden"
+
+#~ msgid "Type to search"
+#~ msgstr "Schreibe um zu suchen"
+
+#~ msgid "Press to select"
+#~ msgstr "Klicke zum auswählen"
+
+#~ msgid "Groups"
+#~ msgstr "Gruppen"
+
+#~ msgid "all"
+#~ msgstr "Alle"
+
+#~ msgid "Logs"
+#~ msgstr "Protokolle"
+
+#~ msgid "Chat"
+#~ msgstr "Chat"
+
+#, fuzzy
+#~| msgid "time"
+#~ msgid "all time"
+#~ msgstr "Zeit"
+
+#~ msgid "Instances"
+#~ msgstr "Instanzen"
+
+#~ msgid "Mute/Gag"
+#~ msgstr "Mute/Gag"
+
+#~ msgid "Password"
+#~ msgstr "Password"
+
+#~ msgid "Gamemode"
+#~ msgstr "Spielmodus"
+
+#~ msgid "until %(until)s"
+#~ msgstr "bis %(until)s"
+
+#~ msgid "in"
+#~ msgstr "in"
+
+#~ msgid "Not Supported"
+#~ msgstr "Nicht Unterstützt"
+
+#~ msgid "Enter command here..."
+#~ msgstr "Schreibe hier einen Befehl..."
+
+#~ msgid "last"
+#~ msgstr "letzter"
+
+#~ msgid "month"
+#~ msgstr "Monat"
+
+#~ msgid "Home"
+#~ msgstr "Startseite"
 
 #~ msgid "enter will do it"
 #~ msgstr "Drücke Enter"

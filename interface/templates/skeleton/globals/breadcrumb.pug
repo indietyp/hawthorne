@@ -2,45 +2,45 @@
 
 .breadcrumbs
   if path|get:0 == ''
-    h3 Dashboard
+    h3 {% trans "Dashboard" %}
   if path|get:0 == 'admins'
-    h3 Admins
+    h3 {% trans "Admins" %}
   if path|get:0 == 'servers'
-    h3 Servers
+    h3 {% trans "Servers" %}
   if path|get:0 == 'punishments'
-    h3 Punishments
+    h3 {% trans "Punishments" %}
   if path|get:0 == 'players'
-    h3 Players
+    h3 {% trans "Players" %}
 
   ul
     li
       if path|get:0 == ''
         i.icon.ion-md-globe
-        | Dashboard
+        | {% trans "Dashboard" %}
       if path|get:0 == 'admins'
         i.icon.ion-ios-flash
-        | Admins
+        | {% trans "Admins" %}
       if path|get:0 == 'servers'
         a(href='javascript:void(0)', onclick="window.vc('servers')")
           i.icon.ion-logo-buffer
-          | Servers
+          | {% trans "Servers" %}
       if path|get:0 == 'punishments'
         i.icon.ion-ios-warning
-        | Punishments
+        | {% trans "Punishments" %}
       if path|get:0 == 'players'
         a(href='javascript:void(0)', onclick="window.vc('players')")
           i.icon.ion-ios-people
-          | Players
+          | {% trans "Players" %}
 
     if path|length == 2
       li
         //- Admins
         if path|get:0 == 'admins' and path|get:1 == 'web'
           a(href="javascript:void(0)" onclick="window.vc('admins[web]')")
-            | Web
+            | {% trans "Web" %}
         if path|get:0 == 'admins' and path|get:1 == 'servers'
           a(href="javascript:void(0)" onclick="window.vc('admins[servers]')")
-            | Servers
+            | {% trans "Servers" %}
 
         //- Servers
         if path|get:0 == 'servers'
@@ -50,13 +50,13 @@
         //- Punishments
         if path|get:0 == 'punishments' and path|get:1 == 'bans'
           a(href="javascript:void(0)" onclick="window.vc('punishments[bans]')")
-            | Bans
+            | {% trans "Bans" %}
         if path|get:0 == 'punishments' and path|get:1 == 'mutes'
           a(href="javascript:void(0)" onclick="window.vc('punishments[mutes]')")
-            | Mutes
+            | {% trans "Mutes" %}
         if path|get:0 == 'punishments' and path|get:1 == 'gags'
           a(href="javascript:void(0)" onclick="window.vc('punishments[gags]')")
-            | Gags
+            | {% trans "Gags" %}
 
         //- Players
         if path|get:0 == 'players'

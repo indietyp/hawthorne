@@ -14,58 +14,58 @@
   img(src=request.user.avatar)
   .username= request.user.namespace
   .role= role
-  button.btnLogout(onclick="window.location='{% url 'logout' %}';") Logout
+  button.btnLogout(onclick="window.location='{% url 'logout' %}';") {% trans "Logout" %}
 
 ul
   .t MENU
   li.title(onclick="window.vc('home')")
     a(href="javascript:void(0)")
       i.icon.ion-md-globe
-      | Dashboard
+      | {% trans "Dashboard" %}
   li.title
     a(href='javascript:void(0)', data-trigger='[dropdown/toggle]')
       i.icon.ion-ios-warning
-      | Punishments
+      | {% trans "Punishments" %}
       i.icon.ion-ios-arrow-down.more
     .expand
       ul
         li(onclick="window.vc('punishments[bans]')")
-          a(href="javascript:void(0)") Bans
+          a(href="javascript:void(0)") {% trans "Bans" %}
         li(onclick="window.vc('punishments[mutes]')")
-          a(href="javascript:void(0)") Mutes
+          a(href="javascript:void(0)") {% trans "Mutes" %}
         li(onclick="window.vc('punishments[gags]')")
-          a(href="javascript:void(0)") Gags
+          a(href="javascript:void(0)") {% trans "Gags" %}
   li.title(onclick="window.vc('players')")
     a(href='javascript:void(0)')
       i.icon.ion-ios-people
-      | Players
+      | {% trans "Players" %}
   li.title
     a(href='javascript:void(0)', data-trigger='[dropdown/toggle]')
       i.icon.ion-ios-flash
-      | Admins
+      | {% trans "Admins" %}
       i.icon.ion-ios-arrow-down.more
     .expand
       ul
         li(onclick="window.vc('admins[servers]')")
-          a(href="javascript:void(0)") Servers
+          a(href="javascript:void(0)") {% trans "Servers" %}
         li(onclick="window.vc('admins[web]')")
-          a(href="javascript:void(0)") Web
+          a(href="javascript:void(0)") {% trans "Web" %}
   li.title(onclick="window.vc('servers')")
     a(href="javascript:void(0)")
       i.icon.ion-logo-buffer
-      | Servers
+      | {% trans "Servers" %}
   li.title
     a(href='')
       i.icon.ion-ios-megaphone
-      | Announcements
+      | {% trans "Announcements" %}
   li.title
     a(href='')
       i.icon.ion-ios-paper
-      | System Messages
+      | {% trans "System Messages" %}
   li.title(onclick="window.vc('settings')")
     a(href="javascript:void(0)", onclick="window.vc('settings')")
       i.icon.ion-ios-options
-      | Settings
+      | {% trans "Settings" %}
 
 
 // window.vc.change('settings')
