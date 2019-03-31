@@ -21,7 +21,7 @@ fermata.registerPlugin 'hawpi', (transport, base) ->
         if err
           window.style.toast 'error', err
         else if not response.success
-          window.style.toast 'error', response.reason
+          window.style.toast 'error', response.reason[0].message.toTitleCase()
         else
           window.style.toast 'success', 'Successfully applied changes!'
 

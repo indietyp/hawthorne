@@ -1,1 +1,1 @@
-Object.prototype.getOrCreate=function(a){void 0===this[a]&&(this[a]={});return this[a]};window.style={};window.cache={};window.api={storage:{}};
+Object.prototype.getOrCreate=function(a){void 0===this[a]&&(this[a]={});return this[a]};String.prototype.toTitleCase=function(){return this.replace(/\w\S*/g,function(a){return a.charAt(0).toUpperCase()+a.substr(1).toLowerCase()})};window.style={};window.cache={};window.api={storage:{}};

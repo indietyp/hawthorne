@@ -17,7 +17,18 @@ init = (scope = document) ->
   $("[data-trigger='[modal/open]']", scope).on 'click', ->
     $('.overlay').fadeIn 'fast'
     target = @.getAttribute('data-trigger-target')
-    $("[data-component='#{target}']").fadeIn 'fast'
+    target = $("[data-component='#{target}']")
+    target.fadeIn 'fast'
+
+    if @.hasAttribute('data-trigger-overrides')
+      overrides = @.getAttribute('data-trigger-overrides')
+
+      form = $('form', target)
+      overrides.split(';').forEach (item) ->
+        components = item.split '='
+
+        $("[name='#{components[0]}']", form)[0].value = components[1]
+
     return
 
   server_item = ->
@@ -365,6 +376,8 @@ init = (scope = document) ->
         window.api.create(mode, @, false)
       when 'edit'
         window.api.edit(mode, @, window.batch.length > 0)
+      when 'misc'
+        window.api.misc(mode, @)
 
   grid_delete = ->
     parent = $(@).parent '.serverGridItem'

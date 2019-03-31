@@ -90,7 +90,7 @@ normalize = (form) ->
       options = Array.from e.options
       payload[name] = options.map((x) -> x.value)
     else if e.hasAttribute('data-boolean')
-      payload[e.getAttribute('data-boolean')] = e.checked
+      payload[name] = e.checked
     else if e.getAttribute('type') is 'checkbox'
       if not e.checked
         return
@@ -112,6 +112,31 @@ normalize = (form) ->
 
   return [payload, component, validated]
 
+misc = (mode = '', target) ->
+  options =
+    toast: true
+  method = 'put'
+
+  [payload, component, validated] = window.api.utils.normalize target
+
+  if not validated
+    return
+
+  switch mode
+    when 'servers[detailed][message]'
+      endpoint = window.endpoint.api.servers[component].message
+
+      if payload.override
+        payload.clients = []
+
+  endpoint[method](options, {}, payload, (err, data) ->
+    if data.success
+      target.reset()
+  )
+
+  return
+
+window.api.misc = misc
 window.api.utils =
   validation: validation
   transform: transform

@@ -158,7 +158,13 @@ def action(request, validated={}, s=None, *args, **kwargs):
 def message(request, validated={}, s=None, *args, **kwargs):
   server = Server.objects.get(id=s)
   clients = User.objects.filter(id__in=validated['clients'])
-  return {'response': SourcemodPluginWrapper(server).message(validated['message'],
-                                                             clients=clients,
-                                                             console=validated['console'],
-                                                             kick=validated['kick'])}
+
+  response = SourcemodPluginWrapper(server).message(validated['message'],
+                                                    clients=clients,
+                                                    console=validated['console'],
+                                                    kick=validated['kick'])
+
+  if 'error' in response:
+    raise response['error']
+
+  return {'response': response}

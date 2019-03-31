@@ -2,7 +2,7 @@
 "version":3,
 "file":"",
 "lineCount":1,
-"mappings":"AAEEA,MAAAC,UAAAC,YAAA,CAA+BC,QAAQ,CAACC,CAAD,CAAO,CACzB,IAAK,EAAxB,GAAI,IAAA,CAAKA,CAAL,CAAJ,GACE,IAAA,CAAKA,CAAL,CADF,CACe,EADf,CAGA,OAAO,KAAA,CAAKA,CAAL,CAJqC,CAO9CC,OAAAC,MAAA,CAAe,EAEfD,OAAAE,MAAA,CAAe,EAEfF,OAAAG,IAAA,CAAa,CACXC,QAAS,EADE;",
+"mappings":"AAEEA,MAAAC,UAAAC,YAAA,CAA+BC,QAAQ,CAACC,CAAD,CAAO,CACzB,IAAK,EAAxB,GAAI,IAAA,CAAKA,CAAL,CAAJ,GACE,IAAA,CAAKA,CAAL,CADF,CACe,EADf,CAGA,OAAO,KAAA,CAAKA,CAAL,CAJqC,CAO9CC,OAAAJ,UAAAK,YAAA,CAA+BC,QAAQ,EAAG,CACxC,MAAO,KAAAC,QAAA,CAAa,QAAb,CAAuB,QAAQ,CAACC,CAAD,CAAM,CAC1C,MAAOA,EAAAC,OAAA,CAAW,CAAX,CAAAC,YAAA,EAAP,CAAqCF,CAAAG,OAAA,CAAW,CAAX,CAAAC,YAAA,EADK,CAArC,CADiC,CAM1CC,OAAAC,MAAA,CAAe,EAEfD,OAAAE,MAAA,CAAe,EAEfF,OAAAG,IAAA,CAAa,CACXC,QAAS,EADE;",
 "sources":["/Users/eatonlab/Dropbox/projects/development/hawthorne/interface/static/COMPILED/js/globals.js"],
-"names":["Object","prototype","getOrCreate","Object.prototype.getOrCreate","prop","window","style","cache","api","storage"]
+"names":["Object","prototype","getOrCreate","Object.prototype.getOrCreate","prop","String","toTitleCase","String.prototype.toTitleCase","replace","txt","charAt","toUpperCase","substr","toLowerCase","window","style","cache","api","storage"]
 }

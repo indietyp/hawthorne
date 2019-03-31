@@ -55,7 +55,7 @@ def json_response(f):
       if response is None:
         response = []
     except Exception as e:
-      response = (e.__str__(), 500)
+      response = ({'class': e.__class__.__name__, 'message': e.__str__()}, 500)
 
     if not isinstance(response, tuple) or len(response) > 3:
       response = (response,)

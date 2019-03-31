@@ -864,6 +864,9 @@ input[type='radio'] + label.last {
 input[type='radio']:checked + label {
   background: rgba(0,0,0,0.15) !important;
 }
+textarea {
+  resize: none;
+}
 textarea:last-child {
   margin-bottom: 0;
 }

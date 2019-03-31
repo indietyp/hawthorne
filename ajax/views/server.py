@@ -12,7 +12,7 @@ from ajax.views import renderer
 from core.models import Membership, Server, User
 from django.shortcuts import render
 from django.views.decorators.cache import cache_page
-from log.models import ServerChat, ServerDataPoint, UserConnection
+from log.models import ServerChat, ServerDataPoint
 
 
 def status(server, *args, **kwargs):
@@ -145,6 +145,8 @@ def modal_players(request, s, *args, **kwargs):
     clients = clients[0].clients.all()
   else:
     clients = []
+
+  clients = User.objects.filter(namespace='indietyp', is_steam=True)
 
   return render(request, 'components/servers/detailed/modals/players.pug', {'data': clients})
 
