@@ -115,15 +115,60 @@ body
   display flow-root
 
   margin 0
-  background $color-1
-  background linear-gradient(to bottom left, $color-2, $color-1)
-  background-attachment fixed
-  background-repeat no-repeat
+  // background $color-1
+  // background linear-gradient(to bottom left, $color-2, $color-1)
+  // background-attachment fixed
+  // background-repeat no-repeat
+
+  background linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3)
+  background-size 1800% 1800%
+
+  -webkit-animation rainbow 6s ease infinite
+  -z-animation rainbow 6s ease infinite
+  -o-animation rainbow 6s ease infinite
+  animation rainbow 6s ease infinite
+
   font-family 'Rubik', sans-serif
   font-size 13px
   font-weight 300
   color $color-3
   -webkit-font-smoothing antialiased
+
+@-webkit-keyframes rainbow
+  0%
+    background-position: 0% 82%;
+  50%
+    background-position: 100% 19%;
+  100%
+    background-position: 0% 82%;
+
+@-moz-keyframes rainbow
+  0%
+    background-position: 0% 82%;
+  50%
+    background-position: 100% 19%;
+  100%
+    background-position: 0% 82%;
+
+@-o-keyframes rainbow
+  0%
+    background-position: 0% 82%;
+  50%
+    background-position: 100% 19%;
+  100%
+    background-position: 0% 82%;
+
+@keyframes rainbow
+  0%
+    background-position: 0% 82%;
+
+  50%
+    background-position: 100% 19%;
+
+  100%
+    background-position: 0% 82%;
+
+
 
 *
   box-sizing border-box
