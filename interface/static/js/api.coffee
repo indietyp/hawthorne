@@ -129,6 +129,9 @@ misc = (mode = '', target) ->
       if payload.override
         payload.clients = []
 
+    when 'servers[detailed][kick]'
+      endpoint = window.endpoint.api.servers[component].message
+
   endpoint[method](options, {}, payload, (err, data) ->
     if data.success
       target.reset()

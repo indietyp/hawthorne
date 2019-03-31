@@ -32,37 +32,40 @@
       tbody
 
   .modal(data-component="[modal/players/message]")
-    h1 Akke – Compose A Message
+    h1
+     span(name='namespace')
+     | – Compose A Message
     .close(data-trigger="[modal/close]")
       i.icon.ion-ios-close
-    .modalContent You can send in-game messages to players through this modal. The message will appear in their chat box with you as the sender, unless specified otherwise in the options.
-    form(data-trigger='[modal/form]', data-action='misc', data-mode='servers[detailed][message]')
-      input.hidden.target(value='{{data.id}}')
-      input.hidden(name='clients', data-list)
-      textarea(name='message', required, placeholder="Send them a message...", style="margin-top:20px")
-      .section.group.checkboxGroup
-        .modalFlags
-          label.switch
-            input(name='console' ,type='checkbox', data-boolean)
-            span.slider.round
-          .switchText Send To Console
-        .modalFlags
-          label.switch
-            input(name='kick', type='checkbox', data-boolean)
-            span.slider.round
-          .switchText Kick Player
-        //- .modalFlags
-        //-   label.switch
-        //-     input(name='warning', type='checkbox', data-boolean)
-        //-     span.slider.round
-        //-   .switchText Send as a warning
-        .modalFlags
-          label.switch
-            input(name='override', type='checkbox', data-boolean)
-            span.slider.round
-          .switchText Send To Entire Server
+    .modalContent
+      .info You can send in-game messages to players through this modal. The message will appear in their chat box with you as the sender, unless specified otherwise in the options.
+      form(data-trigger='[modal/form]', data-action='misc', data-mode='servers[detailed][message]')
+        input.hidden.target(value='{{data.id}}')
+        input.hidden(name='clients', data-list)
+        textarea(name='message', required, placeholder="Send them a message...", style="margin-top:20px")
+        .section.group.checkboxGroup
+          .modalFlags
+            label.switch
+              input(name='console', type='checkbox', data-boolean)
+              span.slider.round
+            .switchText Send To Console
+          .modalFlags
+            label.switch
+              input(name='kick', type='checkbox', data-boolean)
+              span.slider.round
+            .switchText Kick Player
+          //- .modalFlags
+          //-   label.switch
+          //-     input(name='warning', type='checkbox', data-boolean)
+          //-     span.slider.round
+          //-   .switchText Send as a warning
+          .modalFlags
+            label.switch
+              input(name='override', type='checkbox', data-boolean)
+              span.slider.round
+            .switchText Send To Entire Server
 
-      input.skip(type='submit', value='Send')
+        input.skip(type='submit', value='Send')
 
   .modal(data-component='[modal/edit]')
     h1 Server – Edit

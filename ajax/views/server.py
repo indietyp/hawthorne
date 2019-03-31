@@ -148,7 +148,9 @@ def modal_players(request, s, *args, **kwargs):
 
   clients = User.objects.filter(namespace='indietyp', is_steam=True)
 
-  return render(request, 'components/servers/detailed/modals/players.pug', {'data': clients})
+  return render(request,
+                'components/servers/detailed/modals/players.pug',
+                {'data': clients, 'server': server})
 
 
 @login_required
@@ -158,7 +160,9 @@ def modal_admins(request, s, *args, **kwargs):
   server = Server.objects.get(id=s)
   memberships = Membership.objects.filter(Q(role__server=server) | Q(role__server=None))
 
-  return render(request, 'components/servers/detailed/modals/admins.pug', {'data': memberships})
+  return render(request,
+                'components/servers/detailed/modals/admins.pug',
+                {'data': memberships})
 
 
 @login_required

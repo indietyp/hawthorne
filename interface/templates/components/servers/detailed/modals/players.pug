@@ -13,7 +13,12 @@ for item in data
         = item.namespace
     td= item|userconnection|duration
     td
-      button.unset(title="Kick")
-        i.icon.ion-ios-log-out
+      form(data-trigger='[modal/form]', data-action='misc', data-mode='servers[detailed][kick]')
+        input.hidden.target(value='{{server.id}}')
+        input.hidden(name='message', value='You have been kicked')
+        input.hidden(name='kick', type='checkbox', data-boolean)
+        input.hidden(name='clients', value='{{item.id}}', data-list)
+        button.unset(title='Kick', type='submit')
+          i.icon.ion-ios-log-out
       button.unset(title="Message", data-trigger="[modal/open]", data-trigger-target="[modal/players/message]", data-trigger-overrides='clients={{item.id}}')
         i.icon.ion-ios-text

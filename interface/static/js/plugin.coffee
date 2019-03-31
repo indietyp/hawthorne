@@ -43,11 +43,11 @@ init = (scope = document) ->
   modal_close = ->
     $('.overlay').fadeOut 'fast'
 
-    parent = @.parentElement
-    until $(parent).hasClass('modal')
-      parent = parent.parentElement
+    # parent = @.parentElement
+    # until $(parent).hasClass('modal')
+    #   parent = parent.parentElement
 
-    $(parent).fadeOut 'fast'
+    $('.modal').fadeOut 'fast'
     return
 
   $('[data-trigger=\'[modal/close]\']', scope).off 'click'
