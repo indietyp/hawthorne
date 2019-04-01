@@ -9,7 +9,6 @@ from django.utils import timezone
 
 from core.lib.steam import populate
 from core.models import User
-from django.core.cache import cache
 from lib.base import RCONBase
 from log.models import UserConnection
 from panel.settings import RCON_TIMEOUT
