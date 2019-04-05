@@ -136,11 +136,11 @@ class SourcemodPluginWrapper(RCONBase):
 
         populate(user)
 
-      online = UserConnection.objects.filter(user=user, disconnected=None)\
+      online = UserConnection.objects.filter(user=user, closed_at=None)\
                                      .order_by('-created_at')
 
       if online.count() > 0:
-        user.usetime = timezone.now() - online[0].connected
+        user.usetime = timezone.now() - online[0].created_at
 
       users.append(user)
 

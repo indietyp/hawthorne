@@ -64,8 +64,7 @@ class UserConnection(BaseModel):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   server = models.ForeignKey(Server, on_delete=models.CASCADE)
 
-  connected = models.DateTimeField(auto_now_add=True)
-  disconnected = models.DateTimeField(null=True)
+  closed_at = models.DateTimeField(null=True)
 
   def __str__(self):
     return "{} - {}".format(self.user, self.server)

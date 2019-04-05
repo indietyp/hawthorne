@@ -57,8 +57,8 @@ def permission_percentage(value):
 def m2m_duration(m2m):
   total = datetime.timedelta()
   for delta in m2m.all():
-    disconnected = delta.disconnected if delta.disconnected else timezone.now()
-    total += disconnected - delta.connected
+    disconnected = delta.closed_at if delta.closed_at else timezone.now()
+    total += disconnected - delta.created_at
 
   return total
 
@@ -91,8 +91,12 @@ def isoduration(v):
 
 @register.filter
 def userconnection(v):
-  connection = v.userconnection_set.order_by('-created_at')[0]
-  return timezone.now() - connection.connected
+  connection = v.userconnection_set.order_by('-created_at')
+
+  if connection:
+    return timezone.now() - connection[0].created_at
+  else:
+    return ''
 
 
 @register.filter

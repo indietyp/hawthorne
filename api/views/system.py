@@ -12,6 +12,7 @@ from django.views.decorators.http import require_http_methods
 from core.decorators.api import json_response, validation
 from core.decorators.auth import authentication_required, permission_required
 from core.models import Punishment, Server, Token, User
+from lib.api import PermissionUtils
 from lib.sourcemod import SourcemodPluginWrapper
 from log.models import ServerChat
 
@@ -97,23 +98,7 @@ def token(request, validated={}, *args, **kwargs):
 
     token.owner = request.user
 
-    base = Permission.objects.all()\
-                             .annotate(encoded=F('content_type__model') + '.' + F('codename'))\
-                             .filter(encoded__in=request.user.get_all_permissions())\
-                             .order_by('content_type__model')
-    exceptions = []
-    perms = []
-    for perm in validated['permissions']:
-      perm = perm.split('.')
-      p = base.filter(content_type__model=perm[0], codename=perm[1])
-
-      if not p:
-        exceptions.append('.'.join(perm))
-
-      perms.extend(p)
-
-    if exceptions:
-      return {'info': 'You are trying to assign permissions you do not have yourself.', 'affects': exceptions}, 403
+    perms = PermissionUtils.assign(request, validated['permissions'])
 
     token.save()
     token.permissions.set(perms)

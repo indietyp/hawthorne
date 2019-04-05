@@ -33,9 +33,9 @@ def home(request):
   with connection.cursor() as cursor:
     cursor.execute('''
       SELECT COUNT(DISTINCT `log_userconnection`.`user_id`)    AS `active`,
-             CAST(`log_userconnection`.`disconnected` AS DATE) `created_date`
+             CAST(`log_userconnection`.`closed_at` AS DATE) `created_date`
       FROM `log_userconnection`
-      WHERE `log_userconnection`.`disconnected` IS NOT NULL
+      WHERE `log_userconnection`.`closed_at` IS NOT NULL
       GROUP BY `created_date`
       ORDER BY `created_date` DESC
       LIMIT 365;

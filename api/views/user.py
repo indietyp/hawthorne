@@ -13,6 +13,7 @@ from core.decorators.api import json_response, validation
 from core.decorators.auth import authentication_required, permission_required
 from core.lib.steam import populate as steam_populate
 from core.models import Country, Membership, Punishment, Role, Server, User
+from lib.api import PermissionUtils
 from lib.mainframe import Mainframe
 from lib.sourcemod import SourcemodPluginWrapper
 
@@ -101,26 +102,7 @@ def list(request, validated=[], *args, **kwargs):
       user.is_active = True
       user.is_staff = False
 
-      # put into function
-      base = Permission.objects.all()\
-                               .annotate(encoded=F('content_type__model') + '.' + F('codename'))\
-                               .filter(encoded__in=request.user.get_all_permissions())\
-                               .order_by('content_type__model')
-      exceptions = []
-      perms = []
-
-      for perm in validated['permissions']:
-        perm = perm.split('.')
-        p = base.filter(content_type__model=perm[0], codename=perm[1])
-
-        if not p:
-          exceptions.append('.'.join(perm))
-
-        perms.extend(p)
-
-      if exceptions:
-        return {'info': 'You are trying to assign permissions that either do not exist or are out of your scope.', 'affects': exceptions}, 403
-
+      perms = PermissionUtils.assign(request, validated['permissions'])
       user.save()
       user.user_permissions.set(perms)
 
@@ -285,24 +267,7 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
       user.is_active = True
 
     if validated['permissions'] is not None:
-      base = Permission.objects.all()\
-                               .annotate(encoded=F('content_type__model') + '.' + F('codename'))\
-                               .filter(encoded__in=request.user.get_all_permissions())\
-                               .order_by('content_type__model')
-      exceptions = []
-      perms = []
-      for perm in validated['permissions']:
-        perm = perm.split('.')
-        p = base.filter(content_type__model=perm[0], codename=perm[1])
-
-        if not p:
-          exceptions.append('.'.join(perm))
-
-        perms.extend(p)
-
-      if exceptions:
-        return {'info': 'You are trying to assign permissions that either do not exist or are out of your scope.', 'affects': exceptions}, 403
-
+      perms = PermissionUtils.assign(request, validated['permissions'])
       user.user_permissions.set(perms)
       user.save()
 

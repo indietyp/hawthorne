@@ -69,8 +69,8 @@ def user_log_handler(sender, instance, raw, using, update_fields, **kwargs):
   if 'online' in changelog and '_server' in instance.__dict__.keys():
     for disconnect in UserConnection.objects.filter(user=instance,
                                                     server=instance._server,
-                                                    disconnected=None):
-      disconnect.disconnected = timezone.now()
+                                                    closed_at=None):
+      disconnect.closed_at = timezone.now()
       disconnect.save()
 
     if instance.online:

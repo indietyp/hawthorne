@@ -171,10 +171,10 @@ def detailed_overview(request, u, *args, **kwargs):
   with connection.cursor() as cursor:
     cursor.execute('''
       SELECT COUNT(DISTINCT `log_userconnection`.`user_id`) AS `connection`,
-             CAST(`log_userconnection`.`disconnected` AS DATE) `created_date`
+             CAST(`log_userconnection`.`closed_at` AS DATE) `created_date`
       FROM `log_userconnection`
       WHERE `log_userconnection`.`user_id` = %s
-        AND `log_userconnection`.`disconnected` IS NOT NULL
+        AND `log_userconnection`.`closed_at` IS NOT NULL
       GROUP BY `created_date`
       ORDER BY `created_date` DESC
       LIMIT 365;
@@ -187,8 +187,8 @@ def detailed_overview(request, u, *args, **kwargs):
     key = datetime.datetime(year=i[1].year, month=i[1].month, day=i[1].day)
     population[str(key.timestamp())] = i[0]
 
-  query = UserConnection.objects.filter(user=user, disconnected__isnull=False)\
-                                .annotate(time=ExpressionWrapper(F('disconnected') - F('connected'),
+  query = UserConnection.objects.filter(user=user, closed_at__isnull=False)\
+                                .annotate(time=ExpressionWrapper(F('closed_at') - F('created_at'),
                                                                  output_field=DurationField()))
 
   average = {'dataset': [], 'labels': []}
@@ -196,8 +196,8 @@ def detailed_overview(request, u, *args, **kwargs):
   year = today.year
   month = today.month
 
-  derived = query.annotate(month=ExtractMonth('disconnected'),
-                           year=ExtractYear('disconnected'))
+  derived = query.annotate(month=ExtractMonth('closed_at'),
+                           year=ExtractYear('closed_at'))
   for i in range(0, 12):
     year_modifier = 0
     scope = month - i

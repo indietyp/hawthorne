@@ -30,7 +30,8 @@ LOGGING = {
         },
         'database': {
             'level': 'INFO',
-            'class': 'automated_logging.handlers.DatabaseHandler'
+            'class': 'automated_logging.handlers.DatabaseHandler',
+            'maxage': 'P1W'
         },
     },
     'loggers': {
