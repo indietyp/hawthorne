@@ -19,6 +19,6 @@ def populate(strategy, details, backend, user=None, *args, **kwargs):
     if 'loccountrycode' in information and information['loccountrycode'] and not user.country:
       user.country = Country.objects.get_or_create(code=information['loccountrycode'].lower())[0]
 
-    user.avatar = information['avatar']
+    user.avatar = information['avatarfull']
     user.profile = information['profileurl']
     user.save()

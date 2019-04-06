@@ -7,7 +7,6 @@ cssselect
 natural
 dateparser
 django-automated-logging
-git+https://github.com/smiley/steamapi
 django-static-precompiler
 argon2-cffi
 django-redis-cache
