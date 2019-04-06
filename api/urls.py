@@ -40,10 +40,6 @@ urlpatterns = [
     path('system/logs', system.chat, name='system.chat'),
     path('system/sourcemod/verification', system.sourcemod_verification, name='system.sourcemod[verification]'),
 
-    # steam
-    path('steam/search', steam.search, name='steam.search'),
-    path('steam/search/<int:i>', steam.search, name='steam.search'),
-
     # different current capabilities of the system
     path('capabilities/games', capabilities.games, name='capabilities.games'),
     path('capabilities/permissions', capabilities.permissions, name='capabilities.permissions'),
