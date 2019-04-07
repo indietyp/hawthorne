@@ -21,6 +21,7 @@ Credits to ...
 #undef REQUIRE_PLUGIN
 #include <hextags>
 #include <smac>
+#include <adminmenu>
 #define REQUIRE_PLUGIN
 
 
@@ -37,6 +38,7 @@ Credits to ...
 #include "hawthorne/duplicate.sp"
 
 #include "hawthorne/utils/natives.sp"
+#include "hawthorne/utils/adminmenu.sp"
 #include "hawthorne/utils/events.sp"
 #include "hawthorne/utils/humanize.sp"
 #include "hawthorne/utils/steam.sp"
@@ -46,8 +48,8 @@ Credits to ...
 public Plugin myinfo = {
   name = "hawthorne",
   author = "indietyp",
-  description = "Admin plugin for the integration into the hawthorne gameserver panel, for managing multiple servers from an web interface.",
-  version = "0.9.1-alpha.2",
+  description = "SourceMod Hawthorne integration.",
+  version = "0.9.1-alpha.3",
   url = "hawthornepanel.org"
 };
 
@@ -70,10 +72,12 @@ public void OnPluginStart() {
   AddCommandListener(PunishCommandExecuted, "sm_gag");
   AddCommandListener(PunishCommandExecuted, "sm_ungag");
 
-  AddCommandListener(PunishCommandExecuted, "sm_silence");
-  AddCommandListener(PunishCommandExecuted, "sm_unsilence");
-
   CSetPrefix("%s ", PREFIX);
+
+  TopMenu admin_menu;
+    if (LibraryExists("adminmenu") && ((admin_menu = GetAdminTopMenu()) != null)) {
+      OnAdminMenuReady(admin_menu);
+    }
 
   Hawthorne_OnPluginStart();
 }
@@ -103,7 +107,7 @@ public void OnConfigsExecuted() {
   GetConVarString(APITOKEN, token, sizeof(token));
   StrCat(endpoint, sizeof(endpoint), "/api/v1");
 
-  LogMessage("Configured Endpoint: %s", endpoint);
+  LogMessage("Endpoint: %s", endpoint);
 
   httpClient = new HTTPClient(endpoint);
   httpClient.SetHeader("X-TOKEN", token);
@@ -126,26 +130,37 @@ public void APINoResponseCall(HTTPResponse response, any value) {
 
 bool APIValidator(HTTPResponse response) {
   if (response == INVALID_HANDLE) {
-    LogError("[HT] API ERROR (HTTP Handle invalid)");
-    return false;
-  }
-
-  if (response.Status != HTTPStatus_OK) {
-    LogError("[HT] API ERROR (request did not return 200 OK, but %d)", response.Status);
-    return false;
-  }
-
-  if (response.Data == null) {
-    LogError("[HT] API ERROR (no response data received)");
+    LogError("[API] response handle invalid");
     return false;
   }
 
   JSONObject data = view_as<JSONObject>(response.Data);
-  if (data.GetBool("success") == false) {
-    LogError("[HT] API ERROR (api call failed)");
-    return false;
+  bool failed = false;
+  char json[12288];
+
+  if (response.Status != HTTPStatus_OK) {
+    data.ToString(json, sizeof(json));
+    failed = true;
+
+    LogError("[API] request did not return 200 OK, but %d", response.Status);
+    LogError("[API] call returned: %s", json);
   }
 
+  if (response.Data == null) {
+    failed = true;
+
+    LogError("[API] no response data received");
+  }
+
+  if (data.GetBool("success") == false) {
+    data.ToString(json, sizeof(json));
+    failed = true;
+
+    LogError("[API] call failed");
+    LogError("[API] call returned: %s", json);
+  }
+
+  delete data;
   return true;
 }
 

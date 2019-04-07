@@ -31,7 +31,6 @@ public Action RConPunishment(int client, int args) {
     else if (StrContains(command, "unsilence") != -1) action = ACTION_UNSILENCE;
     else if (StrContains(command, "mute") != -1) action = ACTION_MUTE;
     else if (StrContains(command, "gag") != -1) action = ACTION_GAG;
-    else if (StrContains(command, "silence") != -1) action = ACTION_SILENCE;
 
     InitiatePunishment(target, action, reason, timeleft);
   }

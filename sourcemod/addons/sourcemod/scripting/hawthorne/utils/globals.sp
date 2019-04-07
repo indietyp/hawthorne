@@ -20,6 +20,8 @@
 
 HTTPClient httpClient;
 JSONArray message_queue;
+TopMenu ADMIN_MENU = null;
+TopMenuObject ADMIN_CATEGORY;
 
 char SERVER[37] = "",
      CLIENTS[MAXPLAYERS + 1][37],
