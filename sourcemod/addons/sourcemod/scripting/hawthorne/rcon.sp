@@ -1,6 +1,6 @@
 #pragma dynamic 524288
 
-void RConCommands_OnPluginStart() {
+void InitRcon() {
   RegAdminCmd("rcon_status",        RconStatus,       ADMFLAG_RCON);
   RegAdminCmd("rcon_message",       RConMessage,      ADMFLAG_RCON);
   RegAdminCmd("rcon_ban",           RConBanKick,      ADMFLAG_RCON);

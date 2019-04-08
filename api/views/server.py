@@ -4,13 +4,14 @@ import socket
 
 import valve.rcon
 
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 from core.decorators.api import json_response, validation
 from core.decorators.auth import authentication_required, permission_required
-from core.models import Server, User
+from core.models import Role, Server, User
 from lib.base import RCONBase
 from lib.sourcemod import SourcemodPluginWrapper
 
@@ -85,9 +86,15 @@ def detailed(request, validated={}, s=None, *args, **kwargs):
 
   if request.method == 'GET':
     status = SourcemodPluginWrapper(server).status()
+    roles = Role.objects.filter(Q(server=server) | Q(server__isnull=True))
 
     return {'adress': "{}:{}".format(server.ip, server.port),
             'name': server.name,
+            'protected': server.protected,
+            'game': server.game,
+            'mode': server.mode,
+            'vac': server.vac,
+            'roles': [r.id for r in roles],
             'status': status}
 
   elif request.method == 'POST':

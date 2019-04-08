@@ -75,11 +75,17 @@ public void OnPluginStart() {
   CSetPrefix("%s ", PREFIX);
 
   TopMenu admin_menu;
-    if (LibraryExists("adminmenu") && ((admin_menu = GetAdminTopMenu()) != null)) {
-      OnAdminMenuReady(admin_menu);
-    }
+  if (LibraryExists("adminmenu") && ((admin_menu = GetAdminTopMenu()) != null)) {
+    OnAdminMenuReady(admin_menu);
+  }
 
-  Hawthorne_OnPluginStart();
+  ROLES = CreateArray();
+  ADMINS = CreateArray();
+
+  InitConVars();
+  InitAdmins();
+  InitPunishments();
+  InitRcon();
 }
 
 public void OnConfigsExecuted() {

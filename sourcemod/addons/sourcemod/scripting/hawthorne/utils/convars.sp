@@ -1,4 +1,4 @@
-void Hawthorne_InitConVars() {
+void InitConVars() {
   MANAGER           = CreateConVar("ht_manager",
                                    "https://example.com",
                                    "management server address including port and protocol",

@@ -23,6 +23,8 @@ JSONArray message_queue;
 TopMenu ADMIN_MENU = null;
 TopMenuObject ADMIN_CATEGORY;
 
+ArrayList ROLES, ADMINS;
+
 char SERVER[37] = "",
      CLIENTS[MAXPLAYERS + 1][37],
      PUNISHMENTS[MAXPLAYERS + 1][37];

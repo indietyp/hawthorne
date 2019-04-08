@@ -1,6 +1,6 @@
 // add custom tag & formatting
 public void OnClientPostAdminFilter(int client) {
-  	AdminCheck(client);
+	AdminCheck(client);
 }
 
 public Action OnClientReloadAdmins(int client, int args) {
@@ -113,7 +113,7 @@ public Action AdminVerificationTimer(Handle timer, any userid) {
 
     admin_timer[client].Close();
     admin_timer[client] = null;
-    CPrintToChat(client, "%s Hey! Your role just got updated!", PREFIX);
+    CPrintToChat(client, "Hey! Your role just got updated!");
 
     return Plugin_Stop;
   }
@@ -129,4 +129,10 @@ void Admins_OnClientDisconnect(int client) {
 public void HexTags_OnTagsUpdated(int client) {
   HexTags_SetClientTag(client, ScoreTag, ht_tag[client]);
   HexTags_SetClientTag(client, ChatTag, ht_tag[client]);
+}
+
+
+void AdminPopulateCache(int client) {
+  // get all admins from cache (timeleft, roleid, userid [int])
+  // get all roles from cache (name, immunity, roleid [int])
 }

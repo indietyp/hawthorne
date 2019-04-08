@@ -1,4 +1,4 @@
-void Punishment_OnPluginStart() {
+void InitPunishments() {
   BuildPath(Path_SM, PUNISHMENT_TIMES,  sizeof(PUNISHMENT_TIMES),  "configs/hawthorne/punishments.txt");
   BuildPath(Path_SM, BAN_REASONS,       sizeof(BAN_REASONS),       "configs/hawthorne/reasons/ban.txt");
   BuildPath(Path_SM, GAG_REASONS,       sizeof(GAG_REASONS),       "configs/hawthorne/reasons/gag.txt");

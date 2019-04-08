@@ -1,9 +1,3 @@
-void Hawthorne_OnPluginStart() {
-  Hawthorne_InitConVars();
-  Punishment_OnPluginStart();
-  RConCommands_OnPluginStart();
-}
-
 public void OnMapStart() {
   // AutoBan_OnMapStart();
 }
