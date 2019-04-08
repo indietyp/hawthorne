@@ -88,7 +88,7 @@ def detailed(request, validated={}, s=None, *args, **kwargs):
     status = SourcemodPluginWrapper(server).status()
     roles = Role.objects.filter(Q(server=server) | Q(server__isnull=True))
 
-    return {'adress': "{}:{}".format(server.ip, server.port),
+    return {'address': "{}:{}".format(server.ip, server.port),
             'name': server.name,
             'protected': server.protected,
             'game': server.game,
