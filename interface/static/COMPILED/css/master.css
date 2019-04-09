@@ -1308,6 +1308,9 @@ form {
   margin-top: -40px;
   margin-bottom: 40px;
 }
+.chartContainer .chart.dashboard svg {
+  width: 80% !important;
+}
 .chartContainer .chart.minimal .line-vertical {
   display: none;
 }

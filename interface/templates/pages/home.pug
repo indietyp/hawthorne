@@ -41,7 +41,7 @@
       .info {% trans "The total amount of administrative actions executed in the last 7 days." %}
   h1 {% trans "Player Activity" %}
   .chartContainer
-    .chart.overview
+    .chart.overview.dashboard
     //- canvas.overviewChart
   script.execute.
     window.style.charts.heatmap('.chart.overview', {{population|safe}})
