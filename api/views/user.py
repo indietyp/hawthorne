@@ -181,6 +181,7 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
     if user.is_superuser:
       # fake root role
       output['roles'].append({'name': settings.ROOT,
+                              'id': None,
                               'server': None,
                               'flags': 'ABCDEFGHIJKLNMNOPQRSTUVXYZ'.lower(),
                               'immunity': 100,
@@ -201,6 +202,7 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
           continue
 
       output['roles'].append({'name': mem.role.name,
+                              'id': mem.role.id,
                               'server': None if not mem.role.server else mem.role.server.id,
                               'flags': mem.role.flags.convert().lower(),
                               'immunity': mem.role.immunity,

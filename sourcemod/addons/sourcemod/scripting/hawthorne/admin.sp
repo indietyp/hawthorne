@@ -132,7 +132,160 @@ public void HexTags_OnTagsUpdated(int client) {
 }
 
 
-void AdminPopulateCache(int client) {
-  // get all admins from cache (timeleft, roleid, userid [int])
-  // get all roles from cache (name, immunity, roleid [int])
+// get all admins from cache (timeleft, roleid, userid [int])
+// get all roles from cache (name, immunity, roleid [int])
+
+void AdminPopulateCache() {
+  if (!MODULE_ADMIN.BoolValue || StrEqual(SERVER, "")) return;
+  // get roles from /servers/
+  // save information
+  // get members from /roles/ (unique set)
+  // query timeleft of members
+  // add superuser role
+
+  char url[512];
+  Format(url, sizeof(url), "servers/%s", SERVER);
+
+  ROLES.Clear();
+  ADMINS.Clear();
+  ROLE_NAMES.Clear();
+
+  // superuser role
+  // get from api?
+
+  httpClient.Get(url, AdminPopulateCacheDetailed);
+}
+
+void AdminPopulateCacheDetailed(HTTPResponse response, any value) {
+  if (!APIValidator(response)) return;
+
+  JSONObject output = view_as<JSONObject>(response.Data);
+  JSONObject result = view_as<JSONObject>(output.Get("result"));
+  JSONArray roles = view_as<JSONArray>(result.Get("roles"));
+
+  char url[512], role[40];
+  roles.GetString(0, role, sizeof(role));
+  Format(url, sizeof(url), "roles/%s", role);
+
+  httpClient.Get(url, AdminPopulateCacheRoles, roles);
+
+  delete output;
+  delete result;
+  delete roles;
+}
+
+void AdminPopulateCacheRoles(HTTPResponse response, any value) {
+  JSONObject output = view_as<JSONObject>(response.Data);
+  JSONObject result = view_as<JSONObject>(output.Get("result"));
+  JSONArray members = view_as<JSONArray>(result.Get("members"));
+  JSONArray roles = value;
+  char role[40];
+
+  roles.GetString(0, role, sizeof(role));
+  roles.Remove(0);
+
+  char flags[20], name[512];
+  result.GetString("flags", flags, sizeof(flags));
+  result.GetString("name", name, sizeof(name));
+  int flagbits = ReadFlagString(flags);
+  int immunity = result.GetInt("immunity");
+  int uuid = UUIDToInt(role);
+  int nameid = ROLE_NAMES.Length;
+
+  int encoded = uuid;
+  encoded = encoded << 16;
+  encoded = encoded + nameid;
+  encoded = encoded << 32;
+  encoded = encoded + flagbits;
+  encoded = encoded << 8;
+  encoded = encoded + immunity;
+
+  ROLE_NAMES.PushString(name);
+  ROLES.Push(encoded);
+
+  for (int i = 0; i < members.Length; i++) {
+    char tmp[40];
+    members.GetString(i, tmp, sizeof(tmp));
+
+    bool present = false;
+    char tmp2[40];
+    for (int i; i < ADMINS_CLEAR.Length; i++) {
+      ADMINS_CLEAR.GetString(i, tmp2, sizeof(tmp2));
+
+      if (StrEqual(tmp, tmp2)) {
+        present = true;
+        break;
+      }
+    }
+
+    if (!present) {
+      ADMINS_CLEAR.PushString(tmp);
+    }
+  }
+
+  if (roles.Length == 0) {
+    char url[512], admin[40];
+    ADMINS_CLEAR.GetString(0, admin, sizeof(admin));
+    Format(url, sizeof(url), "users/%s?server=", admin, SERVER);
+
+    httpClient.Get(url, AdminPopulateCacheAdmins);
+
+    return;
+  }
+
+  char url[512], target[40];
+  roles.GetString(0, target, sizeof(target));
+  Format(url, sizeof(url), "roles/%s", target);
+
+  httpClient.Get(url, AdminPopulateCacheRoles, roles);
+
+  delete roles;
+  delete result;
+  delete output;
+  delete members;
+}
+
+void AdminPopulateCacheAdmins(HTTPResponse response, any value) {
+  JSONObject output = view_as<JSONObject>(response.Data);
+  JSONObject result = view_as<JSONObject>(output.Get("result"));
+  JSONArray roles = view_as<JSONArray>(result.Get("roles"));
+  JSONObject role = view_as<JSONObject>(roles.Get(0));
+
+  char id[40], roleraw[40];
+  result.GetString("id", id, sizeof(id));
+  role.GetString("id", roleraw, sizeof(roleraw));
+  int timeleft = role.GetInt("timeleft");
+  int uuid = UUIDToInt(id);
+  int roleuuid = UUIDToInt(roleraw);
+  int roleid;
+
+  for (int i = 0; i < ROLES.Length; i++) {
+    int comparison = ROLES.Get(i) >> 56;
+    if (roleuuid == comparison) {
+      roleid = i;
+      break;
+    }
+  }
+
+  int encoded = uuid;
+  encoded = encoded << 64;
+  encoded = encoded + timeleft;
+  encoded = encoded << 16;
+  encoded = encoded + roleid;
+  ADMINS.Push(encoded);
+
+  ADMINS_CLEAR.Erase(0);
+  if (ADMINS_CLEAR.Length == 0) return;
+  // when done apply on all users
+
+  char url[512], admin[40];
+  ADMINS_CLEAR.GetString(0, admin, sizeof(admin));
+  Format(url, sizeof(url), "users/%s?server=", admin, SERVER);
+
+  httpClient.Get(url, AdminPopulateCacheAdmins);
+
+  delete output;
+  delete result;
+  delete role;
+  delete roles;
 }

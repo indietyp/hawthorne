@@ -27,6 +27,7 @@ Credits to ...
 
 #include "hawthorne/utils/globals.sp"
 #include "hawthorne/utils/convars.sp"
+#include "hawthorne/utils/lib.sp"
 #include "hawthorne/server.sp"
 #include "hawthorne/player.sp"
 #include "hawthorne/chat.sp"
@@ -81,6 +82,8 @@ public void OnPluginStart() {
 
   ROLES = CreateArray();
   ADMINS = CreateArray();
+  ROLE_NAMES = CreateArray();
+  ADMINS_CLEAR = CreateArray();
 
   InitConVars();
   InitAdmins();
