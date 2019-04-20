@@ -86,9 +86,9 @@ public void OnPluginStart() {
   ADMINS_CLEAR = CreateArray();
 
   InitConVars();
-  InitAdmins();
-  InitPunishments();
   InitRcon();
+  InitPunishments();
+  AdminPopulateCache();
 }
 
 public void OnConfigsExecuted() {

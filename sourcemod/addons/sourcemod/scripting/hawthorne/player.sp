@@ -2,6 +2,7 @@ public void OnClientAuthorized(int client) {
   CLIENTS[client] = "";
 
   if (StrEqual(SERVER, "") || IsFakeClient(client) || client < 1) return;
+  AdminOnClientAuthorized(client);
 
   char steamid[20];
   GetClientAuthId(client, AuthId_SteamID64, steamid, sizeof(steamid));

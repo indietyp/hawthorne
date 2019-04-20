@@ -1,70 +1,66 @@
 // add custom tag & formatting
-public void OnClientPostAdminFilter(int client) {
-	AdminCheck(client);
+public void AdminOnClientAuthorized(int client) {
+  if (!MODULE_ADMIN.BoolValue || IsFakeClient(client)) return;
+
+  ApplyCachedAdminRole(client);
+}
+
+//public void OnClientPostAdminFilter(int client) {
+//	AdminCheck(client);
+//}
+
+public void OnRebuildAdminCache(AdminCachePart part) {
+  OnClientReloadAdmins(0, 0);
 }
 
 public Action OnClientReloadAdmins(int client, int args) {
   for (int i = 1; i < MaxClients; i++) {
-    AdminCheck(i);
+    ApplyCachedAdminRole(i);
   }
 
   return Plugin_Handled;
 }
 
-bool AdminCheck(int client) {
-  if (!MODULE_ADMIN.BoolValue || IsFakeClient(client) || StrEqual(SERVER, "")) return false;
+void ApplyCachedAdminRole(int client) {
+  char steamid[20];
+  GetClientAuthId(client, AuthId_SteamID64, steamid, sizeof(steamid));
 
-  char url[512] = "users/";
-  StrCat(url, sizeof(url), CLIENTS[client]);
-  StrCat(url, sizeof(url), "?server=");
-  StrCat(url, sizeof(url), SERVER);
+  int steam = StringToInt(steamid);
+  int reference = 0;
+  int duration, role, flags, immunity;
 
-  httpClient.Get(url, APIAdminCheck, client);
-  return true;
-}
+  for (int i = 0; i < ADMINS.Length; i++) {
+    reference = ADMINS.Get(i);
 
-void APIAdminCheck(HTTPResponse response, any value) {
-  int client = value;
+    if (reference >> 80 == steam) {
+      break;
+    }
+  }
 
-  if (!APIValidator(response)) return;
+  if (reference == 0) {
+    return;
+  }
+  duration = ((reference >> 8) & 0b1111111111111111111111111111111111111111111111111111111111111111);
+  role = ROLES.Get(reference & 0b1111111111111111);
 
-  JSONObject output = view_as<JSONObject>(response.Data);
-  JSONObject result = view_as<JSONObject>(output.Get("result"));
-  JSONArray roles = view_as<JSONArray>(result.Get("roles"));
+  immunity = role & 0b11111111;
+  flags = (role >> 8) & 0b11111111111111111111111111111111;
 
-  if (roles.Length < 1) return;
-
-  char flags[25];
-
-  JSONObject role = view_as<JSONObject>(roles.Get(0));
-  role.GetString("flags", flags, sizeof(flags));
-  role.GetString("name", ht_tag[client], sizeof(ht_tag[]));
-
-  int immunity = role.GetInt("immunity");
-  int timeleft = role.GetInt("timeleft");
-
-  delete output;
-  delete result;
-  delete roles;
-  delete role;
+  ROLE_NAMES.GetString((role >> 40) & 0b1111111111111111, ht_tag[client], sizeof(ht_tag[]));
 
   AdminId admin;
   if (MODULE_ADMIN_MERGE.BoolValue) {
-    SetUserFlagBits(client, GetUserFlagBits(client) | ReadFlagString(flags));
+    SetUserFlagBits(client, GetUserFlagBits(client) | flags);
     admin = GetUserAdmin(client);
     if (admin != INVALID_ADMIN_ID) {
       admin.ImmunityLevel = immunity;
     }
+
   } else {
     admin = CreateAdmin();
-    for (int i = 0; i < strlen(flags); i++) {
-      AdminFlag flag;
-      if (FindFlagByChar(flags[i], flag))
-        admin.SetFlag(flag, true);
-    }
-
     admin.ImmunityLevel = immunity;
     SetUserAdmin(client, admin, true);
+    SetUserFlagBits(client, flags);
   }
 
   if (MODULE_HEXTAGS.BoolValue && hextags) {
@@ -89,17 +85,18 @@ void APIAdminCheck(HTTPResponse response, any value) {
     }
 
     strcopy(ht_tag[client], sizeof(ht_tag[]), formatting);
+
     HexTags_SetClientTag(client, ScoreTag, ht_tag[client]);
     HexTags_SetClientTag(client, ChatTag, ht_tag[client]);
   }
 
   if (admin_timer[client] != null) return;
-  admin_timeleft[client] = timeleft;
+  admin_timeleft[client] = duration;
 
-  if (timeleft == 0) return;
+  if (duration == 0) return;
   admin_timer[client] = CreateTimer(60.0, AdminVerificationTimer, GetClientUserId(client), TIMER_REPEAT);
 
-  NotifyPostAdminCheck(client);
+  // NotifyPostAdminCheck(client);
 }
 
 public Action AdminVerificationTimer(Handle timer, any userid) {
@@ -109,7 +106,7 @@ public Action AdminVerificationTimer(Handle timer, any userid) {
 
   admin_timeleft[client] -= 60;
   if (admin_timeleft[client] <= 0) {
-    AdminCheck(client);
+    ApplyCachedAdminRole(client);
 
     admin_timer[client].Close();
     admin_timer[client] = null;
@@ -275,7 +272,10 @@ void AdminPopulateCacheAdmins(HTTPResponse response, any value) {
   ADMINS.Push(encoded);
 
   ADMINS_CLEAR.Erase(0);
-  if (ADMINS_CLEAR.Length == 0) return;
+  if (ADMINS_CLEAR.Length == 0) {
+    OnClientReloadAdmins(0, 0);
+    return;
+  }
   // when done apply on all users
 
   char url[512], admin[40];
