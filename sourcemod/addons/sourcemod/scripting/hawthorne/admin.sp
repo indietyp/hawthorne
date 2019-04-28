@@ -15,7 +15,7 @@ public void OnRebuildAdminCache(AdminCachePart part) {
 
 public Action OnClientReloadAdmins(int client, int args) {
   for (int i = 1; i < MaxClients; i++) {
-    ApplyCachedAdminRole(i);
+    if (IsClientInGame(i)) ApplyCachedAdminRole(i);
   }
 
   return Plugin_Handled;
@@ -147,6 +147,7 @@ void AdminPopulateCache() {
   ADMINS.Clear();
   ROLE_NAMES.Clear();
 
+  // TODO:
   // superuser role
   // get from api?
 

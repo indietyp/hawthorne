@@ -6,7 +6,7 @@ void GetServerUUID() {
   Handle net_public_address = FindConVar("net_public_adr");
 
   if (host_ip == INVALID_HANDLE || host_port == INVALID_HANDLE) {
-    LogError("[hawthorne] Failed to get the ip or port of the server, please fix the convars hostip and hostport");
+    LogError("[HT] Failed to get the ip or port of the server, please fix the convars hostip and hostport");
     return;
   }
 
@@ -43,12 +43,13 @@ void APIGetServerUUID(HTTPResponse response, any value) {
   JSONArray data = view_as<JSONArray>(output.Get("result"));
 
   if (data.Length == 0) {
-    LogError("[hawthorne] Failed to find the server. It seems not to exist. Please check the webpage.");
+    LogError("[HT] Failed to find the server. It seems not to exist. Please check the webpage.");
     return;
   }
 
   JSONObject result = view_as<JSONObject>(data.Get(0));
   result.GetString("id", SERVER, sizeof(SERVER));
+  AdminPopulateCache();
 
   delete data;
   delete result;

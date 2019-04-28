@@ -1,4 +1,5 @@
-public void OnClientAuthorized(int client) {
+public void OnClientAuthorized(int client, const char[] auth) {
+  if (StrEqual(auth, "BOT")) return;
   CLIENTS[client] = "";
 
   if (StrEqual(SERVER, "") || IsFakeClient(client) || client < 1) return;

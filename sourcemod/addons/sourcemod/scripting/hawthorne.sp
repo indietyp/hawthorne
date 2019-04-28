@@ -88,7 +88,6 @@ public void OnPluginStart() {
   InitConVars();
   InitRcon();
   InitPunishments();
-  AdminPopulateCache();
 }
 
 public void OnConfigsExecuted() {

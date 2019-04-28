@@ -20,8 +20,8 @@
             select.skip#select-available(multiple, style='height:250px')
               each permission in permissions
                 if permission.content_type.app_label in excluded
-                  option(value="{{permission.content_type.model|add:'.'|add:permission.codename}}")
-                    = permission.content_type.model.title
+                  option(value="{{permission.content_type.app_label|add:'.'|add:permission.codename}}")
+                    = permission.content_type.app_label.title
                     |  |
                     = permission.name.title
             a(href='javascript:void(0)') {% trans "Select All" %}
@@ -33,7 +33,7 @@
             select#select-selected(multiple, style='height:250px', name='permissions')
               each permission in permissions
                 if permission.content_type.app_label not in excluded
-                  option.hidden(checked, disabled, value="{{permission.content_type.model|add:'.'|add:permission.codename}}")
+                  option.hidden(checked, disabled, value="{{permission.content_type.app_label|add:'.'|add:permission.codename}}")
             a(href='javascript:void(0)') {% trans "Select All" %}
 
         b.mtop.mbotSmall

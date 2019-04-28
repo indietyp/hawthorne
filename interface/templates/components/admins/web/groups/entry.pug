@@ -26,8 +26,8 @@ each item in data
               select.skip(multiple, style='height:250px', id="select-available-{{item.id}}")
                 each permission in permissions
                   if permission not in perms
-                    option(value="{{permission.content_type.model|add:'.'|add:permission.codename}}", class="{%if permission.content_type.app_label not in excluded%}hidden{%endif%}")
-                      = permission.content_type.model.title
+                    option(value="{{permission.content_type.app_label|add:'.'|add:permission.codename}}", class="{%if permission.content_type.app_label not in excluded%}hidden{%endif%}")
+                      = permission.content_type.app_label.title
                       |  |
                       = permission.name.title
               a(href='javascript:void(0)') Select All
@@ -39,8 +39,8 @@ each item in data
               select(multiple, style='height:250px', name='permissions', id='select-selected-{{item.id}}')
                 each permission in permissions
                   if permission in perms
-                    option(value="{{permission.content_type.model|add:'.'|add:permission.codename}}", class="{%if permission.content_type.app_label not in excluded%}hidden{%endif%}")
-                      = permission.content_type.model.title
+                    option(value="{{permission.content_type.app_label|add:'.'|add:permission.codename}}", class="{%if permission.content_type.app_label not in excluded%}hidden{%endif%}")
+                      = permission.content_type.app_label.title
                       |  |
                       = permission.name.title
               a(href='javascript:void(0)') Select All
