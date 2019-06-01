@@ -279,8 +279,6 @@ install() {
               UPDATE user SET password=PASSWORD('${PASSWORD}') WHERE User='root';
               UPDATE user SET plugin='mysql_native_password';
               FLUSH PRIVILEGES;
-
-              exit;
             " | mysql -uroot
           elif hash yum >/dev/null 2>&1; then
             yum -y install mariadb-server expect
@@ -339,11 +337,11 @@ install() {
   {
     if hash apt >/dev/null 2>&1; then
       apt update
-      apt install -y libmysqlclient-dev || {
-        apt install -y default-libmysqlclient-dev
+      apt install -y libmariadbclient-dev || {
+        apt install -y default-libmariadbclient-dev
       }
 
-      apt install -y --force-yes --fix-missing python3 python3-dev python3-pip libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mysql-client build-essential curl bash
+      apt install -y --force-yes --fix-missing python3 python3-dev python3-pip libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mariadb-client build-essential curl bash
 
       if [ $redis -eq 1 ]; then
         apt install -y redis-server
