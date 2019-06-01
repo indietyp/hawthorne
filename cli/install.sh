@@ -365,7 +365,7 @@ install() {
       yum -y update
       curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -
 
-      yum -y install supervisor mysql mysql-devel MariaDB-shared mysql-lib libxml2-devel libffi-devel libxslt-devel openssl-devel nodejs
+      yum -y install supervisor MariaDB MariaDB-devel MariaDB-shared MariaDB-lib libxml2-devel libffi-devel libxslt-devel openssl-devel nodejs
 
       if [ $redis -eq 1 ]; then
         yum -y install redis
