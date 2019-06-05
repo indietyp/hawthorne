@@ -337,9 +337,7 @@ install() {
   {
     if hash apt >/dev/null 2>&1; then
       apt update
-      apt install -y libmariadbclient-dev || {
-        apt install -y default-libmariadbclient-dev
-      }
+      apt install -y libmariadb-dev
       ln -s /usr/bin/mariadb_config /usr/bin/mysql_config
 
       apt install -y --force-yes --fix-missing python3 python3-dev python3-pip libxml2-dev libxslt1-dev libssl-dev libffi-dev git supervisor mariadb-client build-essential curl bash
