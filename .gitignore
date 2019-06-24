@@ -109,7 +109,7 @@ mainframe.ini
 
 *.plist
 *.rdb
-.idea/
+.idea
 .ignore/
 
 todo
