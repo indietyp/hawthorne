@@ -111,7 +111,7 @@ def validation(a):
         try:
           document.update(parser(data) if data else {})
         except Exception as e:
-          'Failed parsing payload ({})'.format(e), 512
+          return 'Failed parsing payload ({})'.format(e), 512
 
       converted = {}
       for k, v in schema['parameters'].items():

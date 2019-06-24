@@ -5,9 +5,12 @@ public int HexToInt(const char[] hex) {
 
   for (int i = 0; i < length; i++) {
     character = hex[i];
-    LogMessage("%i", character);
+    character -= 48;
+    
+    if (character > 9)
+      character -= 7;
 
-    result = result + (character * Pow(16, exponent));
+    result += (character * RoundFloat(Pow(16.0, float(exponent))));
     exponent--;
   }
 

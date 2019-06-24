@@ -26,27 +26,29 @@ void ApplyCachedAdminRole(int client) {
   GetClientAuthId(client, AuthId_SteamID64, steamid, sizeof(steamid));
 
   int steam = StringToInt(steamid);
-  int reference = 0;
-  int duration, role, flags, immunity;
+  int duration, role[4], flags, immunity;
+	int reference[3] = {0, 0, 0};
 
   for (int i = 0; i < ADMINS.Length; i++) {
-    reference = ADMINS.Get(i);
+    ADMINS.GetArray(i, reference, sizeof(reference));
 
-    if (reference >> 80 == steam) {
+    LogMessage("%i: %i", reference[0], steam);
+    if (reference[0] == steam) {
+    	LogMessage("found user");
       break;
     }
   }
 
-  if (reference == 0) {
+  if (reference[0] == 0)
     return;
-  }
-  duration = ((reference >> 8) & 0b1111111111111111111111111111111111111111111111111111111111111111);
-  role = ROLES.Get(reference & 0b1111111111111111);
+  
+  duration = reference[1];
+  ROLES.GetArray(reference[2], role, sizeof(role));
 
-  immunity = role & 0b11111111;
-  flags = (role >> 8) & 0b11111111111111111111111111111111;
+  flags = role[2];
+  immunity = role[3];
 
-  ROLE_NAMES.GetString((role >> 40) & 0b1111111111111111, ht_tag[client], sizeof(ht_tag[]));
+  ROLE_NAMES.GetString(role[1], ht_tag[client], sizeof(ht_tag[]));
 
   AdminId admin;
   if (MODULE_ADMIN_MERGE.BoolValue) {
@@ -96,6 +98,7 @@ void ApplyCachedAdminRole(int client) {
   if (duration == 0) return;
   admin_timer[client] = CreateTimer(60.0, AdminVerificationTimer, GetClientUserId(client), TIMER_REPEAT);
 
+  LogMessage("Done Chief!");
   // NotifyPostAdminCheck(client);
 }
 
@@ -149,7 +152,6 @@ void AdminPopulateCache() {
 
   // TODO:
   // superuser role
-  // get from api?
 
   httpClient.Get(url, AdminPopulateCacheDetailed);
 }
@@ -169,7 +171,6 @@ void AdminPopulateCacheDetailed(HTTPResponse response, any value) {
 
   delete output;
   delete result;
-  delete roles;
 }
 
 void AdminPopulateCacheRoles(HTTPResponse response, any value) {
@@ -190,16 +191,14 @@ void AdminPopulateCacheRoles(HTTPResponse response, any value) {
   int uuid = UUIDToInt(role);
   int nameid = ROLE_NAMES.Length;
 
-  int encoded = uuid;
-  encoded = encoded << 16;
-  encoded = encoded + nameid;
-  encoded = encoded << 32;
-  encoded = encoded + flagbits;
-  encoded = encoded << 8;
-  encoded = encoded + immunity;
+  int encoded[4];
+  encoded[0] = uuid;
+  encoded[1] = nameid;
+  encoded[2] = flagbits;
+  encoded[3] = immunity;
 
   ROLE_NAMES.PushString(name);
-  ROLES.Push(encoded);
+  ROLES.PushArray(encoded, sizeof(encoded));
 
   for (int i = 0; i < members.Length; i++) {
     char tmp[40];
@@ -216,15 +215,15 @@ void AdminPopulateCacheRoles(HTTPResponse response, any value) {
       }
     }
 
-    if (!present) {
+    if (!present)
       ADMINS_CLEAR.PushString(tmp);
-    }
   }
 
   if (roles.Length == 0) {
     char url[512], admin[40];
     ADMINS_CLEAR.GetString(0, admin, sizeof(admin));
-    Format(url, sizeof(url), "users/%s?server=", admin, SERVER);
+    
+    Format(url, sizeof(url), "users/%s?server=%s", admin, SERVER);
 
     httpClient.Get(url, AdminPopulateCacheAdmins);
 
@@ -246,8 +245,8 @@ void AdminPopulateCacheRoles(HTTPResponse response, any value) {
 void AdminPopulateCacheAdmins(HTTPResponse response, any value) {
   JSONObject output = view_as<JSONObject>(response.Data);
   JSONObject result = view_as<JSONObject>(output.Get("result"));
-  JSONArray roles = view_as<JSONArray>(result.Get("roles"));
-  JSONObject role = view_as<JSONObject>(roles.Get(0));
+  JSONArray admin_roles = view_as<JSONArray>(result.Get("roles"));
+  JSONObject role = view_as<JSONObject>(admin_roles.Get(0));
 
   char id[40], roleraw[40];
   result.GetString("id", id, sizeof(id));
@@ -265,12 +264,11 @@ void AdminPopulateCacheAdmins(HTTPResponse response, any value) {
     }
   }
 
-  int encoded = uuid;
-  encoded = encoded << 64;
-  encoded = encoded + timeleft;
-  encoded = encoded << 16;
-  encoded = encoded + roleid;
-  ADMINS.Push(encoded);
+  int encoded[3];
+  encoded[0] = uuid;
+  encoded[1] = timeleft;
+  encoded[2] = roleid;
+  ADMINS.PushArray(encoded);
 
   ADMINS_CLEAR.Erase(0);
   if (ADMINS_CLEAR.Length == 0) {
@@ -288,5 +286,5 @@ void AdminPopulateCacheAdmins(HTTPResponse response, any value) {
   delete output;
   delete result;
   delete role;
-  delete roles;
+  delete admin_roles;
 }

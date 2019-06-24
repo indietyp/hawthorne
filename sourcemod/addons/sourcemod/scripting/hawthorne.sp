@@ -82,8 +82,8 @@ public void OnPluginStart() {
 
   ROLES = CreateArray();
   ADMINS = CreateArray();
-  ROLE_NAMES = CreateArray();
-  ADMINS_CLEAR = CreateArray();
+  ROLE_NAMES = CreateArray(64);
+  ADMINS_CLEAR = CreateArray(37);
 
   InitConVars();
   InitRcon();
@@ -168,8 +168,8 @@ bool APIValidator(HTTPResponse response) {
     LogError("[API] call returned: %s", json);
   }
 
-  delete data;
-  return true;
+  //delete data;
+  return !failed;
 }
 
 Action CLINoActionCommand(int client, int args) {

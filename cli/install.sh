@@ -19,6 +19,7 @@ stapi=""
 admin=""
 user=""
 conn=""
+distro="$(cat /etc/os-release | grep '^ID=' | head -n 1 | sed -nE 's/^ID=(\")?([^\"]*?)(\")?/\2/p')"
 
 # yum package installation
 {

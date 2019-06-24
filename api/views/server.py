@@ -88,13 +88,14 @@ def detailed(request, validated={}, s=None, *args, **kwargs):
     status = SourcemodPluginWrapper(server).status()
     roles = Role.objects.filter(Q(server=server) | Q(server__isnull=True))
 
+    # 00000000-0000-0000-0000-000000000000 is the superuser role
     return {'address': "{}:{}".format(server.ip, server.port),
             'name': server.name,
             'protected': server.protected,
             'game': server.game,
             'mode': server.mode,
             'vac': server.vac,
-            'roles': [r.id for r in roles],
+            'roles': ["00000000-0000-0000-0000-000000000000", *[r.id for r in roles]],
             'status': status}
 
   elif request.method == 'POST':

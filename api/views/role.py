@@ -1,8 +1,10 @@
 """API interface for server roles"""
 
+import string
 import datetime
 
 from django.forms.models import model_to_dict
+from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
@@ -68,12 +70,27 @@ def list(request, validated={}, *args, **kwargs):
 @validation
 @require_http_methods(['GET', 'POST', 'DELETE'])
 def detailed(request, r=None, validated={}, *args, **kwargs):
-  role = Role.objects.get(id=r)
+  if str(r) == "00000000-0000-0000-0000-000000000000" and request.method == 'GET':
+    role = None
+  else:
+    role = Role.objects.get(id=r)
 
   if request.method == 'GET':
-    r = model_to_dict(role)
-    r['members'] = [str(a.id) for a in role.user_set.all()]
-    r['flags'] = role.flags.convert()
+    if role:
+      r = model_to_dict(role)
+      r['members'] = [str(a.id) for a in role.user_set.all()]
+      r['flags'] = role.flags.convert()
+    else:
+      r = {
+        'name': settings.ROOT,
+        'flags': string.ascii_lowercase,
+        'server': None,
+        'tag': None,
+        'immunity': 100,
+        'usetime': None,
+        'is_supergroup': True,
+        'members': [u.id for u in User.objects.filter(is_superuser=True)]
+      }
 
     return r
 

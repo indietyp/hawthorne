@@ -23,7 +23,7 @@ public Action RConPunishment(int client, int args) {
     GetCmdArg(3, raw_timeleft, sizeof(raw_timeleft));
     GetCmdArg(4, reason, sizeof(reason));
 
-    int timeleft  = StringToInt(raw_timeleft);
+    int timeleft = StringToInt(raw_timeleft);
     int action;
 
     if (StrContains(command, "unmute") != -1) action = ACTION_UNMUTE;
