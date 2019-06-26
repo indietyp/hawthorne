@@ -3,7 +3,6 @@ public void OnClientAuthorized(int client, const char[] auth) {
   CLIENTS[client] = "";
 
   if (StrEqual(SERVER, "") || IsFakeClient(client) || client < 1) return;
-  AdminOnClientAuthorized(client);
 
   char steamid[20];
   GetClientAuthId(client, AuthId_SteamID64, steamid, sizeof(steamid));
@@ -54,6 +53,7 @@ void OnClientIsInAPI(HTTPResponse response, any value) {
   result.GetString("id", CLIENTS[client], sizeof(CLIENTS[]));
 
   OnClientIDReceived(client);
+  AdminOnClientAuthorized(client);
 
   Format(url, sizeof(url), "users/%s/punishments?resolved=true", CLIENTS[client]);
   httpClient.Get(url, AdminPunishmentNotify, client);
@@ -88,8 +88,8 @@ void AdminPunishmentNotify(HTTPResponse response, any value) {
 
   char name[512];
   GetClientName(client, name, sizeof(name));
-  for (int i = 0; i <= MaxClients; i++) {
-    if (GetUserFlagBits(i) & ADMFLAG_GENERIC) {
+  for (int i = 1; i <= MaxClients; i++) {
+    if (IsClientInGame(i) && GetUserFlagBits(i) & ADMFLAG_GENERIC) {
       CPrintToChat(i, "{red}%s{default} just connected.");
       if (ban != 0) CPrintToChat(i, "This user was previously banned {blue}%i{default} times.", ban);
       if (mute != 0) CPrintToChat(i, "This user was previously muted {blue}%i{default} times.", mute);

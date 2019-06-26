@@ -181,9 +181,9 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
     if user.is_superuser:
       # fake root role
       output['roles'].append({'name': settings.ROOT,
-                              'id': None,
+                              'id': "00000000-0000-0000-0000-000000000000",
                               'server': None,
-                              'flags': 'ABCDEFGHIJKLNMNOPQRSTUVXYZ'.lower(),
+                              'flags': 'Z'.lower(),
                               'immunity': 100,
                               'usetime': None,
                               'timeleft': None
@@ -197,7 +197,7 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
         timeleft = (mem.created_at + usetime) - timezone.now()
         usetime = usetime.total_seconds()
 
-        if timeleft < 0:
+        if timeleft.total_seconds() < 0:
           mem.delete()
           continue
 

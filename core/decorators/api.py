@@ -98,6 +98,7 @@ def validation(a):
               data += split[i]
 
         meta = request.META['CONTENT_TYPE']
+
         data = data.decode()
         parser = None
 

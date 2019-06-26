@@ -80,8 +80,8 @@ public void OnPluginStart() {
     OnAdminMenuReady(admin_menu);
   }
 
-  ROLES = CreateArray();
-  ADMINS = CreateArray();
+  ROLES = CreateArray(4);
+  ADMINS = CreateArray(3);
   ROLE_NAMES = CreateArray(64);
   ADMINS_CLEAR = CreateArray(37);
 
@@ -119,6 +119,7 @@ public void OnConfigsExecuted() {
 
   httpClient = new HTTPClient(endpoint);
   httpClient.SetHeader("X-TOKEN", token);
+  httpClient.SetHeader("Transfer-Encoding", "identity");
   httpClient.FollowLocation = true;
 
   message_queue = new JSONArray();

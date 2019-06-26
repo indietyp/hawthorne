@@ -83,7 +83,7 @@ def detailed(request, r=None, validated={}, *args, **kwargs):
     else:
       r = {
         'name': settings.ROOT,
-        'flags': string.ascii_lowercase,
+        'flags': 'Z',
         'server': None,
         'tag': None,
         'immunity': 100,
