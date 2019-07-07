@@ -21,10 +21,26 @@ user=""
 conn=""
 distro="$(cat /etc/os-release | grep '^ID=' | head -n 1 | sed -nE 's/^ID=(\")?([^\"]*?)(\")?/\2/p')"
 
-# yum package installation
+# additional package installation
 {
   if hash apt >/dev/null 2>&1; then
     apt update
+    if [ "$(apt-cache show mariadb-server | grep Version | head -n 1 | sed -nE 's/.*\:([0-9]+\.[0-9]+).*/\1/p')" != "10.3" ]; then
+      apt install software-properties-common dirmngr
+      apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
+      touch /etc/apt/sources.list.d/mariadb.list
+
+      echo "# MariaDB 10.3" >> /etc/apt/sources.list.d/mariadb.list
+
+      distro="$(lsb_release -i | cut -f2 | tr '[[:upper:]]' '[[:lower:]]')"
+      codename="$(lsb_release -c | cut -f2 | tr '[[:upper:]]' '[[:lower:]]')"
+
+      echo "deb [arch=amd64,i386,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/$distro $codename main" >> /etc/apt/sources.list.d/mariadb.list
+      echo "deb-src http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/$distro $codename main" >> /etc/apt/sources.list.d/mariadb.list
+
+      apt update
+    fi
+
     apt install -y lsof
   elif hash yum >/dev/null 2>&1; then
     yum -y update
