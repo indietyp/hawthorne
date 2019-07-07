@@ -56,15 +56,17 @@ def user_log_handler(sender, instance, raw, using, update_fields, **kwargs):
   if namespaces.count() > 1:
     namespaces.delete()
 
-  namespace, created = UserNamespace.objects.get_or_create(user=instance,
-                                                           namespace=instance.namespace)
+  namespace, ip = None, None
+  if instance.namespace:
+    namespace, created = UserNamespace.objects.get_or_create(user=instance,
+                                                             namespace=instance.namespace)
 
   try:
     ip, created = UserIP.objects.get_or_create(user=instance, ip=instance.ip)
     ip.is_active = True
-    iplog = True
+    ip_logged = True
   except Exception:
-    iplog = False
+    ip_logged = False
 
   if 'online' in changelog and '_server' in instance.__dict__.keys():
     for disconnect in UserConnection.objects.filter(user=instance,
@@ -77,13 +79,15 @@ def user_log_handler(sender, instance, raw, using, update_fields, **kwargs):
       online = UserConnection(user=instance, server=instance._server)
       online.save()
 
-      if iplog:
+      if ip_logged and ip:
         ip.connections += 1
-      namespace.connections += 1
+
+      if namespace:
+        namespace.connections += 1
 
   namespace.save()
 
-  if iplog:
+  if ip_logged:
     ip.save()
 
 

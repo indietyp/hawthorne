@@ -11,7 +11,7 @@ validation = {
                                    'kicked': {'type': 'boolean', 'nullable': True, 'default': None},
                                    'muted': {'type': 'boolean', 'nullable': True, 'default': None},
                                    'gagged': {'type': 'boolean', 'nullable': True, 'default': None},
-                                   'ip': {'type': 'boolean', 'nullable': True, 'default': None}},
+                                   'ip': {'type': 'ip', 'nullable': True, 'default': None}},
                     'permission': ['core.view_user']},
             'PUT': {'parameters': {'steamid': {'type': 'integer', 'min': 76561197960265729, 'max': 76561202255233023, 'excludes': ['id']},
                                    'id': {'type': 'uuid', 'excludes': ['steamid']},

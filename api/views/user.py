@@ -63,6 +63,9 @@ def list(request, validated=[], *args, **kwargs):
     if validated['role']:
       selected = selected.filter(role__id=validated['role'])
 
+    if validated['ip']:
+      selected = selected.filter(userip__ip=validated['ip'])
+
     output = []
     selected = selected.values('id', 'name', 'steamid', 'profile', 'is_internal',
                                'is_banned', 'is_gagged', 'is_muted')
