@@ -26,7 +26,7 @@ distro="$(cat /etc/os-release | grep '^ID=' | head -n 1 | sed -nE 's/^ID=(\")?([
   if hash apt >/dev/null 2>&1; then
     apt update
     if [ "$(apt-cache show mariadb-server | grep Version | head -n 1 | sed -nE 's/.*\:([0-9]+\.[0-9]+).*/\1/p')" != "10.3" ]; then
-      apt install software-properties-common dirmngr
+      apt install -y software-properties-common dirmngr
       apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
       touch /etc/apt/sources.list.d/mariadb.list
 
