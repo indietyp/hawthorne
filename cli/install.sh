@@ -397,7 +397,6 @@ install() {
       ln -nsf /usr/local/bin/python3 /usr/bin/python3
       ln -nsf /usr/local/bin/pip3 /usr/bin/pip3
 
-      echo "$(which mariadb)"
       alias mysql="$(which mariadb)"
 
       /usr/sbin/setsebool -P httpd_can_network_connect 1
@@ -409,6 +408,7 @@ install() {
       exit 1
     fi
   } >> install.log 2>&1
+  echo "$(which mariadb)"
 
   dnoti "Getting the codebase from the internet" "[03/09] Cloning Repository"
   {
