@@ -19,7 +19,6 @@ void OnClientIDReceived(int client) {
 
 public void OnClientPutInServer(int client) {
   Punishment_OnClientPutInServer(client);
-  Duplicate_OnClientPutInServer(client);
 }
 
 public Action Event_Disconnect(Event event, const char[] name, bool dontBroadcast) {

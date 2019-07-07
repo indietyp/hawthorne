@@ -54,6 +54,7 @@ void OnClientIsInAPI(HTTPResponse response, any value) {
 
   OnClientIDReceived(client);
   AdminOnClientAuthorized(client);
+  DuplicateOnClientAuthorized(client);
 
   Format(url, sizeof(url), "users/%s/punishments?resolved=true", CLIENTS[client]);
   httpClient.Get(url, AdminPunishmentNotify, client);
@@ -101,3 +102,31 @@ void AdminPunishmentNotify(HTTPResponse response, any value) {
   delete output;
   delete result;
 }
+
+void DuplicateOnClientAuthorized(client) {
+  if (!MODULE_DUPLICATE.BoolValue) return;
+
+  char url[512], ip[24];
+
+  GetClientIP(client, ip, sizeof(ip));
+  Format(url, sizeof(url), "users?banned=true&ip=%s", ip);
+
+  httpClient.Get(url, DuplicateOnClientAPI, client);
+}
+
+void DuplicateOnClientAPI(HTTPResponse response, int client) {
+  if (!APIValidator(response)) return;
+
+  JSONObject output = view_as<JSONObject>(response.Data);
+  JSONArray result = view_as<JSONArray>(output.Get("result"));
+
+  if (result.Length == 0) return;
+
+  selected_duration[client] = 0;
+  selected_player[client] = GetClientOfUserId(client);
+  selected_action[client] = ACTION_BAN;
+  selected_reason[client] = "[HT] Ban Evasion Detected";
+
+  PunishExecution(client);
+}
+
