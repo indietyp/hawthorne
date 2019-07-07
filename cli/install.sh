@@ -409,6 +409,7 @@ install() {
     fi
   } >> install.log 2>&1
   echo "$(which mariadb)"
+  echo "$(which mysql)"
 
   dnoti "Getting the codebase from the internet" "[03/09] Cloning Repository"
   {
