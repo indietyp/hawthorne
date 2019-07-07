@@ -397,6 +397,7 @@ install() {
       ln -nsf /usr/local/bin/python3 /usr/bin/python3
       ln -nsf /usr/local/bin/pip3 /usr/bin/pip3
 
+      echo "$(which mariadb)"
       alias mysql="$(which mariadb)"
 
       /usr/sbin/setsebool -P httpd_can_network_connect 1
