@@ -1,6 +1,5 @@
 """API interface for server roles"""
 
-import string
 import datetime
 
 from django.forms.models import model_to_dict
@@ -11,6 +10,8 @@ from django.views.decorators.http import require_http_methods
 from core.decorators.api import json_response, validation
 from core.decorators.auth import authentication_required, permission_required
 from core.models import User, Server, Role, ServerPermission, Membership
+
+from lib.api import PropagationUtils
 
 
 @csrf_exempt
@@ -57,8 +58,8 @@ def list(request, validated={}, *args, **kwargs):
     for u in users:
       m = Membership(user=u, role=role)
       m.save()
-    # role.user_set.set(users)
-    # role.save()
+
+    PropagationUtils.announce_rebuild(role)
 
     return 'passed'
 
@@ -128,4 +129,5 @@ def detailed(request, r=None, validated={}, *args, **kwargs):
   elif request.method == 'DELETE':
     role.delete()
 
+  PropagationUtils.announce_rebuild(role)
   return 'passed'

@@ -13,7 +13,7 @@ from core.decorators.api import json_response, validation
 from core.decorators.auth import authentication_required, permission_required
 from core.lib.steam import populate as steam_populate
 from core.models import Country, Membership, Punishment, Role, Server, User
-from lib.api import PermissionUtils
+from lib.api import PermissionUtils, PropagationUtils
 from lib.mainframe import Mainframe
 from lib.sourcemod import SourcemodPluginWrapper
 
@@ -24,7 +24,10 @@ from lib.sourcemod import SourcemodPluginWrapper
 @permission_required
 @validation
 @require_http_methods(['GET', 'PUT'])
-def list(request, validated=[], *args, **kwargs):
+def list(request, validated=None, *args, **kwargs):
+  if validated is None:
+    validated = []
+
   if request.method == 'GET':
     limit = validated['limit']
     offset = validated['offset']
@@ -247,6 +250,8 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
         m = Membership.objects.get(user=user, role=group)
         m.delete()
 
+      PropagationUtils.announce_rebuild(m.role)
+
     if validated['group'] is not None:
       group = Group.objects.get(id=validated['group'])
 
@@ -264,6 +269,8 @@ def detailed(request, u=None, s=None, validated={}, *args, **kwargs):
         m.user = user
         m.role = group
         m.save()
+
+        PropagationUtils.announce_rebuild(m.role)
 
     if validated['groups']:
       groups = Group.objects.filter(id__in=validated['groups'])

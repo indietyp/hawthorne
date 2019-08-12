@@ -1,3 +1,6 @@
+import redis
+
+from django.conf import settings
 from django.contrib.auth.models import Permission
 from django.db.models import F
 
@@ -32,3 +35,13 @@ class PermissionUtils:
                                     'cannot assign them.').format(','.join(exceptions)))
 
     return perms
+
+
+class PropagationUtils:
+
+  @classmethod
+  def announce_rebuild(cls, role):
+    cache = redis.Redis.from_url(settings.INTERMEDIATE_BROKER_URL)
+    servers = [role.server.id] if role.server else [x for x in Server.objects.all()]
+    for server in servers:
+      cache.incr('ht-srv-{}'.format(server.id), 1)

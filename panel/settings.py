@@ -174,5 +174,11 @@ CELERY_BEAT_SCHEDULE = {
     'rcon-server': {
         'task': 'core.tasks.rcon.wrapper',
         'schedule': RCON_TASK_SCHEDULE,
+    },
+    'admin-server': {
+        'task': 'core.tasks.server.propagate',
+        'schedule': RCON_TASK_SCHEDULE,
     }
 }
+
+INTERMEDIATE_BROKER_URL = 'redis://{}/3'.format(REDISCACHE)

@@ -6,7 +6,12 @@ void InitRcon() {
   RegAdminCmd("rcon_ban",           RConBanKick,      ADMFLAG_RCON);
   RegAdminCmd("rcon_mutegag",       RConPunishment,   ADMFLAG_RCON);
   RegAdminCmd("rcon_init",          RConInit,         ADMFLAG_RCON);
+  RegAdminCmd("rcon_rebuildadmin",  RConRebuildAdmin, ADMFLAG_RCON);
   RegAdminCmd("rcon_sdonate",       RConInit,         ADMFLAG_RCON);
+}
+
+public Action RconRebuildAdmin(int client, int args) {
+    return AdminPopulateCache();
 }
 
 public Action RConPunishment(int client, int args) {

@@ -1,6 +1,9 @@
-from celery import group, shared_task
+import redis
 
+from core.models import Server
+from celery import group, shared_task
 from celery.utils.log import get_task_logger
+from django.conf import settings
 from lib.sourcemod import SourcemodPluginWrapper
 
 
@@ -58,3 +61,16 @@ def entry(server):
 
   logger.info('finished %s...', server)
   return
+
+
+@shared_task(name='core.tasks.server.propagate')
+def propagate():
+  cache = redis.Redis.from_url(settings.INTERMEDIATE_BROKER_URL)
+
+  for server in Server.objects.all():
+    indication = cache.get('ht-srv-{}'.format(server.id))
+    sm = SourcemodPluginWrapper()
+
+    if indication and indication > 0:
+      logger.info('rebuilding admin cache for %s...', server)
+      sm.rebuild_cache()

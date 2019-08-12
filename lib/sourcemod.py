@@ -65,6 +65,12 @@ class SourcemodPluginWrapper(RCONBase):
 
     return response
 
+  def rebuild_cache(self):
+    try:
+      return self.run('rcon_rebuildadmin')
+    except (valve.rcon.RCONError, IndexError) as e:
+      return {'error': e}
+
   def mutegag(self, punishment, *args, **kwargs):
     if punishment.is_gagged and punishment.is_muted:
       mode = 'silence'

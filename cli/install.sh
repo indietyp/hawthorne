@@ -381,7 +381,7 @@ install() {
       yum -y update
       curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -
 
-      yum -y install supervisor mariadb-client mariadb-devel mariadb-shared mariadb-lib libxml2-devel libffi-devel libxslt-devel openssl-devel nodejs
+      yum -y install supervisor mariadb mariadb-devel mariadb-shared mariadb-libs libxml2-devel libffi-devel libxslt-devel openssl-devel nodejs
 
       if [ $redis -eq 1 ]; then
         yum -y install redis
